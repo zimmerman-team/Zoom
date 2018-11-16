@@ -1,4 +1,4 @@
-# Zoom V2 UI
+# ZOOM V2 UI
 
 Zoom base front-end setup using react and redux.
 

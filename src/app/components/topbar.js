@@ -46,8 +46,8 @@ function ButtonAppBar(props) {
   return (
     <header>
         <Grommet theme={customTheme} >
-            <RoutedButton label={'jatoch'} margin={'small'} icon={<Add/>} path={'/'}/>
-            <RoutedButton label={'neetoch'} margin={'small'} icon={<Attachment/>} path={'/about'}/>
+            <RoutedButton label={'home'} margin={'small'} icon={<Add/>} path={'/'}/>
+            <RoutedButton label={'about'} margin={'small'} icon={<Attachment/>} path={'/about'}/>
         </Grommet>
     </header>
   );

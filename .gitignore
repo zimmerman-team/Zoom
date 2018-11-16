@@ -59,3 +59,21 @@ typings/
 
 # next.js build output
 .next
+
+.idea
+
+.vstudio
+
+.cache
+
+yarn.lock
+yarn-error.log
+.fusion
+.idea/encodings.xml
+.idea/markdown-navigator/
+.idea/misc.xml
+.idea/modules.xml
+.idea/workspace.xml
+.idea/zoom-v2-ui.iml
+
+.DS_Store

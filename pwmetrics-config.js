@@ -1,6 +1,6 @@
 module.exports = {
-    url: 'http://localhost:3000/',
-    // url: 'http://zoomy.datajunk.io/',
+    // url: 'http://localhost:3000/',
+    url: 'http://zoomy.datajunk.io/',
     // url: 'http://zoomy.datajunk.io/kenya-workshop',
     flags: {
         runs: 1,

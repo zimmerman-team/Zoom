@@ -2,11 +2,11 @@
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
-import TopBar from './topbar';
+// import TopBar from 'pages/topbar';
 
 const Home = () => (
   <React.Fragment>
-    <TopBar />
+    {/*<TopBar />*/}
       <h1>home</h1>
   </React.Fragment>
 );

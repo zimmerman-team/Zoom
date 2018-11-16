@@ -2,9 +2,9 @@
 import React from 'react';
 import {Route, Switch} from 'fusion-plugin-react-router';
 
-import Home from './pages/home.js';
-import About from './pages/about.js';
-import PageNotFound from './pages/pageNotFound.js';
+import Home from './app/modules/home.js';
+import About from './app/modules/about.js';
+import PageNotFound from './app/modules/pageNotFound.js';
 
 const root = (
   <Switch>

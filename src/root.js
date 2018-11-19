@@ -1,10 +1,10 @@
 // @flow
 import React from 'react';
-import {Route, Switch} from 'fusion-plugin-react-router';
+import { Route, Switch } from 'fusion-plugin-react-router';
 
-import Home from './app/modules/home.js';
-import About from './app/modules/about.js';
-import PageNotFound from './app/modules/pageNotFound.js';
+import Home from './app/modules/home/Home';
+import About from './app/modules/about/About';
+import PageNotFound from './app/modules/pagenotfound/PageNotFound';
 
 const root = (
   <Switch>

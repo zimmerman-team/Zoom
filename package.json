@@ -25,6 +25,7 @@
     "redux": "4.0.1",
     "redux-scoped-reducer": "0.0.4",
     "styled-components": "^4.1.1",
+    "styled-theming": "^2.2.0",
     "styletron": "3.0.4",
     "styletron-react": "4.3.6"
   },

@@ -44,7 +44,17 @@
     "cy:run": "cypress run",
     "cy:record": "cypress run --record --key 13e10402-1d04-4395-9246-32a5fe6f3821",
     "cy:open": "cypress open",
-    "metrics": "pwmetrics --submit --config=pwmetrics-config.js"
+    "metrics": "pwmetrics --submit --config=pwmetrics-config.js",
+    "validate:dependencies": "nsp check",
+    "lighthouse": "lighthouse-ci https://zoom-v2-dev.nyuki.io/",
+    "e2e": "cypress run",
+    "e2e:chrome": "cypress run --browser chrome",
+    "e2e:record": "cypress run --record",
+    "e2e:record:parallel": "cypress run --record --parallel",
+    "test:ci": "run-p --race start:ci e2e",
+    "test:ci:chrome": "run-p --race start:ci e2e:chrome",
+    "test:ci:record": "run-p --race start:ci e2e:record",
+    "test:ci:record:parallel": "run-p --race start:ci e2e:record:parallel"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",

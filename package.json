@@ -59,11 +59,14 @@
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
-    "@storybook/addon-actions": "^4.0.7",
-    "@storybook/addon-links": "^4.0.7",
-    "@storybook/addons": "^4.0.7",
-    "@storybook/react": "^4.0.7",
+    "@storybook/addon-actions": "^4.0.9",
+    "@storybook/addon-info": "^4.0.9",
+    "@storybook/addon-links": "^4.0.9",
+    "@storybook/addon-options": "^4.0.8",
+    "@storybook/addons": "^4.0.9",
+    "@storybook/react": "^4.0.9",
     "babel-loader": "^8.0.4",
+    "babel-plugin-root-import": "^6.1.0",
     "cucumber": "^5.0.2",
     "cucumber-expressions": "^6.0.1",
     "cucumber-tag-expressions": "^1.1.1",
@@ -89,10 +92,23 @@
     "googleapis": "27",
     "lighthouse-ci": "^1.2.1",
     "picklejs": "^0.97.0",
+    "prettier": "^1.15.2",
     "pwmetrics": "^4.1.1",
     "stylelint": "^9.8.0",
     "stylelint-config-recommended": "^2.1.0",
     "stylelint-config-styled-components": "^0.1.1",
     "stylelint-processor-styled-components": "^1.5.0"
+  },
+  "importSort": {
+    ".js, .jsx, .es6, .es": {
+      "parser": "babylon",
+      "style": "eslint",
+      "options": {}
+    },
+    ".ts, .tsx": {
+      "parser": "typescript",
+      "style": "eslint",
+      "options": {}
+    }
   }
 }

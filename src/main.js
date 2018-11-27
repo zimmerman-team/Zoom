@@ -7,13 +7,13 @@ import FontLoaderReact, {
 } from 'fusion-plugin-font-loader-react';
 
 import root from './root';
-import {fonts, preloadDepth} from "./font-config";
+import { fonts, preloadDepth } from './font-config';
 
 export default () => {
   const app = new App(root);
   app.register(FontLoaderReactConfigToken, {
     fonts,
-    preloadDepth
+    preloadDepth,
   });
   app.register(FontLoaderReact);
   app.register(Router);

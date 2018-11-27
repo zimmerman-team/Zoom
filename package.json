@@ -20,6 +20,7 @@
     "fusion-tokens": "1.1.1",
     "grommet": "^2.0.1",
     "grommet-icons": "^3.2.0",
+    "prop-types": "^15.6.2",
     "react": "16.6.3",
     "react-dom": "16.6.3",
     "react-redux": "5.1.1",

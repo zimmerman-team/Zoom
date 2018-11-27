@@ -1,4 +1,4 @@
-import {assetUrl} from 'fusion-core';
+import { assetUrl } from 'fusion-core';
 export const preloadDepth = 0;
 export const fonts = {
   'FFMarkProAF-Bold': {

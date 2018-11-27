@@ -1,7 +1,7 @@
-import {addDecorator, configure } from '@storybook/react';
+import { addDecorator, configure } from '@storybook/react';
 import { withOptions } from '@storybook/addon-options';
-import { withInfo } from "@storybook/addon-info";
-import { setConsoleOptions,withConsole } from '@storybook/addon-console';
+import { withInfo } from '@storybook/addon-info';
+import { setConsoleOptions, withConsole } from '@storybook/addon-console';
 import { withBackgrounds } from '@storybook/addon-backgrounds';
 import { configureViewport } from '@storybook/addon-viewport';
 import { withState } from '@dump247/storybook-state';
@@ -32,7 +32,6 @@ configureViewport({
 // automatically import all files ending in *.stories.js
 // const req = require.context('../stories', true, /.stories.js$/);
 
-
 const req = require.context('../src', true, /.story.js$/);
 
 function loadStories() {
@@ -46,18 +45,16 @@ setConsoleOptions({
 addDecorator(
   withInfo({
     header: false, // Global configuration for the info addon across all of your stories.
-    inline:false,
-  })
+    inline: false,
+  }),
 );
-
-
 
 addDecorator(
   withBackgrounds([
     { name: 'default', value: '#ffffff', default: true },
     { name: 'color2', value: '#00aced' },
     { name: 'color3', value: '#3b5998' },
-  ])
+  ]),
 );
 
 addDecorator((storyFn, context) => withConsole()(storyFn)(context));
@@ -78,9 +75,8 @@ addDecorator(
     sidebarAnimations: false,
     selectedAddonPanel: undefined,
     enableShortcuts: false,
-  })
+  }),
 );
-
 
 // config.js
 

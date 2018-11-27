@@ -12,11 +12,9 @@ const defaultProps = {
   data: undefined,
 };
 
-const ComponentSheet = props => {
-  return <React.Fragment />;
-};
+const BaseModule = props => <ComponentBase />;
 
-ComponentSheet.propTypes = propTypes;
-ComponentSheet.defaultProps = defaultProps;
+BaseModule.propTypes = propTypes;
+BaseModule.defaultProps = defaultProps;
 
-export default ComponentSheet;
+export default BaseModule;

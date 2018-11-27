@@ -2,15 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { createGlobalStyle } from 'styled-components';
-import {
-  Box,
-  Button,
-  Grommet,
-  RoutedButton,
-  Text,
-  Heading,
-  Grid,
-} from 'grommet';
+import { Box, Button, Grommet, Text, Heading, Grid } from 'grommet';
 import { grommet } from 'grommet/themes';
 
 import { withFontLoading } from 'fusion-plugin-font-loader-react';
@@ -118,15 +110,15 @@ export const ZoomButton = styled(Button)`
 `;
 
 const ZoomButtonVariant = styled(ZoomButton)`
-background-color: ${aidsFondsBlue};
+  background-color: ${aidsFondsBlue};
 `;
 
 export const Basictext = styled(Text)`
-font-family: ${zoomFontFamOne};
-font-size: ${fontSizeDialog};
-color: ${zoomBlack};
-width: 100%;
-line-height: 1;
+  font-family: ${zoomFontFamOne};
+  font-size: ${fontSizeDialog};
+  color: ${zoomBlack};
+  width: 100%;
+  line-height: 1;
 `;
 
 const propTypes = {
@@ -137,55 +129,50 @@ const defaultProps = {
   data: undefined,
 };
 
-const ThemeSheet = props => {
-  return (
-    <React.Fragment>
-      <Grommet theme={grommet}>
-        <Box align="start">
-          <Heading level={2}>Color & Typography</Heading>
-          <Heading level={4}>Colors</Heading>
-          <Box direction="row" gap="small">
-            <ColorOne />
-            <ColorTwo />
-          </Box>
-
-          <Heading level={4}>Shades</Heading>
-          <Box direction="row" gap="small">
-            <GreyOne />
-            <GreyTwo />
-            <Black />
-          </Box>
-
-          <Heading level={4}>Typography</Heading>
-          <DialogHeading>Page heading</DialogHeading>
-          <PageHeading>Dialog heading</PageHeading>
-          <SectionHeading>Section heading</SectionHeading>
-
-          <Heading level={4}>Element Shadows</Heading>
-          <Box direction="row" gap="medium">
-            <ElementShadeOne />
-          </Box>
-
-          <Heading level={2}>Buttons</Heading>
-          <Box direction="row" gap="medium">
-            <ZoomButton>Label</ZoomButton>
-            <ZoomButtonVariant>Label</ZoomButtonVariant>
-          </Box>
-          <Heading level={4}>Button shapes</Heading>
-          <Heading level={4}>Button states</Heading>
-
-          <Heading level={2}>Form & Input Fields</Heading>
-
-          <Heading level={2}>Components</Heading>
-          <Heading level={4}>Dropdowns</Heading>
-
-
+const ThemeSheet = props => (
+  <React.Fragment>
+    <Grommet theme={grommet}>
+      <Box align="start">
+        <Heading level={2}>Color & Typography</Heading>
+        <Heading level={4}>Colors</Heading>
+        <Box direction="row" gap="small">
+          <ColorOne />
+          <ColorTwo />
         </Box>
-      </Grommet>
-      {/*<GlobalStyles/>*/}
-    </React.Fragment>
-  );
-};
+
+        <Heading level={4}>Shades</Heading>
+        <Box direction="row" gap="small">
+          <GreyOne />
+          <GreyTwo />
+          <Black />
+        </Box>
+
+        <Heading level={4}>Typography</Heading>
+        <DialogHeading>Page heading</DialogHeading>
+        <PageHeading>Dialog heading</PageHeading>
+        <SectionHeading>Section heading</SectionHeading>
+
+        <Heading level={4}>Element Shadows</Heading>
+        <Box direction="row" gap="medium">
+          <ElementShadeOne />
+        </Box>
+
+        <Heading level={2}>Buttons</Heading>
+        <Box direction="row" gap="medium">
+          <ZoomButton>Label</ZoomButton>
+          <ZoomButtonVariant>Label</ZoomButtonVariant>
+        </Box>
+        <Heading level={4}>Button shapes</Heading>
+        <Heading level={4}>Button states</Heading>
+
+        <Heading level={2}>Form & Input Fields</Heading>
+
+        <Heading level={2}>Components</Heading>
+        <Heading level={4}>Dropdowns</Heading>
+      </Box>
+    </Grommet>
+  </React.Fragment>
+);
 
 ThemeSheet.propTypes = propTypes;
 ThemeSheet.defaultProps = defaultProps;

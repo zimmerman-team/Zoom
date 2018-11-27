@@ -1,9 +1,9 @@
 import { css } from 'styled-components';
 
-const isObject = item => (
-  item && typeof item === 'object' && !Array.isArray(item));
+const isObject = item =>
+  item && typeof item === 'object' && !Array.isArray(item);
 
-const deepFreeze = (obj) => {
+const deepFreeze = obj => {
   Object.keys(obj).forEach(
     key => key && isObject(obj[key]) && Object.freeze(obj[key]),
   );
@@ -17,8 +17,8 @@ export const ZoomTheme = deepFreeze({
       brand: '#000000',
       control: '#ED6F00',
       focus: '#001b30',
-      'aidfonds-red':'#ff0100',
-      'aidfonds-blue':'#0000ff',
+      'aidfonds-red': '#ff0100',
+      'aidfonds-blue': '#0000ff',
     },
     font: {
       family: 'FFMarkProAF-Book, "Helvetica Neue", Helvetica, sans-serif',
@@ -30,7 +30,9 @@ export const ZoomTheme = deepFreeze({
   },
   button: {
     extend: css`
-      ${props => !props.plain && `
+      ${props =>
+        !props.plain &&
+        `
         font-weight: 600;
         border-radius: 4px;
       `}

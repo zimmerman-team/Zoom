@@ -9,7 +9,7 @@ import {
   ZoomButton,
   Basictext,
   aidsFondsWhite,
-} from '../theme/ThemeSheet';
+} from '../../Theme/ThemeSheet';
 
 const DialogLayer = styled(Layer)`
   width: 840px;

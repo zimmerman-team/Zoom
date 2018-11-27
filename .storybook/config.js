@@ -46,7 +46,7 @@ setConsoleOptions({
 addDecorator(
   withInfo({
     header: false, // Global configuration for the info addon across all of your stories.
-    inline:true,
+    inline:false,
   })
 );
 

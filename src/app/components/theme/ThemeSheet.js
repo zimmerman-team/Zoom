@@ -23,8 +23,8 @@ const chartColorThree = '#CDE9EE';
 const zoomGreyOne = '#818181';
 const zoomGreyTwo = '#505050';
 const zoomBlack = '#000000';
-const zoomFontFamOne = 'FFMarkProAF-Bold';
-const zoomFontFamTwo = 'FFMarkProAF-Book';
+export const zoomFontFamOne = 'FFMarkProAF-Bold';
+export const zoomFontFamTwo = 'FFMarkProAF-Book';
 
 const headSizeOne = '48px';
 const headSizeTwo = '48px';
@@ -121,13 +121,8 @@ export const Basictext = styled(Text)`
   line-height: 1;
 `;
 
-const propTypes = {
-  /** Description of prop "foo". */
-  data: PropTypes.object,
-};
-const defaultProps = {
-  data: undefined,
-};
+const propTypes = {};
+const defaultProps = {};
 
 const ThemeSheet = props => (
   <React.Fragment>
@@ -177,7 +172,4 @@ const ThemeSheet = props => (
 ThemeSheet.propTypes = propTypes;
 ThemeSheet.defaultProps = defaultProps;
 
-/**
- * General component description.
- */
 export default ThemeSheet;

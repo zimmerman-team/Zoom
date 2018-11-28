@@ -1,7 +1,7 @@
 // @flow
 import App from 'fusion-react';
 import Router from 'fusion-plugin-react-router';
-
+import HelmetPlugin from 'fusion-plugin-react-helmet-async';
 import FontLoaderReact, {
   FontLoaderReactConfigToken,
 } from 'fusion-plugin-font-loader-react';
@@ -17,5 +17,6 @@ export default () => {
   });
   app.register(FontLoaderReact);
   app.register(Router);
+  app.register(HelmetPlugin);
   return app;
 };

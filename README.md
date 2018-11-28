@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c10302b80de54e56891b7d383f31afdf)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zimmerman-zimmerman/zoom-v2-ui&amp;utm_campaign=Badge_Grade)
+
 # ZOOM V2 UI
 
 Zoom base front-end setup using react and redux.

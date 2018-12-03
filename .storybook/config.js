@@ -5,6 +5,7 @@ import { setConsoleOptions, withConsole } from '@storybook/addon-console';
 import { withBackgrounds } from '@storybook/addon-backgrounds';
 import { configureViewport } from '@storybook/addon-viewport';
 import { withState } from '@dump247/storybook-state';
+import { themes } from '@storybook/components';
 
 /*
 const newViewports = {
@@ -51,12 +52,14 @@ addDecorator(
 );
 */
 
+/*
 addDecorator(
   withBackgrounds([
     { name: 'default', value: '#474747', default: true },
     { name: 'color2', value: '#ffffff' },
   ]),
 );
+*/
 
 addDecorator((storyFn, context) => withConsole()(storyFn)(context));
 
@@ -64,6 +67,7 @@ addDecorator((storyFn, context) => withConsole()(storyFn)(context));
 addDecorator(
   withOptions({
     name: 'ZOOM V2',
+    theme: themes.dark,
     url: 'https://zoom-v2-dev.nyuki.io/',
     goFullScreen: false,
     showStoriesPanel: true,

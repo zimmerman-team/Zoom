@@ -42,18 +42,19 @@ setConsoleOptions({
   panelExclude: [],
 });
 
+/*
 addDecorator(
   withInfo({
     header: false, // Global configuration for the info addon across all of your stories.
     inline: false,
   }),
 );
+*/
 
 addDecorator(
   withBackgrounds([
-    { name: 'default', value: '#ffffff', default: true },
-    { name: 'color2', value: '#00aced' },
-    { name: 'color3', value: '#3b5998' },
+    { name: 'default', value: '#474747', default: true },
+    { name: 'color2', value: '#ffffff' },
   ]),
 );
 

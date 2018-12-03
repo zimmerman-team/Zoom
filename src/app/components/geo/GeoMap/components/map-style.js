@@ -1,6 +1,6 @@
 import { fromJS } from 'immutable';
-import MAP_STYLE from 'app/pages/CountryFocusMapbox/data/map-style-basic-v8.json';
-import KENYA_COUNTIES from 'app/pages/CountryFocusMapbox/data/kenya-county-borders.json';
+import MAP_STYLE from '../data/map-style-basic-v8.json';
+import KENYA_COUNTIES from '../data/kenya-county-borders.json';
 
 const mapStyle = {
   ...MAP_STYLE,

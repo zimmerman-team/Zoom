@@ -7,7 +7,13 @@ module.exports = {
       },
     },
   },
-  extends: ['airbnb', 'prettier', 'prettier/react'],
+  extends: [
+    'airbnb',
+    'prettier',
+    'prettier/react',
+    'plugin:jest/recommended',
+    'jest-enzyme',
+  ],
   plugins: ['prettier'],
   rules: {
     'react/jsx-filename-extension': [0, { extensions: ['.js', '.jsx'] }],

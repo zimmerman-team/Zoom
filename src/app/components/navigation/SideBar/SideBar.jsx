@@ -29,7 +29,9 @@ const CloseButton = styled(Button)`
 const propTypes = {
   open: PropTypes.bool,
 };
-const defaultProps = {};
+const defaultProps = {
+  open: true,
+};
 
 class SideBar extends React.Component {
   state = {

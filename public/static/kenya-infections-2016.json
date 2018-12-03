@@ -1,0 +1,472 @@
+[
+  {
+    "Country": "Kenya",
+    "County": "Baringo",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 109,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Bomet",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 217,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Bungoma",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 1145,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Busia",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 1467,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Elgeyo Marakwet",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 85,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Embu",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 596,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Garissa",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 55,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Homa Bay",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 9629,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Isiolo",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 193,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kajiado",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 394,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kakamega",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 1935,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kericho",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 318,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kiambu",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 4273,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kilifi",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 1413,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kirinyaga",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 742,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kisii",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 2072,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kisumu",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 8790,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kitui",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 1547,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kwale",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 1068,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Laikipia",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 151,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Lamu",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 104,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Machakos",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 1744,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Makueni",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 1571,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Mandera",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 73,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Marsabit",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 152,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Meru",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 1392,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Migori",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 5093,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Mombasa",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 2426,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Murang'a",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 1640,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nairobi",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 4719,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nakuru",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 801,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nandi",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 218,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Narok",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 309,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nyamira",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 425,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nyandarua",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 768,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nyeri",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 1124,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Samburu",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 58,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Siaya",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 7700,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Taita Taveta",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 527,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Tana River",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 125,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Tharaka Nithi",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 486,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Trans Nzoia.",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 508,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Turkana",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 438,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Uasin Gishu",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 520,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Vihiga",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 736,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Wajir",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 28,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "West Pokot",
+    "Indicator_category": "Adults 15+",
+    "Indicator": "Estimated new hiv infections",
+    "measure_value": 93,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county pofiles"
+  }
+]

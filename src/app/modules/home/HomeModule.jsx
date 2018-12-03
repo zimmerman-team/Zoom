@@ -16,7 +16,7 @@ const defaultProps = {};
 
 class HomeModule extends Component {
   state = {
-    dialogOpen: false,
+    dialogOpen: true,
     sideBarOpen: false,
   };
 

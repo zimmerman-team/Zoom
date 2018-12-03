@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box, Button, Image } from 'grommet';
 import { Menu } from 'grommet-icons';
-import { aidsFondsRed } from '../../../components/theme/ThemeSheet';
+import {
+  aidsFondsRed,
+  aidsFondsWhite,
+} from '../../../components/theme/ThemeSheet';
 // import {}
 
 const ModuleContainer = styled(Box)`
@@ -16,6 +19,7 @@ const ModuleContainer = styled(Box)`
   z-index: 10;
   position: sticky;
   top: 0;
+  background-color: ${aidsFondsWhite};
 `;
 
 const AidsFondLogo = styled(Image)`
@@ -55,7 +59,6 @@ class AppBar extends React.Component {
       >
         <Box direction="row">
           <MenuButton
-            active
             plain
             icon={<Menu color={aidsFondsRed} />}
             onClick={this.toggleSideBar}

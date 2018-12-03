@@ -1,0 +1,1102 @@
+[
+  {
+    "Country": "Kenya",
+    "County": "Kenya national",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 133675,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kenya national",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 13019,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kenya national",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 18327,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Bomet",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 550,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Bungoma",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 3984,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Busia",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 3182,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Busia",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 145,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Busia",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 157,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Embu",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 1032,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Embu",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 29,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Embu",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 117,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Homa Bay",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 995,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Homa Bay",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 339,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Homa Bay",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 67,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kajiado",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 1564,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kajiado",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 26,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kajiado",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 11,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kakamega",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 3405,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kakamega",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 314,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kakamega",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 230,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kericho",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 1116,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kericho",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 0,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kericho",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 0,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kiambu",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 4603,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kiambu",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 310,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kiambu",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 597,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kilifi",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 4676,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kilifi",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 640,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kilifi",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 509,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kirinyaga",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 739,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kirinyaga",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 20,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kirinyaga",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 24,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kisii",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 4063,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kisii",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 426,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kisii",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 64,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kisumu",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 4041,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kisumu",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 3019,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kisumu",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 424,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kitui",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 794,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kitui",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 260,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kitui",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 20,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kwale",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 1112,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kwale",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 257,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Kwale",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 134,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Laikipia",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 1355,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Laikipia",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 29,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Laikipia",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 60,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Machakos",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 3385,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Machakos",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 617,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Machakos",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 214,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Makueni",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 1966,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Makueni",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 46,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Makueni",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 3,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Marsabit",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 1966,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Marsabit",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 46,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Marsabit",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 3,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Meru",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 3391,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Meru",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 509,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Meru",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 545,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Migori",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 29494,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Migori",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 10000,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Migori",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 6216,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Mombasa",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 9288,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Mombasa",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 782,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Mombasa",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 2101,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Murang�a",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 442,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Murang�a",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 184,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Murang�a",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 123,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nairobi",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 29494,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nairobi",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 10000,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nairobi",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 6216,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nakuru",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 5309,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nakuru",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 259,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nakuru",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 131,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nandi",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 0,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nandi",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 0,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nandi",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 0,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Narok",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 576,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Narok",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 4,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Narok",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 7,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nyamira",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 856,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nyamira",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 118,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nyamira",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 8,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nyeri",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 988,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nyeri",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 9,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Nyeri",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 62,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Siaya",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 2149,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Siaya",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 618,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Siaya",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 57,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Taita Taveta",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 1389,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Taita Taveta",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 6,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Taita Taveta",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 0,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Tharaka Nithi",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 3150,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Tharaka Nithi",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 100,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Tharaka Nithi",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 0,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Trans Nzoia.",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 815,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Trans Nzoia.",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 13,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Trans Nzoia.",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 8,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Turkana",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 724,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Turkana",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 0,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Turkana",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 0,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Uasin Gishu",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 2442,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Uasin Gishu",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 95,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Uasin Gishu",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 32,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Vihiga",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 2749,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Vihiga",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 151,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "Vihiga",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 109,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "West Pokot",
+    "Indicator_category": "FSW",
+    "Indicator": "KP size estimate",
+    "measure_value": 1004,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "West Pokot",
+    "Indicator_category": "MSM",
+    "Indicator": "KP size estimate",
+    "measure_value": 8,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  },
+  {
+    "Country": "Kenya",
+    "County": "West Pokot",
+    "Indicator_category": "PWID",
+    "Indicator": "KP size estimate",
+    "measure_value": 0,
+    "Year": 2016,
+    "unit_of_measure": "Number",
+    "Source": "Kenya HIV county profiles"
+  }
+]

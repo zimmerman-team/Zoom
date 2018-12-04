@@ -28,8 +28,9 @@ export const zoomFontFamTwo = 'FFMarkProAF-Book';
 const headSizeOne = '48px';
 const headSizeTwo = '48px';
 const fontSizeDialog = '18px';
+const fontSizeParagraph = '20px';
 
-export const fragmentContentWidth = '977px';
+export const fragmentContentWidth = '1024px';
 
 const BaseHeading = styled.h2`
   color: ${zoomBlack};
@@ -70,6 +71,7 @@ export const PageIntroInitial = styled(BaseParagraph)`
   font-size: 20px;
   font-weight: 700;
   font-family: ${zoomFontFamOne};
+  margin-top: 0;
 `;
 
 export const PageIntroSecondary = styled(BaseParagraph)`
@@ -138,10 +140,10 @@ const ZoomButtonVariant = styled(ZoomButton)`
   background-color: ${aidsFondsBlue};
 `;
 
-export const Basictext = styled(Text)`
-  font-family: ${zoomFontFamOne};
-  font-size: ${fontSizeDialog};
-  color: ${zoomBlack};
+export const SimpleText = styled(Text)`
+  font-family: ${zoomFontFamTwo};
+  font-size: ${fontSizeParagraph};
+  font-weight: 300;
   width: 100%;
   line-height: 1;
 `;

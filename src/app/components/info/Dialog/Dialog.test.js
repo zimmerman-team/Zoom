@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 // Components
 import Dialog from './Dialog';
-import { ZoomButton, DialogHeading, Basictext } from '../../theme/ThemeSheet';
+import { ZoomButton, DialogHeading, SimpleText } from '../../theme/ThemeSheet';
 
 const wrapper = shallow(<Dialog />);
 
@@ -13,7 +13,7 @@ describe('<Dialog />', () => {
   });
 
   it('renders one <Basictext/> component', () => {
-    expect(wrapper.find(Basictext)).toHaveLength(1);
+    expect(wrapper.find(SimpleText)).toHaveLength(1);
   });
 
   it('renders one <ZoomButton/> component', () => {

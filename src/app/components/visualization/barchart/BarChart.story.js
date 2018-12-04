@@ -1,8 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import LineChart from './LineChart';
+import BarChart from './BarChart';
 import { lineChartMockData } from '../../../__mocks__/lineChartMock';
 
-storiesOf('Components', module).add('LineChart', () => (
-  <LineChart data={lineChartMockData} />
+storiesOf('Components', module).add('BarChart', () => (
+  <BarChart data={lineChartMockData} />
 ));

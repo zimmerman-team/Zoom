@@ -6,7 +6,7 @@ import { Box, Layer } from 'grommet';
 import {
   DialogHeading,
   ZoomButton,
-  Basictext,
+  SimpleText,
   aidsFondsWhite,
 } from '../../theme/ThemeSheet';
 
@@ -65,9 +65,9 @@ class Dialog extends Component {
               gap="medium"
             >
               <DialogHeading>{this.props.title}</DialogHeading>
-              <Basictext alignSelf="center" textAlign="center">
+              <SimpleText alignSelf="center" textAlign="center">
                 {this.props.message}
-              </Basictext>
+              </SimpleText>
               {this.props.buttonEnabled && (
                 <ZoomButton
                   plain

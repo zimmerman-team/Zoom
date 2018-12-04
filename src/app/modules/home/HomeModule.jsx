@@ -36,7 +36,6 @@ class HomeModule extends Component {
   render() {
     return (
       <React.Fragment>
-        {/*{this._showSideBar()}*/}
         <SideBar open={this.state.sideBarOpen} />
         <AppBar toggleSideBar={this.toggleSideBar} />
         <ModuleContainer>

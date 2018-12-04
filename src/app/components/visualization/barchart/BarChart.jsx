@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
-
-const ComponentBase = styled.div`
+import { Box, Button, Grommet, Text, Paragraph, Heading, Grid } from 'grommet';
+const ComponentBase = styled(Box)`
   height: 280px;
   width: 100%;
   //outline: 1px solid red;

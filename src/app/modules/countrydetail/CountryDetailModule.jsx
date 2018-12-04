@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Box, Button, Grommet, Text, Paragraph, Heading, Grid } from 'grommet';
 import { lineChartMockData } from '../../__mocks__/lineChartMock';
 import { barChartMockData } from '../../__mocks__/barChartMock';
+import { countryDetailMockData } from '../../__mocks__/countryDetailMock';
 import ThemeSheet, {
   PageHeading,
   SectionHeading,
@@ -23,6 +24,8 @@ import ThemeSheet, {
 import AppBar from '../../components/navigation/AppBar/AppBar';
 import LineChart from '../../components/visualization/linechart/LineChart';
 import BarChart from '../../components/visualization/barchart/BarChart';
+import PieChart from '../../components/visualization/piechart/PieChart';
+import { pieChartMockData } from '../../__mocks__/pieChartMock';
 
 const ModuleContainer = styled(Box)`
   background-color: ${aidsFondsWhite};
@@ -107,15 +110,6 @@ const PageNavItem = styled.li`
   }
 `;
 
-const PageNavItems = [
-  'Summary',
-  'Aids epidemic',
-  'Economic indicators',
-  'Civic space',
-  'Human rights',
-  'Financials',
-  'Projects',
-];
 // FRAGMENT 2: country info
 const CountryInfoContainer = styled(Box)``;
 const CountryName = styled(PageHeading)`
@@ -125,16 +119,6 @@ const CountryInfoIntro = styled.p``;
 const CountryInfoMore = styled.p``;
 const CountryInfoDisclaimer = styled.p``;
 const CountryInfoBarContainer = styled(Box)``;
-
-// FRAGMENT 3:
-
-// FRAGMENT 4
-
-// FRAGMENT 5: civic space
-
-// FRAGMENT 6
-
-// FRAGMENT 7
 
 const propTypes = {
   data: PropTypes.object,
@@ -153,7 +137,7 @@ const CountryDetailModule = props => {
           <FragmentContent>
             <PageNavigation>
               <PageNavList>
-                {PageNavItems.map(item => (
+                {countryDetailMockData.nav.map(item => (
                   <PageNavItem key={item}>{item}</PageNavItem>
                 ))}
               </PageNavList>
@@ -164,25 +148,16 @@ const CountryDetailModule = props => {
         {/* Fragment 2: Country info */}
         <FragmentContainer>
           <FragmentContent>
-            <CountryName>Zoom in on Kenya</CountryName>
+            <CountryName>
+              Zoom in on {countryDetailMockData.country}
+            </CountryName>
             <Box direction="row">
               <Box width="50%">
                 <PageIntroInitial>
-                  Kenya (/ˈkɛnjə/; locally [ˈkɛɲa] (About this sound listen)),
-                  officially the Republic of Kenya (Swahili: Jamhuri ya Kenya),
-                  is a country in Africa with its capital and largest city in
-                  Nairobi. Kenya's territory lies on the equator and overlies
-                  the East African Rift, covering a diverse and expansive
-                  terrain that extends roughly from Lake Victoria to Lake
-                  Turkana (formerly called Lake Rudolf) and further south-east
-                  to the Indian Ocean.
+                  {countryDetailMockData.info.initial}
                 </PageIntroInitial>
                 <PageIntroSecondary>
-                  It is bordered by Tanzania to the south and south-west, Uganda
-                  to the west, South Sudan to the north-west, Ethiopia to the
-                  north and Somalia to the north-east. Kenya covers 581,309 km2
-                  (224,445 sq mi) has a population of approximately 48
-                  million.[2] Kenya's capital and largest city is Nairobi…
+                  {countryDetailMockData.info.secondary}
                 </PageIntroSecondary>
                 <SimpleText color={aidsFondsRed}>
                   Source: Wikipedia, not endorsed by Aidsfonds
@@ -207,7 +182,9 @@ const CountryDetailModule = props => {
         {/* Fragment 2: Indicator chart */}
         <FragmentContainer background={zoomGreyZero}>
           <FragmentContent>
-            <FragmentHeader>Aids epidemic</FragmentHeader>
+            <FragmentHeader>
+              {countryDetailMockData.fragments[0].name}
+            </FragmentHeader>
             <FragmentVisualisation>
               <LineChart data={lineChartMockData} />
             </FragmentVisualisation>
@@ -217,7 +194,9 @@ const CountryDetailModule = props => {
         {/* Fragment 3: Indicator chart */}
         <FragmentContainer>
           <FragmentContent>
-            <FragmentHeader>Economic indicators</FragmentHeader>
+            <FragmentHeader>
+              {countryDetailMockData.fragments[1].name}
+            </FragmentHeader>
             <FragmentVisualisation>
               <LineChart data={lineChartMockData} />
             </FragmentVisualisation>
@@ -227,24 +206,26 @@ const CountryDetailModule = props => {
         {/* Fragment 4: Indicator chart */}
         <FragmentContainer background={zoomGreyZero}>
           <FragmentContent>
-            <FragmentHeader>Civic space</FragmentHeader>
+            <FragmentHeader>
+              {countryDetailMockData.fragments[2].name}
+            </FragmentHeader>
             <FragmentDescription>
-              Civic space is the political, legislative, social and economic
-              environment which enables citizens to come together, share their
-              interests and concerns and act individually and collectively to
-              influence and shape they policy-making.
+              {countryDetailMockData.fragments[2].description}
             </FragmentDescription>
-            <FragmentVisualisation />
+            <FragmentVisualisation>
+              <BarChart data={barChartMockData} />
+            </FragmentVisualisation>
           </FragmentContent>
         </FragmentContainer>
 
         {/* Fragment 5: Indicator chart */}
         <FragmentContainer>
           <FragmentContent>
-            <FragmentHeader>Human rights</FragmentHeader>
+            <FragmentHeader>
+              {countryDetailMockData.fragments[3].name}
+            </FragmentHeader>
             <FragmentDescription>
-              Data on stigma and discrimination and the legal environment were
-              extracted and mapped to better capture
+              {countryDetailMockData.fragments[3].description}
             </FragmentDescription>
             <FragmentVisualisation />
           </FragmentContent>
@@ -253,15 +234,25 @@ const CountryDetailModule = props => {
         {/* Fragment 5: Indicator chart */}
         <FragmentContainer background={zoomGreyZero}>
           <FragmentContent>
-            <FragmentHeader>Aidsfonds financial transactions</FragmentHeader>
-            <FragmentVisualisation />
+            <FragmentHeader>
+              {countryDetailMockData.fragments[4].name}
+            </FragmentHeader>
+            <FragmentVisualisation direction="row">
+              <PieChart data={pieChartMockData} />
+              <PieChart data={pieChartMockData} />
+            </FragmentVisualisation>
+            <FragmentVisualisation>
+              <LineChart data={lineChartMockData} />
+            </FragmentVisualisation>
           </FragmentContent>
         </FragmentContainer>
 
         {/* Fragment 5: Projects */}
         <FragmentContainer>
           <FragmentContent>
-            <FragmentHeader>Projects</FragmentHeader>
+            <FragmentHeader>
+              {countryDetailMockData.fragments[5].name}
+            </FragmentHeader>
             <FragmentVisualisation />
           </FragmentContent>
         </FragmentContainer>

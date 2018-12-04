@@ -5,8 +5,6 @@ import styled, { createGlobalStyle } from 'styled-components';
 import { Box, Button, Grommet, Text, Heading, Grid } from 'grommet';
 import { grommet } from 'grommet/themes';
 
-import { withFontLoading } from 'fusion-plugin-font-loader-react';
-
 const ComponentBase = styled.div``;
 
 /* Main colors */
@@ -15,14 +13,15 @@ export const aidsFondsRed = '#ff0100';
 export const aidsFondsWhite = '#ffffff';
 
 /* Chart colors */
-const chartColorOne = '#f2c987';
-const chartColorTwo = '#091799';
-const chartColorThree = '#CDE9EE';
+export const chartColorOne = '#f2c987';
+export const chartColorTwo = '#091799';
+export const chartColorThree = '#CDE9EE';
 
 /* Shades */
-const zoomGreyOne = '#818181';
-const zoomGreyTwo = '#505050';
-const zoomBlack = '#000000';
+export const zoomGreyZero = '#efefef';
+export const zoomGreyOne = '#818181';
+export const zoomGreyTwo = '#505050';
+export const zoomBlack = '#000000';
 export const zoomFontFamOne = 'FFMarkProAF-Bold';
 export const zoomFontFamTwo = 'FFMarkProAF-Book';
 
@@ -30,9 +29,20 @@ const headSizeOne = '48px';
 const headSizeTwo = '48px';
 const fontSizeDialog = '18px';
 
+export const fragmentContentWidth = '977px';
+
 const BaseHeading = styled.h2`
   color: ${zoomBlack};
   font-weight: 700;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+`;
+
+const BaseParagraph = styled.p`
+  color: ${zoomGreyTwo};
+  font-weight: 300;
+  line-height: 1.5;
+  font-size: 20px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 `;
@@ -46,14 +56,29 @@ export const DialogHeading = styled(BaseHeading)`
   line-height: 1;
 `;
 
-const PageHeading = styled(BaseHeading)`
+export const PageHeading = styled(BaseHeading)`
   font-family: ${zoomFontFamOne};
   font-size: ${headSizeOne};
 `;
 
-const SectionHeading = styled(BaseHeading)`
+export const SectionHeading = styled(BaseHeading)`
   font-size: 32px;
   font-family: ${zoomFontFamOne};
+`;
+
+export const PageIntroInitial = styled(BaseParagraph)`
+  font-size: 20px;
+  font-weight: 700;
+  font-family: ${zoomFontFamOne};
+`;
+
+export const PageIntroSecondary = styled(BaseParagraph)`
+  font-size: 20px;
+  font-family: ${zoomFontFamTwo};
+`;
+
+export const FragmentParagraph = styled(BaseParagraph)`
+  font-family: ${zoomFontFamTwo};
 `;
 
 const ColorPallete = styled.div`
@@ -146,6 +171,9 @@ const ThemeSheet = props => (
         <DialogHeading>Page heading</DialogHeading>
         <PageHeading>Dialog heading</PageHeading>
         <SectionHeading>Section heading</SectionHeading>
+        <FragmentParagraph>
+          Lorem ipsum dolor simet fragment paragraph
+        </FragmentParagraph>
 
         <Heading level={4}>Element Shadows</Heading>
         <Box direction="row" gap="medium">

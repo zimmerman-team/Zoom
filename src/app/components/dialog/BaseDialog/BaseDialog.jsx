@@ -37,7 +37,7 @@ const defaultProps = {
   onClose: undefined,
 };
 
-class Dialog extends Component {
+class BaseDialog extends Component {
   state = {
     open: this.props.open,
   };
@@ -84,7 +84,7 @@ class Dialog extends Component {
   }
 }
 
-Dialog.propTypes = propTypes;
-Dialog.defaultProps = defaultProps;
+BaseDialog.propTypes = propTypes;
+BaseDialog.defaultProps = defaultProps;
 
-export default Dialog;
+export default BaseDialog;

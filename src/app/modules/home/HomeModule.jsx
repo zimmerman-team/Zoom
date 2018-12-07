@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import GeoMap from '../../components/geo/GeoMap/GeoMap';
-import Dialog from '../../components/info/Dialog/Dialog';
+import BaseDialog from '../../components/dialog/BaseDialog/BaseDialog';
 import AppBar from '../../components/navigation/AppBar/AppBar';
 import { Box } from 'grommet';
 import SideBar from '../../components/navigation/SideBar/SideBar';
@@ -39,7 +39,7 @@ class HomeModule extends Component {
         <SideBar open={this.state.sideBarOpen} />
         <AppBar toggleSideBar={this.toggleSideBar} />
         <ModuleContainer>
-          <Dialog open={this.state.dialogOpen} onClose={this.onClose} />
+          <BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />
           <GeoMap />
         </ModuleContainer>
       </React.Fragment>

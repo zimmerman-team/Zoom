@@ -2,12 +2,12 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 // Components
-import Dialog from './Dialog';
+import BaseDialog from './BaseDialog';
 import { ZoomButton, DialogHeading, SimpleText } from '../../theme/ThemeSheet';
 
-const wrapper = shallow(<Dialog />);
+const wrapper = shallow(<BaseDialog />);
 
-describe('<Dialog />', () => {
+describe('<BaseDialog />', () => {
   it('renders one <DialogHeading/> component', () => {
     expect(wrapper.find(DialogHeading)).toHaveLength(1);
   });

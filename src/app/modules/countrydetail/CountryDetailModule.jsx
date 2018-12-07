@@ -26,6 +26,7 @@ import LineChart from '../../components/visualization/linechart/LineChart';
 import BarChart from '../../components/visualization/barchart/BarChart';
 import PieChart from '../../components/visualization/piechart/PieChart';
 import { pieChartMockData } from '../../__mocks__/pieChartMock';
+import ModuleFragment from '../../components/layout/ModuleFragment/ModuleFragment';
 
 const ModuleContainer = styled(Box)`
   background-color: ${aidsFondsWhite};
@@ -128,16 +129,9 @@ const defaultProps = {
 };
 
 class CountryDetailModule extends React.Component {
-  constructor(props) {
-    super(props);
-
-    // This binding is necessary to make `this` work in the callback
-    this.scrollToNode = this.scrollToNode.bind(this);
-  }
-
-  scrollToNode(node) {
+  scrollToNode = node => {
     node.scrollIntoView({ behavior: 'smooth' });
-  }
+  };
 
   render() {
     return (
@@ -237,6 +231,7 @@ class CountryDetailModule extends React.Component {
           </FragmentContainer>
 
           {/* Fragment 5: Indicator chart */}
+
           <FragmentContainer
             ref={node => (countryDetailMockData.fragments[4].id = node)}
           >
@@ -250,7 +245,12 @@ class CountryDetailModule extends React.Component {
               <FragmentVisualisation />
             </FragmentContent>
           </FragmentContainer>
-
+          {/*<ModuleFragment
+            ref={node => (countryDetailMockData.fragments[4].id = node)}
+            title={countryDetailMockData.fragments[4].title}
+            description={countryDetailMockData.fragments[4].description[0]}
+          />
+*/}
           {/* Fragment 5: Indicator chart */}
           <FragmentContainer
             background={zoomGreyZero}

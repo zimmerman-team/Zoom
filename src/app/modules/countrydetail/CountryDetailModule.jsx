@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Box, Button, Grommet, Text, Paragraph, Heading, Grid } from 'grommet';
 import { lineChartMockData } from '../../__mocks__/lineChartMock';
 import { barChartMockData } from '../../__mocks__/barChartMock';
-import { countryDetailMockData } from '../../__mocks__/countryDetailMock';
+import countryDetailMockData from '../../__mocks__/countryDetailMock';
 import ThemeSheet, {
   PageHeading,
   SectionHeading,
@@ -127,139 +127,165 @@ const defaultProps = {
   data: undefined,
 };
 
-const CountryDetailModule = props => {
-  return (
-    <React.Fragment>
-      <AppBar />
-      <ModuleContainer>
-        {/* Fragment 1: Page navigation */}
-        <NavigationContainer background={zoomGreyZero}>
-          <FragmentContent>
-            <PageNavigation>
-              <PageNavList>
-                {countryDetailMockData.nav.map(item => (
-                  <PageNavItem key={item}>{item}</PageNavItem>
-                ))}
-              </PageNavList>
-            </PageNavigation>
-          </FragmentContent>
-        </NavigationContainer>
+class CountryDetailModule extends React.Component {
+  constructor(props) {
+    super(props);
 
-        {/* Fragment 2: Country info */}
-        <FragmentContainer>
-          <FragmentContent>
-            <CountryName>
-              Zoom in on {countryDetailMockData.country}
-            </CountryName>
-            <Box direction="row">
-              <Box width="50%">
-                <PageIntroInitial>
-                  {countryDetailMockData.info.initial}
-                </PageIntroInitial>
-                <PageIntroSecondary>
-                  {countryDetailMockData.info.secondary}
-                </PageIntroSecondary>
-                <SimpleText color={aidsFondsRed}>
-                  Source: Wikipedia, not endorsed by Aidsfonds
-                </SimpleText>
+    // This binding is necessary to make `this` work in the callback
+    this.scrollToNode = this.scrollToNode.bind(this);
+  }
+
+  scrollToNode(node) {
+    node.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <AppBar />
+        <ModuleContainer>
+          {/* Fragment 1: Page navigation */}
+          <NavigationContainer background={zoomGreyZero}>
+            <FragmentContent>
+              <PageNavigation>
+                <PageNavList>
+                  {countryDetailMockData.fragments.map(item => (
+                    <PageNavItem
+                      key={item.id}
+                      onClick={() => this.scrollToNode(item.id)}
+                    >
+                      {item.id}
+                    </PageNavItem>
+                  ))}
+                </PageNavList>
+              </PageNavigation>
+            </FragmentContent>
+          </NavigationContainer>
+
+          {/* Fragment 2: Country info */}
+          <FragmentContainer
+            ref={node => (countryDetailMockData.fragments[0].id = node)}
+          >
+            <FragmentContent>
+              <CountryName>
+                Zoom in on {countryDetailMockData.country}
+              </CountryName>
+              <Box direction="row">
+                <Box width="50%">
+                  <PageIntroInitial>
+                    {countryDetailMockData.fragments[0].description[0]}
+                  </PageIntroInitial>
+                  <PageIntroSecondary>
+                    {countryDetailMockData.fragments[0].description[1]}
+                  </PageIntroSecondary>
+                  <SimpleText color={aidsFondsRed}>
+                    {countryDetailMockData.fragments[0].description[2]}
+                  </SimpleText>
+                </Box>
+                <Box width="50%">
+                  <BarChart data={barChartMockData} />
+                </Box>
               </Box>
-              <Box width="50%">
+            </FragmentContent>
+          </FragmentContainer>
+
+          {/* Fragment 2: Indicator chart */}
+          <FragmentContainer
+            background={zoomGreyZero}
+            ref={node => (countryDetailMockData.fragments[1].id = node)}
+          >
+            <FragmentContent>
+              <FragmentHeader>
+                {countryDetailMockData.fragments[1].title}
+              </FragmentHeader>
+              <FragmentVisualisation>
+                <LineChart data={lineChartMockData} />
+              </FragmentVisualisation>
+            </FragmentContent>
+          </FragmentContainer>
+
+          {/* Fragment 3: Indicator chart */}
+          <FragmentContainer
+            ref={node => (countryDetailMockData.fragments[2].id = node)}
+          >
+            <FragmentContent>
+              <FragmentHeader>
+                {countryDetailMockData.fragments[2].title}
+              </FragmentHeader>
+              <FragmentVisualisation>
+                <LineChart data={lineChartMockData} />
+              </FragmentVisualisation>
+            </FragmentContent>
+          </FragmentContainer>
+
+          {/* Fragment 4: Indicator chart */}
+          <FragmentContainer
+            background={zoomGreyZero}
+            ref={node => (countryDetailMockData.fragments[3].id = node)}
+          >
+            <FragmentContent>
+              <FragmentHeader>
+                {countryDetailMockData.fragments[3].title}
+              </FragmentHeader>
+              <FragmentDescription>
+                {countryDetailMockData.fragments[3].description[0]}
+              </FragmentDescription>
+              <FragmentVisualisation>
                 <BarChart data={barChartMockData} />
-                {/*<Box>
-                  <Text>HIV prevalance (adults and children)</Text>
-                </Box>
-                <Box>
-                  <Text>HIV incidence per 1000 population</Text>
-                </Box>
-                <Box>
-                  <Text>People living with HIV receiving ART</Text>
-                </Box>*/}
-              </Box>
-            </Box>
-          </FragmentContent>
-        </FragmentContainer>
+              </FragmentVisualisation>
+            </FragmentContent>
+          </FragmentContainer>
 
-        {/* Fragment 2: Indicator chart */}
-        <FragmentContainer background={zoomGreyZero}>
-          <FragmentContent>
-            <FragmentHeader>
-              {countryDetailMockData.fragments[0].name}
-            </FragmentHeader>
-            <FragmentVisualisation>
-              <LineChart data={lineChartMockData} />
-            </FragmentVisualisation>
-          </FragmentContent>
-        </FragmentContainer>
+          {/* Fragment 5: Indicator chart */}
+          <FragmentContainer
+            ref={node => (countryDetailMockData.fragments[4].id = node)}
+          >
+            <FragmentContent>
+              <FragmentHeader>
+                {countryDetailMockData.fragments[4].title}
+              </FragmentHeader>
+              <FragmentDescription>
+                {countryDetailMockData.fragments[4].description[0]}
+              </FragmentDescription>
+              <FragmentVisualisation />
+            </FragmentContent>
+          </FragmentContainer>
 
-        {/* Fragment 3: Indicator chart */}
-        <FragmentContainer>
-          <FragmentContent>
-            <FragmentHeader>
-              {countryDetailMockData.fragments[1].name}
-            </FragmentHeader>
-            <FragmentVisualisation>
-              <LineChart data={lineChartMockData} />
-            </FragmentVisualisation>
-          </FragmentContent>
-        </FragmentContainer>
+          {/* Fragment 5: Indicator chart */}
+          <FragmentContainer
+            background={zoomGreyZero}
+            ref={node => (countryDetailMockData.fragments[5].id = node)}
+          >
+            <FragmentContent>
+              <FragmentHeader>
+                {countryDetailMockData.fragments[5].title}
+              </FragmentHeader>
+              <FragmentVisualisation direction="row">
+                <PieChart data={pieChartMockData} />
+                <PieChart data={pieChartMockData} />
+              </FragmentVisualisation>
+              <FragmentVisualisation>
+                <LineChart data={lineChartMockData} />
+              </FragmentVisualisation>
+            </FragmentContent>
+          </FragmentContainer>
 
-        {/* Fragment 4: Indicator chart */}
-        <FragmentContainer background={zoomGreyZero}>
-          <FragmentContent>
-            <FragmentHeader>
-              {countryDetailMockData.fragments[2].name}
-            </FragmentHeader>
-            <FragmentDescription>
-              {countryDetailMockData.fragments[2].description}
-            </FragmentDescription>
-            <FragmentVisualisation>
-              <BarChart data={barChartMockData} />
-            </FragmentVisualisation>
-          </FragmentContent>
-        </FragmentContainer>
-
-        {/* Fragment 5: Indicator chart */}
-        <FragmentContainer>
-          <FragmentContent>
-            <FragmentHeader>
-              {countryDetailMockData.fragments[3].name}
-            </FragmentHeader>
-            <FragmentDescription>
-              {countryDetailMockData.fragments[3].description}
-            </FragmentDescription>
-            <FragmentVisualisation />
-          </FragmentContent>
-        </FragmentContainer>
-
-        {/* Fragment 5: Indicator chart */}
-        <FragmentContainer background={zoomGreyZero}>
-          <FragmentContent>
-            <FragmentHeader>
-              {countryDetailMockData.fragments[4].name}
-            </FragmentHeader>
-            <FragmentVisualisation direction="row">
-              <PieChart data={pieChartMockData} />
-              <PieChart data={pieChartMockData} />
-            </FragmentVisualisation>
-            <FragmentVisualisation>
-              <LineChart data={lineChartMockData} />
-            </FragmentVisualisation>
-          </FragmentContent>
-        </FragmentContainer>
-
-        {/* Fragment 5: Projects */}
-        <FragmentContainer>
-          <FragmentContent>
-            <FragmentHeader>
-              {countryDetailMockData.fragments[5].name}
-            </FragmentHeader>
-            <FragmentVisualisation />
-          </FragmentContent>
-        </FragmentContainer>
-      </ModuleContainer>
-    </React.Fragment>
-  );
-};
+          {/* Fragment 5: Projects */}
+          <FragmentContainer
+            ref={node => (countryDetailMockData.fragments[6].id = node)}
+          >
+            <FragmentContent>
+              <FragmentHeader>
+                {countryDetailMockData.fragments[6].title}
+              </FragmentHeader>
+              <FragmentVisualisation />
+            </FragmentContent>
+          </FragmentContainer>
+        </ModuleContainer>
+      </React.Fragment>
+    );
+  }
+}
 
 CountryDetailModule.propTypes = propTypes;
 CountryDetailModule.defaultProps = defaultProps;

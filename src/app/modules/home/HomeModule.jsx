@@ -2,11 +2,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import GeoMap from '../../components/geo/GeoMap/GeoMap';
-import BaseDialog from '../../components/dialog/BaseDialog/BaseDialog';
-import AppBar from '../../components/navigation/AppBar/AppBar';
+import GeoMap from 'app/components/geo/GeoMap/GeoMap';
+import BaseDialog from 'app/components/dialog/BaseDialog/BaseDialog';
+import AppBar from 'app/components/navigation/AppBar/AppBar';
 import { Box } from 'grommet';
-import SideBar from '../../components/navigation/SideBar/SideBar';
+import SideBar from 'app/components/navigation/SideBar/SideBar';
 
 const ModuleContainer = styled(Box)``;
 

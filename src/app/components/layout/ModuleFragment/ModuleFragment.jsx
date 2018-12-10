@@ -8,7 +8,7 @@ import {
   fragmentContentWidth,
   FragmentParagraph,
   SectionHeading,
-} from '../../../components/theme/ThemeSheet';
+} from 'app/components/theme/ThemeSheet';
 
 const FragmentContainer = styled(Box)`
   width: 100%;

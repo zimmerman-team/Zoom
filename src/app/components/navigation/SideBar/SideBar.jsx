@@ -8,7 +8,7 @@ import {
   aidsFondsRed,
   zoomFontFamOne,
   zoomFontFamTwo,
-} from '../../../components/theme/ThemeSheet';
+} from 'app/components/theme/ThemeSheet';
 
 const ComponentBase = styled.div``;
 

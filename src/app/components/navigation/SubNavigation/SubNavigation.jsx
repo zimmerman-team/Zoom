@@ -7,8 +7,8 @@ import {
   aidsFondsRed,
   zoomFontFamOne,
   zoomGreyZero,
-} from '../../../components/theme/ThemeSheet';
-import countryDetailMockData from '../../../__mocks__/countryDetailMock';
+} from 'app/components/theme/ThemeSheet';
+import countryDetailMockData from 'app/__mocks__/countryDetailMock';
 import { Box } from 'grommet/es6';
 
 const NavigationContainer = styled(FragmentContainer)`

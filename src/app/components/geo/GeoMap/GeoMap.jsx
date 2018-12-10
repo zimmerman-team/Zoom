@@ -1,24 +1,28 @@
 /* global window, fetch */
 import React, { Component } from 'react';
 import MapGL, { Popup, NavigationControl, Marker } from 'react-map-gl';
-import KENYA_COUNTIES from './data/kenya-county-borders.json';
-import { dataLayer, defaultMapStyle, colorStops } from './components/map-style';
-import IndicatorPin from './components/indicator-pin';
+import KENYA_COUNTIES from 'app/components/geo/GeoMap/data/kenya-county-borders.json';
+import {
+  dataLayer,
+  defaultMapStyle,
+  colorStops,
+} from 'app/components/geo/GeoMap/components/map-style';
+import IndicatorPin from 'app/components/geo/GeoMap/components/indicator-pin';
 import {
   updatePercentiles,
   coupleData,
   loadSubIndicators,
-} from './components/utils';
+} from 'app/components/geo/GeoMap/components/utils';
 import { fromJS } from 'immutable';
 import { json as requestJson } from 'd3-request';
-import DataControlPanel from './components/DataControlPanel';
+import DataControlPanel from 'app/components/geo/GeoMap/components/DataControlPanel';
 import styled from 'styled-components';
 import find from 'lodash/find';
 import filter from 'lodash/filter';
 
 // import 'app/pages/CountryFocusMapbox/CountryFocusMapbox.css';
 
-import IndicatorInfo from './components/indicator-info';
+import IndicatorInfo from 'app/components/geo/GeoMap/components/indicator-info';
 
 const MAPBOX_TOKEN =
   'pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw';

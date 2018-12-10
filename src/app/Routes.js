@@ -1,14 +1,18 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, Component } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 // Utils
-import PageLoader from './modules/common/pageloader/PageLoader';
+import PageLoader from 'app/modules/common/pageloader/PageLoader';
 
 // Modules
-const HomeModule = lazy(() => import('./modules/home/HomeModule'));
+// import HomeModule from './modules/home/HomeModule';
+const HomeModule = lazy(() => import('app/modules/home/HomeModule'));
+const CountryDetailModule = lazy(() =>
+  import('app/modules/countrydetail/CountryDetailModule'),
+);
 const NotFoundModule = lazy(() =>
-  import('./modules/common/404/NotFoundModule'),
+  import('app/modules/common/404/NotFoundModule'),
 );
 
 // Routes
@@ -17,21 +21,14 @@ const Routes = () => {
     <Suspense fallback={<PageLoader />}>
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/home" />} />
-        <Route
-          exact
-          path="/home"
-          render={props => {
-            <HomeModule {...props} />;
-          }}
-        />
-        <Route component={NotFoundModule} />
+        <Route exact path="/home" render={() => <HomeModule />} />
+        <Route exact path="/country" render={() => <CountryDetailModule />} />
+        <Route render={() => NotFoundModule} />
       </Switch>
     </Suspense>
   );
 };
 
-Routes.propTypes = {
-  location: PropTypes.object, // React Router Passed Props
-};
+Routes.propTypes = {};
 
 export default Routes;

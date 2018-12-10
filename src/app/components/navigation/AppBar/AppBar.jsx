@@ -4,10 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box, Button, Image } from 'grommet';
 import { Menu } from 'grommet-icons';
-import {
-  aidsFondsRed,
-  aidsFondsWhite,
-} from '../../../components/theme/ThemeSheet';
+import { aidsFondsRed, aidsFondsWhite } from 'app/components/theme/ThemeSheet';
 // import {}
 
 const ModuleContainer = styled(Box)`

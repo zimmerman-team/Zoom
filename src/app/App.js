@@ -1,26 +1,22 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+// import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-import Grommet from 'grommet';
-import { grommet } from 'grommet/themes';
+// import Grommet from 'grommet';
+// import { grommet } from 'grommet/themes';
 // Routes
 import Routes from './Routes';
 
 // Store Configuration
-import createStore from './store';
+// import createStore from './store';
 
-const THEME = grommet;
-const STORE = createStore();
+// const THEME = grommet;
+// const STORE = createStore();
 
 const App = () => {
   return (
-    <Grommet theme={THEME}>
-      <Provider store={STORE}>
-        <Router>
-          <Routes />
-        </Router>
-      </Provider>
-    </Grommet>
+    <Router>
+      <Routes />
+    </Router>
   );
 };
 

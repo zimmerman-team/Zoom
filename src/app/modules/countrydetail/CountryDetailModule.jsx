@@ -3,9 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box, Button, Grommet, Text, Paragraph, Heading, Grid } from 'grommet';
-import { lineChartMockData } from '../../__mocks__/lineChartMock';
-import { barChartMockData } from '../../__mocks__/barChartMock';
-import countryDetailMockData from '../../__mocks__/countryDetailMock';
+import { lineChartMockData } from 'app/__mocks__/lineChartMock';
+import { barChartMockData } from 'app/__mocks__/barChartMock';
+import countryDetailMockData from 'app/__mocks__/countryDetailMock';
 import ThemeSheet, {
   PageHeading,
   SectionHeading,
@@ -20,13 +20,13 @@ import ThemeSheet, {
   PageIntroInitial,
   PageIntroSecondary,
   SimpleText,
-} from '../../components/theme/ThemeSheet';
-import AppBar from '../../components/navigation/AppBar/AppBar';
-import LineChart from '../../components/visualization/linechart/LineChart';
-import BarChart from '../../components/visualization/barchart/BarChart';
-import PieChart from '../../components/visualization/piechart/PieChart';
-import { pieChartMockData } from '../../__mocks__/pieChartMock';
-import ModuleFragment from '../../components/layout/ModuleFragment/ModuleFragment';
+} from 'app/components/theme/ThemeSheet';
+import AppBar from 'app/components/navigation/AppBar/AppBar';
+import LineChart from 'app/components/visualization/linechart/LineChart';
+import BarChart from 'app/components/visualization/barchart/BarChart';
+import PieChart from 'app/components/visualization/piechart/PieChart';
+import { pieChartMockData } from 'app/__mocks__/pieChartMock';
+import ModuleFragment from 'app/components/layout/ModuleFragment/ModuleFragment';
 
 const ModuleContainer = styled(Box)`
   background-color: ${aidsFondsWhite};

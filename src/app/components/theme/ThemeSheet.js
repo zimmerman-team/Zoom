@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styled, { createGlobalStyle } from 'styled-components';
 import { Box, Button, Grommet, Text, Heading, Grid } from 'grommet';
 import { grommet } from 'grommet/themes';
+import { Checkmark, Close } from 'grommet-icons';
 
 const ComponentBase = styled.div``;
 
@@ -146,6 +147,15 @@ export const SimpleText = styled(Text)`
   font-weight: 300;
   width: 100%;
   line-height: 1;
+`;
+
+/* Icons */
+
+export const ConditionMet = styled(Checkmark)`
+  fill: green;
+`;
+export const ConditionUnmet = styled(Close)`
+  fill: ${aidsFondsRed};
 `;
 
 const propTypes = {};

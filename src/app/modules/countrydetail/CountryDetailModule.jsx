@@ -20,6 +20,8 @@ import ThemeSheet, {
   PageIntroInitial,
   PageIntroSecondary,
   SimpleText,
+  ConditionMet,
+  ConditionUnmet,
 } from 'app/components/theme/ThemeSheet';
 import AppBar from 'app/components/navigation/AppBar/AppBar';
 import LineChart from 'app/components/visualization/linechart/LineChart';
@@ -111,6 +113,25 @@ const PageNavItem = styled.li`
   }
 `;
 
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+/* Fragment 5: human rights */
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+const StigmaList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+`;
+
+const StigmaListItem = styled.ul`
+  display: flex;
+  align-items: center;
+  //justify-content: center;
+  flex-direction: column;
+`;
+
 // FRAGMENT 2: country info
 const CountryInfoContainer = styled(Box)``;
 const CountryName = styled(PageHeading)`
@@ -138,7 +159,10 @@ class CountryDetailModule extends React.Component {
       <React.Fragment>
         <AppBar />
         <ModuleContainer>
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
           {/* Fragment 1: Page navigation */}
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
+
           <NavigationContainer background={zoomGreyZero}>
             <FragmentContent>
               <PageNavigation>
@@ -156,7 +180,10 @@ class CountryDetailModule extends React.Component {
             </FragmentContent>
           </NavigationContainer>
 
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
           {/* Fragment 2: Country info */}
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
+
           <FragmentContainer
             ref={node => (countryDetailMockData.fragments[0].id = node)}
           >
@@ -183,7 +210,10 @@ class CountryDetailModule extends React.Component {
             </FragmentContent>
           </FragmentContainer>
 
-          {/* Fragment 2: Indicator chart */}
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
+          {/* Fragment 2: aids epidemic*/}
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
+
           <FragmentContainer
             background={zoomGreyZero}
             ref={node => (countryDetailMockData.fragments[1].id = node)}
@@ -198,7 +228,10 @@ class CountryDetailModule extends React.Component {
             </FragmentContent>
           </FragmentContainer>
 
-          {/* Fragment 3: Indicator chart */}
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
+          {/* Fragment 3: economic indicators */}
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
+
           <FragmentContainer
             ref={node => (countryDetailMockData.fragments[2].id = node)}
           >
@@ -212,7 +245,10 @@ class CountryDetailModule extends React.Component {
             </FragmentContent>
           </FragmentContainer>
 
-          {/* Fragment 4: Indicator chart */}
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
+          {/* Fragment 4: civil space */}
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
+
           <FragmentContainer
             background={zoomGreyZero}
             ref={node => (countryDetailMockData.fragments[3].id = node)}
@@ -230,7 +266,9 @@ class CountryDetailModule extends React.Component {
             </FragmentContent>
           </FragmentContainer>
 
-          {/* Fragment 5: Indicator chart */}
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
+          {/* Fragment 5: human rights */}
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
 
           <FragmentContainer
             ref={node => (countryDetailMockData.fragments[4].id = node)}
@@ -242,16 +280,39 @@ class CountryDetailModule extends React.Component {
               <FragmentDescription>
                 {countryDetailMockData.fragments[4].description[0]}
               </FragmentDescription>
-              <FragmentVisualisation />
+              <FragmentVisualisation>
+                <StigmaList>
+                  <StigmaListItem>
+                    <ConditionMet color="green" />
+                    <p>Laws deeming sex work to be illegal</p>
+                  </StigmaListItem>
+                  <StigmaListItem>
+                    <ConditionMet color="green" />
+                    <p>Laws that criminalize same-sex activities</p>
+                  </StigmaListItem>
+                  <StigmaListItem>
+                    <ConditionUnmet color="red" />
+                    <p>
+                      Impose compulsory treatment/detention for people who use
+                      drugs
+                    </p>
+                  </StigmaListItem>
+                  <StigmaListItem>
+                    <ConditionMet color="green" />
+                    <p>
+                      Laws that specifically criminalize HIV transmission or
+                      exposure
+                    </p>
+                  </StigmaListItem>
+                </StigmaList>
+              </FragmentVisualisation>
             </FragmentContent>
           </FragmentContainer>
-          {/*<ModuleFragment
-            ref={node => (countryDetailMockData.fragments[4].id = node)}
-            title={countryDetailMockData.fragments[4].title}
-            description={countryDetailMockData.fragments[4].description[0]}
-          />
-*/}
-          {/* Fragment 5: Indicator chart */}
+
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
+          {/* Fragment 5: aidsfonds financial transactions */}
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
+
           <FragmentContainer
             background={zoomGreyZero}
             ref={node => (countryDetailMockData.fragments[5].id = node)}
@@ -270,7 +331,10 @@ class CountryDetailModule extends React.Component {
             </FragmentContent>
           </FragmentContainer>
 
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
           {/* Fragment 5: Projects */}
+          {/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
+
           <FragmentContainer
             ref={node => (countryDetailMockData.fragments[6].id = node)}
           >

@@ -28,6 +28,8 @@ import LineChart from 'app/components/visualization/linechart/LineChart';
 import BarChart from 'app/components/visualization/barchart/BarChart';
 import PieChart from 'app/components/visualization/piechart/PieChart';
 import { pieChartMockData } from 'app/__mocks__/pieChartMock';
+import IconInfo from 'app/assets/icons/icon_info.svg';
+
 import ModuleFragment from 'app/components/layout/ModuleFragment/ModuleFragment';
 
 const ModuleContainer = styled(Box)`
@@ -165,6 +167,7 @@ class CountryDetailModule extends React.Component {
 
           <NavigationContainer background={zoomGreyZero}>
             <FragmentContent>
+              <IconInfo />
               <PageNavigation>
                 <PageNavList>
                   {countryDetailMockData.fragments.map(item => (

@@ -2,8 +2,12 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 // Components
-import BaseDialog from './BaseDialog';
-import { ZoomButton, DialogHeading, SimpleText } from '../../theme/ThemeSheet';
+import BaseDialog from 'components/dialog/BaseDialog/BaseDialog';
+import {
+  ZoomButton,
+  DialogHeading,
+  SimpleText,
+} from 'components/theme/ThemeSheet';
 
 const wrapper = shallow(<BaseDialog />);
 

@@ -43,41 +43,38 @@ class CountryDetailModule extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
-        <AppBar />
-        <ModuleContainer>
-          {/* Fragment 1: Page navigation */}
-          <PageNavigation />
+      <ModuleContainer>
+        {/* Fragment 1: Page navigation */}
+        <PageNavigation />
 
-          {/* Fragment 2: Country info */}
-          <CountryInfo />
+        {/* Fragment 2: Country info */}
+        <CountryInfo />
 
-          {/* Fragment 2: aids epidemic*/}
-          <AidsEpidemic background={zoomGreyZero} />
+        {/* Fragment 2: aids epidemic*/}
+        <AidsEpidemic background={zoomGreyZero} />
 
-          {/* Fragment 3: economic indicators */}
-          <EconomicIndicators />
+        {/* Fragment 3: economic indicators */}
+        <EconomicIndicators />
 
-          {/* Fragment 4: civic space */}
-          <CivicSpace background={zoomGreyZero} />
+        {/* Fragment 4: civic space */}
+        <CivicSpace background={zoomGreyZero} />
 
-          {/* Fragment 5: human rights */}
-          <HumanRights />
+        {/* Fragment 5: human rights */}
+        <HumanRights />
 
-          {/* Fragment 5: aidsfonds financial transactions */}
-          <AidsfondsTransactions background={zoomGreyZero} />
+        {/* Fragment 5: aidsfonds financial transactions */}
+        <AidsfondsTransactions background={zoomGreyZero} />
 
-          {/* Fragment 5: Projects */}
-          <FragmentContainer>
-            <FragmentContent>
-              <FragmentHeader>
-                {countryDetailMockData.fragments[6].title}
-              </FragmentHeader>
-              <FragmentVisualisation />
-            </FragmentContent>
-          </FragmentContainer>
-        </ModuleContainer>
-      </React.Fragment>
+        {/* Fragment 5: Projects */}
+        <FragmentContainer>
+          <FragmentContent>
+            <FragmentHeader>
+              {countryDetailMockData.fragments[6].title}
+            </FragmentHeader>
+            <FragmentVisualisation />
+          </FragmentContent>
+        </FragmentContainer>
+      </ModuleContainer>
     );
   }
 }

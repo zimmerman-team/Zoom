@@ -8,7 +8,7 @@ import {
   ZoomButton,
   SimpleText,
   aidsFondsWhite,
-} from 'app/components/theme/ThemeSheet';
+} from 'components/theme/ThemeSheet';
 
 const DialogLayer = styled(Layer)`
   width: 840px;

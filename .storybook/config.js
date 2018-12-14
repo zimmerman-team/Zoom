@@ -33,7 +33,7 @@ configureViewport({
 // automatically import all files ending in *.stories.js
 // const req = require.context('../stories', true, /.stories.js$/);
 
-const req = require.context('../src', true, /.story.js$/);
+const req = require.context('../src/app', true, /.story.js$/);
 
 function loadStories() {
   req.keys().forEach(filename => req(filename));
@@ -67,7 +67,7 @@ addDecorator((storyFn, context) => withConsole()(storyFn)(context));
 addDecorator(
   withOptions({
     name: 'ZOOM V2',
-    theme: themes.dark,
+    // theme: themes.dark,
     url: 'https://zoom-v2-dev.nyuki.io/',
     goFullScreen: false,
     showStoriesPanel: true,

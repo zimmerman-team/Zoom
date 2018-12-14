@@ -3,25 +3,23 @@ import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 // Utils
-import PageLoader from 'app/modules/common/pageloader/PageLoader';
+import PageLoader from 'modules/common/pageloader/PageLoader';
 
 // Modules
 // import HomeModule from './modules/home/HomeModule';
-const HomeModule = lazy(() => import('app/modules/home/HomeModule'));
+// const HomeModule = lazy(() => import('modules/home/HomeModule'));
 const CountryDetailModule = lazy(() =>
-  import('app/modules/countrydetail/CountryDetailModule'),
+  import('modules/countrydetail/CountryDetailModule'),
 );
-const NotFoundModule = lazy(() =>
-  import('app/modules/common/404/NotFoundModule'),
-);
+const NotFoundModule = lazy(() => import('modules/common/404/NotFoundModule'));
 
 // Routes
 const Routes = () => {
   return (
     <Suspense fallback={<PageLoader />}>
       <Switch>
-        <Route exact path="/" render={() => <Redirect to="/home" />} />
-        <Route exact path="/home" render={() => <HomeModule />} />
+        <Route exact path="/" render={() => <Redirect to="/country" />} />
+        {/*<Route exact path="/home" render={() => <HomeModule />} />*/}
         <Route exact path="/country" render={() => <CountryDetailModule />} />
         <Route render={() => NotFoundModule} />
       </Switch>

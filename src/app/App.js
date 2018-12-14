@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 // import Grommet from 'grommet';
 // import { grommet } from 'grommet/themes';
 // Routes
-import Routes from './Routes';
+import Routes from 'Routes';
 
 // Store Configuration
 // import createStore from './store';

@@ -5,10 +5,12 @@ import styled from 'styled-components';
 import {
   aidsFondsBlue,
   aidsFondsRed,
+  FragmentContent,
   zoomFontFamOne,
   zoomGreyZero,
-} from 'app/components/theme/ThemeSheet';
-import countryDetailMockData from 'app/__mocks__/countryDetailMock';
+  FragmentContainer,
+} from '../../../components/theme/ThemeSheet';
+import countryDetailMockData from '../../../__mocks__/countryDetailMock';
 import { Box } from 'grommet/es6';
 
 const NavigationContainer = styled(FragmentContainer)`
@@ -18,7 +20,7 @@ const NavigationContainer = styled(FragmentContainer)`
   padding: 0;
 `;
 
-const PageNavigation = styled(Box)`
+const PageNavigationContainer = styled(Box)`
   height: 65px;
   align-items: center;
   justify-content: center;
@@ -58,36 +60,31 @@ const PageNavItem = styled.li`
     }
   }
 `;
+const propTypes = {};
+const defaultProps = {};
 
-const propTypes = {
-  data: PropTypes.object,
-};
-const defaultProps = {
-  data: undefined,
-};
-
-const SubNavigation = props => {
+const PageNavigation = props => {
   return (
     <NavigationContainer background={zoomGreyZero}>
       <FragmentContent>
-        <PageNavigation>
+        <PageNavigationContainer>
           <PageNavList>
             {countryDetailMockData.fragments.map(item => (
               <PageNavItem
                 key={item.id}
-                onClick={() => this.scrollToNode(item.id)}
+                // onClick={() => this.scrollToNode(item.id)}
               >
                 {item.id}
               </PageNavItem>
             ))}
           </PageNavList>
-        </PageNavigation>
+        </PageNavigationContainer>
       </FragmentContent>
     </NavigationContainer>
   );
 };
 
-SubNavigation.propTypes = propTypes;
-SubNavigation.defaultProps = defaultProps;
+PageNavigation.propTypes = propTypes;
+PageNavigation.defaultProps = defaultProps;
 
-export default SubNavigation;
+export default PageNavigation;

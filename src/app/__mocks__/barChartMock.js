@@ -2,7 +2,7 @@ import {
   chartColorOne,
   chartColorTwo,
   chartColorThree,
-} from 'app/components/theme/ThemeSheet';
+} from 'components/theme/ThemeSheet';
 export const barChartMockData = [
   {
     country: 'AI',

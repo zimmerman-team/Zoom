@@ -158,6 +158,51 @@ export const ConditionUnmet = styled(Close)`
   fill: ${aidsFondsRed};
 `;
 
+/* modfule fragments */
+
+export const FragmentContainer = styled(Box)`
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+`;
+
+export const FragmentContent = styled(Box)`
+  width: 100%;
+  max-width: ${fragmentContentWidth};
+  justify-content: center;
+  align-items: center;
+`;
+
+export const FragmentHeader = styled(SectionHeading)`
+  margin-top: 0;
+  margin-bottom: 0;
+`;
+export const FragmentDescription = styled(FragmentParagraph)`
+  max-width: 900px;
+  align-self: flex-start;
+`;
+export const FragmentVisualisation = styled(Box)`
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
+
+export const StigmaList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+`;
+
+export const StigmaListItem = styled.ul`
+  display: flex;
+  align-items: center;
+  //justify-content: center;
+  flex-direction: column;
+`;
+
 const propTypes = {};
 const defaultProps = {};
 

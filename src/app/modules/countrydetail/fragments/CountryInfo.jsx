@@ -2,18 +2,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import BarChart from '../../../components/charts/barcharts/BarChart';
-import countryDetailMockData from '../../../__mocks__/countryDetailMock';
-import { Box } from 'grommet/es6';
+import BarChart from 'components/charts/barcharts/BarChart';
+import { countryDetailMockData } from '__mocks__/countryDetailMock';
+import { Box } from 'grommet';
 import {
   aidsFondsRed,
   PageIntroInitial,
   PageIntroSecondary,
   SimpleText,
   PageHeading,
-} from '../../../components/theme/ThemeSheet';
-import { barChartMockData } from '../../../__mocks__/barChartMock';
-import ModuleFragment from '../../../components/layout/ModuleFragment/ModuleFragment';
+} from 'components/theme/ThemeSheet';
+import { barChartMockData } from '__mocks__/barChartMock';
+import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 
 // FRAGMENT 2: country info
 const CountryInfoContainer = styled(Box)``;

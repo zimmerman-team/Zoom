@@ -7,12 +7,14 @@ import EconomicIndicators from 'modules/countrydetail/fragments/EconomicIndicato
 import CivicSpace from 'modules/countrydetail/fragments/CivicSpace';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
 import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTransactions';
+import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';
 
 storiesOf('Country Detail', module)
   .add('0. Full Page', () => <CountryDetailModule />)
-  .add('1. Country Info', () => <CountryInfo />)
-  .add('2. Aids Epidemic', () => <AidsEpidemic />)
-  .add('3. Economic Indicators', () => <EconomicIndicators />)
-  .add('4. Civic Space', () => <CivicSpace />)
+  .add('1. Page Navigation', () => <PageNavigation />)
+  .add('2. Country Info', () => <CountryInfo />)
+  .add('3. Aids Epidemic', () => <AidsEpidemic />)
+  .add('4. Economic Indicators', () => <EconomicIndicators />)
+  .add('5. Civic Space', () => <CivicSpace />)
   .add('6. Human Rights', () => <HumanRights />)
   .add('7. Aidsfonds financial transactions', () => <AidsfondsTransactions />);

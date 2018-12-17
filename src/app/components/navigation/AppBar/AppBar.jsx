@@ -42,10 +42,6 @@ class AppBar extends React.Component {
     anchorEl: null,
   };
 
-  toggleSideBar = () => {
-    this.props.toggleSideBar();
-  };
-
   render() {
     return (
       <ModuleContainer
@@ -58,7 +54,7 @@ class AppBar extends React.Component {
           <MenuButton
             plain
             icon={<Menu color={aidsFondsRed} />}
-            onClick={this.toggleSideBar}
+            onClick={this.props.toggleSideBar}
           />
           <AidsFondLogo
             a11yTitle="Aidsfonds logo"

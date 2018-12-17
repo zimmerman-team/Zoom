@@ -10,8 +10,8 @@ import {
   zoomGreyZero,
   FragmentContainer,
   PageHeading,
-} from '../../../components/theme/ThemeSheet';
-import countryDetailMockData from '../../../__mocks__/countryDetailMock';
+} from 'components/theme/ThemeSheet';
+import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import { Box } from 'grommet/es6';
 
 const NavigationContainer = styled(FragmentContainer)`
@@ -71,12 +71,7 @@ const PageNavigation = props => {
         <PageNavigationContainer>
           <PageNavList>
             {countryDetailMockData.fragments.map(item => (
-              <PageNavItem
-                key={item.id}
-                // onClick={() => this.scrollToNode(item.id)}
-              >
-                {item.id}
-              </PageNavItem>
+              <PageNavItem key={item.id}>{item.id}</PageNavItem>
             ))}
           </PageNavList>
         </PageNavigationContainer>

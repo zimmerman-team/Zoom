@@ -1,8 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import BarChartHorizontal from './BarChartHorizontal';
+import BarChartVertical from './BarChartVertical';
 import { barChartMockData } from '__mocks__/barChartMock';
 
 storiesOf('Charts', module).add('Bar Chart Horizontal', () => (
-  <BarChartHorizontal data={barChartMockData} />
+  <BarChartVertical data={barChartMockData} />
 ));

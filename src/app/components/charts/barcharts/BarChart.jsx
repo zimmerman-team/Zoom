@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
-import { Box, Button, Grommet, Text, Paragraph, Heading, Grid } from 'grommet';
+import { Box } from 'grommet';
 const ComponentBase = styled(Box)`
   height: 280px;
   width: 100%;

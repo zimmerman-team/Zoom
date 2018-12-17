@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Layer, Box, Heading, Button } from 'grommet';
+import { Layer, Box, Button } from 'grommet';
 import { FormClose } from 'grommet-icons';
 import {
   aidsFondsRed,
@@ -28,9 +28,10 @@ const CloseButton = styled(Button)`
 `;
 const propTypes = {
   open: PropTypes.bool,
+  toggleSideBar: PropTypes.func,
 };
 const defaultProps = {
-  open: true,
+  open: undefined,
 };
 
 class SideBar extends React.Component {
@@ -45,17 +46,15 @@ class SideBar extends React.Component {
   };
 
   render() {
-    const { open } = this.state;
-
     return (
       <React.Fragment>
-        {open && (
+        {this.props.open && (
           <Layer
             position="left"
             full="vertical"
             modal
-            onClickOutside={this.onClose}
-            onEsc={this.onClose}
+            onClickOutside={this.props.toggleSideBar}
+            onEsc={this.props.toggleSideBar}
           >
             <Box
               tag="form"
@@ -74,7 +73,7 @@ class SideBar extends React.Component {
                 <CloseButton
                   plain
                   icon={<CloseIcon color="white" />}
-                  onClick={this.onClose}
+                  onClick={this.props.toggleSideBar}
                   label="Close"
                 />
               </Box>

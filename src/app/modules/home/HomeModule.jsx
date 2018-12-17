@@ -36,8 +36,6 @@ class HomeModule extends Component {
   render() {
     return (
       <React.Fragment>
-        <SideBar open={this.state.sideBarOpen} />
-        <AppBar toggleSideBar={this.toggleSideBar} />
         <ModuleContainer>
           <BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />
           <GeoMap />

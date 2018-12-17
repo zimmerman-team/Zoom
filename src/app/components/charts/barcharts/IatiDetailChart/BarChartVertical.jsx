@@ -17,7 +17,7 @@ const defaultProps = {
   data: [],
 };
 
-const BarChartHorizontal = props => {
+const BarChartVertical = props => {
   return (
     <ComponentBase>
       <ResponsiveBar
@@ -126,7 +126,7 @@ const BarChartHorizontal = props => {
   );
 };
 
-BarChartHorizontal.propTypes = propTypes;
-BarChartHorizontal.defaultProps = defaultProps;
+BarChartVertical.propTypes = propTypes;
+BarChartVertical.defaultProps = defaultProps;
 
-export default BarChartHorizontal;
+export default BarChartVertical;

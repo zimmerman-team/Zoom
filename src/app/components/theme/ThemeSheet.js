@@ -165,6 +165,7 @@ export const FragmentContainer = styled(Box)`
   align-items: center;
   justify-content: center;
   padding: 40px;
+  position: relative;
 `;
 
 export const FragmentContent = styled(Box)`
@@ -172,6 +173,7 @@ export const FragmentContent = styled(Box)`
   max-width: ${fragmentContentWidth};
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
 export const FragmentHeader = styled(SectionHeading)`

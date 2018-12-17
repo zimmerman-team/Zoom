@@ -5,11 +5,11 @@ import styled from 'styled-components';
 import {
   FragmentHeader,
   FragmentVisualisation,
-} from '../../../components/theme/ThemeSheet';
-import countryDetailMockData from '../../../__mocks__/countryDetailMock';
-import LineChart from '../../../components/charts/linechart/LineChart';
-import { lineChartMockData } from '../../../__mocks__/lineChartMock';
-import ModuleFragment from '../../../components/layout/ModuleFragment/ModuleFragment';
+} from 'components/theme/ThemeSheet';
+import { countryDetailMockData } from '__mocks__/countryDetailMock';
+import LineChart from 'components/charts/linechart/LineChart';
+import { lineChartMockData } from '__mocks__/lineChartMock';
+import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 
 const ComponentBase = styled.div``;
 
@@ -22,13 +22,11 @@ const defaultProps = {
 
 const EconomicIndicators = props => {
   return (
-    <ModuleFragment>
-      <FragmentHeader>
-        {countryDetailMockData.fragments[2].title}
-      </FragmentHeader>
-      <FragmentVisualisation>
-        <LineChart data={lineChartMockData} />
-      </FragmentVisualisation>
+    <ModuleFragment
+      title={countryDetailMockData.fragments[2].title}
+      showInfoButton
+    >
+      <LineChart data={lineChartMockData} />
     </ModuleFragment>
   );
 };

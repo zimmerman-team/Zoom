@@ -5,6 +5,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 // import { grommet } from 'grommet/themes';
 // Routes
 import Routes from 'Routes';
+import AppBar from 'components/navigation/AppBar/AppBar';
+import SideBar from 'components/navigation/SideBar/SideBar';
 
 // Store Configuration
 // import createStore from './store';
@@ -12,12 +14,31 @@ import Routes from 'Routes';
 // const THEME = grommet;
 // const STORE = createStore();
 
-const App = () => {
-  return (
-    <Router>
-      <Routes />
-    </Router>
-  );
-};
+class App extends React.Component {
+  state = {
+    showSidebar: false,
+  };
+
+  render() {
+    return (
+      <React.Fragment>
+        <AppBar
+          toggleSideBar={() =>
+            this.setState({ showSidebar: !this.state.showSidebar })
+          }
+        />
+        <SideBar
+          open={this.state.showSidebar}
+          toggleSideBar={() =>
+            this.setState({ showSidebar: !this.state.showSidebar })
+          }
+        />
+        <Router>
+          <Routes />
+        </Router>
+      </React.Fragment>
+    );
+  }
+}
 
 export default App;

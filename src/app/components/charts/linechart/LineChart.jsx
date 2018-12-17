@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ResponsiveLine } from '@nivo/line';
-import { Box, Button, Grommet, Text, Paragraph, Heading, Grid } from 'grommet';
+import { Box } from 'grommet';
 
 const ComponentBase = styled(Box)`
   height: 400px;
@@ -26,7 +26,7 @@ const LineChart = props => {
           top: 30,
           right: 30,
           bottom: 30,
-          left: 30,
+          left: 50,
         }}
         xScale={{
           type: 'point',
@@ -44,8 +44,8 @@ const LineChart = props => {
         axisRight={null}
         axisBottom={{
           orient: 'bottom',
-          tickSize: 5,
-          tickPadding: 5,
+          tickSize: 0,
+          tickPadding: 10,
           tickRotation: 0,
           legend: '',
           legendOffset: 36,
@@ -53,10 +53,10 @@ const LineChart = props => {
         }}
         axisLeft={{
           orient: 'left',
-          tickSize: 5,
-          tickPadding: 5,
+          tickSize: 0,
+          tickPadding: 10,
           tickRotation: 0,
-          legend: 'count',
+          legend: '',
           legendOffset: -40,
           legendPosition: 'middle',
         }}

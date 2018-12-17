@@ -1,4 +1,4 @@
-const countryDetailMockData = {
+export const countryDetailMockData = {
   country: 'Kenya',
   fragments: [
     {

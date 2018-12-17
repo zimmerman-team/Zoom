@@ -186,6 +186,7 @@ export const FragmentVisualisation = styled(Box)`
   align-items: center;
   justify-content: center;
   width: 100%;
+  font-family: ${zoomFontFamTwo};
 `;
 
 export const StigmaList = styled.ul`

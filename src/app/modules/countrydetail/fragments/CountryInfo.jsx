@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import BarChart from '../../../components/charts/barchart/BarChart';
+import BarChart from '../../../components/charts/barcharts/BarChart';
 import countryDetailMockData from '../../../__mocks__/countryDetailMock';
 import { Box } from 'grommet/es6';
 import {

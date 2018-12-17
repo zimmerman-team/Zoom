@@ -25,7 +25,7 @@ const NodeLabel = styled.span`
   overflow: hidden;
   //white-space: nowrap;
   text-overflow: ellipsis;
-  font-family: ${zoomFontFamTwo};
+  font-family: ${zoomFontFamOne};
   font-size: 18x;
 `;
 const NodeValue = styled.span`

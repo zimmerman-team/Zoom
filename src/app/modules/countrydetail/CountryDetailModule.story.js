@@ -9,7 +9,7 @@ import HumanRights from 'modules/countrydetail/fragments/HumanRights';
 import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTransactions';
 import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';
 
-storiesOf('Country Detail', module)
+storiesOf('Module: Country Detail', module)
   .add('0. Full Page', () => <CountryDetailModule />)
   .add('1. Page Navigation', () => <PageNavigation />)
   .add('2. Country Info', () => <CountryInfo />)

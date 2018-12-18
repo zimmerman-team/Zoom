@@ -20,11 +20,8 @@ const defaultProps = {
 
 const Sectors = props => {
   return (
-    <ModuleFragment background={zoomGreyZero}>
-      <FragmentHeader>Sectors</FragmentHeader>
-      <FragmentVisualisation>
-        <TreeMap data={treeMapMockData} />
-      </FragmentVisualisation>
+    <ModuleFragment background={zoomGreyZero} title="Sectors" showInfoButton>
+      <TreeMap data={treeMapMockData} />
     </ModuleFragment>
   );
 };

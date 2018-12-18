@@ -2,23 +2,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Layer, Box, Button } from 'grommet';
-import { FormClose } from 'grommet-icons';
+import { Layer, Box, Button, RoutedButton } from 'grommet';
 import {
   aidsFondsRed,
   zoomFontFamOne,
   zoomFontFamTwo,
+  zoomGreyOne,
+  zoomGreyZero,
+  zoomGreyTwo,
 } from 'components/theme/ThemeSheet';
 
-const ComponentBase = styled.div``;
-
-const CloseIcon = styled(FormClose)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: ${aidsFondsRed};
-  border-radius: 50%;
-`;
+import IconHome from './icon_home.svg';
+import IconCharts from './icon_charts.svg';
+import IconClose from './icon_close.svg';
+import IconAbout from './icon_about.svg';
 
 const CloseButton = styled(Button)`
   padding: 0;
@@ -26,6 +23,55 @@ const CloseButton = styled(Button)`
   font-family: ${zoomFontFamTwo};
   font-size: 14px;
 `;
+
+const SidebarNavListContainer = styled(Box)`
+  background-color: ${zoomGreyZero};
+  padding: 20px;
+`;
+
+const SidebarNavList = styled(Box)`
+  display: flex;
+  flex-direction: column;
+`;
+
+const SidebarNavListItem = styled(RoutedButton)`
+  border: none;
+  color: ${aidsFondsRed};
+  border-radius: initial;
+  font-family: ${zoomFontFamTwo};
+  display: flex;
+  padding-left: 0;
+  padding-right: 0;
+  font-size: 14px;
+  line-height: 1;
+  margin-bottom: 16px;
+  transition: opacity 200ms ease-out;
+
+  &:last-child {
+    margin-bottom: 0;
+    opacity: 0.5;
+  }
+
+  &:hover {
+    opacity: 0.5;
+  }
+`;
+
+const SideBarLayer = styled(Layer)`
+  border-radius: 0;
+`;
+
+const SidebarHeader = styled(Box)`
+  padding: 20px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+`;
+
+const LoginContainer = styled(Box)`
+  width: 100px;
+  height: 100px;
+`;
+
 const propTypes = {
   open: PropTypes.bool,
   toggleSideBar: PropTypes.func,
@@ -39,32 +85,19 @@ class SideBar extends React.Component {
     open: this.props.open,
   };
 
-  onOpen = () => this.setState({ open: true });
-
-  onClose = () => {
-    this.setState({ open: undefined });
-  };
-
   render() {
     return (
       <React.Fragment>
         {this.props.open && (
-          <Layer
+          <SideBarLayer
             position="left"
             full="vertical"
             modal
             onClickOutside={this.props.toggleSideBar}
             onEsc={this.props.toggleSideBar}
           >
-            <Box
-              tag="form"
-              fill="vertical"
-              overflow="auto"
-              width="medium"
-              pad="medium"
-              onSubmit={this.onClose}
-            >
-              <Box
+            <Box fill="vertical" overflow="auto" width="320px">
+              <SidebarHeader
                 flex={false}
                 align="center"
                 direction="row"
@@ -72,13 +105,56 @@ class SideBar extends React.Component {
               >
                 <CloseButton
                   plain
-                  icon={<CloseIcon color="white" />}
+                  icon={<IconClose />}
                   onClick={this.props.toggleSideBar}
                   label="Close"
                 />
-              </Box>
+              </SidebarHeader>
+
+              <SidebarNavListContainer>
+                <SidebarNavList>
+                  <SidebarNavListItem
+                    label="Home"
+                    path={'/home'}
+                    icon={<IconHome />}
+                    onClick={this.props.toggleSideBar}
+                    hoverIndicator={false}
+                    type="button"
+                    plain={true}
+                  />
+
+                  <SidebarNavListItem
+                    label="Country Detail"
+                    path={'/country'}
+                    onClick={this.props.toggleSideBar}
+                    icon={<IconCharts />}
+                    type="button"
+                    plain={true}
+                  />
+
+                  <SidebarNavListItem
+                    label="IATI Detail"
+                    path="/iati"
+                    onClick={this.props.toggleSideBar}
+                    icon={<IconCharts />}
+                    type="button"
+                    plain={true}
+                  />
+
+                  <SidebarNavListItem
+                    disabled={true}
+                    active={false}
+                    label="About ZOOM"
+                    path="/about"
+                    onClick={this.props.toggleSideBar}
+                    icon={<IconAbout />}
+                    type="button"
+                    plain={true}
+                  />
+                </SidebarNavList>
+              </SidebarNavListContainer>
             </Box>
-          </Layer>
+          </SideBarLayer>
         )}
       </React.Fragment>
     );

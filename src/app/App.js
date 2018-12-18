@@ -16,27 +16,27 @@ import SideBar from 'components/navigation/SideBar/SideBar';
 
 class App extends React.Component {
   state = {
-    showSidebar: false,
+    showSidebar: true,
   };
 
   render() {
     return (
-      <React.Fragment>
-        <AppBar
-          toggleSideBar={() =>
-            this.setState({ showSidebar: !this.state.showSidebar })
-          }
-        />
-        <SideBar
-          open={this.state.showSidebar}
-          toggleSideBar={() =>
-            this.setState({ showSidebar: !this.state.showSidebar })
-          }
-        />
-        <Router>
+      <Router>
+        <React.Fragment>
+          <AppBar
+            toggleSideBar={() =>
+              this.setState({ showSidebar: !this.state.showSidebar })
+            }
+          />
+          <SideBar
+            open={this.state.showSidebar}
+            toggleSideBar={() =>
+              this.setState({ showSidebar: !this.state.showSidebar })
+            }
+          />
           <Routes />
-        </Router>
-      </React.Fragment>
+        </React.Fragment>
+      </Router>
     );
   }
 }

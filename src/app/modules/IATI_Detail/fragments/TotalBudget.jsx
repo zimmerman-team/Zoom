@@ -18,11 +18,8 @@ const defaultProps = {
 };
 
 const TotalBudget = props => (
-  <ModuleFragment>
-    <FragmentHeader>Total budget</FragmentHeader>
-    <FragmentVisualisation>
-      <BarChartVertical data={barChartMockData} />
-    </FragmentVisualisation>
+  <ModuleFragment title="Total budget" showInfoButton>
+    <BarChartVertical data={barChartMockData} />
   </ModuleFragment>
 );
 

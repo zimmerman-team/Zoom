@@ -7,6 +7,7 @@ import { Box, Button, Grommet, Text, Heading, Grid } from 'grommet';
 import {
   FragmentContainer,
   FragmentContent,
+  zoomFontFamTwo,
 } from 'components/theme/ThemeSheet';
 import { FragmentHeader } from 'components/theme/ThemeSheet';
 import countryDetailMockData from '__mocks__/countryDetailMock';
@@ -51,6 +52,8 @@ const FragmentInfo = styled(Box)`
   background-color: white;
   padding: 20px;
   z-index: 2;
+  border-radius: 2%;
+  font-family: ${zoomFontFamTwo};
 `;
 
 const propTypes = {

@@ -1,0 +1,12 @@
+
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g id="SYMBOLS" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="PRIMARY-MENU/OPENED" transform="translate(-16.000000, -135.000000)" fill="#FF0100">
+      <g id="ICONS/INFO" transform="translate(16.000000, 135.000000)">
+        <g id="icons8-info">
+          <path d="M10,0 C4.477,0 0,4.477 0,10 C0,15.523 4.477,20 10,20 C15.523,20 20,15.523 20,10 C20,4.477 15.523,0 10,0 Z M11,15 L9,15 L9,9 L11,9 L11,15 Z M11,7 L9,7 L9,5 L11,5 L11,7 Z" id="Shape" fill-rule="nonzero"></path>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

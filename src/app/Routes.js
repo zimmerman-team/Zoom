@@ -31,7 +31,7 @@ const Routes = () => {
       {/*<Route path="/:path" render={() => <SideBar />} />*/}
       <Suspense fallback={<PageLoader />}>
         <Switch>
-          <Route exact path="/" render={() => <Redirect to="/country" />} />
+          <Route exact path="/" render={() => <Redirect to="/home" />} />
           <Route exact path="/home" render={() => <HomeModule />} />
           <Route exact path="/country" render={() => <CountryDetailModule />} />
           <Route exact path="/iati" render={() => <IatiDetail />} />

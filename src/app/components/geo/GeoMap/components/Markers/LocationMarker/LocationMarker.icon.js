@@ -9,7 +9,7 @@ const pinStyle = {
   stroke: 'none',
 };
 
-export default class IndicatorPin extends PureComponent {
+export default class LocationMarkerIcon extends PureComponent {
   render() {
     const { size = 20, onMouseEnter, onMouseLeave, extraStyle } = this.props;
 

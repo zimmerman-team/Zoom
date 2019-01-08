@@ -1,18 +1,32 @@
 import React from 'react';
-// import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-// import Grommet from 'grommet';
-// import { grommet } from 'grommet/themes';
+import { graphql, QueryRenderer } from 'react-relay';
+import { Environment, Network, RecordSource, Store } from 'relay-runtime';
+
 // Routes
-import Routes from 'Routes';
+import Routes from './Routes';
 import AppBar from 'components/navigation/AppBar/AppBar';
 import SideBar from 'components/navigation/SideBar/SideBar';
 
-// Store Configuration
-// import createStore from './store';
+function fetchQuery(operation, variables) {
+  return fetch(`${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: operation.text,
+      variables,
+    }),
+  }).then(response => {
+    return response.json();
+  });
+}
 
-// const THEME = grommet;
-// const STORE = createStore();
+const modernEnvironment = new Environment({
+  network: Network.create(fetchQuery),
+  store: new Store(new RecordSource()),
+});
 
 class App extends React.Component {
   state = {
@@ -21,22 +35,40 @@ class App extends React.Component {
 
   render() {
     return (
-      <Router>
-        <React.Fragment>
-          <AppBar
-            toggleSideBar={() =>
-              this.setState({ showSidebar: !this.state.showSidebar })
-            }
-          />
-          <SideBar
-            open={this.state.showSidebar}
-            toggleSideBar={() =>
-              this.setState({ showSidebar: !this.state.showSidebar })
-            }
-          />
-          <Routes />
-        </React.Fragment>
-      </Router>
+      <QueryRenderer
+        environment={modernEnvironment}
+        query={graphql`
+          query AppQuery {
+            ...HomeModuleMediator_indicatorAggregations
+            ...IndicatorDropMediator_allIndicatorNames
+          }
+        `}
+        variables={{}}
+        render={({ error, props }) => {
+          if (props) {
+            return (
+              <Router>
+                <React.Fragment>
+                  <AppBar
+                    toggleSideBar={() =>
+                      this.setState({ showSidebar: !this.state.showSidebar })
+                    }
+                  />
+                  <SideBar
+                    open={this.state.showSidebar}
+                    toggleSideBar={() =>
+                      this.setState({ showSidebar: !this.state.showSidebar })
+                    }
+                  />
+                  <Routes props={props} />
+                </React.Fragment>
+              </Router>
+            );
+          } else {
+            return <div>Loading - 0</div>;
+          }
+        }}
+      />
     );
   }
 }

@@ -15,16 +15,19 @@ import SideBar from 'components/navigation/SideBar/SideBar';
 import Projects from 'modules/countrydetail/fragments/Projects';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
 import TreeMap from 'components/charts/treemap/TreeMap';
+// import HomeModuleMediator from 'mediators/ModuleMediators/HomeModuleMediator';
 
 // Modules lazy load
 const CountryDetailModule = lazy(() =>
   import('modules/countrydetail/CountryDetailModule'),
 );
-const HomeModule = lazy(() => import('modules/home/HomeModule'));
+const HomeModuleMediator = lazy(() =>
+  import('mediators/ModuleMediators/HomeModuleMediator'),
+);
 const IatiDetail = lazy(() => import('modules/IATI_Detail/IatiDetail'));
 
 // Routes
-const Routes = () => {
+const Routes = props => {
   return (
     <React.Fragment>
       {/*<Route path="/:path" render={() => <AppBar />} />*/}
@@ -32,7 +35,16 @@ const Routes = () => {
       <Suspense fallback={<PageLoader />}>
         <Switch>
           <Route exact path="/" render={() => <Redirect to="/home" />} />
-          <Route exact path="/home" render={() => <HomeModule />} />
+          <Route
+            exact
+            path="/home"
+            render={() => (
+              <HomeModuleMediator
+                indicatorAggregations={props.props}
+                allIndNames={props.props}
+              />
+            )}
+          />
           <Route exact path="/country" render={() => <CountryDetailModule />} />
           <Route exact path="/iati" render={() => <IatiDetail />} />
           <Route exact path="/component" render={() => <TreeMap />} />

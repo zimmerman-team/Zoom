@@ -2,12 +2,13 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 // Components
-import GeoMap, { ZoomControl } from './GeoMap';
+import { MapContainer } from './GeoMap.styles';
+import GeoMap from './GeoMap';
 
 const wrapper = shallow(<GeoMap />);
 
 describe('<GeoMap />', () => {
-  it('renders one <ZoomControl/> component', () => {
-    expect(wrapper.find(ZoomControl)).toHaveLength(1);
+  it('renders one <MapContainer/> component', () => {
+    expect(wrapper.find(MapContainer)).toHaveLength(1);
   });
 });

@@ -14,6 +14,12 @@ import {
 } from 'components/theme/ThemeSheet';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 
+const ItemText = styled.p`
+  //justify-self: flex-start;
+  align-self: flex-start;
+  width: 90%;
+`;
+
 const propTypes = {};
 const defaultProps = {};
 
@@ -27,19 +33,23 @@ const HumanRights = props => {
       <StigmaList>
         <StigmaListItem>
           <ConditionMet color="green" />
-          <p>Laws deeming sex work to be illegal</p>
+          <ItemText>Laws deeming sex work to be illegal</ItemText>
         </StigmaListItem>
         <StigmaListItem>
           <ConditionMet color="green" />
-          <p>Laws that criminalize same-sex activities</p>
+          <ItemText>Laws that criminalize same-sex activities</ItemText>
         </StigmaListItem>
         <StigmaListItem>
           <ConditionUnmet color="red" />
-          <p>Impose compulsory treatment/detention for people who use drugs</p>
+          <ItemText>
+            Impose compulsory treatment/detention for people who use drugs
+          </ItemText>
         </StigmaListItem>
         <StigmaListItem>
           <ConditionMet color="green" />
-          <p>Laws that specifically criminalize HIV transmission or exposure</p>
+          <ItemText>
+            Laws that specifically criminalize HIV transmission or exposure
+          </ItemText>
         </StigmaListItem>
       </StigmaList>
     </ModuleFragment>

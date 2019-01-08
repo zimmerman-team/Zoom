@@ -8,6 +8,7 @@ import CivicSpace from 'modules/countrydetail/fragments/CivicSpace';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
 import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTransactions';
 import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';
+import Projects from 'modules/countrydetail/fragments/Projects';
 
 storiesOf('Module: Country Detail', module)
   .add('0. Full Page', () => <CountryDetailModule />)
@@ -17,4 +18,5 @@ storiesOf('Module: Country Detail', module)
   .add('4. Economic Indicators', () => <EconomicIndicators />)
   .add('5. Civic Space', () => <CivicSpace />)
   .add('6. Human Rights', () => <HumanRights />)
-  .add('7. Aidsfonds financial transactions', () => <AidsfondsTransactions />);
+  .add('7. Aidsfonds financial transactions', () => <AidsfondsTransactions />)
+  .add('8. Projects', () => <Projects />);

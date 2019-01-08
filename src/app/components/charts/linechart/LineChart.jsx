@@ -23,7 +23,7 @@ const LineChart = props => {
       <ResponsiveLine
         data={props.data}
         margin={{
-          top: 30,
+          top: 0,
           right: 30,
           bottom: 30,
           left: 50,

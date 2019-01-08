@@ -16,7 +16,7 @@ import SideBar from 'components/navigation/SideBar/SideBar';
 
 class App extends React.Component {
   state = {
-    showSidebar: true,
+    showSidebar: false,
   };
 
   render() {

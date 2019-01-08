@@ -12,6 +12,9 @@ import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';*/
 // always active
 import AppBar from 'components/navigation/AppBar/AppBar';
 import SideBar from 'components/navigation/SideBar/SideBar';
+import Projects from 'modules/countrydetail/fragments/Projects';
+import HumanRights from 'modules/countrydetail/fragments/HumanRights';
+import TreeMap from 'components/charts/treemap/TreeMap';
 
 // Modules lazy load
 const CountryDetailModule = lazy(() =>
@@ -28,10 +31,11 @@ const Routes = () => {
       {/*<Route path="/:path" render={() => <SideBar />} />*/}
       <Suspense fallback={<PageLoader />}>
         <Switch>
-          <Route exact path="/" render={() => <Redirect to="/home" />} />
+          <Route exact path="/" render={() => <Redirect to="/country" />} />
           <Route exact path="/home" render={() => <HomeModule />} />
           <Route exact path="/country" render={() => <CountryDetailModule />} />
           <Route exact path="/iati" render={() => <IatiDetail />} />
+          <Route exact path="/component" render={() => <TreeMap />} />
         </Switch>
       </Suspense>
     </React.Fragment>

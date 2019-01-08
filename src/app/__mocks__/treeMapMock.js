@@ -1,82 +1,92 @@
 export const treeMapMockData = {
-  name: 'nivo',
+  name: 'root',
   color: '#5886E8',
   children: [
     {
+      name: 'Lorem ipsume dolor simet sector -5',
+      color: '#F7F8FA',
+      loc: 70000,
+    },
+    {
+      name: 'Lorem ipsume dolor simet sector -4',
+      color: '#F7F8FA',
+      loc: 50000,
+    },
+    {
       name: 'Lorem ipsume dolor simet sector -3',
-      color: '#D5D8DE',
-      loc: 1500,
+      color: '#F7F8FA',
+      loc: 40000,
     },
     {
       name: 'Lorem ipsume dolor simet sector -2',
       color: '#F7F8FA',
-      loc: 1000,
+      loc: 32768,
     },
     {
       name: 'Lorem ipsume dolor simet sector -1',
       color: '#B6CCFC',
-      loc: 700,
+      loc: 16384,
     },
     {
       name: 'Lorem ipsume dolor simet sector 1',
       color: '#D5D8DE',
-      loc: 400,
+      loc: 8192,
     },
     {
       name: 'Lorem ipsume dolor simet sector 2',
       color: '#F7F8FA',
-      loc: 300,
+      loc: 4096,
     },
     {
       name: 'Lorem ipsume dolor simet sector 3',
       color: '#B6CCFC',
-      loc: 200,
+      loc: 2048,
     },
     {
       name: 'Lorem ipsume dolor simet sector 4',
       color: '#AEA7BC',
-      loc: 100,
+      loc: 1024,
     },
     {
       name: 'Lorem ipsume dolor simet sector 5',
       color: '#F5D8D9',
-      loc: 80,
+      loc: 512,
     },
     {
       name: 'Lorem ipsume dolor simet sector 6',
       color: '#5886E8',
-      loc: 60,
+      loc: 256,
     },
     {
       name: 'Lorem ipsume dolor simet sector 7',
       color: '#D5D8DE',
-      loc: 40,
+      loc: 128,
     },
     {
       name: 'Lorem ipsume dolor simet sector 8',
       color: '#F7F8FA',
-      loc: 20,
+      loc: 64,
     },
     {
       name: 'Lorem ipsume dolor simet sector 9',
       color: '#B6CCFC',
-      loc: 10,
+      loc: 32,
     },
 
     {
       name: 'Lorem ipsume dolor simet sector 10',
       color: '#AEA7BC',
-      loc: 5,
+      loc: 16,
     },
     {
       name: 'Lorem ipsume dolor simet sector 11',
       color: '#F5D8D9',
-      loc: 4,
+      loc: 8,
     },
     {
       name: 'Lorem ipsume dolor simet sector 12',
       color: '#5886E8',
-      loc: 3,
+      loc: 4,
     },
     {
       name: 'Lorem ipsume dolor simet sector 13',

@@ -9,7 +9,6 @@ import {
   zoomFontFamOne,
   zoomGreyZero,
   FragmentContainer,
-  PageHeading,
 } from 'components/theme/ThemeSheet';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import { Box } from 'grommet/es6';

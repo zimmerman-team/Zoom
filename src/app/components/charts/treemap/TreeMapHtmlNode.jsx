@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import ScaleText from 'react-scale-text';
 import {
   aidsFondsBlue,
   zoomFontFamOne,
@@ -11,12 +12,20 @@ import {
   FragmentHeader,
   FragmentVisualisation,
 } from 'components/theme/ThemeSheet';
-
+/* todo: needs further tweaking from a design perspective and speccing from a business perspective*/
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-items: center;
+  //align-content: space-between;
+  justify-content: space-around;
+  //justify-items: center;
+  //padding: 10%;
+  //padding-top: 20px;
+  height: 100%;
+  &:hover {
+    opacity: 0.5;
+  }
 `;
 
 const NodeLabel = styled.span`
@@ -26,12 +35,18 @@ const NodeLabel = styled.span`
   //white-space: nowrap;
   text-overflow: ellipsis;
   font-family: ${zoomFontFamOne};
-  font-size: 18x;
+  line-height: 1;
 `;
 const NodeValue = styled.span`
   user-select: none;
   font-family: ${zoomFontFamOne};
-  font-size: 25px;
+  //font-size: 25px;
+  line-height: 1;
+  //color: cornflowerblue;
+`;
+
+const WidthDefiner = styled.div`
+  width: 80%;
 `;
 
 const TreeNodeBase = styled.div`
@@ -66,10 +81,16 @@ const TreeMapHtmlNode = ({ node, style }) => {
         borderColor: style.borderColor,
       }}
     >
-      {!hideText && (
+      {/*{!hideText && (*/}
+      {node.label && (
         <TextContainer>
-          <NodeLabel>{node.label}</NodeLabel>
-          <NodeValue>{node.value}</NodeValue>
+          <NodeLabel style={{ fontSize: style.width / 12 }}>
+            {node.label}
+          </NodeLabel>
+
+          <NodeValue style={{ fontSize: style.width / 9 }}>
+            {node.value}
+          </NodeValue>
         </TextContainer>
       )}
     </TreeNodeBase>

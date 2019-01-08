@@ -15,7 +15,6 @@ import {
 } from 'components/geo/GeoMap/components/utils';
 import { fromJS } from 'immutable';
 import { json as requestJson } from 'd3-request';
-import DataControlPanel from 'components/geo/GeoMap/components/DataControlPanel';
 import styled from 'styled-components';
 import find from 'lodash/find';
 import filter from 'lodash/filter';

@@ -30,6 +30,8 @@ const headSizeOne = '48px';
 const headSizeTwo = '48px';
 const fontSizeDialog = '18px';
 const fontSizeParagraph = '20px';
+const bigSpace = '40px';
+const smallSpace = '20px';
 
 export const fragmentContentWidth = '1024px';
 
@@ -82,6 +84,7 @@ export const PageIntroSecondary = styled(BaseParagraph)`
 
 export const FragmentParagraph = styled(BaseParagraph)`
   font-family: ${zoomFontFamTwo};
+  margin-top: 0;
 `;
 
 const ColorPallete = styled.div`
@@ -178,7 +181,7 @@ export const FragmentContent = styled(Box)`
 
 export const FragmentHeader = styled(SectionHeading)`
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: 50px;
 `;
 export const FragmentDescription = styled(FragmentParagraph)`
   max-width: 900px;
@@ -199,11 +202,12 @@ export const StigmaList = styled.ul`
   flex-direction: row;
 `;
 
-export const StigmaListItem = styled.ul`
+export const StigmaListItem = styled.li`
   display: flex;
   align-items: center;
   //justify-content: center;
   flex-direction: column;
+  width: 25%;
 `;
 
 const propTypes = {};

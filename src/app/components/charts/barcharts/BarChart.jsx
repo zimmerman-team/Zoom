@@ -25,9 +25,9 @@ const BarChart = props => {
         keys={['Kenya', 'Global']}
         indexBy="country"
         margin={{
-          top: -30,
+          top: -35,
           right: 0,
-          bottom: 19,
+          bottom: 20,
           left: 0,
         }}
         padding={0.4}

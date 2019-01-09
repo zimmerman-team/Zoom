@@ -19,8 +19,8 @@ import ThemeSheet from 'components/theme/ThemeSheet';
 // import HomeModuleMediator from 'mediators/ModuleMediators/HomeModuleMediator';
 
 // Modules lazy load
-const CountryDetailModule = lazy(() =>
-  import('modules/countrydetail/CountryDetailModule'),
+const CountryDetailMediator = lazy(() =>
+  import('mediators/ModuleMediators/CountryDetailMediator'),
 );
 const HomeModuleMediator = lazy(() =>
   import('mediators/ModuleMediators/HomeModuleMediator'),
@@ -46,7 +46,11 @@ const Routes = props => {
               />
             )}
           />
-          <Route exact path="/country" render={() => <CountryDetailModule />} />
+          <Route
+            exact
+            path="/country"
+            render={() => <CountryDetailMediator />}
+          />
           <Route exact path="/iati" render={() => <IatiDetail />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
         </Switch>

@@ -39,6 +39,7 @@ class HomeModuleMediator extends Component {
       }),
     );
     //
+    //
     requestJson(`static/country_center.json`, (error, countryCenters) => {
       if (!error) {
         requestJson(`static/world.json`, (error, worldMap) => {

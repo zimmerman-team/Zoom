@@ -85,15 +85,15 @@ function upload(state = initial, action) {
   }
 }
 
-function activities(state = initial, action) {
+function countryActivities(state = initial, action) {
   switch (action.type) {
-    case oipaActions.ACTIVITIES_INITIAL:
+    case oipaActions.COUNTRY_ACTIVITIES_INITIAL:
       return updateInitial(state);
-    case oipaActions.ACTIVITIES_REQUEST:
+    case oipaActions.COUNTRY_ACTIVITIES_REQUEST:
       return updateRequest(state, action);
-    case oipaActions.ACTIVITIES_SUCCESS:
+    case oipaActions.COUNTRY_ACTIVITIES_SUCCESS:
       return updateSuccess(state, action);
-    case oipaActions.ACTIVITIES_FAILED:
+    case oipaActions.COUNTRY_ACTIVITIES_FAILED:
       return updateFailed(state, action);
     default:
       return state;
@@ -102,7 +102,7 @@ function activities(state = initial, action) {
 
 const reducers = {
   upload,
-  activities,
+  countryActivities,
 };
 
 export default reducers;

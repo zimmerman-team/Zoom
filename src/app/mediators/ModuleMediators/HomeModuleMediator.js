@@ -8,8 +8,6 @@ import {
 } from 'modules/home/HomeModule.utils';
 import { updatePercentiles } from 'components/geo/GeoMap/components/utils';
 import HomeModule from 'modules/home/HomeModule';
-import connect from 'react-redux/es/connect/connect';
-import * as oipaActions from 'services/actions/oipa';
 
 class HomeModuleMediator extends Component {
   constructor(props) {
@@ -31,15 +29,6 @@ class HomeModuleMediator extends Component {
   }
 
   componentDidMount() {
-    // Redux example oipa api call
-    this.props.dispatch(
-      oipaActions.activitiesRequest({
-        format: 'json',
-        recipient_country: 'KE',
-      }),
-    );
-    //
-    //
     requestJson(`static/country_center.json`, (error, countryCenters) => {
       if (!error) {
         requestJson(`static/world.json`, (error, worldMap) => {
@@ -127,9 +116,6 @@ class HomeModuleMediator extends Component {
   }
 
   render() {
-    // Redux example oipa activities results
-    console.log('activities', this.props.activities);
-    //
     return (
       <HomeModule
         indicators={this.state.indicators}
@@ -147,16 +133,8 @@ class HomeModuleMediator extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    activities: state.activities,
-  };
-};
-
 export default createRefetchContainer(
-  // Examplary redux connection with this relay thing
-  connect(mapStateToProps)(HomeModuleMediator),
-  //
+  HomeModuleMediator,
   graphql`
     fragment HomeModuleMediator_indicatorAggregations on Query
       @argumentDefinitions(

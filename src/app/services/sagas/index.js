@@ -25,12 +25,12 @@ export function* fileRequest(action) {
   yield put(mutationActions.fileDone(action.data));
 }
 
-export function* activitiesRequest(action) {
+export function* countryActivitiesRequest(action) {
   try {
     const response = yield call(api.activitiesRequest, action.values);
-    yield put(oipaActions.activitiesSuccess(response));
+    yield put(oipaActions.countryActivitiesSuccess(response));
   } catch (error) {
-    yield put(oipaActions.activitiesFailed(error));
+    yield put(oipaActions.countryActivitiesFailed(error));
   }
 }
 
@@ -45,7 +45,7 @@ export function* countryExcerptRequest(action) {
 
 function* sagas() {
   yield [
-    takeLatest('ACTIVITIES_REQUEST', activitiesRequest),
+    takeLatest('COUNTRY_ACTIVITIES_REQUEST', countryActivitiesRequest),
     takeLatest('UPLOAD_REQUEST', uploadRequest),
     takeLatest('GEOLOCATION_REQUEST', geoLocationRequest),
     takeLatest('FILE_SOURCE_REQUEST', fileSourceRequest),

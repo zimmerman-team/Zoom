@@ -36,9 +36,11 @@ const ModuleContainer = styled(Box)`
 
 const propTypes = {
   data: PropTypes.object,
+  projectData: PropTypes.array,
 };
 const defaultProps = {
   data: undefined,
+  projectData: [],
 };
 
 class CountryDetailModule extends React.Component {
@@ -71,7 +73,7 @@ class CountryDetailModule extends React.Component {
         <AidsfondsTransactions background={zoomGreyZero} />
 
         {/* Fragment 5: Projects */}
-        <Projects />
+        <Projects projectData={this.props.projectData} />
       </ModuleContainer>
     );
   }

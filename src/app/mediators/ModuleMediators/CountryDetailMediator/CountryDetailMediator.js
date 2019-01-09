@@ -1,48 +1,93 @@
 /* base */
 import React from 'react';
 import connect from 'react-redux/es/connect/connect';
-import get from 'lodash/get';
-import map from 'lodash/map';
-import filter from 'lodash/filter';
-import { split } from 'sentence-splitter';
 import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';
+import PropTypes from 'prop-types';
+
+/* helpers */
+import get from 'lodash/get';
+import isEqual from 'lodash/isEqual';
+
+/* actions */
 import * as actions from 'services/actions/index';
+import * as oipaActions from 'services/actions/oipa';
+
+/* mock */
+import mock from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
+import {
+  formatProjectData,
+  formatWikiExcerpts
+} from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
+
+const propTypes = {
+  excerpts: PropTypes.object,
+  countryActivities: PropTypes.object,
+};
+const defaultProps = {
+  excerpts: {},
+  countryActivities: {},
+};
 
 class CountryDetailMediator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      transParams: mock.transParams,
+      wikiParams: mock.wikiParams,
+      projectData: [],
+      excerpts: ['', ''],
+    };
+  }
+
   componentDidMount() {
-    if (this.props.dispatch) {
-      this.props.dispatch(actions.countryExcerptRequest({
-        origin: '*',
-        action: 'query',
-        prop: 'extracts',
-        exsentences: 5,
-        exlimit: 1,
-        exintro: 1,
-        explaintext: 1,
-        exsectionformat: 'raw',
-        formatversion: 2,
-        titles: 'Kenya'
-      }));
+    this.props.dispatch(
+      oipaActions.countryActivitiesRequest(this.state.transParams),
+    );
+    this.props.dispatch(actions.countryExcerptRequest(this.state.wikiParams));
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      !isEqual(
+        this.props.countryActivities.data,
+        prevProps.countryActivities.data,
+      )
+    ) {
+      const projectData = formatProjectData(
+        get(this.props.countryActivities, 'data.results', []),
+      );
+      this.setState({ projectData });
+    }
+
+    if (
+      !isEqual(
+        this.props.excerpts.data,
+        prevProps.excerpts.data,
+      )
+    ) {
+      const excerpts = formatWikiExcerpts(this.props.excerpts);
+      this.setState({ excerpts });
     }
   }
 
   render() {
-    let excerptSentences = split(get(this.props, 'excerpts.data.query.pages[0].extract', ''));
-    excerptSentences = map(filter(excerptSentences, sentence => {
-      return sentence.type !== "WhiteSpace";
-    }), sentence => {
-      return sentence.raw;
-    });
-    const excerpt0 = excerptSentences.slice(0, 2).join(" ");
-    const excerpt1 = excerptSentences.slice(2).join(" ");
-    return <CountryDetailModule excerpts={[excerpt0, excerpt1]} />;
+    return (
+      <CountryDetailModule
+        excerpts={this.state.excerpts}
+        projectData={this.state.projectData}
+      />
+    );
   }
 }
 
 const mapStateToProps = state => {
   return {
     excerpts: state.countryExcerpt,
+    countryActivities: state.countryActivities,
   };
 };
+
+CountryDetailMediator.propTypes = propTypes;
+CountryDetailMediator.defaultProps = defaultProps;
 
 export default connect(mapStateToProps)(CountryDetailMediator);

@@ -74,15 +74,17 @@ const SectorListItem = styled(Value)`
 
 const propTypes = {
   data: PropTypes.object,
+  projectData: PropTypes.array,
 };
 const defaultProps = {
   data: undefined,
+  projectData: [],
 };
 
 const ProjectList = props => {
   return (
     <List width="100%">
-      {projectsMockData.map(project => (
+      {props.projectData.map(project => (
         <ListItem>
           {/* title container */}
           <TitleContainer level="4" truncate>
@@ -103,7 +105,7 @@ const ProjectList = props => {
             <Separator>|</Separator>
             <Box direction="row">
               <Label>End date:</Label>
-              <Value>{project.startDate}</Value>
+              <Value>{project.endDate}</Value>
             </Box>
           </PropertyContainer>
 

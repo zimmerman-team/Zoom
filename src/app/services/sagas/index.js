@@ -2,6 +2,7 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 import * as actions from 'services/actions/index';
 import * as mutationActions from 'services/actions/mutation';
 import * as api from 'services/index';
+import * as oipaActions from 'services/actions/oipa';
 
 export function* uploadRequest(action) {
   try {
@@ -24,8 +25,18 @@ export function* fileRequest(action) {
   yield put(mutationActions.fileDone(action.data));
 }
 
+export function* activitiesRequest(action) {
+  try {
+    const response = yield call(api.activitiesRequest, action.values);
+    yield put(oipaActions.activitiesSuccess(response));
+  } catch (error) {
+    yield put(oipaActions.activitiesFailed(error));
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('ACTIVITIES_REQUEST', activitiesRequest),
     takeLatest('UPLOAD_REQUEST', uploadRequest),
     takeLatest('GEOLOCATION_REQUEST', geoLocationRequest),
     takeLatest('FILE_SOURCE_REQUEST', fileSourceRequest),

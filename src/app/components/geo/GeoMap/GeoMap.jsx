@@ -17,12 +17,11 @@ import layerInfo from 'components/geo/GeoMap/components/ToolTips/LayerInfo/Layer
 import { MapContainer } from 'components/geo/GeoMap/GeoMap.styles';
 import { LegendContainer } from 'components/geo/GeoMap/GeoMap.styles';
 import { generateLegends } from 'components/geo/GeoMap/GeoMap.utils';
-import MAP_STYLE from 'components/geo/GeoMap/data/map-style-basic-v8.json';
 
 const MAPBOX_TOKEN =
   'pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw';
 
-export default class App extends Component {
+export default class GeoMap extends Component {
   constructor(props) {
     super(props);
 

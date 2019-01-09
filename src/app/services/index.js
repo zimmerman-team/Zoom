@@ -41,3 +41,16 @@ export function uploadRequest(values) {
     'upload',
   );
 }
+
+function oipaURL(url) {
+  return process.env.REACT_APP_OIPA_HOST.concat(url);
+}
+
+function formatJSON(values) {
+  values.format = 'json';
+  return values;
+}
+
+export function activitiesRequest(values) {
+  return handleRequest(oipaURL('/api/activities/'), formatJSON(values), 'get');
+}

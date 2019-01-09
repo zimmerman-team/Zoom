@@ -44,6 +44,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/zoom-v2-ui
+      - run: yarn relay
       - run: yarn build
       - run: sudo apt install rsync
       - run: ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts

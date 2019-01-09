@@ -1,4 +1,5 @@
 import React from 'react';
+// import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { graphql, QueryRenderer } from 'react-relay';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';

@@ -1,6 +1,10 @@
 /* base */
 import React from 'react';
+import axios from 'axios';
+import map from 'lodash/map';
+import filter from 'lodash/filter';
 import PropTypes from 'prop-types';
+import {split, Syntax} from "sentence-splitter";
 import styled from 'styled-components';
 import { Box } from 'grommet';
 import { lineChartMockData } from '__mocks__/lineChartMock';
@@ -49,7 +53,7 @@ class CountryDetailModule extends React.Component {
         <PageNavigation />
 
         {/* Fragment 2: Country info */}
-        <CountryInfo />
+        <CountryInfo excerpts={this.props.excerpts}/>
 
         {/* Fragment 2: aids epidemic*/}
         <AidsEpidemic background={zoomGreyZero} />

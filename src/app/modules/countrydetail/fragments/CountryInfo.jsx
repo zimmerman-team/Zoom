@@ -35,10 +35,10 @@ const CountryInfo = props => {
       <Box direction="row">
         <Box width="50%">
           <PageIntroInitial>
-            {countryDetailMockData.fragments[0].description[0]}
+            {props.excerpts[0]}
           </PageIntroInitial>
           <PageIntroSecondary>
-            {countryDetailMockData.fragments[0].description[1]}
+            {props.excerpts[1]}
           </PageIntroSecondary>
           <SimpleText color={aidsFondsRed}>
             {countryDetailMockData.fragments[0].description[2]}

@@ -46,6 +46,10 @@ function oipaURL(url) {
   return process.env.REACT_APP_OIPA_HOST.concat(url);
 }
 
+function wikiURL(url) {
+  return process.env.REACT_APP_WIKIPEDIA_API_HOST.concat(url);
+}
+
 function formatJSON(values) {
   values.format = 'json';
   return values;
@@ -53,4 +57,8 @@ function formatJSON(values) {
 
 export function activitiesRequest(values) {
   return handleRequest(oipaURL('/api/activities/'), formatJSON(values), 'get');
+}
+
+export function wikipediaExcerptRequest(values) {
+  return handleRequest(wikiURL('/w/api.php'), formatJSON(values), 'get');
 }

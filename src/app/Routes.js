@@ -40,8 +40,8 @@ const Routes = props => {
             path="/home"
             render={() => (
               <HomeModuleMediator
-                indicatorAggregations={props.props}
-                allIndNames={props.props}
+                indicatorAggregations={props}
+                allIndNames={props}
               />
             )}
           />

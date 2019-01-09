@@ -60,7 +60,7 @@ class App extends React.Component {
                       this.setState({ showSidebar: !this.state.showSidebar })
                     }
                   />
-                  <Routes props={props} />
+                  <Routes {...props} />
                 </React.Fragment>
               </Router>
             );

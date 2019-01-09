@@ -1,5 +1,6 @@
 import update from 'immutability-helper';
 import * as actions from 'services/actions/index';
+import * as oipaActions from 'services/actions/oipa';
 
 const initial = {
   values: null,
@@ -84,8 +85,24 @@ function upload(state = initial, action) {
   }
 }
 
+function activities(state = initial, action) {
+  switch (action.type) {
+    case oipaActions.ACTIVITIES_INITIAL:
+      return updateInitial(state);
+    case oipaActions.ACTIVITIES_REQUEST:
+      return updateRequest(state, action);
+    case oipaActions.ACTIVITIES_SUCCESS:
+      return updateSuccess(state, action);
+    case oipaActions.ACTIVITIES_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
   upload,
+  activities,
 };
 
 export default reducers;

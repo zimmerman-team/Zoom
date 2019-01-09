@@ -20,10 +20,10 @@ import ThemeSheet from 'components/theme/ThemeSheet';
 
 // Modules lazy load
 const CountryDetailMediator = lazy(() =>
-  import('mediators/ModuleMediators/CountryDetailMediator'),
+  import('mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator'),
 );
 const HomeModuleMediator = lazy(() =>
-  import('mediators/ModuleMediators/HomeModuleMediator'),
+  import('mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator'),
 );
 const IatiDetail = lazy(() => import('modules/IATI_Detail/IatiDetail'));
 

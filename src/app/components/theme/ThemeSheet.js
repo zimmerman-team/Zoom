@@ -37,7 +37,8 @@ export const fragmentContentWidth = '1024px';
 
 const BaseHeading = styled.h2`
   color: ${zoomBlack};
-  font-weight: 700;
+  font-weight: 400;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 `;
@@ -72,7 +73,7 @@ export const SectionHeading = styled(BaseHeading)`
 
 export const PageIntroInitial = styled(BaseParagraph)`
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 400;
   font-family: ${zoomFontFamOne};
   margin-top: 0;
 `;

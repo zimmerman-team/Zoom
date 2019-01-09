@@ -11,6 +11,10 @@ import isEqual from 'lodash/isEqual';
 /* actions */
 import * as oipaActions from 'services/actions/oipa';
 
+/* mock */
+import mock from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
+import { formatProjectData } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
+
 const propTypes = {
   countryActivities: PropTypes.object,
 };
@@ -22,15 +26,8 @@ class CountryDetailMediator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      transParams: {
-        // so for now we using data for kenya specifically
-        // until the full country detail user flow is implemented
-        recipient_country: 'KE',
-        // and also so for now we only display the first
-        // 10 activities, until we implement pagination
-        page: 1,
-        page_size: 10,
-      },
+      transParams: mock.transParams,
+      projectData: [],
     };
   }
 
@@ -47,12 +44,15 @@ class CountryDetailMediator extends React.Component {
         prevProps.countryActivities.data,
       )
     ) {
+      const projectData = formatProjectData(
+        get(this.props.countryActivities, 'data.results', []),
+      );
+      this.setState({ projectData });
     }
   }
 
   render() {
-    console.log('countryActivities', this.props.countryActivities);
-    return <CountryDetailModule />;
+    return <CountryDetailModule projectData={this.state.projectData} />;
   }
 }
 

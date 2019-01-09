@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual';
 import {
   formatCountryCenterData,
   formatCountryLayerData,
-} from 'modules/home/HomeModule.utils';
+} from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
 import { updatePercentiles } from 'components/geo/GeoMap/components/utils';
 import HomeModule from 'modules/home/HomeModule';
 

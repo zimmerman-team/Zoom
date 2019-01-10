@@ -1,5 +1,6 @@
 /* base */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 // import { projectsMockData } from '__mocks__/projectsMock';
 import { Box, Heading } from 'grommet';
@@ -9,7 +10,6 @@ import {
   zoomFontFamTwo,
   aidsFondsRed,
 } from 'components/theme/ThemeSheet';
-import { ProjectListDataPropTypes } from 'PropTypes';
 
 // const ComponentBase = styled.div``;
 
@@ -73,7 +73,16 @@ const SectorListItem = styled(Value)`
 `;
 
 const propTypes = {
-  projectData: ProjectListDataPropTypes,
+  projectData: PropTypes.arrayOf(PropTypes.shape({
+    budget: PropTypes.number,
+    endDat: PropTypes.string,
+    organisation: PropTypes.string,
+    sectors: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+    })),
+    startDate: PropTypes.string,
+    title: PropTypes.string,
+  })),
 };
 const defaultProps = {
   projectData: [],

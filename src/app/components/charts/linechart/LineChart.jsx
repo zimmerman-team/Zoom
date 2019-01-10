@@ -1,9 +1,9 @@
 /* base */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ResponsiveLine } from '@nivo/line';
 import { Box } from 'grommet';
-import { LineChartDataPropTypes } from 'PropTypes';
 
 const ComponentBase = styled(Box)`
   height: 400px;
@@ -11,7 +11,16 @@ const ComponentBase = styled(Box)`
 `;
 
 const propTypes = {
-  data: LineChartDataPropTypes,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      color: PropTypes.string,
+      data: PropTypes.PropTypes.arrayOf(PropTypes.shape({
+        x: PropTypes.string,
+        y: PropTypes.number,
+      })),
+      id: PropTypes.string,
+    })
+  ),
 };
 const defaultProps = {
   data: [],

@@ -1,5 +1,6 @@
 /* base */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box } from 'grommet';
 import { aidsFondsWhite, zoomGreyZero } from 'components/theme/ThemeSheet';
@@ -12,7 +13,6 @@ import EconomicIndicators from 'modules/countrydetail/fragments/EconomicIndicato
 import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTransactions';
 import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';
 import Projects from 'modules/countrydetail/fragments/Projects';
-import { CountryDetailModuleExcerptPropTypes, ProjectListDataPropTypes } from 'PropTypes';
 
 const ModuleContainer = styled(Box)`
   background-color: ${aidsFondsWhite};
@@ -20,8 +20,17 @@ const ModuleContainer = styled(Box)`
 
 const propTypes = {
   // data: PropTypes.object,
-  excerpts: CountryDetailModuleExcerptPropTypes,
-  projectData: ProjectListDataPropTypes,
+  excerpts: PropTypes.arrayOf(PropTypes.string),
+  projectData: PropTypes.arrayOf(PropTypes.shape({
+    budget: PropTypes.number,
+    endDat: PropTypes.string,
+    organisation: PropTypes.string,
+    sectors: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+    })),
+    startDate: PropTypes.string,
+    title: PropTypes.string,
+  })),
 };
 const defaultProps = {
   // data: undefined,

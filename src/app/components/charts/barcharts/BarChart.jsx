@@ -1,9 +1,9 @@
 /* base */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 import { Box } from 'grommet';
-import { BarChartDataPropTypes } from 'PropTypes';
 const ComponentBase = styled(Box)`
   height: 280px;
   width: 100%;
@@ -11,7 +11,15 @@ const ComponentBase = styled(Box)`
 `;
 
 const propTypes = {
-  data: BarChartDataPropTypes,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      Global: PropTypes.number,
+      GlobalColor: PropTypes.string,
+      Kenya: PropTypes.number,
+      KenyaColor: PropTypes.string,
+      country: PropTypes.string,
+    })
+  ),
 };
 const defaultProps = {
   data: [],

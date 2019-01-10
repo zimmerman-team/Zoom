@@ -1,8 +1,8 @@
 /* base */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
-import { BarChartDataPropTypes } from 'PropTypes';
 
 const ComponentBase = styled.div`
   height: 280px;
@@ -10,7 +10,15 @@ const ComponentBase = styled.div`
 `;
 
 const propTypes = {
-  data: BarChartDataPropTypes,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      Global: PropTypes.number,
+      GlobalColor: PropTypes.string,
+      Kenya: PropTypes.number,
+      KenyaColor: PropTypes.string,
+      country: PropTypes.string,
+    })
+  ),
 };
 const defaultProps = {
   data: [],

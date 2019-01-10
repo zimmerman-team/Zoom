@@ -1,13 +1,22 @@
 /* base */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 import ProjectList from 'components/lists/projects/ProjectList';
-import { ProjectListDataPropTypes } from 'PropTypes';
 
 const propTypes = {
-  projectData: ProjectListDataPropTypes,
+  projectData: PropTypes.arrayOf(PropTypes.shape({
+    budget: PropTypes.number,
+    endDat: PropTypes.string,
+    organisation: PropTypes.string,
+    sectors: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+    })),
+    startDate: PropTypes.string,
+    title: PropTypes.string,
+  })),
 };
 const defaultProps = {
   projectData: [],

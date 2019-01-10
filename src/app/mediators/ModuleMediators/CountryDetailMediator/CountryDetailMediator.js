@@ -2,7 +2,6 @@
 import React from 'react';
 import connect from 'react-redux/es/connect/connect';
 import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';
-import PropTypes from 'prop-types';
 
 /* helpers */
 import get from 'lodash/get';
@@ -18,11 +17,11 @@ import {
   formatProjectData,
   formatWikiExcerpts,
 } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
-import { WikiAPIExcerptPropType } from '../../../PropTypes';
+import { WikiAPIExcerptPropType, countryActivitiesPropType } from 'PropTypes';
 
 const propTypes = {
   excerpts: WikiAPIExcerptPropType,
-  countryActivities: PropTypes.object,
+  countryActivities: countryActivitiesPropType,
 };
 const defaultProps = {
   excerpts: {},

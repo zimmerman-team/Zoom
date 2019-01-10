@@ -1,7 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { zoomFontFamOne } from 'components/theme/ThemeSheet';
+import { TreeMapHtmlNodePropTypes, TreeMapHtmlNodeStylePropTypes } from 'PropTypes';
+
 /* todo: needs further tweaking from a design perspective and speccing from a business perspective*/
 const TextContainer = styled.div`
   display: flex;
@@ -88,8 +89,12 @@ const TreeMapHtmlNode = ({ node, style }) => {
 };
 
 TreeMapHtmlNode.propTypes = {
-  node: PropTypes.object,
-  style: PropTypes.object,
+  node: TreeMapHtmlNodePropTypes,
+  style: TreeMapHtmlNodeStylePropTypes,
+};
+TreeMapHtmlNode.defaultProps = {
+  node: {},
+  style: {},
 };
 
 export default TreeMapHtmlNode;

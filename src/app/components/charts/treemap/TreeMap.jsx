@@ -1,11 +1,11 @@
 /* base */
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box } from 'grommet';
 import { ResponsiveTreeMapHtml } from '@nivo/treemap';
-import { generateCountriesData } from '@nivo/generators';
+// import { generateCountriesData } from '@nivo/generators';
 import TreeMapHtmlNode from 'components/charts/treemap/TreeMapHtmlNode';
+import { TreeMapDataPropTypes } from 'PropTypes';
 
 const ComponentBase = styled(Box)`
   height: 400px;
@@ -13,7 +13,7 @@ const ComponentBase = styled(Box)`
 `;
 
 const propTypes = {
-  data: PropTypes.object,
+  data: TreeMapDataPropTypes,
 };
 const defaultProps = {
   data: {},
@@ -21,7 +21,6 @@ const defaultProps = {
 
 const TreeMap = props => {
   // console.log(generateCountriesData(['value'], { size: 10 }));
-
   return (
     <ComponentBase>
       <ResponsiveTreeMapHtml
@@ -40,7 +39,7 @@ const TreeMap = props => {
           bottom: 0,
           left: 0,
         }}
-        colorBy={function(e) {
+        colorBy={e => {
           return e.color;
         }}
         borderColor="inherit:darker(0.3)"

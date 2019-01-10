@@ -1,9 +1,8 @@
 /* base */
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { barChartMockData } from '__mocks__/barChartHorizontalMock';
 import { ResponsiveBar } from '@nivo/bar';
+import { BarChartDataPropTypes } from 'PropTypes';
 
 const ComponentBase = styled.div`
   height: 280px;
@@ -11,7 +10,7 @@ const ComponentBase = styled.div`
 `;
 
 const propTypes = {
-  data: PropTypes.array,
+  data: BarChartDataPropTypes,
 };
 const defaultProps = {
   data: [],
@@ -33,8 +32,8 @@ const BarChartVertical = props => {
         padding={0.5}
         groupMode="grouped"
         colors="nivo"
-        colorBy={function(e) {
-          var t = e.id;
+        colorBy={e => {
+          const t = e.id;
           return e.data[''.concat(t, 'Color')];
         }}
         defs={[

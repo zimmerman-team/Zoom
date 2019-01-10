@@ -1,16 +1,16 @@
 /* base */
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box } from 'grommet';
 import { ResponsivePie } from '@nivo/pie';
+import { PieChartDataPropTypes } from 'PropTypes';
 const ComponentBase = styled(Box)`
   height: 400px;
   width: 100%;
 `;
 
 const propTypes = {
-  data: PropTypes.array,
+  data: PieChartDataPropTypes,
 };
 const defaultProps = {
   data: [],

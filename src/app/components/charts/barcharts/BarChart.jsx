@@ -1,9 +1,9 @@
 /* base */
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 import { Box } from 'grommet';
+import { BarChartDataPropTypes } from 'PropTypes';
 const ComponentBase = styled(Box)`
   height: 280px;
   width: 100%;
@@ -11,7 +11,7 @@ const ComponentBase = styled(Box)`
 `;
 
 const propTypes = {
-  data: PropTypes.array,
+  data: BarChartDataPropTypes,
 };
 const defaultProps = {
   data: [],
@@ -35,8 +35,8 @@ const BarChart = props => {
         groupMode="grouped"
         layout="horizontal"
         colors="nivo"
-        colorBy={function(e) {
-          var t = e.id;
+        colorBy={e => {
+          const t = e.id;
           return e.data[''.concat(t, 'Color')];
         }}
         defs={[

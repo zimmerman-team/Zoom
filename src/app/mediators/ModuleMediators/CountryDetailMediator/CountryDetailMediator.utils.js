@@ -4,8 +4,10 @@ import find from 'lodash/find';
 import filter from 'lodash/filter';
 import { split } from 'sentence-splitter';
 
-//Formats project data so it would be acceptable for the project list
-//component
+/*
+  Formats project data so it would be acceptable
+  for the project list component
+*/
 export function formatProjectData(activities) {
   const projectData = [];
 
@@ -18,19 +20,19 @@ export function formatProjectData(activities) {
       });
     });
 
-    let startDate = find(activity.activity_dates, function(date) {
+    let startDate = find(activity.activity_dates, date => {
       return date.type.name === 'Planned start';
     });
 
-    let endDate = find(activity.activity_dates, function(date) {
+    let endDate = find(activity.activity_dates, date => {
       return date.type.name === 'Planned End';
     });
 
     if (!startDate && !endDate) {
-      startDate = find(activity.activity_dates, function(date) {
+      startDate = find(activity.activity_dates, date => {
         return date.type.name === 'Actual start';
       });
-      endDate = find(activity.activity_dates, function(date) {
+      endDate = find(activity.activity_dates, date => {
         return date.type.name === 'Actual end';
       });
     }
@@ -60,7 +62,9 @@ export function formatProjectData(activities) {
   return projectData;
 }
 
-//Splits wikipedia country information text into 2 excerpts/paragraphs
+/*
+  Splits wikipedia country information text into 2 excerpts/paragraphs
+*/
 export function formatWikiExcerpts(excerpts) {
   let excerptSentences = split(
     get(excerpts, 'data.query.pages[0].extract', ''),

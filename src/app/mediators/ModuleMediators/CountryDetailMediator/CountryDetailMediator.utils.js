@@ -1,6 +1,8 @@
-import React from 'react';
 import get from 'lodash/get';
+import map from 'lodash/map';
 import find from 'lodash/find';
+import filter from 'lodash/filter';
+import { split } from 'sentence-splitter';
 
 //Formats project data so it would be acceptable for the project list
 //component
@@ -56,4 +58,22 @@ export function formatProjectData(activities) {
   });
 
   return projectData;
+}
+
+//Splits wikipedia country information text into 2 excerpts/paragraphs
+export function formatWikiExcerpts(excerpts) {
+  let excerptSentences = split(
+    get(excerpts, 'data.query.pages[0].extract', ''),
+  );
+  excerptSentences = map(
+    filter(excerptSentences, sentence => {
+      return sentence.type !== 'WhiteSpace';
+    }),
+    sentence => {
+      return sentence.raw;
+    },
+  );
+  const excerpt0 = excerptSentences.slice(0, 2).join(' ');
+  const excerpt1 = excerptSentences.slice(2).join(' ');
+  return [excerpt0, excerpt1];
 }

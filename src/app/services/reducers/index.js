@@ -100,8 +100,24 @@ function countryActivities(state = initial, action) {
   }
 }
 
+function countryExcerpt(state = initial, action) {
+  switch (action.type) {
+    case actions.COUNTRY_EXCERPT_INITIAL:
+      return updateInitial(state);
+    case actions.COUNTRY_EXCERPT_REQUEST:
+      return updateRequest(state, action);
+    case actions.COUNTRY_EXCERPT_SUCCESS:
+      return updateSuccess(state, action);
+    case actions.COUNTRY_EXCERPT_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
   upload,
+  countryExcerpt,
   countryActivities,
 };
 

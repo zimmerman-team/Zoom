@@ -18,9 +18,10 @@ import {
   formatProjectData,
   formatWikiExcerpts,
 } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
+import { WikiAPIExcerptPropType } from '../../../PropTypes';
 
 const propTypes = {
-  excerpts: PropTypes.object,
+  excerpts: WikiAPIExcerptPropType,
   countryActivities: PropTypes.object,
 };
 const defaultProps = {

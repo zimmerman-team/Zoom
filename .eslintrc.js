@@ -54,5 +54,6 @@ module.exports = {
     'import/no-named-as-default-member': 0,
     'no-unused-expressions': 0,
     'arrow-body-style': 0,
+    'react/no-did-update-set-state': 0,
   },
 };

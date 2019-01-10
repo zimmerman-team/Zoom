@@ -29,3 +29,35 @@ export function countryActivitiesFailed(error) {
     error: error,
   };
 }
+
+export const ACTIVITY_DATA_INITIAL = 'ACTIVITY_DATA_INITIAL';
+export const ACTIVITY_DATA_REQUEST = 'ACTIVITY_DATA_REQUEST';
+export const ACTIVITY_DATA_SUCCESS = 'ACTIVITY_DATA_SUCCESS';
+export const ACTIVITY_DATA_FAILED = 'ACTIVITY_DATA_FAILED';
+
+export function activityDataInitial() {
+  return {
+    type: ACTIVITY_DATA_INITIAL,
+  };
+}
+
+export function activityDataRequest(values) {
+  return {
+    type: ACTIVITY_DATA_REQUEST,
+    values: values,
+  };
+}
+
+export function activityDataSuccess(data) {
+  return {
+    type: ACTIVITY_DATA_SUCCESS,
+    data: data,
+  };
+}
+
+export function activityDataFailed(error) {
+  return {
+    type: ACTIVITY_DATA_FAILED,
+    error: error,
+  };
+}

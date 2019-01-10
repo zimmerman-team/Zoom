@@ -100,9 +100,25 @@ function countryActivities(state = initial, action) {
   }
 }
 
+function activityData(state = initial, action) {
+  switch (action.type) {
+    case oipaActions.ACTIVITY_DATA_INITIAL:
+      return updateInitial(state);
+    case oipaActions.ACTIVITY_DATA_REQUEST:
+      return updateRequest(state, action);
+    case oipaActions.ACTIVITY_DATA_SUCCESS:
+      return updateSuccess(state, action);
+    case oipaActions.ACTIVITY_DATA_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
   upload,
   countryActivities,
+  activityData,
 };
 
 export default reducers;

@@ -34,6 +34,15 @@ export function* countryActivitiesRequest(action) {
   }
 }
 
+export function* activityDataRequest(action) {
+  try {
+    const response = yield call(api.activityRequest, action.values);
+    yield put(oipaActions.activityDataSuccess(response));
+  } catch (error) {
+    yield put(oipaActions.activityDataFailed(error));
+  }
+}
+
 function* sagas() {
   yield [
     takeLatest('COUNTRY_ACTIVITIES_REQUEST', countryActivitiesRequest),
@@ -41,6 +50,7 @@ function* sagas() {
     takeLatest('GEOLOCATION_REQUEST', geoLocationRequest),
     takeLatest('FILE_SOURCE_REQUEST', fileSourceRequest),
     takeLatest('FILE_REQUEST', fileRequest),
+    takeLatest('ACTIVITY_DATA_REQUEST', activityDataRequest),
   ];
 }
 

@@ -54,3 +54,7 @@ function formatJSON(values) {
 export function activitiesRequest(values) {
   return handleRequest(oipaURL('/api/activities/'), formatJSON(values), 'get');
 }
+
+export function activityRequest(id) {
+  return handleRequest(oipaURL(`/api/activities/${id}`), formatJSON({}), 'get');
+}

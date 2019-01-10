@@ -1,17 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import ScaleText from 'react-scale-text';
-import {
-  aidsFondsBlue,
-  zoomFontFamOne,
-  zoomFontFamTwo,
-  zoomGreyOne,
-  zoomGreyZero,
-  PageHeading,
-  FragmentHeader,
-  FragmentVisualisation,
-} from 'components/theme/ThemeSheet';
+import { zoomFontFamOne } from 'components/theme/ThemeSheet';
 /* todo: needs further tweaking from a design perspective and speccing from a business perspective*/
 const TextContainer = styled.div`
   display: flex;

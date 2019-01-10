@@ -14,6 +14,14 @@ module.exports = {
     'plugin:jest/recommended',
     'jest-enzyme',
   ],
+  parserOptions: {
+    ecmaVersion: 8,
+    sourceType: 'module',
+  },
+  env: {
+    es6: true,
+    node: true,
+  },
   plugins: ['prettier'],
   rules: {
     'react/jsx-filename-extension': [0, { extensions: ['.js', '.jsx'] }],
@@ -41,5 +49,10 @@ module.exports = {
     'import/imports-first': ['warning', 'absolute-first'],
     'import/newline-after-import': 'warning',
     'react/prefer-stateless-function': 'off',
+    'react/destructuring-assignment': 0,
+    'import/no-named-as-default': 0,
+    'import/no-named-as-default-member': 0,
+    'no-unused-expressions': 0,
+    'arrow-body-style': 0,
   },
 };

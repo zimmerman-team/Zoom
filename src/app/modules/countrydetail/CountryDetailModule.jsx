@@ -19,12 +19,21 @@ const ModuleContainer = styled(Box)`
 `;
 
 const propTypes = {
-  data: PropTypes.object,
-  excerpts: PropTypes.array,
-  projectData: PropTypes.array,
+  // data: PropTypes.object,
+  excerpts: PropTypes.arrayOf(PropTypes.string),
+  projectData: PropTypes.arrayOf(PropTypes.shape({
+    budget: PropTypes.number,
+    endDat: PropTypes.string,
+    organisation: PropTypes.string,
+    sectors: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+    })),
+    startDate: PropTypes.string,
+    title: PropTypes.string,
+  })),
 };
 const defaultProps = {
-  data: undefined,
+  // data: undefined,
   excerpts: [],
   projectData: [],
 };

@@ -31,8 +31,8 @@ class HomeModuleMediator extends Component {
   componentDidMount() {
     requestJson(`static/country_center.json`, (error, countryCenters) => {
       if (!error) {
-        requestJson(`static/world.json`, (error, worldMap) => {
-          if (!error) {
+        requestJson(`static/world.json`, (error2, worldMap) => {
+          if (!error2) {
             this.setState(
               {
                 countryCenters,

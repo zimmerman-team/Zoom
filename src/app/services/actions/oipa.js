@@ -1,31 +1,31 @@
-export const ACTIVITIES_INITIAL = 'ACTIVITIES_INITIAL';
-export const ACTIVITIES_REQUEST = 'ACTIVITIES_REQUEST';
-export const ACTIVITIES_SUCCESS = 'ACTIVITIES_SUCCESS';
-export const ACTIVITIES_FAILED = 'ACTIVITIES_FAILED';
+export const COUNTRY_ACTIVITIES_INITIAL = 'COUNTRY_ACTIVITIES_INITIAL';
+export const COUNTRY_ACTIVITIES_REQUEST = 'COUNTRY_ACTIVITIES_REQUEST';
+export const COUNTRY_ACTIVITIES_SUCCESS = 'COUNTRY_ACTIVITIES_SUCCESS';
+export const COUNTRY_ACTIVITIES_FAILED = 'COUNTRY_ACTIVITIES_FAILED';
 
 export function activitiesInitial() {
   return {
-    type: ACTIVITIES_INITIAL,
+    type: COUNTRY_ACTIVITIES_INITIAL,
   };
 }
 
-export function activitiesRequest(values) {
+export function countryActivitiesRequest(values) {
   return {
-    type: ACTIVITIES_REQUEST,
+    type: COUNTRY_ACTIVITIES_REQUEST,
     values: values,
   };
 }
 
-export function activitiesSuccess(data) {
+export function countryActivitiesSuccess(data) {
   return {
-    type: ACTIVITIES_SUCCESS,
+    type: COUNTRY_ACTIVITIES_SUCCESS,
     data: data,
   };
 }
 
-export function activitiesFailed(error) {
+export function countryActivitiesFailed(error) {
   return {
-    type: ACTIVITIES_FAILED,
+    type: COUNTRY_ACTIVITIES_FAILED,
     error: error,
   };
 }

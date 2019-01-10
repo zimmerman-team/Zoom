@@ -8,8 +8,12 @@ import { projectsMockData } from '__mocks__/projectsMock';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 import ProjectList from 'components/lists/projects/ProjectList';
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  projectData: PropTypes.array,
+};
+const defaultProps = {
+  projectData: [],
+};
 
 const Projects = props => {
   return (
@@ -17,7 +21,7 @@ const Projects = props => {
       title={countryDetailMockData.fragments[6].title}
       description={countryDetailMockData.fragments[6].description[0]}
     >
-      <ProjectList />
+      <ProjectList projectData={props.projectData} />
     </ModuleFragment>
   );
 };

@@ -19,6 +19,7 @@ const IatiDetail = props => {
       <Header />
       <TotalBudget />
       <Sectors />
+      <div>joejoejoe</div>
     </React.Fragment>
   );
 };

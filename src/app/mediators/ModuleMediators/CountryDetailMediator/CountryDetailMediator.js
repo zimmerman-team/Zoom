@@ -16,7 +16,7 @@ import * as oipaActions from 'services/actions/oipa';
 import mock from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
 import {
   formatProjectData,
-  formatWikiExcerpts
+  formatWikiExcerpts,
 } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
 
 const propTypes = {
@@ -59,12 +59,7 @@ class CountryDetailMediator extends React.Component {
       this.setState({ projectData });
     }
 
-    if (
-      !isEqual(
-        this.props.excerpts.data,
-        prevProps.excerpts.data,
-      )
-    ) {
+    if (!isEqual(this.props.excerpts.data, prevProps.excerpts.data)) {
       const excerpts = formatWikiExcerpts(this.props.excerpts);
       this.setState({ excerpts });
     }

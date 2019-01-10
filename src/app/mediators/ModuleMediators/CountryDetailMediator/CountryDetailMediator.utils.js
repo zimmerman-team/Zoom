@@ -62,13 +62,18 @@ export function formatProjectData(activities) {
 
 //Splits wikipedia country information text into 2 excerpts/paragraphs
 export function formatWikiExcerpts(excerpts) {
-  let excerptSentences = split(get(excerpts, 'data.query.pages[0].extract', ''));
-  excerptSentences = map(filter(excerptSentences, sentence => {
-    return sentence.type !== "WhiteSpace";
-  }), sentence => {
-    return sentence.raw;
-  });
-  const excerpt0 = excerptSentences.slice(0, 2).join(" ");
-  const excerpt1 = excerptSentences.slice(2).join(" ");
+  let excerptSentences = split(
+    get(excerpts, 'data.query.pages[0].extract', ''),
+  );
+  excerptSentences = map(
+    filter(excerptSentences, sentence => {
+      return sentence.type !== 'WhiteSpace';
+    }),
+    sentence => {
+      return sentence.raw;
+    },
+  );
+  const excerpt0 = excerptSentences.slice(0, 2).join(' ');
+  const excerpt1 = excerptSentences.slice(2).join(' ');
   return [excerpt0, excerpt1];
 }

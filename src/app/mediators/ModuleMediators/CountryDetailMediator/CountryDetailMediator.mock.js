@@ -16,8 +16,8 @@ const data = {
     explaintext: 1,
     exsectionformat: 'raw',
     formatversion: 2,
-    titles: 'Kenya'
-  }
+    titles: 'Kenya',
+  },
 };
 
 export default data;

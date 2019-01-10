@@ -43,6 +43,15 @@ export function* activityDataRequest(action) {
   }
 }
 
+export function* countryExcerptRequest(action) {
+  try {
+    const response = yield call(api.wikipediaExcerptRequest, action.values);
+    yield put(actions.countryExcerptSuccess(response));
+  } catch (error) {
+    yield put(actions.countryExcerptFailed(error));
+  }
+}
+
 function* sagas() {
   yield [
     takeLatest('COUNTRY_ACTIVITIES_REQUEST', countryActivitiesRequest),
@@ -51,6 +60,7 @@ function* sagas() {
     takeLatest('FILE_SOURCE_REQUEST', fileSourceRequest),
     takeLatest('FILE_REQUEST', fileRequest),
     takeLatest('ACTIVITY_DATA_REQUEST', activityDataRequest),
+    takeLatest('COUNTRY_EXCERPT_REQUEST', countryExcerptRequest),
   ];
 }
 

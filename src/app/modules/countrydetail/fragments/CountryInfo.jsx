@@ -34,12 +34,8 @@ const CountryInfo = props => {
       <CountryName>Zoom in on {countryDetailMockData.country}</CountryName>
       <Box direction="row">
         <Box width="50%">
-          <PageIntroInitial>
-            {countryDetailMockData.fragments[0].description[0]}
-          </PageIntroInitial>
-          <PageIntroSecondary>
-            {countryDetailMockData.fragments[0].description[1]}
-          </PageIntroSecondary>
+          <PageIntroInitial>{props.excerpts[0]}</PageIntroInitial>
+          <PageIntroSecondary>{props.excerpts[1]}</PageIntroSecondary>
           <SimpleText color={aidsFondsRed}>
             {countryDetailMockData.fragments[0].description[2]}
           </SimpleText>

@@ -13,7 +13,7 @@ import * as oipaActions from 'services/actions/oipa';
 
 /* mock */
 import mock from 'mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator.mock';
-import { formatActivityData } from 'mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator.utils';
+import formatActivityData from 'mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator.utils';
 
 const propTypes = {
   activityData: PropTypes.object,
@@ -26,7 +26,7 @@ class IatiDetailMediator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activityData: [],
+      activityData: {},
     };
   }
 
@@ -44,14 +44,14 @@ class IatiDetailMediator extends React.Component {
       )
     ) {
       const activityData = formatActivityData(
-        get(this.props.activityData, 'data.results', []),
+        get(this.props.activityData, 'data', {}),
       );
       this.setState({ activityData });
     }
   }
 
   render() {
-    return <IatiDetailModule activityData={this.state.activityData} />;
+    return <IatiDetailModule data={this.state.activityData} />;
   }
 }
 

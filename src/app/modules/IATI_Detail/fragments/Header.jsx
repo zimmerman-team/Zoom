@@ -2,16 +2,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import get from 'lodash/get';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
-import { zoomGreyZero, PageHeading } from 'components/theme/ThemeSheet';
-import { iatiDetailMockData } from '__mocks__/iatiDetailMock';
+// import { iatiDetailMockData } from '__mocks__/iatiDetailMock';
 import {
   zoomFontFamOne,
   zoomFontFamTwo,
   aidsFondsBlue,
+  zoomGreyZero,
+  PageHeading
 } from 'components/theme/ThemeSheet';
 
-const ComponentBase = styled.div``;
+// const ComponentBase = styled.div``;
 
 const DetailList = styled.ul`
   list-style: none;
@@ -44,18 +46,39 @@ const ItemInfo = styled.div`
 `;
 
 const propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.shape({
+    timeline: PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string,
+      info: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf([PropTypes.string]),
+      ])
+    })),
+    title: PropTypes.string,
+    detail: PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string,
+      info: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf([PropTypes.string]),
+      ])
+    })),
+  }),
 };
 const defaultProps = {
-  data: undefined,
+  data: {
+    timeline: [],
+    title: '',
+    detail: [],
+  },
 };
 
 const Header = props => {
+  console.log(props.data);
   return (
     <React.Fragment>
       <ModuleFragment background={zoomGreyZero}>
         <DetailList>
-          {iatiDetailMockData.timeline.map(item => (
+          {get(props.data, 'timeline', []).map(item => (
             <DetailListItem key={item.info}>
               <ItemLabel>{item.label}</ItemLabel>
               <ItemInfo>{item.info}</ItemInfo>
@@ -64,11 +87,11 @@ const Header = props => {
         </DetailList>
       </ModuleFragment>
       <ModuleFragment>
-        <PageHeading>IATI Project detail page title</PageHeading>
+        <PageHeading>{props.data.title}</PageHeading>
       </ModuleFragment>
       <ModuleFragment background={zoomGreyZero}>
         <DetailList>
-          {iatiDetailMockData.detail.map(item => (
+          {get(props.data, 'detail', []).map(item => (
             <DetailListItem key={item.info}>
               <ItemLabel>{item.label}</ItemLabel>
               <ItemInfo>{item.info}</ItemInfo>

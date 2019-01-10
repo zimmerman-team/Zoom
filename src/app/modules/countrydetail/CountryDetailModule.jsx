@@ -36,10 +36,12 @@ const ModuleContainer = styled(Box)`
 
 const propTypes = {
   data: PropTypes.object,
+  excerpts: PropTypes.array,
   projectData: PropTypes.array,
 };
 const defaultProps = {
   data: undefined,
+  excerpts: [],
   projectData: [],
 };
 

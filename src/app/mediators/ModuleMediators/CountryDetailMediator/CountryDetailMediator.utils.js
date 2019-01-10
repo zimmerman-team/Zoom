@@ -60,6 +60,7 @@ export function formatProjectData(activities) {
   return projectData;
 }
 
+//Splits wikipedia country information text into 2 excerpts/paragraphs
 export function formatWikiExcerpts(excerpts) {
   let excerptSentences = split(get(excerpts, 'data.query.pages[0].extract', ''));
   excerptSentences = map(filter(excerptSentences, sentence => {

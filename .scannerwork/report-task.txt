@@ -2,6 +2,6 @@ organization=zimmerman-zimmerman-020
 projectKey=zimmerman-zimmerman_zoom-v2-ui
 serverUrl=https://sonarcloud.io
 serverVersion=7.6.0.20657
-dashboardUrl=https://sonarcloud.io/dashboard?id=zimmerman-zimmerman_zoom-v2-ui
-ceTaskId=AWg3FciniIyhoR2HUO8h
-ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AWg3FciniIyhoR2HUO8h
+dashboardUrl=https://sonarcloud.io/project/issues?id=zimmerman-zimmerman_zoom-v2-ui&pullRequest=5&resolved=false
+ceTaskId=AWg3LgBdiIyhoR2HUPBh
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AWg3LgBdiIyhoR2HUPBh

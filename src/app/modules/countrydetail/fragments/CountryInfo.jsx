@@ -25,13 +25,19 @@ const CountryInfoMore = styled.p``;
 const CountryInfoDisclaimer = styled.p``;
 const CountryInfoBarContainer = styled(Box)``;
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  infoBarData: PropTypes.array,
+  countryName: PropTypes.string,
+};
+const defaultProps = {
+  infoBarData: [],
+  countryName: countryDetailMockData.country,
+};
 
 const CountryInfo = props => {
   return (
     <ModuleFragment>
-      <CountryName>Zoom in on {countryDetailMockData.country}</CountryName>
+      <CountryName>Zoom in on {props.countryName}</CountryName>
       <Box direction="row">
         <Box width="50%">
           <PageIntroInitial>
@@ -45,7 +51,8 @@ const CountryInfo = props => {
           </SimpleText>
         </Box>
         <Box width="50%">
-          <BarChart data={barChartMockData} />
+          <BarChart data={props.infoBarData}
+                    countryName={props.countryName}/>
         </Box>
       </Box>
     </ModuleFragment>

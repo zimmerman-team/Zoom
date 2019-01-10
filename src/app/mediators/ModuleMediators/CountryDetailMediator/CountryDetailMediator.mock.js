@@ -6,6 +6,7 @@ const data = {
     fields:
       'sectors,title,id,activity_dates,reporting_organisation,aggregations',
   },
+  countryCode: 'ke',
 };
 
 export default data;

@@ -33,10 +33,12 @@ const ModuleContainer = styled(Box)`
 const propTypes = {
   data: PropTypes.object,
   projectData: PropTypes.array,
+  countryName: PropTypes.string,
 };
 const defaultProps = {
   data: undefined,
   projectData: [],
+  countryName: '',
 };
 
 class CountryDetailModule extends React.Component {
@@ -51,7 +53,8 @@ class CountryDetailModule extends React.Component {
         <PageNavigation />
 
         {/* Fragment 2: Country info */}
-        <CountryInfo />
+        <CountryInfo infoBarData={this.props.infoBarData}
+                     countryName={this.props.countryName}/>
 
         {/* Fragment 2: aids epidemic*/}
         <AidsEpidemic background={zoomGreyZero} />

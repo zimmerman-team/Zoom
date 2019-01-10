@@ -1,9 +1,7 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
-import { projectsMockData } from '__mocks__/projectsMock';
 
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 import ProjectList from 'components/lists/projects/ProjectList';

@@ -11,7 +11,16 @@ const ComponentBase = styled(Box)`
 `;
 
 const propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      color: PropTypes.string,
+      data: PropTypes.PropTypes.arrayOf(PropTypes.shape({
+        x: PropTypes.string,
+        y: PropTypes.number,
+      })),
+      id: PropTypes.string,
+    })
+  ),
 };
 const defaultProps = {
   data: [],

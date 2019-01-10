@@ -1,7 +1,6 @@
-import { Popup } from 'react-map-gl';
 import React from 'react';
-import 'components/geo/GeoMap/components/ToolTips/MarkerInfo/MarkerInfo.css';
 import { getMeasure } from 'components/geo/GeoMap/components/Markers/CircleMarker/CircleMarker';
+import { MarkerPopup } from 'components/geo/GeoMap/components/ToolTips/MarkerInfo/MarkerInfo.styles';
 
 // So if the marker changes in size depending on its value we use
 // this function to get the offset top of the popup
@@ -26,16 +25,15 @@ function getOffsetTop(hoverMarkerInfo) {
 // or unit tests for it as a seperate component
 const markerInfo = hoverMarkerInfo =>
   hoverMarkerInfo && (
-    <Popup
+    <MarkerPopup
       tipSize={5}
       longitude={parseFloat(hoverMarkerInfo.longitude)}
       latitude={parseFloat(hoverMarkerInfo.latitude)}
       closeButton={false}
-      className="info-marker-tooltip"
       offsetTop={getOffsetTop(hoverMarkerInfo)}
     >
       {hoverMarkerInfo.tooltipText}
-    </Popup>
+    </MarkerPopup>
   );
 
 export default markerInfo;

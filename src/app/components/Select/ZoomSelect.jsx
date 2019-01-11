@@ -19,6 +19,7 @@ const ComponentBase = styled(Select)`
   border-radius: 0;
   font-family: ${zoomFontFamOne};
   font-weight: normal;
+  font-size: 14px;
   //background-color: ${zoomGreyZero};
   color: ${aidsFondsRed};
   ::-webkit-input-placeholder {

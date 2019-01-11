@@ -32,7 +32,7 @@ const LineChart = props => {
       <ResponsiveLine
         data={props.data}
         margin={{
-          top: 0,
+          top: 20,
           right: 30,
           bottom: 30,
           left: 50,
@@ -43,8 +43,6 @@ const LineChart = props => {
         yScale={{
           type: 'linear',
           stacked: true,
-          min: 0,
-          max: 1150,
         }}
         minY="auto"
         maxY="auto"

@@ -26,6 +26,15 @@ const data = {
     'new hiv infections',
     'aids-related deaths',
   ],
+  // So currently for aids epidemics data we will use
+  // this array of indicators
+  aidsEpIndicators: [
+    'people living with hiv',
+    'new hiv infections',
+    'aids-related deaths',
+    'children living with hiv',
+    'coverage of people receiving art',
+  ],
 };
 
 export default data;

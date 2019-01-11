@@ -61,9 +61,20 @@ export default function formatActivityData(data) {
       },
       {
         label: 'Beneficiary country:',
-        info: get(data, 'recipient_countries', []).map(rc => {
-          return rc.country.name;
-        }).join(', '),
+        info: `
+          ${get(data, 'recipient_countries[0].country.name', '')}
+          ${' '}
+          ${
+            get(data, 'recipient_countries.length', 0) > 1
+              ? `${data.recipient_countries.length}+ more`
+              : ''
+          }
+        `,
+        moreData: get(data, 'recipient_countries.length', 0) > 1
+          ? get(data, 'recipient_countries', []).map(country => {
+              return country.country.name;
+            })
+          : undefined,
       },
       {
         label: 'Data source:',

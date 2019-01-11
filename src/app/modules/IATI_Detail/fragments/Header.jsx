@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import get from 'lodash/get';
+import { Box } from 'grommet';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 // import { iatiDetailMockData } from '__mocks__/iatiDetailMock';
 import {
@@ -43,6 +44,20 @@ const ItemInfo = styled.div`
   font-family: ${zoomFontFamTwo};
   color: ${aidsFondsBlue};
   line-height: 1;
+  position: relative;
+`;
+
+const Tooltip = styled(Box)`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 250px;
+  background-color: white;
+  padding: 20px;
+  z-index: 2;
+  border-radius: 2%;
+  font-family: ${zoomFontFamTwo};
+  line-height: 1.3;
 `;
 
 const propTypes = {
@@ -61,7 +76,8 @@ const propTypes = {
       info: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.arrayOf([PropTypes.string]),
-      ])
+      ]),
+      moreData: PropTypes.arrayOf(PropTypes.string),
     })),
   }),
 };
@@ -73,12 +89,25 @@ const defaultProps = {
   },
 };
 
-const Header = props => {
+class Header extends React.Component {
+  state = {
+    showMoreData: false,
+  }
+
+  handleMouseEnter() {
+    this.setState({ showMoreData: true });
+  }
+
+  handleMouseLeave() {
+    this.setState({ showMoreData: false });
+  }
+
+  render() {
   return (
     <React.Fragment>
       <ModuleFragment background={zoomGreyZero}>
         <DetailList>
-          {get(props.data, 'timeline', []).map(item => (
+          {get(this.props.data, 'timeline', []).map(item => (
             <DetailListItem key={item.id}>
               <ItemLabel>{item.label}</ItemLabel>
               <ItemInfo>{item.info}</ItemInfo>
@@ -87,20 +116,31 @@ const Header = props => {
         </DetailList>
       </ModuleFragment>
       <ModuleFragment>
-        <PageHeading>{props.data.title}</PageHeading>
+        <PageHeading>{this.props.data.title}</PageHeading>
       </ModuleFragment>
       <ModuleFragment background={zoomGreyZero}>
         <DetailList>
-          {get(props.data, 'detail', []).map(item => (
+          {get(this.props.data, 'detail', []).map(item => (
             <DetailListItem key={item.info}>
               <ItemLabel>{item.label}</ItemLabel>
-              <ItemInfo>{item.info}</ItemInfo>
+              <ItemInfo
+                onMouseEnter={() => item.moreData && this.handleMouseEnter()}
+                onMouseLeave={() => item.moreData && this.handleMouseLeave()}
+              >
+                {item.info}
+                {item.moreData && this.state.showMoreData &&
+                <Tooltip>
+                  {item.moreData.join(', ')}
+                </Tooltip>
+              }
+              </ItemInfo>
             </DetailListItem>
           ))}
         </DetailList>
       </ModuleFragment>
     </React.Fragment>
   );
+  }
 };
 
 Header.propTypes = propTypes;

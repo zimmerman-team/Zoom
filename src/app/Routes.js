@@ -16,6 +16,7 @@ import Projects from 'modules/countrydetail/fragments/Projects';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
 import TreeMap from 'components/charts/treemap/TreeMap';
 import ThemeSheet from 'components/theme/ThemeSheet';
+import DataExplorePanel from 'components/DataExplorePane/DataExplorePanel';
 // import HomeModuleMediator from 'mediators/ModuleMediators/HomeModuleMediator';
 
 // Modules lazy load
@@ -53,6 +54,7 @@ const Routes = props => {
           />
           <Route exact path="/iati" render={() => <IatiDetail />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
+          <Route exact path="/component" render={() => <DataExplorePanel />} />
         </Switch>
       </Suspense>
     </React.Fragment>

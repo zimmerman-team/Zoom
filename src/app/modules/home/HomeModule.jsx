@@ -13,8 +13,11 @@ import {
 } from 'modules/home/HomeModule.styles';
 import IndicatorDropMediator from 'mediators/DropDownMediators/IndicatorDropMediator';
 import { yearDropDown } from 'modules/home/HomeModule.utils';
+import DataExplorePane from 'components/DataExplorePane/DataExplorePanel';
 
 const ModuleContainer = styled(Box)``;
+
+const DataPaneContainer = styled.div``;
 
 const propTypes = {};
 
@@ -44,14 +47,13 @@ class HomeModule extends Component {
   render() {
     return (
       <React.Fragment>
-        {/*<SideBar open={this.state.sideBarOpen} />*/}
-        {/*<AppBar toggleSideBar={this.toggleSideBar} />*/}
         <ModuleContainer>
-          <BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />
+          {/*<BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />*/}
 
           <GeoMap indicatorData={this.props.indicators} />
 
           <ControlPanelContainer>
+            <DataExplorePane />
             <PanelDuo>
               <DropDownContainer>
                 <div>Indicator 1</div>

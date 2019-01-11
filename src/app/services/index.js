@@ -59,8 +59,8 @@ export function activitiesRequest(values) {
   return handleRequest(oipaURL('/api/activities/'), formatJSON(values), 'get');
 }
 
-export function activityRequest(id) {
-  return handleRequest(oipaURL(`/api/activities/${id}`), formatJSON({}), 'get');
+export function activityRequest(values) {
+  return handleRequest(oipaURL(`/api/activities/${values.activityID}`), formatJSON({ fields: values.fields }), 'get');
 }
 
 export function wikipediaExcerptRequest(values) {

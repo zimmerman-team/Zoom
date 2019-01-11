@@ -7,9 +7,11 @@ function convertISOToDate(date) {
 }
 
 export default function formatActivityData(data) {
+  if (!data) return undefined;
   return {
     timeline: [
       {
+        id: 1,
         label: 'Start date planned:',
         info: convertISOToDate(
           get(find(data.activity_dates, d => {
@@ -18,6 +20,7 @@ export default function formatActivityData(data) {
         ),
       },
       {
+        id: 2,
         label: 'Start date actual:',
         info: convertISOToDate(
           get(find(data.activity_dates, d => {
@@ -26,6 +29,7 @@ export default function formatActivityData(data) {
         ),
       },
       {
+        id: 3,
         label: 'End date planned:',
         info: convertISOToDate(
           get(find(data.activity_dates, d => {
@@ -34,7 +38,8 @@ export default function formatActivityData(data) {
         ),
       },
       {
-        label: 'Start date actual:',
+        id: 4,
+        label: 'End date actual:',
         info: convertISOToDate(
           get(find(data.activity_dates, d => {
             return d.type.code === '4'; 

@@ -48,6 +48,7 @@ const ItemInfo = styled.div`
 const propTypes = {
   data: PropTypes.shape({
     timeline: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
       label: PropTypes.string,
       info: PropTypes.oneOfType([
         PropTypes.string,
@@ -78,7 +79,7 @@ const Header = props => {
       <ModuleFragment background={zoomGreyZero}>
         <DetailList>
           {get(props.data, 'timeline', []).map(item => (
-            <DetailListItem key={item.info}>
+            <DetailListItem key={item.id}>
               <ItemLabel>{item.label}</ItemLabel>
               <ItemInfo>{item.info}</ItemInfo>
             </DetailListItem>

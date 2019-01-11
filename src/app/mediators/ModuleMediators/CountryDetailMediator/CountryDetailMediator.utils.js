@@ -2,6 +2,7 @@ import get from 'lodash/get';
 import map from 'lodash/map';
 import find from 'lodash/find';
 import filter from 'lodash/filter';
+import { chartColorThree, chartColorTwo } from 'components/theme/ThemeSheet';
 import { split } from 'sentence-splitter';
 
 /*
@@ -80,4 +81,42 @@ export function formatWikiExcerpts(excerpts) {
   const excerpt0 = excerptSentences.slice(0, 2).join(' ');
   const excerpt1 = excerptSentences.slice(2).join(' ');
   return [excerpt0, excerpt1];
+}
+
+// This basically formats the data for the bar charts shown
+// in country info
+export function formatBarChartInfoIndicators(
+  countryData,
+  globalData,
+  indicatorNames,
+  countryName,
+) {
+  const barChartData = [];
+
+  indicatorNames.forEach((name, index) => {
+    if (index < 3) {
+      const countryDataPoints = filter(countryData, ['indicatorName', name]);
+      const globalDataPoints = filter(globalData, ['indicatorName', name]);
+
+      let countryIndValue = 0;
+      countryDataPoints.forEach(point => {
+        countryIndValue += point.value;
+      });
+
+      let globalIndValue = 0;
+      globalDataPoints.forEach(point => {
+        globalIndValue += point.value;
+      });
+
+      barChartData.push({
+        indicator: name,
+        [countryName]: countryIndValue,
+        CountryColor: chartColorTwo,
+        Global: globalIndValue,
+        GlobalColor: chartColorThree,
+      });
+    }
+  });
+
+  return barChartData;
 }

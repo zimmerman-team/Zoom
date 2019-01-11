@@ -11,7 +11,7 @@ import {
   DropDownContainer,
   PanelDuo,
 } from 'modules/home/HomeModule.styles';
-import IndicatorDropMediator from 'mediators/DropDownMediators/IndicatorDropMediator';
+import IndicatorDropMediator from 'mediators/DropDownMediators/IndicatorDropMediator/IndicatorDropMediator';
 import { yearDropDown } from 'modules/home/HomeModule.utils';
 
 const ModuleContainer = styled(Box)``;

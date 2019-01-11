@@ -5,23 +5,23 @@ import {
 } from 'components/theme/ThemeSheet';
 export const barChartMockData = [
   {
-    country: 'AI',
+    indicator: 'AI',
     Kenya: 17,
-    KenyaColor: chartColorTwo,
+    CountryColor: chartColorTwo,
     Global: 169,
     GlobalColor: chartColorThree,
   },
   {
-    country: 'AL',
+    indicator: 'AL',
     Kenya: 125,
-    KenyaColor: chartColorTwo,
+    CountryColor: chartColorTwo,
     Global: 163,
     GlobalColor: chartColorThree,
   },
   {
-    country: 'AM',
+    indicator: 'AM',
     Kenya: 135,
-    KenyaColor: chartColorTwo,
+    CountryColor: chartColorTwo,
     Global: 131,
     GlobalColor: chartColorThree,
   },

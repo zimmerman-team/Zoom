@@ -51,7 +51,9 @@ const Routes = props => {
           <Route
             exact
             path="/country"
-            render={() => <CountryDetailMediator />}
+            render={() => (
+              <CountryDetailMediator indicatorAggregations={props} />
+            )}
           />
           <Route exact path="/iati" render={() => <IatiDetailMediator />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 import { Box } from 'grommet';
+import get from 'lodash/get';
 const ComponentBase = styled(Box)`
   height: 280px;
   width: 100%;
@@ -11,6 +12,7 @@ const ComponentBase = styled(Box)`
 `;
 
 const propTypes = {
+  countryName: PropTypes.string,
   data: PropTypes.arrayOf(
     PropTypes.shape({
       Global: PropTypes.number,
@@ -23,29 +25,40 @@ const propTypes = {
 };
 const defaultProps = {
   data: [],
+  countryName: 'Kenya',
 };
 
 const BarChart = props => {
+
+  const customTick = tick => {
+    // console.log(tick);
+    return <g transform={`translate(0, ${tick.y-30})`}
+              style={{ opacity: 1 }}
+              key={`indicator-${tick.key}`}>
+            <text style={{ fontSize: 11, }}>{tick.key}</text>
+           </g>
+  };
+
   return (
     <ComponentBase>
       <ResponsiveBar
         data={props.data}
-        keys={['Kenya', 'Global']}
-        indexBy="country"
+        keys={[props.countryName, 'Global']}
+        indexBy="indicator"
         margin={{
-          top: -35,
+          top: 0,
           right: 0,
           bottom: 20,
-          left: 0,
+          left: 10,
         }}
         padding={0.4}
         innerPadding={10}
         groupMode="grouped"
         layout="horizontal"
         colors="nivo"
-        colorBy={e => {
-          const t = e.id;
-          return e.data[''.concat(t, 'Color')];
+        colorBy={function(e) {
+          return e.id === 'Global' ?
+            get(e, 'data.GlobalColor', '#000') : get(e, 'data.CountryColor', '#000');
         }}
         defs={[
           {
@@ -82,14 +95,14 @@ const BarChart = props => {
           },
         ]}
         borderColor="inherit:darker(1.6)"
-        axisTop={null}
-        axisRight={null}
         axisBottom={null}
-        axisLeft={null}
         enableGridY={false}
+        axisLeft={{
+          renderTick: customTick
+        }}
         labelSkipWidth={12}
         labelSkipHeight={12}
-        labelTextColor="#000000"
+        labelTextColor="#000"
         animate={true}
         motionStiffness={90}
         motionDamping={15}

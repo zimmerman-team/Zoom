@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash e6f368fabe3b5da483a1263ef7f21e71
+ * @relayHash 4da21f708a8a060aa62e1581269535ae
  */
 
 /* eslint-disable */
@@ -9,11 +9,12 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
+type CountryDetailMediator_indicatorAggregations$ref = any;
 type HomeModuleMediator_indicatorAggregations$ref = any;
 type IndicatorDropMediator_allIndicatorNames$ref = any;
 export type AppQueryVariables = {||};
 export type AppQueryResponse = {|
-  +$fragmentRefs: HomeModuleMediator_indicatorAggregations$ref & IndicatorDropMediator_allIndicatorNames$ref
+  +$fragmentRefs: HomeModuleMediator_indicatorAggregations$ref & IndicatorDropMediator_allIndicatorNames$ref & CountryDetailMediator_indicatorAggregations$ref
 |};
 export type AppQuery = {|
   variables: AppQueryVariables,
@@ -25,6 +26,7 @@ export type AppQuery = {|
 query AppQuery {
   ...HomeModuleMediator_indicatorAggregations
   ...IndicatorDropMediator_allIndicatorNames
+  ...CountryDetailMediator_indicatorAggregations
 }
 
 fragment HomeModuleMediator_indicatorAggregations on Query {
@@ -54,50 +56,81 @@ fragment IndicatorDropMediator_allIndicatorNames on Query {
     }
   }
 }
+
+fragment CountryDetailMediator_indicatorAggregations on Query {
+  country: datapointsAggregation(groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"], orderBy: ["indicatorName"], aggregation: ["Sum(value)"], geolocationIso2_In: ["undefined"], indicatorName_In: ["undefined"]) {
+    indicatorName
+    geolocationTag
+    value
+  }
+  global: datapointsAggregation(groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"], orderBy: ["indicatorName"], aggregation: ["Sum(value)"], indicatorName_In: ["undefined"]) {
+    indicatorName
+    value
+  }
+}
 */
 
 const node /*: ConcreteRequest*/ = (function() {
-  var v0 = ['undefined'],
-    v1 = [
-      {
-        kind: 'Literal',
-        name: 'aggregation',
-        value: ['Sum(value)'],
-        type: '[String]',
-      },
+  var v0 = {
+      kind: 'Literal',
+      name: 'aggregation',
+      value: ['Sum(value)'],
+      type: '[String]',
+    },
+    v1 = ['undefined'],
+    v2 = {
+      kind: 'Literal',
+      name: 'groupBy',
+      value: ['indicatorName', 'geolocationTag', 'date', 'geolocationIso2'],
+      type: '[String]',
+    },
+    v3 = {
+      kind: 'Literal',
+      name: 'indicatorName_In',
+      value: v1,
+      type: '[String]',
+    },
+    v4 = {
+      kind: 'Literal',
+      name: 'orderBy',
+      value: ['indicatorName'],
+      type: '[String]',
+    },
+    v5 = [
+      v0,
       {
         kind: 'Literal',
         name: 'date_In',
-        value: v0,
+        value: v1,
         type: '[String]',
       },
-      {
-        kind: 'Literal',
-        name: 'groupBy',
-        value: ['indicatorName', 'geolocationTag', 'date', 'geolocationIso2'],
-        type: '[String]',
-      },
-      {
-        kind: 'Literal',
-        name: 'indicatorName_In',
-        value: v0,
-        type: '[String]',
-      },
-      {
-        kind: 'Literal',
-        name: 'orderBy',
-        value: ['indicatorName'],
-        type: '[String]',
-      },
+      v2,
+      v3,
+      v4,
     ],
-    v2 = [
-      {
-        kind: 'ScalarField',
-        alias: null,
-        name: 'indicatorName',
-        args: null,
-        storageKey: null,
-      },
+    v6 = {
+      kind: 'ScalarField',
+      alias: null,
+      name: 'indicatorName',
+      args: null,
+      storageKey: null,
+    },
+    v7 = {
+      kind: 'ScalarField',
+      alias: null,
+      name: 'geolocationTag',
+      args: null,
+      storageKey: null,
+    },
+    v8 = {
+      kind: 'ScalarField',
+      alias: null,
+      name: 'value',
+      args: null,
+      storageKey: null,
+    },
+    v9 = [
+      v6,
       {
         kind: 'ScalarField',
         alias: null,
@@ -105,13 +138,7 @@ const node /*: ConcreteRequest*/ = (function() {
         args: null,
         storageKey: null,
       },
-      {
-        kind: 'ScalarField',
-        alias: null,
-        name: 'geolocationTag',
-        args: null,
-        storageKey: null,
-      },
+      v7,
       {
         kind: 'ScalarField',
         alias: null,
@@ -119,13 +146,7 @@ const node /*: ConcreteRequest*/ = (function() {
         args: null,
         storageKey: null,
       },
-      {
-        kind: 'ScalarField',
-        alias: null,
-        name: 'value',
-        args: null,
-        storageKey: null,
-      },
+      v8,
     ];
   return {
     kind: 'Request',
@@ -133,7 +154,7 @@ const node /*: ConcreteRequest*/ = (function() {
     name: 'AppQuery',
     id: null,
     text:
-      'query AppQuery {\n  ...HomeModuleMediator_indicatorAggregations\n  ...IndicatorDropMediator_allIndicatorNames\n}\n\nfragment HomeModuleMediator_indicatorAggregations on Query {\n  indicators1: datapointsAggregation(groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"], orderBy: ["indicatorName"], aggregation: ["Sum(value)"], date_In: ["undefined"], indicatorName_In: ["undefined"]) {\n    indicatorName\n    geolocationIso2\n    geolocationTag\n    date\n    value\n  }\n  indicators2: datapointsAggregation(groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"], orderBy: ["indicatorName"], aggregation: ["Sum(value)"], date_In: ["undefined"], indicatorName_In: ["undefined"]) {\n    indicatorName\n    geolocationIso2\n    geolocationTag\n    date\n    value\n  }\n}\n\nfragment IndicatorDropMediator_allIndicatorNames on Query {\n  allIndicators {\n    edges {\n      node {\n        name\n        id\n      }\n    }\n  }\n}\n',
+      'query AppQuery {\n  ...HomeModuleMediator_indicatorAggregations\n  ...IndicatorDropMediator_allIndicatorNames\n  ...CountryDetailMediator_indicatorAggregations\n}\n\nfragment HomeModuleMediator_indicatorAggregations on Query {\n  indicators1: datapointsAggregation(groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"], orderBy: ["indicatorName"], aggregation: ["Sum(value)"], date_In: ["undefined"], indicatorName_In: ["undefined"]) {\n    indicatorName\n    geolocationIso2\n    geolocationTag\n    date\n    value\n  }\n  indicators2: datapointsAggregation(groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"], orderBy: ["indicatorName"], aggregation: ["Sum(value)"], date_In: ["undefined"], indicatorName_In: ["undefined"]) {\n    indicatorName\n    geolocationIso2\n    geolocationTag\n    date\n    value\n  }\n}\n\nfragment IndicatorDropMediator_allIndicatorNames on Query {\n  allIndicators {\n    edges {\n      node {\n        name\n        id\n      }\n    }\n  }\n}\n\nfragment CountryDetailMediator_indicatorAggregations on Query {\n  country: datapointsAggregation(groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"], orderBy: ["indicatorName"], aggregation: ["Sum(value)"], geolocationIso2_In: ["undefined"], indicatorName_In: ["undefined"]) {\n    indicatorName\n    geolocationTag\n    value\n  }\n  global: datapointsAggregation(groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"], orderBy: ["indicatorName"], aggregation: ["Sum(value)"], indicatorName_In: ["undefined"]) {\n    indicatorName\n    value\n  }\n}\n',
     metadata: {},
     fragment: {
       kind: 'Fragment',
@@ -152,6 +173,11 @@ const node /*: ConcreteRequest*/ = (function() {
           name: 'IndicatorDropMediator_allIndicatorNames',
           args: null,
         },
+        {
+          kind: 'FragmentSpread',
+          name: 'CountryDetailMediator_indicatorAggregations',
+          args: null,
+        },
       ],
     },
     operation: {
@@ -165,10 +191,10 @@ const node /*: ConcreteRequest*/ = (function() {
           name: 'datapointsAggregation',
           storageKey:
             'datapointsAggregation(aggregation:["Sum(value)"],date_In:["undefined"],groupBy:["indicatorName","geolocationTag","date","geolocationIso2"],indicatorName_In:["undefined"],orderBy:["indicatorName"])',
-          args: v1,
+          args: v5,
           concreteType: 'DatapointsAggregationNode',
           plural: true,
-          selections: v2,
+          selections: v9,
         },
         {
           kind: 'LinkedField',
@@ -176,10 +202,10 @@ const node /*: ConcreteRequest*/ = (function() {
           name: 'datapointsAggregation',
           storageKey:
             'datapointsAggregation(aggregation:["Sum(value)"],date_In:["undefined"],groupBy:["indicatorName","geolocationTag","date","geolocationIso2"],indicatorName_In:["undefined"],orderBy:["indicatorName"])',
-          args: v1,
+          args: v5,
           concreteType: 'DatapointsAggregationNode',
           plural: true,
-          selections: v2,
+          selections: v9,
         },
         {
           kind: 'LinkedField',
@@ -228,10 +254,43 @@ const node /*: ConcreteRequest*/ = (function() {
             },
           ],
         },
+        {
+          kind: 'LinkedField',
+          alias: 'country',
+          name: 'datapointsAggregation',
+          storageKey:
+            'datapointsAggregation(aggregation:["Sum(value)"],geolocationIso2_In:["undefined"],groupBy:["indicatorName","geolocationTag","date","geolocationIso2"],indicatorName_In:["undefined"],orderBy:["indicatorName"])',
+          args: [
+            v0,
+            {
+              kind: 'Literal',
+              name: 'geolocationIso2_In',
+              value: v1,
+              type: '[String]',
+            },
+            v2,
+            v3,
+            v4,
+          ],
+          concreteType: 'DatapointsAggregationNode',
+          plural: true,
+          selections: [v6, v7, v8],
+        },
+        {
+          kind: 'LinkedField',
+          alias: 'global',
+          name: 'datapointsAggregation',
+          storageKey:
+            'datapointsAggregation(aggregation:["Sum(value)"],groupBy:["indicatorName","geolocationTag","date","geolocationIso2"],indicatorName_In:["undefined"],orderBy:["indicatorName"])',
+          args: [v0, v2, v3, v4],
+          concreteType: 'DatapointsAggregationNode',
+          plural: true,
+          selections: [v6, v8],
+        },
       ],
     },
   };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'b46b681615d289d7960fa50a2a55d307';
+(node/*: any*/).hash = '20e24ae6be824b3463afed191662f84a';
 module.exports = node;

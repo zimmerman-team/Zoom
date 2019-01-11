@@ -42,6 +42,7 @@ class App extends React.Component {
           query AppQuery {
             ...HomeModuleMediator_indicatorAggregations
             ...IndicatorDropMediator_allIndicatorNames
+            ...CountryDetailMediator_indicatorAggregations
           }
         `}
         variables={{}}

@@ -18,15 +18,19 @@ import PropTypes from 'prop-types';
 
 const propTypes = {
   excerpts: PropTypes.array,
+  infoBarData: PropTypes.array,
+  countryName: PropTypes.string,
 };
 const defaultProps = {
   excerpts: [],
+  infoBarData: [],
+  countryName: countryDetailMockData.country,
 };
 
 const CountryInfo = props => {
   return (
     <ModuleFragment>
-      <CountryName>Zoom in on {countryDetailMockData.country}</CountryName>
+      <CountryName>Zoom in on {props.countryName}</CountryName>
       <Box direction="row">
         <Box width="50%">
           <PageIntroInitial>{props.excerpts[0]}</PageIntroInitial>
@@ -36,7 +40,8 @@ const CountryInfo = props => {
           </SimpleText>
         </Box>
         <Box width="50%">
-          <BarChart data={barChartMockData} />
+          <BarChart data={props.infoBarData}
+                    countryName={props.countryName}/>
         </Box>
       </Box>
     </ModuleFragment>

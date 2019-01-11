@@ -10,7 +10,14 @@ const ComponentBase = styled(Box)`
 `;
 
 const propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      color: PropTypes.string,
+      id: PropTypes.string,
+      label: PropTypes.string,
+      value: PropTypes.number,
+    })
+  ),
 };
 const defaultProps = {
   data: [],

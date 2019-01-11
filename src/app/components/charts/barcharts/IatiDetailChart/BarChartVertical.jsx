@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { barChartMockData } from '__mocks__/barChartHorizontalMock';
 import { ResponsiveBar } from '@nivo/bar';
 
 const ComponentBase = styled.div`
@@ -11,7 +10,15 @@ const ComponentBase = styled.div`
 `;
 
 const propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      Global: PropTypes.number,
+      GlobalColor: PropTypes.string,
+      Kenya: PropTypes.number,
+      KenyaColor: PropTypes.string,
+      country: PropTypes.string,
+    })
+  ),
 };
 const defaultProps = {
   data: [],
@@ -33,8 +40,8 @@ const BarChartVertical = props => {
         padding={0.5}
         groupMode="grouped"
         colors="nivo"
-        colorBy={function(e) {
-          var t = e.id;
+        colorBy={e => {
+          const t = e.id;
           return e.data[''.concat(t, 'Color')];
         }}
         defs={[

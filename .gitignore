@@ -77,3 +77,6 @@ yarn-error.log
 .idea/zoom-v2-ui.iml
 
 .DS_Store
+
+
+**/__generated__/*

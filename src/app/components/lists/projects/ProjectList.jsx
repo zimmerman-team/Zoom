@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { projectsMockData } from '__mocks__/projectsMock';
+// import { projectsMockData } from '__mocks__/projectsMock';
 import { Box, Heading } from 'grommet';
 import {
   zoomGreyZero,
@@ -11,7 +11,7 @@ import {
   aidsFondsRed,
 } from 'components/theme/ThemeSheet';
 
-const ComponentBase = styled.div``;
+// const ComponentBase = styled.div``;
 
 const List = styled(Box)`
   display: flex;
@@ -73,11 +73,18 @@ const SectorListItem = styled(Value)`
 `;
 
 const propTypes = {
-  data: PropTypes.object,
-  projectData: PropTypes.array,
+  projectData: PropTypes.arrayOf(PropTypes.shape({
+    budget: PropTypes.number,
+    endDat: PropTypes.string,
+    organisation: PropTypes.string,
+    sectors: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+    })),
+    startDate: PropTypes.string,
+    title: PropTypes.string,
+  })),
 };
 const defaultProps = {
-  data: undefined,
   projectData: [],
 };
 

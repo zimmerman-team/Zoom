@@ -3,19 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box } from 'grommet';
-import { lineChartMockData } from '__mocks__/lineChartMock';
-import { barChartMockData } from '__mocks__/barChartMock';
-import ThemeSheet, {
-  aidsFondsWhite,
-  zoomGreyZero,
-  FragmentVisualisation,
-  FragmentHeader,
-  FragmentDescription,
-  FragmentContent,
-  FragmentContainer,
-} from 'components/theme/ThemeSheet';
+import { aidsFondsWhite, zoomGreyZero } from 'components/theme/ThemeSheet';
 
-import CountryInfo from 'modules/countrydetail/fragments/CountryInfo';
+import CountryInfo from 'modules/countrydetail/fragments/CountryInfo/CountryInfo';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
 import CivicSpace from 'modules/countrydetail/fragments/CivicSpace';
 import AidsEpidemic from 'modules/countrydetail/fragments/AidsEpidemic';
@@ -29,21 +19,28 @@ const ModuleContainer = styled(Box)`
 `;
 
 const propTypes = {
-  data: PropTypes.object,
-  projectData: PropTypes.array,
+  // data: PropTypes.object,
+  excerpts: PropTypes.arrayOf(PropTypes.string),
+  projectData: PropTypes.arrayOf(PropTypes.shape({
+    budget: PropTypes.number,
+    endDat: PropTypes.string,
+    organisation: PropTypes.string,
+    sectors: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+    })),
+    startDate: PropTypes.string,
+    title: PropTypes.string,
+  })),
   countryName: PropTypes.string,
 };
 const defaultProps = {
-  data: undefined,
+  // data: undefined,
+  excerpts: [],
   projectData: [],
   countryName: '',
 };
 
 class CountryDetailModule extends React.Component {
-  scrollToNode = node => {
-    node.scrollIntoView({ behavior: 'smooth' });
-  };
-
   render() {
     return (
       <ModuleContainer>
@@ -52,9 +49,10 @@ class CountryDetailModule extends React.Component {
 
         {/* Fragment 2: Country info */}
         <CountryInfo infoBarData={this.props.infoBarData}
-                     countryName={this.props.countryName}/>
+                     countryName={this.props.countryName}
+                     excerpts={this.props.excerpts}/>
 
-        {/* Fragment 2: aids epidemic*/}
+        {/* Fragment 2: aids epidemic */}
         <AidsEpidemic background={zoomGreyZero} />
 
         {/* Fragment 3: economic indicators */}

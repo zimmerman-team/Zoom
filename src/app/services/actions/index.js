@@ -29,3 +29,35 @@ export function uploadFailed(error) {
     error: error,
   };
 }
+
+export const COUNTRY_EXCERPT_INITIAL = 'COUNTRY_EXCERPT_INITIAL';
+export const COUNTRY_EXCERPT_REQUEST = 'COUNTRY_EXCERPT_REQUEST';
+export const COUNTRY_EXCERPT_SUCCESS = 'COUNTRY_EXCERPT_SUCCESS';
+export const COUNTRY_EXCERPT_FAILED = 'COUNTRY_EXCERPT_FAILED';
+
+export function countryExcerptInitial() {
+  return {
+    type: COUNTRY_EXCERPT_INITIAL,
+  };
+}
+
+export function countryExcerptRequest(values) {
+  return {
+    type: COUNTRY_EXCERPT_REQUEST,
+    values: values,
+  };
+}
+
+export function countryExcerptSuccess(data) {
+  return {
+    type: COUNTRY_EXCERPT_SUCCESS,
+    data: data,
+  };
+}
+
+export function countryExcerptFailed(error) {
+  return {
+    type: COUNTRY_EXCERPT_FAILED,
+    error: error,
+  };
+}

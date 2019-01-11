@@ -12,8 +12,16 @@ const ComponentBase = styled(Box)`
 `;
 
 const propTypes = {
-  data: PropTypes.array,
   countryName: PropTypes.string,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      Global: PropTypes.number,
+      GlobalColor: PropTypes.string,
+      Kenya: PropTypes.number,
+      KenyaColor: PropTypes.string,
+      country: PropTypes.string,
+    })
+  ),
 };
 const defaultProps = {
   data: [],
@@ -48,8 +56,6 @@ const BarChart = props => {
         groupMode="grouped"
         layout="horizontal"
         colors="nivo"
-        // miValue={1}
-        // maxValue={100}
         colorBy={function(e) {
           return e.id === 'Global' ?
             get(e, 'data.GlobalColor', '#000') : get(e, 'data.CountryColor', '#000');

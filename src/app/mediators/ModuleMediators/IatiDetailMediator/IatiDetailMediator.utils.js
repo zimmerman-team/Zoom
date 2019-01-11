@@ -3,7 +3,9 @@ import find from 'lodash/find';
 import DateTime from 'luxon/src/datetime';
 
 function convertISOToDate(date) {
-  return date ? DateTime.fromISO(date).toFormat('dd LLL yyyy') : 'Data not available';
+  return date
+    ? DateTime.fromISO(date).toFormat('dd LLL yyyy')
+    : 'Data not available';
 }
 
 export default function formatActivityData(data) {
@@ -14,36 +16,52 @@ export default function formatActivityData(data) {
         id: 1,
         label: 'Start date planned:',
         info: convertISOToDate(
-          get(find(data.activity_dates, d => {
-            return d.type.code === '1'; 
-          }), 'iso_date', null)
+          get(
+            find(data.activity_dates, d => {
+              return d.type.code === '1';
+            }),
+            'iso_date',
+            null,
+          ),
         ),
       },
       {
         id: 2,
         label: 'Start date actual:',
         info: convertISOToDate(
-          get(find(data.activity_dates, d => {
-            return d.type.code === '2'; 
-          }), 'iso_date', null)
+          get(
+            find(data.activity_dates, d => {
+              return d.type.code === '2';
+            }),
+            'iso_date',
+            null,
+          ),
         ),
       },
       {
         id: 3,
         label: 'End date planned:',
         info: convertISOToDate(
-          get(find(data.activity_dates, d => {
-            return d.type.code === '3'; 
-          }), 'iso_date', null)
+          get(
+            find(data.activity_dates, d => {
+              return d.type.code === '3';
+            }),
+            'iso_date',
+            null,
+          ),
         ),
       },
       {
         id: 4,
         label: 'End date actual:',
         info: convertISOToDate(
-          get(find(data.activity_dates, d => {
-            return d.type.code === '4'; 
-          }), 'iso_date', null)
+          get(
+            find(data.activity_dates, d => {
+              return d.type.code === '4';
+            }),
+            'iso_date',
+            null,
+          ),
         ),
       },
     ],
@@ -51,9 +69,7 @@ export default function formatActivityData(data) {
     detail: [
       {
         label: 'Last project update:',
-        info: convertISOToDate(
-          get(data, 'last_updated_datetime', null),
-        )
+        info: convertISOToDate(get(data, 'last_updated_datetime', null)),
       },
       {
         label: 'Status:',
@@ -70,11 +86,12 @@ export default function formatActivityData(data) {
               : ''
           }
         `,
-        moreData: get(data, 'recipient_countries.length', 0) > 1
-          ? get(data, 'recipient_countries', []).map(country => {
-              return country.country.name;
-            })
-          : undefined,
+        moreData:
+          get(data, 'recipient_countries.length', 0) > 1
+            ? get(data, 'recipient_countries', []).map(country => {
+                return country.country.name;
+              })
+            : undefined,
       },
       {
         label: 'Data source:',
@@ -99,7 +116,7 @@ export default function formatActivityData(data) {
           color: '#F7F8FA',
           loc: sector.percentage,
         };
-      })
-    }
+      }),
+    },
   };
 }

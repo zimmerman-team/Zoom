@@ -11,7 +11,7 @@ import isEqual from 'lodash/isEqual';
 import {
   formatBarChartInfoIndicators,
   formatProjectData,
-  formatWikiExcerpts
+  formatWikiExcerpts,
 } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
 
 /* actions */

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Box, Button, Layer, RoutedButton } from 'grommet/es6';
+import { Box, Button, Layer, RoutedButton } from 'grommet';
 import {
   aidsFondsRed,
   zoomFontFamTwo,

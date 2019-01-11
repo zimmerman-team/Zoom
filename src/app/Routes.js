@@ -25,7 +25,9 @@ const CountryDetailMediator = lazy(() =>
 const HomeModuleMediator = lazy(() =>
   import('mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator'),
 );
-const IatiDetail = lazy(() => import('modules/IATI_Detail/IatiDetail'));
+const IatiDetailMediator = lazy(() =>
+  import('mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator')
+);
 
 // Routes
 const Routes = props => {
@@ -51,7 +53,7 @@ const Routes = props => {
             path="/country"
             render={() => <CountryDetailMediator />}
           />
-          <Route exact path="/iati" render={() => <IatiDetail />} />
+          <Route exact path="/iati" render={() => <IatiDetailMediator />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
         </Switch>
       </Suspense>

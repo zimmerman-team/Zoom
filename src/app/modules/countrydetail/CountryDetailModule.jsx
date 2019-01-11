@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Box } from 'grommet';
 import { lineChartMockData } from '__mocks__/lineChartMock';
 import { barChartMockData } from '__mocks__/barChartMock';
-import countryDetailMockData from '__mocks__/countryDetailMock';
 import ThemeSheet, {
   aidsFondsWhite,
   zoomGreyZero,
@@ -15,7 +14,6 @@ import ThemeSheet, {
   FragmentContent,
   FragmentContainer,
 } from 'components/theme/ThemeSheet';
-import AppBar from 'components/navigation/AppBar/AppBar';
 
 import CountryInfo from 'modules/countrydetail/fragments/CountryInfo';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';

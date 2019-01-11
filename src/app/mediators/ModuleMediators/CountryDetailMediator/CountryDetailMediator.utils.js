@@ -60,24 +60,9 @@ export function formatProjectData(activities) {
   return projectData;
 }
 
-// Formats an array with country indicator names
-// which then is used to get the global data based on those indicators
-// and which is used in formating the joint indicator data
-// for the bar charts in country info
-export function formatCountryIndNames(countryData) {
-  const countryIndNames = [];
-
-  countryData.forEach(item => {
-    if (countryIndNames.indexOf(item.indicatorName) === -1) {
-      countryIndNames.push(item.indicatorName);
-    }
-  });
-  return countryIndNames;
-}
-
 // This basically formats the data for the bar charts shown
 // in country info
-export function formatCountryInfoIndicators(
+export function formatBarChartInfoIndicators(
   countryData,
   globalData,
   indicatorNames,

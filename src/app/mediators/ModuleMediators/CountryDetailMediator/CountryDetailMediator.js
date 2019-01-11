@@ -9,8 +9,7 @@ import { createRefetchContainer, graphql } from 'react-relay';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import {
-  formatCountryIndNames,
-  formatCountryInfoIndicators,
+  formatBarChartInfoIndicators,
   formatProjectData,
 } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
 
@@ -35,7 +34,7 @@ class CountryDetailMediator extends React.Component {
     this.state = {
       transParams: mock.transParams,
       projectData: [],
-      indicatorNames: ['undefined'],
+      barChartIndicators: mock.barChartIndicators,
       countryName: '',
       infoBarData: [],
     };
@@ -68,47 +67,34 @@ class CountryDetailMediator extends React.Component {
       this.setState({ projectData });
     }
 
-    // Here we format the countryIndicator names out of
-    // country indicator data, and get global data
-    // according to those indicators
+    // Here we format the bar chart indicator data
+    // And save the countries name that we also retrieved
+    // from the indicators
     if (
       !isEqual(
-        this.props.indicatorAggregations.country,
-        prevProps.indicatorAggregations.country,
-      ) &&
-      this.props.indicatorAggregations.country.length > 0
-    ) {
-      const countryName = this.props.indicatorAggregations.country[0]
-        .geolocationTag;
-      const indicatorNames = formatCountryIndNames(
-        this.props.indicatorAggregations.country,
-      );
-      this.setState({ indicatorNames, countryName }, this.refetch);
-    }
-
-    // Here we format the barChart data using the
-    // retrieved indicator data for the country
-    // and for the global values
-    if (
-      !isEqual(
-        this.props.indicatorAggregations.global,
-        prevProps.indicatorAggregations.global,
+        this.props.indicatorAggregations,
+        prevProps.indicatorAggregations,
       )
     ) {
-      const infoBarData = formatCountryInfoIndicators(
+      const countryName = get(
+        this.props.indicatorAggregations,
+        'country[0].geolocationTag',
+        'CountryNotFound',
+      );
+      const infoBarData = formatBarChartInfoIndicators(
         this.props.indicatorAggregations.country,
         this.props.indicatorAggregations.global,
-        this.state.indicatorNames,
-        this.state.countryName,
+        this.state.barChartIndicators,
+        countryName,
       );
-      this.setState({ infoBarData });
+      this.setState({ infoBarData, countryName });
     }
   }
 
   refetch() {
     this.props.relay.refetch({
       countryCode: [mock.countryCode.toLowerCase()],
-      indicatorNames: this.state.indicatorNames,
+      indicatorNames: this.state.barChartIndicators,
     });
   }
 
@@ -145,6 +131,7 @@ export default createRefetchContainer(
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
         geolocationIso2_In: $countryCode
+        indicatorName_In: $indicatorNames
       ) {
         indicatorName
         geolocationTag

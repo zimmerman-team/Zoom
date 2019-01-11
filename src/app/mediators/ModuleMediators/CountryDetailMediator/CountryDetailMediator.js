@@ -38,19 +38,21 @@ const propTypes = {
     data: PropTypes.shape({
       batchcomplete: PropTypes.bool,
       query: PropTypes.shape({
-        pages: PropTypes.arrayOf(PropTypes.shape({
-          pageid: PropTypes.number,
-          ns: PropTypes.number,
-          title: PropTypes.string,
-          extract: PropTypes.string
-        }))
-      })
+        pages: PropTypes.arrayOf(
+          PropTypes.shape({
+            pageid: PropTypes.number,
+            ns: PropTypes.number,
+            title: PropTypes.string,
+            extract: PropTypes.string,
+          }),
+        ),
+      }),
     }),
     error: PropTypes.shape({
       status: PropTypes.string,
       statusText: PropTypes.string,
       result: PropTypes.object,
-    })
+    }),
   }),
   countryActivities: PropTypes.shape({
     values: PropTypes.shape({
@@ -71,7 +73,7 @@ const propTypes = {
       status: PropTypes.string,
       statusText: PropTypes.string,
       result: PropTypes.object,
-    })
+    }),
   }),
 };
 const defaultProps = {

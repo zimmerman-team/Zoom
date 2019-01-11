@@ -1,8 +1,7 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Layer, Box, Button, RoutedButton } from 'grommet';
+import { Box } from 'grommet';
 import {
   aidsFondsRed,
   zoomFontFamOne,
@@ -16,61 +15,12 @@ import IconHome from './icon_home.svg';
 import IconCharts from './icon_charts.svg';
 import IconClose from './icon_close.svg';
 import IconAbout from './icon_about.svg';
-
-const CloseButton = styled(Button)`
-  padding: 0;
-  color: ${aidsFondsRed};
-  font-family: ${zoomFontFamTwo};
-  font-size: 14px;
-`;
-
-const SidebarNavListContainer = styled(Box)`
-  background-color: ${zoomGreyZero};
-  padding: 20px;
-`;
-
-const SidebarNavList = styled(Box)`
-  display: flex;
-  flex-direction: column;
-`;
-
-const SidebarNavListItem = styled(RoutedButton)`
-  border: none;
-  color: ${aidsFondsRed};
-  border-radius: initial;
-  font-family: ${zoomFontFamTwo};
-  display: flex;
-  padding-left: 0;
-  padding-right: 0;
-  font-size: 14px;
-  line-height: 1;
-  margin-bottom: 16px;
-  transition: opacity 200ms ease-out;
-
-  &:last-child {
-    margin-bottom: 0;
-    opacity: 0.5;
-  }
-
-  &:hover {
-    opacity: 0.5;
-  }
-`;
-
-const SideBarLayer = styled(Layer)`
-  border-radius: 0;
-`;
-
-const SidebarHeader = styled(Box)`
-  padding: 20px;
-  padding-bottom: 8px;
-  padding-top: 8px;
-`;
-
-const LoginContainer = styled(Box)`
-  width: 100px;
-  height: 100px;
-`;
+import {
+  CloseButton,
+  SidebarHeader,
+  SideBarLayer, SidebarNavList,
+  SidebarNavListContainer, SidebarNavListItem
+} from 'components/navigation/SideBar/SideBar.styles';
 
 const propTypes = {
   open: PropTypes.bool,

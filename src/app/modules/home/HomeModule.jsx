@@ -54,44 +54,46 @@ class HomeModule extends Component {
 
           <ControlPanelContainer>
             <DataExplorePane />
-            <PanelDuo>
-              <DropDownContainer>
-                <div>Indicator 1</div>
-                <IndicatorDropMediator
-                  valueSelected={this.props.selectedInd1}
-                  selectVal={this.props.selectInd1}
-                  allIndicatorNames={this.props.allIndNames}
-                />
-              </DropDownContainer>
-              <DropDownContainer>
-                <div>Year</div>
-                <Select
-                  placeholder="Select"
-                  value={this.props.selectedYear1}
-                  options={yearDropDown}
-                  onChange={this.props.selectYear1}
-                />
-              </DropDownContainer>
-            </PanelDuo>
-            <PanelDuo>
-              <DropDownContainer>
-                <div>Indicator 2</div>
-                <IndicatorDropMediator
-                  valueSelected={this.props.selectedInd2}
-                  selectVal={this.props.selectInd2}
-                  allIndicatorNames={this.props.allIndNames}
-                />
-              </DropDownContainer>
-              <DropDownContainer>
-                <div>Year</div>
-                <Select
-                  placeholder="Select"
-                  value={this.props.selectedYear2}
-                  options={yearDropDown}
-                  onChange={this.props.selectYear2}
-                />
-              </DropDownContainer>
-            </PanelDuo>
+            {/*<Box>
+              <PanelDuo>
+                <DropDownContainer>
+                  <div>Indicator 1</div>
+                  <IndicatorDropMediator
+                    valueSelected={this.props.selectedInd1}
+                    selectVal={this.props.selectInd1}
+                    allIndicatorNames={this.props.allIndNames}
+                  />
+                </DropDownContainer>
+                <DropDownContainer>
+                  <div>Year</div>
+                  <Select
+                    placeholder="Select"
+                    value={this.props.selectedYear1}
+                    options={yearDropDown}
+                    onChange={this.props.selectYear1}
+                  />
+                </DropDownContainer>
+              </PanelDuo>
+              <PanelDuo>
+                <DropDownContainer>
+                  <div>Indicator 2</div>
+                  <IndicatorDropMediator
+                    valueSelected={this.props.selectedInd2}
+                    selectVal={this.props.selectInd2}
+                    allIndicatorNames={this.props.allIndNames}
+                  />
+                </DropDownContainer>
+                <DropDownContainer>
+                  <div>Year</div>
+                  <Select
+                    placeholder="Select"
+                    value={this.props.selectedYear2}
+                    options={yearDropDown}
+                    onChange={this.props.selectYear2}
+                  />
+                </DropDownContainer>
+              </PanelDuo>
+            </Box>*/}
           </ControlPanelContainer>
         </ModuleContainer>
       </React.Fragment>

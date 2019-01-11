@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Box } from 'grommet';
 import { aidsFondsWhite, zoomGreyZero } from 'components/theme/ThemeSheet';
 
-import CountryInfo from 'modules/countrydetail/fragments/CountryInfo';
+import CountryInfo from 'modules/countrydetail/fragments/CountryInfo/CountryInfo';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
 import CivicSpace from 'modules/countrydetail/fragments/CivicSpace';
 import AidsEpidemic from 'modules/countrydetail/fragments/AidsEpidemic';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';
-import CountryInfo from 'modules/countrydetail/fragments/CountryInfo';
+import CountryInfo from 'modules/countrydetail/fragments/CountryInfo/CountryInfo';
 import AidsEpidemic from 'modules/countrydetail/fragments/AidsEpidemic';
 import EconomicIndicators from 'modules/countrydetail/fragments/EconomicIndicators';
 import CivicSpace from 'modules/countrydetail/fragments/CivicSpace';

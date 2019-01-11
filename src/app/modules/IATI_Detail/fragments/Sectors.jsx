@@ -8,7 +8,7 @@ import {
   // FragmentVisualisation,
 } from 'components/theme/ThemeSheet';
 import TreeMap from 'components/charts/treemap/TreeMap';
-// import { treeMapMockData } from '__mocks__/treeMapMock';
+import { treeMapMockData } from '__mocks__/treeMapMock';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 
 const propTypes = {
@@ -23,13 +23,13 @@ const propTypes = {
   }),
 };
 const defaultProps = {
-  data: undefined,
+  data: {},
 };
 
 const Sectors = props => {
   return (
     <ModuleFragment background={zoomGreyZero} title="Sectors" showInfoButton>
-      <TreeMap data={props.data} />
+      <TreeMap data={props.data || treeMapMockData} />
     </ModuleFragment>
   );
 };

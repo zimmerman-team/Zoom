@@ -73,7 +73,6 @@ const defaultProps = {
 };
 
 const Header = props => {
-  console.log(props.data);
   return (
     <React.Fragment>
       <ModuleFragment background={zoomGreyZero}>

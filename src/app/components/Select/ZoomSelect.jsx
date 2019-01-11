@@ -17,8 +17,13 @@ import {
 
 const ComponentBase = styled(Select)`
   border-radius: 0;
-  background-color: ${zoomGreyZero};
+  font-family: ${zoomFontFamOne};
+  font-weight: normal;
+  //background-color: ${zoomGreyZero};
   color: ${aidsFondsRed};
+  ::-webkit-input-placeholder {
+    color: ${aidsFondsRed};
+  }
 `;
 
 const propTypes = {
@@ -30,7 +35,9 @@ const defaultProps = {
 };
 
 const ZoomSelect = props => {
-  return <Select placeholder={props.placeHolder} options={props.data} plain />;
+  return (
+    <ComponentBase placeholder={props.placeHolder} options={props.data} plain />
+  );
 };
 
 ZoomSelect.propTypes = propTypes;

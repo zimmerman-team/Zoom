@@ -1,27 +1,35 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import {
   zoomGreyZero,
-  FragmentHeader,
-  FragmentVisualisation,
+  // FragmentHeader,
+  // FragmentVisualisation,
 } from 'components/theme/ThemeSheet';
 import TreeMap from 'components/charts/treemap/TreeMap';
-import { treeMapMockData } from '__mocks__/treeMapMock';
+// import { treeMapMockData } from '__mocks__/treeMapMock';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 
 const propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.shape({
+    name: PropTypes.string,
+    color: PropTypes.string,
+    children: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+      color: PropTypes.string,
+      loc: PropTypes.number,
+    }))
+  }),
 };
 const defaultProps = {
-  data: undefined,
+  data: {},
 };
 
 const Sectors = props => {
   return (
     <ModuleFragment background={zoomGreyZero} title="Sectors" showInfoButton>
-      <TreeMap data={treeMapMockData} />
+      {props.data.children && <TreeMap data={props.data} />}
     </ModuleFragment>
   );
 };

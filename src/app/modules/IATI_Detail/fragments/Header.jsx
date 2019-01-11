@@ -2,16 +2,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import get from 'lodash/get';
+import { Box } from 'grommet';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
-import { zoomGreyZero, PageHeading } from 'components/theme/ThemeSheet';
-import { iatiDetailMockData } from '__mocks__/iatiDetailMock';
+// import { iatiDetailMockData } from '__mocks__/iatiDetailMock';
 import {
   zoomFontFamOne,
   zoomFontFamTwo,
   aidsFondsBlue,
+  zoomGreyZero,
+  PageHeading
 } from 'components/theme/ThemeSheet';
 
-const ComponentBase = styled.div``;
+// const ComponentBase = styled.div``;
 
 const DetailList = styled.ul`
   list-style: none;
@@ -41,22 +44,71 @@ const ItemInfo = styled.div`
   font-family: ${zoomFontFamTwo};
   color: ${aidsFondsBlue};
   line-height: 1;
+  position: relative;
+`;
+
+const Tooltip = styled(Box)`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 250px;
+  background-color: white;
+  padding: 20px;
+  z-index: 2;
+  border-radius: 2%;
+  font-family: ${zoomFontFamTwo};
+  line-height: 1.3;
 `;
 
 const propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.shape({
+    timeline: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      label: PropTypes.string,
+      info: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf([PropTypes.string]),
+      ])
+    })),
+    title: PropTypes.string,
+    detail: PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string,
+      info: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf([PropTypes.string]),
+      ]),
+      moreData: PropTypes.arrayOf(PropTypes.string),
+    })),
+  }),
 };
 const defaultProps = {
-  data: undefined,
+  data: {
+    timeline: [],
+    title: '',
+    detail: [],
+  },
 };
 
-const Header = props => {
+class Header extends React.Component {
+  state = {
+    showMoreData: false,
+  }
+
+  handleMouseEnter() {
+    this.setState({ showMoreData: true });
+  }
+
+  handleMouseLeave() {
+    this.setState({ showMoreData: false });
+  }
+
+  render() {
   return (
     <React.Fragment>
       <ModuleFragment background={zoomGreyZero}>
         <DetailList>
-          {iatiDetailMockData.timeline.map(item => (
-            <DetailListItem key={item.info}>
+          {get(this.props.data, 'timeline', []).map(item => (
+            <DetailListItem key={item.id}>
               <ItemLabel>{item.label}</ItemLabel>
               <ItemInfo>{item.info}</ItemInfo>
             </DetailListItem>
@@ -64,20 +116,31 @@ const Header = props => {
         </DetailList>
       </ModuleFragment>
       <ModuleFragment>
-        <PageHeading>IATI Project detail page title</PageHeading>
+        <PageHeading>{this.props.data.title}</PageHeading>
       </ModuleFragment>
       <ModuleFragment background={zoomGreyZero}>
         <DetailList>
-          {iatiDetailMockData.detail.map(item => (
+          {get(this.props.data, 'detail', []).map(item => (
             <DetailListItem key={item.info}>
               <ItemLabel>{item.label}</ItemLabel>
-              <ItemInfo>{item.info}</ItemInfo>
+              <ItemInfo
+                onMouseEnter={() => item.moreData && this.handleMouseEnter()}
+                onMouseLeave={() => item.moreData && this.handleMouseLeave()}
+              >
+                {item.info}
+                {item.moreData && this.state.showMoreData &&
+                <Tooltip>
+                  {item.moreData.join(', ')}
+                </Tooltip>
+              }
+              </ItemInfo>
             </DetailListItem>
           ))}
         </DetailList>
       </ModuleFragment>
     </React.Fragment>
   );
+  }
 };
 
 Header.propTypes = propTypes;

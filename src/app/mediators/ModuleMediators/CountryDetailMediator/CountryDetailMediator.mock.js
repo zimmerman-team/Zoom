@@ -18,6 +18,14 @@ const data = {
     formatversion: 2,
     titles: 'Kenya',
   },
+  countryCode: 'ke',
+  // So currently these are the default indicators
+  // that are gonna be used for all country details
+  barChartIndicators: [
+    'people living with hiv',
+    'new hiv infections',
+    'aids-related deaths',
+  ],
 };
 
 export default data;

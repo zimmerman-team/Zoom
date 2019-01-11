@@ -31,11 +31,13 @@ const propTypes = {
     startDate: PropTypes.string,
     title: PropTypes.string,
   })),
+  countryName: PropTypes.string,
 };
 const defaultProps = {
   // data: undefined,
   excerpts: [],
   projectData: [],
+  countryName: '',
 };
 
 class CountryDetailModule extends React.Component {
@@ -46,7 +48,9 @@ class CountryDetailModule extends React.Component {
         <PageNavigation />
 
         {/* Fragment 2: Country info */}
-        <CountryInfo excerpts={this.props.excerpts} />
+        <CountryInfo infoBarData={this.props.infoBarData}
+                     countryName={this.props.countryName}
+                     excerpts={this.props.excerpts}/>
 
         {/* Fragment 2: aids epidemic */}
         <AidsEpidemic background={zoomGreyZero} />

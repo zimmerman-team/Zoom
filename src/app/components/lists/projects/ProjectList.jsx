@@ -91,8 +91,8 @@ const defaultProps = {
 const ProjectList = props => {
   return (
     <List width="100%">
-      {props.projectData.map(project => (
-        <ListItem>
+      {props.projectData.map((project, index) => (
+        <ListItem key={`project-${index}`}>
           {/* title container */}
           <TitleContainer level="4" truncate>
             {project.title}
@@ -130,8 +130,8 @@ const ProjectList = props => {
               <Label>Sectors:</Label>
               {/* sector list */}
               <SectorList>
-                {project.sectors.map(sector => (
-                  <SectorListItem>{sector.name}</SectorListItem>
+                {project.sectors.map((sector, sectorInd) => (
+                  <SectorListItem key={`sector-${sectorInd}`}>{sector.name}</SectorListItem>
                 ))}
               </SectorList>
             </PropertyContainer>

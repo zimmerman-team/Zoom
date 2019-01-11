@@ -60,7 +60,11 @@ export function activitiesRequest(values) {
 }
 
 export function activityRequest(values) {
-  return handleRequest(oipaURL(`/api/activities/${values.activityID}`), formatJSON({ fields: values.fields }), 'get');
+  return handleRequest(
+    oipaURL(`/api/activities/${values.activityID}`),
+    formatJSON({ fields: values.fields }),
+    'get',
+  );
 }
 
 export function wikipediaExcerptRequest(values) {

@@ -27,56 +27,64 @@ const propTypes = {
       iati_identifier: PropTypes.string,
       title: PropTypes.shape({
         id: PropTypes.number,
-        narratives: PropTypes.arrayOf(PropTypes.shape({
-          text: PropTypes.string,
-          language: PropTypes.shape({
-            code: PropTypes.string,
-            name: PropTypes.string,
+        narratives: PropTypes.arrayOf(
+          PropTypes.shape({
+            text: PropTypes.string,
+            language: PropTypes.shape({
+              code: PropTypes.string,
+              name: PropTypes.string,
+            }),
           }),
-        })),
+        ),
       }),
       activity_status: PropTypes.shape({
         code: PropTypes.string,
         name: PropTypes.string,
       }),
-      activity_dates: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        iso_date: PropTypes.string,
-        type: PropTypes.shape({
-          code: PropTypes.string,
-          name: PropTypes.string,
-        })
-      })),
-      recipient_countries: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        country: PropTypes.shape({
-          url: PropTypes.string,
-          code: PropTypes.string,
-          name: PropTypes.string,
+      activity_dates: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          iso_date: PropTypes.string,
+          type: PropTypes.shape({
+            code: PropTypes.string,
+            name: PropTypes.string,
+          }),
         }),
-        percentage: PropTypes.number,
-      })),
-      sectors: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        sector: PropTypes.shape({
-          url: PropTypes.string,
-          code: PropTypes.string,
-          name: PropTypes.string,
+      ),
+      recipient_countries: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          country: PropTypes.shape({
+            url: PropTypes.string,
+            code: PropTypes.string,
+            name: PropTypes.string,
+          }),
+          percentage: PropTypes.number,
         }),
-        percentage: PropTypes.number,
-        vocabulary: PropTypes.shape({
-          code: PropTypes.string,
-          name: PropTypes.string,
+      ),
+      sectors: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          sector: PropTypes.shape({
+            url: PropTypes.string,
+            code: PropTypes.string,
+            name: PropTypes.string,
+          }),
+          percentage: PropTypes.number,
+          vocabulary: PropTypes.shape({
+            code: PropTypes.string,
+            name: PropTypes.string,
+          }),
+          vocabulary_uri: PropTypes.string,
         }),
-        vocabulary_uri: PropTypes.string,
-      })),
+      ),
       last_updated_datetime: PropTypes.string,
     }),
     error: PropTypes.shape({
       status: PropTypes.string,
       statusText: PropTypes.string,
       result: PropTypes.object,
-    })
+    }),
   }),
 };
 const defaultProps = {
@@ -92,18 +100,11 @@ class IatiDetailMediator extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(
-      oipaActions.activityDataRequest(mock.oipaParams),
-    );
+    this.props.dispatch(oipaActions.activityDataRequest(mock.oipaParams));
   }
 
   componentDidUpdate(prevProps) {
-    if (
-      !isEqual(
-        this.props.activityData.data,
-        prevProps.activityData.data,
-      )
-    ) {
+    if (!isEqual(this.props.activityData.data, prevProps.activityData.data)) {
       const activityData = formatActivityData(
         get(this.props.activityData, 'data', {}),
       );
@@ -114,7 +115,9 @@ class IatiDetailMediator extends React.Component {
   render() {
     return (
       <React.Fragment>
-        {this.state.activityData && <IatiDetailModule data={this.state.activityData} />}
+        {this.state.activityData && (
+          <IatiDetailModule data={this.state.activityData} />
+        )}
       </React.Fragment>
     );
   }

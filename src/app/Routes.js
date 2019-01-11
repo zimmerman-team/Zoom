@@ -26,7 +26,7 @@ const HomeModuleMediator = lazy(() =>
   import('mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator'),
 );
 const IatiDetailMediator = lazy(() =>
-  import('mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator')
+  import('mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator'),
 );
 
 // Routes

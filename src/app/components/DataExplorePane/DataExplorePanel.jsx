@@ -19,19 +19,21 @@ const propTypes = {
   startYear: PropTypes.number,
   endYear: PropTypes.number,
   currentYear: PropTypes.number,
+  regionAmount: PropTypes.number,
+  totalCountries: PropTypes.number,
+  totalIndicators: PropTypes.number,
 };
 const defaultProps = {
   data: undefined,
   startYear: 2000,
   endYear: 2019,
   currentYear: 2010,
+  regionAmount: 12,
+  totalCountries: 211,
+  totalIndicators: 289,
 };
 
 class DataExplorePane extends React.Component {
-  state = {
-    year: 2001,
-  };
-
   render() {
     return (
       <ComponentBase>
@@ -41,8 +43,12 @@ class DataExplorePane extends React.Component {
         <Divider />
         <FilterContainer>
           <FilterLabel>Location</FilterLabel>
-          <ZoomSelect placeHolder="Select region" />
-          <ZoomSelect placeHolder="Select country" />
+          <ZoomSelect
+            placeHolder={'Select region (' + this.props.regionAmount + ')'}
+          />
+          <ZoomSelect
+            placeHolder={'Select country (' + this.props.totalCountries + ')'}
+          />
         </FilterContainer>
         <FilterContainer>
           <FilterLabel>Period</FilterLabel>
@@ -51,12 +57,20 @@ class DataExplorePane extends React.Component {
         </FilterContainer>
         <FilterContainer>
           <FilterLabel>Indicators</FilterLabel>
-          <ZoomSelect placeHolder="Select indicator" />
+          <ZoomSelect
+            placeHolder={
+              'Select indicator (' + this.props.totalIndicators + ')'
+            }
+          />
           <ZoomSelect placeHolder="Select sub indicator" />
         </FilterContainer>
         <Divider />
         <FilterContainer>
-          <ZoomSelect placeHolder="Select indicator" />
+          <ZoomSelect
+            placeHolder={
+              'Select indicator (' + this.props.totalIndicators + ')'
+            }
+          />
           <ZoomSelect placeHolder="Select sub indicator" />
         </FilterContainer>
       </ComponentBase>

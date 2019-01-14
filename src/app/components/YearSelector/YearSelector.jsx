@@ -8,11 +8,11 @@ import { grommet } from 'grommet/themes';
 const ComponentBase = styled.div``;
 
 const propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.array,
   direction: PropTypes.string,
 };
 const defaultProps = {
-  data: undefined,
+  data: [],
   direction: 'horizontal',
 };
 

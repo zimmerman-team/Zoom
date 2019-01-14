@@ -26,10 +26,10 @@ const ToolFragment = styled.div`
 `;
 const FragmentTitle = styled.span``;
 const propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.array,
 };
 const defaultProps = {
-  data: undefined,
+  data: [],
 };
 
 const RichTabTitle = ({ icon, label }) => (

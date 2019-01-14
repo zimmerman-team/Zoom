@@ -1,21 +1,19 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Select, Box, RangeInput } from 'grommet';
 import ZoomSelect from 'components/Select/ZoomSelect';
 
 import {
   ComponentBase,
+  Divider,
   ExplorerHeader,
   FilterContainer,
   FilterLabel,
   FilterTitle,
-  Divider,
 } from './DataExplorerPane.style';
 
 const propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.array,
   startYear: PropTypes.number,
   endYear: PropTypes.number,
   currentYear: PropTypes.number,
@@ -24,7 +22,7 @@ const propTypes = {
   totalIndicators: PropTypes.number,
 };
 const defaultProps = {
-  data: undefined,
+  data: [],
   startYear: 2000,
   endYear: 2019,
   currentYear: 2010,

@@ -14,12 +14,14 @@ const propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       color: PropTypes.string,
-      data: PropTypes.PropTypes.arrayOf(PropTypes.shape({
-        x: PropTypes.string,
-        y: PropTypes.number,
-      })),
+      data: PropTypes.PropTypes.arrayOf(
+        PropTypes.shape({
+          x: PropTypes.string,
+          y: PropTypes.number,
+        }),
+      ),
       id: PropTypes.string,
-    })
+    }),
   ),
 };
 const defaultProps = {

@@ -8,7 +8,7 @@ import { aidsFondsWhite, zoomGreyZero } from 'components/theme/ThemeSheet';
 import CountryInfo from 'modules/countrydetail/fragments/CountryInfo/CountryInfo';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
 import CivicSpace from 'modules/countrydetail/fragments/CivicSpace';
-import AidsEpidemic from 'modules/countrydetail/fragments/AidsEpidemic';
+import AidsEpidemic from 'modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic';
 import EconomicIndicators from 'modules/countrydetail/fragments/EconomicIndicators';
 import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTransactions';
 import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';

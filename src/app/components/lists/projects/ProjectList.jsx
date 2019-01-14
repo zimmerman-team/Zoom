@@ -1,76 +1,15 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 // import { projectsMockData } from '__mocks__/projectsMock';
-import { Box, Heading } from 'grommet';
+import { Box } from 'grommet';
 import {
-  zoomGreyZero,
-  zoomFontFamOne,
-  zoomFontFamTwo,
-  aidsFondsRed,
-} from 'components/theme/ThemeSheet';
-
-// const ComponentBase = styled.div``;
-
-const List = styled(Box)`
-  display: flex;
-  flex-direction: column;
-`;
-const ListItem = styled(Box)`
-  background-color: ${zoomGreyZero};
-  margin-bottom: 2px;
-  padding: 20px;
-`;
-
-const PropertyContainer = styled(Box)`
-  margin-bottom: 10px;
-`;
-
-const Label = styled.div`
-  font-family: ${zoomFontFamOne};
-  font-size: 14px;
-  line-height: 1;
-  margin-right: 4px;
-`;
-const Value = styled.div`
-  font-family: ${zoomFontFamTwo};
-  font-size: 14px;
-  line-height: 1;
-`;
-
-const TitleContainer = styled(Heading)`
-  color: ${aidsFondsRed};
-  font-family: ${zoomFontFamTwo};
-  font-weight: normal;
-  font-size: 18px;
-  margin: 0;
-  margin-bottom: 10px;
-  line-height: 1;
-`;
-const DateContainer = styled(Box)``;
-const Separator = styled(Box)`
-  font-family: ${zoomFontFamOne};
-  margin-left: 4px;
-  margin-right: 4px;
-`;
-
-const SectorList = styled(Box)`
-  flex-direction: row;
-`;
-
-const SectorListItem = styled(Value)`
-  &:after {
-    content: ',';
-    margin-right: 4px;
-  }
-
-  &:last-child {
-    &:after {
-      content: '';
-    }
-  }
-`;
+  Label,
+  List,
+  ListItem,
+  PropertyContainer, SectorList, SectorListItem, Separator,
+  TitleContainer, Value
+} from 'components/lists/projects/ProjectList.styles';
 
 const propTypes = {
   projectData: PropTypes.arrayOf(PropTypes.shape({

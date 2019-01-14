@@ -8,7 +8,7 @@ import CivicSpace from 'modules/countrydetail/fragments/CivicSpace';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
 import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTransactions';
 import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';
-import Projects from 'modules/countrydetail/fragments/Projects';
+import Projects from 'modules/countrydetail/fragments/Projects/Projects';
 
 storiesOf('Module: Country Detail', module)
   .add('0. Full Page', () => <CountryDetailModule />)

@@ -12,7 +12,7 @@ import AidsEpidemic from 'modules/countrydetail/fragments/AidsEpidemic';
 import EconomicIndicators from 'modules/countrydetail/fragments/EconomicIndicators';
 import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTransactions';
 import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';
-import Projects from 'modules/countrydetail/fragments/Projects';
+import Projects from 'modules/countrydetail/fragments/Projects/Projects';
 
 const ModuleContainer = styled(Box)`
   background-color: ${aidsFondsWhite};

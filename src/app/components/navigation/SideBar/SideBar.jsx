@@ -18,8 +18,10 @@ import IconAbout from './icon_about.svg';
 import {
   CloseButton,
   SidebarHeader,
-  SideBarLayer, SidebarNavList,
-  SidebarNavListContainer, SidebarNavListItem
+  SideBarLayer,
+  SidebarNavList,
+  SidebarNavListContainer,
+  SidebarNavListItem,
 } from 'components/navigation/SideBar/SideBar.styles';
 
 const propTypes = {

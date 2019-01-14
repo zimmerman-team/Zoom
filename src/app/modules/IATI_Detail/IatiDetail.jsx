@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import Sectors from 'modules/IATI_Detail/fragments/Sectors';
 import TotalBudget from 'modules/IATI_Detail/fragments/TotalBudget';
-import Header from 'modules/IATI_Detail/fragments/Header';
+import Header from 'modules/IATI_Detail/fragments/Header/Header';
 
 const propTypes = {
   data: PropTypes.shape({

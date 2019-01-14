@@ -1,18 +1,22 @@
 export const iatiDetailMockData = {
   timeline: [
     {
+      id: 1,
       label: 'Start date planned:',
       info: '01 Mar 2009',
     },
     {
+      id: 2,
       label: 'Start date actual:',
       info: '30 jul 2009',
     },
     {
+      id: 3,
       label: 'End date planned:',
       info: '31 Dec 2020',
     },
     {
+      id: 4,
       label: 'Start date actual:',
       info: 'Data not available',
     },

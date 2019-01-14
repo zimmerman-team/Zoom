@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import IatiDetail from 'modules/IATI_Detail/IatiDetail';
 import Sectors from 'modules/IATI_Detail/fragments/Sectors';
-import Header from 'modules/IATI_Detail/fragments/Header';
+import Header from 'modules/IATI_Detail/fragments/Header/Header';
 import TotalBudget from 'modules/IATI_Detail/fragments/TotalBudget';
 
 storiesOf('Module: IATI Detail', module)

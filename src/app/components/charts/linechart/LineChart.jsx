@@ -11,7 +11,16 @@ const ComponentBase = styled(Box)`
 `;
 
 const propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      color: PropTypes.string,
+      data: PropTypes.PropTypes.arrayOf(PropTypes.shape({
+        x: PropTypes.string,
+        y: PropTypes.number,
+      })),
+      id: PropTypes.string,
+    })
+  ),
 };
 const defaultProps = {
   data: [],
@@ -23,7 +32,7 @@ const LineChart = props => {
       <ResponsiveLine
         data={props.data}
         margin={{
-          top: 0,
+          top: 20,
           right: 30,
           bottom: 30,
           left: 50,
@@ -34,8 +43,6 @@ const LineChart = props => {
         yScale={{
           type: 'linear',
           stacked: true,
-          min: 0,
-          max: 1150,
         }}
         minY="auto"
         maxY="auto"

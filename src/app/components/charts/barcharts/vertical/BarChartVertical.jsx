@@ -3,40 +3,45 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
-import { Box } from 'grommet';
-const ComponentBase = styled(Box)`
+
+const ComponentBase = styled.div`
   height: 280px;
   width: 100%;
-  //outline: 1px solid red;
 `;
 
 const propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      Global: PropTypes.number,
+      GlobalColor: PropTypes.string,
+      Kenya: PropTypes.number,
+      KenyaColor: PropTypes.string,
+      country: PropTypes.string,
+    })
+  ),
 };
 const defaultProps = {
   data: [],
 };
 
-const BarChart = props => {
+const BarChartVertical = props => {
   return (
     <ComponentBase>
       <ResponsiveBar
         data={props.data}
-        keys={['Kenya', 'Global']}
+        keys={['Budget', 'Spent']}
         indexBy="country"
         margin={{
-          top: -35,
+          top: 0,
           right: 0,
-          bottom: 20,
-          left: 0,
+          bottom: 50,
+          left: 60,
         }}
-        padding={0.4}
-        innerPadding={10}
+        padding={0.5}
         groupMode="grouped"
-        layout="horizontal"
         colors="nivo"
-        colorBy={function(e) {
-          var t = e.id;
+        colorBy={e => {
+          const t = e.id;
           return e.data[''.concat(t, 'Color')];
         }}
         defs={[
@@ -76,13 +81,27 @@ const BarChart = props => {
         borderColor="inherit:darker(1.6)"
         axisTop={null}
         axisRight={null}
-        axisBottom={null}
-        axisLeft={null}
-        enableGridY={false}
+        axisBottom={{
+          tickSize: 0,
+          tickPadding: 10,
+          tickRotation: 0,
+          legend: '',
+          legendPosition: 'middle',
+          legendOffset: 32,
+        }}
+        axisLeft={{
+          tickSize: 0,
+          tickPadding: 15,
+          tickRotation: 0,
+          legend: '',
+          legendPosition: 'middle',
+          legendOffset: -40,
+        }}
+        enableLabel={false}
         labelSkipWidth={12}
         labelSkipHeight={12}
-        labelTextColor="#000000"
-        animate={true}
+        labelTextColor="inherit:darker(1.6)"
+        animate={false}
         motionStiffness={90}
         motionDamping={15}
         legends={[
@@ -92,12 +111,12 @@ const BarChart = props => {
             direction: 'row',
             justify: false,
             translateX: 0,
-            translateY: 19,
+            translateY: 50,
             itemsSpacing: 2,
             itemWidth: 100,
             itemHeight: 20,
             itemDirection: 'left-to-right',
-            itemOpacity: 1,
+            itemOpacity: 0.85,
             symbolSize: 20,
             effects: [
               {
@@ -114,7 +133,7 @@ const BarChart = props => {
   );
 };
 
-BarChart.propTypes = propTypes;
-BarChart.defaultProps = defaultProps;
+BarChartVertical.propTypes = propTypes;
+BarChartVertical.defaultProps = defaultProps;
 
-export default BarChart;
+export default BarChartVertical;

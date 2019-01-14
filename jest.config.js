@@ -67,7 +67,12 @@ module.exports = {
   moduleFileExtensions: ['js', 'json', 'jsx'],
 
   // A map from regular expressions to module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
+  moduleNameMapper: {
+    '^components[/](.+)': '<rootDir>/src/app/components/$1',
+    '^__mocks__[/](.+)': '<rootDir>/src/app/__mocks__/$1',
+    '^modules[/](.+)': '<rootDir>/src/app/modules/$1',
+    '\\.(svg)$': '<rootDir>src/app/__mocks__/svgMock.js',
+  },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],

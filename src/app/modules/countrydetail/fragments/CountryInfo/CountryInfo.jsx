@@ -1,8 +1,6 @@
 /* base */
 import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import BarChart from 'components/charts/barcharts/BarChart';
+import BarChartHorizontal from 'components/charts/barcharts/horizontal/BarChartHorizontal';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import { Box } from 'grommet';
 import {
@@ -10,28 +8,36 @@ import {
   PageIntroInitial,
   PageIntroSecondary,
   SimpleText,
-  PageHeading,
 } from 'components/theme/ThemeSheet';
-import { barChartMockData } from '__mocks__/barChartMock';
+import { barChartMockData } from '__mocks__/barChartVerticalMock';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import { CountryName } from 'modules/countrydetail/fragments/CountryInfo/CountryInfo.styles';
+import PropTypes from 'prop-types';
 
 // FRAGMENT 2: country info
-const CountryInfoContainer = styled(Box)``;
-const CountryName = styled(PageHeading)`
-  margin-top: 0;
-`;
-const CountryInfoIntro = styled.p``;
-const CountryInfoMore = styled.p``;
-const CountryInfoDisclaimer = styled.p``;
-const CountryInfoBarContainer = styled(Box)``;
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  excerpts: PropTypes.array,
+  infoBarData: PropTypes.arrayOf(
+    PropTypes.shape({
+      CountryColor: PropTypes.string,
+      Global: PropTypes.number,
+      GlobalColor: PropTypes.string,
+      indicator: PropTypes.string,
+    })
+  ),
+  countryName: PropTypes.string,
+};
+const defaultProps = {
+  excerpts: [],
+  infoBarData: [],
+  countryName: countryDetailMockData.country,
+};
 
 const CountryInfo = props => {
   return (
     <ModuleFragment>
-      <CountryName>Zoom in on {countryDetailMockData.country}</CountryName>
+      <CountryName>Zoom in on {props.countryName}</CountryName>
       <Box direction="row">
         <Box width="50%">
           <PageIntroInitial>{props.excerpts[0]}</PageIntroInitial>
@@ -41,7 +47,8 @@ const CountryInfo = props => {
           </SimpleText>
         </Box>
         <Box width="50%">
-          <BarChart data={barChartMockData} />
+          <BarChartHorizontal data={props.infoBarData}
+                    countryName={props.countryName}/>
         </Box>
       </Box>
     </ModuleFragment>

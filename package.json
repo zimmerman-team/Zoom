@@ -21,7 +21,7 @@
     "immutability-helper": "^2.9.0",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.11",
-    "material-ui-slider": "^3.0.0",
+    "luxon": "^1.9.0",
     "prop-types": "^15.6.2",
     "rc-slider": "^8.6.4",
     "react": "16.7.0",

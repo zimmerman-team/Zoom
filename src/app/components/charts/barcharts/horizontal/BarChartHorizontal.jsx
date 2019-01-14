@@ -2,40 +2,63 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { barChartMockData } from '__mocks__/barChartHorizontalMock';
 import { ResponsiveBar } from '@nivo/bar';
-
-const ComponentBase = styled.div`
+import { Box } from 'grommet';
+import get from 'lodash/get';
+const ComponentBase = styled(Box)`
   height: 280px;
   width: 100%;
+  //outline: 1px solid red;
 `;
 
 const propTypes = {
-  data: PropTypes.array,
+  countryName: PropTypes.string,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      Global: PropTypes.number,
+      GlobalColor: PropTypes.string,
+      Kenya: PropTypes.number,
+      KenyaColor: PropTypes.string,
+      country: PropTypes.string,
+    })
+  ),
 };
 const defaultProps = {
   data: [],
+  countryName: 'Kenya',
 };
 
-const BarChartVertical = props => {
+const BarChart = props => {
+
+  const customTick = tick => {
+    // console.log(tick);
+    return <g transform={`translate(0, ${tick.y-30})`}
+              style={{ opacity: 1 }}
+              key={`indicator-${tick.key}`}>
+            <text style={{ fontSize: 11, }}>{tick.key}</text>
+           </g>
+  };
+
   return (
     <ComponentBase>
       <ResponsiveBar
         data={props.data}
-        keys={['Kenya', 'Global']}
-        indexBy="country"
+        keys={[props.countryName, 'Global']}
+        indexBy="indicator"
         margin={{
           top: 0,
           right: 0,
-          bottom: 50,
-          left: 60,
+          bottom: 20,
+          left: 10,
         }}
-        padding={0.5}
+        padding={0.4}
+        innerPadding={10}
         groupMode="grouped"
+        layout="horizontal"
         colors="nivo"
         colorBy={function(e) {
-          var t = e.id;
-          return e.data[''.concat(t, 'Color')];
+          return e.id === 'Global' ?
+            get(e, 'data.GlobalColor', '#000') : get(e, 'data.CountryColor', '#000');
         }}
         defs={[
           {
@@ -72,29 +95,15 @@ const BarChartVertical = props => {
           },
         ]}
         borderColor="inherit:darker(1.6)"
-        axisTop={null}
-        axisRight={null}
-        axisBottom={{
-          tickSize: 0,
-          tickPadding: 10,
-          tickRotation: 0,
-          legend: '',
-          legendPosition: 'middle',
-          legendOffset: 32,
-        }}
+        axisBottom={null}
+        enableGridY={false}
         axisLeft={{
-          tickSize: 0,
-          tickPadding: 15,
-          tickRotation: 0,
-          legend: '',
-          legendPosition: 'middle',
-          legendOffset: -40,
+          renderTick: customTick
         }}
-        enableLabel={false}
         labelSkipWidth={12}
         labelSkipHeight={12}
-        labelTextColor="inherit:darker(1.6)"
-        animate={false}
+        labelTextColor="#000"
+        animate={true}
         motionStiffness={90}
         motionDamping={15}
         legends={[
@@ -104,12 +113,12 @@ const BarChartVertical = props => {
             direction: 'row',
             justify: false,
             translateX: 0,
-            translateY: 50,
+            translateY: 19,
             itemsSpacing: 2,
             itemWidth: 100,
             itemHeight: 20,
             itemDirection: 'left-to-right',
-            itemOpacity: 0.85,
+            itemOpacity: 1,
             symbolSize: 20,
             effects: [
               {
@@ -126,7 +135,7 @@ const BarChartVertical = props => {
   );
 };
 
-BarChartVertical.propTypes = propTypes;
-BarChartVertical.defaultProps = defaultProps;
+BarChart.propTypes = propTypes;
+BarChart.defaultProps = defaultProps;
 
-export default BarChartVertical;
+export default BarChart;

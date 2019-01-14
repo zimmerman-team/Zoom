@@ -12,7 +12,7 @@ import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';*/
 // always active
 import AppBar from 'components/navigation/AppBar/AppBar';
 import SideBar from 'components/navigation/SideBar/SideBar';
-import Projects from 'modules/countrydetail/fragments/Projects';
+import Projects from 'modules/countrydetail/fragments/Projects/Projects';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
 import TreeMap from 'components/charts/treemap/TreeMap';
 import ThemeSheet from 'components/theme/ThemeSheet';
@@ -26,7 +26,9 @@ const CountryDetailMediator = lazy(() =>
 const HomeModuleMediator = lazy(() =>
   import('mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator'),
 );
-const IatiDetail = lazy(() => import('modules/IATI_Detail/IatiDetail'));
+const IatiDetailMediator = lazy(() =>
+  import('mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator'),
+);
 
 // Routes
 const Routes = props => {
@@ -50,9 +52,11 @@ const Routes = props => {
           <Route
             exact
             path="/country"
-            render={() => <CountryDetailMediator />}
+            render={() => (
+              <CountryDetailMediator indicatorAggregations={props} />
+            )}
           />
-          <Route exact path="/iati" render={() => <IatiDetail />} />
+          <Route exact path="/iati" render={() => <IatiDetailMediator />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
           <Route exact path="/component" render={() => <DataExplorePanel />} />
         </Switch>

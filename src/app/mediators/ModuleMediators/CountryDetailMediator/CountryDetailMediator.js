@@ -182,8 +182,6 @@ class CountryDetailMediator extends React.Component {
         this.props.indicatorAggregations.aidsEpidemic,
       );
 
-      console.log('aidsLineChartData', aidsLineChartData);
-
       this.setState({ infoBarData, countryName, aidsLineChartData });
     }
   }

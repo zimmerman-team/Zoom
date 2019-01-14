@@ -10,6 +10,7 @@ import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import {
   formatBarChartInfoIndicators,
+  formatLineChartData,
   formatProjectData,
   formatWikiExcerpts,
 } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
@@ -77,7 +78,28 @@ const propTypes = {
       result: PropTypes.object,
     }),
   }),
-  indicatorAggregations: PropTypes.object,
+  indicatorAggregations: PropTypes.shape({
+    country: PropTypes.arrayOf(
+      PropTypes.shape({
+        indicatorName: PropTypes.string,
+        geolocationTag: PropTypes.string,
+        value: PropTypes.number,
+      }),
+    ),
+    global: PropTypes.arrayOf(
+      PropTypes.shape({
+        indicatorName: PropTypes.string,
+        value: PropTypes.number,
+      }),
+    ),
+    aidsEpidemic: PropTypes.arrayOf(
+      PropTypes.shape({
+        indicatorName: PropTypes.string,
+        date: PropTypes.string,
+        value: PropTypes.number,
+      }),
+    ),
+  }),
 };
 const defaultProps = {
   excerpts: {},
@@ -94,6 +116,8 @@ class CountryDetailMediator extends React.Component {
       projectData: [],
       excerpts: ['', ''],
       barChartIndicators: mock.barChartIndicators,
+      aidsEpIndicators: mock.aidsEpIndicators,
+      aidsLineChartData: [],
       countryName: '',
       infoBarData: [],
     };
@@ -132,34 +156,41 @@ class CountryDetailMediator extends React.Component {
       this.setState({ excerpts });
     }
 
-    // Here we format the bar chart indicator data
-    // And save the countries name that we also retrieved
-    // from the indicators
+    // Here we format the data retrieved from graphql
     if (
       !isEqual(
         this.props.indicatorAggregations,
         prevProps.indicatorAggregations,
       )
     ) {
+      // Save the countries name that we retrieved
+      // from the indicators
       const countryName = get(
         this.props.indicatorAggregations,
         'country[0].geolocationTag',
         'CountryNotFound',
       );
+      // Here we format the bar chart indicator data
       const infoBarData = formatBarChartInfoIndicators(
         this.props.indicatorAggregations.country,
         this.props.indicatorAggregations.global,
         this.state.barChartIndicators,
         countryName,
       );
-      this.setState({ infoBarData, countryName });
+
+      const aidsLineChartData = formatLineChartData(
+        this.props.indicatorAggregations.aidsEpidemic,
+      );
+
+      this.setState({ infoBarData, countryName, aidsLineChartData });
     }
   }
 
   refetch() {
     this.props.relay.refetch({
       countryCode: [mock.countryCode.toLowerCase()],
-      indicatorNames: this.state.barChartIndicators,
+      barChartIndicators: this.state.barChartIndicators,
+      aidsEpIndicators: this.state.aidsEpIndicators,
     });
   }
 
@@ -168,6 +199,7 @@ class CountryDetailMediator extends React.Component {
       <CountryDetailModule
         projectData={this.state.projectData}
         infoBarData={this.state.infoBarData}
+        aidsLineChartData={this.state.aidsLineChartData}
         countryName={this.state.countryName}
         excerpts={this.state.excerpts}
       />
@@ -191,14 +223,15 @@ export default createRefetchContainer(
     fragment CountryDetailMediator_indicatorAggregations on Query
       @argumentDefinitions(
         countryCode: { type: "[String]", defaultValue: ["undefined"] }
-        indicatorNames: { type: "[String]", defaultValue: ["undefined"] }
+        barChartIndicators: { type: "[String]", defaultValue: ["undefined"] }
+        aidsEpIndicators: { type: "[String]", defaultValue: ["undefined"] }
       ) {
       country: datapointsAggregation(
         groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
         geolocationIso2_In: $countryCode
-        indicatorName_In: $indicatorNames
+        indicatorName_In: $barChartIndicators
       ) {
         indicatorName
         geolocationTag
@@ -208,9 +241,20 @@ export default createRefetchContainer(
         groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
-        indicatorName_In: $indicatorNames
+        indicatorName_In: $barChartIndicators
       ) {
         indicatorName
+        value
+      }
+      aidsEpidemic: datapointsAggregation(
+        groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
+        orderBy: ["indicatorName"]
+        aggregation: ["Sum(value)"]
+        geolocationIso2_In: $countryCode
+        indicatorName_In: $aidsEpIndicators
+      ) {
+        indicatorName
+        date
         value
       }
     }
@@ -218,10 +262,15 @@ export default createRefetchContainer(
   graphql`
     query CountryDetailMediatorRefetchQuery(
       $countryCode: [String]
-      $indicatorNames: [String]
+      $barChartIndicators: [String]
+      $aidsEpIndicators: [String]
     ) {
       ...CountryDetailMediator_indicatorAggregations
-        @arguments(countryCode: $countryCode, indicatorNames: $indicatorNames)
+        @arguments(
+          countryCode: $countryCode
+          barChartIndicators: $barChartIndicators
+          aidsEpIndicators: $aidsEpIndicators
+        )
     }
   `,
 );

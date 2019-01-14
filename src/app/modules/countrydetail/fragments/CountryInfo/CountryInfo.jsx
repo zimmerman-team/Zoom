@@ -18,7 +18,14 @@ import PropTypes from 'prop-types';
 
 const propTypes = {
   excerpts: PropTypes.array,
-  infoBarData: PropTypes.array,
+  infoBarData: PropTypes.arrayOf(
+    PropTypes.shape({
+      CountryColor: PropTypes.string,
+      Global: PropTypes.number,
+      GlobalColor: PropTypes.string,
+      indicator: PropTypes.string,
+    })
+  ),
   countryName: PropTypes.string,
 };
 const defaultProps = {

@@ -32,12 +32,34 @@ const propTypes = {
     title: PropTypes.string,
   })),
   countryName: PropTypes.string,
+  infoBarData: PropTypes.arrayOf(
+    PropTypes.shape({
+      CountryColor: PropTypes.string,
+      Global: PropTypes.number,
+      GlobalColor: PropTypes.string,
+      indicator: PropTypes.string,
+    })
+  ),
+  aidsLineChartData: PropTypes.arrayOf(
+    PropTypes.shape({
+      color: PropTypes.string,
+      data: PropTypes.arrayOf(
+        PropTypes.shape({
+          x: PropTypes.string,
+          y: PropTypes.number,
+        })
+      ),
+      id: PropTypes.string,
+    })
+  ),
 };
 const defaultProps = {
   // data: undefined,
   excerpts: [],
   projectData: [],
   countryName: '',
+  infoBarData: [],
+  aidsLineChartData: [],
 };
 
 class CountryDetailModule extends React.Component {
@@ -53,7 +75,8 @@ class CountryDetailModule extends React.Component {
                      excerpts={this.props.excerpts}/>
 
         {/* Fragment 2: aids epidemic */}
-        <AidsEpidemic background={zoomGreyZero} />
+        <AidsEpidemic background={zoomGreyZero}
+                      aidsLineChartData={this.props.aidsLineChartData}/>
 
         {/* Fragment 3: economic indicators */}
         <EconomicIndicators />

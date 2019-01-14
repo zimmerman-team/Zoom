@@ -1,6 +1,8 @@
 import get from 'lodash/get';
 import map from 'lodash/map';
 import find from 'lodash/find';
+import findIndex from 'lodash/findIndex';
+import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
 import { chartColorThree, chartColorTwo } from 'components/theme/ThemeSheet';
 import { split } from 'sentence-splitter';
@@ -119,4 +121,65 @@ export function formatBarChartInfoIndicators(
   });
 
   return barChartData;
+}
+
+// formats linechart data from indicators
+export function formatLineChartData(indicatorData) {
+  const lineChartData = [];
+  const colorArray = [
+    'hsl(172, 70%, 50%)',
+    'hsl(91, 70%, 50%)',
+    'hsl(313, 70%, 50%)',
+    'hsl(221, 70%, 50%)',
+    'hsl(48, 70%, 50%)',
+  ];
+
+  let colorInd = 0;
+  indicatorData.forEach(item => {
+    const chartItemInd = findIndex(lineChartData, ['id', item.indicatorName]);
+    if (chartItemInd !== -1) {
+      const itemData = lineChartData[chartItemInd].data;
+      itemData.push({
+        x: item.date,
+        y: item.value,
+      });
+      lineChartData[chartItemInd].data = itemData;
+    } else {
+      lineChartData.push({
+        id: item.indicatorName,
+        color:
+          colorInd >= colorArray.length
+            ? colorArray[colorArray.length - 1]
+            : colorArray[colorInd],
+        data: [
+          {
+            x: item.date,
+            y: item.value,
+          },
+        ],
+      });
+      colorInd += 1;
+    }
+  });
+
+  // so the item with the biggest data value needs to be first
+  // as that is how line chart that we use works
+  // cause if the item with the biggest value will not be the first one
+  // most of its data will not be shown
+  let max = 0;
+  let maxInd = 0;
+  lineChartData.forEach((item, index) => {
+    if (item.data.length > max) {
+      max = item.data.length;
+      maxInd = index;
+    }
+  });
+
+  if (lineChartData.length > 0) {
+    const bigLineitem = lineChartData[maxInd];
+    lineChartData.splice(maxInd, 1);
+    lineChartData.unshift(bigLineitem);
+  }
+
+  return lineChartData;
 }

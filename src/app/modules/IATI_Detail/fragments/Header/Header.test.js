@@ -13,7 +13,7 @@ import {
   ItemInfo,
 } from 'modules/IATI_Detail/fragments/Header/Header.styles';
 
-const wrapper = shallow(<Header data={iatiDetailMockData}/>);
+const wrapper = shallow(<Header data={iatiDetailMockData} />);
 
 describe('<Header />', () => {
   it('renders one <ModuleFragment/> component', () => {

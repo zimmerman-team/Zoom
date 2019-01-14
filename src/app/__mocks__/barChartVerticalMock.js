@@ -1,7 +1,4 @@
-import {
-  chartColorTwo,
-  chartColorThree,
-} from 'components/theme/ThemeSheet';
+import { chartColorTwo, chartColorThree } from 'components/theme/ThemeSheet';
 
 export const IATIDetailBarChartMockData = [
   {

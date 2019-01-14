@@ -1,6 +1,6 @@
 /* base */
 import React from 'react';
-import BarChart from 'components/charts/barcharts/BarChart';
+import BarChartHorizontal from 'components/charts/barcharts/horizontal/BarChartHorizontal';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import { Box } from 'grommet';
 import {
@@ -9,7 +9,7 @@ import {
   PageIntroSecondary,
   SimpleText,
 } from 'components/theme/ThemeSheet';
-import { barChartMockData } from '__mocks__/barChartMock';
+import { barChartMockData } from '__mocks__/barChartVerticalMock';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 import { CountryName } from 'modules/countrydetail/fragments/CountryInfo/CountryInfo.styles';
 import PropTypes from 'prop-types';
@@ -47,7 +47,7 @@ const CountryInfo = props => {
           </SimpleText>
         </Box>
         <Box width="50%">
-          <BarChart data={props.infoBarData}
+          <BarChartHorizontal data={props.infoBarData}
                     countryName={props.countryName}/>
         </Box>
       </Box>

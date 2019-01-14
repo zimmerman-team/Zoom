@@ -4,7 +4,7 @@ import CountryInfo from './CountryInfo';
 
 // Components
 import { Box } from 'grommet';
-import BarChart from 'components/charts/barcharts/BarChart';
+import BarChartHorizontal from 'components/charts/barcharts/horizontal/BarChartHorizontal';
 import {
   PageIntroInitial,
   PageIntroSecondary,
@@ -34,7 +34,7 @@ describe('<CountryInfo />', () => {
   it('renders one <SimpleText/> component', () => {
     expect(wrapper.find(SimpleText)).toHaveLength(1);
   });
-  it('renders one <BarChart/> component', () => {
-    expect(wrapper.find(BarChart)).toHaveLength(1);
+  it('renders one <BarChartHorizontal/> component', () => {
+    expect(wrapper.find(BarChartHorizontal)).toHaveLength(1);
   });
 });

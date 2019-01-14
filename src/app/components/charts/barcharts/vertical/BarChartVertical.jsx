@@ -29,7 +29,7 @@ const BarChartVertical = props => {
     <ComponentBase>
       <ResponsiveBar
         data={props.data}
-        keys={['Kenya', 'Global']}
+        keys={['Budget', 'Spent']}
         indexBy="country"
         margin={{
           top: 0,

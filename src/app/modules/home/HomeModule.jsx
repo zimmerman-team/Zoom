@@ -13,8 +13,11 @@ import {
 } from 'modules/home/HomeModule.styles';
 import IndicatorDropMediator from 'mediators/DropDownMediators/IndicatorDropMediator/IndicatorDropMediator';
 import { yearDropDown } from 'modules/home/HomeModule.utils';
+import DataExplorePane from 'components/DataExplorePane/DataExplorePanel';
 
 const ModuleContainer = styled(Box)``;
+
+const DataPaneContainer = styled.div``;
 
 const propTypes = {};
 
@@ -44,52 +47,53 @@ class HomeModule extends Component {
   render() {
     return (
       <React.Fragment>
-        {/*<SideBar open={this.state.sideBarOpen} />*/}
-        {/*<AppBar toggleSideBar={this.toggleSideBar} />*/}
         <ModuleContainer>
-          <BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />
+          {/*<BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />*/}
 
           <GeoMap indicatorData={this.props.indicators} />
 
           <ControlPanelContainer>
-            <PanelDuo>
-              <DropDownContainer>
-                <div>Indicator 1</div>
-                <IndicatorDropMediator
-                  valueSelected={this.props.selectedInd1}
-                  selectVal={this.props.selectInd1}
-                  allIndicatorNames={this.props.allIndNames}
-                />
-              </DropDownContainer>
-              <DropDownContainer>
-                <div>Year</div>
-                <Select
-                  placeholder="Select"
-                  value={this.props.selectedYear1}
-                  options={yearDropDown}
-                  onChange={this.props.selectYear1}
-                />
-              </DropDownContainer>
-            </PanelDuo>
-            <PanelDuo>
-              <DropDownContainer>
-                <div>Indicator 2</div>
-                <IndicatorDropMediator
-                  valueSelected={this.props.selectedInd2}
-                  selectVal={this.props.selectInd2}
-                  allIndicatorNames={this.props.allIndNames}
-                />
-              </DropDownContainer>
-              <DropDownContainer>
-                <div>Year</div>
-                <Select
-                  placeholder="Select"
-                  value={this.props.selectedYear2}
-                  options={yearDropDown}
-                  onChange={this.props.selectYear2}
-                />
-              </DropDownContainer>
-            </PanelDuo>
+            <DataExplorePane />
+            {/*<Box>
+              <PanelDuo>
+                <DropDownContainer>
+                  <div>Indicator 1</div>
+                  <IndicatorDropMediator
+                    valueSelected={this.props.selectedInd1}
+                    selectVal={this.props.selectInd1}
+                    allIndicatorNames={this.props.allIndNames}
+                  />
+                </DropDownContainer>
+                <DropDownContainer>
+                  <div>Year</div>
+                  <Select
+                    placeholder="Select"
+                    value={this.props.selectedYear1}
+                    options={yearDropDown}
+                    onChange={this.props.selectYear1}
+                  />
+                </DropDownContainer>
+              </PanelDuo>
+              <PanelDuo>
+                <DropDownContainer>
+                  <div>Indicator 2</div>
+                  <IndicatorDropMediator
+                    valueSelected={this.props.selectedInd2}
+                    selectVal={this.props.selectInd2}
+                    allIndicatorNames={this.props.allIndNames}
+                  />
+                </DropDownContainer>
+                <DropDownContainer>
+                  <div>Year</div>
+                  <Select
+                    placeholder="Select"
+                    value={this.props.selectedYear2}
+                    options={yearDropDown}
+                    onChange={this.props.selectYear2}
+                  />
+                </DropDownContainer>
+              </PanelDuo>
+            </Box>*/}
           </ControlPanelContainer>
         </ModuleContainer>
       </React.Fragment>

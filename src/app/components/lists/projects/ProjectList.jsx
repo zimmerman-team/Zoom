@@ -7,21 +7,29 @@ import {
   Label,
   List,
   ListItem,
-  PropertyContainer, SectorList, SectorListItem, Separator,
-  TitleContainer, Value
+  PropertyContainer,
+  SectorList,
+  SectorListItem,
+  Separator,
+  TitleContainer,
+  Value,
 } from 'components/lists/projects/ProjectList.styles';
 
 const propTypes = {
-  projectData: PropTypes.arrayOf(PropTypes.shape({
-    budget: PropTypes.number,
-    endDat: PropTypes.string,
-    organisation: PropTypes.string,
-    sectors: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string,
-    })),
-    startDate: PropTypes.string,
-    title: PropTypes.string,
-  })),
+  projectData: PropTypes.arrayOf(
+    PropTypes.shape({
+      budget: PropTypes.number,
+      endDat: PropTypes.string,
+      organisation: PropTypes.string,
+      sectors: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string,
+        }),
+      ),
+      startDate: PropTypes.string,
+      title: PropTypes.string,
+    }),
+  ),
 };
 const defaultProps = {
   projectData: [],
@@ -70,7 +78,9 @@ const ProjectList = props => {
               {/* sector list */}
               <SectorList>
                 {project.sectors.map((sector, sectorInd) => (
-                  <SectorListItem key={`sector-${sectorInd}`}>{sector.name}</SectorListItem>
+                  <SectorListItem key={`sector-${sectorInd}`}>
+                    {sector.name}
+                  </SectorListItem>
                 ))}
               </SectorList>
             </PropertyContainer>

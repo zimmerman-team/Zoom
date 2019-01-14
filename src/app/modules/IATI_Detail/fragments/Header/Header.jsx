@@ -15,23 +15,27 @@ import {
 
 const propTypes = {
   data: PropTypes.shape({
-    timeline: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number,
-      label: PropTypes.string,
-      info: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.arrayOf([PropTypes.string]),
-      ])
-    })),
+    timeline: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        label: PropTypes.string,
+        info: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.arrayOf([PropTypes.string]),
+        ]),
+      }),
+    ),
     title: PropTypes.string,
-    detail: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string,
-      info: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.arrayOf([PropTypes.string]),
-      ]),
-      moreData: PropTypes.arrayOf(PropTypes.string),
-    })),
+    detail: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        info: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.arrayOf([PropTypes.string]),
+        ]),
+        moreData: PropTypes.arrayOf(PropTypes.string),
+      }),
+    ),
   }),
 };
 const defaultProps = {
@@ -45,7 +49,7 @@ const defaultProps = {
 class Header extends React.Component {
   state = {
     showMoreData: false,
-  }
+  };
 
   handleMouseEnter() {
     this.setState({ showMoreData: true });
@@ -81,11 +85,9 @@ class Header extends React.Component {
                   onMouseLeave={() => item.moreData && this.handleMouseLeave()}
                 >
                   {item.info}
-                  {item.moreData && this.state.showMoreData &&
-                  <Tooltip>
-                    {item.moreData.join(', ')}
-                  </Tooltip>
-                }
+                  {item.moreData && this.state.showMoreData && (
+                    <Tooltip>{item.moreData.join(', ')}</Tooltip>
+                  )}
                 </ItemInfo>
               </DetailListItem>
             ))}
@@ -94,7 +96,7 @@ class Header extends React.Component {
       </React.Fragment>
     );
   }
-};
+}
 
 Header.propTypes = propTypes;
 Header.defaultProps = defaultProps;

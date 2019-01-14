@@ -24,7 +24,7 @@ const propTypes = {
       Global: PropTypes.number,
       GlobalColor: PropTypes.string,
       indicator: PropTypes.string,
-    })
+    }),
   ),
   countryName: PropTypes.string,
 };
@@ -47,8 +47,10 @@ const CountryInfo = props => {
           </SimpleText>
         </Box>
         <Box width="50%">
-          <BarChartHorizontal data={props.infoBarData}
-                    countryName={props.countryName}/>
+          <BarChartHorizontal
+            data={props.infoBarData}
+            countryName={props.countryName}
+          />
         </Box>
       </Box>
     </ModuleFragment>

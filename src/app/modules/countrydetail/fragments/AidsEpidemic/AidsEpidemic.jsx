@@ -24,10 +24,10 @@ const propTypes = {
         PropTypes.shape({
           x: PropTypes.string,
           y: PropTypes.number,
-        })
+        }),
       ),
       id: PropTypes.string,
-    })
+    }),
   ),
 };
 const defaultProps = {

@@ -14,11 +14,13 @@ const ComponentBase = styled(Box)`
 
 const propTypes = {
   data: PropTypes.shape({
-    children: PropTypes.arrayOf(PropTypes.shape({
-      color: PropTypes.string,
-      loc: PropTypes.number,
-      name: PropTypes.string
-    })),
+    children: PropTypes.arrayOf(
+      PropTypes.shape({
+        color: PropTypes.string,
+        loc: PropTypes.number,
+        name: PropTypes.string,
+      }),
+    ),
     color: PropTypes.string,
     name: PropTypes.string,
   }),

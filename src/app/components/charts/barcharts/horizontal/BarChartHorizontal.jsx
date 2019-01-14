@@ -20,7 +20,7 @@ const propTypes = {
       Kenya: PropTypes.number,
       KenyaColor: PropTypes.string,
       country: PropTypes.string,
-    })
+    }),
   ),
 };
 const defaultProps = {
@@ -29,14 +29,17 @@ const defaultProps = {
 };
 
 const BarChart = props => {
-
   const customTick = tick => {
     // console.log(tick);
-    return <g transform={`translate(0, ${tick.y-30})`}
-              style={{ opacity: 1 }}
-              key={`indicator-${tick.key}`}>
-            <text style={{ fontSize: 11, }}>{tick.key}</text>
-           </g>
+    return (
+      <g
+        transform={`translate(0, ${tick.y - 30})`}
+        style={{ opacity: 1 }}
+        key={`indicator-${tick.key}`}
+      >
+        <text style={{ fontSize: 11 }}>{tick.key}</text>
+      </g>
+    );
   };
 
   return (
@@ -57,8 +60,9 @@ const BarChart = props => {
         layout="horizontal"
         colors="nivo"
         colorBy={function(e) {
-          return e.id === 'Global' ?
-            get(e, 'data.GlobalColor', '#000') : get(e, 'data.CountryColor', '#000');
+          return e.id === 'Global'
+            ? get(e, 'data.GlobalColor', '#000')
+            : get(e, 'data.CountryColor', '#000');
         }}
         defs={[
           {
@@ -98,7 +102,7 @@ const BarChart = props => {
         axisBottom={null}
         enableGridY={false}
         axisLeft={{
-          renderTick: customTick
+          renderTick: customTick,
         }}
         labelSkipWidth={12}
         labelSkipHeight={12}

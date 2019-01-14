@@ -16,7 +16,7 @@ const propTypes = {
       id: PropTypes.string,
       label: PropTypes.string,
       value: PropTypes.number,
-    })
+    }),
   ),
 };
 const defaultProps = {

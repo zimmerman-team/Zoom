@@ -35,10 +35,13 @@ const TotalBudget = props => (
       <Title>
         Total budget
         <br />$
-        {props.totalBudget.toLocaleString(undefined, {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2,
-        })}
+        {props.totalBudget.toLocaleString(
+          {},
+          {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          },
+        )}
       </Title>
     }
   >

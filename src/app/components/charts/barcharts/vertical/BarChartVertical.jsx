@@ -109,10 +109,13 @@ const BarChartVertical = props => {
         motionStiffness={90}
         motionDamping={15}
         tooltipFormat={value =>
-          `$ ${value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })}`
+          `$ ${value.toLocaleString(
+            {},
+            {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            },
+          )}`
         }
         legends={[
           {

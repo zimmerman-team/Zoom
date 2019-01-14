@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
-import { barChartMockData } from '__mocks__/barChartHorizontalMock';
+import { IATIDetailBarChartMockData } from '__mocks__/barChartVerticalMock';
 import {
   FragmentHeader,
   FragmentVisualisation,
@@ -19,7 +19,7 @@ const defaultProps = {
 
 const TotalBudget = props => (
   <ModuleFragment title="Total budget" showInfoButton>
-    <BarChartVertical data={barChartMockData} />
+    <BarChartVertical data={IATIDetailBarChartMockData} />
   </ModuleFragment>
 );
 

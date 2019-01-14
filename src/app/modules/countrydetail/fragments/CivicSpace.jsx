@@ -8,7 +8,7 @@ import {
   FragmentVisualisation,
 } from 'components/theme/ThemeSheet';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
-import { barChartMockData } from '__mocks__/barChartMock';
+import { barChartMockData } from '__mocks__/barChartVerticalMock';
 import BarChart from 'components/charts/barcharts/horizontal/BarChartHorizontal';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 

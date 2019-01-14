@@ -17,7 +17,7 @@ const propTypes = {
       Kenya: PropTypes.number,
       KenyaColor: PropTypes.string,
       country: PropTypes.string,
-    })
+    }),
   ),
 };
 const defaultProps = {

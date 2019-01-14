@@ -8,29 +8,35 @@ import Header from 'modules/IATI_Detail/fragments/Header/Header';
 
 const propTypes = {
   data: PropTypes.shape({
-    timeline: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string,
-      info: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.arrayOf([PropTypes.string]),
-      ])
-    })),
+    timeline: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        info: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.arrayOf([PropTypes.string]),
+        ]),
+      }),
+    ),
     title: PropTypes.string,
-    detail: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string,
-      info: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.arrayOf([PropTypes.string]),
-      ])
-    })),
+    detail: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        info: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.arrayOf([PropTypes.string]),
+        ]),
+      }),
+    ),
     sectors: PropTypes.shape({
       name: PropTypes.string,
       color: PropTypes.string,
-      children: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.string,
-        color: PropTypes.string,
-        loc: PropTypes.number,
-      }))
+      children: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string,
+          color: PropTypes.string,
+          loc: PropTypes.number,
+        }),
+      ),
     }),
   }),
 };
@@ -39,7 +45,7 @@ const defaultProps = {
     timeline: [],
     title: '',
     detail: [],
-    sectors: {}
+    sectors: {},
   },
 };
 

@@ -52,7 +52,7 @@
     "build-storybook": "build-storybook",
     "metrics": "pwmetrics --submit --config=pwmetrics-config.js",
     "validate:dependencies": "nsp check",
-    "lighthouse": "lighthouse-ci https://zoom-v2-dev.nyuki.io/",
+    "lighthouse": "lighthouse-ci https://app.zoom.staging.nyuki.io/home",
     "e2e": "cypress run",
     "e2e:chrome": "cypress run --browser chrome",
     "e2e:record": "cypress run --record",

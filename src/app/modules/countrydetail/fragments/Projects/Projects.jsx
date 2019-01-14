@@ -7,16 +7,20 @@ import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 import ProjectList from 'components/lists/projects/ProjectList';
 
 const propTypes = {
-  projectData: PropTypes.arrayOf(PropTypes.shape({
-    budget: PropTypes.number,
-    endDat: PropTypes.string,
-    organisation: PropTypes.string,
-    sectors: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string,
-    })),
-    startDate: PropTypes.string,
-    title: PropTypes.string,
-  })),
+  projectData: PropTypes.arrayOf(
+    PropTypes.shape({
+      budget: PropTypes.number,
+      endDat: PropTypes.string,
+      organisation: PropTypes.string,
+      sectors: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string,
+        }),
+      ),
+      startDate: PropTypes.string,
+      title: PropTypes.string,
+    }),
+  ),
 };
 const defaultProps = {
   projectData: [],

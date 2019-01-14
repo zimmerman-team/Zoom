@@ -8,7 +8,7 @@ import {
   FragmentVisualisation,
   zoomGreyZero,
 } from 'components/theme/ThemeSheet';
-import BarChartVertical from 'components/charts/barcharts/IatiDetailChart/BarChartVertical';
+import BarChartVertical from 'components/charts/barcharts/vertical/BarChartVertical';
 
 const propTypes = {
   data: PropTypes.array,

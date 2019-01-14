@@ -9,7 +9,7 @@ import {
 } from 'components/theme/ThemeSheet';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import { barChartMockData } from '__mocks__/barChartMock';
-import BarChart from 'components/charts/barcharts/BarChart';
+import BarChart from 'components/charts/barcharts/horizontal/BarChartHorizontal';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 
 const propTypes = {

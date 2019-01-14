@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
+import { format } from 'd3-format';
 
 const ComponentBase = styled.div`
   height: 280px;
@@ -12,16 +13,18 @@ const ComponentBase = styled.div`
 const propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      Global: PropTypes.number,
-      GlobalColor: PropTypes.string,
-      Kenya: PropTypes.number,
-      KenyaColor: PropTypes.string,
-      country: PropTypes.string,
+      Budget: PropTypes.number,
+      BudgetColor: PropTypes.string,
+      Spent: PropTypes.number,
+      SpentColor: PropTypes.string,
+      year: PropTypes.string,
     }),
   ),
+  keys: PropTypes.arrayOf(PropTypes.string),
 };
 const defaultProps = {
   data: [],
+  keys: ['', ''],
 };
 
 const BarChartVertical = props => {
@@ -29,8 +32,8 @@ const BarChartVertical = props => {
     <ComponentBase>
       <ResponsiveBar
         data={props.data}
-        keys={['Budget', 'Spent']}
-        indexBy="country"
+        keys={props.keys}
+        indexBy="year"
         margin={{
           top: 0,
           right: 0,
@@ -96,6 +99,7 @@ const BarChartVertical = props => {
           legend: '',
           legendPosition: 'middle',
           legendOffset: -40,
+          format: value => `$${format('.2s')(value)}`,
         }}
         enableLabel={false}
         labelSkipWidth={12}
@@ -104,6 +108,15 @@ const BarChartVertical = props => {
         animate={false}
         motionStiffness={90}
         motionDamping={15}
+        tooltipFormat={value =>
+          `$ ${value.toLocaleString(
+            {},
+            {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            },
+          )}`
+        }
         legends={[
           {
             dataFrom: 'keys',
@@ -117,7 +130,7 @@ const BarChartVertical = props => {
             itemHeight: 20,
             itemDirection: 'left-to-right',
             itemOpacity: 0.85,
-            symbolSize: 20,
+            symbolSize: 15,
             effects: [
               {
                 on: 'hover',

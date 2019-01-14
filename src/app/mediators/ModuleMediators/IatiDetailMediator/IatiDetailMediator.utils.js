@@ -1,6 +1,8 @@
 import get from 'lodash/get';
 import find from 'lodash/find';
+import sumBy from 'lodash/sumBy';
 import DateTime from 'luxon/src/datetime';
+import { chartColorTwo, chartColorThree } from 'components/theme/ThemeSheet';
 
 function convertISOToDate(date) {
   return date
@@ -106,7 +108,16 @@ export default function formatActivityData(data) {
         info: get(data, 'iati_identifier', '-'),
       },
     ],
-    budgets: [],
+    budgets: data.budgets.map(b => {
+      return {
+        year: b.period_end.substr(0, 4),
+        Budget: b.value.value,
+        BudgetColor: chartColorTwo,
+        Spent: data.aggregations.activity_children.expenditure_value,
+        SpentColor: chartColorThree,
+      };
+    }),
+    totalBudget: sumBy(data.budgets, 'value.value'),
     sectors: {
       name: 'root',
       color: '#5886E8',

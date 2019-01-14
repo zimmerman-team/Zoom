@@ -57,7 +57,7 @@ const FragmentInfo = styled(Box)`
 `;
 
 const propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   description: PropTypes.string,
   background: PropTypes.string,
   fragmentInfo: PropTypes.string,

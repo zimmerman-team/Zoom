@@ -12,7 +12,7 @@ import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';*/
 // always active
 import AppBar from 'components/navigation/AppBar/AppBar';
 import SideBar from 'components/navigation/SideBar/SideBar';
-import Projects from 'modules/countrydetail/fragments/Projects';
+import Projects from 'modules/countrydetail/fragments/Projects/Projects';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
 import TreeMap from 'components/charts/treemap/TreeMap';
 import ThemeSheet from 'components/theme/ThemeSheet';

@@ -1,14 +1,9 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 import { format } from 'd3-format';
-
-const ComponentBase = styled.div`
-  height: 280px;
-  width: 100%;
-`;
+import { ComponentBase } from './BarChartVertical.styles';
 
 const propTypes = {
   data: PropTypes.arrayOf(

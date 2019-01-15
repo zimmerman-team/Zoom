@@ -1,5 +1,6 @@
 /* base */
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
 import IatiDetailModule from 'modules/IATI_Detail/IatiDetail';
 import PropTypes from 'prop-types';
@@ -100,7 +101,16 @@ class IatiDetailMediator extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(oipaActions.activityDataRequest(mock.oipaParams));
+    this.props.dispatch(
+      oipaActions.activityDataRequest({
+        ...mock.oipaParams,
+        activityID: get(
+          this.props,
+          'match.params.activity_id',
+          mock.oipaParams.activityID,
+        ),
+      }),
+    );
   }
 
   componentDidUpdate(prevProps) {
@@ -132,4 +142,4 @@ const mapStateToProps = state => {
 IatiDetailMediator.propTypes = propTypes;
 IatiDetailMediator.defaultProps = defaultProps;
 
-export default connect(mapStateToProps)(IatiDetailMediator);
+export default withRouter(connect(mapStateToProps)(IatiDetailMediator));

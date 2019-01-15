@@ -38,7 +38,7 @@ const TreeMapHtmlNode = ({ node, style }) => {
           </NodeLabel>
 
           <NodeValue style={{ fontSize: style.width / 9 }}>
-            {node.value}
+            {node.value}%
           </NodeValue>
         </TextContainer>
       )}

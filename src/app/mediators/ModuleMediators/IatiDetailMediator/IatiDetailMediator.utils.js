@@ -84,7 +84,7 @@ export default function formatActivityData(data) {
           ${' '}
           ${
             get(data, 'recipient_countries.length', 0) > 1
-              ? `${data.recipient_countries.length}+ more`
+              ? `${data.recipient_countries.length - 1}+ more`
               : ''
           }
         `,

@@ -39,6 +39,7 @@ class AppBar extends React.Component {
             plain
             icon={<Menu color={aidsFondsRed} />}
             onClick={this.props.toggleSideBar}
+            data-cy="sidebar-toggle"
           />
           <AidsFondLogo
             a11yTitle="Aidsfonds logo"

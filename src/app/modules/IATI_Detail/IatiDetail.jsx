@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Sectors from 'modules/IATI_Detail/fragments/Sectors';
+import Sectors from 'modules/IATI_Detail/fragments/Sectors/Sectors';
 import TotalBudget from 'modules/IATI_Detail/fragments/TotalBudget/TotalBudget';
 import Header from 'modules/IATI_Detail/fragments/Header/Header';
 

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 import BarChartVertical from 'components/charts/barcharts/vertical/BarChartVertical';
-// import { IATIDetailBarChartMockData } from '__mocks__/barChartVerticalMock';
 
 const Title = styled.span`
   width: 100%;

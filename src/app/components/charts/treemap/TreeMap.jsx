@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ResponsiveTreeMapHtml } from '@nivo/treemap';
-// import { generateCountriesData } from '@nivo/generators';
 import TreeMapHtmlNode from 'components/charts/treemap/TreeMapHtmlNode/TreeMapHtmlNode';
 import { ComponentBase } from './TreeMap.styles';
 
@@ -24,7 +23,6 @@ const defaultProps = {
 };
 
 const TreeMap = props => {
-  // console.log(generateCountriesData(['value'], { size: 10 }));
   return (
     <ComponentBase>
       <ResponsiveTreeMapHtml

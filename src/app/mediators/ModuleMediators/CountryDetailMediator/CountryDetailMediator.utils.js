@@ -45,6 +45,7 @@ export function formatProjectData(activities) {
     endDate = get(endDate, 'iso_date', 'No planned end date');
 
     projectData.push({
+      id: activity.id,
       sectors,
       title: get(activity, 'title.narratives[0].text', 'No project title'),
       startDate,

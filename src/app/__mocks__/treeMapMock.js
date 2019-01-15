@@ -100,3 +100,22 @@ export const treeMapMockData = {
     },
   ],
 };
+
+export const treeMapNodeMockData = {
+  node: {
+    id: 'x',
+    label: 'x',
+    value: 1,
+  },
+  style: {
+    borderColor: 'rgb(222, 223, 225)',
+    borderWidth: 0,
+    color: '#F7F8FA',
+    height: 396,
+    labelTextColor: 'rgb(173, 174, 175)',
+    orientLabel: true,
+    width: 1020,
+    x: 2,
+    y: 2,
+  },
+};

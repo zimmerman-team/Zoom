@@ -1,59 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { zoomFontFamOne } from 'components/theme/ThemeSheet';
 
-/* todo: needs further tweaking from a design perspective and speccing from a business perspective*/
-const TextContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  //align-content: space-between;
-  justify-content: space-around;
-  //justify-items: center;
-  //padding: 10%;
-  //padding-top: 20px;
-  height: 100%;
-  &:hover {
-    opacity: 0.5;
-  }
-`;
-
-const NodeLabel = styled.span`
-  user-select: none;
-  width: 80%;
-  overflow: hidden;
-  //white-space: nowrap;
-  text-overflow: ellipsis;
-  font-family: ${zoomFontFamOne};
-  line-height: 1;
-`;
-const NodeValue = styled.span`
-  user-select: none;
-  font-family: ${zoomFontFamOne};
-  //font-size: 25px;
-  line-height: 1;
-  //color: cornflowerblue;
-`;
-
-const WidthDefiner = styled.div`
-  width: 80%;
-`;
-
-const TreeNodeBase = styled.div`
-  box-sizing: border-box;
-  position: absolute;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-style: solid;
-`;
+import {
+  TextContainer,
+  NodeLabel,
+  NodeValue,
+  TreeNodeBase,
+} from './TreeMapHtmlNode.styles';
 
 const TreeMapHtmlNode = ({ node, style }) => {
   if (style.width <= 0 || style.height <= 0) return null;
 
-  const hideText = style.width <= 180;
+  // const hideText = style.width <= 180;
 
   return (
     <TreeNodeBase
@@ -72,7 +30,7 @@ const TreeMapHtmlNode = ({ node, style }) => {
         borderColor: style.borderColor,
       }}
     >
-      {/*{!hideText && (*/}
+      {/* {!hideText && ( */}
       {node.label && (
         <TextContainer>
           <NodeLabel style={{ fontSize: style.width / 12 }}>
@@ -80,7 +38,7 @@ const TreeMapHtmlNode = ({ node, style }) => {
           </NodeLabel>
 
           <NodeValue style={{ fontSize: style.width / 9 }}>
-            {node.value}
+            {node.value}%
           </NodeValue>
         </TextContainer>
       )}

@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // import { projectsMockData } from '__mocks__/projectsMock';
-import { Box } from 'grommet';
+import { Box, RoutedButton } from 'grommet';
 import {
   Label,
   List,
@@ -18,6 +18,7 @@ import {
 const propTypes = {
   projectData: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.string,
       budget: PropTypes.number,
       endDat: PropTypes.string,
       organisation: PropTypes.string,
@@ -38,14 +39,18 @@ const defaultProps = {
 const ProjectList = props => {
   return (
     <List width="100%">
-      {props.projectData.map((project, index) => (
-        <ListItem key={`project-${index}`}>
+      {props.projectData.map(project => (
+        <ListItem key={`project-${project.id}`}>
           {/* title container */}
           <TitleContainer level="4" truncate>
-            {project.title}
+            <RoutedButton
+              label={project.title}
+              path={`/iati-activity/${project.id}`}
+              plain
+            />
           </TitleContainer>
 
-          {/* date container*/}
+          {/* date container */}
           <PropertyContainer
             width="100%"
             direction="row"
@@ -63,7 +68,7 @@ const ProjectList = props => {
             </Box>
           </PropertyContainer>
 
-          {/* mixed properties*/}
+          {/* mixed properties */}
           <Box>
             <PropertyContainer direction="row">
               <Label>Reporting organisation:</Label>

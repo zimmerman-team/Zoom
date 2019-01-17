@@ -1,0 +1,38 @@
+{
+  "Header": {
+    "StartDatePlannedLabel": "Start date planned:",
+    "StartDatePlannedValue": "31 Dec 2015",
+    "StartDateActualLabel": "Start date actual:",
+    "StartDateActualValue": "Data not available",
+    "EndDatePlannedLabel": "End date planned:",
+    "EndDatePlannedValue": "30 Dec 2018",
+    "EndDateActualLabel": "End date actual:",
+    "EndDateActualValue": "Data not available",
+    "Title": "2015142 - Sex Worker Networks Consortium: Sex Workers: strengthening rights based responses to HIV",
+    "LastProjectUpdateLabel": "Last project update:",
+    "LastProjectUpdateValue": "05 Nov 2018",
+    "StatusLabel": "Status:",
+    "StatusValue": "Implementation",
+    "BeneficiaryCountryLabel": "Beneficiary country:",
+    "BeneficiaryCountryValue": "Zimbabwe 83+ more",
+    "BeneficiaryCountryMoreValue": "Zimbabwe, Zambia, Viet Nam, United Kingdom Of Great Britain And Northern Ireland (The), Ukraine, Uganda, Turkey, Trinidad And Tobago, Togo, Timor-Leste, Thailand, Tajikistan, Switzerland, Sweden, Eswatini, Suriname, Spain, South Sudan, South Africa, Slovakia, Seychelles, Serbia, Senegal, Rwanda, Russian Federation (The), Romania, Portugal, Poland, Peru, Papua New Guinea, Pakistan, Norway, Nigeria, New Zealand, Netherlands (The), Nepal, Namibia, Myanmar, Mozambique, Morocco, Montenegro, Mexico, Mauritius, Mali, Malaysia, Malawi, Madagascar, Macedonia (The Former Yugoslav Republic Of), Lithuania, Lesotho, Kyrgyzstan, Korea (The Republic Of), Kenya, Kazakhstan, Japan, Jamaica, Indonesia, India, Hungary, Guyana, Guinea, Ghana, Germany, Georgia, France, Fiji, Ethiopia, Ecuador, Congo (The Democratic Republic Of The), China, Cameroon, Cambodia, Burundi, Burkina Faso, Bulgaria, Brazil, Botswana, Bosnia And Herzegovina, Bangladesh, Austria, Australia, Antigua And Barbuda, Angola, Albania",
+    "DataSourceLabel": "Data source:",
+    "DataSourceValue": "IATI Registry",
+    "ReportedByLabel": "Reported by:",
+    "ReportedByValue": "Aidsfonds",
+    "IatiIDLabel": "IATI identifier:",
+    "IatiIDValue": "NL-KVK-41207989-P-11803-2015142 - 2S3202"
+  },
+  "TotalBudget": {
+    "InfoTooltip": "Lorem ipsum dolor simet empty module description."
+  },
+  "Sectors": {
+    "SectorsInfo": "Lorem ipsum dolor simet empty module description.",
+    "Values": [
+      "STD control including HIV/AIDS",
+      "Human rights",
+      "Social mitigation of HIV/AIDS",
+      "Reproductive health care"
+    ]
+  }
+}

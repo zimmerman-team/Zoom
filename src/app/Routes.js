@@ -57,6 +57,10 @@ const Routes = props => {
             )}
           />
           <Route exact path="/iati" render={() => <IatiDetailMediator />} />
+          <Route
+            path="/iati-activity/:activity_id"
+            render={() => <IatiDetailMediator />}
+          />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
           <Route exact path="/component" render={() => <DataExplorePanel />} />
         </Switch>

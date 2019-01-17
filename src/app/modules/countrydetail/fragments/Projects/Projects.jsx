@@ -9,6 +9,7 @@ import ProjectList from 'components/lists/projects/ProjectList';
 const propTypes = {
   projectData: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.string,
       budget: PropTypes.number,
       endDat: PropTypes.string,
       organisation: PropTypes.string,

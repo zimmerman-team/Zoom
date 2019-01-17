@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'grommet';
+import auth0Client from 'Auth';
 import {
   aidsFondsRed,
   zoomFontFamOne,
@@ -22,7 +23,11 @@ import {
   SidebarNavList,
   SidebarNavListContainer,
   SidebarNavListItem,
+  LoginContainer,
+  LoginHeader,
 } from 'components/navigation/SideBar/SideBar.styles';
+import LoginForm from './comps/LoginForm';
+import { ZoomButton } from '../../theme/ThemeSheet';
 
 const propTypes = {
   open: PropTypes.bool,
@@ -106,6 +111,12 @@ class SideBar extends React.Component {
                   />
                 </SidebarNavList>
               </SidebarNavListContainer>
+
+              {auth0Client.isAuthenticated() ? (
+                <ZoomButton onClick={auth0Client.signOut}>Sign out</ZoomButton>
+              ) : (
+                <LoginForm />
+              )}
             </Box>
           </SideBarLayer>
         )}

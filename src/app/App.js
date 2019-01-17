@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { graphql, QueryRenderer } from 'react-relay';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
+import auth0Client from 'Auth';
 
 // Routes
 import Routes from './Routes';
@@ -32,7 +33,24 @@ const modernEnvironment = new Environment({
 class App extends React.Component {
   state = {
     showSidebar: false,
+    checkingSession: true,
   };
+
+  componentDidMount() {
+    if (window.location.pathname.indexOf('/callback') !== -1) {
+      this.setState({ checkingSession: false });
+      return;
+    }
+    try {
+      auth0Client.silentAuth().then(() => this.forceUpdate());
+    } catch (err) {
+      console.log(err);
+      if (err.error === 'login_required') {
+        auth0Client.signIn();
+      }
+    }
+    this.setState({ checkingSession: false });
+  }
 
   render() {
     return (

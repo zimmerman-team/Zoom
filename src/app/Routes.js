@@ -17,6 +17,7 @@ import HumanRights from 'modules/countrydetail/fragments/HumanRights';
 import TreeMap from 'components/charts/treemap/TreeMap';
 import ThemeSheet from 'components/theme/ThemeSheet';
 import DataExplorePanel from 'components/DataExplorePane/DataExplorePanel';
+import LoginCallback from './LoginCallback';
 // import HomeModuleMediator from 'mediators/ModuleMediators/HomeModuleMediator';
 
 // Modules lazy load
@@ -38,6 +39,7 @@ const Routes = props => {
       {/*<Route path="/:path" render={() => <SideBar />} />*/}
       <Suspense fallback={<PageLoader />}>
         <Switch>
+          <Route exact path="/callback" component={LoginCallback} />
           <Route exact path="/" render={() => <Redirect to="/home" />} />
           <Route
             exact

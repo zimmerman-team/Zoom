@@ -47,13 +47,13 @@ jobs:
           name: Add target host to known_hosts files
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              ssh-keyscan "$SSH_HOST_PRODUCTION" >> ~/.ssh/known_hosts
+              ssh-keyscan "$SSH_HOST_STAGING" >> ~/.ssh/known_hosts
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
               ssh-keyscan "$SSH_HOST_TEST" >> ~/.ssh/known_hosts
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
               ssh-keyscan "$SSH_HOST_DEV" >> ~/.ssh/known_hosts
             else
-              ssh-keyscan "$SSH_HOST_TEST" >> ~/.ssh/known_hosts
+              ssh-keyscan "$SSH_HOST_DEV" >> ~/.ssh/known_hosts
             fi
       - add_ssh_keys:
           name: Add SSH KEY
@@ -66,7 +66,7 @@ jobs:
           name: Upload build folder to target host
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_PRODUCTION":~/zoom-v2-ui/build
+              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_STAGING":~/zoom-v2-ui/build
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
               rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_TEST":~/zoom-v2-ui/build
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then

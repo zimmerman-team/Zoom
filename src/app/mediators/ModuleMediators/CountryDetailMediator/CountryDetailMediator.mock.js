@@ -5,6 +5,8 @@ const data = {
     page_size: 10,
     fields:
       'sectors,title,id,activity_dates,reporting_organisation,aggregations',
+    ordering: 'activity_budget_value',
+    reporting_organisation_identifier: 'NL-KVK-41207989',
   },
   wikiParams: {
     origin: '*',

@@ -2,8 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Sectors from 'modules/IATI_Detail/fragments/Sectors';
-import TotalBudget from 'modules/IATI_Detail/fragments/TotalBudget';
+import Sectors from 'modules/IATI_Detail/fragments/Sectors/Sectors';
+import TotalBudget from 'modules/IATI_Detail/fragments/TotalBudget/TotalBudget';
 import Header from 'modules/IATI_Detail/fragments/Header/Header';
 
 const propTypes = {
@@ -27,6 +27,16 @@ const propTypes = {
         ]),
       }),
     ),
+    totalBudget: PropTypes.number,
+    budgets: PropTypes.arrayOf(
+      PropTypes.shape({
+        year: PropTypes.string,
+        Budget: PropTypes.number,
+        BudgetColor: PropTypes.string,
+        Spent: PropTypes.number,
+        SpentColor: PropTypes.string,
+      }),
+    ),
     sectors: PropTypes.shape({
       name: PropTypes.string,
       color: PropTypes.string,
@@ -45,6 +55,8 @@ const defaultProps = {
     timeline: [],
     title: '',
     detail: [],
+    totalBudget: 0,
+    budgets: [],
     sectors: {},
   },
 };
@@ -53,7 +65,10 @@ const IatiDetail = props => {
   return (
     <React.Fragment>
       <Header data={props.data} />
-      <TotalBudget />
+      <TotalBudget
+        data={props.data.budgets}
+        totalBudget={props.data.totalBudget}
+      />
       <Sectors data={props.data.sectors} />
     </React.Fragment>
   );

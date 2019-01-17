@@ -57,7 +57,7 @@ const FragmentInfo = styled(Box)`
 `;
 
 const propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   description: PropTypes.string,
   background: PropTypes.string,
   fragmentInfo: PropTypes.string,
@@ -96,6 +96,7 @@ class ModuleFragment extends React.Component {
 
           {this.props.showInfoButton && (
             <FragmentInfoButton
+              data-cy="tooltip-fragment-info"
               onMouseEnter={() => this.handleMouseEnter()}
               onMouseLeave={() => this.handleMouseLeave()}
             />

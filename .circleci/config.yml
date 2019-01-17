@@ -9,20 +9,12 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/zoom-v2-ui
-      #- restore_cache:
-      #    keys:
-      #      - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      #      - yarn-cache-{{ .Branch }}
-      #      - yarn-cache-
       - restore_cache:
           keys:
             - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
             - yarn-cache-{{ .Branch }}
             - yarn-cache-
       - run: yarn install
-      #- save_cache:
-      #    key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      #    paths: node_modules
       - save_cache:
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths: node_modules
@@ -32,7 +24,6 @@ jobs:
 
   #  BUILD SOURCE AND DEPLOY TO SERVER
   build_deploy:
-    #    machine: true
     docker:
       - image: circleci/node:10.13.0
     working_directory: ~/zoom-v2-ui
@@ -58,7 +49,6 @@ jobs:
           name: Add SSH KEY
           fingerprints:
             - "6f:b2:10:8a:43:db:4b:fb:a0:31:47:da:99:68:7c:af"
-          #  - "98:09:eb:52:9a:fc:ec:ba:e2:cf:9a:f3:99:0e:a1:e8"
       - run: eval ssh-agent -s
       - run: sudo apt install rsync
       - run:
@@ -73,7 +63,6 @@ jobs:
             else
               rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_DEV":~/zoom-v2-ui/build
             fi
-      #- run: rsync -ave  ssh ~/zoom-v2-ui/ $SSH_USER@$SSH_HOST:~/zoom-v2-ui/
 
   test_e2e:
     docker:

@@ -2,26 +2,29 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import GeoMap from 'components/geo/GeoMap/GeoMap';
-import BaseDialog from 'components/dialog/BaseDialog/BaseDialog';
 // import AppBar from 'components/navigation/AppBar/AppBar';
-import { Box, Select } from 'grommet';
+import { Box } from 'grommet';
 // import SideBar from 'components/navigation/SideBar/SideBar';
 import {
   ControlPanelContainer,
   DropDownContainer,
   PanelDuo,
 } from 'modules/home/HomeModule.styles';
-import IndicatorDropMediator from 'mediators/DropDownMediators/IndicatorDropMediator/IndicatorDropMediator';
 import { yearDropDown } from 'modules/home/HomeModule.utils';
-import DataExplorePane from 'components/DataExplorePane/DataExplorePanel';
+import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
+import PropTypes from "prop-types";
 
 const ModuleContainer = styled(Box)``;
 
 const DataPaneContainer = styled.div``;
 
-const propTypes = {};
+const propTypes = {
+  indicators: PropTypes.arrayOf(PropTypes.shape),
+};
 
-const defaultProps = {};
+const defaultProps = {
+  indicators: [],
+};
 
 class HomeModule extends Component {
   constructor(props) {
@@ -45,15 +48,21 @@ class HomeModule extends Component {
   };
 
   render() {
+    const {indicators, ...otherProps} = this.props;
+
     return (
       <React.Fragment>
         <ModuleContainer>
           {/*<BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />*/}
 
-          <GeoMap indicatorData={this.props.indicators} />
+          <GeoMap indicatorData={indicators} />
 
           <ControlPanelContainer>
-            <DataExplorePane />
+
+          <ExplorePanelMediator
+            {...otherProps}
+          />
+
             {/*<Box>
               <PanelDuo>
                 <DropDownContainer>
@@ -67,7 +76,7 @@ class HomeModule extends Component {
                 <DropDownContainer>
                   <div>Year</div>
                   <Select
-                    placeholder="Select"
+                    placeholder='Select'
                     value={this.props.selectedYear1}
                     options={yearDropDown}
                     onChange={this.props.selectYear1}
@@ -86,7 +95,7 @@ class HomeModule extends Component {
                 <DropDownContainer>
                   <div>Year</div>
                   <Select
-                    placeholder="Select"
+                    placeholder='Select'
                     value={this.props.selectedYear2}
                     options={yearDropDown}
                     onChange={this.props.selectYear2}

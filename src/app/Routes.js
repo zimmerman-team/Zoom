@@ -47,7 +47,7 @@ const Routes = props => {
             render={() => (
               <HomeModuleMediator
                 indicatorAggregations={props}
-                allIndNames={props}
+                dropDownData={props}
               />
             )}
           />

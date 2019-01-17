@@ -1,7 +1,7 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import connect from 'react-redux/es/connect/connect';
+import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 import auth0Client from 'Auth';
 
@@ -10,6 +10,7 @@ import * as syncActions from 'services/actions/sync';
 
 /* components */
 import { aidsFondsRed, ZoomButton } from 'components/theme/ThemeSheet';
+import IconSignIn from 'assets/icons/icon_sign_in.svg';
 import {
   ComponentBase,
   LoginHeader,
@@ -22,7 +23,6 @@ import {
   ErrorMessage,
   ErrorText,
 } from './LoginForm.styles';
-import IconSignIn from '../icon_sign_in.svg';
 
 const propTypes = {
   loginStatusMessage: PropTypes.shape({
@@ -40,7 +40,7 @@ const defaultProps = {
   loginStatusMessage: null,
 };
 
-class LoginForm extends React.Component {
+export class LoginForm extends React.Component {
   constructor(props) {
     super(props);
 

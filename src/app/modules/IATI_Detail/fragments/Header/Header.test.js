@@ -16,22 +16,22 @@ import {
 const wrapper = shallow(<Header data={iatiDetailMockData} />);
 
 describe('<Header />', () => {
-  it('renders one <ModuleFragment/> component', () => {
+  it('renders three <ModuleFragment/> component', () => {
     expect(wrapper.find(ModuleFragment)).toHaveLength(3);
   });
-  it('renders one <DetailList/> component', () => {
+  it('renders two <DetailList/> component', () => {
     expect(wrapper.find(DetailList)).toHaveLength(2);
   });
-  it('renders three <DetailListItem/> component', () => {
+  it('renders ten <DetailListItem/> component', () => {
     expect(wrapper.find(DetailListItem)).toHaveLength(10);
   });
   it('renders one <PageHeading/> component', () => {
     expect(wrapper.find(PageHeading)).toHaveLength(1);
   });
-  it('renders one <ItemLabel/> component', () => {
+  it('renders ten <ItemLabel/> component', () => {
     expect(wrapper.find(ItemLabel)).toHaveLength(10);
   });
-  it('renders one <ItemInfo/> component', () => {
+  it('renders ten <ItemInfo/> component', () => {
     expect(wrapper.find(ItemInfo)).toHaveLength(10);
   });
 });

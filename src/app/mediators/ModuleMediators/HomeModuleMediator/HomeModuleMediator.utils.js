@@ -59,7 +59,7 @@ export function formatCountryCenterData(indicators, centerGeometry) {
       // another country
       // this needs to be done when using several data points with the same country
       // example: data points with different years, will have same countries
-      if (existCountryIndex === -1) {
+      if (existCountryIndex === -1)
         countryCenteredData.push({
           value: indicator.value,
           name: indicator.indicatorName,
@@ -74,10 +74,9 @@ export function formatCountryCenterData(indicators, centerGeometry) {
             indicator.value
           }`,
         });
-      } else {
+      else
         countryCenteredData[existCountryIndex].value =
           countryCenteredData[existCountryIndex].value + indicator.value;
-      }
     }
   });
 
@@ -112,9 +111,8 @@ export function formatCountryParam(countryCodes, regionCountryCodes) {
 
   regionCountryCodes.forEach(region => {
     region.forEach(countryCode => {
-      if (jointCountries.indexOf(countryCode.iso2) === -1) {
+      if (jointCountries.indexOf(countryCode.iso2) === -1)
         jointCountries.push(countryCode.iso2);
-      }
     });
   });
 

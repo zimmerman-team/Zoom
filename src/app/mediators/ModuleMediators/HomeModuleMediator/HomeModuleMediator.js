@@ -20,7 +20,7 @@ const propTypes = {
         geolocationIso2: PropTypes.string,
         geolocationTag: PropTypes.string,
         date: PropTypes.string,
-        value: PropTypes.string,
+        value: PropTypes.number,
       }),
     ),
     indicators2: PropTypes.arrayOf(
@@ -29,7 +29,7 @@ const propTypes = {
         geolocationIso2: PropTypes.string,
         geolocationTag: PropTypes.string,
         date: PropTypes.string,
-        value: PropTypes.string,
+        value: PropTypes.number,
       }),
     ),
     subIndicators1: PropTypes.shape({
@@ -153,23 +153,11 @@ class HomeModuleMediator extends Component {
       },
     );
 
-    // So if a new batch of subindicators is retrieved
-    // we reset the selected subindicator
-    if (!isEqual(subIndicators1, this.state.subIndicators1)) {
-      this.setState({ selectedSubInd1: undefined });
-    }
-
     const subIndicators2 = this.props.indicatorAggregations.subIndicators2.edges.map(
       indicator => {
         return { label: indicator.node.name, value: indicator.node.name };
       },
     );
-
-    // So if a new batch of subindicators is retrieved
-    // we reset the selected subindicator
-    if (!isEqual(subIndicators2, this.state.subIndicators2)) {
-      this.setState({ selectedSubInd2: undefined });
-    }
 
     const countryLayerData = formatCountryLayerData(
       this.props.indicatorAggregations.indicators1,
@@ -219,7 +207,8 @@ class HomeModuleMediator extends Component {
   ) {
     // we forming the parameter for year array
     const datePeriod = [];
-    if (startYear && endYear) {
+
+    if (startYear && endYear)
       yearMock.years.forEach(year => {
         if (
           parseInt(year.value, 10) >= parseInt(startYear, 10) &&
@@ -228,7 +217,6 @@ class HomeModuleMediator extends Component {
           datePeriod.push(year.value);
         }
       });
-    }
 
     if (datePeriod.length === 0) {
       datePeriod.push('undefined');
@@ -256,11 +244,27 @@ class HomeModuleMediator extends Component {
   }
 
   selectInd1(val) {
-    this.setState({ selectedInd1: val.value.value }, this.refetch);
+    // So if a new batch of subindicators is retrieved
+    // we reset the selected subindicator
+    this.setState(
+      {
+        selectedInd1: val.value.value,
+        selectedSubInd1: 'Select sub indicator',
+      },
+      this.refetch,
+    );
   }
 
   selectInd2(val) {
-    this.setState({ selectedInd2: val.value.value }, this.refetch);
+    // So if a new batch of subindicators is retrieved
+    // we reset the selected subindicator
+    this.setState(
+      {
+        selectedInd2: val.value.value,
+        selectedSubInd2: 'Select sub indicator',
+      },
+      this.refetch,
+    );
   }
 
   selectSubInd1(val) {
@@ -284,13 +288,11 @@ class HomeModuleMediator extends Component {
 
     const countryIndex = selectedCountryVal.indexOf(item.value);
 
-    if (countryIndex === -1) {
+    if (countryIndex === -1)
       // so if it doesn't exist we add it
       selectedCountryVal.push(item.value);
-    } else {
-      // if it does exist we remove it
-      selectedCountryVal.splice(countryIndex, 1);
-    }
+    // if it does exist we remove it
+    else selectedCountryVal.splice(countryIndex, 1);
 
     this.setState({ selectedCountryVal }, this.refetch);
   }
@@ -300,13 +302,11 @@ class HomeModuleMediator extends Component {
 
     const regionIndex = selectedRegionVal.indexOf(item.value);
 
-    if (regionIndex === -1) {
+    if (regionIndex === -1)
       // so if it doesn't exist we add it
       selectedRegionVal.push(item.value);
-    } else {
-      // if it does exist we remove it
-      selectedRegionVal.splice(regionIndex, 1);
-    }
+    // if it does exist we remove it
+    else selectedRegionVal.splice(regionIndex, 1);
 
     this.setState({ selectedRegionVal }, this.refetch);
   }

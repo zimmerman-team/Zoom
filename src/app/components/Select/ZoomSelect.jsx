@@ -43,18 +43,13 @@ const ZoomSelect = props => {
 
   const dropDownItem = item => {
     if(props.multiple)
-    {
-      return <CheckBox
+      return (<CheckBox
         key={item}
         checked={props.arraySelected.indexOf(item.value) !== -1}
         label={item.label}
         onChange={() => props.selectVal(item)}
-      />;
-
-    }else
-    {
-      return <DropDownItem>{item.label}</DropDownItem>
-    }
+      />);
+    return (<DropDownItem>{item.label}</DropDownItem>);
   };
 
   return (
@@ -65,7 +60,7 @@ const ZoomSelect = props => {
       children={dropDownItem}
       options={props.data} plain
       value={props.valueSelected}
-      onChange={!props.multiple && props.selectVal}
+      onChange={props.multiple ? undefined : props.selectVal}
     />
   );
 };

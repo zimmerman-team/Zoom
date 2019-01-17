@@ -60,7 +60,7 @@ const ZoomSelect = props => {
       children={dropDownItem}
       options={props.data} plain
       value={props.valueSelected}
-      onChange={props.multiple ? undefined : props.selectVal}
+      onChange={props.multiple ? null : props.selectVal}
     />
   );
 };

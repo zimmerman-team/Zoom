@@ -86,15 +86,15 @@ class HomeModuleMediator extends Component {
       countryCenters: [],
       worldMap: [],
       indicators: [],
-      selectedInd1: undefined,
-      selectedInd2: undefined,
-      selectedStartYear: undefined,
-      selectedEndYear: undefined,
+      selectedInd1: null,
+      selectedInd2: null,
+      selectedStartYear: null,
+      selectedEndYear: null,
       subIndicators1: [],
       subIndicators2: [],
       selectedCountryVal: [],
-      selectedSubInd1: undefined,
-      selectedSubInd2: undefined,
+      selectedSubInd1: null,
+      selectedSubInd2: null,
       selectedRegionVal: [],
     };
 
@@ -218,7 +218,7 @@ class HomeModuleMediator extends Component {
         }
       });
 
-    if (datePeriod.length === 0) datePeriod.push('undefined');
+    if (datePeriod.length === 0) datePeriod.push('null');
 
     // We forming the param for countries from the selected countries of a region
     // and single selected countries
@@ -231,8 +231,8 @@ class HomeModuleMediator extends Component {
       indicator1: [ind1],
       indicator2: [ind2],
       countriesISO2,
-      singleInd1: ind1 ? ind1 : 'undefined',
-      singleInd2: ind2 ? ind2 : 'undefined',
+      singleInd1: ind1 ? ind1 : 'null',
+      singleInd2: ind2 ? ind2 : 'null',
       datePeriod,
       subInd1: [subInd1],
       subInd2: [subInd2],
@@ -345,14 +345,14 @@ export default createRefetchContainer(
   graphql`
     fragment HomeModuleMediator_indicatorAggregations on Query
       @argumentDefinitions(
-        datePeriod: { type: "[String]", defaultValue: ["undefined"] }
-        indicator1: { type: "[String]", defaultValue: ["undefined"] }
-        indicator2: { type: "[String]", defaultValue: ["undefined"] }
-        subInd1: { type: "[String]", defaultValue: ["undefined"] }
-        subInd2: { type: "[String]", defaultValue: ["undefined"] }
-        countriesISO2: { type: "[String]", defaultValue: ["undefined"] }
-        singleInd1: { type: "String", defaultValue: "undefined" }
-        singleInd2: { type: "String", defaultValue: "undefined" }
+        datePeriod: { type: "[String]", defaultValue: ["null"] }
+        indicator1: { type: "[String]", defaultValue: ["null"] }
+        indicator2: { type: "[String]", defaultValue: ["null"] }
+        subInd1: { type: "[String]", defaultValue: ["null"] }
+        subInd2: { type: "[String]", defaultValue: ["null"] }
+        countriesISO2: { type: "[String]", defaultValue: ["null"] }
+        singleInd1: { type: "String", defaultValue: "null" }
+        singleInd2: { type: "String", defaultValue: "null" }
       ) {
       indicators1: datapointsAggregation(
         groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]

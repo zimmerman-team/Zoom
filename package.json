@@ -88,7 +88,7 @@
     "babel-loader": "^8.0.4",
     "babel-plugin-named-asset-import": "^0.2.3",
     "babel-plugin-react-docgen": "^2.0.0",
-    "babel-plugin-relay": "^1.7.0",
+    "babel-plugin-relay": "^2.0.0-rc.1",
     "babel-plugin-root-import": "^6.1.0",
     "babel-preset-react-app": "^7.0.0",
     "bfj": "6.1.1",

@@ -218,9 +218,7 @@ class HomeModuleMediator extends Component {
         }
       });
 
-    if (datePeriod.length === 0) {
-      datePeriod.push('undefined');
-    }
+    if (datePeriod.length === 0) datePeriod.push('undefined');
 
     // We forming the param for countries from the selected countries of a region
     // and single selected countries

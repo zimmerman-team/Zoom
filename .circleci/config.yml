@@ -1,4 +1,4 @@
-version: 2.1
+version: 2
 jobs:
   #  CHECKOUT REPOSITORY
   checkout_repo:
@@ -32,7 +32,7 @@ jobs:
           paths: .
 
   #  BUILD SOURCE AND DEPLOY TO SERVER
-  build_&_deploy:
+  build_deploy:
     #    machine: true
     docker:
       - image: circleci/node:10.13.0
@@ -92,7 +92,7 @@ workflows:
   test_build_deploy:
     jobs:
       - checkout_repo
-      - build_&_deploy:
+      - build_deploy:
           requires:
             - checkout_repo
 #      - test_e2e:

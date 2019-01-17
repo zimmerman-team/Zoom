@@ -1,9 +1,7 @@
-version: 2
+version: 2.1
 jobs:
-
   #  CHECKOUT REPOSITORY
   checkout_repo:
-    #    machine: true
     docker:
       - image: circleci/node:10.13.0
     working_directory: ~/zoom-v2-ui
@@ -11,28 +9,27 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/zoom-v2-ui
+      #- restore_cache:
+      #    keys:
+      #      - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      #      - yarn-cache-{{ .Branch }}
+      #      - yarn-cache-
       - restore_cache:
           keys:
-            - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-cache-{{ .Branch }}
-            - yarn-cache-
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
       - run: yarn install
+      #- save_cache:
+      #    key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      #    paths: node_modules
       - save_cache:
-          key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths: node_modules
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
       - persist_to_workspace:
           root: .
           paths: .
-
-  #  CHECKOUT FOR VULNERABILITIES IN LIBRARIES
-  check_vulnerabilities:
-    docker:
-      - image: circleci/node:10.13.0
-    working_directory: ~/zoom-v2-ui
-    steps:
-      - attach_workspace:
-          at: ~/zoom-v2-ui
-      - run: yarn validate:dependencies
 
   #  BUILD SOURCE AND DEPLOY TO SERVER
   build_&_deploy:
@@ -46,24 +43,38 @@ jobs:
           at: ~/zoom-v2-ui
       - run: yarn relay
       - run: yarn build
-      - run: sudo apt install rsync
-      - run: ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts
+      - run:
+          name: Add target host to known_hosts files
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ssh-keyscan "$SSH_HOST_PRODUCTION" >> ~/.ssh/known_hosts
+            elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              ssh-keyscan "$SSH_HOST_TEST" >> ~/.ssh/known_hosts
+            elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
+              ssh-keyscan "$SSH_HOST_DEV" >> ~/.ssh/known_hosts
+            else
+              ssh-keyscan "$SSH_HOST_TEST" >> ~/.ssh/known_hosts
+            fi
       - add_ssh_keys:
           name: Add SSH KEY
           fingerprints:
-            - "98:09:eb:52:9a:fc:ec:ba:e2:cf:9a:f3:99:0e:a1:e8"
+            - "6f:b2:10:8a:43:db:4b:fb:a0:31:47:da:99:68:7c:af"
+          #  - "98:09:eb:52:9a:fc:ec:ba:e2:cf:9a:f3:99:0e:a1:e8"
       - run: eval ssh-agent -s
-      - run: rsync -ave  ssh ~/zoom-v2-ui/.fusion $SSH_USER@$SSH_HOST:~/zoom-v2-ui/.fusion
-
-  #  EVALUATE BROWSER PERFORMANCE WITH LIGHTHOUSE
-  test_performance:
-    docker:
-      - image: circleci/node:10.13.0-browsers
-    working_directory: ~/zoom-v2-ui
-    steps:
-      - attach_workspace:
-          at: ~/zoom-v2-ui
-      - run: CI=true yarn lighthouse
+      - run: sudo apt install rsync
+      - run:
+          name: Upload build folder to target host
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_PRODUCTION":~/zoom-v2-ui/build
+            elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_TEST":~/zoom-v2-ui/build
+            elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
+              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_DEV":~/zoom-v2-ui/build
+            else
+              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_DEV":~/zoom-v2-ui/build
+            fi
+      #- run: rsync -ave  ssh ~/zoom-v2-ui/ $SSH_USER@$SSH_HOST:~/zoom-v2-ui/
 
   test_e2e:
     docker:
@@ -84,9 +95,6 @@ workflows:
       - build_&_deploy:
           requires:
             - checkout_repo
-      - test_performance:
-          requires:
-            - build_&_deploy
 #      - test_e2e:
 #          requires:
 #            - build_&_deploy

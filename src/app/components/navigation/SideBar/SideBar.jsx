@@ -112,11 +112,7 @@ class SideBar extends React.Component {
                 </SidebarNavList>
               </SidebarNavListContainer>
 
-              {auth0Client.isAuthenticated() ? (
-                <ZoomButton onClick={auth0Client.signOut}>Sign out</ZoomButton>
-              ) : (
-                <LoginForm />
-              )}
+              <LoginForm />
             </Box>
           </SideBarLayer>
         )}

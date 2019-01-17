@@ -13,6 +13,7 @@ import { CookiesProvider } from 'react-cookie';
 
 import reducers from 'services/reducers';
 import mutationReducers from 'services/reducers/mutation';
+import syncReducers from 'services/reducers/sync';
 import sagas from 'services/sagas';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -24,6 +25,7 @@ const store = createStore(
   combineReducers({
     ...reducers,
     ...mutationReducers,
+    ...syncReducers,
   }),
   composeEnhancers(applyMiddleware(sagaMiddleware, routerMiddleware(history))),
 );

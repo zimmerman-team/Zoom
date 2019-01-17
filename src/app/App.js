@@ -43,12 +43,7 @@ class App extends React.Component {
     }
     try {
       auth0Client.silentAuth().then(() => this.forceUpdate());
-    } catch (err) {
-      console.log(err);
-      if (err.error === 'login_required') {
-        auth0Client.signIn();
-      }
-    }
+    } catch (err) {}
     this.setState({ checkingSession: false });
   }
 

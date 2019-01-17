@@ -97,14 +97,14 @@ class Auth {
     return new Date().getTime() < this.expiresAt;
   }
 
-  signIn(username, password) {
+  signIn(username, password, reduxAction) {
     this.auth0.login(
       {
         realm: 'Username-Password-Authentication',
         email: username,
         password,
       },
-      err => console.log(err),
+      err => reduxAction(err),
     );
   }
 

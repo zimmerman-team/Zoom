@@ -1,10 +1,15 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import connect from 'react-redux/es/connect/connect';
+import isEqual from 'lodash/isEqual';
 import auth0Client from 'Auth';
-import IconSignIn from '../icon_sign_in.svg';
+
+/* actions */
+import * as syncActions from 'services/actions/sync';
 
 /* components */
+import { aidsFondsRed, ZoomButton } from 'components/theme/ThemeSheet';
 import {
   ComponentBase,
   LoginHeader,
@@ -13,11 +18,27 @@ import {
   LoginHeaderLabel,
   ForgotPassLink,
   InfoText,
-  EmailLink,
+  Link,
+  ErrorMessage,
+  ErrorText,
 } from './LoginForm.styles';
+import IconSignIn from '../icon_sign_in.svg';
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  loginStatusMessage: PropTypes.shape({
+    original: PropTypes.shape({
+      error: PropTypes.string,
+      error_description: PropTypes.string,
+    }),
+    code: PropTypes.string,
+    description: PropTypes.string,
+    error: PropTypes.string,
+    error_description: PropTypes.string,
+  }),
+};
+const defaultProps = {
+  loginStatusMessage: null,
+};
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -26,11 +47,19 @@ class LoginForm extends React.Component {
     this.state = {
       username: '',
       password: '',
+      error: null,
     };
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onUsernameChange = this.onUsernameChange.bind(this);
     this.onPasswordChange = this.onPasswordChange.bind(this);
+    this.setStatusMessage = this.setStatusMessage.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!isEqual(this.props.loginStatusMessage, prevProps.loginStatusMessage)) {
+      this.setState({ error: this.props.loginStatusMessage });
+    }
   }
 
   onUsernameChange(e) {
@@ -43,49 +72,91 @@ class LoginForm extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    auth0Client.signIn(this.state.username, this.state.password);
+    auth0Client.signIn(
+      this.state.username,
+      this.state.password,
+      this.setStatusMessage,
+    );
+  }
+
+  setStatusMessage(message) {
+    this.props.dispatch(syncActions.setLoginStatusMessage(message));
   }
 
   render() {
+    const textFieldTheme = {
+      borderStyle: this.state.error ? 'solid' : 'none',
+      borderColor: this.state.error ? aidsFondsRed : 'none',
+    };
     return (
       <ComponentBase onSubmit={this.onSubmit}>
         <LoginHeader>
           <IconSignIn />
           <LoginHeaderLabel size="small">
-            Sign in registered users
+            {auth0Client.isAuthenticated()
+              ? `Welcome ${auth0Client.getProfile().nickname}`
+              : 'Sign in registered users'}
           </LoginHeaderLabel>
         </LoginHeader>
-        <TextField
-          placeholder="Email or Username"
-          onChange={this.onUsernameChange}
-        />
-        <TextField
-          placeholder="Password"
-          type="password"
-          onChange={this.onPasswordChange}
-        />
 
-        <SignInButton
-          type="submit"
-          disabled={this.state.username === '' || this.state.password === ''}
-        >
-          Sign in
-        </SignInButton>
+        {auth0Client.isAuthenticated() ? (
+          <ZoomButton onClick={auth0Client.signOut}>Sign out</ZoomButton>
+        ) : (
+          <React.Fragment>
+            <TextField
+              placeholder="Email or Username"
+              onChange={this.onUsernameChange}
+              theme={textFieldTheme}
+            />
+            <TextField
+              placeholder="Password"
+              type="password"
+              onChange={this.onPasswordChange}
+              theme={textFieldTheme}
+            />
 
-        <ForgotPassLink>Forgot password?</ForgotPassLink>
+            <SignInButton
+              type="submit"
+              disabled={
+                this.state.username === '' || this.state.password === ''
+              }
+            >
+              Sign in
+            </SignInButton>
 
-        <InfoText size="small">
-          Would you like to have access to Zoom? Please contact Jane Doe,{' '}
-          <EmailLink href="mailto:janedoe@aidsfonds.nl">
-            janedoe@aidsfonds.nl
-          </EmailLink>
-        </InfoText>
+            <ForgotPassLink href="#">Forgot password?</ForgotPassLink>
+
+            <InfoText size="small">
+              Would you like to have access to Zoom? Please contact Jane Doe,{' '}
+              <Link href="mailto:janedoe@aidsfonds.nl">
+                janedoe@aidsfonds.nl
+              </Link>
+            </InfoText>
+
+            {this.state.error && (
+              <ErrorMessage>
+                <ErrorText size="small">
+                  {this.state.error.description}
+                </ErrorText>
+                <ErrorText size="small">
+                  Do need help <Link href="#">logging in</Link>?
+                </ErrorText>
+              </ErrorMessage>
+            )}
+          </React.Fragment>
+        )}
       </ComponentBase>
     );
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    loginStatusMessage: state.loginStatusMessage.data,
+  };
+};
+
 LoginForm.propTypes = propTypes;
 LoginForm.defaultProps = defaultProps;
 
-export default LoginForm;
+export default connect(mapStateToProps)(LoginForm);

@@ -27,8 +27,9 @@ export const TextField = styled(TextInput)`
   font-size: 12px;
   margin: 10px 0;
   border-radius: 0;
-  border-style: none;
   background: ${zoomGreyZero};
+  border-color: ${props => props.theme.borderColor};
+  border-style: ${props => props.theme.borderStyle};
   -webkit-box-shadow: 0px 2px 4px 0px rgba(239, 239, 239, 0.5);
   -moz-box-shadow: 0px 2px 4px 0px rgba(239, 239, 239, 0.5);
   box-shadow: 0px 2px 4px 0px rgba(220, 220, 220, 0.5);
@@ -40,15 +41,29 @@ export const SignInButton = styled(ZoomButton)`
 
 export const ForgotPassLink = styled.a`
   font-size: 10px;
+  text-decoration: none;
   color: ${aidsFondsRed};
 `;
 
 export const InfoText = styled(Text)`
   display: block;
-  margin-top: 20px;
+  margin: 20px 0;
 `;
 
-export const EmailLink = styled.a`
+export const Link = styled.a`
   text-decoration: none;
   color: ${aidsFondsRed};
+`;
+
+export const ErrorMessage = styled(Box)`
+  padding: 10px;
+  background: ${zoomGreyZero};
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${aidsFondsRed};
+`;
+
+export const ErrorText = styled(Text)`
+  color: #000000;
+  font-weight: bold;
 `;

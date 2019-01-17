@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Select } from 'grommet';
+import { Select, CheckBox } from 'grommet';
 import {
   DialogHeading,
   ZoomButton,
@@ -27,6 +27,10 @@ const ComponentBase = styled(Select)`
   }
 `;
 
+const DropDownItem = styled.div`
+  padding: 5px;
+`;
+
 const propTypes = {
   data: PropTypes.array,
   placeHolder: PropTypes.string,
@@ -36,8 +40,28 @@ const defaultProps = {
 };
 
 const ZoomSelect = props => {
+
+  const dropDownItem = item => {
+    if(props.multiple)
+      return (<CheckBox
+        key={item}
+        checked={props.arraySelected.indexOf(item.value) !== -1}
+        label={item.label}
+        onChange={() => props.selectVal(item)}
+      />);
+    return (<DropDownItem>{item.label}</DropDownItem>);
+  };
+
   return (
-    <ComponentBase placeholder={props.placeHolder} options={props.data} plain />
+    <ComponentBase
+      closeOnChange={!props.multiple}
+      multiple={props.multiple}
+      placeholder={props.placeHolder}
+      children={dropDownItem}
+      options={props.data} plain
+      value={props.valueSelected}
+      onChange={props.multiple ? null : props.selectVal}
+    />
   );
 };
 

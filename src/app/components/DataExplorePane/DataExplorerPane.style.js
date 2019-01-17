@@ -4,7 +4,7 @@ import {
   zoomFontFamTwo,
   zoomGreyZero,
 } from 'components/theme/ThemeSheet';
-import { Box } from 'grommet/es6';
+import { Box } from 'grommet';
 
 export const ComponentBase = styled.div`
   width: 320px;

@@ -59,6 +59,7 @@
     "e2e:chrome": "cypress run --browser chrome",
     "e2e:record": "cypress run --record",
     "e2e:record:parallel": "cypress run --record --parallel",
+    "cy:open": "cypress open",
     "relay": "relay-compiler --src ./src --schema ./data/schema.json --extensions js jsx"
   },
   "devDependencies": {

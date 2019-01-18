@@ -82,6 +82,7 @@ class SideBar extends React.Component {
                     icon={<IconCharts />}
                     type="button"
                     plain={true}
+                    data-cy="sidebar-country"
                   />
 
                   <SidebarNavListItem

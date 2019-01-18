@@ -16,13 +16,19 @@ const propTypes = {
     }),
   ),
   keys: PropTypes.arrayOf(PropTypes.string),
+  enableLabel: PropTypes.bool,
+  disabledLegend: PropTypes.bool,
 };
+
 const defaultProps = {
+  disabledLegend: false,
+  enableLabel: false,
   data: [],
   keys: ['', ''],
 };
 
 const BarChartVertical = props => {
+
   return (
     <ComponentBase>
       <ResponsiveBar
@@ -96,7 +102,7 @@ const BarChartVertical = props => {
           legendOffset: -40,
           format: value => `$${format('.2s')(value)}`,
         }}
-        enableLabel={false}
+        enableLabel={!!props.enableLabel}
         labelSkipWidth={12}
         labelSkipHeight={12}
         labelTextColor="inherit:darker(1.6)"
@@ -112,7 +118,7 @@ const BarChartVertical = props => {
             },
           )}`
         }
-        legends={[
+        legends={props.disabledLegend ? [] : [
           {
             dataFrom: 'keys',
             anchor: 'bottom-left',

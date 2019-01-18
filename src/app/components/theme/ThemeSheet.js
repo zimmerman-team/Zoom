@@ -52,6 +52,21 @@ const BaseParagraph = styled.p`
   -moz-osx-font-smoothing: grayscale;
 `;
 
+export const DescriptionParagraph = styled.div`
+  text-align: justify;
+  color: ${zoomBlack};
+  font-family: ${zoomFontFamTwo};
+  font-weight: 300;
+  line-height: 33px;
+  font-size: 18px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+`;
+
+export const DescriptionParagraphBold = styled(DescriptionParagraph)`
+  font-weight: 700;
+`;
+
 export const DialogHeading = styled(BaseHeading)`
   font-family: ${zoomFontFamOne};
   font-size: ${headSizeOne};
@@ -62,8 +77,10 @@ export const DialogHeading = styled(BaseHeading)`
 `;
 
 export const PageHeading = styled(BaseHeading)`
-  font-family: ${zoomFontFamOne};
+  color: ${zoomBlack};
+  font-family: ${zoomFontFamTwo};
   font-size: ${headSizeOne};
+  font-weight: 700;
 `;
 
 export const SectionHeading = styled(BaseHeading)`

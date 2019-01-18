@@ -256,6 +256,13 @@ const ThemeSheet = props => (
         <FragmentParagraph>
           Lorem ipsum dolor simet fragment paragraph
         </FragmentParagraph>
+        <DescriptionParagraph>
+          Style used for paragraphish text that takes up a whole block of the
+          page
+        </DescriptionParagraph>
+        <DescriptionParagraphBold>
+          Same as above just in bold.
+        </DescriptionParagraphBold>
 
         <Heading level={4}>Element Shadows</Heading>
         <Box direction="row" gap="medium">

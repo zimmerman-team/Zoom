@@ -12,7 +12,7 @@ import {
 } from 'modules/home/HomeModule.styles';
 import { yearDropDown } from 'modules/home/HomeModule.utils';
 import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 const ModuleContainer = styled(Box)``;
 
@@ -48,7 +48,7 @@ class HomeModule extends Component {
   };
 
   render() {
-    const {indicators, ...otherProps} = this.props;
+    const { indicators, ...otherProps } = this.props;
 
     return (
       <React.Fragment>
@@ -58,10 +58,7 @@ class HomeModule extends Component {
           <GeoMap indicatorData={indicators} />
 
           <ControlPanelContainer>
-
-          <ExplorePanelMediator
-            {...otherProps}
-          />
+            <ExplorePanelMediator {...otherProps} />
 
             {/*<Box>
               <PanelDuo>

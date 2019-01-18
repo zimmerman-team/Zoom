@@ -18,38 +18,54 @@ const propTypes = {
   selectedInd2: PropTypes.string,
   selectedInd1: PropTypes.string,
   regionAmount: PropTypes.number,
-  indNames: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.string,
-  })),
-  years: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.string,
-  })),
-  countries: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.string,
-  })),
-  regions: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.arrayOf(PropTypes.shape({
-      iso2: PropTypes.string,
-    })),
-  })),
-  subIndicators1: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.string,
-  })),
-  subIndicators2: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.string,
-  })),
-  selectedCountryVal: PropTypes.arrayOf(PropTypes.string),
-  selectedRegionVal: PropTypes.arrayOf(PropTypes.arrayOf(
+  indNames: PropTypes.arrayOf(
     PropTypes.shape({
-      iso2: PropTypes.string,
-    })
-  )),
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+  ),
+  years: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+  ),
+  countries: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+  ),
+  regions: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.arrayOf(
+        PropTypes.shape({
+          iso2: PropTypes.string,
+        }),
+      ),
+    }),
+  ),
+  subIndicators1: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+  ),
+  subIndicators2: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+  ),
+  selectedCountryVal: PropTypes.arrayOf(PropTypes.string),
+  selectedRegionVal: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        iso2: PropTypes.string,
+      }),
+    ),
+  ),
   selectCountry: PropTypes.func,
   selectRegion: PropTypes.func,
   selectStartYear: PropTypes.func,
@@ -113,14 +129,18 @@ class DataExplorePane extends React.Component {
         </FilterContainer>
         <FilterContainer>
           <FilterLabel>Period</FilterLabel>
-          <ZoomSelect placeHolder="Select begin year"
-                      data={this.props.years}
-                      valueSelected={this.props.selectedStartYear}
-                      selectVal={this.props.selectStartYear}/>
-          <ZoomSelect placeHolder="Select end year"
-                      data={this.props.years}
-                      valueSelected={this.props.selectedEndYear}
-                      selectVal={this.props.selectEndYear}/>
+          <ZoomSelect
+            placeHolder="Select begin year"
+            data={this.props.years}
+            valueSelected={this.props.selectedStartYear}
+            selectVal={this.props.selectStartYear}
+          />
+          <ZoomSelect
+            placeHolder="Select end year"
+            data={this.props.years}
+            valueSelected={this.props.selectedEndYear}
+            selectVal={this.props.selectEndYear}
+          />
         </FilterContainer>
         <FilterContainer>
           <FilterLabel>Indicators</FilterLabel>
@@ -132,10 +152,12 @@ class DataExplorePane extends React.Component {
             valueSelected={this.props.selectedInd1}
             selectVal={this.props.selectInd1}
           />
-          <ZoomSelect placeHolder="Select sub indicator"
-                      data={this.props.subIndicators1}
-                      valueSelected={this.props.selectedSubInd1}
-                      selectVal={this.props.selectSubInd1}/>
+          <ZoomSelect
+            placeHolder="Select sub indicator"
+            data={this.props.subIndicators1}
+            valueSelected={this.props.selectedSubInd1}
+            selectVal={this.props.selectSubInd1}
+          />
         </FilterContainer>
         <Divider />
         <FilterContainer>
@@ -147,10 +169,12 @@ class DataExplorePane extends React.Component {
             valueSelected={this.props.selectedInd2}
             selectVal={this.props.selectInd2}
           />
-          <ZoomSelect placeHolder="Select sub indicator"
-                      data={this.props.subIndicators2}
-                      valueSelected={this.props.selectedSubInd2}
-                      selectVal={this.props.selectSubInd2}/>
+          <ZoomSelect
+            placeHolder="Select sub indicator"
+            data={this.props.subIndicators2}
+            valueSelected={this.props.selectedSubInd2}
+            selectVal={this.props.selectSubInd2}
+          />
         </FilterContainer>
       </ComponentBase>
     );

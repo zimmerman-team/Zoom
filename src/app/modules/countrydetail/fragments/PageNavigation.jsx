@@ -65,7 +65,10 @@ const defaultProps = {};
 
 const PageNavigation = props => {
   return (
-    <NavigationContainer background={zoomGreyZero} data-cy="navbar-country-detail">
+    <NavigationContainer
+      background={zoomGreyZero}
+      data-cy="navbar-country-detail"
+    >
       <FragmentContent>
         <PageNavigationContainer>
           <PageNavList>

@@ -40,16 +40,17 @@ const defaultProps = {
 };
 
 const ZoomSelect = props => {
-
   const dropDownItem = item => {
-    if(props.multiple)
-      return (<CheckBox
-        key={item}
-        checked={props.arraySelected.indexOf(item.value) !== -1}
-        label={item.label}
-        onChange={() => props.selectVal(item)}
-      />);
-    return (<DropDownItem>{item.label}</DropDownItem>);
+    if (props.multiple)
+      return (
+        <CheckBox
+          key={item}
+          checked={props.arraySelected.indexOf(item.value) !== -1}
+          label={item.label}
+          onChange={() => props.selectVal(item)}
+        />
+      );
+    return <DropDownItem>{item.label}</DropDownItem>;
   };
 
   return (
@@ -58,7 +59,8 @@ const ZoomSelect = props => {
       multiple={props.multiple}
       placeholder={props.placeHolder}
       children={dropDownItem}
-      options={props.data} plain
+      options={props.data}
+      plain
       value={props.valueSelected}
       onChange={props.multiple ? null : props.selectVal}
     />

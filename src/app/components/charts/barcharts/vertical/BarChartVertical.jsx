@@ -28,7 +28,6 @@ const defaultProps = {
 };
 
 const BarChartVertical = props => {
-
   return (
     <ComponentBase>
       <ResponsiveBar
@@ -118,30 +117,34 @@ const BarChartVertical = props => {
             },
           )}`
         }
-        legends={props.disabledLegend ? [] : [
-          {
-            dataFrom: 'keys',
-            anchor: 'bottom-left',
-            direction: 'row',
-            justify: false,
-            translateX: 0,
-            translateY: 50,
-            itemsSpacing: 2,
-            itemWidth: 100,
-            itemHeight: 20,
-            itemDirection: 'left-to-right',
-            itemOpacity: 0.85,
-            symbolSize: 15,
-            effects: [
-              {
-                on: 'hover',
-                style: {
-                  itemOpacity: 1,
+        legends={
+          props.disabledLegend
+            ? []
+            : [
+                {
+                  dataFrom: 'keys',
+                  anchor: 'bottom-left',
+                  direction: 'row',
+                  justify: false,
+                  translateX: 0,
+                  translateY: 50,
+                  itemsSpacing: 2,
+                  itemWidth: 100,
+                  itemHeight: 20,
+                  itemDirection: 'left-to-right',
+                  itemOpacity: 0.85,
+                  symbolSize: 15,
+                  effects: [
+                    {
+                      on: 'hover',
+                      style: {
+                        itemOpacity: 1,
+                      },
+                    },
+                  ],
                 },
-              },
-            ],
-          },
-        ]}
+              ]
+        }
       />
     </ComponentBase>
   );

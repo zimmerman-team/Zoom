@@ -106,17 +106,18 @@ export class LoginForm extends React.Component {
       borderStyle: this.state.error ? 'solid' : 'none',
       borderColor: this.state.error ? aidsFondsRed : 'none',
     };
+    let headerText = auth0Client.isAuthenticated()
+      ? `Welcome ${auth0Client.getProfile().nickname}`
+      : 'Sign in registered users';
+    headerText =
+      this.state.view === 'login'
+        ? 'Sign in registered users'
+        : 'Forgot password';
     return (
       <ComponentBase onSubmit={this.onSubmit}>
         <LoginHeader>
           <IconSignIn />
-          <LoginHeaderLabel size="small">
-            {auth0Client.isAuthenticated()
-              ? `Welcome ${auth0Client.getProfile().nickname}`
-              : this.state.view === 'login'
-              ? 'Sign in registered users'
-              : 'Forgot password'}
-          </LoginHeaderLabel>
+          <LoginHeaderLabel size="small">{headerText}</LoginHeaderLabel>
         </LoginHeader>
 
         {auth0Client.isAuthenticated() ? (

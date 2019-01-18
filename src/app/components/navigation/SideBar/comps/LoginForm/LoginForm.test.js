@@ -10,7 +10,6 @@ import {
   TextField,
   FormButton,
   LoginHeaderLabel,
-  ForgotPassLink,
   InfoText,
   Link,
 } from './LoginForm.styles';
@@ -20,7 +19,7 @@ const wrapper = shallow(<LoginForm />);
 
 describe('<LoginForm />', () => {
   it('renders one <ComponentBase/> component', () => {
-    expect(wrapper.dive(ComponentBase)).toHaveLength(1);
+    expect(wrapper.find(ComponentBase)).toHaveLength(1);
   });
   it('renders one <LoginHeader/> component', () => {
     expect(wrapper.find(LoginHeader)).toHaveLength(1);

@@ -1,6 +1,7 @@
 /* base */
 import React from 'react';
 import auth0Client from 'Auth';
+import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import { connect } from 'react-redux';
 
@@ -12,12 +13,16 @@ import {
   ForgotPassLink,
   TextField,
   FormButton,
-  ErrorMessage,
-  ErrorText,
 } from '../LoginForm/LoginForm.styles';
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  view: PropTypes.oneOf(['login', 'forget_password']),
+  changeView: PropTypes.func,
+};
+const defaultProps = {
+  view: 'login',
+  changeView: null,
+};
 
 const validateEmail = mail => {
   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
@@ -26,7 +31,7 @@ const validateEmail = mail => {
   return false;
 };
 
-class ForgetPassword extends React.Component {
+export class ForgetPassword extends React.Component {
   constructor(props) {
     super(props);
 

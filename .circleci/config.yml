@@ -55,13 +55,13 @@ jobs:
           name: Upload build folder to target host
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_STAGING":~/zoom-v2-ui/build
+              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_STAGING":~/zoom-v2-ui
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_TEST":~/zoom-v2-ui/build
+              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_TEST":~/zoom-v2-ui
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
-              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_DEV":~/zoom-v2-ui/build
+              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_DEV":~/zoom-v2-ui
             else
-              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_DEV":~/zoom-v2-ui/build
+              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_DEV":~/zoom-v2-ui
             fi
 
   test_e2e:

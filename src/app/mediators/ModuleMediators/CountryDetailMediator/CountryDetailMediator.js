@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';
 import { createRefetchContainer, graphql } from 'react-relay';
+import { withRouter } from 'react-router';
 
 /* helpers */
 import get from 'lodash/get';
@@ -126,13 +127,11 @@ class CountryDetailMediator extends React.Component {
   componentDidMount() {
     // We get countries related activities here
     const transParams = this.state.transParams;
-    transParams.recipient_country = mock.countryCode.toUpperCase();
-    this.setState({ transParams });
-    this.props.dispatch(
-      oipaActions.countryActivitiesRequest(this.state.transParams),
-    );
-    this.props.dispatch(actions.countryExcerptRequest(this.state.wikiParams));
+    transParams.recipient_country = this.props.match.params.iso2.toUpperCase();
 
+    this.props.dispatch(oipaActions.countryActivitiesRequest(transParams));
+
+    this.setState({ transParams });
     // We get countries related indicator data here
     this.refetch();
   }
@@ -178,17 +177,27 @@ class CountryDetailMediator extends React.Component {
         countryName,
       );
 
+      // We dispatch wiki api here, cause this is the place where we get the country name
+      const wikiParams = this.state.wikiParams;
+      wikiParams.titles = countryName;
+      this.props.dispatch(actions.countryExcerptRequest(this.state.wikiParams));
+
       const aidsLineChartData = formatLineChartData(
         this.props.indicatorAggregations.aidsEpidemic,
       );
 
-      this.setState({ infoBarData, countryName, aidsLineChartData });
+      this.setState({
+        infoBarData,
+        countryName,
+        aidsLineChartData,
+        wikiParams,
+      });
     }
   }
 
   refetch() {
     this.props.relay.refetch({
-      countryCode: [mock.countryCode.toLowerCase()],
+      countryCode: [this.props.match.params.iso2.toLowerCase()],
       barChartIndicators: this.state.barChartIndicators,
       aidsEpIndicators: this.state.aidsEpIndicators,
     });
@@ -218,7 +227,7 @@ CountryDetailMediator.propTypes = propTypes;
 CountryDetailMediator.defaultProps = defaultProps;
 
 export default createRefetchContainer(
-  connect(mapStateToProps)(CountryDetailMediator),
+  connect(mapStateToProps)(withRouter(CountryDetailMediator)),
   graphql`
     fragment CountryDetailMediator_indicatorAggregations on Query
       @argumentDefinitions(

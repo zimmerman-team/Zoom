@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import MapGL from 'react-map-gl';
 import isEqual from 'lodash/isEqual';
+import { withRouter } from 'react-router';
 import {
   dataLayer,
   defaultMapStyle,
@@ -21,7 +22,7 @@ import { generateLegends } from 'components/geo/GeoMap/GeoMap.utils';
 const MAPBOX_TOKEN =
   'pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw';
 
-export default class GeoMap extends Component {
+class GeoMap extends Component {
   constructor(props) {
     super(props);
 
@@ -142,6 +143,14 @@ export default class GeoMap extends Component {
     return markerInfo(hoverMarkerInfo);
   }
 
+  _onCountryClick = event => {
+    const { features } = event;
+
+    const feature = features && features.find(f => f.layer.id === 'layer');
+    if (feature)
+      this.props.history.push(`country/${feature.properties.iso_a2}`);
+  };
+
   render() {
     const { viewport, mapStyle, markerArray, legends } = this.state;
     return (
@@ -153,6 +162,7 @@ export default class GeoMap extends Component {
           mapStyle={mapStyle}
           onViewportChange={this._onViewportChange}
           onHover={this._setLayerInfo}
+          onClick={this._onCountryClick}
           mapboxApiAccessToken={MAPBOX_TOKEN}
         >
           {/*So this is the layer tooltip, and we seperate it from the
@@ -171,3 +181,5 @@ export default class GeoMap extends Component {
     );
   }
 }
+
+export default withRouter(GeoMap);

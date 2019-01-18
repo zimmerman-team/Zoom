@@ -70,7 +70,7 @@ class SideBar extends React.Component {
 
                   <SidebarNavListItem
                     label="Country Detail"
-                    path={'/country'}
+                    path={'/country/ke'}
                     onClick={this.props.toggleSideBar}
                     icon={<IconCharts />}
                     type="button"

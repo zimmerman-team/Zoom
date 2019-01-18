@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
-import auth0Client from 'Auth';
+import auth0Client from 'auth/Auth';
 
 /* actions */
 import * as syncActions from 'services/actions/sync';

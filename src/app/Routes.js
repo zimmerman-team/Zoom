@@ -17,7 +17,7 @@ import HumanRights from 'modules/countrydetail/fragments/HumanRights';
 import TreeMap from 'components/charts/treemap/TreeMap';
 import ThemeSheet from 'components/theme/ThemeSheet';
 import DataExplorePanel from 'components/DataExplorePane/DataExplorePanel';
-import LoginCallback from './LoginCallback';
+import LoginCallback from 'components/LoginCallback/LoginCallback';
 // import HomeModuleMediator from 'mediators/ModuleMediators/HomeModuleMediator';
 
 // Modules lazy load

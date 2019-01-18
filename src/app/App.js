@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { graphql, QueryRenderer } from 'react-relay';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
-import auth0Client from 'Auth';
+import auth0Client from 'auth/Auth';
 
 // Routes
 import Routes from './Routes';

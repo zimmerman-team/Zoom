@@ -1,6 +1,6 @@
 /* base */
 import React from 'react';
-import auth0Client from 'Auth';
+import auth0Client from 'auth/Auth';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import { connect } from 'react-redux';

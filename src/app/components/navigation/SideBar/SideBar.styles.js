@@ -55,8 +55,3 @@ export const SidebarHeader = styled(Box)`
   padding-bottom: 8px;
   padding-top: 8px;
 `;
-
-export const LoginContainer = styled(Box)`
-  width: 100px;
-  height: 100px;
-`;

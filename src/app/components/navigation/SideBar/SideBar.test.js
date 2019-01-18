@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import SideBar from './SideBar';
 
 /* Components */
 import {
@@ -11,6 +10,8 @@ import {
   SidebarNavListItem,
 } from 'components/navigation/SideBar/SideBar.styles';
 import { Box } from 'grommet';
+import LoginForm from './comps/LoginForm/LoginForm';
+import SideBar from './SideBar';
 
 const wrapper = shallow(<SideBar open />);
 
@@ -32,5 +33,8 @@ describe('<SideBar />', () => {
   });
   it('renders four <SidebarNavListItem/> component', () => {
     expect(wrapper.find(SidebarNavListItem)).toHaveLength(4);
+  });
+  it('renders one <LoginForm/> component', () => {
+    expect(wrapper.find(LoginForm)).toHaveLength(1);
   });
 });

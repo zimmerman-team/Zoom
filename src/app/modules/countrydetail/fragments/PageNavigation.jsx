@@ -11,7 +11,7 @@ import {
   FragmentContainer,
 } from 'components/theme/ThemeSheet';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
-import { Box } from 'grommet/es6';
+import { Box } from 'grommet';
 
 const NavigationContainer = styled(FragmentContainer)`
   position: sticky;
@@ -65,7 +65,7 @@ const defaultProps = {};
 
 const PageNavigation = props => {
   return (
-    <NavigationContainer background={zoomGreyZero}>
+    <NavigationContainer background={zoomGreyZero} data-cy="navbar-country-detail">
       <FragmentContent>
         <PageNavigationContainer>
           <PageNavList>

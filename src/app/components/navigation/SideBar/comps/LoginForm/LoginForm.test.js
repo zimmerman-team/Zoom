@@ -8,12 +8,13 @@ import {
   ComponentBase,
   LoginHeader,
   TextField,
-  SignInButton,
+  FormButton,
   LoginHeaderLabel,
   ForgotPassLink,
   InfoText,
   Link,
 } from './LoginForm.styles';
+import ForgetPassword from '../ForgetPassword/ForgetPassword';
 
 const wrapper = shallow(<LoginForm />);
 
@@ -33,11 +34,11 @@ describe('<LoginForm />', () => {
   it('renders two <TextField/> component', () => {
     expect(wrapper.find(TextField)).toHaveLength(2);
   });
-  it('renders one <SignInButton/> component', () => {
-    expect(wrapper.find(SignInButton)).toHaveLength(1);
+  it('renders one <FormButton/> component', () => {
+    expect(wrapper.find(FormButton)).toHaveLength(1);
   });
-  it('renders one <ForgotPassLink/> component', () => {
-    expect(wrapper.find(ForgotPassLink)).toHaveLength(1);
+  it('renders one <ForgetPassword/> component', () => {
+    expect(wrapper.find(ForgetPassword)).toHaveLength(1);
   });
   it('renders one <InfoText/> component', () => {
     expect(wrapper.find(InfoText)).toHaveLength(1);

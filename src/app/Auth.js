@@ -117,6 +117,16 @@ class Auth {
       });
     });
   }
+
+  forgetPassword(email, reduxAction) {
+    this.auth0.changePassword(
+      {
+        email,
+        connection: 'Username-Password-Authentication',
+      },
+      err => reduxAction(),
+    );
+  }
 }
 
 const auth0Client = new Auth();

@@ -20,8 +20,18 @@ function loginStatusMessage(state = initial, action) {
   }
 }
 
+function forgotPasswordEmailSent(state = initial, action) {
+  switch (action.type) {
+    case syncActions.SET_FORGOT_PASSWORD_EMAIL_SENT:
+      return updateSuccess(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
   loginStatusMessage,
+  forgotPasswordEmailSent,
 };
 
 export default reducers;

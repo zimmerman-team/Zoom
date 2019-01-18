@@ -35,14 +35,18 @@ export const TextField = styled(TextInput)`
   box-shadow: 0px 2px 4px 0px rgba(220, 220, 220, 0.5);
 `;
 
-export const SignInButton = styled(ZoomButton)`
+export const FormButton = styled(ZoomButton)`
   margin: 10px 0;
 `;
 
-export const ForgotPassLink = styled.a`
-  font-size: 10px;
+export const ForgotPassLink = styled(Text)`
   text-decoration: none;
   color: ${aidsFondsRed};
+
+  &:hover {
+    opacity: 0.5;
+    cursor: pointer;
+  }
 `;
 
 export const InfoText = styled(Text)`

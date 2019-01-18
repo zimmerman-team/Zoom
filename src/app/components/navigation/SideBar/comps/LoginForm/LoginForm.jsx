@@ -3,26 +3,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
+import get from 'lodash/get';
 import auth0Client from 'Auth';
 
 /* actions */
 import * as syncActions from 'services/actions/sync';
 
 /* components */
-import { aidsFondsRed, ZoomButton } from 'components/theme/ThemeSheet';
+import { aidsFondsRed } from 'components/theme/ThemeSheet';
 import IconSignIn from 'assets/icons/icon_sign_in.svg';
 import {
   ComponentBase,
   LoginHeader,
   TextField,
-  SignInButton,
+  FormButton,
   LoginHeaderLabel,
-  ForgotPassLink,
   InfoText,
   Link,
   ErrorMessage,
   ErrorText,
 } from './LoginForm.styles';
+import ForgetPassword from '../ForgetPassword/ForgetPassword';
 
 const propTypes = {
   loginStatusMessage: PropTypes.shape({
@@ -48,9 +49,11 @@ export class LoginForm extends React.Component {
       username: '',
       password: '',
       error: null,
+      view: 'login',
     };
 
     this.onSubmit = this.onSubmit.bind(this);
+    this.changeView = this.changeView.bind(this);
     this.onUsernameChange = this.onUsernameChange.bind(this);
     this.onPasswordChange = this.onPasswordChange.bind(this);
     this.setStatusMessage = this.setStatusMessage.bind(this);
@@ -62,12 +65,21 @@ export class LoginForm extends React.Component {
     }
   }
 
-  onUsernameChange(e) {
-    this.setState({ username: e.target.value });
+  componentWillUnmount() {
+    this.props.dispatch(
+      syncActions.setForgotPasswordEmailSent({
+        value: false,
+        email: '',
+      }),
+    );
   }
 
   onPasswordChange(e) {
     this.setState({ password: e.target.value });
+  }
+
+  onUsernameChange(e) {
+    this.setState({ username: e.target.value });
   }
 
   onSubmit(e) {
@@ -83,6 +95,12 @@ export class LoginForm extends React.Component {
     this.props.dispatch(syncActions.setLoginStatusMessage(message));
   }
 
+  changeView() {
+    this.setState(prevState => ({
+      view: prevState.view === 'login' ? 'forget_password' : 'login',
+    }));
+  }
+
   render() {
     const textFieldTheme = {
       borderStyle: this.state.error ? 'solid' : 'none',
@@ -95,36 +113,45 @@ export class LoginForm extends React.Component {
           <LoginHeaderLabel size="small">
             {auth0Client.isAuthenticated()
               ? `Welcome ${auth0Client.getProfile().nickname}`
-              : 'Sign in registered users'}
+              : this.state.view === 'login'
+              ? 'Sign in registered users'
+              : 'Forgot password'}
           </LoginHeaderLabel>
         </LoginHeader>
 
         {auth0Client.isAuthenticated() ? (
-          <ZoomButton onClick={auth0Client.signOut}>Sign out</ZoomButton>
+          <FormButton onClick={auth0Client.signOut}>Sign out</FormButton>
         ) : (
           <React.Fragment>
-            <TextField
-              placeholder="Email or Username"
-              onChange={this.onUsernameChange}
-              theme={textFieldTheme}
-            />
-            <TextField
-              placeholder="Password"
-              type="password"
-              onChange={this.onPasswordChange}
-              theme={textFieldTheme}
-            />
+            {this.state.view === 'login' && (
+              <React.Fragment>
+                <TextField
+                  placeholder="Email or Username"
+                  onChange={this.onUsernameChange}
+                  theme={textFieldTheme}
+                />
+                <TextField
+                  placeholder="Password"
+                  type="password"
+                  onChange={this.onPasswordChange}
+                  theme={textFieldTheme}
+                />
 
-            <SignInButton
-              type="submit"
-              disabled={
-                this.state.username === '' || this.state.password === ''
-              }
-            >
-              Sign in
-            </SignInButton>
+                <FormButton
+                  type="submit"
+                  disabled={
+                    this.state.username === '' || this.state.password === ''
+                  }
+                >
+                  Sign in
+                </FormButton>
+              </React.Fragment>
+            )}
 
-            <ForgotPassLink href="#">Forgot password?</ForgotPassLink>
+            <ForgetPassword
+              view={this.state.view}
+              changeView={this.changeView}
+            />
 
             <InfoText size="small">
               Would you like to have access to Zoom? Please contact Jane Doe,{' '}
@@ -143,6 +170,15 @@ export class LoginForm extends React.Component {
                 </ErrorText>
               </ErrorMessage>
             )}
+
+            {get(this.props.forgotPasswordEmailSent, 'value', false) && (
+              <ErrorMessage>
+                <ErrorText size="small">
+                  Email sent to {this.props.forgotPasswordEmailSent.email} (if
+                  user with this email exists)
+                </ErrorText>
+              </ErrorMessage>
+            )}
           </React.Fragment>
         )}
       </ComponentBase>
@@ -153,6 +189,7 @@ export class LoginForm extends React.Component {
 const mapStateToProps = state => {
   return {
     loginStatusMessage: state.loginStatusMessage.data,
+    forgotPasswordEmailSent: state.forgotPasswordEmailSent.data,
   };
 };
 

@@ -5,7 +5,7 @@ import { countryDetailMockData } from '__mocks__/countryDetailMock';
 
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 import ProjectList from 'components/lists/projects/ProjectList';
-import {Element} from "react-scroll/modules";
+import { Element } from 'react-scroll/modules';
 
 const propTypes = {
   projectData: PropTypes.arrayOf(
@@ -30,7 +30,7 @@ const defaultProps = {
 
 const Projects = props => {
   return (
-    <Element name='Projects' >
+    <Element name="Projects">
       <ModuleFragment
         title={countryDetailMockData.fragments[6].title}
         description={countryDetailMockData.fragments[6].description[0]}

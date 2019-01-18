@@ -12,7 +12,7 @@ import {
 } from 'components/theme/ThemeSheet';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import { Box } from 'grommet';
-import { scroller } from 'react-scroll'
+import { scroller } from 'react-scroll';
 
 const NavigationContainer = styled(FragmentContainer)`
   position: sticky;
@@ -65,8 +65,7 @@ const propTypes = {};
 const defaultProps = {};
 
 const PageNavigation = props => {
-
-  const handleClick = (elName) => {
+  const handleClick = elName => {
     scroller.scrollTo(elName, {
       duration: 1000,
       delay: 100,
@@ -84,7 +83,9 @@ const PageNavigation = props => {
         <PageNavigationContainer>
           <PageNavList>
             {countryDetailMockData.fragments.map(item => (
-              <PageNavItem onClick={() => handleClick(item.id)} key={item.id}>{item.id}</PageNavItem>
+              <PageNavItem onClick={() => handleClick(item.id)} key={item.id}>
+                {item.id}
+              </PageNavItem>
             ))}
           </PageNavList>
         </PageNavigationContainer>

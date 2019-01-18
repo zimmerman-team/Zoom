@@ -3,7 +3,7 @@ import React from 'react';
 import BarChartHorizontal from 'components/charts/barcharts/horizontal/BarChartHorizontal';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import { Box } from 'grommet';
-import { Element } from "react-scroll/modules";
+import { Element } from 'react-scroll/modules';
 import {
   aidsFondsRed,
   PageIntroInitial,
@@ -37,7 +37,7 @@ const defaultProps = {
 
 const CountryInfo = props => {
   return (
-    <Element name='Summary' >
+    <Element name="Summary">
       <ModuleFragment>
         <CountryName>Zoom in on {props.countryName}</CountryName>
         <Box direction="row">

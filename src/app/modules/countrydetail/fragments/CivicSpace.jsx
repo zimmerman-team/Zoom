@@ -11,7 +11,7 @@ import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import { barChartMockData } from '__mocks__/barChartVerticalMock';
 import BarChart from 'components/charts/barcharts/horizontal/BarChartHorizontal';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
-import { Element } from 'react-scroll'
+import { Element } from 'react-scroll';
 
 const propTypes = {
   background: PropTypes.string,
@@ -20,7 +20,7 @@ const defaultProps = {};
 
 const CivicSpace = props => {
   return (
-    <Element name='Civic space' >
+    <Element name="Civic space">
       <ModuleFragment
         background={props.background}
         title={countryDetailMockData.fragments[3].title}

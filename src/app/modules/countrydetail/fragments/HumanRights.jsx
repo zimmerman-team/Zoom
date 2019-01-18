@@ -26,7 +26,7 @@ const defaultProps = {};
 
 const HumanRights = props => {
   return (
-    <Element name='Human rights' >
+    <Element name="Human rights">
       <ModuleFragment
         title={countryDetailMockData.fragments[4].title}
         description={countryDetailMockData.fragments[4].description[0]}
@@ -34,21 +34,21 @@ const HumanRights = props => {
       >
         <StigmaList>
           <StigmaListItem>
-            <ConditionMet color='green' />
+            <ConditionMet color="green" />
             <ItemText>Laws deeming sex work to be illegal</ItemText>
           </StigmaListItem>
           <StigmaListItem>
-            <ConditionMet color='green' />
+            <ConditionMet color="green" />
             <ItemText>Laws that criminalize same-sex activities</ItemText>
           </StigmaListItem>
           <StigmaListItem>
-            <ConditionUnmet color='red' />
+            <ConditionUnmet color="red" />
             <ItemText>
               Impose compulsory treatment/detention for people who use drugs
             </ItemText>
           </StigmaListItem>
           <StigmaListItem>
-            <ConditionMet color='green' />
+            <ConditionMet color="green" />
             <ItemText>
               Laws that specifically criminalize HIV transmission or exposure
             </ItemText>

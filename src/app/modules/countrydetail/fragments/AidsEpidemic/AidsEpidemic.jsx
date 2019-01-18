@@ -11,6 +11,7 @@ import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import LineChart from 'components/charts/linechart/LineChart';
 import { lineChartMockData } from '__mocks__/lineChartMock';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import { Element } from "react-scroll/modules";
 
 const ComponentBase = styled.div``;
 
@@ -38,13 +39,15 @@ const defaultProps = {
 
 const AidsEpidemic = props => {
   return (
-    <ModuleFragment
-      background={props.background}
-      title={countryDetailMockData.fragments[1].title}
-      showInfoButton
-    >
-      <LineChart data={props.aidsLineChartData} />
-    </ModuleFragment>
+    <Element name='Aids epidemic' >
+      <ModuleFragment
+        background={props.background}
+        title={countryDetailMockData.fragments[1].title}
+        showInfoButton
+      >
+        <LineChart data={props.aidsLineChartData} />
+      </ModuleFragment>
+    </Element>
   );
 };
 

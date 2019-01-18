@@ -55,7 +55,7 @@ const Routes = props => {
           />
           <Route
             exact
-            path="/country"
+            path="/country/:iso2"
             render={() => (
               <CountryDetailMediator indicatorAggregations={props} />
             )}

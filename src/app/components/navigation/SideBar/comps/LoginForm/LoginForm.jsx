@@ -97,6 +97,7 @@ export class LoginForm extends React.Component {
 
   changeView() {
     this.setState(prevState => ({
+      error: null,
       view: prevState.view === 'login' ? 'forget_password' : 'login',
     }));
   }

@@ -62,10 +62,10 @@ const propTypes = {
   selectSubInd2: PropTypes.func,
 };
 const defaultProps = {
-  selectedInd2: null,
-  selectedInd1: null,
-  selectedStartYear: null,
-  selectedEndYear: null,
+  selectedInd2: undefined,
+  selectedInd1: undefined,
+  selectedStartYear: undefined,
+  selectedEndYear: undefined,
   indNames: [],
   years: [],
   countries: [],
@@ -80,8 +80,8 @@ const defaultProps = {
   selectEndYear: null,
   selectInd1: null,
   selectInd2: null,
-  selectedSubInd1: null,
-  selectedSubInd2: null,
+  selectedSubInd1: undefined,
+  selectedSubInd2: undefined,
   selectSubInd1: null,
   selectSubInd2: null,
 };

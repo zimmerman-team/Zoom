@@ -30,6 +30,8 @@ const IatiDetailMediator = lazy(() =>
   import('mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator'),
 );
 
+const About = lazy(() => import('modules/about/About'));
+
 // Routes
 const Routes = props => {
   return (
@@ -61,6 +63,7 @@ const Routes = props => {
             path="/iati-activity/:activity_id"
             render={() => <IatiDetailMediator />}
           />
+          <Route path="/about" render={() => <About />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
           <Route exact path="/component" render={() => <DataExplorePanel />} />
         </Switch>

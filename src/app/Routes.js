@@ -18,6 +18,7 @@ import TreeMap from 'components/charts/treemap/TreeMap';
 import ThemeSheet from 'components/theme/ThemeSheet';
 import DataExplorePanel from 'components/DataExplorePane/DataExplorePanel';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
+import DataMapperModule from 'modules/datamapper/DataMapperModule';
 // import HomeModuleMediator from 'mediators/ModuleMediators/HomeModuleMediator';
 
 // Modules lazy load
@@ -66,6 +67,7 @@ const Routes = props => {
             render={() => <IatiDetailMediator />}
           />
           <Route path="/about" render={() => <About />} />
+          <Route path="/datamapper" render={() => <DataMapperModule />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
           <Route exact path="/component" render={() => <DataExplorePanel />} />
         </Switch>

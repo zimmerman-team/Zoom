@@ -13,6 +13,7 @@ import {
   StigmaList,
 } from 'components/theme/ThemeSheet';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import { Element } from 'react-scroll/modules';
 
 const ItemText = styled.p`
   //justify-self: flex-start;
@@ -25,34 +26,36 @@ const defaultProps = {};
 
 const HumanRights = props => {
   return (
-    <ModuleFragment
-      title={countryDetailMockData.fragments[4].title}
-      description={countryDetailMockData.fragments[4].description[0]}
-      showInfoButton
-    >
-      <StigmaList>
-        <StigmaListItem>
-          <ConditionMet color="green" />
-          <ItemText>Laws deeming sex work to be illegal</ItemText>
-        </StigmaListItem>
-        <StigmaListItem>
-          <ConditionMet color="green" />
-          <ItemText>Laws that criminalize same-sex activities</ItemText>
-        </StigmaListItem>
-        <StigmaListItem>
-          <ConditionUnmet color="red" />
-          <ItemText>
-            Impose compulsory treatment/detention for people who use drugs
-          </ItemText>
-        </StigmaListItem>
-        <StigmaListItem>
-          <ConditionMet color="green" />
-          <ItemText>
-            Laws that specifically criminalize HIV transmission or exposure
-          </ItemText>
-        </StigmaListItem>
-      </StigmaList>
-    </ModuleFragment>
+    <Element name="Human rights">
+      <ModuleFragment
+        title={countryDetailMockData.fragments[4].title}
+        description={countryDetailMockData.fragments[4].description[0]}
+        showInfoButton
+      >
+        <StigmaList>
+          <StigmaListItem>
+            <ConditionMet color="green" />
+            <ItemText>Laws deeming sex work to be illegal</ItemText>
+          </StigmaListItem>
+          <StigmaListItem>
+            <ConditionMet color="green" />
+            <ItemText>Laws that criminalize same-sex activities</ItemText>
+          </StigmaListItem>
+          <StigmaListItem>
+            <ConditionUnmet color="red" />
+            <ItemText>
+              Impose compulsory treatment/detention for people who use drugs
+            </ItemText>
+          </StigmaListItem>
+          <StigmaListItem>
+            <ConditionMet color="green" />
+            <ItemText>
+              Laws that specifically criminalize HIV transmission or exposure
+            </ItemText>
+          </StigmaListItem>
+        </StigmaList>
+      </ModuleFragment>
+    </Element>
   );
 };
 

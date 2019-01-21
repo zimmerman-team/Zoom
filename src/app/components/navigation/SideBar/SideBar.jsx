@@ -2,19 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'grommet';
-import {
-  aidsFondsRed,
-  zoomFontFamOne,
-  zoomFontFamTwo,
-  zoomGreyOne,
-  zoomGreyZero,
-  zoomGreyTwo,
-} from 'components/theme/ThemeSheet';
 
-import IconHome from './icon_home.svg';
-import IconCharts from './icon_charts.svg';
-import IconClose from './icon_close.svg';
-import IconAbout from './icon_about.svg';
+import IconHome from 'assets/icons/icon_home.svg';
+import IconCharts from 'assets/icons/icon_charts.svg';
+import IconClose from 'assets/icons/icon_close.svg';
+import IconAbout from 'assets/icons/icon_about.svg';
 import {
   CloseButton,
   SidebarHeader,
@@ -23,6 +15,7 @@ import {
   SidebarNavListContainer,
   SidebarNavListItem,
 } from 'components/navigation/SideBar/SideBar.styles';
+import LoginForm from 'components/navigation/SideBar/comps/LoginForm/LoginForm';
 
 const propTypes = {
   open: PropTypes.bool,
@@ -77,11 +70,12 @@ class SideBar extends React.Component {
 
                   <SidebarNavListItem
                     label="Country Detail"
-                    path={'/country'}
+                    path={'/country/ke'}
                     onClick={this.props.toggleSideBar}
                     icon={<IconCharts />}
                     type="button"
                     plain={true}
+                    data-cy="sidebar-country"
                   />
 
                   <SidebarNavListItem
@@ -106,6 +100,8 @@ class SideBar extends React.Component {
                   />
                 </SidebarNavList>
               </SidebarNavListContainer>
+
+              <LoginForm />
             </Box>
           </SideBarLayer>
         )}

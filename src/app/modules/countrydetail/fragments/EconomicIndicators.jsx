@@ -10,6 +10,7 @@ import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import LineChart from 'components/charts/linechart/LineChart';
 import { lineChartMockData } from '__mocks__/lineChartMock';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import { Element } from 'react-scroll/modules';
 
 const ComponentBase = styled.div``;
 
@@ -22,12 +23,14 @@ const defaultProps = {
 
 const EconomicIndicators = props => {
   return (
-    <ModuleFragment
-      title={countryDetailMockData.fragments[2].title}
-      showInfoButton
-    >
-      <LineChart data={lineChartMockData} />
-    </ModuleFragment>
+    <Element name="Economic indicators">
+      <ModuleFragment
+        title={countryDetailMockData.fragments[2].title}
+        showInfoButton
+      >
+        <LineChart data={lineChartMockData} />
+      </ModuleFragment>
+    </Element>
   );
 };
 

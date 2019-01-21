@@ -12,6 +12,7 @@ import LineChart from 'components/charts/linechart/LineChart';
 import { pieChartMockData } from '__mocks__/pieChartMock';
 import { lineChartMockData } from '__mocks__/lineChartMock';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import { Element } from 'react-scroll/modules';
 
 const ComponentBase = styled.div``;
 
@@ -25,20 +26,22 @@ const defaultProps = {
 
 const AidsfondsTransactions = props => {
   return (
-    <ModuleFragment
-      background={props.background}
-      title={countryDetailMockData.fragments[5].title}
-      showInfoButton
-    >
-      <FragmentHeader />
-      <FragmentVisualisation direction="row">
-        <PieChart data={pieChartMockData} />
-        <PieChart data={pieChartMockData} />
-      </FragmentVisualisation>
-      <FragmentVisualisation>
-        <LineChart data={lineChartMockData} />
-      </FragmentVisualisation>
-    </ModuleFragment>
+    <Element name="Financials">
+      <ModuleFragment
+        background={props.background}
+        title={countryDetailMockData.fragments[5].title}
+        showInfoButton
+      >
+        <FragmentHeader />
+        <FragmentVisualisation direction="row">
+          <PieChart data={pieChartMockData} />
+          <PieChart data={pieChartMockData} />
+        </FragmentVisualisation>
+        <FragmentVisualisation>
+          <LineChart data={lineChartMockData} />
+        </FragmentVisualisation>
+      </ModuleFragment>
+    </Element>
   );
 };
 

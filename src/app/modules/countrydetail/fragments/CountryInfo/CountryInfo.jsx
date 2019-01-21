@@ -3,6 +3,7 @@ import React from 'react';
 import BarChartHorizontal from 'components/charts/barcharts/horizontal/BarChartHorizontal';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import { Box } from 'grommet';
+import { Element } from 'react-scroll/modules';
 import {
   aidsFondsRed,
   PageIntroInitial,
@@ -36,24 +37,26 @@ const defaultProps = {
 
 const CountryInfo = props => {
   return (
-    <ModuleFragment>
-      <CountryName>Zoom in on {props.countryName}</CountryName>
-      <Box direction="row">
-        <Box width="50%">
-          <PageIntroInitial>{props.excerpts[0]}</PageIntroInitial>
-          <PageIntroSecondary>{props.excerpts[1]}</PageIntroSecondary>
-          <SimpleText color={aidsFondsRed}>
-            {countryDetailMockData.fragments[0].description[2]}
-          </SimpleText>
+    <Element name="Summary">
+      <ModuleFragment>
+        <CountryName>Zoom in on {props.countryName}</CountryName>
+        <Box direction="row">
+          <Box width="50%">
+            <PageIntroInitial>{props.excerpts[0]}</PageIntroInitial>
+            <PageIntroSecondary>{props.excerpts[1]}</PageIntroSecondary>
+            <SimpleText color={aidsFondsRed}>
+              {countryDetailMockData.fragments[0].description[2]}
+            </SimpleText>
+          </Box>
+          <Box width="50%">
+            <BarChartHorizontal
+              data={props.infoBarData}
+              countryName={props.countryName}
+            />
+          </Box>
         </Box>
-        <Box width="50%">
-          <BarChartHorizontal
-            data={props.infoBarData}
-            countryName={props.countryName}
-          />
-        </Box>
-      </Box>
-    </ModuleFragment>
+      </ModuleFragment>
+    </Element>
   );
 };
 

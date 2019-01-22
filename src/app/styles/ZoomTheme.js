@@ -50,4 +50,25 @@ export const ZoomTheme = deepFreeze({
       `,
     },
   },
+  formField: {
+    border: {
+      color: '#9b9b9b',
+      position: 'inner',
+      side: 'bottom',
+      error: {
+        color: {
+          dark: 'white',
+          light: 'status-critical',
+        },
+      },
+    },
+    label: {
+      color: '#9b9b9b',
+    },
+  },
+  textInput: {
+    extend: css`
+      font-weight: 400;
+    `,
+  },
 });

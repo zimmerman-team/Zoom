@@ -12,6 +12,7 @@ const ComponentBase = styled.div``;
 export const aidsFondsBlue = '#0000ff';
 export const aidsFondsRed = '#ff0100';
 export const aidsFondsWhite = '#ffffff';
+export const toolTipColor = '#414141';
 
 /* Chart colors */
 export const chartColorOne = '#f2c987';
@@ -22,6 +23,7 @@ export const chartColorThree = '#CDE9EE';
 export const zoomGreyZero = '#efefef';
 export const zoomGreyOne = '#818181';
 export const zoomGreyTwo = '#505050';
+export const zoomGreyThree = '#dfdfdf';
 export const zoomBlack = '#000000';
 export const zoomFontFamOne = 'FFMarkProAF-Bold';
 export const zoomFontFamTwo = 'FFMarkProAF-Book';

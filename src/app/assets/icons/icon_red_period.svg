@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg style="margin: auto" width="16px" height="15px" viewBox="0 0 16 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>time filter - link</title>
+    <desc>Created with Sketch.</desc>
+    <g id="time-filter---link" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-5" fill="#FF0100">
+            <path d="M15.8201379,0.0289 L13.5768276,0.0289 L13.5768276,0.610866667 C13.5768276,1.57136667 12.8171034,2.35393333 11.8802759,2.35393333 C10.9423448,2.35393333 10.1842759,1.57136667 10.1842759,0.610866667 L10.1842759,0.0289 L5.65737931,0.0289 L5.65737931,0.610866667 C5.65737931,1.57136667 4.89655172,2.35393333 3.96027586,2.35393333 C3.024,2.35393333 2.26372414,1.57193333 2.26372414,0.610866667 L2.26372414,0.0289 L2.93098879e-14,-9.50350909e-14 L2.93098879e-14,14.5508667 L1.13213793,14.5508667 L14.7067586,14.5508667 L15.8372414,14.5474667 L15.8201379,0.0289 Z M14.7056552,13.3920333 L1.13213793,13.3920333 L1.13213793,4.09643333 L14.7067586,4.09643333 L14.7067586,13.3920333 L14.7056552,13.3920333 Z" id="Shape" fill-rule="nonzero"></path>
+            <rect id="Rectangle" x="5" y="5" width="1.78262069" height="1.61613333"></rect>
+            <rect id="Rectangle" x="9" y="5" width="1.78427586" height="1.61613333"></rect>
+            <rect id="Rectangle" x="12" y="5" width="1.78262069" height="1.61613333"></rect>
+            <rect id="Rectangle" x="5" y="8" width="1.78262069" height="1.615"></rect>
+            <rect id="Rectangle" x="9" y="8" width="1.78427586" height="1.615"></rect>
+            <rect id="Rectangle" x="12" y="8" width="1.78262069" height="1.615"></rect>
+            <rect id="Rectangle" x="6" y="11" width="1.78262069" height="1.615"></rect>
+            <rect id="Rectangle" x="2" y="8" width="1.78151724" height="1.615"></rect>
+            <rect id="Rectangle" x="2" y="11" width="1.78151724" height="1.615"></rect>
+            <rect id="Rectangle" x="9" y="11" width="1.78427586" height="1.615"></rect>
+            <rect id="Rectangle" x="12" y="11" width="1.78262069" height="1.615"></rect>
+        </g>
+    </g>
+</svg>

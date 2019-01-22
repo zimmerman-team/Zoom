@@ -1,69 +1,78 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { Select, CheckBox } from 'grommet';
-import {
-  DialogHeading,
-  ZoomButton,
-  SimpleText,
-  aidsFondsWhite,
-  zoomFontFamOne,
-  zoomFontFamTwo,
-  aidsFondsRed,
-  aidsFondsBlue,
-  zoomGreyZero,
-} from 'components/theme/ThemeSheet';
+import { Tooltip } from 'react-tippy';
+import { grommet } from 'grommet/themes';
+import { deepMerge } from 'grommet/utils';
+import SelectHeader from 'components/Select/components/SelectHeader/SelectHeader';
+import ResetIcon from 'assets/icons/icon_reset.svg';
+import {ComponentBase, DropDownItem, ResetContainer, ToolTipInsider} from 'components/Select/ZoomSelect.styles';
+import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 
-const ComponentBase = styled(Select)`
-  border-radius: 0;
-  font-family: ${zoomFontFamOne};
-  font-weight: normal;
-  font-size: 14px;
-  //background-color: ${zoomGreyZero};
-  color: ${aidsFondsRed};
-  ::-webkit-input-placeholder {
-    color: ${aidsFondsRed};
-  }
-`;
-
-const DropDownItem = styled.div`
-  padding: 5px;
-`;
 
 const propTypes = {
   data: PropTypes.array,
   placeHolder: PropTypes.string,
+  reset: PropTypes.func,
 };
 const defaultProps = {
   placeHolder: 'Has no indicators',
+  reset: undefined,
 };
 
+// basically a theme to remove the arrow and add custom arrows to this
+const removeArrowTheme = deepMerge(grommet, {
+  select: {
+    icons:{
+      down: 'div',
+    },
+}
+});
+
 const ZoomSelect = props => {
+
   const dropDownItem = item => {
     if (props.multiple)
       return (
-        <CheckBox
-          key={item}
-          checked={props.arraySelected.indexOf(item.value) !== -1}
-          label={item.label}
-          onChange={() => props.selectVal(item)}
-        />
+        <DropDownItem>
+          <CheckBox
+            key={item}
+            checked={props.arraySelected.indexOf(item.value) !== -1}
+            label={item.label}
+            onChange={() => props.selectVal(item)}
+          />
+        </DropDownItem>
       );
     return <DropDownItem>{item.label}</DropDownItem>;
   };
 
   return (
-    <ComponentBase
-      closeOnChange={!props.multiple}
-      multiple={props.multiple}
-      placeholder={props.placeHolder}
-      children={dropDownItem}
-      options={props.data}
-      plain
-      value={props.valueSelected}
-      onChange={props.multiple ? null : props.selectVal}
-    />
+    <ComponentBase>
+      <Select
+        plain
+        theme={removeArrowTheme}
+        closeOnChange={!props.multiple}
+        multiple={props.multiple}
+        placeholder={props.placeHolder}
+        children={dropDownItem}
+        options={props.data}
+        valueLabel={<SelectHeader
+          label={props.valueSelected ? props.valueSelected : props.placeHolder}/>}
+        onChange={props.multiple ? null : props.selectVal}
+      />
+      {props.reset &&
+        <ResetContainer onClick={props.reset} >
+          <Tooltip
+            html={(<SimpleToolTip title='Reset'/>)}
+            position='top-start'
+            trigger='mouseenter'
+          >
+            <ResetIcon />
+          </Tooltip>
+        </ResetContainer>
+      }
+    </ComponentBase>
   );
 };
 

@@ -6,7 +6,7 @@ import PageLoader from 'modules/common/pageloader/PageLoader';
 import ThemeSheet from 'components/theme/ThemeSheet';
 import DataExplorePanel from 'components/DataExplorePane/DataExplorePanel';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
-import Stepper from 'components/stepper/Stepper';
+import DataMapperModule from 'modules/datamapper/DataMapperModule';
 // Modules regular import
 /*import HomeModule from 'modules/home/HomeModule';
 import IatiDetail from 'modules/IATI_Detail/IatiDetail';
@@ -59,7 +59,7 @@ const Routes = props => {
             render={() => <IatiDetailMediator />}
           />
           <Route path="/about" render={() => <About />} />
-          <Route path="/datamapper" render={() => <Stepper />} />
+          <Route path="/mapper" render={() => <DataMapperModule />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
           <Route exact path="/component" render={() => <DataExplorePanel />} />
         </Switch>

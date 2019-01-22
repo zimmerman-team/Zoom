@@ -110,10 +110,12 @@ export class LoginForm extends React.Component {
     let headerText = auth0Client.isAuthenticated()
       ? `Welcome ${auth0Client.getProfile().nickname}`
       : 'Sign in registered users';
-    headerText =
-      this.state.view === 'login'
-        ? 'Sign in registered users'
-        : 'Forgot password';
+    if (!auth0Client.isAuthenticated()) {
+      headerText =
+        this.state.view === 'login'
+          ? 'Sign in registered users'
+          : 'Forgot password';
+    }
     return (
       <ComponentBase onSubmit={this.onSubmit}>
         <LoginHeader>

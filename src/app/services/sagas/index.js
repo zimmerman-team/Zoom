@@ -13,6 +13,60 @@ export function* uploadRequest(action) {
   }
 }
 
+export function* validateRequest(action) {
+  try {
+    const response = yield call(api.validateRequest, action.values);
+    yield put(actions.validateSuccess(response));
+  } catch (error) {
+    yield put(actions.validateFailed(error));
+  }
+}
+
+export function* getColumnsRequest(action) {
+  try {
+    const response = yield call(api.errorCorrectionRequest, action.values);
+    yield put(actions.getColumnsSuccess(response));
+  } catch (error) {
+    yield put(actions.getColumnsFailed(error));
+  }
+}
+
+export function* getFileErrorsRequest(action) {
+  try {
+    const response = yield call(api.errorCorrectionRequest, action.values);
+    yield put(actions.getFileErrorsSuccess(response));
+  } catch (error) {
+    yield put(actions.getFileErrorsFailed(error));
+  }
+}
+
+export function* errorCorrectionSaveRequest(action) {
+  try {
+    const response = yield call(api.errorCorrectionRequest, action.values);
+    yield put(actions.errorCorrectionSaveSuccess(response));
+  } catch (error) {
+    yield put(actions.errorCorrectionSaveFailed(error));
+  }
+}
+
+export function* errorCorrectionDeleteRowRequest(action) {
+  try {
+    const response = yield call(api.errorCorrectionRequest, action.values);
+    yield put(actions.errorCorrectionDeleteRowSuccess(response));
+  } catch (error) {
+    yield put(actions.errorCorrectionDeleteRowFailed(error));
+  }
+}
+
+export function* manualMapDataRequest(action) {
+  try {
+    const response = yield call(api.manualMapDataRequest, action.values);
+    yield put(actions.manualMapDataSuccess(response));
+  } catch (error) {
+    yield put(actions.manualMapDataFailed(error));
+  }
+}
+
 export function* geoLocationRequest(action) {
   yield put(mutationActions.geoLocationDone(action.data));
 }
@@ -56,6 +110,15 @@ function* sagas() {
   yield [
     takeLatest('COUNTRY_ACTIVITIES_REQUEST', countryActivitiesRequest),
     takeLatest('UPLOAD_REQUEST', uploadRequest),
+    takeLatest('VALIDATE_REQUEST', validateRequest),
+    takeLatest('GET_COLUMNS_REQUEST', getColumnsRequest),
+    takeLatest('ERROR_CORRECTION_SAVE_REQUEST', errorCorrectionSaveRequest),
+    takeLatest(
+      'ERROR_CORRECTION_DELETE_ROW_REQUEST',
+      errorCorrectionDeleteRowRequest,
+    ),
+    takeLatest('GET_FILE_ERRORS', getFileErrorsRequest),
+    takeLatest('MANUAL_MAP_DATA_REQUEST', manualMapDataRequest),
     takeLatest('GEOLOCATION_REQUEST', geoLocationRequest),
     takeLatest('FILE_SOURCE_REQUEST', fileSourceRequest),
     takeLatest('FILE_REQUEST', fileRequest),

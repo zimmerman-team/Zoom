@@ -6,19 +6,18 @@ function handleResponse(response) {
   return response.json().then(result => {
     if (response.ok) {
       return result;
-    } else {
-      const error = {
-        status: response.status,
-        statusText: response.statusText,
-        result: result,
-      };
-      throw error;
     }
+    const error = {
+      status: response.status,
+      statusText: response.statusText,
+      result,
+    };
+    throw error;
   });
 }
 
 function handleRequest(url, values = null, method = 'post') {
-  let request = {
+  const request = {
     method: method !== 'upload' ? method : 'post',
   };
   if (values) {
@@ -39,6 +38,27 @@ export function uploadRequest(values) {
     `${process.env.REACT_APP_BACKEND_HOST}/api/metadata/upload/`,
     values,
     'upload',
+  );
+}
+
+export function validateRequest(values) {
+  return handleRequest(
+    `${process.env.REACT_APP_BACKEND_HOST}/api/validate/`,
+    values,
+  );
+}
+
+export function errorCorrectionRequest(values) {
+  return handleRequest(
+    `${process.env.REACT_APP_BACKEND_HOST}/api/error-correction/`,
+    values,
+  );
+}
+
+export function manualMapDataRequest(values) {
+  return handleRequest(
+    `${process.env.REACT_APP_BACKEND_HOST}/api/manual-mapping/get_data/`,
+    values,
   );
 }
 

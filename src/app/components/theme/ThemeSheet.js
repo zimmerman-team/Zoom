@@ -22,6 +22,7 @@ export const chartColorThree = '#CDE9EE';
 export const zoomGreyZero = '#efefef';
 export const zoomGreyOne = '#818181';
 export const zoomGreyTwo = '#505050';
+export const zoomGreyThree = '#a1a1a1';
 export const zoomBlack = '#000000';
 export const zoomFontFamOne = 'FFMarkProAF-Bold';
 export const zoomFontFamTwo = 'FFMarkProAF-Book';

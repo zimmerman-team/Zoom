@@ -23,6 +23,9 @@ const HomeModuleMediator = lazy(() =>
 const IatiDetailMediator = lazy(() =>
   import('mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator'),
 );
+const AddUserMediator = lazy(() =>
+  import('mediators/ModuleMediators/AddUserMediator/AddUserMediator'),
+);
 
 const About = lazy(() => import('modules/about/About'));
 
@@ -58,6 +61,7 @@ const Routes = props => {
             path="/iati-activity/:activity_id"
             render={() => <IatiDetailMediator />}
           />
+          <Route path="/add-user" render={() => <AddUserMediator />} />
           <Route path="/about" render={() => <About />} />
           <Route path="/mapper" render={() => <DataMapperModule />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />

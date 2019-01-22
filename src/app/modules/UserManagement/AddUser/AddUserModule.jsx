@@ -11,7 +11,7 @@ import {
 } from 'modules/UserManagement/AddUser/AddUserModule.styles';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';
-import ZoomSelect from 'components/Select/ZoomSelect';
+import FormSelect from 'components/FormSelect/FormSelect';
 import { Box } from 'grommet';
 import userManagementMockData from '__mocks__/userManagementMock';
 
@@ -99,7 +99,7 @@ const AddUserModule = props => {
         <Box direction="row-responsive">
           <DropDown>
             <DropDownLabel>User role</DropDownLabel>
-            <ZoomSelect
+            <FormSelect
               data={props.roleOptions}
               placeHolder=""
               selectVal={props.changeUserRole}
@@ -108,7 +108,7 @@ const AddUserModule = props => {
           </DropDown>
           <DropDown>
             <DropDownLabel>Organisation</DropDownLabel>
-            <ZoomSelect
+            <FormSelect
               data={props.orgOptions}
               placeHolder=""
               selectVal={props.changeOrganisation}

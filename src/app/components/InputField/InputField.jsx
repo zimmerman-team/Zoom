@@ -1,10 +1,14 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 /* components */
-import { Grommet, FormField, TextInput } from 'grommet';
-import { ZoomTheme } from 'styles/ZoomTheme';
+import { FormField, TextInput } from 'grommet';
+
+const Label = styled.span`
+  margin-left: -12px;
+`;
 
 const propTypes = {
   label: PropTypes.string,
@@ -34,22 +38,20 @@ const defaultProps = {
 
 const InputField = props => {
   return (
-    <Grommet theme={ZoomTheme}>
-      <FormField
-        label={props.label}
-        htmlFor={props.id}
-        name={props.name}
-        required={props.required}
-        validate={props.validate}
-      >
-        <TextInput
-          id={props.id}
-          value={props.value}
-          onChange={props.onChange}
-          type={props.type}
-        />
-      </FormField>
-    </Grommet>
+    <FormField
+      label={<Label>{props.label}</Label>}
+      htmlFor={props.id}
+      name={props.name}
+      required={props.required}
+      validate={props.validate}
+    >
+      <TextInput
+        id={props.id}
+        value={props.value}
+        onChange={props.onChange}
+        type={props.type}
+      />
+    </FormField>
   );
 };
 

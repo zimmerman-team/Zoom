@@ -50,6 +50,13 @@ export const ZoomTheme = deepFreeze({
       `,
     },
   },
+  select: {
+    control: {
+      extend: css`
+        border-color: #d1d1d1;
+      `,
+    },
+  },
   formField: {
     border: {
       color: '#9b9b9b',
@@ -64,6 +71,7 @@ export const ZoomTheme = deepFreeze({
     },
     label: {
       color: '#9b9b9b',
+      size: '15px',
     },
   },
   textInput: {

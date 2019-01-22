@@ -10,6 +10,9 @@ import Routes from './Routes';
 import AppBar from 'components/navigation/AppBar/AppBar';
 import SideBar from 'components/navigation/SideBar/SideBar';
 
+import { Grommet } from 'grommet';
+import { ZoomTheme } from 'styles/ZoomTheme';
+
 function fetchQuery(operation, variables) {
   return fetch(`${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`, {
     method: 'POST',
@@ -49,41 +52,43 @@ class App extends React.Component {
 
   render() {
     return (
-      <QueryRenderer
-        environment={modernEnvironment}
-        query={graphql`
-          query AppQuery {
-            ...HomeModuleMediator_indicatorAggregations
-            ...CountryDetailMediator_indicatorAggregations
-            ...ExplorePanelMediator_dropDownData
-          }
-        `}
-        variables={{}}
-        render={({ error, props }) => {
-          if (props) {
-            return (
-              <Router>
-                <React.Fragment>
-                  <AppBar
-                    toggleSideBar={() =>
-                      this.setState({ showSidebar: !this.state.showSidebar })
-                    }
-                  />
-                  <SideBar
-                    open={this.state.showSidebar}
-                    toggleSideBar={() =>
-                      this.setState({ showSidebar: !this.state.showSidebar })
-                    }
-                  />
-                  <Routes {...props} />
-                </React.Fragment>
-              </Router>
-            );
-          } else {
-            return <div>Loading - 0</div>;
-          }
-        }}
-      />
+      <Grommet theme={ZoomTheme}>
+        <QueryRenderer
+          environment={modernEnvironment}
+          query={graphql`
+            query AppQuery {
+              ...HomeModuleMediator_indicatorAggregations
+              ...CountryDetailMediator_indicatorAggregations
+              ...ExplorePanelMediator_dropDownData
+            }
+          `}
+          variables={{}}
+          render={({ error, props }) => {
+            if (props) {
+              return (
+                <Router>
+                  <React.Fragment>
+                    <AppBar
+                      toggleSideBar={() =>
+                        this.setState({ showSidebar: !this.state.showSidebar })
+                      }
+                    />
+                    <SideBar
+                      open={this.state.showSidebar}
+                      toggleSideBar={() =>
+                        this.setState({ showSidebar: !this.state.showSidebar })
+                      }
+                    />
+                    <Routes {...props} />
+                  </React.Fragment>
+                </Router>
+              );
+            } else {
+              return <div>Loading - 0</div>;
+            }
+          }}
+        />
+      </Grommet>
     );
   }
 }

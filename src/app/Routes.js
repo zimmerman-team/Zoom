@@ -1,24 +1,16 @@
-import React, { lazy, Suspense, Component } from 'react';
-import PropTypes from 'prop-types';
-import { Switch, Route, Redirect } from 'react-router-dom';
-
+import React, { lazy, Suspense } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
 // Utils
 import PageLoader from 'modules/common/pageloader/PageLoader';
+// always active
+import ThemeSheet from 'components/theme/ThemeSheet';
+import DataExplorePanel from 'components/DataExplorePane/DataExplorePanel';
+import LoginCallback from 'components/LoginCallback/LoginCallback';
+import Stepper from 'components/stepper/Stepper';
 // Modules regular import
 /*import HomeModule from 'modules/home/HomeModule';
 import IatiDetail from 'modules/IATI_Detail/IatiDetail';
 import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';*/
-
-// always active
-import AppBar from 'components/navigation/AppBar/AppBar';
-import SideBar from 'components/navigation/SideBar/SideBar';
-import Projects from 'modules/countrydetail/fragments/Projects/Projects';
-import HumanRights from 'modules/countrydetail/fragments/HumanRights';
-import TreeMap from 'components/charts/treemap/TreeMap';
-import ThemeSheet from 'components/theme/ThemeSheet';
-import DataExplorePanel from 'components/DataExplorePane/DataExplorePanel';
-import LoginCallback from 'components/LoginCallback/LoginCallback';
-import DataMapperModule from 'modules/datamapper/DataMapperModule';
 // import HomeModuleMediator from 'mediators/ModuleMediators/HomeModuleMediator';
 
 // Modules lazy load
@@ -67,7 +59,7 @@ const Routes = props => {
             render={() => <IatiDetailMediator />}
           />
           <Route path="/about" render={() => <About />} />
-          <Route path="/datamapper" render={() => <DataMapperModule />} />
+          <Route path="/datamapper" render={() => <Stepper />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
           <Route exact path="/component" render={() => <DataExplorePanel />} />
         </Switch>

@@ -1,67 +1,61 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { Box } from 'grommet';
 
-import { aidsFondsWhite, zoomGreyZero } from 'components/theme/ThemeSheet';
+import {
+  ComponentBase,
+  StepCompleteIcon,
+  StepIcon,
+  StepLabel,
+  StepNumber,
+  StepSpacer,
+} from 'components/stepper/StepperItem.style';
 
-const ComponentBase = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-const StepLabel = styled.div``;
-const StepIcon = styled.div`
-  border-radius: 50%;
-  background-color: dimgrey;
-  height: 20px;
-  width: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 5px;
-  margin-right: 5px;
-`;
-const StepNumber = styled.span`
-  font-size: 12px;
-  line-height: 1;
-  color: white;
-`;
-
-const StepSpacer = styled.div`
-  height: 2px;
-  width: 75px;
-  background: dimgray;
-`;
+/*TODO: document component*/
 
 const propTypes = {
   stepLabel: PropTypes.string,
-  stepActive: PropTypes.bool,
-  stepDonestepDone: PropTypes.bool,
+  isActive: PropTypes.bool,
+  isDone: PropTypes.bool,
   stepNumber: PropTypes.number,
-  firstStep: PropTypes.bool,
-  lastStep: PropTypes.bool,
+  outerStep: PropTypes.bool,
+  isFirst: PropTypes.bool,
+  isLast: PropTypes.bool,
 };
 const defaultProps = {
   stepLabel: 'empty label',
-  stepActive: false,
+  isActive: false,
   stepNumber: 1,
-  stepDone: false,
-  firstStep: true,
+  isDone: false,
+  outerStep: false,
+  isFirst: false,
+  isLast: false,
 };
 
 const StepItem = props => {
   return (
     <ComponentBase>
       <Box direction="row" align="center">
-        <StepSpacer />
-        <StepIcon>
-          {!props.stepDone && <StepNumber>{props.stepNumber}</StepNumber>}
+        <StepSpacer
+          colores={props.isDone || props.isActive}
+          outer={props.isFirst}
+        />
+        <StepIcon colores={props.isDone || props.isActive}>
+          {props.isDone ? (
+            <StepCompleteIcon />
+          ) : (
+            <StepNumber>{props.stepNumber}</StepNumber>
+          )}
         </StepIcon>
-        <StepSpacer />
+        <StepSpacer
+          colores={props.isDone || props.isActive}
+          outer={props.isLast}
+        />
       </Box>
-      <StepLabel>{props.stepLabel}</StepLabel>
+      <StepLabel colores={props.isDone || props.isActive}>
+        {props.stepLabel}
+      </StepLabel>
     </ComponentBase>
   );
 };

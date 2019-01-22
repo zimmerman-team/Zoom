@@ -1,30 +1,37 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import ZoomSelect from 'components/Select/ZoomSelect';
 
+/* icons */
+import IconRedIndicators from 'assets/icons/icon_red_indicators.svg';
+import IconRedLocation from 'assets/icons/icon_red_location.svg';
+import IconRedPeriod from 'assets/icons/icon_red_period.svg';
+import IconBlueIndicators from 'assets/icons/icon_blue_indicators.svg';
+import IconBlueLocation from 'assets/icons/icon_blue_location.svg';
+import IconBluePeriod from 'assets/icons/icon_blue_period.svg';
+
+/* components */
+import ZoomSelect from 'components/Select/ZoomSelect';
+import AccordionSelection from 'components/DataExplorePane/components/AccordionSelection/AccordionSelection';
+import YearSelector from 'components/YearSelector/YearSelector';
+import ResetIcon from 'assets/icons/icon_reset.svg';
+
+/* styles */
 import {
   ComponentBase,
-  Divider,
-  ExplorerHeader,
+  ResetContainer,
   FilterContainer,
-  FilterLabel,
-  FilterTitle,
+  PanelAccordion,
+  AccordionSection
 } from './DataExplorerPane.style';
+import SimpleToolTip from "components/ToolTips/SimpleToolTip/SimpleToolTip";
+import {Tooltip} from "react-tippy";
 
 const propTypes = {
-  selectedStartYear: PropTypes.string,
-  selectedEndYear: PropTypes.string,
   selectedInd2: PropTypes.string,
   selectedInd1: PropTypes.string,
   regionAmount: PropTypes.number,
   indNames: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.string,
-    }),
-  ),
-  years: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
       value: PropTypes.string,
@@ -68,22 +75,20 @@ const propTypes = {
   ),
   selectCountry: PropTypes.func,
   selectRegion: PropTypes.func,
-  selectStartYear: PropTypes.func,
-  selectEndYear: PropTypes.func,
+  selectYear: PropTypes.func,
   selectInd1: PropTypes.func,
   selectInd2: PropTypes.func,
   selectedSubInd1: PropTypes.string,
   selectedSubInd2: PropTypes.string,
   selectSubInd1: PropTypes.func,
   selectSubInd2: PropTypes.func,
+  resetAll: PropTypes.func,
 };
 const defaultProps = {
   selectedInd2: undefined,
   selectedInd1: undefined,
-  selectedStartYear: undefined,
-  selectedEndYear: undefined,
+  selectYear: undefined,
   indNames: [],
-  years: [],
   countries: [],
   regions: [],
   subIndicators1: [],
@@ -92,90 +97,139 @@ const defaultProps = {
   selectedRegionVal: [],
   selectCountry: null,
   selectRegion: null,
-  selectStartYear: null,
-  selectEndYear: null,
   selectInd1: null,
   selectInd2: null,
   selectedSubInd1: undefined,
   selectedSubInd2: undefined,
   selectSubInd1: null,
   selectSubInd2: null,
+  resetAll: null,
 };
 
 class DataExplorePane extends React.Component {
+
+  state = {
+    activeIndex: [],
+  };
+
+  renderHeader(label)
+  {
+    let active = false;
+    let icon = '';
+    switch (label) {
+      case 'Geo loaction':
+        // checks if geolocations is active
+        if(this.state.activeIndex.indexOf(0) !== -1)
+        {
+          active=true;
+          icon = <IconBlueLocation />;
+        }
+        else
+          icon = <IconRedLocation />;
+        break;
+      case 'Time period':
+        // checks if time period is active
+        if(this.state.activeIndex.indexOf(1) !== -1)
+        {
+          active=true;
+          icon = <IconBluePeriod />;
+        }
+        else
+          icon = <IconRedPeriod />;
+        break;
+      case 'Indicators':
+        // checks if indicators is active
+        if(this.state.activeIndex.indexOf(2) !== -1)
+        {
+          active=true;
+          icon = <IconBlueIndicators />;
+        }
+        else
+          icon = <IconRedIndicators />;
+        break;
+    }
+
+    return <AccordionSelection icon={icon} label={label} active={active} />;
+  }
+
   render() {
     return (
-      <ComponentBase>
-        <ExplorerHeader>
-          <FilterTitle>Modify chart</FilterTitle>
-        </ExplorerHeader>
-        <Divider />
-        <FilterContainer>
-          <FilterLabel>Location</FilterLabel>
-          <ZoomSelect
-            multiple
-            placeHolder={'Select region (' + this.props.regions.length + ')'}
-            data={this.props.regions}
-            arraySelected={this.props.selectedRegionVal}
-            selectVal={this.props.selectRegion}
-          />
-          <ZoomSelect
-            multiple
-            placeHolder={'Select country (' + this.props.countries.length + ')'}
-            data={this.props.countries}
-            arraySelected={this.props.selectedCountryVal}
-            selectVal={this.props.selectCountry}
-          />
-        </FilterContainer>
-        <FilterContainer>
-          <FilterLabel>Period</FilterLabel>
-          <ZoomSelect
-            placeHolder="Select begin year"
-            data={this.props.years}
-            valueSelected={this.props.selectedStartYear}
-            selectVal={this.props.selectStartYear}
-          />
-          <ZoomSelect
-            placeHolder="Select end year"
-            data={this.props.years}
-            valueSelected={this.props.selectedEndYear}
-            selectVal={this.props.selectEndYear}
-          />
-        </FilterContainer>
-        <FilterContainer>
-          <FilterLabel>Indicators</FilterLabel>
-          <ZoomSelect
-            placeHolder={
-              'Select indicator (' + this.props.indNames.length + ')'
-            }
-            data={this.props.indNames}
-            valueSelected={this.props.selectedInd1}
-            selectVal={this.props.selectInd1}
-          />
-          <ZoomSelect
-            placeHolder="Select sub indicator"
-            data={this.props.subIndicators1}
-            valueSelected={this.props.selectedSubInd1}
-            selectVal={this.props.selectSubInd1}
-          />
-        </FilterContainer>
-        <Divider />
-        <FilterContainer>
-          <ZoomSelect
-            placeHolder={
-              'Select indicator (' + this.props.indNames.length + ')'
-            }
-            data={this.props.indNames}
-            valueSelected={this.props.selectedInd2}
-            selectVal={this.props.selectInd2}
-          />
-          <ZoomSelect
-            placeHolder="Select sub indicator"
-            data={this.props.subIndicators2}
-            valueSelected={this.props.selectedSubInd2}
-            selectVal={this.props.selectSubInd2}
-          />
-        </FilterContainer>
+      <ComponentBase >
+        <PanelAccordion animate multiple
+                        onActive={newActiveIndex =>
+                        this.setState({ activeIndex: newActiveIndex })
+        }>
+          <AccordionSection header={this.renderHeader('Geo loaction')}>
+            <FilterContainer>
+              <ZoomSelect
+                multiple
+                placeHolder={'Select region (' + this.props.regions.length + ')'}
+                data={this.props.regions}
+                arraySelected={this.props.selectedRegionVal}
+                selectVal={this.props.selectRegion}
+                reset={() => this.props.selectRegion('reset')}
+              />
+              <ZoomSelect
+                reset={() => this.props.selectCountry('reset')}
+                multiple
+                placeHolder={'Select country (' + this.props.countries.length + ')'}
+                data={this.props.countries}
+                arraySelected={this.props.selectedCountryVal}
+                selectVal={this.props.selectCountry}
+              />
+            </FilterContainer>
+          </AccordionSection>
+          <AccordionSection header={this.renderHeader('Time period')}>
+            <FilterContainer>
+              <YearSelector selectYear={this.props.selectYear} />
+            </FilterContainer>
+          </AccordionSection>
+          <AccordionSection header={this.renderHeader('Indicators')}>
+            <FilterContainer>
+              <ZoomSelect
+                reset={() => this.props.selectInd1({ value: { value: undefined }})}
+                placeHolder={
+                  'Select indicator (' + this.props.indNames.length + ')'
+                }
+                data={this.props.indNames}
+                valueSelected={this.props.selectedInd1}
+                selectVal={this.props.selectInd1}
+              />
+              <ZoomSelect
+                placeHolder='Select sub indicator'
+                data={this.props.subIndicators1}
+                valueSelected={this.props.selectedSubInd1}
+                selectVal={this.props.selectSubInd1}
+              />
+            </FilterContainer>
+            <FilterContainer>
+              <ZoomSelect
+                reset={() => this.props.selectInd2({ value: { value: undefined }})}
+                placeHolder={
+                  'Select indicator (' + this.props.indNames.length + ')'
+                }
+                data={this.props.indNames}
+                valueSelected={this.props.selectedInd2}
+                selectVal={this.props.selectInd2}
+              />
+              <ZoomSelect
+                placeHolder='Select sub indicator'
+                data={this.props.subIndicators2}
+                valueSelected={this.props.selectedSubInd2}
+                selectVal={this.props.selectSubInd2}
+              />
+            </FilterContainer>
+          </AccordionSection>
+        </PanelAccordion>
+        <ResetContainer onClick={() => this.props.resetAll()}>
+          <Tooltip
+            html={(<SimpleToolTip title='Reset'/>)}
+            position='top'
+            trigger='mouseenter'
+          >
+            <ResetIcon />
+          </Tooltip>
+        </ResetContainer>
       </ComponentBase>
     );
   }

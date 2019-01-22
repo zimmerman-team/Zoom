@@ -1,62 +1,51 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Grommet, Stack, Box, Text, RangeSelector } from 'grommet';
-import { grommet } from 'grommet/themes';
 
-const ComponentBase = styled.div``;
+/* styles */
+import { YearLabel, ComponentBase, RangeContainer, CustomHandle } from 'components/YearSelector/YearSelector.styles';
 
 const propTypes = {
-  data: PropTypes.array,
-  direction: PropTypes.string,
 };
+
 const defaultProps = {
-  data: [],
-  direction: 'horizontal',
 };
+
+// As discussed with Siem default year period selected should be
+// current year and 15 years before
+const now = new Date();
+const currentYear = now.getFullYear();
+const yearBefore = currentYear - 15;
 
 class YearSelector extends React.Component {
-  state = { values: [15, 17] };
 
-  onChange = values => this.setState({ values });
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      value: {min: 2, max: 10},
+    };
+  }
+
+  lastTwoDigits(value){
+    const string = value.toString();
+    const numbArray = string.split('');
+    return numbArray.length > 1 ? numbArray[numbArray.length-2].concat(numbArray[numbArray.length-1]) : 'N/A';
+  }
+
+  renderHandle(value) {
+    return <CustomHandle style={{ left: `${value.offset}%` }}
+                         key={value.index}>{this.lastTwoDigits(value.value)}</CustomHandle>;
+  };
 
   render() {
     return (
       <ComponentBase>
-        <Grommet theme={grommet}>
-          <Box align="center" pad="large">
-            <Stack>
-              <Box
-                direction={
-                  this.props.direction === 'vertical' ? 'column' : 'row'
-                }
-                justify="between"
-              >
-                {[14, 15, 16, 17, 18, 19].map(value => (
-                  <Box
-                    key={value}
-                    width="xxsmall"
-                    height="xxsmall"
-                    align="center"
-                    pad="small"
-                    border={false}
-                  >
-                    <Text style={{ fontFamily: 'monospace' }}>{value}</Text>
-                  </Box>
-                ))}
-              </Box>
-              <RangeSelector
-                direction={this.props.direction}
-                min={10}
-                max={20}
-                size="full"
-                values={this.state.values}
-                onChange={this.onChange}
-              />
-            </Stack>
-          </Box>
-        </Grommet>
+        <YearLabel> 1968 </YearLabel>
+        <RangeContainer min={1968} max={2019} defaultValue={[yearBefore, currentYear]}
+                        handle={(val) => this.renderHandle(val)}
+                        onAfterChange={(val) => this.props.selectYear(val)}/>
+        <YearLabel> 2019 </YearLabel>
       </ComponentBase>
     );
   }

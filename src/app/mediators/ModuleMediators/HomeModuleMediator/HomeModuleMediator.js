@@ -9,7 +9,6 @@ import {
 } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
 import { updatePercentiles } from 'components/geo/GeoMap/components/utils';
 import HomeModule from 'modules/home/HomeModule';
-import yearMock from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator.mock';
 import PropTypes from 'prop-types';
 
 const propTypes = {
@@ -88,8 +87,7 @@ class HomeModuleMediator extends Component {
       indicators: [],
       selectedInd1: undefined,
       selectedInd2: undefined,
-      selectedStartYear: undefined,
-      selectedEndYear: undefined,
+      yearPeriod: [],
       subIndicators1: [],
       subIndicators2: [],
       selectedCountryVal: [],
@@ -102,11 +100,11 @@ class HomeModuleMediator extends Component {
     this.selectInd2 = this.selectInd2.bind(this);
     this.selectSubInd1 = this.selectSubInd1.bind(this);
     this.selectSubInd2 = this.selectSubInd2.bind(this);
-    this.selectStartYear = this.selectStartYear.bind(this);
-    this.selectEndYear = this.selectEndYear.bind(this);
+    this.selectYear = this.selectYear.bind(this);
     this.refetch = this.refetch.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
     this.selectRegion = this.selectRegion.bind(this);
+    this.resetAll = this.resetAll.bind(this);
   }
 
   componentDidMount() {
@@ -177,8 +175,8 @@ class HomeModuleMediator extends Component {
         type: 'layer',
         data: countryLayerData,
         legendName: `${this.state.selectedInd1} ${this.state.selectedSubInd1} ${
-          this.state.selectedStartYear
-        } -  ${this.state.selectedEndYear}`,
+          this.state.yearPeriod[0]
+        } -  ${this.state.yearPeriod[1]}`,
       });
     }
 
@@ -198,28 +196,12 @@ class HomeModuleMediator extends Component {
   refetch(
     ind1 = this.state.selectedInd1,
     ind2 = this.state.selectedInd2,
-    startYear = this.state.selectedStartYear,
-    endYear = this.state.selectedEndYear,
+    datePeriod = this.state.yearPeriod,
     subInd1 = this.state.selectedSubInd1,
     subInd2 = this.state.selectedSubInd2,
     countriesCodes = this.state.selectedCountryVal,
     regionCountriesCodes = this.state.selectedRegionVal,
   ) {
-    // we forming the parameter for year array
-    const datePeriod = [];
-
-    if (startYear && endYear)
-      yearMock.years.forEach(year => {
-        if (
-          parseInt(year.value, 10) >= parseInt(startYear, 10) &&
-          parseInt(year.value, 10) <= parseInt(endYear, 10)
-        ) {
-          datePeriod.push(year.value);
-        }
-      });
-
-    if (datePeriod.length === 0) datePeriod.push('null');
-
     // We forming the param for countries from the selected countries of a region
     // and single selected countries
     const countriesISO2 = formatCountryParam(
@@ -273,40 +255,65 @@ class HomeModuleMediator extends Component {
     this.setState({ selectedSubInd2: val.value.value }, this.refetch);
   }
 
-  selectStartYear(val) {
-    this.setState({ selectedStartYear: val.value.value }, this.refetch);
-  }
-
-  selectEndYear(val) {
-    this.setState({ selectedEndYear: val.value.value }, this.refetch);
+  selectYear(val) {
+    this.setState(
+      { yearPeriod: [val[0].toString(), val[1].toString()] },
+      this.refetch,
+    );
   }
 
   selectCountry(item) {
-    const selectedCountryVal = [...this.state.selectedCountryVal];
+    let selectedCountryVal = [];
 
-    const countryIndex = selectedCountryVal.indexOf(item.value);
+    if (item !== 'reset') {
+      selectedCountryVal = [...this.state.selectedCountryVal];
 
-    if (countryIndex === -1)
-      // so if it doesn't exist we add it
-      selectedCountryVal.push(item.value);
-    // if it does exist we remove it
-    else selectedCountryVal.splice(countryIndex, 1);
+      const countryIndex = selectedCountryVal.indexOf(item.value);
+
+      if (countryIndex === -1)
+        // so if it doesn't exist we add it
+        selectedCountryVal.push(item.value);
+      // if it does exist we remove it
+      else selectedCountryVal.splice(countryIndex, 1);
+    }
 
     this.setState({ selectedCountryVal }, this.refetch);
   }
 
   selectRegion(item) {
-    const selectedRegionVal = [...this.state.selectedRegionVal];
+    let selectedRegionVal = [];
 
-    const regionIndex = selectedRegionVal.indexOf(item.value);
+    if (item !== 'reset') {
+      selectedRegionVal = [...this.state.selectedRegionVal];
 
-    if (regionIndex === -1)
-      // so if it doesn't exist we add it
-      selectedRegionVal.push(item.value);
-    // if it does exist we remove it
-    else selectedRegionVal.splice(regionIndex, 1);
+      const regionIndex = selectedRegionVal.indexOf(item.value);
+
+      if (regionIndex === -1)
+        // so if it doesn't exist we add it
+        selectedRegionVal.push(item.value);
+      // if it does exist we remove it
+      else selectedRegionVal.splice(regionIndex, 1);
+    }
 
     this.setState({ selectedRegionVal }, this.refetch);
+  }
+
+  resetAll() {
+    this.setState(
+      {
+        indicators: [],
+        selectedInd1: undefined,
+        selectedInd2: undefined,
+        yearPeriod: [],
+        subIndicators1: [],
+        subIndicators2: [],
+        selectedCountryVal: [],
+        selectedSubInd1: undefined,
+        selectedSubInd2: undefined,
+        selectedRegionVal: [],
+      },
+      this.refetch,
+    );
   }
 
   render() {
@@ -316,22 +323,20 @@ class HomeModuleMediator extends Component {
         dropDownData={this.props.dropDownData}
         selectInd1={this.selectInd1}
         selectInd2={this.selectInd2}
-        selectStartYear={this.selectStartYear}
-        selectEndYear={this.selectEndYear}
+        selectYear={this.selectYear}
         selectSubInd1={this.selectSubInd1}
         selectSubInd2={this.selectSubInd2}
         selectedInd1={this.state.selectedInd1}
         selectedInd2={this.state.selectedInd2}
         selectedSubInd1={this.state.selectedSubInd1}
         selectedSubInd2={this.state.selectedSubInd2}
-        selectedStartYear={this.state.selectedStartYear}
-        selectedEndYear={this.state.selectedEndYear}
         subIndicators1={this.state.subIndicators1}
         subIndicators2={this.state.subIndicators2}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.state.selectedCountryVal}
         selectedRegionVal={this.state.selectedRegionVal}
         selectRegion={this.selectRegion}
+        resetAll={this.resetAll}
       />
     );
   }

@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { graphql, QueryRenderer } from 'react-relay';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
@@ -9,6 +8,8 @@ import auth0Client from 'auth/Auth';
 import Routes from './Routes';
 import AppBar from 'components/navigation/AppBar/AppBar';
 import SideBar from 'components/navigation/SideBar/SideBar';
+import { Grommet } from 'grommet';
+import { zoom } from 'theme/Zoom';
 
 function fetchQuery(operation, variables) {
   return fetch(`${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`, {
@@ -63,7 +64,7 @@ class App extends React.Component {
           if (props) {
             return (
               <Router>
-                <React.Fragment>
+                <Grommet theme={zoom}>
                   <AppBar
                     toggleSideBar={() =>
                       this.setState({ showSidebar: !this.state.showSidebar })
@@ -76,7 +77,7 @@ class App extends React.Component {
                     }
                   />
                   <Routes {...props} />
-                </React.Fragment>
+                </Grommet>
               </Router>
             );
           } else {

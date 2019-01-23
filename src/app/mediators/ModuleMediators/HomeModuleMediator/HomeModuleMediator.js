@@ -6,6 +6,7 @@ import {
   formatCountryCenterData,
   formatCountryLayerData,
   formatCountryParam,
+  formatYearParam,
 } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
 import { updatePercentiles } from 'components/geo/GeoMap/components/utils';
 import HomeModule from 'modules/home/HomeModule';
@@ -78,6 +79,12 @@ const defaultProps = {
   indicatorAggregations: {},
 };
 
+// As discussed with Siem default year period selected should be
+// current year and 15 years before
+const now = new Date();
+const currentYear = now.getFullYear();
+const yearBefore = currentYear - 15;
+
 class HomeModuleMediator extends Component {
   constructor(props) {
     super(props);
@@ -87,7 +94,7 @@ class HomeModuleMediator extends Component {
       indicators: [],
       selectedInd1: undefined,
       selectedInd2: undefined,
-      yearPeriod: [],
+      yearPeriod: formatYearParam([yearBefore, currentYear]),
       subIndicators1: [],
       subIndicators2: [],
       selectedCountryVal: [],
@@ -176,7 +183,7 @@ class HomeModuleMediator extends Component {
         data: countryLayerData,
         legendName: `${this.state.selectedInd1} ${this.state.selectedSubInd1} ${
           this.state.yearPeriod[0]
-        } -  ${this.state.yearPeriod[1]}`,
+        } -  ${this.state.yearPeriod[this.state.yearPeriod.length - 1]}`,
       });
     }
 
@@ -185,8 +192,8 @@ class HomeModuleMediator extends Component {
         type: 'circle',
         data: countryCircleData,
         legendName: `${this.state.selectedInd2} ${this.state.selectedSubInd2} ${
-          this.state.selectedStartYear
-        } -  ${this.state.selectedEndYear}`,
+          this.state.yearPeriod[0]
+        } -  ${this.state.yearPeriod[this.state.yearPeriod.length - 1]}`,
       });
     }
 
@@ -256,10 +263,7 @@ class HomeModuleMediator extends Component {
   }
 
   selectYear(val) {
-    this.setState(
-      { yearPeriod: [val[0].toString(), val[1].toString()] },
-      this.refetch,
-    );
+    this.setState({ yearPeriod: formatYearParam(val) }, this.refetch);
   }
 
   selectCountry(item) {
@@ -317,6 +321,7 @@ class HomeModuleMediator extends Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <HomeModule
         indicators={this.state.indicators}
@@ -371,6 +376,7 @@ export default createRefetchContainer(
         indicatorName
         geolocationIso2
         geolocationTag
+        geolocationPolygons
         date
         value
       }
@@ -386,6 +392,7 @@ export default createRefetchContainer(
         indicatorName
         geolocationIso2
         geolocationTag
+        geolocationCenterLongLat
         date
         value
       }

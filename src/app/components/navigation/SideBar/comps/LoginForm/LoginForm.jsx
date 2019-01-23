@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
-import auth0Client from 'auth/Auth';
 
 /* actions */
 import * as syncActions from 'services/actions/sync';
@@ -84,7 +83,7 @@ export class LoginForm extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    auth0Client.signIn(
+    this.props.auth0Client.signIn(
       this.state.username,
       this.state.password,
       this.setStatusMessage,
@@ -107,10 +106,10 @@ export class LoginForm extends React.Component {
       borderStyle: this.state.error ? 'solid' : 'none',
       borderColor: this.state.error ? aidsFondsRed : 'none',
     };
-    let headerText = auth0Client.isAuthenticated()
-      ? `Welcome ${auth0Client.getProfile().nickname}`
+    let headerText = this.props.auth0Client.isAuthenticated()
+      ? `Welcome ${this.props.auth0Client.getProfile().nickname}`
       : 'Sign in registered users';
-    if (!auth0Client.isAuthenticated()) {
+    if (!this.props.auth0Client.isAuthenticated()) {
       headerText =
         this.state.view === 'login'
           ? 'Sign in registered users'
@@ -123,8 +122,10 @@ export class LoginForm extends React.Component {
           <LoginHeaderLabel size="small">{headerText}</LoginHeaderLabel>
         </LoginHeader>
 
-        {auth0Client.isAuthenticated() ? (
-          <FormButton onClick={auth0Client.signOut}>Sign out</FormButton>
+        {this.props.auth0Client.isAuthenticated() ? (
+          <FormButton onClick={this.props.auth0Client.signOut}>
+            Sign out
+          </FormButton>
         ) : (
           <React.Fragment>
             {this.state.view === 'login' && (
@@ -155,6 +156,7 @@ export class LoginForm extends React.Component {
             <ForgetPassword
               view={this.state.view}
               changeView={this.changeView}
+              auth0Client={this.props.auth0Client}
             />
 
             <InfoText size="small">

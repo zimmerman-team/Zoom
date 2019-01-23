@@ -61,7 +61,16 @@ const Routes = props => {
             path="/iati-activity/:activity_id"
             render={() => <IatiDetailMediator />}
           />
-          <Route path="/add-user" render={() => <AddUserMediator />} />
+          <Route
+            path="/add-user"
+            render={() =>
+              props.auth0Client.isAuthenticated() ? (
+                <AddUserMediator />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
           <Route path="/about" render={() => <About />} />
           <Route path="/mapper" render={() => <DataMapperModule />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />

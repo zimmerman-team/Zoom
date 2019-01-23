@@ -82,11 +82,17 @@ class Auth {
     this.profile = authResult.idTokenPayload;
     // set the time that the id token will expire at
     this.expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
+    localStorage.setItem('auth_access_token', authResult.accessToken);
+    localStorage.setItem('auth_id_token', authResult.idToken);
+    localStorage.setItem('auth_expires_at', this.expiresAt);
     // this.getUserGroup();
   }
 
   signOut() {
     // localStorage.removeItem('userGroup');
+    localStorage.removeItem('auth_access_token');
+    localStorage.removeItem('auth_id_token');
+    localStorage.removeItem('auth_expires_at');
     this.auth0.logout({
       returnTo: process.env.REACT_APP_PROJECT_URL,
       clientID: process.env.REACT_APP_CLIENT_ID,
@@ -94,7 +100,8 @@ class Auth {
   }
 
   isAuthenticated() {
-    return new Date().getTime() < this.expiresAt;
+    const expiresAt = JSON.parse(localStorage.getItem('auth_expires_at'));
+    return new Date().getTime() < expiresAt;
   }
 
   signIn(username, password, reduxAction) {
@@ -111,8 +118,8 @@ class Auth {
   silentAuth() {
     return new Promise((resolve, reject) => {
       this.auth0.checkSession({}, (err, authResult) => {
-        if (err) return reject(err);
-        this.setSession(authResult);
+        // if (err) return reject(err);
+        if (!err) this.setSession(authResult);
         resolve();
       });
     });

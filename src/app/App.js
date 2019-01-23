@@ -74,12 +74,13 @@ class App extends React.Component {
                       }
                     />
                     <SideBar
+                      auth0Client={auth0Client}
                       open={this.state.showSidebar}
                       toggleSideBar={() =>
                         this.setState({ showSidebar: !this.state.showSidebar })
                       }
                     />
-                    <Routes {...props} />
+                    <Routes {...props} auth0Client={auth0Client} />
                   </React.Fragment>
                 </Router>
               );

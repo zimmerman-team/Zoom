@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { createGlobalStyle } from 'styled-components';
-import { Box, Button, Grommet, Text, Heading, Grid } from 'grommet';
+import { Box, Button, Grommet, Text, Heading, Grid, DataTable } from 'grommet';
 import { grommet } from 'grommet/themes';
 import { Checkmark, Close } from 'grommet-icons';
 
@@ -28,6 +28,64 @@ export const zoomGreyFour = '#dfdfdf';
 export const zoomBlack = '#000000';
 export const zoomFontFamOne = 'FFMarkProAF-Bold';
 export const zoomFontFamTwo = 'FFMarkProAF-Book';
+
+/* Tables */
+export const colHeadColor = '#9b9b9b';
+
+export const ZoomTable = styled(DataTable)`
+  & th {
+    padding-left: 32px;
+    border: 2px solid ${zoomGreyFour};
+    border-bottom: 0 !important;
+    &:first-child {
+      border-left: 0;
+    }
+    &:last-child {
+      border-right: 0;
+    }
+  }
+
+  & tbody {
+    & tr {
+      border-bottom: 2px solid ${aidsFondsWhite};
+      &:last-child {
+        border-color: ${zoomGreyFour};
+      }
+    }
+    & td {
+      padding: 15px 0 18px 32px;
+      vertical-align: top;
+      border-left: 2px solid ${zoomGreyFour};
+      border-right: 2px solid ${zoomGreyFour};
+      &:first-child {
+        border-left: 0;
+      }
+      &:last-child {
+        border-right: 0;
+      }
+    }
+  }
+
+  & td {
+    background-color: ${zoomGreyZero};
+  }
+`;
+
+export const ColumnHeader = styled.div`
+  color: ${colHeadColor};
+  font-family: ${zoomFontFamOne};
+  font-size: 14px;
+  line-height: 19px;
+`;
+
+export const CellValue = styled.div`
+  color: ${zoomBlack};
+  font-family: ${zoomFontFamOne};
+  font-size: 12px;
+  line-height: 19px;
+`;
+
+/* Tables End */
 
 const headSizeOne = '48px';
 const headSizeTwo = '48px';

@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
-import { json as requestJson } from 'd3-request';
 import isEqual from 'lodash/isEqual';
 import {
   formatCountryCenterData,
   formatCountryLayerData,
   formatCountryParam,
+  formatYearParam,
+  updatePercentiles,
 } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
-import { updatePercentiles } from 'components/geo/GeoMap/components/utils';
 import HomeModule from 'modules/home/HomeModule';
 import PropTypes from 'prop-types';
+import { initialState } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.consts';
 
 const propTypes = {
   indicatorAggregations: PropTypes.shape({
@@ -78,22 +79,18 @@ const defaultProps = {
   indicatorAggregations: {},
 };
 
+// As discussed with Siem default year period selected should be
+// current year and 15 years before
+const now = new Date();
+const currentYear = now.getFullYear();
+const yearBefore = currentYear - 15;
+
 class HomeModuleMediator extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      countryCenters: [],
-      worldMap: [],
-      indicators: [],
-      selectedInd1: undefined,
-      selectedInd2: undefined,
-      yearPeriod: [],
-      subIndicators1: [],
-      subIndicators2: [],
-      selectedCountryVal: [],
-      selectedSubInd1: undefined,
-      selectedSubInd2: undefined,
-      selectedRegionVal: [],
+      yearPeriod: formatYearParam([yearBefore, currentYear]),
+      ...initialState,
     };
 
     this.selectInd1 = this.selectInd1.bind(this);
@@ -105,24 +102,6 @@ class HomeModuleMediator extends Component {
     this.selectCountry = this.selectCountry.bind(this);
     this.selectRegion = this.selectRegion.bind(this);
     this.resetAll = this.resetAll.bind(this);
-  }
-
-  componentDidMount() {
-    requestJson(`static/country_center.json`, (error, countryCenters) => {
-      if (!error) {
-        requestJson(`static/world.json`, (error2, worldMap) => {
-          if (!error2) {
-            this.setState(
-              {
-                countryCenters,
-                worldMap,
-              },
-              this.updateIndicators,
-            );
-          }
-        });
-      }
-    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -166,7 +145,7 @@ class HomeModuleMediator extends Component {
       this.state.countryCenters,
     );
 
-    updatePercentiles(countryLayerData, f => f.properties.indicator.value);
+    updatePercentiles(countryLayerData, f => f.properties.value);
 
     const indicators = [];
 
@@ -176,7 +155,7 @@ class HomeModuleMediator extends Component {
         data: countryLayerData,
         legendName: `${this.state.selectedInd1} ${this.state.selectedSubInd1} ${
           this.state.yearPeriod[0]
-        } -  ${this.state.yearPeriod[1]}`,
+        } -  ${this.state.yearPeriod[this.state.yearPeriod.length - 1]}`,
       });
     }
 
@@ -185,8 +164,8 @@ class HomeModuleMediator extends Component {
         type: 'circle',
         data: countryCircleData,
         legendName: `${this.state.selectedInd2} ${this.state.selectedSubInd2} ${
-          this.state.selectedStartYear
-        } -  ${this.state.selectedEndYear}`,
+          this.state.yearPeriod[0]
+        } -  ${this.state.yearPeriod[this.state.yearPeriod.length - 1]}`,
       });
     }
 
@@ -256,10 +235,7 @@ class HomeModuleMediator extends Component {
   }
 
   selectYear(val) {
-    this.setState(
-      { yearPeriod: [val[0].toString(), val[1].toString()] },
-      this.refetch,
-    );
+    this.setState({ yearPeriod: formatYearParam(val) }, this.refetch);
   }
 
   selectCountry(item) {
@@ -301,16 +277,7 @@ class HomeModuleMediator extends Component {
   resetAll() {
     this.setState(
       {
-        indicators: [],
-        selectedInd1: undefined,
-        selectedInd2: undefined,
-        yearPeriod: [],
-        subIndicators1: [],
-        subIndicators2: [],
-        selectedCountryVal: [],
-        selectedSubInd1: undefined,
-        selectedSubInd2: undefined,
-        selectedRegionVal: [],
+        ...initialState,
       },
       this.refetch,
     );
@@ -337,6 +304,7 @@ class HomeModuleMediator extends Component {
         selectedRegionVal={this.state.selectedRegionVal}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
+        defaultYear={this.state.defaultYear}
       />
     );
   }
@@ -360,7 +328,13 @@ export default createRefetchContainer(
         singleInd2: { type: "String", defaultValue: "null" }
       ) {
       indicators1: datapointsAggregation(
-        groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
+        groupBy: [
+          "indicatorName"
+          "geolocationTag"
+          "date"
+          "geolocationIso2"
+          "geolocationPolygons"
+        ]
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
         date_In: $datePeriod
@@ -371,11 +345,18 @@ export default createRefetchContainer(
         indicatorName
         geolocationIso2
         geolocationTag
+        geolocationPolygons
         date
         value
       }
       indicators2: datapointsAggregation(
-        groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
+        groupBy: [
+          "indicatorName"
+          "geolocationTag"
+          "date"
+          "geolocationIso2"
+          "geolocationCenterLongLat"
+        ]
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
         date_In: $datePeriod
@@ -386,6 +367,7 @@ export default createRefetchContainer(
         indicatorName
         geolocationIso2
         geolocationTag
+        geolocationCenterLongLat
         date
         value
       }

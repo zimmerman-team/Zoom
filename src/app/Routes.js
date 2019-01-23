@@ -27,8 +27,6 @@ const AddUserMediator = lazy(() =>
   import('mediators/ModuleMediators/AddUserMediator/AddUserMediator'),
 );
 
-const OverviewStep = lazy(() => import('components/OverviewStep/OverviewStep'));
-
 const About = lazy(() => import('modules/about/About'));
 
 // Routes
@@ -68,7 +66,6 @@ const Routes = props => {
           <Route path="/mapper" render={() => <DataMapperModule />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
           <Route exact path="/component" render={() => <DataExplorePanel />} />
-          <Route exact path="/step" render={() => <OverviewStep />} />
         </Switch>
       </Suspense>
     </React.Fragment>

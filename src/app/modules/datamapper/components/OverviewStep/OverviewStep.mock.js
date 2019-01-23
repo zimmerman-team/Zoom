@@ -3,7 +3,7 @@ import { CellValue, ColumnHeader } from 'components/theme/ThemeSheet';
 import {
   CellLine,
   CellText,
-} from 'components/OverviewStep/OverviewStep.styles';
+} from 'modules/datamapper/components/OverviewStep/OverviewStep.styles';
 
 export const columns = [
   {

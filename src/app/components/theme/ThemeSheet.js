@@ -36,12 +36,15 @@ export const ZoomTable = styled(DataTable)`
   & th {
     padding-left: 32px;
     border: 2px solid ${zoomGreyFour};
-    border-bottom: 0 !important;
+    border-bottom: 0;
     &:first-child {
       border-left: 0;
     }
     &:last-child {
       border-right: 0;
+    }
+    & div {
+      border-bottom: 0;
     }
   }
 

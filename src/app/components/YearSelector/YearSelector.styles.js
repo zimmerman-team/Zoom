@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import './YearSelector.scss';
+import './YearSelector.css';
 import { Range } from 'rc-slider';
 import {
   zoomBlack,

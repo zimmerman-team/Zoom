@@ -2,6 +2,7 @@
 import React from 'react';
 
 /* components */
+import IconSort from 'assets/icons/icon_sort.svg';
 import {
   UsersTableColHeader,
   UsersTableCellValue,
@@ -31,15 +32,24 @@ export const columns = [
         {val.name}
       </UsersTableCellValue>
     ),
-    search: true,
-    sortable: true,
+    search: false,
+    sortable: false,
   },
   {
     property: 'role',
     header: <UsersTableColHeader>Role</UsersTableColHeader>,
     render: val => <UsersTableCellValue>{val.role}</UsersTableCellValue>,
-    search: true,
-    sortable: true,
+    search: false,
+    sortable: false,
+  },
+  {
+    property: 'sort',
+    header: (
+      <UsersTableColHeader>
+        <IconSort />
+      </UsersTableColHeader>
+    ),
+    render: val => <UsersTableCellValue />,
   },
 ];
 

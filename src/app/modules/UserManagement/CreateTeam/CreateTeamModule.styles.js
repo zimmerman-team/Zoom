@@ -25,6 +25,10 @@ export const UsersTable = styled(ZoomTable)`
         width: 40px;
         height: 40px;
       }
+      &:last-child {
+        width: 40px;
+        height: 40px;
+      }
     }
   }
   & th {
@@ -32,15 +36,19 @@ export const UsersTable = styled(ZoomTable)`
       width: 40px;
       height: 40px;
     }
+    &:last-child {
+      width: 40px;
+      height: 40px;
+    }
   }
 `;
 
 export const UsersTableColHeader = styled(ColumnHeader)`
-  padding: 5px 0 5px 20px;
+  padding: 5px 0 5px 15px;
 `;
 
 export const UsersTableCellValue = styled(CellValue)`
-  padding: 12px 0 12px 20px;
+  padding: 12px 0 12px 15px;
 `;
 
 export const SubmitButton = styled(ZoomButton)`

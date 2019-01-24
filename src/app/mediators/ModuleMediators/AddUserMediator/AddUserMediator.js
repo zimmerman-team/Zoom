@@ -11,11 +11,14 @@ class AddUserMediator extends React.Component {
     this.state = {
       success: false,
       errorMessage: null,
+      secondaryInfoMessage: null,
       email: '',
       lastName: '',
       firstName: '',
-      userRole: { label: '', value: '' },
-      organisation: { label: '', value: '' },
+      userRole: { label: '', value: '', _id: '' },
+      organisation: { label: '', value: '', _id: '' },
+      userGroups: [],
+      userRoles: [],
     };
 
     this.submitForm = this.submitForm.bind(this);
@@ -24,6 +27,11 @@ class AddUserMediator extends React.Component {
     this.changeUserRole = this.changeUserRole.bind(this);
     this.changeFirstName = this.changeFirstName.bind(this);
     this.changeOrganisation = this.changeOrganisation.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.auth0Client.getUserGroups(this);
+    this.props.auth0Client.getUserRoles(this);
   }
 
   changeFirstName(e) {
@@ -62,6 +70,8 @@ class AddUserMediator extends React.Component {
       this.state.firstName,
       this.state.lastName,
       this.state.email,
+      this.state.organisation._id,
+      this.state.userRole._id,
       this,
     );
   }
@@ -71,6 +81,7 @@ class AddUserMediator extends React.Component {
       <AddUserModule
         email={this.state.email}
         success={this.state.success}
+        secondaryInfoMessage={this.state.secondaryInfoMessage}
         errorMessage={this.state.errorMessage}
         lastName={this.state.lastName}
         firstName={this.state.firstName}
@@ -84,6 +95,8 @@ class AddUserMediator extends React.Component {
         changeUserRole={this.changeUserRole}
         orgSelected={this.state.organisation}
         changeOrganisation={this.changeOrganisation}
+        orgOptions={this.state.userGroups}
+        roleOptions={this.state.userRoles}
       />
     );
   }

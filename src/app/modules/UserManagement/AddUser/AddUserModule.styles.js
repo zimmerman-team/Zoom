@@ -7,10 +7,6 @@ export const AddUserForm = styled.form`
   width: 100%;
 `;
 
-export const DropDownsBox = styled(Box)`
-  pointer-events: none;
-`;
-
 export const DropDown = styled(Box)`
   margin-right: 40px;
 `;

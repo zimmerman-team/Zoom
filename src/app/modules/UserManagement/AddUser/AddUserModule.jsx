@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 /* components */
 import {
   AddUserForm,
-  DropDownsBox,
   DropDown,
   DropDownLabel,
   SubmitButton,
@@ -18,10 +17,12 @@ import FormSelect from 'components/FormSelect/FormSelect';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
 import userManagementMockData from '__mocks__/userManagementMock';
+import { Box } from 'grommet';
 
 const propTypes = {
   email: PropTypes.string,
   success: PropTypes.bool,
+  secondaryInfoMessage: PropTypes.string,
   errorMessage: PropTypes.string,
   lastName: PropTypes.string,
   firstName: PropTypes.string,
@@ -55,6 +56,7 @@ const propTypes = {
 const defaultProps = {
   email: '',
   success: false,
+  secondaryInfoMessage: null,
   errorMessage: null,
   lastName: '',
   firstName: '',
@@ -62,9 +64,9 @@ const defaultProps = {
   changeLastName: null,
   changeFirstName: null,
   submitForm: null,
-  roleSelected: { label: '', value: '' },
+  roleSelected: { label: '', value: '', _id: '' },
   changeUserRole: null,
-  orgSelected: { label: '', value: '' },
+  orgSelected: { label: '', value: '', _id: '' },
   changeOrganisation: null,
   roleOptions: userManagementMockData.roleOptions,
   orgOptions: userManagementMockData.orgOptions,
@@ -72,7 +74,11 @@ const defaultProps = {
 
 const AddUserModule = props => {
   const disableSubmit =
-    props.firstName === '' || props.lastName === '' || props.email === '';
+    props.firstName === '' ||
+    props.lastName === '' ||
+    props.email === '' ||
+    props.orgSelected._id === '' ||
+    props.roleSelected._id === '';
   return (
     <ModuleFragment title="Add user">
       <AddUserForm onSubmit={props.submitForm}>
@@ -106,33 +112,26 @@ const AddUserModule = props => {
           onChange={props.changeEmail}
         />
 
-        {/* Tooltip will be removed once we implement functionality of this */}
-        <Tooltip
-          trigger="mouseenter"
-          position="top-start"
-          html={<SimpleToolTip title="Functionality not implemented yet" />}
-        >
-          <DropDownsBox direction="row-responsive">
-            <DropDown>
-              <DropDownLabel>User role</DropDownLabel>
-              <FormSelect
-                data={props.roleOptions}
-                placeHolder=""
-                selectVal={props.changeUserRole}
-                valueSelected={props.roleSelected.label}
-              />
-            </DropDown>
-            <DropDown>
-              <DropDownLabel>Organisation</DropDownLabel>
-              <FormSelect
-                data={props.orgOptions}
-                placeHolder=""
-                selectVal={props.changeOrganisation}
-                valueSelected={props.orgSelected.label}
-              />
-            </DropDown>
-          </DropDownsBox>
-        </Tooltip>
+        <Box direction="row-responsive">
+          <DropDown>
+            <DropDownLabel>User role</DropDownLabel>
+            <FormSelect
+              data={props.roleOptions}
+              placeHolder=""
+              selectVal={props.changeUserRole}
+              valueSelected={props.roleSelected.label}
+            />
+          </DropDown>
+          <DropDown>
+            <DropDownLabel>Organisation</DropDownLabel>
+            <FormSelect
+              data={props.orgOptions}
+              placeHolder=""
+              selectVal={props.changeOrganisation}
+              valueSelected={props.orgSelected.label}
+            />
+          </DropDown>
+        </Box>
 
         <Tooltip
           trigger="mouseenter"
@@ -153,6 +152,11 @@ const AddUserModule = props => {
         {!props.success && props.errorMessage && (
           <Message theme={{ color: aidsFondsRed }}>
             {props.errorMessage}
+          </Message>
+        )}
+        {props.secondaryInfoMessage && (
+          <Message theme={{ color: 'orange' }}>
+            {props.secondaryInfoMessage}
           </Message>
         )}
       </AddUserForm>

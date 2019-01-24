@@ -1,3 +1,4 @@
+import 'isomorphic-fetch';
 import axios from 'axios';
 import auth0 from 'auth0-js';
 
@@ -40,13 +41,18 @@ class Auth {
         })
         .then(response => {
           axios
-            .get(`${process.env.AE_API_URL}/users/${this.profile.sub}/groups`, {
-              headers: {
-                Authorization: `${response.data.token_type} ${
-                  response.data.access_token
-                }`,
+            .get(
+              `${process.env.REACT_APP_AE_API_URL}/users/${
+                this.profile.sub
+              }/groups`,
+              {
+                headers: {
+                  Authorization: `${response.data.token_type} ${
+                    response.data.access_token
+                  }`,
+                },
               },
-            })
+            )
             .then(response2 => {
               localStorage.setItem('userGroup', response2.data[0].name);
               if (that) {
@@ -63,6 +69,168 @@ class Auth {
           console.error(error);
         });
     }
+  }
+
+  getUserGroups(that = null) {
+    axios
+      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: 'urn:auth0-authz-api',
+        grant_type: 'client_credentials',
+      })
+      .then(response => {
+        axios
+          .get(`${process.env.REACT_APP_AE_API_URL}/groups`, {
+            headers: {
+              Authorization: `${response.data.token_type} ${
+                response.data.access_token
+              }`,
+            },
+          })
+          .then(response2 => {
+            // console.log(response2);
+            if (that) {
+              that.setState({
+                userGroups: response2.data.groups.map(g => {
+                  return {
+                    ...g,
+                    label: g.name,
+                    value: g._id,
+                  };
+                }),
+              });
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  getUserRoles(that = null) {
+    axios
+      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: 'urn:auth0-authz-api',
+        grant_type: 'client_credentials',
+      })
+      .then(response => {
+        axios
+          .get(`${process.env.REACT_APP_AE_API_URL}/roles`, {
+            headers: {
+              Authorization: `${response.data.token_type} ${
+                response.data.access_token
+              }`,
+            },
+          })
+          .then(response2 => {
+            // console.log(response2);
+            if (that) {
+              that.setState({
+                userRoles: response2.data.roles.map(g => {
+                  return {
+                    ...g,
+                    label: g.name,
+                    value: g._id,
+                  };
+                }),
+              });
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  addUserToGroup(user_id, group_id, parent) {
+    axios
+      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: 'urn:auth0-authz-api',
+        grant_type: 'client_credentials',
+      })
+      .then(response => {
+        axios
+          .patch(
+            `${process.env.REACT_APP_AE_API_URL}/users/${user_id}/groups`,
+            new Array(group_id),
+            {
+              headers: {
+                Authorization: `${response.data.token_type} ${
+                  response.data.access_token
+                }`,
+              },
+            },
+          )
+          .then(response2 => {
+            // console.log(response2);
+          })
+          .catch(error => {
+            console.error(error);
+            parent.setState({
+              secondaryInfoMessage:
+                'Something went wrong with assigning role or organisation. Please try again later.',
+            });
+          });
+      })
+      .catch(error => {
+        console.error(error);
+        parent.setState({
+          secondaryInfoMessage:
+            'Something went wrong with assigning role or organisation. Please try again later.',
+        });
+      });
+  }
+
+  assignRoleToUser(user_id, role_id) {
+    axios
+      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: 'urn:auth0-authz-api',
+        grant_type: 'client_credentials',
+      })
+      .then(response => {
+        axios
+          .patch(
+            `${process.env.REACT_APP_AE_API_URL}/users/${user_id}/roles`,
+            new Array(role_id),
+            {
+              headers: {
+                Authorization: `${response.data.token_type} ${
+                  response.data.access_token
+                }`,
+              },
+            },
+          )
+          .then(response2 => {
+            // console.log(response2);
+          })
+          .catch(error => {
+            console.error(error);
+            parent.setState({
+              secondaryInfoMessage:
+                'Something went wrong with assigning role or organisation. Please try again later.',
+            });
+          });
+      })
+      .catch(error => {
+        console.error(error);
+        parent.setState({
+          secondaryInfoMessage:
+            'Something went wrong with assigning role or organisation. Please try again later.',
+        });
+      });
   }
 
   handleAuthentication() {
@@ -116,7 +284,7 @@ class Auth {
     );
   }
 
-  addUser(name, surname, email, parent) {
+  addUser(name, surname, email, group_id, role_id, parent) {
     const _this = this;
     axios
       .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
@@ -158,7 +326,11 @@ class Auth {
                 email: '',
                 firstName: '',
                 lastName: '',
+                userRole: { label: '', value: '', _id: '' },
+                organisation: { label: '', value: '', _id: '' },
               });
+              this.addUserToGroup(res2.data.user_id, group_id, parent);
+              this.assignRoleToUser(res2.data.user_id, role_id, parent);
             } else {
               parent.setState({
                 success: false,
@@ -167,6 +339,7 @@ class Auth {
             }
           })
           .catch(error => {
+            console.log(error);
             parent.setState({
               success: false,
               errorMessage: error.response.data.message,
@@ -198,7 +371,7 @@ class Auth {
         connection: 'Username-Password-Authentication',
       },
       err => {
-        console.log(err);
+        // console.log(err);
         reduxAction && reduxAction();
       },
     );

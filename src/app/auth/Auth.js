@@ -71,6 +71,42 @@ class Auth {
     }
   }
 
+  getUserRole() {
+    if (this.profile) {
+      axios
+        .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+          client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+          client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+          audience: 'urn:auth0-authz-api',
+          grant_type: 'client_credentials',
+        })
+        .then(response => {
+          axios
+            .get(
+              `${process.env.REACT_APP_AE_API_URL}/users/${
+                this.profile.sub
+              }/roles`,
+              {
+                headers: {
+                  Authorization: `${response.data.token_type} ${
+                    response.data.access_token
+                  }`,
+                },
+              },
+            )
+            .then(response2 => {
+              localStorage.setItem('userRole', response2.data[0].name);
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  }
+
   getUserGroups(that = null) {
     axios
       .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
@@ -254,6 +290,7 @@ class Auth {
     localStorage.setItem('auth_access_token', authResult.accessToken);
     localStorage.setItem('auth_id_token', authResult.idToken);
     localStorage.setItem('auth_expires_at', this.expiresAt);
+    this.getUserRole();
     // this.getUserGroup();
   }
 
@@ -262,6 +299,8 @@ class Auth {
     localStorage.removeItem('auth_access_token');
     localStorage.removeItem('auth_id_token');
     localStorage.removeItem('auth_expires_at');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userGroup');
     this.auth0.logout({
       returnTo: process.env.REACT_APP_PROJECT_URL,
       clientID: process.env.REACT_APP_CLIENT_ID,
@@ -271,6 +310,11 @@ class Auth {
   isAuthenticated() {
     const expiresAt = JSON.parse(localStorage.getItem('auth_expires_at'));
     return new Date().getTime() < expiresAt;
+  }
+
+  isAdministrator() {
+    const userRole = localStorage.getItem('userRole');
+    return userRole === 'Administrator';
   }
 
   signIn(username, password, reduxAction) {

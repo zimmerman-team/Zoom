@@ -21,6 +21,7 @@ module.exports = {
   env: {
     es6: true,
     node: true,
+    browser: true,
   },
   plugins: ['prettier'],
   rules: {
@@ -55,5 +56,6 @@ module.exports = {
     'no-unused-expressions': 0,
     'arrow-body-style': 0,
     'react/no-did-update-set-state': 0,
+    'class-methods-use-this': 0,
   },
 };

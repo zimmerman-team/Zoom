@@ -1,6 +1,5 @@
 /* base */
 import React from 'react';
-import auth0Client from 'auth/Auth';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import { connect } from 'react-redux';
@@ -67,7 +66,7 @@ export class ForgetPassword extends React.Component {
   }
 
   onSubmit() {
-    auth0Client.forgetPassword(
+    this.props.auth0Client.forgetPassword(
       this.state.email,
       this.setForgotPasswordStatusMessage,
     );

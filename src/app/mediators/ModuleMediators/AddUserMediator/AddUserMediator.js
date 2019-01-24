@@ -9,6 +9,8 @@ class AddUserMediator extends React.Component {
     super(props);
 
     this.state = {
+      success: false,
+      errorMessage: null,
       email: '',
       lastName: '',
       firstName: '',
@@ -56,12 +58,20 @@ class AddUserMediator extends React.Component {
 
   submitForm(e) {
     e.preventDefault();
+    this.props.auth0Client.addUser(
+      this.state.firstName,
+      this.state.lastName,
+      this.state.email,
+      this,
+    );
   }
 
   render() {
     return (
       <AddUserModule
         email={this.state.email}
+        success={this.state.success}
+        errorMessage={this.state.errorMessage}
         lastName={this.state.lastName}
         firstName={this.state.firstName}
         userRole={this.state.userRole}

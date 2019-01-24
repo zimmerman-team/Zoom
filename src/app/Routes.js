@@ -32,6 +32,10 @@ const CreateTeamMediator = lazy(() =>
 
 const About = lazy(() => import('modules/about/About'));
 
+const ErrorStep = lazy(() =>
+  import('modules/datamapper/components/ErrorsStep/ErrorsStep'),
+);
+
 // Routes
 const Routes = props => {
   return (
@@ -90,6 +94,7 @@ const Routes = props => {
           <Route path="/mapper" render={() => <DataMapperModule />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
           <Route exact path="/component" render={() => <DataExplorePanel />} />
+          <Route exact path="/step" render={() => <ErrorStep />} />
         </Switch>
       </Suspense>
     </React.Fragment>

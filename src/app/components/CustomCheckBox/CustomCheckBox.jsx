@@ -25,6 +25,7 @@ class CustomCheckBox extends React.Component {
     this.setState({ checked: !this.state.checked });
   }
 
+
   render(){
     return(
       <ComponentBase>

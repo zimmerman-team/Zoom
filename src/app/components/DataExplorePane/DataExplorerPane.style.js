@@ -21,14 +21,6 @@ export const ExplorerHeader = styled.div`
   padding-right: 20px;
 `;
 
-export const Divider = styled.div`
-  height: 2px;
-  background-color: ${zoomGreyZero};
-  width: 100%;
-  margin-top: 15px;
-  margin-bottom: 15px;
-`;
-
 export const FilterContainer = styled(Box)`
   background-color: ${zoomGreyZero};
   padding: 12px 0;

@@ -25,16 +25,17 @@ export const zoomGreyOne = '#818181';
 export const zoomGreyTwo = '#505050';
 export const zoomGreyThree = '#a1a1a1';
 export const zoomGreyFour = '#dfdfdf';
+export const zoomGreyFive = '#9b9b9b';
 export const zoomBlack = '#000000';
 export const zoomFontFamOne = 'FFMarkProAF-Bold';
 export const zoomFontFamTwo = 'FFMarkProAF-Book';
 
 /* Tables */
-export const colHeadColor = '#9b9b9b';
+export const colHeadColor = zoomGreyFive;
+export const errorCellColor = '#ff807f';
 
 export const ZoomTable = styled(DataTable)`
   & th {
-    padding-left: 32px;
     border: 2px solid ${zoomGreyFour};
     border-bottom: 0;
     &:first-child {
@@ -56,7 +57,6 @@ export const ZoomTable = styled(DataTable)`
       }
     }
     & td {
-      padding: 15px 0 18px 32px;
       vertical-align: top;
       border-left: 2px solid ${zoomGreyFour};
       border-right: 2px solid ${zoomGreyFour};
@@ -72,6 +72,12 @@ export const ZoomTable = styled(DataTable)`
   & td {
     background-color: ${zoomGreyZero};
   }
+`;
+
+export const Divider = styled.div`
+  height: 2px;
+  background-color: ${zoomGreyZero};
+  width: 100%;
 `;
 
 export const ColumnHeader = styled.div`
@@ -149,6 +155,7 @@ export const PageHeading = styled(BaseHeading)`
 
 export const SectionHeading = styled(BaseHeading)`
   font-size: 32px;
+  text-align: center;
   font-family: ${zoomFontFamOne};
 `;
 

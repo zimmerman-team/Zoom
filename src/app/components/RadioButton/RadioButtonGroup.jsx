@@ -1,10 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
-import {RadioButton, Grommet, Box} from 'grommet';
+import PropTypes from 'prop-types';
+import { RadioButton, Grommet, Box } from 'grommet';
 
+const propTypes = {
+  options: PropTypes.array,
+  direction: PropTypes.string,
+};
+const defaultProps = {
+  options: [
+    {
+      label: 'No',
+      value: 'option1',
+    },
+    {
+      label: 'Yes',
+      value: 'option2',
+    },
+  ],
 
+  direction: 'row',
+};
 
-class CustomRadioButton extends React.Component {
+class RadioButtonGroup extends React.Component {
   state = { selected: undefined };
 
   onChange = event => this.setState({ selected: event.target.value });
@@ -12,27 +30,22 @@ class CustomRadioButton extends React.Component {
   render() {
     const { selected } = this.state;
     return (
-        <Box >
+      <Box direction={this.props.direction}>
+        {this.props.options.map(option => (
           <RadioButton
-            label="Yes"
+            label={option.label}
             name="radio"
-            value="c1"
-            checked={selected === "c1"}
+            value={option.value}
+            checked={selected === option.value}
             onChange={this.onChange}
           />
-          <RadioButton
-            label="No"
-            name="radio"
-            value="c2"
-            checked={selected === "c2"}
-            onChange={this.onChange}
-          />
-
-      {/*<ZoomButton*/}
-        </Box>
-
+        ))}
+      </Box>
     );
   }
 }
 
-export default CustomRadioButton;
+RadioButtonGroup.propTypes = propTypes;
+RadioButtonGroup.defaultProps = defaultProps;
+
+export default RadioButtonGroup;

@@ -1,21 +1,27 @@
 import React from 'react';
-import { CellValue, ColumnHeader } from 'components/theme/ThemeSheet';
+import { CellValue } from 'components/theme/ThemeSheet';
 import {
   CellLine,
   CellText,
+  ColHeader,
+  Cell,
 } from 'modules/datamapper/components/OverviewStep/OverviewStep.styles';
 
 export const columns = [
   {
     property: 'fileColumn',
-    header: <ColumnHeader>File column</ColumnHeader>,
-    render: val => <CellValue>{val.fileColumn}</CellValue>,
+    header: <ColHeader>File column</ColHeader>,
+    render: val => (
+      <Cell>
+        <CellValue>{val.fileColumn}</CellValue>
+      </Cell>
+    ),
   },
   {
     property: 'summary',
-    header: <ColumnHeader>Summary</ColumnHeader>,
+    header: <ColHeader>Summary</ColHeader>,
     render: val => (
-      <div style={{ color: 'blue' }}>
+      <Cell>
         {val.summary.map((item, index) => {
           return (
             <CellLine key={`column-item-${index}`}>
@@ -24,24 +30,28 @@ export const columns = [
             </CellLine>
           );
         })}
-      </div>
+      </Cell>
     ),
   },
   {
     property: 'dataTypes',
-    header: <ColumnHeader>Data types</ColumnHeader>,
+    header: <ColHeader>Data types</ColHeader>,
     render: val => (
-      <div style={{ color: 'blue' }}>
+      <Cell>
         {val.dataTypes.map((type, index) => {
           return <CellValue key={`data-type-item-${index}`}>{type}</CellValue>;
         })}
-      </div>
+      </Cell>
     ),
   },
   {
     property: 'blankCells',
-    header: <ColumnHeader>Number of blank cells</ColumnHeader>,
-    render: val => <CellValue>{val.blankCells}</CellValue>,
+    header: <ColHeader>Number of blank cells</ColHeader>,
+    render: val => (
+      <Cell>
+        <CellValue>{val.blankCells}</CellValue>
+      </Cell>
+    ),
   },
 ];
 

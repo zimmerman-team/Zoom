@@ -64,7 +64,8 @@ const Routes = props => {
           <Route
             path="/add-user"
             render={() =>
-              props.auth0Client.isAuthenticated() ? (
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
                 <AddUserMediator auth0Client={props.auth0Client} />
               ) : (
                 <Redirect to="/" />

@@ -43,7 +43,7 @@ export const ZoomTable = styled(DataTable)`
     &:last-child {
       border-right: 0;
     }
-    & div {
+    > div {
       border-bottom: 0;
     }
   }
@@ -82,7 +82,7 @@ export const ColumnHeader = styled.div`
 `;
 
 export const CellValue = styled.div`
-  color: ${zoomBlack};
+  color: ${props => (props.theme.color ? props.theme.color : zoomBlack)};
   font-family: ${zoomFontFamOne};
   font-size: 12px;
   line-height: 19px;

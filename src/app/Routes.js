@@ -6,7 +6,7 @@ import PageLoader from 'modules/common/pageloader/PageLoader';
 import ThemeSheet from 'components/theme/ThemeSheet';
 import DataExplorePanel from 'components/DataExplorePane/DataExplorePanel';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
-import DataMapperModule from 'modules/datamapper/DataMapperModule';
+import DataMapperModule from 'modules/datamapper/components/OverviewStep/OverviewStep';
 // Modules regular import
 /*import HomeModule from 'modules/home/HomeModule';
 import IatiDetail from 'modules/IATI_Detail/IatiDetail';
@@ -25,6 +25,9 @@ const IatiDetailMediator = lazy(() =>
 );
 const AddUserMediator = lazy(() =>
   import('mediators/ModuleMediators/AddUserMediator/AddUserMediator'),
+);
+const CreateTeamMediator = lazy(() =>
+  import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator'),
 );
 
 const About = lazy(() => import('modules/about/About'));
@@ -67,6 +70,17 @@ const Routes = props => {
               props.auth0Client.isAuthenticated() &&
               props.auth0Client.isAdministrator() ? (
                 <AddUserMediator auth0Client={props.auth0Client} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            path="/create-team"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <CreateTeamMediator auth0Client={props.auth0Client} />
               ) : (
                 <Redirect to="/" />
               )

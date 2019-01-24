@@ -65,7 +65,7 @@ const Routes = props => {
             path="/add-user"
             render={() =>
               props.auth0Client.isAuthenticated() ? (
-                <AddUserMediator />
+                <AddUserMediator auth0Client={props.auth0Client} />
               ) : (
                 <Redirect to="/" />
               )

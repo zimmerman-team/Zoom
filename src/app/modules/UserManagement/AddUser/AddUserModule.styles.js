@@ -7,6 +7,10 @@ export const AddUserForm = styled.form`
   width: 100%;
 `;
 
+export const DropDownsBox = styled(Box)`
+  pointer-events: none;
+`;
+
 export const DropDown = styled(Box)`
   margin-right: 40px;
 `;
@@ -19,5 +23,11 @@ export const DropDownLabel = styled(Text)`
 `;
 
 export const SubmitButton = styled(ZoomButton)`
+  margin-top: 40px;
+`;
+
+export const Message = styled(Box)`
+  color: ${props => props.theme.color};
+  font-size: 20px;
   margin-top: 40px;
 `;

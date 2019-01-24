@@ -12,6 +12,7 @@ class Auth {
       scope: 'openid profile',
     });
 
+    this.addUser = this.addUser.bind(this);
     this.getProfile = this.getProfile.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
@@ -115,6 +116,71 @@ class Auth {
     );
   }
 
+  addUser(name, surname, email, parent) {
+    const _this = this;
+    axios
+      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: 'https://zimmermanzimmerman.eu.auth0.com/api/v2/',
+        grant_type: 'client_credentials',
+      })
+      .then(res1 => {
+        axios
+          .post(
+            'https://zimmermanzimmerman.eu.auth0.com/api/v2/users',
+            {
+              email,
+              blocked: false,
+              email_verified: false,
+              verify_email: true,
+              password: 'wPsRZT?&&H%p2sj3',
+              given_name: name,
+              family_name: surname,
+              name: `${name} ${surname}`,
+              nickname: name,
+              connection: 'Username-Password-Authentication',
+            },
+            {
+              headers: {
+                Authorization: `${res1.data.token_type} ${
+                  res1.data.access_token
+                }`,
+              },
+            },
+          )
+          .then(res2 => {
+            if (res2.status === 201) {
+              _this.forgetPassword(email, null);
+              parent.setState({
+                success: true,
+                errorMessage: null,
+                email: '',
+                firstName: '',
+                lastName: '',
+              });
+            } else {
+              parent.setState({
+                success: false,
+                errorMessage: res2.data.statusText,
+              });
+            }
+          })
+          .catch(error => {
+            parent.setState({
+              success: false,
+              errorMessage: error.response.data.message,
+            });
+          });
+      })
+      .catch(error => {
+        parent.setState({
+          success: false,
+          errorMessage: error.response.data.message,
+        });
+      });
+  }
+
   silentAuth() {
     return new Promise((resolve, reject) => {
       this.auth0.checkSession({}, (err, authResult) => {
@@ -131,7 +197,10 @@ class Auth {
         email,
         connection: 'Username-Password-Authentication',
       },
-      err => reduxAction(),
+      err => {
+        console.log(err);
+        reduxAction && reduxAction();
+      },
     );
   }
 }

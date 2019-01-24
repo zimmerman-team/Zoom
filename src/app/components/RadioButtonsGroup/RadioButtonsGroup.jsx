@@ -20,6 +20,7 @@ import styled from 'styled-components';
 const ZimmermanRadio = styled(Radio)`
   && {
     padding: 0;
+    margin-right: 5px;
     svg {
       fill: gray;
     }

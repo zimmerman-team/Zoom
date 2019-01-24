@@ -18,6 +18,11 @@ import ZoomSelect from 'components/Select/ZoomSelect';
 import ChipsArray from 'components/ChipsArray/Chips';
 import CheckboxesGroup from 'components/CheckboxesGroup/CheckboxesGroup';
 import RadioButtonsGroup from 'components/RadioButtonsGroup/RadioButtonsGroup';
+import { aidsFondsWhite, FragmentContainer } from 'components/theme/ThemeSheet';
+
+const ModuleContainer = styled(Box)`
+  background-color: ${aidsFondsWhite};
+`;
 
 const FieldDivider = styled.div`
   height: 0;
@@ -74,7 +79,7 @@ const options3 = [
 
 const DataMapperModule = props => {
   return (
-    <React.Fragment>
+    <ModuleContainer>
       <Box margin="none">
         <Stepper />
       </Box>
@@ -185,7 +190,7 @@ const DataMapperModule = props => {
           <ZimmermanTextField />
         </Box>
       </Box>
-    </React.Fragment>
+    </ModuleContainer>
   );
 };
 

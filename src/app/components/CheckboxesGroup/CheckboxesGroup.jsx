@@ -20,6 +20,7 @@ import styled from 'styled-components';
 const ZimmermanCheckbox = styled(Checkbox)`
   && {
     padding: 0;
+    margin-right: 5px;
     svg {
       fill: gray;
       //width: 23px;
@@ -64,7 +65,6 @@ class CheckboxesGroup extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
     const { option1, option2, option3, option4, option5, option6 } = this.state;
     const error =
       [option1, option2, option3, option3, option4, option5, option6].filter(

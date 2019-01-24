@@ -17,6 +17,9 @@ const ZimmermanChip = styled(Chip)`
   && {
     background-color: ${aidsFondsBlue};
     border-radius: 5px;
+    margin: 0;
+    margin-right: 20px;
+    margin-bottom: 3px;
     span {
       line-height: 1;
       color: ${aidsFondsWhite};

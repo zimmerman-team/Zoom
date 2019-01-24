@@ -31,8 +31,7 @@ const defaultProps = {
   data,
 };
 
-const OverviewStep = (props) => {
-
+const OverviewStep = props => {
   return (
     <ModuleContainer>
       <SectionHeading>Overview</SectionHeading>

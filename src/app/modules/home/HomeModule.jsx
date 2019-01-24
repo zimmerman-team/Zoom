@@ -60,7 +60,6 @@ class HomeModule extends Component {
           <ControlPanelContainer>
             <ExplorePanelMediator {...otherProps} />
           </ControlPanelContainer>
-
         </ModuleContainer>
       </React.Fragment>
     );

@@ -21,3 +21,9 @@ export const DropDownLabel = styled(Text)`
 export const SubmitButton = styled(ZoomButton)`
   margin-top: 40px;
 `;
+
+export const Message = styled(Box)`
+  color: ${props => props.theme.color};
+  font-size: 20px;
+  margin-top: 40px;
+`;

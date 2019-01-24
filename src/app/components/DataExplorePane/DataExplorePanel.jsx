@@ -22,10 +22,10 @@ import {
   ResetContainer,
   FilterContainer,
   PanelAccordion,
-  AccordionSection
+  AccordionSection,
 } from './DataExplorerPane.style';
-import SimpleToolTip from "components/ToolTips/SimpleToolTip/SimpleToolTip";
-import {Tooltip} from "react-tippy";
+import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
+import { Tooltip } from 'react-tippy';
 
 const propTypes = {
   selectedInd2: PropTypes.string,
@@ -107,45 +107,34 @@ const defaultProps = {
 };
 
 class DataExplorePane extends React.Component {
-
   state = {
     activeIndex: [],
   };
 
-  renderHeader(label)
-  {
+  renderHeader(label) {
     let active = false;
     let icon = '';
     switch (label) {
       case 'Geo loaction':
         // checks if geolocations is active
-        if(this.state.activeIndex.indexOf(0) !== -1)
-        {
-          active=true;
+        if (this.state.activeIndex.indexOf(0) !== -1) {
+          active = true;
           icon = <IconBlueLocation />;
-        }
-        else
-          icon = <IconRedLocation />;
+        } else icon = <IconRedLocation />;
         break;
       case 'Time period':
         // checks if time period is active
-        if(this.state.activeIndex.indexOf(1) !== -1)
-        {
-          active=true;
+        if (this.state.activeIndex.indexOf(1) !== -1) {
+          active = true;
           icon = <IconBluePeriod />;
-        }
-        else
-          icon = <IconRedPeriod />;
+        } else icon = <IconRedPeriod />;
         break;
       case 'Indicators':
         // checks if indicators is active
-        if(this.state.activeIndex.indexOf(2) !== -1)
-        {
-          active=true;
+        if (this.state.activeIndex.indexOf(2) !== -1) {
+          active = true;
           icon = <IconBlueIndicators />;
-        }
-        else
-          icon = <IconRedIndicators />;
+        } else icon = <IconRedIndicators />;
         break;
     }
 
@@ -154,16 +143,21 @@ class DataExplorePane extends React.Component {
 
   render() {
     return (
-      <ComponentBase >
-        <PanelAccordion animate multiple
-                        onActive={newActiveIndex =>
-                        this.setState({ activeIndex: newActiveIndex })
-        }>
+      <ComponentBase>
+        <PanelAccordion
+          animate
+          multiple
+          onActive={newActiveIndex =>
+            this.setState({ activeIndex: newActiveIndex })
+          }
+        >
           <AccordionSection header={this.renderHeader('Geo loaction')}>
             <FilterContainer>
               <ZoomSelect
                 multiple
-                placeHolder={'Select region (' + this.props.regions.length + ')'}
+                placeHolder={
+                  'Select region (' + this.props.regions.length + ')'
+                }
                 data={this.props.regions}
                 arraySelected={this.props.selectedRegionVal}
                 selectVal={this.props.selectRegion}
@@ -172,7 +166,9 @@ class DataExplorePane extends React.Component {
               <ZoomSelect
                 reset={() => this.props.selectCountry('reset')}
                 multiple
-                placeHolder={'Select country (' + this.props.countries.length + ')'}
+                placeHolder={
+                  'Select country (' + this.props.countries.length + ')'
+                }
                 data={this.props.countries}
                 arraySelected={this.props.selectedCountryVal}
                 selectVal={this.props.selectCountry}
@@ -187,7 +183,9 @@ class DataExplorePane extends React.Component {
           <AccordionSection header={this.renderHeader('Indicators')}>
             <FilterContainer>
               <ZoomSelect
-                reset={() => this.props.selectInd1({ value: { value: undefined }})}
+                reset={() =>
+                  this.props.selectInd1({ value: { value: undefined } })
+                }
                 placeHolder={
                   'Select indicator (' + this.props.indNames.length + ')'
                 }
@@ -196,7 +194,7 @@ class DataExplorePane extends React.Component {
                 selectVal={this.props.selectInd1}
               />
               <ZoomSelect
-                placeHolder='Select sub indicator'
+                placeHolder="Select sub indicator"
                 data={this.props.subIndicators1}
                 valueSelected={this.props.selectedSubInd1}
                 selectVal={this.props.selectSubInd1}
@@ -204,7 +202,9 @@ class DataExplorePane extends React.Component {
             </FilterContainer>
             <FilterContainer>
               <ZoomSelect
-                reset={() => this.props.selectInd2({ value: { value: undefined }})}
+                reset={() =>
+                  this.props.selectInd2({ value: { value: undefined } })
+                }
                 placeHolder={
                   'Select indicator (' + this.props.indNames.length + ')'
                 }
@@ -213,7 +213,7 @@ class DataExplorePane extends React.Component {
                 selectVal={this.props.selectInd2}
               />
               <ZoomSelect
-                placeHolder='Select sub indicator'
+                placeHolder="Select sub indicator"
                 data={this.props.subIndicators2}
                 valueSelected={this.props.selectedSubInd2}
                 selectVal={this.props.selectSubInd2}
@@ -223,9 +223,9 @@ class DataExplorePane extends React.Component {
         </PanelAccordion>
         <ResetContainer onClick={() => this.props.resetAll()}>
           <Tooltip
-            html={(<SimpleToolTip title='Reset'/>)}
-            position='top'
-            trigger='mouseenter'
+            html={<SimpleToolTip title="Reset" />}
+            position="top"
+            trigger="mouseenter"
           >
             <ResetIcon />
           </Tooltip>

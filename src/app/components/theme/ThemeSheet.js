@@ -45,7 +45,7 @@ export const ZoomTable = styled(DataTable)`
       border-right: 0;
     }
     & div {
-      border-bottom7: 0;
+      border-bottom: 0;
     }
   }
 
@@ -72,6 +72,12 @@ export const ZoomTable = styled(DataTable)`
   & td {
     background-color: ${zoomGreyZero};
   }
+`;
+
+export const Divider = styled.div`
+  height: 2px;
+  background-color: ${zoomGreyZero};
+  width: 100%;
 `;
 
 export const ColumnHeader = styled.div`

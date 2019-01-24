@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 /* components */
 import { Box } from 'grommet';
 import FindReplace from 'modules/datamapper/components/ErrorsStep/components/FindReplace/FindReplace';
+import Pagination from 'components/Pagination/Pagination';
 
 /* mock */
 import { columns, data, errorCells } from './ErrorsStep.mock';
@@ -16,7 +17,7 @@ import {
   ErrorTable,
   TabContainer, TabText, TabDivider
 } from 'modules/datamapper/components/ErrorsStep/ErrorStep.styles';
-import { aidsFondsBlue, aidsFondsRed, errorCellColor, zoomGreyZero } from 'components/theme/ThemeSheet';
+import {aidsFondsBlue, aidsFondsRed, Divider, errorCellColor, zoomGreyZero} from 'components/theme/ThemeSheet';
 
 const propTypes = {
   data: PropTypes.arrayOf(
@@ -121,6 +122,8 @@ class ErrorStep extends React.Component{
         <Box>
           <ErrorTable columns={columns} data={this.state.data} />
         </Box>
+        <Pagination />
+        <Divider/>
       </ModuleContainer>
     );
   }

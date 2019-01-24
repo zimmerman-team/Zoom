@@ -3,39 +3,41 @@ import React from 'react';
 
 /* components */
 import {
-  CellValue,
-  ColumnHeader,
-  aidsFondsRed,
-} from 'components/theme/ThemeSheet';
+  UsersTableColHeader,
+  UsersTableCellValue,
+} from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
+import { aidsFondsRed } from 'components/theme/ThemeSheet';
 import { CheckBox } from 'grommet';
 
 export const columns = [
   {
     property: 'selected',
     header: (
-      <ColumnHeader>
+      <UsersTableColHeader>
         <CheckBox />
-      </ColumnHeader>
+      </UsersTableColHeader>
     ),
     render: val => (
-      <CellValue>
+      <UsersTableCellValue>
         <CheckBox />
-      </CellValue>
+      </UsersTableCellValue>
     ),
   },
   {
     property: 'name',
-    header: <ColumnHeader>Name</ColumnHeader>,
+    header: <UsersTableColHeader>Name</UsersTableColHeader>,
     render: val => (
-      <CellValue theme={{ color: aidsFondsRed }}>{val.name}</CellValue>
+      <UsersTableCellValue theme={{ color: aidsFondsRed }}>
+        {val.name}
+      </UsersTableCellValue>
     ),
     search: true,
     sortable: true,
   },
   {
     property: 'role',
-    header: <ColumnHeader>Role</ColumnHeader>,
-    render: val => <CellValue>{val.role}</CellValue>,
+    header: <UsersTableColHeader>Role</UsersTableColHeader>,
+    render: val => <UsersTableCellValue>{val.role}</UsersTableCellValue>,
     search: true,
     sortable: true,
   },

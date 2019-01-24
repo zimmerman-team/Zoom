@@ -2,26 +2,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip } from 'react-tippy';
+import { Text } from 'grommet';
 
 /* components */
 import {
   CreateTeamForm,
   TableBox,
+  UsersTable,
   SubmitButton,
   Message,
   TextField,
 } from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
-import { aidsFondsRed, ZoomTable } from 'components/theme/ThemeSheet';
+import { aidsFondsRed, zoomGreyFive } from 'components/theme/ThemeSheet';
+import Pagination from 'components/Pagination/Pagination';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
+import IconSearch from 'assets/icons/icon_search.svg';
 
 /* mock */
 import {
   columns,
   tableData,
 } from 'modules/UserManagement/CreateTeam/CreateTeamModule.mock';
-import { Text } from 'grommet';
 
 const propTypes = {
   success: PropTypes.bool,
@@ -65,14 +68,17 @@ const CreateTeam = props => {
           onChange={props.changeName}
         />
 
-        <Text>Add team members</Text>
+        <Text color={zoomGreyFive} size="15px">
+          Add team members
+        </Text>
         <TextField
-          placeholder="Add team members"
+          placeholder={<IconSearch />}
           onChange={props.changeSearchKeyword}
         />
 
         <TableBox>
-          <ZoomTable columns={columns} data={tableData} />
+          <UsersTable columns={columns} data={tableData} />
+          <Pagination />
         </TableBox>
 
         <Tooltip

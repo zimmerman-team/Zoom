@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 import { Box, TextInput } from 'grommet';
-import { ZoomButton, zoomGreyOne } from 'components/theme/ThemeSheet';
+import {
+  ZoomTable,
+  ZoomButton,
+  zoomGreyFour,
+  ColumnHeader,
+  CellValue,
+} from 'components/theme/ThemeSheet';
 
 export const CreateTeamForm = styled.form`
   padding: 0 40px;
@@ -9,6 +15,32 @@ export const CreateTeamForm = styled.form`
 
 export const TableBox = styled(Box)`
   margin: 40px 0;
+  border-bottom: 1px solid ${zoomGreyFour};
+`;
+
+export const UsersTable = styled(ZoomTable)`
+  & tbody {
+    & td {
+      &:first-child {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  }
+  & th {
+    &:first-child {
+      width: 40px;
+      height: 40px;
+    }
+  }
+`;
+
+export const UsersTableColHeader = styled(ColumnHeader)`
+  padding: 5px 0 5px 20px;
+`;
+
+export const UsersTableCellValue = styled(CellValue)`
+  padding: 12px 0 12px 20px;
 `;
 
 export const SubmitButton = styled(ZoomButton)`
@@ -27,7 +59,8 @@ export const TextField = styled(TextInput)`
   border-radius: 0;
   border-width: 1px;
   border-style: solid;
-  border-color: ${zoomGreyOne};
+  border-color: ${zoomGreyFour};
+  padding-left: 35px;
   // -webkit-box-shadow: 0px 2px 4px 0px rgba(239, 239, 239, 0.5);
   // -moz-box-shadow: 0px 2px 4px 0px rgba(239, 239, 239, 0.5);
   // box-shadow: 0px 2px 4px 0px rgba(220, 220, 220, 0.5);

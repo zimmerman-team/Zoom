@@ -7,17 +7,25 @@ import { Box } from 'grommet';
 import FindReplace from 'modules/datamapper/components/ErrorsStep/components/FindReplace/FindReplace';
 import Pagination from 'components/Pagination/Pagination';
 
-/* mock */
-import { columns, data, errorCells } from './ErrorsStep.mock';
-
 /* styles */
 import {
   ErrorTitle,
   ModuleContainer,
   ErrorTable,
-  TabContainer, TabText, TabDivider
+  TabContainer,
+  TabText,
+  TabDivider,
 } from 'modules/datamapper/components/ErrorsStep/ErrorStep.styles';
-import {aidsFondsBlue, aidsFondsRed, Divider, errorCellColor, zoomGreyZero} from 'components/theme/ThemeSheet';
+import {
+  aidsFondsBlue,
+  aidsFondsRed,
+  Divider,
+  errorCellColor,
+  zoomGreyZero,
+} from 'components/theme/ThemeSheet';
+
+/* mock */
+import { columns, data, errorCells } from './ErrorsStep.mock';
 
 const propTypes = {
   data: PropTypes.arrayOf(
@@ -34,16 +42,14 @@ const propTypes = {
       dateValue: PropTypes.number,
       footnotes: PropTypes.string,
     }),
-  )
+  ),
 };
 
 const defaultProps = {
   data,
 };
 
-
-class ErrorStep extends React.Component{
-
+class ErrorStep extends React.Component {
   constructor(props) {
     super(props);
 
@@ -75,55 +81,76 @@ class ErrorStep extends React.Component{
     }
   }
 
-  colorErrors(){
+  colorErrors() {
     errorCells.forEach(cell => {
-      document.querySelector(`tbody tr:nth-child(${cell.row}) td:nth-child(${cell.col})`).style.backgroundColor = errorCellColor;
+      document.querySelector(
+        `tbody tr:nth-child(${cell.row}) td:nth-child(${cell.col})`,
+      ).style.backgroundColor = errorCellColor;
     });
   }
 
-  clickFindErrors(){
+  clickFindErrors() {
     this.colorErrors();
     this.setState({ tab: 'findErrors' });
   }
 
-  clickOverview(){
+  clickOverview() {
     const allCells = document.querySelectorAll('td');
     allCells.forEach(cell => {
-      cell.style.backgroundColor = zoomGreyZero
+      cell.style.backgroundColor = zoomGreyZero;
     });
     this.setState({ tab: 'overview' });
   }
 
-  clickFindReplace(){
+  clickFindReplace() {
     this.colorErrors();
     this.setState({ tab: 'findReplace', dialogOpen: true });
   }
 
-  render(){
+  render() {
     return (
       <ModuleContainer>
         <ErrorTitle>Check & correct erorrs</ErrorTitle>
         <TabContainer>
           <TabText
-            style={{ color: this.state.tab === 'overview' ? aidsFondsBlue : aidsFondsRed }}
-            onClick={() => this.clickOverview()}>Overview</TabText>
+            style={{
+              color:
+                this.state.tab === 'overview' ? aidsFondsBlue : aidsFondsRed,
+            }}
+            onClick={() => this.clickOverview()}
+          >
+            Overview
+          </TabText>
           <TabDivider>|</TabDivider>
           <TabText
-            style={{ color: this.state.tab === 'findErrors' ? aidsFondsBlue : aidsFondsRed }}
-            onClick={() => this.clickFindErrors()} >Find errors </TabText>
+            style={{
+              color:
+                this.state.tab === 'findErrors' ? aidsFondsBlue : aidsFondsRed,
+            }}
+            onClick={() => this.clickFindErrors()}
+          >
+            Find errors{' '}
+          </TabText>
           <TabDivider>|</TabDivider>
           <TabText
-            style={{ color: this.state.tab === 'findReplace' ? aidsFondsBlue : aidsFondsRed }}
-            onClick={() => this.clickFindReplace()} >
+            style={{
+              color:
+                this.state.tab === 'findReplace' ? aidsFondsBlue : aidsFondsRed,
+            }}
+            onClick={() => this.clickFindReplace()}
+          >
             Find & replace
           </TabText>
-            <FindReplace open={this.state.dialogOpen} setWrapperRef={this.setWrapperRef} />
+          <FindReplace
+            open={this.state.dialogOpen}
+            setWrapperRef={this.setWrapperRef}
+          />
         </TabContainer>
         <Box>
           <ErrorTable columns={columns} data={this.state.data} />
         </Box>
         <Pagination />
-        <Divider/>
+        <Divider />
       </ModuleContainer>
     );
   }

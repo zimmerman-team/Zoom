@@ -6,11 +6,14 @@ import PropTypes from 'prop-types';
 import { Box } from 'grommet';
 
 /* mock */
-import { columns, data } from 'modules/datamapper/components/OverviewStep/OverviewStep.mock';
+import {
+  columns,
+  data,
+} from 'modules/datamapper/components/OverviewStep/OverviewStep.mock';
 
 /* styles */
 import { ModuleContainer } from 'modules/datamapper/components/OverviewStep/OverviewStep.styles';
-import {SectionHeading, ZoomTable} from 'components/theme/ThemeSheet';
+import { SectionHeading, ZoomTable } from 'components/theme/ThemeSheet';
 
 const propTypes = {
   data: PropTypes.arrayOf(
@@ -20,19 +23,18 @@ const propTypes = {
         PropTypes.shape({
           label: PropTypes.string,
           value: PropTypes.any, // cause it can be number or string
-        })
+        }),
       ),
       dataTypes: PropTypes.arrayOf(PropTypes.string),
       blankCells: PropTypes.number,
     }),
-  )
+  ),
 };
 const defaultProps = {
   data,
 };
 
-const OverviewStep = (props) => {
-
+const OverviewStep = props => {
   return (
     <ModuleContainer>
       <SectionHeading>Overview</SectionHeading>

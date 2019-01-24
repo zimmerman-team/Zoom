@@ -7,9 +7,13 @@ import { grommet } from 'grommet/themes';
 import { deepMerge } from 'grommet/utils';
 import SelectHeader from 'components/Select/components/SelectHeader/SelectHeader';
 import ResetIcon from 'assets/icons/icon_reset.svg';
-import {ComponentBase, DropDownItem, ResetContainer, ToolTipInsider} from 'components/Select/ZoomSelect.styles';
+import {
+  ComponentBase,
+  DropDownItem,
+  ResetContainer,
+  ToolTipInsider,
+} from 'components/Select/ZoomSelect.styles';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
-
 
 const propTypes = {
   data: PropTypes.array,
@@ -24,14 +28,13 @@ const defaultProps = {
 // basically a theme to remove the arrow and add custom arrows to this
 const removeArrowTheme = deepMerge(grommet, {
   select: {
-    icons:{
+    icons: {
       down: 'div',
     },
-}
+  },
 });
 
 const ZoomSelect = props => {
-
   const dropDownItem = item => {
     if (props.multiple)
       return (
@@ -57,21 +60,26 @@ const ZoomSelect = props => {
         placeholder={props.placeHolder}
         children={dropDownItem}
         options={props.data}
-        valueLabel={<SelectHeader
-          label={props.valueSelected ? props.valueSelected : props.placeHolder}/>}
+        valueLabel={
+          <SelectHeader
+            label={
+              props.valueSelected ? props.valueSelected : props.placeHolder
+            }
+          />
+        }
         onChange={props.multiple ? null : props.selectVal}
       />
-      {props.reset &&
-        <ResetContainer onClick={props.reset} >
+      {props.reset && (
+        <ResetContainer onClick={props.reset}>
           <Tooltip
-            html={(<SimpleToolTip title='Reset'/>)}
-            position='top-start'
-            trigger='mouseenter'
+            html={<SimpleToolTip title="Reset" />}
+            position="top-start"
+            trigger="mouseenter"
           >
             <ResetIcon />
           </Tooltip>
         </ResetContainer>
-      }
+      )}
     </ComponentBase>
   );
 };

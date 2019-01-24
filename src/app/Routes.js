@@ -6,7 +6,7 @@ import PageLoader from 'modules/common/pageloader/PageLoader';
 import ThemeSheet from 'components/theme/ThemeSheet';
 import DataExplorePanel from 'components/DataExplorePane/DataExplorePanel';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
-import DataMapperModule from 'modules/datamapper/components/OverviewStep/OverviewStep';
+import DataMapperModule from 'modules/datamapper/DataMapperModule';
 // Modules regular import
 /*import HomeModule from 'modules/home/HomeModule';
 import IatiDetail from 'modules/IATI_Detail/IatiDetail';

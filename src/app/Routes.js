@@ -32,8 +32,8 @@ const CreateTeamMediator = lazy(() =>
 
 const About = lazy(() => import('modules/about/About'));
 
-// const ManMappingStep = lazy(() =>
-//   import('modules/datamapper/components/ManMappingStep/ManMappingStep'),
+// const UploadStep = lazy(() =>
+//   import('modules/datamapper/components/UploadStep/UploadStep'),
 // );
 
 // Routes
@@ -94,7 +94,7 @@ const Routes = props => {
           <Route path="/mapper" render={() => <DataMapperModule />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
           <Route exact path="/component" render={() => <DataExplorePanel />} />
-          {/*<Route exact path="/step" render={() => <ManMappingStep />} />*/}
+          {/*<Route exact path="/step" render={() => <UploadStep />} />*/}
         </Switch>
       </Suspense>
     </React.Fragment>

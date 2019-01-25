@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Stepper from 'components/stepper/Stepper';
-import RadioButtonGroup from 'components/RadioButton/RadioButtonGroup';
+
 import {
   RadioButton,
   Box,
@@ -17,7 +17,7 @@ import ZimmermanTextField from 'components/sort/ZimmermanTextField';
 import ZoomSelect from 'components/Select/ZoomSelect';
 import ChipsArray from 'components/ChipsArray/Chips';
 import CheckboxesGroup from 'components/CheckboxesGroup/CheckboxesGroup';
-import RadioButtonsGroup from 'components/RadioButtonsGroup/RadioButtonsGroup';
+import RadioButtonGroup from 'components/RadioButtonGroup/RadioButtonGroup';
 import {
   aidsFondsWhite,
   FragmentContainer,
@@ -103,28 +103,26 @@ const DataMapperModule = props => {
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>Description*</FieldLabel>
-          <ZimmermanTextField />
+          {/*<ZimmermanTextField />*/}
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>Tags*</FieldLabel>
-          <Box direction="row">
-            <ChipsArray />
-          </Box>
+          <Box direction="row">{/*<ChipsArray />*/}</Box>
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>Select data source*</FieldLabel>
-          <ZoomSelect />
+          {/*<ZoomSelect />*/}
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>Share data set?</FieldLabel>
           <Box>
-            <RadioButtonsGroup />
+            <RadioButtonGroup direction="column" />
           </Box>
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>Is this a servey data set?</FieldLabel>
           <Box>
-            <RadioButtonsGroup />
+            <RadioButtonGroup direction="column" />
           </Box>
         </FieldContainer>
         <FieldContainer>
@@ -133,7 +131,7 @@ const DataMapperModule = props => {
             conducting it?
           </FieldLabel>
           <Box direction="row">
-            <RadioButtonsGroup />
+            <RadioButtonGroup direction="row" />
           </Box>
         </FieldContainer>
         <FieldContainer>
@@ -142,7 +140,7 @@ const DataMapperModule = props => {
             conducting it?
           </FieldLabel>
           <Box direction="row">
-            <RadioButtonsGroup />
+            <RadioButtonGroup direction="row" />
           </Box>
         </FieldContainer>
 
@@ -153,7 +151,7 @@ const DataMapperModule = props => {
           </FieldLabel>
           <CheckboxesGroup />
           <FieldLabel>If other, explain</FieldLabel>
-          <ZimmermanTextField />
+          {/*<ZimmermanTextField />*/}
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>
@@ -164,7 +162,7 @@ const DataMapperModule = props => {
         <FieldContainer>
           <FieldLabel>3. How did you select respondents?</FieldLabel>
 
-          <RadioButtonsGroup />
+          <RadioButtonGroup direction="row" />
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>
@@ -176,15 +174,15 @@ const DataMapperModule = props => {
             5. Did you clean/edit the data before uploading it?
           </FieldLabel>
 
-          <RadioButtonsGroup />
+          <RadioButtonGroup direction="row" />
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>
             5.1 Which data cleaning techniques did you use?
           </FieldLabel>
-          <CheckboxesGroup />
+          {/*<CheckboxesGroup />*/}
           <FieldLabel>If other, explain</FieldLabel>
-          <ZimmermanTextField />
+          {/*<ZimmermanTextField />*/}
         </FieldContainer>
       </Box>
     </ModuleContainer>

@@ -107,7 +107,7 @@ export class LoginForm extends React.Component {
       borderColor: this.state.error ? aidsFondsRed : 'none',
     };
     let headerText = this.props.auth0Client.isAuthenticated()
-      ? `Welcome ${this.props.auth0Client.getProfile().nickname}`
+      ? `Welcome ${get(this.props.auth0Client.getProfile(), 'nickname', '')}`
       : 'Sign in registered users';
     if (!this.props.auth0Client.isAuthenticated()) {
       headerText =

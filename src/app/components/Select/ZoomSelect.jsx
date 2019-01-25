@@ -62,6 +62,8 @@ const ZoomSelect = props => {
         options={props.data}
         valueLabel={
           <SelectHeader
+            headerStyle={props.headerStyle}
+            arrowMargins={props.arrowMargins}
             label={
               props.valueSelected ? props.valueSelected : props.placeHolder
             }

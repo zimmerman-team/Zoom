@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { aidsFondsWhite } from 'components/theme/ThemeSheet';
 
 export const DropDownItem = styled.div`
   padding: 5px;
@@ -8,8 +7,6 @@ export const DropDownItem = styled.div`
 
 export const ComponentBase = styled.div`
   display: flex;
-  background-color: ${aidsFondsWhite};
-  margin: 6px 20px 6px 18px;
 `;
 
 export const ResetContainer = styled.div`

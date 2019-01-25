@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {EmptyInput, ComponentBase, CheckBoxStyle} from 'components/CustomCheckBox/CustomCheckBox.styles';
+import {
+  EmptyInput,
+  ComponentBase,
+  CheckBoxStyle,
+} from 'components/CustomCheckBox/CustomCheckBox.styles';
 
 const propTypes = {
   onChange: PropTypes.func,
@@ -11,7 +15,6 @@ const defaultProps = {
 };
 
 class CustomCheckBox extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -20,16 +23,21 @@ class CustomCheckBox extends React.Component {
     };
   }
 
-  handleChange(){
+  handleChange() {
     this.props.onChange && this.props.onChange();
     this.setState({ checked: !this.state.checked });
   }
 
-
-  render(){
-    return(
+  render() {
+    return (
       <ComponentBase>
-        <EmptyInput type='checkbox' checked={this.state.checked} onChange={() => {return ''}} />
+        <EmptyInput
+          type="checkbox"
+          checked={this.state.checked}
+          onChange={() => {
+            return '';
+          }}
+        />
         <CheckBoxStyle onClick={() => this.handleChange()} />
       </ComponentBase>
     );

@@ -3,7 +3,6 @@ import { Box } from 'grommet';
 import {
   aidsFondsWhite,
   CellValue,
-  SectionHeading,
   zoomFontFamTwo,
   ColumnHeader,
 } from 'components/theme/ThemeSheet';

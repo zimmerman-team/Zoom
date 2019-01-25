@@ -5,6 +5,7 @@ import {
   zoomGreyThree,
 } from 'components/theme/ThemeSheet';
 import { Box, Accordion, AccordionPanel } from 'grommet';
+import { aidsFondsWhite } from 'components/theme/ThemeSheet';
 
 export const ComponentBase = styled.div`
   width: 320px;
@@ -40,4 +41,9 @@ export const ResetContainer = styled.div`
   &:hover {
     cursor: pointer;
   }
+`;
+
+export const DropDownCont = styled.div`
+  background-color: ${aidsFondsWhite};
+  margin: 6px 20px 6px 18px;
 `;

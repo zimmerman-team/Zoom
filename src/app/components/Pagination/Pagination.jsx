@@ -11,7 +11,7 @@ const Pagination = () => (
     pageCount={5}
     marginPagesDisplayed={2}
     pageRangeDisplayed={5}
-    onPageChange={(e) => console.log('Selected page', e)}
+    onPageChange={e => console.log('Selected page', e)}
     containerClassName={'pagination'}
     pageClassName={'page'}
     activeClassName={'active-page'}

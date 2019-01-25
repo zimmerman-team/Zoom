@@ -29,9 +29,9 @@ const AddUserMediator = lazy(() =>
 
 const About = lazy(() => import('modules/about/About'));
 
-const ErrorStep = lazy(() =>
-  import('modules/datamapper/components/ErrorsStep/ErrorsStep'),
-);
+// const ManMappingStep = lazy(() =>
+//   import('modules/datamapper/components/ManMappingStep/ManMappingStep'),
+// );
 
 // Routes
 const Routes = props => {
@@ -80,7 +80,7 @@ const Routes = props => {
           <Route path="/mapper" render={() => <DataMapperModule />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
           <Route exact path="/component" render={() => <DataExplorePanel />} />
-          <Route exact path="/step" render={() => <ErrorStep />} />
+          {/*<Route exact path="/step" render={() => <ManMappingStep />} />*/}
         </Switch>
       </Suspense>
     </React.Fragment>

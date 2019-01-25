@@ -23,6 +23,7 @@ import {
   FilterContainer,
   PanelAccordion,
   AccordionSection,
+  DropDownCont,
 } from './DataExplorerPane.style';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
@@ -153,26 +154,30 @@ class DataExplorePane extends React.Component {
         >
           <AccordionSection header={this.renderHeader('Geo loaction')}>
             <FilterContainer>
-              <ZoomSelect
-                multiple
-                placeHolder={
-                  'Select region (' + this.props.regions.length + ')'
-                }
-                data={this.props.regions}
-                arraySelected={this.props.selectedRegionVal}
-                selectVal={this.props.selectRegion}
-                reset={() => this.props.selectRegion('reset')}
-              />
-              <ZoomSelect
-                reset={() => this.props.selectCountry('reset')}
-                multiple
-                placeHolder={
-                  'Select country (' + this.props.countries.length + ')'
-                }
-                data={this.props.countries}
-                arraySelected={this.props.selectedCountryVal}
-                selectVal={this.props.selectCountry}
-              />
+              <DropDownCont>
+                <ZoomSelect
+                  multiple
+                  placeHolder={
+                    'Select region (' + this.props.regions.length + ')'
+                  }
+                  data={this.props.regions}
+                  arraySelected={this.props.selectedRegionVal}
+                  selectVal={this.props.selectRegion}
+                  reset={() => this.props.selectRegion('reset')}
+                />
+              </DropDownCont>
+              <DropDownCont>
+                <ZoomSelect
+                  reset={() => this.props.selectCountry('reset')}
+                  multiple
+                  placeHolder={
+                    'Select country (' + this.props.countries.length + ')'
+                  }
+                  data={this.props.countries}
+                  arraySelected={this.props.selectedCountryVal}
+                  selectVal={this.props.selectCountry}
+                />
+              </DropDownCont>
             </FilterContainer>
           </AccordionSection>
           <AccordionSection header={this.renderHeader('Time period')}>
@@ -182,42 +187,50 @@ class DataExplorePane extends React.Component {
           </AccordionSection>
           <AccordionSection header={this.renderHeader('Indicators')}>
             <FilterContainer>
-              <ZoomSelect
-                reset={() =>
-                  this.props.selectInd1({ value: { value: undefined } })
-                }
-                placeHolder={
-                  'Select indicator (' + this.props.indNames.length + ')'
-                }
-                data={this.props.indNames}
-                valueSelected={this.props.selectedInd1}
-                selectVal={this.props.selectInd1}
-              />
-              <ZoomSelect
-                placeHolder="Select sub indicator"
-                data={this.props.subIndicators1}
-                valueSelected={this.props.selectedSubInd1}
-                selectVal={this.props.selectSubInd1}
-              />
+              <DropDownCont>
+                <ZoomSelect
+                  reset={() =>
+                    this.props.selectInd1({ value: { value: undefined } })
+                  }
+                  placeHolder={
+                    'Select indicator (' + this.props.indNames.length + ')'
+                  }
+                  data={this.props.indNames}
+                  valueSelected={this.props.selectedInd1}
+                  selectVal={this.props.selectInd1}
+                />
+              </DropDownCont>
+              <DropDownCont>
+                <ZoomSelect
+                  placeHolder="Select sub indicator"
+                  data={this.props.subIndicators1}
+                  valueSelected={this.props.selectedSubInd1}
+                  selectVal={this.props.selectSubInd1}
+                />
+              </DropDownCont>
             </FilterContainer>
             <FilterContainer>
-              <ZoomSelect
-                reset={() =>
-                  this.props.selectInd2({ value: { value: undefined } })
-                }
-                placeHolder={
-                  'Select indicator (' + this.props.indNames.length + ')'
-                }
-                data={this.props.indNames}
-                valueSelected={this.props.selectedInd2}
-                selectVal={this.props.selectInd2}
-              />
-              <ZoomSelect
-                placeHolder="Select sub indicator"
-                data={this.props.subIndicators2}
-                valueSelected={this.props.selectedSubInd2}
-                selectVal={this.props.selectSubInd2}
-              />
+              <DropDownCont>
+                <ZoomSelect
+                  reset={() =>
+                    this.props.selectInd2({ value: { value: undefined } })
+                  }
+                  placeHolder={
+                    'Select indicator (' + this.props.indNames.length + ')'
+                  }
+                  data={this.props.indNames}
+                  valueSelected={this.props.selectedInd2}
+                  selectVal={this.props.selectInd2}
+                />
+              </DropDownCont>
+              <DropDownCont>
+                <ZoomSelect
+                  placeHolder="Select sub indicator"
+                  data={this.props.subIndicators2}
+                  valueSelected={this.props.selectedSubInd2}
+                  selectVal={this.props.selectSubInd2}
+                />
+              </DropDownCont>
             </FilterContainer>
           </AccordionSection>
         </PanelAccordion>

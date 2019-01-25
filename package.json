@@ -4,6 +4,7 @@
   "private": true,
   "main": "index.js",
   "dependencies": {
+    "@material-ui/core": "^3.9.0",
     "@nivo/bar": "^0.52.0",
     "@nivo/generators": "^0.52.0",
     "@nivo/line": "^0.52.0",

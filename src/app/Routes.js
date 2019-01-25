@@ -26,6 +26,9 @@ const IatiDetailMediator = lazy(() =>
 const AddUserMediator = lazy(() =>
   import('mediators/ModuleMediators/AddUserMediator/AddUserMediator'),
 );
+const CreateTeamMediator = lazy(() =>
+  import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator'),
+);
 
 const About = lazy(() => import('modules/about/About'));
 
@@ -71,6 +74,17 @@ const Routes = props => {
               props.auth0Client.isAuthenticated() &&
               props.auth0Client.isAdministrator() ? (
                 <AddUserMediator auth0Client={props.auth0Client} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            path="/create-team"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <CreateTeamMediator auth0Client={props.auth0Client} />
               ) : (
                 <Redirect to="/" />
               )

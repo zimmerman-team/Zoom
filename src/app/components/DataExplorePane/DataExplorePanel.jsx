@@ -116,7 +116,7 @@ class DataExplorePane extends React.Component {
     let active = false;
     let icon = '';
     switch (label) {
-      case 'Geo loaction':
+      case 'Geo location':
         // checks if geolocations is active
         if (this.state.activeIndex.indexOf(0) !== -1) {
           active = true;
@@ -152,7 +152,7 @@ class DataExplorePane extends React.Component {
             this.setState({ activeIndex: newActiveIndex })
           }
         >
-          <AccordionSection header={this.renderHeader('Geo loaction')}>
+          <AccordionSection header={this.renderHeader('Geo location')}>
             <FilterContainer>
               <DropDownCont>
                 <ZoomSelect

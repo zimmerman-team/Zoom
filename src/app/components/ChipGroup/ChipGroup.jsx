@@ -1,43 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Chip from '@material-ui/core/Chip';
-import Paper from '@material-ui/core/Paper';
+import Chip from 'components/Chip/Chip';
 import TagFacesIcon from '@material-ui/icons/TagFaces';
-import { Box } from 'grommet';
-import NoSsr from '@material-ui/core/NoSsr';
-import {
-  zoomFontFamTwo,
-  aidsFondsBlue,
-  aidsFondsWhite,
-} from 'components/theme/ThemeSheet';
-import styled from 'styled-components';
 
-const ZimmermanChip = styled(Chip)`
-  && {
-    background-color: ${aidsFondsBlue};
-    border-radius: 5px;
-    margin: 0;
-    margin-right: 20px;
-    margin-bottom: 3px;
-    span {
-      line-height: 1;
-      color: ${aidsFondsWhite};
-      font-family: ${zoomFontFamTwo};
-      margin-right: 10px;
-    }
-
-    svg {
-      fill: white;
-      fill-opacity: 0.7;
-    }
-  }
-`;
-
+/*TODO: get rid of material-ui theming */
+/*TODO: clean up and refactor this components*/
 const styles = theme => ({
   root: {
     display: 'flex',
-    // justifyContent: 'center',
     flexWrap: 'wrap',
     padding: theme.spacing.unit / 2,
   },
@@ -46,7 +17,8 @@ const styles = theme => ({
   },
 });
 
-class ChipsArray extends React.Component {
+/*TODO: add proptypes*/
+class ChipGroup extends React.Component {
   state = {
     chipData: [
       { key: 0, label: 'Primary test data set' },
@@ -81,7 +53,7 @@ class ChipsArray extends React.Component {
       }
 
       return (
-        <ZimmermanChip
+        <Chip
           key={data.key}
           icon={icon}
           label={data.label}
@@ -93,8 +65,8 @@ class ChipsArray extends React.Component {
   }
 }
 
-ChipsArray.propTypes = {
+ChipGroup.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ChipsArray);
+export default withStyles(styles)(ChipGroup);

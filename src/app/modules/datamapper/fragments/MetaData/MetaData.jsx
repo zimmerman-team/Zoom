@@ -6,7 +6,7 @@ import { Box } from 'grommet';
 
 /* custom components */
 import ZoomSelect from 'components/Select/ZoomSelect';
-import ChipsArray from 'components/ChipsArray/Chips';
+import ChipsArray from 'components/ChipGroup/ChipGroup';
 import CheckboxesGroup from 'components/CheckboxesGroup/CheckboxesGroup';
 import RadioButtonGroup from 'components/RadioButtonGroup/RadioButtonGroup';
 import TextField from 'components/sort/TextField';

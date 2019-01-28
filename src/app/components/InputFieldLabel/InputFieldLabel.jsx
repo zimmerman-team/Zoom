@@ -14,6 +14,7 @@ export default styled(({ text, ...props }) => (
     color: #9b9b9b;
     margin-bottom: 10px;
     font-weight: 500;
+    font-size: 14px;
     font-family: ${zoomFontFamOne};
   }
 `;

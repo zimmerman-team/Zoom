@@ -36,7 +36,7 @@ const defaultProps = {
 const StepItem = props => {
   return (
     <ComponentBase>
-      <Box direction="row" align="center">
+      <Box direction="row" align="center" width="100%">
         <StepSpacer
           colores={props.isDone || props.isActive}
           outer={props.isFirst}

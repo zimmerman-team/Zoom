@@ -15,6 +15,7 @@ export const ComponentBase = styled.div`
   flex-direction: column;
   align-items: center;
   user-select: none;
+  width: 100%;
 `;
 
 export const StepLabel = styled.div`
@@ -49,7 +50,7 @@ export const StepNumber = styled.span`
 
 export const StepSpacer = styled.div`
   height: 2px;
-  width: 75px;
+  width: 41.67%;
   visibility: ${props => (props.outer ? 'hidden' : 'visible')}
   background: ${props => (props.colores ? aidsFondsBlue : zoomGreyThree)};
 `;

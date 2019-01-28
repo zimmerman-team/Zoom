@@ -7,6 +7,7 @@ import {
   ColumnHeader,
   CellValue,
 } from 'components/theme/ThemeSheet';
+import IconSort from 'assets/icons/icon_sort.svg';
 
 export const CreateTeamForm = styled.form`
   padding: 0 40px;
@@ -72,4 +73,8 @@ export const TextField = styled(TextInput)`
   // -webkit-box-shadow: 0px 2px 4px 0px rgba(239, 239, 239, 0.5);
   // -moz-box-shadow: 0px 2px 4px 0px rgba(239, 239, 239, 0.5);
   // box-shadow: 0px 2px 4px 0px rgba(220, 220, 220, 0.5);
+`;
+
+export const SortByIcon = styled(IconSort)`
+  cursor: pointer;
 `;

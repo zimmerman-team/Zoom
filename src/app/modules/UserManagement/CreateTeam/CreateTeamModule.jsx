@@ -40,6 +40,12 @@ const propTypes = {
   changePage: PropTypes.func,
   totalPages: PropTypes.number,
   submitForm: PropTypes.func,
+  isSortByOpen: PropTypes.bool,
+  changeIsSortByOpen: PropTypes.func,
+  setWrapperRef: PropTypes.func,
+  changeSortBy: PropTypes.func,
+  addRemoveAllUsers: PropTypes.func,
+  selectedSortBy: PropTypes.string,
 };
 const defaultProps = {
   success: false,
@@ -54,6 +60,12 @@ const defaultProps = {
   changePage: null,
   totalPages: 0,
   submitForm: null,
+  isSortByOpen: false,
+  changeIsSortByOpen: null,
+  setWrapperRef: null,
+  changeSortBy: null,
+  addRemoveAllUsers: null,
+  selectedSortBy: 'name:1',
 };
 
 const CreateTeam = props => {
@@ -99,7 +111,16 @@ const CreateTeam = props => {
           <UsersTable
             primaryKey="id"
             data={props.userOptions}
-            columns={getColumns(props.users, props.addRemoveUser)}
+            columns={getColumns(
+              props.users,
+              props.addRemoveUser,
+              props.addRemoveAllUsers,
+              props.isSortByOpen,
+              props.changeIsSortByOpen,
+              props.setWrapperRef,
+              props.changeSortBy,
+              props.selectedSortBy,
+            )}
           />
           <Pagination
             pageCount={props.totalPages}

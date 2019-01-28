@@ -52,6 +52,11 @@ export const ZoomTable = styled(DataTable)`
   & tbody {
     & tr {
       border-bottom: 2px solid ${aidsFondsWhite};
+      &:first-child {
+        & th {
+          border-top: none;
+        }
+      }
       &:last-child {
         border-color: ${zoomGreyFour};
       }
@@ -66,6 +71,10 @@ export const ZoomTable = styled(DataTable)`
       &:last-child {
         border-right: 0;
       }
+    }
+    & th {
+      background-color: ${zoomGreyZero};
+      border-top: 2px solid ${aidsFondsWhite};
     }
   }
 

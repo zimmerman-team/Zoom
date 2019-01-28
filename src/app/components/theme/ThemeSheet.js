@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { createGlobalStyle } from 'styled-components';
-import { Box, Button, Grommet, Text, Heading, Grid } from 'grommet';
+import { Box, Button, Grommet, Text, Heading, Grid, DataTable } from 'grommet';
 import { grommet } from 'grommet/themes';
 import { Checkmark, Close } from 'grommet-icons';
 
@@ -12,6 +12,7 @@ const ComponentBase = styled.div``;
 export const aidsFondsBlue = '#0000ff';
 export const aidsFondsRed = '#ff0100';
 export const aidsFondsWhite = '#ffffff';
+export const toolTipColor = '#414141';
 
 /* Chart colors */
 export const chartColorOne = '#f2c987';
@@ -23,9 +24,77 @@ export const zoomGreyZero = '#efefef';
 export const zoomGreyOne = '#818181';
 export const zoomGreyTwo = '#505050';
 export const zoomGreyThree = '#a1a1a1';
+export const zoomGreyFour = '#dfdfdf';
+export const zoomGreyFive = '#9b9b9b';
 export const zoomBlack = '#000000';
 export const zoomFontFamOne = 'FFMarkProAF-Bold';
 export const zoomFontFamTwo = 'FFMarkProAF-Book';
+
+/* Tables */
+export const colHeadColor = zoomGreyFive;
+export const errorCellColor = '#ff807f';
+
+export const ZoomTable = styled(DataTable)`
+  & th {
+    border: 2px solid ${zoomGreyFour};
+    border-bottom: 0;
+    &:first-child {
+      border-left: 0;
+    }
+    &:last-child {
+      border-right: 0;
+    }
+    > div {
+      border-bottom: 0;
+    }
+  }
+
+  & tbody {
+    & tr {
+      border-bottom: 2px solid ${aidsFondsWhite};
+      &:last-child {
+        border-color: ${zoomGreyFour};
+      }
+    }
+    & td {
+      vertical-align: top;
+      border-left: 2px solid ${zoomGreyFour};
+      border-right: 2px solid ${zoomGreyFour};
+      &:first-child {
+        border-left: 0;
+      }
+      &:last-child {
+        border-right: 0;
+      }
+    }
+  }
+
+  & td {
+    background-color: ${zoomGreyZero};
+  }
+`;
+
+export const Divider = styled.div`
+  height: 2px;
+  background-color: ${zoomGreyZero};
+  width: 100%;
+`;
+
+export const ColumnHeader = styled.div`
+  color: ${colHeadColor};
+  font-family: ${zoomFontFamOne};
+  font-size: 14px;
+  line-height: 19px;
+`;
+
+export const CellValue = styled.div`
+  color: ${props => (props.theme.color ? props.theme.color : zoomBlack)};
+  font-family: ${zoomFontFamOne};
+  font-size: 12px;
+  line-height: 19px;
+`;
+
+/* Tables End */
 
 const headSizeOne = '48px';
 const headSizeTwo = '48px';
@@ -86,6 +155,7 @@ export const PageHeading = styled(BaseHeading)`
 
 export const SectionHeading = styled(BaseHeading)`
   font-size: 32px;
+  text-align: center;
   font-family: ${zoomFontFamOne};
 `;
 

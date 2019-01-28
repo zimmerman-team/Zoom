@@ -23,8 +23,18 @@ const HomeModuleMediator = lazy(() =>
 const IatiDetailMediator = lazy(() =>
   import('mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator'),
 );
+const AddUserMediator = lazy(() =>
+  import('mediators/ModuleMediators/AddUserMediator/AddUserMediator'),
+);
+const CreateTeamMediator = lazy(() =>
+  import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator'),
+);
 
 const About = lazy(() => import('modules/about/About'));
+
+// const WrapUpStep = lazy(() =>
+//   import('modules/datamapper/components/WrapUpStep/WrapUpStep'),
+// );
 
 // Routes
 const Routes = props => {
@@ -58,10 +68,33 @@ const Routes = props => {
             path="/iati-activity/:activity_id"
             render={() => <IatiDetailMediator />}
           />
+          <Route
+            path="/add-user"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <AddUserMediator auth0Client={props.auth0Client} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            path="/create-team"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <CreateTeamMediator auth0Client={props.auth0Client} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
           <Route path="/about" render={() => <About />} />
           <Route path="/mapper" render={() => <DataMapperModule />} />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
           <Route exact path="/component" render={() => <DataExplorePanel />} />
+          {/*<Route exact path="/step" render={() => <WrapUpStep />} />*/}
         </Switch>
       </Suspense>
     </React.Fragment>

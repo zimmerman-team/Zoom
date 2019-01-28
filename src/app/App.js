@@ -1,4 +1,5 @@
 import React from 'react';
+// import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { graphql, QueryRenderer } from 'react-relay';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
@@ -8,8 +9,9 @@ import auth0Client from 'auth/Auth';
 import Routes from './Routes';
 import AppBar from 'components/navigation/AppBar/AppBar';
 import SideBar from 'components/navigation/SideBar/SideBar';
+
 import { Grommet } from 'grommet';
-import { zoom } from 'theme/Zoom';
+import { ZoomTheme } from 'styles/ZoomTheme';
 
 function fetchQuery(operation, variables) {
   return fetch(`${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`, {
@@ -50,41 +52,44 @@ class App extends React.Component {
 
   render() {
     return (
-      <QueryRenderer
-        environment={modernEnvironment}
-        query={graphql`
-          query AppQuery {
-            ...HomeModuleMediator_indicatorAggregations
-            ...CountryDetailMediator_indicatorAggregations
-            ...ExplorePanelMediator_dropDownData
-          }
-        `}
-        variables={{}}
-        render={({ error, props }) => {
-          if (props) {
-            return (
-              <Router>
-                <Grommet theme={zoom}>
-                  <AppBar
-                    toggleSideBar={() =>
-                      this.setState({ showSidebar: !this.state.showSidebar })
-                    }
-                  />
-                  <SideBar
-                    open={this.state.showSidebar}
-                    toggleSideBar={() =>
-                      this.setState({ showSidebar: !this.state.showSidebar })
-                    }
-                  />
-                  <Routes {...props} />
-                </Grommet>
-              </Router>
-            );
-          } else {
-            return <div>Loading - 0</div>;
-          }
-        }}
-      />
+      <Grommet theme={ZoomTheme}>
+        <QueryRenderer
+          environment={modernEnvironment}
+          query={graphql`
+            query AppQuery {
+              ...HomeModuleMediator_indicatorAggregations
+              ...CountryDetailMediator_indicatorAggregations
+              ...ExplorePanelMediator_dropDownData
+            }
+          `}
+          variables={{}}
+          render={({ error, props }) => {
+            if (props) {
+              return (
+                <Router>
+                  <React.Fragment>
+                    <AppBar
+                      toggleSideBar={() =>
+                        this.setState({ showSidebar: !this.state.showSidebar })
+                      }
+                    />
+                    <SideBar
+                      auth0Client={auth0Client}
+                      open={this.state.showSidebar}
+                      toggleSideBar={() =>
+                        this.setState({ showSidebar: !this.state.showSidebar })
+                      }
+                    />
+                    <Routes {...props} auth0Client={auth0Client} />
+                  </React.Fragment>
+                </Router>
+              );
+            } else {
+              return <div>Loading - 0</div>;
+            }
+          }}
+        />
+      </Grommet>
     );
   }
 }

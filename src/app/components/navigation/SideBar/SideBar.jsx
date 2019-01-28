@@ -88,6 +88,19 @@ class SideBar extends React.Component {
                     data-cy="sidebar-iati"
                   />
 
+                  {this.props.auth0Client.isAuthenticated() &&
+                    this.props.auth0Client.isAdministrator() && (
+                      <SidebarNavListItem
+                        label="Add user"
+                        path="/add-user"
+                        onClick={this.props.toggleSideBar}
+                        icon={<IconCharts />}
+                        type="button"
+                        plain={true}
+                        data-cy="sidebar-add-user"
+                      />
+                    )}
+
                   <SidebarNavListItem
                     disabled={true}
                     active={false}
@@ -101,7 +114,7 @@ class SideBar extends React.Component {
                 </SidebarNavList>
               </SidebarNavListContainer>
 
-              <LoginForm />
+              <LoginForm auth0Client={this.props.auth0Client} />
             </Box>
           </SideBarLayer>
         )}

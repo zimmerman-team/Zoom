@@ -1,20 +1,15 @@
 import styled from 'styled-components';
 import {
-  zoomFontFamOne,
   zoomFontFamTwo,
   zoomGreyZero,
+  zoomGreyThree,
 } from 'components/theme/ThemeSheet';
-import { Box } from 'grommet';
+import { Box, Accordion, AccordionPanel } from 'grommet';
+import { aidsFondsWhite } from 'components/theme/ThemeSheet';
 
 export const ComponentBase = styled.div`
   width: 320px;
   padding-top: 20px;
-`;
-
-export const FilterLabel = styled.span`
-  font-family: ${zoomFontFamOne};
-  font-size: 13px;
-  margin-bottom: 10px;
 `;
 
 export const FilterTitle = styled.span`
@@ -27,16 +22,28 @@ export const ExplorerHeader = styled.div`
   padding-right: 20px;
 `;
 
-export const Divider = styled.div`
-  height: 2px;
+export const FilterContainer = styled(Box)`
   background-color: ${zoomGreyZero};
-  width: 100%;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  padding: 12px 0;
 `;
 
-export const FilterContainer = styled(Box)`
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-bottom: 30px;
+export const PanelAccordion = styled(Accordion)`
+  overflow: unset;
+`;
+
+export const AccordionSection = styled(AccordionPanel)`
+  // border-bottom: 1px solid ${zoomGreyThree};
+`;
+
+export const ResetContainer = styled.div`
+  display: flex;
+  margin: 15px 0 0 12px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+export const DropDownCont = styled.div`
+  background-color: ${aidsFondsWhite};
+  margin: 6px 20px 6px 18px;
 `;

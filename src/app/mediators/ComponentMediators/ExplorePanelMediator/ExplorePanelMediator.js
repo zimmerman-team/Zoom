@@ -4,9 +4,6 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import DataExplorePane from 'components/DataExplorePane/DataExplorePanel';
 import PropTypes from 'prop-types';
 
-/* mock */
-import mock from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator.mock';
-
 /* helpers */
 import sortBy from 'lodash/sortBy';
 import findIndex from 'lodash/findIndex';
@@ -94,7 +91,6 @@ class ExplorePanelMediator extends React.Component {
     return (
       <DataExplorePane
         indNames={this.state.allIndNames}
-        years={mock.years}
         countries={this.state.allCountries}
         regions={this.state.allRegions}
         {...otherProps}

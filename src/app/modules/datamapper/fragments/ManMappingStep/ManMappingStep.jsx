@@ -16,14 +16,14 @@ import {
   ModuleContainer,
   ManMapTable,
   ManMapTitle,
-} from 'modules/datamapper/components/ManMappingStep/ManMappingStep.syles';
+} from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.syles';
 import { CellValue } from 'components/theme/ThemeSheet';
 
 /* mock */
 import {
   mockData,
   mockOptions,
-} from 'modules/datamapper/components/ManMappingStep/ManMappingStep.mock';
+} from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.mock';
 
 /* helpers */
 import isEqual from 'lodash/isEqual';

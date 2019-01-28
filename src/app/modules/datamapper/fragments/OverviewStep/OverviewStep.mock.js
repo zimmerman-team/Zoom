@@ -5,7 +5,7 @@ import {
   CellText,
   ColHeader,
   Cell,
-} from 'modules/datamapper/components/OverviewStep/OverviewStep.styles';
+} from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
 
 export const columns = [
   {

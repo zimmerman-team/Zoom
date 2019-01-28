@@ -7,10 +7,10 @@ import {
   InputContainer,
   EmptyInput,
   FindReplaceButton,
-} from 'modules/datamapper/components/ErrorsStep/components/FindReplace/FindReplace.styles';
+} from 'modules/datamapper/fragments/ErrorsStep/components/FindReplace/FindReplace.styles';
 import PropTypes from 'prop-types';
-import { data } from 'modules/datamapper/components/ErrorsStep/ErrorsStep.mock';
-import ErrorStep from 'modules/datamapper/components/ErrorsStep/ErrorsStep';
+import { data } from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep.mock';
+import ErrorStep from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep';
 
 const propTypes = {
   open: PropTypes.bool,

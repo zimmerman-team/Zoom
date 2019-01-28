@@ -4,7 +4,7 @@ import {
   CheckBox,
   ErrorCell,
   ErrorColHeader,
-} from 'modules/datamapper/components/ErrorsStep/ErrorStep.styles';
+} from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
 import CustomCheckBox from 'components/CustomCheckBox/CustomCheckBox';
 
 export const columns = [

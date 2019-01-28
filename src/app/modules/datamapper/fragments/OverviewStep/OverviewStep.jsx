@@ -9,10 +9,10 @@ import { Box } from 'grommet';
 import {
   columns,
   data,
-} from 'modules/datamapper/components/OverviewStep/OverviewStep.mock';
+} from 'modules/datamapper/fragments/OverviewStep/OverviewStep.mock';
 
 /* styles */
-import { ModuleContainer } from 'modules/datamapper/components/OverviewStep/OverviewStep.styles';
+import { ModuleContainer } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
 import { SectionHeading, ZoomTable } from 'components/theme/ThemeSheet';
 
 const propTypes = {

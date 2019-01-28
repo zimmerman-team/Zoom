@@ -49,36 +49,34 @@ const defaultProps = {
 class Stepper extends React.Component {
   render() {
     return (
-      <React.Fragment>
-        <Box align="center">
-          <Box direction="row" margin="medium">
-            {/*TODO: implement conditional logic that sets state accordingly to control the stepper and the content that is linked to specific steps*/}
-            {steps.map(step => (
-              /*TODO: set "isFirst" and "isLast" depending on if object is first or last in the array of objects */
-              <StepItem
-                key={step.id}
-                stepNumber={step.id}
-                isActive={step.isActive}
-                isDone={step.isDone}
-                stepLabel={step.label}
-                isFirst={step.isFirst}
-                isLast={step.isLast}
-              />
-            ))}
-          </Box>
+      <Box align="center" width="100%">
+        <Box direction="row" width="100%">
+          {/*TODO: implement conditional logic that sets state accordingly to control the stepper and the content that is linked to specific steps*/}
+          {steps.map(step => (
+            /*TODO: set "isFirst" and "isLast" depending on if object is first or last in the array of objects */
+            <StepItem
+              key={step.id}
+              stepNumber={step.id}
+              isActive={step.isActive}
+              isDone={step.isDone}
+              stepLabel={step.label}
+              isFirst={step.isFirst}
+              isLast={step.isLast}
+            />
+          ))}
+        </Box>
 
-          {/*TODO: refactor "ZoomButton" to be a proper component*/}
-          {/*TODO: add click event handlers*/}
-          <Box direction="row">
-            <Box margin="small">
-              <ZoomButton>back</ZoomButton>
-            </Box>
-            <Box margin="small">
-              <ZoomButton>next</ZoomButton>
-            </Box>
+        {/*TODO: refactor "ZoomButton" to be a proper component*/}
+        {/*TODO: add click event handlers*/}
+        <Box direction="row">
+          <Box margin="small">
+            <ZoomButton>back</ZoomButton>
+          </Box>
+          <Box margin="small">
+            <ZoomButton>next</ZoomButton>
           </Box>
         </Box>
-      </React.Fragment>
+      </Box>
     );
   }
 }

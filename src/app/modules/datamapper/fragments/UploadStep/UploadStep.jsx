@@ -9,7 +9,7 @@ import {
   BrowseLink,
   EmptyInput,
   UploadedContainer,
-} from 'modules/datamapper/components/UploadStep/UploadStep.styles';
+} from 'modules/datamapper/fragments/UploadStep/UploadStep.styles';
 import IconUpload from 'assets/icons/icon_upload.svg';
 
 const propTypes = {};

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 /* components */
 import { Box } from 'grommet';
-import FindReplace from 'modules/datamapper/components/ErrorsStep/components/FindReplace/FindReplace';
+import FindReplace from 'modules/datamapper/fragments/ErrorsStep/components/FindReplace/FindReplace';
 import Pagination from 'components/Pagination/Pagination';
 
 /* styles */
@@ -15,7 +15,7 @@ import {
   TabContainer,
   TabText,
   TabDivider,
-} from 'modules/datamapper/components/ErrorsStep/ErrorStep.styles';
+} from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
 import {
   aidsFondsBlue,
   aidsFondsRed,

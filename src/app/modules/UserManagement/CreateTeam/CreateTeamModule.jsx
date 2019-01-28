@@ -19,12 +19,7 @@ import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import IconSearch from 'assets/icons/icon_search.svg';
-
-/* mock */
-import {
-  columns,
-  tableData,
-} from 'modules/UserManagement/CreateTeam/CreateTeamModule.mock';
+import getColumns from 'modules/UserManagement/CreateTeam/comps/TableColumns';
 
 const propTypes = {
   success: PropTypes.bool,
@@ -32,15 +27,19 @@ const propTypes = {
   errorMessage: PropTypes.string,
   name: PropTypes.string,
   changeName: PropTypes.func,
-  searchKeyword: PropTypes.string,
   changeSearchKeyword: PropTypes.func,
-  users: PropTypes.arrayOf(
+  users: PropTypes.arrayOf(PropTypes.string),
+  addRemoveUser: PropTypes.func,
+  userOptions: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
       role: PropTypes.string,
       id: PropTypes.string,
     }),
   ),
+  changePage: PropTypes.func,
+  totalPages: PropTypes.number,
+  submitForm: PropTypes.func,
 };
 const defaultProps = {
   success: false,
@@ -48,9 +47,13 @@ const defaultProps = {
   errorMessage: null,
   name: '',
   changeName: null,
-  searchKeyword: '',
   changeSearchKeyword: null,
   users: [],
+  addRemoveUser: null,
+  userOptions: [],
+  changePage: null,
+  totalPages: 0,
+  submitForm: null,
 };
 
 const CreateTeam = props => {
@@ -58,6 +61,22 @@ const CreateTeam = props => {
   return (
     <ModuleFragment title="Create team">
       <CreateTeamForm onSubmit={props.submitForm}>
+        {props.success && (
+          <Message theme={{ color: 'green' }}>
+            Team created successfully
+          </Message>
+        )}
+        {!props.success && props.errorMessage && (
+          <Message theme={{ color: aidsFondsRed }}>
+            {props.errorMessage}
+          </Message>
+        )}
+        {props.secondaryInfoMessage && (
+          <Message theme={{ color: 'orange' }}>
+            {props.secondaryInfoMessage}
+          </Message>
+        )}
+
         <InputField
           label="Team name"
           id="teamName-input"
@@ -77,8 +96,15 @@ const CreateTeam = props => {
         />
 
         <TableBox>
-          <UsersTable columns={columns} data={tableData} />
-          <Pagination />
+          <UsersTable
+            primaryKey="id"
+            data={props.userOptions}
+            columns={getColumns(props.users, props.addRemoveUser)}
+          />
+          <Pagination
+            pageCount={props.totalPages}
+            changePage={props.changePage}
+          />
         </TableBox>
 
         <Tooltip
@@ -91,22 +117,6 @@ const CreateTeam = props => {
             create team
           </SubmitButton>
         </Tooltip>
-
-        {props.success && (
-          <Message theme={{ color: 'green' }}>
-            Team created successfully
-          </Message>
-        )}
-        {!props.success && props.errorMessage && (
-          <Message theme={{ color: aidsFondsRed }}>
-            {props.errorMessage}
-          </Message>
-        )}
-        {props.secondaryInfoMessage && (
-          <Message theme={{ color: 'orange' }}>
-            {props.secondaryInfoMessage}
-          </Message>
-        )}
       </CreateTeamForm>
     </ModuleFragment>
   );

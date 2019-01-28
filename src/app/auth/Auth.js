@@ -1,4 +1,3 @@
-import 'isomorphic-fetch';
 import axios from 'axios';
 import auth0 from 'auth0-js';
 
@@ -20,6 +19,90 @@ class Auth {
     this.getUserGroup = this.getUserGroup.bind(this);
     this.signIn = this.signIn.bind(this);
     this.signOut = this.signOut.bind(this);
+  }
+
+  /* Current user actions */
+
+  signIn(username, password, reduxAction) {
+    this.auth0.login(
+      {
+        realm: 'Username-Password-Authentication',
+        email: username,
+        password,
+      },
+      err => reduxAction(err),
+    );
+  }
+
+  handleAuthentication() {
+    return new Promise((resolve, reject) => {
+      this.auth0.parseHash((err, authResult) => {
+        if (err) return reject(err);
+        if (!authResult || !authResult.idToken) {
+          return reject(err);
+        }
+        this.setSession(authResult);
+        resolve();
+      });
+    });
+  }
+
+  setSession(authResult, step) {
+    this.idToken = authResult.idToken;
+    this.profile = authResult.idTokenPayload;
+    // set the time that the id token will expire at
+    this.expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
+    localStorage.setItem('auth_access_token', authResult.accessToken);
+    localStorage.setItem('auth_id_token', authResult.idToken);
+    localStorage.setItem('auth_expires_at', this.expiresAt);
+    this.getUserRole();
+    // this.getUserGroup();
+  }
+
+  signOut() {
+    // localStorage.removeItem('userGroup');
+    localStorage.removeItem('auth_access_token');
+    localStorage.removeItem('auth_id_token');
+    localStorage.removeItem('auth_expires_at');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userGroup');
+    this.auth0.logout({
+      returnTo: process.env.REACT_APP_PROJECT_URL,
+      clientID: process.env.REACT_APP_CLIENT_ID,
+    });
+  }
+
+  isAuthenticated() {
+    const expiresAt = JSON.parse(localStorage.getItem('auth_expires_at'));
+    return new Date().getTime() < expiresAt;
+  }
+
+  isAdministrator() {
+    const userRole = localStorage.getItem('userRole');
+    return userRole === 'Administrator';
+  }
+
+  silentAuth() {
+    return new Promise((resolve, reject) => {
+      this.auth0.checkSession({}, (err, authResult) => {
+        // if (err) return reject(err);
+        if (!err) this.setSession(authResult);
+        resolve();
+      });
+    });
+  }
+
+  forgetPassword(email, reduxAction) {
+    this.auth0.changePassword(
+      {
+        email,
+        connection: 'Username-Password-Authentication',
+      },
+      err => {
+        // console.log(err);
+        reduxAction && reduxAction();
+      },
+    );
   }
 
   getProfile() {
@@ -105,6 +188,42 @@ class Auth {
           console.error(error);
         });
     }
+  }
+
+  /* User management actions */
+
+  getAllUsers(stateAction = null, page, sort, search) {
+    axios
+      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: 'https://zimmermanzimmerman.eu.auth0.com/api/v2/',
+        grant_type: 'client_credentials',
+      })
+      .then(response => {
+        axios
+          .get(
+            `https://zimmermanzimmerman.eu.auth0.com/api/v2/users?include_totals=true&per_page=10&page=${page}&sort=${sort}&q=identities.connection:"Username-Password-Authentication"${search}&search_engine=v3`,
+            {
+              headers: {
+                Authorization: `${response.data.token_type} ${
+                  response.data.access_token
+                }`,
+              },
+            },
+          )
+          .then(response2 => {
+            if (stateAction) {
+              stateAction(response2.data);
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
   getUserGroups(that = null) {
@@ -269,65 +388,6 @@ class Auth {
       });
   }
 
-  handleAuthentication() {
-    return new Promise((resolve, reject) => {
-      this.auth0.parseHash((err, authResult) => {
-        if (err) return reject(err);
-        if (!authResult || !authResult.idToken) {
-          return reject(err);
-        }
-        this.setSession(authResult);
-        resolve();
-      });
-    });
-  }
-
-  setSession(authResult, step) {
-    this.idToken = authResult.idToken;
-    this.profile = authResult.idTokenPayload;
-    // set the time that the id token will expire at
-    this.expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
-    localStorage.setItem('auth_access_token', authResult.accessToken);
-    localStorage.setItem('auth_id_token', authResult.idToken);
-    localStorage.setItem('auth_expires_at', this.expiresAt);
-    this.getUserRole();
-    // this.getUserGroup();
-  }
-
-  signOut() {
-    // localStorage.removeItem('userGroup');
-    localStorage.removeItem('auth_access_token');
-    localStorage.removeItem('auth_id_token');
-    localStorage.removeItem('auth_expires_at');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userGroup');
-    this.auth0.logout({
-      returnTo: process.env.REACT_APP_PROJECT_URL,
-      clientID: process.env.REACT_APP_CLIENT_ID,
-    });
-  }
-
-  isAuthenticated() {
-    const expiresAt = JSON.parse(localStorage.getItem('auth_expires_at'));
-    return new Date().getTime() < expiresAt;
-  }
-
-  isAdministrator() {
-    const userRole = localStorage.getItem('userRole');
-    return userRole === 'Administrator';
-  }
-
-  signIn(username, password, reduxAction) {
-    this.auth0.login(
-      {
-        realm: 'Username-Password-Authentication',
-        email: username,
-        password,
-      },
-      err => reduxAction(err),
-    );
-  }
-
   addUser(name, surname, email, group_id, role_id, parent) {
     const _this = this;
     axios
@@ -398,27 +458,95 @@ class Auth {
       });
   }
 
-  silentAuth() {
-    return new Promise((resolve, reject) => {
-      this.auth0.checkSession({}, (err, authResult) => {
-        // if (err) return reject(err);
-        if (!err) this.setSession(authResult);
-        resolve();
+  addMultipleUsersToGroup(group_id, users, headers, parent) {
+    axios
+      .patch(
+        `${process.env.REACT_APP_AE_API_URL}/groups/${group_id}/members`,
+        users,
+        { headers },
+      )
+      .then(res2 => {
+        if (res2.status === 204) {
+          parent.setState({
+            success: true,
+            secondaryInfoMessage: null,
+          });
+        } else {
+          parent.setState({
+            success: false,
+            secondaryInfoMessage: res2.data.statusText,
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        parent.setState({
+          success: false,
+          secondaryInfoMessage: error.response.data.message,
+        });
       });
-    });
   }
 
-  forgetPassword(email, reduxAction) {
-    this.auth0.changePassword(
-      {
-        email,
-        connection: 'Username-Password-Authentication',
-      },
-      err => {
-        // console.log(err);
-        reduxAction && reduxAction();
-      },
-    );
+  addGroup(name, users, parent) {
+    axios
+      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: 'urn:auth0-authz-api',
+        grant_type: 'client_credentials',
+      })
+      .then(res1 => {
+        axios
+          .post(
+            `${process.env.REACT_APP_AE_API_URL}/groups`,
+            { name, description: name },
+            {
+              headers: {
+                Authorization: `${res1.data.token_type} ${
+                  res1.data.access_token
+                }`,
+              },
+            },
+          )
+          .then(res2 => {
+            if (res2.status === 200 || res2.status === 204) {
+              parent.setState({
+                success: true,
+                errorMessage: null,
+                name: '',
+                users: [],
+              });
+              this.addMultipleUsersToGroup(
+                res2.data._id,
+                users,
+                {
+                  Authorization: `${res1.data.token_type} ${
+                    res1.data.access_token
+                  }`,
+                },
+                parent,
+              );
+            } else {
+              parent.setState({
+                success: false,
+                errorMessage: res2.data.statusText,
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            parent.setState({
+              success: false,
+              errorMessage: error.response.data.message,
+            });
+          });
+      })
+      .catch(error => {
+        parent.setState({
+          success: false,
+          errorMessage: error.response.data.message,
+        });
+      });
   }
 }
 

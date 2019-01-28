@@ -58,7 +58,7 @@ export const SubmitButton = styled(ZoomButton)`
 export const Message = styled(Box)`
   color: ${props => props.theme.color};
   font-size: 20px;
-  margin-top: 40px;
+  margin-bottom: 40px;
 `;
 
 export const TextField = styled(TextInput)`

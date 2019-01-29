@@ -1,9 +1,30 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Box } from 'grommet';
+import PropTypes from 'prop-types';
+// Material UI
+import { withStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-const PageLoader = () => {
-  return <div>Loading..</div>;
+const styles = theme => ({
+  progress: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
+    margin: theme.spacing.unit * 5,
+  },
+});
+
+const PageLoader = ({ classes }) => {
+  return (
+    <div className={classes.progress}>
+      <CircularProgress />
+    </div>
+  );
 };
 
-export default PageLoader;
+PageLoader.propTypes = {
+  classes: PropTypes.object.isRequired, // Material UI Injected
+};
+
+export default withStyles(styles)(PageLoader);

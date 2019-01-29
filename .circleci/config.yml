@@ -33,7 +33,7 @@ jobs:
           at: ~/zoom-v2-ui
       - run: yarn relay
       - run:
-          name: Upload build folder to target host
+          name: Set REACT_APP_PROJECT_URL env var
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_STAGING"
@@ -41,8 +41,10 @@ jobs:
               export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_TEST"
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
               export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"
+              echo $REACT_APP_PROJECT_URL
             else
               export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"
+              echo $REACT_APP_PROJECT_URL
             fi
       - run: yarn build
       - run:

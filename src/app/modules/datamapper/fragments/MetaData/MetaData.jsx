@@ -14,10 +14,11 @@ import InputFieldLabel from 'components/InputFieldLabel/InputFieldLabel';
 import InputFieldDivider from 'components/Dividers/InputFieldDivider';
 
 /* style */
-import { FieldContainer } from './MetaData.style';
+import { FieldContainer, ModuleContainer } from './MetaData.style';
 
 /* mock data */
 import { options1, options2, options3 } from './MetaData.mock';
+import { SectionHeading } from 'components/theme/ThemeSheet';
 
 const propTypes = {
   data: PropTypes.array,
@@ -28,7 +29,8 @@ const defaultProps = {
 
 const MetaData = props => {
   return (
-    <Box>
+    <ModuleContainer>
+      <SectionHeading>Describe meta data</SectionHeading>
       {/*////////////////////////////////////////////////////////////////////*/}
       <FieldContainer>
         <InputFieldLabel text="Title data set*" />
@@ -148,7 +150,7 @@ const MetaData = props => {
         <InputFieldLabel text="If other, explain" />
         <TextField />
       </FieldContainer>
-    </Box>
+    </ModuleContainer>
   );
 };
 

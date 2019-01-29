@@ -26,6 +26,7 @@ export const zoomGreyTwo = '#505050';
 export const zoomGreyThree = '#a1a1a1';
 export const zoomGreyFour = '#dfdfdf';
 export const zoomGreyFive = '#9b9b9b';
+export const zoomGreySix = '#cecece';
 export const zoomBlack = '#000000';
 export const zoomFontFamOne = 'FFMarkProAF-Bold';
 export const zoomFontFamTwo = 'FFMarkProAF-Book';

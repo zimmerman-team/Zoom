@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'grommet';
-import { ZoomButton } from 'components/theme/ThemeSheet';
+import { ZoomButton, zoomGreySix } from 'components/theme/ThemeSheet';
 import StepItem from 'components/stepper/StepItem';
 
 /*TODO: discuss object structure*/
@@ -41,39 +41,56 @@ const steps = [
 
 const propTypes = {
   data: PropTypes.object,
+  onlyButtons: PropTypes.bool,
 };
 const defaultProps = {
   data: undefined,
+  onlyButtons: false,
 };
 
 class Stepper extends React.Component {
   render() {
+    const nextEnabled = this.props.step !== 6;
+    const prevEnabled = this.props.step !== 1;
+
     return (
       <Box align="center" width="100%">
-        <Box direction="row" width="100%">
-          {/*TODO: implement conditional logic that sets state accordingly to control the stepper and the content that is linked to specific steps*/}
-          {steps.map(step => (
-            /*TODO: set "isFirst" and "isLast" depending on if object is first or last in the array of objects */
-            <StepItem
-              key={step.id}
-              stepNumber={step.id}
-              isActive={step.isActive}
-              isDone={step.isDone}
-              stepLabel={step.label}
-              isFirst={step.isFirst}
-              isLast={step.isLast}
-            />
-          ))}
-        </Box>
+        {!this.props.onlyButtons && (
+          <Box direction="row" width="100%">
+            {/*TODO: implement conditional logic that sets state accordingly to control the stepper and the content that is linked to specific steps*/}
+            {steps.map(step => (
+              /*TODO: set "isFirst" and "isLast" depending on if object is first or last in the array of objects */
+              <StepItem
+                key={step.id}
+                stepNumber={step.id}
+                isActive={this.props.step === step.id}
+                isDone={step.id < this.props.step}
+                stepLabel={step.label}
+                isFirst={step.isFirst}
+                isLast={step.isLast}
+              />
+            ))}
+          </Box>
+        )}
 
         {/*TODO: refactor "ZoomButton" to be a proper component*/}
         {/*TODO: add click event handlers*/}
         <Box direction="row">
           <Box margin="small">
-            <ZoomButton>back</ZoomButton>
+            <ZoomButton
+              style={{ backgroundColor: !prevEnabled ? zoomGreySix : '' }}
+              onClick={prevEnabled ? this.props.prevStep : undefined}
+            >
+              back
+            </ZoomButton>
           </Box>
           <Box margin="small">
-            <ZoomButton>next</ZoomButton>
+            <ZoomButton
+              style={{ backgroundColor: !nextEnabled ? zoomGreySix : '' }}
+              onClick={nextEnabled ? this.props.nextStep : undefined}
+            >
+              next
+            </ZoomButton>
           </Box>
         </Box>
       </Box>

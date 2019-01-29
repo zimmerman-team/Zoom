@@ -36,15 +36,13 @@ jobs:
           name: Set REACT_APP_PROJECT_URL env var
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_STAGING"
+              echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_STAGING"' >> $BASH_ENV
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_TEST"
+              echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_TEST"' >> $BASH_ENV
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
-              export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"
-              echo $REACT_APP_PROJECT_URL
+              echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
             else
-              export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"
-              echo $REACT_APP_PROJECT_URL
+              echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
             fi
       - run: yarn build
       - run:

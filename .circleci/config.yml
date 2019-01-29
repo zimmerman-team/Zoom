@@ -32,6 +32,18 @@ jobs:
       - attach_workspace:
           at: ~/zoom-v2-ui
       - run: yarn relay
+      - run:
+          name: Upload build folder to target host
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_STAGING"
+            elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_TEST"
+            elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
+              export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"
+            else
+              export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"
+            fi
       - run: yarn build
       - run:
           name: Add target host to known_hosts files
@@ -55,16 +67,12 @@ jobs:
           name: Upload build folder to target host
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_STAGING"
               rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_STAGING":~/zoom-v2-ui
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_TEST"
               rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_TEST":~/zoom-v2-ui
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
-              export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"
               rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_DEV":~/zoom-v2-ui
             else
-              export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"
               rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_DEV":~/zoom-v2-ui
             fi
 

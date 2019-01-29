@@ -70,8 +70,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn build; yarn e2e:record",
-      "pre-push": "yarn test"
+      "pre-commit": "echo pre commit polic",
+      "pre-push": "echo pre push police"
     }
   },
   "devDependencies": {

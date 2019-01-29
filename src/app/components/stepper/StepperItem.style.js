@@ -50,7 +50,7 @@ export const StepNumber = styled.span`
 
 export const StepSpacer = styled.div`
   height: 2px;
-  width: 41.67%;
-  visibility: ${props => (props.outer ? 'hidden' : 'visible')}
+  width: 50%;
+  visibility: ${props => (props.outer ? 'hidden' : 'visible')};
   background: ${props => (props.colores ? aidsFondsBlue : zoomGreyThree)};
 `;

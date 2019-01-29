@@ -42,7 +42,6 @@
     "react-router-redux": "^4.0.8",
     "react-scroll": "^1.7.10",
     "react-stepper-horizontal": "^1.0.11",
-    "react-stepzilla": "^4.8.0",
     "react-tippy": "^1.2.3",
     "redux": "4.0.1",
     "redux-saga": "^0.16.2",
@@ -70,7 +69,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo pre commit polic",
+      "pre-commit": "echo pre && echo commit && echo police",
       "pre-push": "echo pre push police"
     }
   },

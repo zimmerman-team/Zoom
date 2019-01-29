@@ -10,7 +10,7 @@ import { aidsFondsRed } from 'components/theme/ThemeSheet';
 import {
   AidsFondLogo,
   MenuButton,
-  ModuleContainer,
+  ComponentBase,
 } from 'components/navigation/AppBar/AppBar.styles';
 
 const propTypes = {
@@ -28,13 +28,13 @@ class AppBar extends React.Component {
 
   render() {
     return (
-      <ModuleContainer
+      <ComponentBase
         elevation="small"
         direction="row"
         justify="between"
         align="center"
       >
-        <Box direction="row">
+        <Box direction="row" justify="center">
           <MenuButton
             plain
             icon={<Menu color={aidsFondsRed} />}
@@ -50,7 +50,7 @@ class AppBar extends React.Component {
         </Box>
 
         <Box direction="row">{/*<div>button</div>*/}</Box>
-      </ModuleContainer>
+      </ComponentBase>
     );
   }
 }

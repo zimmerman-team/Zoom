@@ -1,60 +1,17 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Box, Button, Grommet, Text, Heading, Grid } from 'grommet';
 
 import {
   FragmentContainer,
   FragmentContent,
-  zoomFontFamTwo,
 } from 'components/theme/ThemeSheet';
 import { FragmentHeader } from 'components/theme/ThemeSheet';
-import countryDetailMockData from '__mocks__/countryDetailMock';
 import { FragmentVisualisation } from 'components/theme/ThemeSheet';
-import { aidsFondsRed } from 'components/theme/ThemeSheet';
-import { aidsFondsWhite } from 'components/theme/ThemeSheet';
-import { zoomFontFamOne } from 'components/theme/ThemeSheet';
+
 import { FragmentDescription } from 'components/theme/ThemeSheet';
 
-const FragmentInfoButton = styled.div`
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  background-color: ${aidsFondsRed};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-  position: absolute;
-  right: 0;
-  top: 0;
-
-  &:hover {
-    background-color: darkgrey;
-  }
-
-  &:after {
-    content: 'i';
-    font-size: 13px;
-    text-align: center;
-    color: ${aidsFondsWhite};
-    font-family: ${zoomFontFamOne};
-    user-select: none;
-  }
-`;
-
-const FragmentInfo = styled(Box)`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 250px;
-  background-color: white;
-  padding: 20px;
-  z-index: 2;
-  border-radius: 2%;
-  font-family: ${zoomFontFamTwo};
-`;
+import { FragmentInfo, FragmentInfoButton } from './ModuleFragment.style';
 
 const propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),

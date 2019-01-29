@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Box, Button, Image } from 'grommet';
 import { aidsFondsWhite } from 'components/theme/ThemeSheet';
 
-export const ModuleContainer = styled(Box)`
+export const ComponentBase = styled(Box)`
   height: 40px;
   width: 100vw;
   padding: 10px;
@@ -22,4 +22,6 @@ export const AidsFondLogo = styled(Image)`
 export const MenuButton = styled(Button)`
   padding: 0;
   margin-right: 25px;
+
+  height: 24px;
 `;

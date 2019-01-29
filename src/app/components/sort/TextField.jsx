@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import SvgIcon from '@material-ui/core/SvgIcon';
-import IconRadioUnchecked from 'assets/icons/icon_radio_unchecked.svg';
+import IconRadioUnchecked from 'assets/icons/IconRadioUnchecked';
 import TextField from '@material-ui/core/TextField';
 import NoSsr from '@material-ui/core/NoSsr';
 import { zoomFontFamTwo } from 'components/theme/ThemeSheet';

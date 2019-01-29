@@ -13,6 +13,11 @@ import SideBar from 'components/navigation/SideBar/SideBar';
 import { Grommet } from 'grommet';
 import { ZoomTheme } from 'styles/ZoomTheme';
 
+const modernEnvironment = new Environment({
+  network: Network.create(fetchQuery),
+  store: new Store(new RecordSource()),
+});
+
 function fetchQuery(operation, variables) {
   return fetch(`${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`, {
     method: 'POST',
@@ -27,11 +32,6 @@ function fetchQuery(operation, variables) {
     return response.json();
   });
 }
-
-const modernEnvironment = new Environment({
-  network: Network.create(fetchQuery),
-  store: new Store(new RecordSource()),
-});
 
 class App extends React.Component {
   state = {

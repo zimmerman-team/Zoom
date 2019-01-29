@@ -3,10 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'grommet';
 
-import IconHome from 'assets/icons/icon_home.svg';
-import IconCharts from 'assets/icons/icon_charts.svg';
-import IconClose from 'assets/icons/icon_close.svg';
-import IconAbout from 'assets/icons/icon_about.svg';
+import IconHome from 'assets/icons/IconHome';
+import IconCharts from 'assets/icons/IconCharts';
+import IconClose from 'assets/icons/IconClose';
+import IconAbout from 'assets/icons/IconAbout';
 import {
   CloseButton,
   SidebarHeader,
@@ -17,7 +17,9 @@ import {
 } from 'components/navigation/SideBar/SideBar.styles';
 import LoginForm from 'components/navigation/SideBar/comps/LoginForm/LoginForm';
 
+/*TODO: add auth0Client as prop,  */
 const propTypes = {
+  // auth0Client: PropTypes.object,
   open: PropTypes.bool,
   toggleSideBar: PropTypes.func,
 };
@@ -88,18 +90,20 @@ class SideBar extends React.Component {
                     data-cy="sidebar-iati"
                   />
 
-                  {this.props.auth0Client.isAuthenticated() &&
-                    this.props.auth0Client.isAdministrator() && (
-                      <SidebarNavListItem
-                        label="Add user"
-                        path="/add-user"
-                        onClick={this.props.toggleSideBar}
-                        icon={<IconCharts />}
-                        type="button"
-                        plain={true}
-                        data-cy="sidebar-add-user"
-                      />
-                    )}
+                  {/*TODO: we need to clean this up, maybe go for desctructing the auth0Client object */}
+                  {this.props.auth0Client &&
+                    (this.props.auth0Client.isAuthenticated() &&
+                      this.props.auth0Client.isAdministrator() && (
+                        <SidebarNavListItem
+                          label="Add user"
+                          path="/add-user"
+                          onClick={this.props.toggleSideBar}
+                          icon={<IconCharts />}
+                          type="button"
+                          plain={true}
+                          data-cy="sidebar-add-user"
+                        />
+                      ))}
 
                   <SidebarNavListItem
                     disabled={true}

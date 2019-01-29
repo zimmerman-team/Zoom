@@ -7,7 +7,7 @@ import {
   ColumnHeader,
   CellValue,
 } from 'components/theme/ThemeSheet';
-import IconSort from 'assets/icons/icon_sort.svg';
+import IconSort from 'assets/icons/IconSort';
 
 export const CreateTeamForm = styled.form`
   padding: 0 40px;

@@ -18,7 +18,7 @@ import Pagination from 'components/Pagination/Pagination';
 import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
-import IconSearch from 'assets/icons/icon_search.svg';
+import IconSearch from 'assets/icons/IconSearch';
 import getColumns from 'modules/UserManagement/CreateTeam/comps/TableColumns';
 
 const propTypes = {

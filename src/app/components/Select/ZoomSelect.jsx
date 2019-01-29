@@ -6,7 +6,7 @@ import { Tooltip } from 'react-tippy';
 import { grommet } from 'grommet/themes';
 import { deepMerge } from 'grommet/utils';
 import SelectHeader from 'components/Select/components/SelectHeader/SelectHeader';
-import ResetIcon from 'assets/icons/icon_reset.svg';
+import ResetIcon from 'assets/icons/IconReset';
 import {
   ComponentBase,
   DropDownItem,

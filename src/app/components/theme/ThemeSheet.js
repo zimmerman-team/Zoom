@@ -26,6 +26,7 @@ export const zoomGreyTwo = '#505050';
 export const zoomGreyThree = '#a1a1a1';
 export const zoomGreyFour = '#dfdfdf';
 export const zoomGreyFive = '#9b9b9b';
+export const zoomGreySix = '#cecece';
 export const zoomBlack = '#000000';
 export const zoomFontFamOne = 'FFMarkProAF-Bold';
 export const zoomFontFamTwo = 'FFMarkProAF-Book';
@@ -52,6 +53,11 @@ export const ZoomTable = styled(DataTable)`
   & tbody {
     & tr {
       border-bottom: 2px solid ${aidsFondsWhite};
+      &:first-child {
+        & th {
+          border-top: none;
+        }
+      }
       &:last-child {
         border-color: ${zoomGreyFour};
       }
@@ -66,6 +72,10 @@ export const ZoomTable = styled(DataTable)`
       &:last-child {
         border-right: 0;
       }
+    }
+    & th {
+      background-color: ${zoomGreyZero};
+      border-top: 2px solid ${aidsFondsWhite};
     }
   }
 

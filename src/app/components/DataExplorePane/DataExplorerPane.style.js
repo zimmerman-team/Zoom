@@ -46,4 +46,7 @@ export const ResetContainer = styled.div`
 export const DropDownCont = styled.div`
   background-color: ${aidsFondsWhite};
   margin: 6px 20px 6px 18px;
+  & button {
+    border-style: none !important;
+  }
 `;

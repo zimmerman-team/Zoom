@@ -1,18 +1,11 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 /* components */
 import { Select, CheckBox, Box } from 'grommet';
 import { zoomFontFamOne, aidsFondsRed } from 'components/theme/ThemeSheet';
-
-const ComponentBase = styled(Box)`
-  border-radius: 1;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #d1d1d1;
-`;
 
 const CustomSelect = styled(Select)`
   font-family: ${zoomFontFamOne};
@@ -62,7 +55,7 @@ const FormSelect = props => {
   };
 
   return (
-    <ComponentBase>
+    <Box>
       <CustomSelect
         closeOnChange={!props.multiple}
         multiple={props.multiple}
@@ -73,7 +66,7 @@ const FormSelect = props => {
         value={props.valueSelected}
         onChange={props.multiple ? null : props.selectVal}
       />
-    </ComponentBase>
+    </Box>
   );
 };
 

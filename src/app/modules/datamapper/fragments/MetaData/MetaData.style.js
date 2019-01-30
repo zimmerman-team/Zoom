@@ -7,7 +7,7 @@ export const FieldContainer = styled(Box)`
 `;
 
 export const ModuleContainer = styled(Box)`
-  width: 78%;
+  width: 100%;
   margin: auto;
   padding-bottom: 12px;
 `;

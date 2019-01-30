@@ -2,16 +2,10 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Header from 'modules/IATI_Detail/fragments/Header/Header';
 import { iatiDetailMockData } from '__mocks__/iatiDetailMock';
-
 // Components
 import { PageHeading } from 'components/theme/ThemeSheet';
-import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
-import {
-  DetailList,
-  DetailListItem,
-  ItemLabel,
-  ItemInfo,
-} from 'modules/IATI_Detail/fragments/Header/Header.styles';
+import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
+import { DetailList, DetailListItem, ItemInfo, ItemLabel } from 'modules/IATI_Detail/fragments/Header/Header.styles';
 
 const wrapper = shallow(<Header data={iatiDetailMockData} />);
 

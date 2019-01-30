@@ -1,8 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-
 // Components
-import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import BarChartVertical from 'components/charts/barcharts/vertical/BarChartVertical';
 import TotalBudget from './TotalBudget';
 

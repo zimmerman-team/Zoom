@@ -1,15 +1,14 @@
 /* base */
 import React from 'react';
-
 /* components */
 import { CheckBox } from 'grommet';
 import {
   SortByIcon,
-  UsersTableColHeader,
   UsersTableCellValue,
+  UsersTableColHeader,
 } from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
 import { aidsFondsRed } from 'components/theme/ThemeSheet';
-import SortbyDialog from 'components/dialog/SortbyDialog/SortbyDialog';
+import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
 
 const sortByOptions = [
   { label: 'Name (asc)', value: 'name:1' },

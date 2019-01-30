@@ -2,16 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
-import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 // import { iatiDetailMockData } from '__mocks__/iatiDetailMock';
-import { zoomGreyZero, PageHeading } from 'components/theme/ThemeSheet';
-import {
-  DetailList,
-  DetailListItem,
-  ItemLabel,
-  ItemInfo,
-  Tooltip,
-} from './Header.styles';
+import { PageHeading, zoomGreyZero } from 'components/theme/ThemeSheet';
+import { DetailList, DetailListItem, ItemInfo, ItemLabel, Tooltip } from './Header.styles';
 
 const propTypes = {
   data: PropTypes.shape({

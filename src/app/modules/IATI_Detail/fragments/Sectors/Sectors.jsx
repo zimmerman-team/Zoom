@@ -2,14 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
-import {
-  zoomGreyZero,
-  // FragmentHeader,
-  // FragmentVisualisation,
-} from 'components/theme/ThemeSheet';
+import { zoomGreyZero } from 'components/theme/ThemeSheet';
 import TreeMap from 'components/charts/treemap/TreeMap';
 // import { treeMapMockData } from '__mocks__/treeMapMock';
-import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 
 const propTypes = {
   data: PropTypes.shape({

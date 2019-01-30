@@ -1,17 +1,16 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* components */
 import {
   AddUserForm,
   DropDown,
   DropDownLabel,
-  SubmitButton,
   Message,
+  SubmitButton,
 } from 'modules/UserManagement/AddUser/AddUserModule.styles';
 import { aidsFondsRed } from 'components/theme/ThemeSheet';
-import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';
 import FormSelect from 'components/FormSelect/FormSelect';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';

@@ -1,18 +1,17 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import CreateTeamModule from 'modules/UserManagement/CreateTeam/CreateTeamModule';
-
 // Components
 import {
   CreateTeamForm,
-  TableBox,
-  UsersTable,
   SubmitButton,
+  TableBox,
   TextField,
+  UsersTable,
 } from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
 import { Text } from 'grommet';
 import Pagination from 'components/Pagination/Pagination';
-import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';
 
 const wrapper = shallow(<CreateTeamModule />);

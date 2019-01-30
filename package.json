@@ -53,6 +53,7 @@
     "styled-theming": "^2.2.0"
   },
   "scripts": {
+    "testit": "percy exec -- ./run-tests.sh",
     "lint:css": "stylelint './src/**/*.jsx'",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
@@ -83,6 +84,7 @@
     "@babel/preset-env": "7.3.1",
     "@babel/preset-react": "^7.0.0",
     "@dump247/storybook-state": "^1.5.2",
+    "@percy/cypress": "^0.2.3",
     "@storybook/addon-actions": "^4.1.11",
     "@storybook/addon-backgrounds": "^4.1.11",
     "@storybook/addon-console": "^1.1.0",

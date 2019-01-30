@@ -1,9 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Sectors from 'modules/IATI_Detail/fragments/Sectors/Sectors';
-
 // Components
-import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import TreeMap from 'components/charts/treemap/TreeMap';
 import { treeMapMockData } from '__mocks__/treeMapMock';
 

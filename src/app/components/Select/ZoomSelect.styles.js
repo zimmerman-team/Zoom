@@ -7,6 +7,9 @@ export const DropDownItem = styled.div`
 
 export const ComponentBase = styled.div`
   display: flex;
+  & button {
+    border-style: none !important;
+  }
 `;
 
 export const ResetContainer = styled.div`

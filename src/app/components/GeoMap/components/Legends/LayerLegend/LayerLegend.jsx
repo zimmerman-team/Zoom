@@ -1,5 +1,8 @@
 import React from 'react';
-import { LayerLegendItem, LegendLabel } from 'components/GeoMap/components/Legends/LayerLegend/LayerLegend.styles';
+import {
+  LayerLegendItem,
+  LegendLabel,
+} from 'components/GeoMap/components/Legends/LayerLegend/LayerLegend.styles';
 import { colorStops } from 'components/GeoMap/components/map-style';
 
 const layerLegend = (legendName, index) =>

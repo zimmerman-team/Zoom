@@ -3,7 +3,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box, Layer } from 'grommet';
-import { aidsFondsWhite, DialogHeading, SimpleText, ZoomButton } from 'components/theme/ThemeSheet';
+import {
+  aidsFondsWhite,
+  DialogHeading,
+  SimpleText,
+  ZoomButton,
+} from 'components/theme/ThemeSheet';
 
 const DialogLayer = styled(Layer)`
   width: 840px;

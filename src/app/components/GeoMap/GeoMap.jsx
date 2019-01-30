@@ -8,7 +8,11 @@ import { fromJS } from 'immutable';
 import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
 
-import { borderStyle, dataLayer, defaultMapStyle } from './components/map-style';
+import {
+  borderStyle,
+  dataLayer,
+  defaultMapStyle,
+} from './components/map-style';
 import { generateLegends, generateMarkers } from './GeoMap.utils';
 import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
 import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';

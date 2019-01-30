@@ -1,4 +1,7 @@
-import { LegendLabel, MarkerLegendItem } from 'components/GeoMap/components/Legends/MarkerLegend.styles';
+import {
+  LegendLabel,
+  MarkerLegendItem,
+} from 'components/GeoMap/components/Legends/MarkerLegend.styles';
 import React from 'react';
 import LocationMarkerIcon from 'components/GeoMap/components/Markers/LocationMarker/LocationMarker.icon';
 

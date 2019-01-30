@@ -2,7 +2,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
-import { ConditionMet, ConditionUnmet, StigmaList, StigmaListItem } from 'components/theme/ThemeSheet';
+import {
+  ConditionMet,
+  ConditionUnmet,
+  StigmaList,
+  StigmaListItem,
+} from 'components/theme/ThemeSheet';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';
 

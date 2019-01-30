@@ -1,6 +1,10 @@
 import React from 'react';
 import CircleMarkerIcon from 'components/GeoMap/components/Markers/CircleMarker/CircleMarker.icon';
-import { LegendIcon, LegendLabel, MarkerLegendItem } from 'components/GeoMap/components/Legends/MarkerLegend.styles';
+import {
+  LegendIcon,
+  LegendLabel,
+  MarkerLegendItem,
+} from 'components/GeoMap/components/Legends/MarkerLegend.styles';
 
 const circleLegend = (legendName, index) =>
   legendName && (

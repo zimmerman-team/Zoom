@@ -5,7 +5,13 @@ import get from 'lodash/get';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 // import { iatiDetailMockData } from '__mocks__/iatiDetailMock';
 import { PageHeading, zoomGreyZero } from 'components/theme/ThemeSheet';
-import { DetailList, DetailListItem, ItemInfo, ItemLabel, Tooltip } from './Header.styles';
+import {
+  DetailList,
+  DetailListItem,
+  ItemInfo,
+  ItemLabel,
+  Tooltip,
+} from './Header.styles';
 
 const propTypes = {
   data: PropTypes.shape({

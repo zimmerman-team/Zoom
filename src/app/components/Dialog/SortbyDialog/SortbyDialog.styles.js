@@ -1,5 +1,9 @@
 import styled from 'styled-components';
-import { aidsFondsRed, aidsFondsWhite, zoomGreyZero } from 'components/theme/ThemeSheet';
+import {
+  aidsFondsRed,
+  aidsFondsWhite,
+  zoomGreyZero,
+} from 'components/theme/ThemeSheet';
 
 export const ComponentBase = styled.div`
   position: fixed;

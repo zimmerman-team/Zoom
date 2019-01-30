@@ -1,5 +1,10 @@
 import styled from 'styled-components';
-import { aidsFondsRed, aidsFondsWhite, zoomFontFamOne, zoomFontFamTwo } from 'components/theme/ThemeSheet';
+import {
+  aidsFondsRed,
+  aidsFondsWhite,
+  zoomFontFamOne,
+  zoomFontFamTwo,
+} from 'components/theme/ThemeSheet';
 
 import { Box } from 'grommet';
 

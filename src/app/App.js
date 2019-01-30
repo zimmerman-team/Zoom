@@ -60,6 +60,7 @@ class App extends React.Component {
               ...HomeModuleMediator_indicatorAggregations
               ...CountryDetailMediator_indicatorAggregations
               ...ExplorePanelMediator_dropDownData
+              ...MetaDataMediator_dropDownData
             }
           `}
           variables={{}}

@@ -24,6 +24,7 @@ import {
   SelectContainer,
   OrLabel,
 } from './MetaData.style';
+import { SectionHeading } from 'components/theme/ThemeSheet';
 
 /* mock data */
 import {
@@ -33,8 +34,8 @@ import {
   checkBoxOptions3,
   checkBoxOptions51,
   numberOptions,
+  dataSourceOptions,
 } from './MetaData.mock';
-import { SectionHeading } from 'components/theme/ThemeSheet';
 
 const propTypes = {
   data: PropTypes.array,
@@ -156,7 +157,7 @@ class MetaData extends React.Component {
 
   // and we'll have a specific text change
   // if 'other' option is chosen from the dropdowns
-  otherDropdownText(value, question, qText) {
+  otherDropdownText(value, question, qText, options) {
     if (this.state.data[question].key === 'other')
       this.simpleChange(
         {
@@ -166,14 +167,23 @@ class MetaData extends React.Component {
         },
         question,
       );
+    else if (this.state.data[question].key === '') {
+      const labelInd = findIndex(options, ['value', 'other']);
+      this.simpleChange(
+        {
+          key: 'other',
+          label: options[labelInd].label,
+          value,
+        },
+        question,
+      );
+    }
 
     this.simpleChange(value, qText);
   }
 
   render() {
     console.log(this.state.data);
-    console.log(this.state.data.dataSource.value);
-
     return (
       <ModuleContainer>
         <SectionHeading>Describe meta data</SectionHeading>
@@ -214,11 +224,7 @@ class MetaData extends React.Component {
             <SelectSurround>
               <ZoomSelect
                 placeHolder={'Connect to Zoom data source'}
-                data={[
-                  { value: 'other', label: 'Add New' },
-                  { value: 'hello', label: 'hello' },
-                  { value: 'hello1', label: 'hello2' },
-                ]}
+                data={dataSourceOptions}
                 valueSelected={this.state.data.dataSource.label}
                 selectVal={e =>
                   this.dropDownChange(e.value, 'dataSource', 'sourceText')
@@ -239,6 +245,7 @@ class MetaData extends React.Component {
                   e.target.value,
                   'dataSource',
                   'sourceText',
+                  dataSourceOptions,
                 )
               }
             />
@@ -377,7 +384,12 @@ class MetaData extends React.Component {
                 disableUnderline: false,
               }}
               onChange={e =>
-                this.otherDropdownText(e.target.value, 'q4', 'q4Text')
+                this.otherDropdownText(
+                  e.target.value,
+                  'q4',
+                  'q4Text',
+                  numberOptions,
+                )
               }
             />
           </DataSourceTextCont>

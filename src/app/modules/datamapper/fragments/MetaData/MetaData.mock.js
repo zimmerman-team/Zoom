@@ -104,3 +104,9 @@ export const numberOptions = [
   { value: 15, label: '15' },
   { value: 20, label: '20' },
 ];
+
+export const dataSourceOptions = [
+  { value: 'other', label: 'Add New' },
+  { value: 'hello', label: 'hello' },
+  { value: 'hello1', label: 'hello2' },
+];

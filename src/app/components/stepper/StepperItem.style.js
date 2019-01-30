@@ -36,6 +36,7 @@ export const StepIcon = styled.div`
   justify-content: center;
   margin-left: 5px;
   margin-right: 5px;
+  flex-shrink: 0;
 `;
 
 export const StepCompleteIcon = styled(iconCheck)`

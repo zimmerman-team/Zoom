@@ -7,8 +7,8 @@ import auth0Client from 'auth/Auth';
 
 // Routes
 import Routes from './Routes';
-import AppBar from 'components/navigation/AppBar/AppBar';
-import SideBar from 'components/navigation/SideBar/SideBar';
+import AppBar from 'components/AppBar/AppBar';
+import SideBar from 'components/SideBar/SideBar';
 
 import { Grommet } from 'grommet';
 import { ZoomTheme } from 'styles/ZoomTheme';

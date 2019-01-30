@@ -6,6 +6,7 @@ import {
   CheckBoxStyle,
 } from 'components/CustomCheckBox/CustomCheckBox.styles';
 
+/*TODO: rename this component to something better*/
 const propTypes = {
   onChange: PropTypes.func,
 };

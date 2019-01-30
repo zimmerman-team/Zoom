@@ -2,7 +2,7 @@
 import React from 'react';
 import { Box } from 'grommet';
 /* components */
-import Stepper from 'components/stepper/Stepper';
+import Stepper from 'components/Stepper/Stepper';
 
 /* styles */
 import {

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-import ProjectList from 'components/lists/projects/ProjectList';
+import ProjectList from 'components/Lists/ProjectList/ProjectList';
 import { Element } from 'react-scroll/modules';
 
 const propTypes = {

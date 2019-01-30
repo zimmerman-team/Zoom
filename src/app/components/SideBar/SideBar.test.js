@@ -8,7 +8,7 @@ import {
   SidebarNavList,
   SidebarNavListContainer,
   SidebarNavListItem,
-} from 'components/navigation/SideBar/SideBar.styles';
+} from 'components/SideBar/SideBar.styles';
 import { Box } from 'grommet';
 import LoginForm from './comps/LoginForm/LoginForm';
 import SideBar from './SideBar';

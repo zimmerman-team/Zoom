@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
-import Checkbox from 'components/CheckboxesGroup/CheckBox';
+import Checkbox from 'components/Checkbox/CheckBox';
 import FormLabel from 'components/RadioButtonGroup/FormLabel';
 import NoSsr from '@material-ui/core/NoSsr';
 import styled from 'styled-components';

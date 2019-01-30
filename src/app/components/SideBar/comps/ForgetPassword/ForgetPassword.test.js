@@ -1,13 +1,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { ForgetPassword } from 'components/navigation/SideBar/comps/ForgetPassword/ForgetPassword';
+import { ForgetPassword } from 'components/SideBar/comps/ForgetPassword/ForgetPassword';
 
 /* Components */
 import {
   ForgotPassLink,
   TextField,
   FormButton,
-} from 'components/navigation/SideBar/comps/LoginForm/LoginForm.styles';
+} from 'components/SideBar/comps/LoginForm/LoginForm.styles';
 
 const wrapper1 = shallow(<ForgetPassword view="login" />);
 const wrapper2 = shallow(<ForgetPassword view="forget_password" />);

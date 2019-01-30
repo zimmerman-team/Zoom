@@ -8,7 +8,7 @@ import {
   AidsFondLogo,
   MenuButton,
   ModuleContainer,
-} from 'components/navigation/AppBar/AppBar.styles';
+} from 'components/AppBar/AppBar.styles';
 
 const wrapper = shallow(<AppBar />);
 

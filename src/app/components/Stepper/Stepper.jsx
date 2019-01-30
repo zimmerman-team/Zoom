@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Box } from 'grommet';
 import styled from 'styled-components';
 import { ZoomButton, zoomGreySix } from 'components/theme/ThemeSheet';
-import StepItem from 'components/stepper/StepItem';
+import StepItem from 'components/Stepper/StepItem';
 
 const ComponentBase = styled.div`
   display: flex;

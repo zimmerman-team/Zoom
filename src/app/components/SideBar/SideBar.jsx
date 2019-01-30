@@ -14,8 +14,8 @@ import {
   SidebarNavList,
   SidebarNavListContainer,
   SidebarNavListItem,
-} from 'components/navigation/SideBar/SideBar.styles';
-import LoginForm from 'components/navigation/SideBar/comps/LoginForm/LoginForm';
+} from 'components/SideBar/SideBar.styles';
+import LoginForm from 'components/SideBar/comps/LoginForm/LoginForm';
 
 /*TODO: add auth0Client as prop,  */
 const propTypes = {

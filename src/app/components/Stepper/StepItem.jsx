@@ -10,7 +10,7 @@ import {
   StepLabel,
   StepNumber,
   StepSpacer,
-} from 'components/stepper/StepperItem.style';
+} from 'components/Stepper/StepperItem.style';
 
 /*TODO: document component*/
 

@@ -13,7 +13,7 @@ import {
   Separator,
   TitleContainer,
   Value,
-} from 'components/lists/projects/ProjectList.styles';
+} from 'components/Lists/ProjectList/ProjectList.styles';
 
 const propTypes = {
   projectData: PropTypes.arrayOf(

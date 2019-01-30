@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FormControl from '@material-ui/core/FormControl';
-import RadioButton from 'components/RadioButtonGroup/RadioButton';
+import RadioButton from 'components/RadioButton/RadioButton';
 import FormLabel from 'components/RadioButtonGroup/FormLabel';
 import RadioGroup from 'components/RadioButtonGroup/RadioGroup';
 

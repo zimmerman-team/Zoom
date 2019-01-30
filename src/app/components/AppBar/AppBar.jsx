@@ -11,7 +11,7 @@ import {
   AidsFondLogo,
   MenuButton,
   ComponentBase,
-} from 'components/navigation/AppBar/AppBar.styles';
+} from 'components/AppBar/AppBar.styles';
 
 const propTypes = {
   toggleSideBar: PropTypes.func,

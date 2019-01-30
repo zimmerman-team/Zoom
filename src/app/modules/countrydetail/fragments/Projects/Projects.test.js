@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import Projects from './Projects';
 // Components
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-import ProjectList from 'components/lists/projects/ProjectList';
+import ProjectList from 'components/Lists/ProjectList/ProjectList';
 
 const wrapper = shallow(<Projects />);
 

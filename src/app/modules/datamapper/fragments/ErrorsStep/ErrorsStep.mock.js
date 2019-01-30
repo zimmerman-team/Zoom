@@ -5,6 +5,7 @@ import {
   ErrorCell,
   ErrorColHeader,
 } from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
+/*TODO: replace CustomCheckBox component with Checkbox component*/
 import CustomCheckBox from 'components/CustomCheckBox/CustomCheckBox';
 
 export const columns = [

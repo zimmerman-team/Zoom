@@ -54,7 +54,7 @@ setConsoleOptions({
   },
 };*/
 
-const path = require('path');
+/*const path = require('path');
 
 const pathToInlineSvg = path.resolve(__dirname, '../src/app/assets/icons');
 
@@ -79,7 +79,7 @@ module.exports = defaultConfig => {
   });
 
   return defaultConfig;
-};
+};*/
 
 /*
 addDecorator(

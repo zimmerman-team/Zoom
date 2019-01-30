@@ -3,18 +3,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /* icons */
-import IconRedIndicators from 'assets/icons/icon_red_indicators.svg';
-import IconRedLocation from 'assets/icons/icon_red_location.svg';
-import IconRedPeriod from 'assets/icons/icon_red_period.svg';
-import IconBlueIndicators from 'assets/icons/icon_blue_indicators.svg';
-import IconBlueLocation from 'assets/icons/icon_blue_location.svg';
-import IconBluePeriod from 'assets/icons/icon_blue_period.svg';
+import IconRedIndicators from 'assets/icons/IconRedIndicators';
+import IconRedLocation from 'assets/icons/IconRedLocation';
+import IconRedPeriod from 'assets/icons/IconRedPeriod';
+import IconBlueIndicators from 'assets/icons/IconBlueIndicators';
+import IconBlueLocation from 'assets/icons/IconBlueLocation';
+import IconBluePeriod from 'assets/icons/IconBluePeriod';
 
 /* components */
 import ZoomSelect from 'components/Select/ZoomSelect';
 import AccordionSelection from 'components/DataExplorePane/components/AccordionSelection/AccordionSelection';
 import YearSelector from 'components/YearSelector/YearSelector';
-import ResetIcon from 'assets/icons/icon_reset.svg';
+import ResetIcon from 'assets/icons/IconReset';
 
 /* styles */
 import {

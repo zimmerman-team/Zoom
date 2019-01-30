@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import AddUserModule from 'modules/UserManagement/AddUser/AddUserModule';
-
 // Components
 import {
   AddUserForm,
@@ -9,7 +8,7 @@ import {
   DropDownLabel,
   SubmitButton,
 } from 'modules/UserManagement/AddUser/AddUserModule.styles';
-import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';
 import ZoomSelect from 'components/Select/ZoomSelect';
 import { Box } from 'grommet';

@@ -6,7 +6,7 @@ import {
   LabelContainer,
 } from 'components/Select/components/SelectHeader/SelectHeader.styles';
 
-import IconPointer from 'assets/icons/icon_pointer.svg';
+import IconPointer from 'assets/icons/IconPointer';
 
 const propTypes = {
   headerStyle: PropTypes.object,

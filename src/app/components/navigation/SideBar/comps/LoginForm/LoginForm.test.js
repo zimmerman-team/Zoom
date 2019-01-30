@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { LoginForm } from 'components/navigation/SideBar/comps/LoginForm/LoginForm';
 
 /* Components */
-import IconSignIn from 'assets/icons/icon_sign_in.svg';
+import IconSignIn from 'assets/icons/IconSignIn';
 import {
   ComponentBase,
   LoginHeader,

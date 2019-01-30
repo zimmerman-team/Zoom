@@ -1,10 +1,11 @@
+
 {
   "baseUrl": "http://localhost:3000",
   "chromeWebSecurity": false,
   "viewportWidth": 1440,
   "viewportHeight": 900,
-  "projectId": "s2ubtf",
   "env": {
-    "NODE_ENV":"development"
-  }
+    "targetURL": "http://localhost:3000"
+  },
+  "projectId": "pz1mie"
 }

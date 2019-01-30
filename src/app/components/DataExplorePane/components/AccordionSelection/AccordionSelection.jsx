@@ -5,7 +5,7 @@ import {
   IconContainer,
   PointerContainer,
 } from 'components/DataExplorePane/components/AccordionSelection/AccordionSelection.styles';
-import IconPointer from 'assets/icons/icon_pointer.svg';
+import IconPointer from 'assets/icons/IconPointer';
 import {
   aidsFondsBlue,
   aidsFondsRed,

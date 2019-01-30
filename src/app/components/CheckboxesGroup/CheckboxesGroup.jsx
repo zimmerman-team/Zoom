@@ -1,22 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 // import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from 'components/CheckboxesGroup/CheckBox';
 import FormLabel from 'components/RadioButtonGroup/FormLabel';
-import { Box } from 'grommet';
 import NoSsr from '@material-ui/core/NoSsr';
-import {
-  zoomFontFamTwo,
-  aidsFondsBlue,
-  aidsFondsWhite,
-} from 'components/theme/ThemeSheet';
 import styled from 'styled-components';
-import RadioButtonGroup from 'components/RadioButtonGroup/RadioButtonGroup';
 
 const ZimmermanFormGroup = styled(FormGroup)`
   && {

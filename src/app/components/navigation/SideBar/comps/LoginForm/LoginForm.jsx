@@ -10,7 +10,7 @@ import * as syncActions from 'services/actions/sync';
 
 /* components */
 import { aidsFondsRed } from 'components/theme/ThemeSheet';
-import IconSignIn from 'assets/icons/icon_sign_in.svg';
+import IconSignIn from 'assets/icons/IconSignIn';
 import {
   ComponentBase,
   LoginHeader,

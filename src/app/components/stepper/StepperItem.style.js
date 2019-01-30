@@ -4,7 +4,7 @@ import {
   zoomFontFamOne,
   zoomGreyThree,
 } from 'components/theme/ThemeSheet';
-import iconCheck from 'assets/icons/icon_check.svg';
+import iconCheck from 'assets/icons/IconCheck';
 
 /*TODO: clean up, and put variables in the themesheet*/
 
@@ -36,6 +36,7 @@ export const StepIcon = styled.div`
   justify-content: center;
   margin-left: 5px;
   margin-right: 5px;
+  flex-shrink: 0;
 `;
 
 export const StepCompleteIcon = styled(iconCheck)`

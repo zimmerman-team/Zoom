@@ -10,8 +10,7 @@ import {
   PageIntroSecondary,
   SimpleText,
 } from 'components/theme/ThemeSheet';
-import { barChartMockData } from '__mocks__/barChartVerticalMock';
-import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { CountryName } from 'modules/countrydetail/fragments/CountryInfo/CountryInfo.styles';
 import PropTypes from 'prop-types';
 

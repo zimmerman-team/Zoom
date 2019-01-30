@@ -1,22 +1,36 @@
 /* base */
 import React from 'react';
-
 /* components */
-import IconSort from 'assets/icons/icon_sort.svg';
+import { CheckBox } from 'grommet';
 import {
-  UsersTableColHeader,
+  SortByIcon,
   UsersTableCellValue,
+  UsersTableColHeader,
 } from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
 import { aidsFondsRed } from 'components/theme/ThemeSheet';
-import { CheckBox } from 'grommet';
+import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
 
-export default function getColumns(selectedValues, addRemoveSelectionFunc) {
+const sortByOptions = [
+  { label: 'Name (asc)', value: 'name:1' },
+  { label: 'Name (desc)', value: 'name:-1' },
+];
+
+export default function getColumns(
+  selectedValues,
+  addRemoveSelectionFunc,
+  addRemoveAllSelectionsFunc,
+  isSortByOpen,
+  changeIsSortByOpen,
+  setWrapperRef,
+  onSortOptionClick,
+  selectedSortBy,
+) {
   return [
     {
-      property: 'selected',
+      property: 'id',
       header: (
         <UsersTableColHeader>
-          <CheckBox />
+          <CheckBox onChange={addRemoveAllSelectionsFunc} />
         </UsersTableColHeader>
       ),
       render: val => (
@@ -52,10 +66,18 @@ export default function getColumns(selectedValues, addRemoveSelectionFunc) {
       property: 'sort',
       header: (
         <UsersTableColHeader>
-          <IconSort />
+          <SortByIcon onClick={changeIsSortByOpen} />
+          <SortbyDialog
+            open={isSortByOpen}
+            options={sortByOptions}
+            closeDialog={changeIsSortByOpen}
+            setWrapperRef={setWrapperRef}
+            onOptionClick={onSortOptionClick}
+            selectedOptionValue={selectedSortBy}
+          />
         </UsersTableColHeader>
       ),
-      render: val => <UsersTableCellValue />,
+      render: () => <UsersTableCellValue />,
     },
   ];
 }

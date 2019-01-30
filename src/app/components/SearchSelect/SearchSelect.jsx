@@ -1,14 +1,9 @@
-import React, { createRef, Component, PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { storiesOf } from '@storybook/react';
+import React, { Component, createRef, PureComponent } from 'react';
 import { css } from 'styled-components';
-import styled from 'styled-components';
-import { FormClose } from 'grommet-icons';
 
-import { Box, Button, CheckBox, Grommet, Select, Text } from 'grommet';
+import { Box, Grommet, Select } from 'grommet';
 import { grommet } from 'grommet/themes';
 import { deepMerge } from 'grommet/utils';
-import CircleMarkerIcon from 'components/geo/GeoMap/components/Markers/CircleMarker/CircleMarker.icon';
 
 const customRoundedTheme = deepMerge(grommet, {
   global: {

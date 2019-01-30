@@ -1,16 +1,11 @@
 /* base */
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import GeoMap from 'components/geo/GeoMap/GeoMap';
+import GeoMap from 'components/GeoMap/GeoMap';
 // import AppBar from 'components/navigation/AppBar/AppBar';
 import { Box } from 'grommet';
 // import SideBar from 'components/navigation/SideBar/SideBar';
-import {
-  ControlPanelContainer,
-  DropDownContainer,
-  PanelDuo,
-} from 'modules/home/HomeModule.styles';
-import { yearDropDown } from 'modules/home/HomeModule.utils';
+import { ControlPanelContainer } from 'modules/home/HomeModule.styles';
 import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
 import PropTypes from 'prop-types';
 

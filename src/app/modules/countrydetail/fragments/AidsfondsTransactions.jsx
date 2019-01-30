@@ -11,7 +11,7 @@ import PieChart from 'components/charts/piechart/PieChart';
 import LineChart from 'components/charts/linechart/LineChart';
 import { pieChartMockData } from '__mocks__/pieChartMock';
 import { lineChartMockData } from '__mocks__/lineChartMock';
-import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';
 
 const ComponentBase = styled.div``;

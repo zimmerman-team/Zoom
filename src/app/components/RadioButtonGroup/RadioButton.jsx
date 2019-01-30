@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Radio from '@material-ui/core/Radio';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import IconRadioUnchecked from 'assets/icons/icon_radio_unchecked.svg';
+import IconRadioUnchecked from 'assets/icons/IconRadioUnchecked';
 import NoSsr from '@material-ui/core/NoSsr';
 import { aidsFondsBlue } from 'components/theme/ThemeSheet';
 

@@ -1,18 +1,14 @@
 /* base */
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import {
   ConditionMet,
   ConditionUnmet,
-  FragmentHeader,
-  FragmentDescription,
-  FragmentVisualisation,
-  StigmaListItem,
   StigmaList,
+  StigmaListItem,
 } from 'components/theme/ThemeSheet';
-import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';
 
 const ItemText = styled.p`

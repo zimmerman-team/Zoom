@@ -2,15 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {
-  FragmentContent,
-  FragmentHeader,
-  FragmentVisualisation,
-} from 'components/theme/ThemeSheet';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import LineChart from 'components/charts/linechart/LineChart';
-import { lineChartMockData } from '__mocks__/lineChartMock';
-import ModuleFragment from 'components/layout/ModuleFragment/ModuleFragment';
+import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';
 
 const ComponentBase = styled.div``;

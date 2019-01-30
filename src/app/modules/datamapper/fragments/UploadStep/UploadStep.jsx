@@ -10,7 +10,7 @@ import {
   EmptyInput,
   UploadedContainer,
 } from 'modules/datamapper/fragments/UploadStep/UploadStep.styles';
-import IconUpload from 'assets/icons/icon_upload.svg';
+import IconUpload from 'assets/icons/IconUpload';
 
 const propTypes = {};
 const defaultProps = {};

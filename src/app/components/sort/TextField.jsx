@@ -31,7 +31,7 @@ export default styled(props => (
     font-family: ${zoomFontFamTwo};
     margin: 0;
 
-    &:before {
+    /*  &:before {
       left: 0;
       right: 0;
       bottom: 0;
@@ -52,7 +52,7 @@ export default styled(props => (
       transition: transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
       border-bottom: 2px solid #303f9f;
       pointer-events: none;
-    }
+    }*/
 
     input {
       font-family: ${zoomFontFamTwo};

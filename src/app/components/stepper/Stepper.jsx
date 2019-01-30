@@ -2,8 +2,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'grommet';
+import styled from 'styled-components';
 import { ZoomButton, zoomGreySix } from 'components/theme/ThemeSheet';
 import StepItem from 'components/stepper/StepItem';
+
+const ComponentBase = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  max-width: 1024px;
+  flex-direction: column;
+`;
 
 /*TODO: discuss object structure*/
 /*TODO: document component*/
@@ -54,7 +63,7 @@ class Stepper extends React.Component {
     const prevEnabled = this.props.step !== 1;
 
     return (
-      <Box align="center" width="100%">
+      <ComponentBase>
         {!this.props.onlyButtons && (
           <Box direction="row" width="100%">
             {/*TODO: implement conditional logic that sets state accordingly to control the stepper and the content that is linked to specific steps*/}
@@ -93,7 +102,7 @@ class Stepper extends React.Component {
             </ZoomButton>
           </Box>
         </Box>
-      </Box>
+      </ComponentBase>
     );
   }
 }

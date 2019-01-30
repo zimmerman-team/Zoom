@@ -8,6 +8,7 @@ import RadioGroup from 'components/RadioButtonGroup/RadioGroup';
 const propTypes = {
   options: PropTypes.array,
   direction: PropTypes.string,
+  onChange: PropTypes.func,
 };
 const defaultProps = {
   options: [
@@ -25,6 +26,7 @@ const defaultProps = {
     },
   ],
   direction: 'row',
+  onChange: null,
 };
 
 class RadioButtonGroup extends React.Component {
@@ -32,7 +34,8 @@ class RadioButtonGroup extends React.Component {
     value: 'female',
   };
 
-  handleChange = event => {
+  handleChange = (event, checked) => {
+    this.props.onChange && this.props.onChange(event.target.value);
     this.setState({ value: event.target.value });
   };
 

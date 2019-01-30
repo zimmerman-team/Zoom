@@ -1,6 +1,6 @@
 /* base */
 import React from 'react';
-
+import { Box } from 'grommet';
 /* components */
 import Stepper from 'components/stepper/Stepper';
 
@@ -9,6 +9,9 @@ import {
   StepperContainer,
   ModuleContainer,
   BottomStepCont,
+  ModuleHeader,
+  ModuleFooter,
+  ModuleContent,
 } from './DataMapperModule.styles';
 
 /* fragments */
@@ -64,23 +67,25 @@ class DataMapperModule extends React.Component {
 
   render() {
     return (
-      <ModuleContainer width="100%">
-        <StepperContainer>
+      <ModuleContainer>
+        <ModuleHeader>
           <Stepper
             step={this.state.step}
             nextStep={this.nextStep}
             prevStep={this.prevStep}
           />
-        </StepperContainer>
-        {this.renderStep()}
-        <BottomStepCont>
+        </ModuleHeader>
+
+        <ModuleContent>{this.renderStep()}</ModuleContent>
+
+        <ModuleFooter>
           <Stepper
             onlyButtons
             step={this.state.step}
             nextStep={this.nextStep}
             prevStep={this.prevStep}
           />
-        </BottomStepCont>
+        </ModuleFooter>
       </ModuleContainer>
     );
   }

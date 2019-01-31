@@ -90,6 +90,16 @@ class SideBar extends React.Component {
                     data-cy="sidebar-iati"
                   />
 
+                  <SidebarNavListItem
+                    label="Datamapper"
+                    path={'/mapper'}
+                    icon={<IconCharts />}
+                    onClick={this.props.toggleSideBar}
+                    hoverIndicator={false}
+                    type="button"
+                    plain={true}
+                  />
+
                   {/*TODO: we need to clean this up, maybe go for desctructing the auth0Client object */}
                   {this.props.auth0Client &&
                     (this.props.auth0Client.isAuthenticated() &&
@@ -106,7 +116,6 @@ class SideBar extends React.Component {
                       ))}
 
                   <SidebarNavListItem
-                    disabled={true}
                     active={false}
                     label="About ZOOM"
                     path="/about"

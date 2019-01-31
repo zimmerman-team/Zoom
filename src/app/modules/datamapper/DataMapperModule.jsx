@@ -16,11 +16,11 @@ import {
 
 /* fragments */
 import ErrorStep from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep';
-import MetaData from 'modules/datamapper/fragments/MetaData/MetaData';
 import ManMappingStep from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep';
 import UploadStep from 'modules/datamapper/fragments/UploadStep/UploadStep';
 import OverviewStep from 'modules/datamapper/fragments/OverviewStep/OverviewStep';
 import WrapUpStep from 'modules/datamapper/fragments/WrapUpStep/WrapUpStep';
+import MetaDataMediator from 'mediators/DataMapperMediators/MetaDataMediator';
 
 class DataMapperModule extends React.Component {
   constructor(props) {
@@ -49,7 +49,7 @@ class DataMapperModule extends React.Component {
   renderStep() {
     switch (this.state.step) {
       case 1:
-        return <MetaData />;
+        return <MetaDataMediator dropDownData={this.props.dropDownData} />;
       case 2:
         return <UploadStep />;
       case 3:

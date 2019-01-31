@@ -32,5 +32,6 @@ export const ModuleFooter = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  background-color: ${zoomGreyZero};
   justify-content: center;
 `;

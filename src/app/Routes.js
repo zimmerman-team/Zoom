@@ -91,7 +91,10 @@ const Routes = props => {
             }
           />
           <Route path="/about" render={() => <About />} />
-          <Route path="/mapper" render={() => <DataMapperModule />} />
+          <Route
+            path="/mapper"
+            render={() => <DataMapperModule dropDownData={props} />}
+          />
           <Route exact path="/theme" render={() => <ThemeSheet />} />
           <Route exact path="/component" render={() => <DataExplorePanel />} />
           <Route exact path="/step" render={() => <ManMappingStep />} />

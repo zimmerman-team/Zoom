@@ -1,0 +1,28 @@
+@font-face {
+  font-family: 'FFMarkProAF-Book';
+
+  src: url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Book.eot'); /* IE9 Compat Modes */
+  src: url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Book.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Book.woff2') format('woff2'), /* Super Modern Browsers */
+  url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Book.woff') format('woff'), /* Pretty Modern Browsers */
+  url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Book.ttf')  format('truetype'), /* Safari, Android, iOS */
+  url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Book.svg#svgFontName') format('svg'); /* Legacy iOS */
+  }
+@font-face {
+  font-family: 'FFMarkProAF-Bold';
+  src: url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Bold.eot'); /* IE9 Compat Modes */
+  src: url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Bold.woff2') format('woff2'), /* Super Modern Browsers */
+  url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Bold.woff') format('woff'), /* Pretty Modern Browsers */
+  url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Bold.ttf')  format('truetype'), /* Safari, Android, iOS */
+  url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Bold.svg#svgFontName') format('svg'); /* Legacy iOS */
+  }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'FFMarkProAF-Book', "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+

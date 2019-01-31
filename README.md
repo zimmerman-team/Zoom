@@ -17,7 +17,7 @@ Fusion.js is a web application framework for building high quality universal app
 ### react
 A JavaScript library for building declarative component-based user interfaces
 ### redux
-Redux is a predictable state container for JavaScript apps. It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to tes
+Redux is a predictable state container for JavaScript apps. It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test
 
 ## Styling
 ### grommet

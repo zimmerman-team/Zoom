@@ -147,8 +147,7 @@ class GeoMap extends Component {
     const { features } = event;
 
     const feature = features && features.find(f => f.layer.id === 'layer');
-    if (feature)
-      this.props.history.push(`country/${feature.properties.iso_a2}`);
+    if (feature) this.props.history.push(`country/${feature.properties.iso2}`);
   };
 
   render() {

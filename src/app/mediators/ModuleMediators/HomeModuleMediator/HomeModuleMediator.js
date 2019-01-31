@@ -138,11 +138,9 @@ class HomeModuleMediator extends Component {
 
     const countryLayerData = formatCountryLayerData(
       this.props.indicatorAggregations.indicators1,
-      this.state.worldMap,
     );
     const countryCircleData = formatCountryCenterData(
       this.props.indicatorAggregations.indicators2,
-      this.state.countryCenters,
     );
 
     updatePercentiles(countryLayerData, f => f.properties.value);

@@ -1,10 +1,5 @@
 import styled from 'styled-components';
-import { Box } from 'grommet';
 import { zoomGreyZero } from 'components/theme/ThemeSheet';
-
-export const StepperContainer = styled(Box)`
-  background-color: ${zoomGreyZero};
-`;
 
 export const ModuleContainer = styled.div`
   min-height: 96vh;
@@ -12,10 +7,6 @@ export const ModuleContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-export const BottomStepCont = styled(StepperContainer)`
-  margin-top: auto;
 `;
 
 export const ModuleHeader = styled.div`

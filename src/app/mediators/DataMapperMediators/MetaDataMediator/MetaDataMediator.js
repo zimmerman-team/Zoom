@@ -19,10 +19,12 @@ const propTypes = {
       ),
     }),
   }),
+  saveStepData: PropTypes.func,
 };
 
 const defaultProps = {
   dropDownData: {},
+  saveStepData: undefined,
 };
 
 class MetaDataMediator extends React.Component {
@@ -75,6 +77,12 @@ class MetaDataMediator extends React.Component {
       },
     );
     this.setState({ fileSources });
+  }
+
+  // So we will save the step data when this component will be unmounting
+  // as this data will be used in other components
+  componentWillUnmount() {
+    this.props.saveStepData(this.state.data);
   }
 
   simpleChange(value, question) {

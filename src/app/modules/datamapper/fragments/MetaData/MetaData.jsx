@@ -1,5 +1,5 @@
 /* base */
-/* third party*/
+/* third party */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'grommet';
@@ -14,6 +14,7 @@ import InputFieldDivider from 'components/Dividers/InputFieldDivider';
 import ChipInput from 'components/ChipInput/ChipInput';
 
 /* style */
+import { SectionHeading } from 'components/theme/ThemeSheet';
 import {
   FieldContainer,
   ModuleContainer,
@@ -23,7 +24,6 @@ import {
   SelectContainer,
   OrLabel,
 } from './MetaData.style';
-import { SectionHeading } from 'components/theme/ThemeSheet';
 
 /* mock data */
 import {
@@ -34,7 +34,7 @@ import {
   checkBoxOptions51,
   numberOptions,
   dataSourceOptions,
-} from './MetaData.mock';
+} from './MetaData.consts';
 
 const propTypes = {
   simpleChange: PropTypes.func,
@@ -103,7 +103,7 @@ const defaultProps = {
 };
 
 const MetaData = props => (
-  <ModuleContainer hello={console.log(props)}>
+  <ModuleContainer>
     <SectionHeading>Describe meta data</SectionHeading>
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>

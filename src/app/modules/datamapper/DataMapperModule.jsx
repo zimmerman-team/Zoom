@@ -1,14 +1,11 @@
 /* base */
 import React from 'react';
-import { Box } from 'grommet';
 /* components */
 import Stepper from 'components/Stepper/Stepper';
 
 /* styles */
 import {
-  StepperContainer,
   ModuleContainer,
-  BottomStepCont,
   ModuleHeader,
   ModuleFooter,
   ModuleContent,
@@ -20,7 +17,7 @@ import ManMappingStep from 'modules/datamapper/fragments/ManMappingStep/ManMappi
 import UploadStep from 'modules/datamapper/fragments/UploadStep/UploadStep';
 import OverviewStep from 'modules/datamapper/fragments/OverviewStep/OverviewStep';
 import WrapUpStep from 'modules/datamapper/fragments/WrapUpStep/WrapUpStep';
-import MetaDataMediator from 'mediators/DataMapperMediators/MetaDataMediator';
+import MetaDataMediator from 'mediators/DataMapperMediators/MetaDataMediator/MetaDataMediator';
 
 class DataMapperModule extends React.Component {
   constructor(props) {
@@ -28,10 +25,13 @@ class DataMapperModule extends React.Component {
 
     this.state = {
       step: 1,
+      // So this will basically store the data required for each step
+      stepData: [],
     };
 
     this.nextStep = this.nextStep.bind(this);
     this.prevStep = this.prevStep.bind(this);
+    this.saveStepData = this.saveStepData.bind(this);
   }
 
   nextStep() {
@@ -46,10 +46,23 @@ class DataMapperModule extends React.Component {
     });
   }
 
+  saveStepData(data) {
+    this.setState(prevState => {
+      const { stepData, step } = prevState;
+      stepData[step] = data;
+      return { stepData };
+    });
+  }
+
   renderStep() {
     switch (this.state.step) {
       case 1:
-        return <MetaDataMediator dropDownData={this.props.dropDownData} />;
+        return (
+          <MetaDataMediator
+            saveStepData={this.props.saveStepData}
+            dropDownData={this.props.dropDownData}
+          />
+        );
       case 2:
         return <UploadStep />;
       case 3:
@@ -66,6 +79,7 @@ class DataMapperModule extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     return (
       <ModuleContainer>
         <ModuleHeader>

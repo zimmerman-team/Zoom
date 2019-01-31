@@ -5,7 +5,7 @@ import React from 'react';
 import connect from 'react-redux/es/connect/connect';
 
 /* components */
-import actions from 'services/actions';
+import actions from 'src/app/services/actions';
 
 const propTypes = {};
 

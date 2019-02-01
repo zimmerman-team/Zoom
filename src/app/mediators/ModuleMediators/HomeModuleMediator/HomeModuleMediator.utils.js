@@ -49,31 +49,33 @@ export function formatCountryCenterData(indicators) {
       indicator.geolocationIso2,
     ]);
 
-    // so here we check if we already added a country to the countries layers
-    // and if it has been added we just add the indicators value instead of pushing
-    // another country
-    // this needs to be done when using several data points with the same country
-    // example: data points with different years, will have same countries
-    if (existCountryIndex === -1) {
-      // we need to do a double parse here, cause we retrieve a json
-      // which is i dunno a double string or sth :D
-      const coord = JSON.parse(JSON.parse(indicator.geolocationCenterLongLat))
-        .coordinates;
-      countryCenteredData.push({
-        value: indicator.value,
-        name: indicator.indicatorName,
-        geolocationIso2: indicator.geolocationIso2,
-        maxValue,
-        minValue,
-        longitude: coord[0],
-        latitude: coord[1],
-        tooltipText: `Country: ${indicator.geolocationTag}, Value: ${
-          indicator.value
-        }`,
-      });
-    } else
-      countryCenteredData[existCountryIndex].value =
-        countryCenteredData[existCountryIndex].value + indicator.value;
+    if (indicator.geolocationCenterLongLat) {
+      // so here we check if we already added a country to the countries layers
+      // and if it has been added we just add the indicators value instead of pushing
+      // another country
+      // this needs to be done when using several data points with the same country
+      // example: data points with different years, will have same countries
+      if (existCountryIndex === -1) {
+        // we need to do a double parse here, cause we retrieve a json
+        // which is i dunno a double string or sth :D
+        const coord = JSON.parse(JSON.parse(indicator.geolocationCenterLongLat))
+          .coordinates;
+        countryCenteredData.push({
+          value: indicator.value,
+          name: indicator.indicatorName,
+          geolocationIso2: indicator.geolocationIso2,
+          maxValue,
+          minValue,
+          longitude: coord[0],
+          latitude: coord[1],
+          tooltipText: `Country: ${indicator.geolocationTag}, Value: ${
+            indicator.value
+          }`,
+        });
+      } else
+        countryCenteredData[existCountryIndex].value =
+          countryCenteredData[existCountryIndex].value + indicator.value;
+    }
   });
 
   const maxValue = Math.max.apply(

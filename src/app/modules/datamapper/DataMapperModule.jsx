@@ -14,10 +14,10 @@ import {
 /* fragments */
 import ErrorStep from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep';
 import ManMappingStep from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep';
-import UploadStep from 'modules/datamapper/fragments/UploadStep/UploadStep';
 import OverviewStep from 'modules/datamapper/fragments/OverviewStep/OverviewStep';
 import WrapUpStep from 'modules/datamapper/fragments/WrapUpStep/WrapUpStep';
 import MetaDataMediator from 'mediators/DataMapperMediators/MetaDataMediator/MetaDataMediator';
+import UploadMediator from 'mediators/DataMapperMediators/UploadMediator/UploadMediator';
 
 class DataMapperModule extends React.Component {
   constructor(props) {
@@ -46,10 +46,10 @@ class DataMapperModule extends React.Component {
     });
   }
 
-  saveStepData(data) {
+  saveStepData(data, step) {
     this.setState(prevState => {
-      const { stepData, step } = prevState;
-      stepData[step] = data;
+      const { stepData } = prevState;
+      stepData[step - 1] = data;
       return { stepData };
     });
   }
@@ -59,12 +59,20 @@ class DataMapperModule extends React.Component {
       case 1:
         return (
           <MetaDataMediator
-            saveStepData={this.props.saveStepData}
+            uploadData={this.state.stepData[1]}
+            data={this.state.stepData[0]}
+            saveStepData={this.saveStepData}
             dropDownData={this.props.dropDownData}
           />
         );
       case 2:
-        return <UploadStep />;
+        return (
+          <UploadMediator
+            prevStepData={this.state.stepData[0]}
+            data={this.state.stepData[1]}
+            saveStepData={this.saveStepData}
+          />
+        );
       case 3:
         return <OverviewStep />;
       case 4:
@@ -79,7 +87,6 @@ class DataMapperModule extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <ModuleContainer>
         <ModuleHeader>

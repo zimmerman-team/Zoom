@@ -25,4 +25,5 @@ export const ModuleFooter = styled.div`
   align-items: center;
   background-color: ${zoomGreyZero};
   justify-content: center;
+  margin-top: auto;
 `;

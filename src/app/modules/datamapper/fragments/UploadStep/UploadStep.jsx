@@ -12,8 +12,12 @@ import {
 } from 'modules/datamapper/fragments/UploadStep/UploadStep.styles';
 import IconUpload from 'assets/icons/IconUpload';
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  handleFileUpload: PropTypes.func,
+};
+const defaultProps = {
+  handleFileUpload: undefined,
+};
 
 class UploadStep extends React.Component {
   constructor(props) {
@@ -21,14 +25,11 @@ class UploadStep extends React.Component {
 
     this.state = {
       active: false,
-      loaded: false,
-      filez: null,
     };
 
     this.onDragEnter = this.onDragEnter.bind(this);
     this.onDragLeave = this.onDragLeave.bind(this);
     this.onDrop = this.onDrop.bind(this);
-    this.onFileChange = this.onFileChange.bind(this);
     this.inputOpenFileRef = React.createRef();
   }
 
@@ -47,13 +48,7 @@ class UploadStep extends React.Component {
   onDrop(e) {
     e.preventDefault();
     this.setState({ active: false });
-    this.onFileChange(e, e.dataTransfer.files[0]);
-  }
-
-  onFileChange(e, file) {
-    const filez = file || e.target.files[0];
-
-    this.setState({ loaded: false, file: filez });
+    this.props.handleFileUpload(e);
   }
 
   render() {
@@ -82,12 +77,12 @@ class UploadStep extends React.Component {
             <EmptyInput
               type="file"
               ref={this.inputOpenFileRef}
-              onChange={this.onFileChange}
+              onChange={e => this.props.handleFileUpload(e)}
             />
           </TextContainer>
         </UploadContainer>
-        {this.state.file && (
-          <UploadedContainer>{this.state.file.name}</UploadedContainer>
+        {this.props.file && (
+          <UploadedContainer>{this.props.file.name}</UploadedContainer>
         )}
       </ModuleContainer>
     );

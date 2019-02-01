@@ -6,6 +6,7 @@ import Checkbox from 'components/Checkbox/CheckBox';
 import FormLabel from 'components/RadioButtonGroup/FormLabel';
 import NoSsr from '@material-ui/core/NoSsr';
 import styled from 'styled-components';
+import find from 'lodash/find';
 
 const ZimmermanFormGroup = styled(FormGroup)`
   && {
@@ -64,6 +65,11 @@ class CheckboxesGroup extends React.Component {
     this.setState({ [name]: event.target.checked });
   };
 
+  isChecked(value) {
+    // so we do this nonsense cause checked property excepts a boolean value
+    return find(this.props.values, ['label', value]) ? true : false;
+  }
+
   render() {
     return (
       <NoSsr>
@@ -74,7 +80,7 @@ class CheckboxesGroup extends React.Component {
                 key={option.value}
                 control={
                   <Checkbox
-                    // checked={option1}
+                    checked={this.isChecked(option.value)}
                     onChange={this.handleChange(option.value)}
                     value={option.value}
                   />

@@ -1,5 +1,5 @@
 /* base */
-/* third party*/
+/* third party */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'grommet';
@@ -14,6 +14,7 @@ import InputFieldDivider from 'components/Dividers/InputFieldDivider';
 import ChipInput from 'components/ChipInput/ChipInput';
 
 /* style */
+import { SectionHeading } from 'components/theme/ThemeSheet';
 import {
   FieldContainer,
   ModuleContainer,
@@ -23,9 +24,9 @@ import {
   SelectContainer,
   OrLabel,
 } from './MetaData.style';
-import { SectionHeading } from 'components/theme/ThemeSheet';
 
-/* mock data */
+/* const data */
+import { step1InitialData } from '__consts__/MetaDataStepConsts';
 import {
   options1,
   options2,
@@ -34,7 +35,7 @@ import {
   checkBoxOptions51,
   numberOptions,
   dataSourceOptions,
-} from './MetaData.mock';
+} from './MetaData.consts';
 
 const propTypes = {
   simpleChange: PropTypes.func,
@@ -42,12 +43,6 @@ const propTypes = {
   otherCheckBoxText: PropTypes.func,
   dropDownChange: PropTypes.func,
   otherDropdownText: PropTypes.func,
-  fileSources: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.string,
-    }),
-  ),
   data: PropTypes.shape({
     title: PropTypes.string,
     desc: PropTypes.string,
@@ -90,11 +85,17 @@ const propTypes = {
     q3Text: PropTypes.string,
     q4Text: PropTypes.string,
     q51Text: PropTypes.string,
+    fileSources: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        value: PropTypes.string,
+      }),
+    ),
+    environment: PropTypes.shape({}),
   }),
 };
 const defaultProps = {
-  data: {},
-  fileSources: [],
+  data: step1InitialData,
   simpleChange: undefined,
   checkBoxChange: undefined,
   otherCheckBoxText: undefined,
@@ -103,7 +104,7 @@ const defaultProps = {
 };
 
 const MetaData = props => (
-  <ModuleContainer hello={console.log(props)}>
+  <ModuleContainer>
     <SectionHeading>Describe meta data</SectionHeading>
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
@@ -113,6 +114,7 @@ const MetaData = props => (
         InputProps={{
           disableUnderline: false,
         }}
+        value={props.data.title}
         onChange={e => props.simpleChange(e.target.value, 'title')}
       />
     </FieldContainer>
@@ -125,6 +127,7 @@ const MetaData = props => (
         InputProps={{
           disableUnderline: false,
         }}
+        value={props.data.desc}
         onChange={e => props.simpleChange(e.target.value, 'desc')}
       />
     </FieldContainer>
@@ -132,7 +135,11 @@ const MetaData = props => (
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
       <InputFieldLabel text="Tags*" />
-      <ChipInput onChange={tags => props.simpleChange(tags, 'tags')} />
+      <ChipInput
+        value={props.data.tags}
+        onAdd={chip => props.onChipAdd(chip)}
+        onDelete={(chip, index) => props.onChipDelete(index)}
+      />
     </FieldContainer>
 
     {/*////////////////////////////////////////////////////////////////////*/}
@@ -142,7 +149,7 @@ const MetaData = props => (
         <SelectSurround>
           <ZoomSelect
             placeHolder={'Connect to Zoom data source'}
-            data={dataSourceOptions.concat(props.fileSources)}
+            data={dataSourceOptions.concat(props.data.fileSources)}
             valueSelected={props.data.dataSource.label}
             selectVal={e =>
               props.dropDownChange(e.value, 'dataSource', 'sourceText')
@@ -158,6 +165,7 @@ const MetaData = props => (
           InputProps={{
             disableUnderline: false,
           }}
+          value={props.data.sourceText}
           onChange={e =>
             props.otherDropdownText(
               e.target.value,
@@ -176,6 +184,7 @@ const MetaData = props => (
       <Box>
         <RadioButtonGroup
           direction="column"
+          value={props.data.shared}
           options={options1}
           onChange={value => props.simpleChange(value, 'shared')}
         />
@@ -191,6 +200,7 @@ const MetaData = props => (
         <RadioButtonGroup
           direction="column"
           options={options1}
+          value={props.data.surveyData}
           onChange={value => props.simpleChange(value, 'surveyData')}
         />
       </Box>
@@ -208,6 +218,7 @@ const MetaData = props => (
         <RadioButtonGroup
           direction="row"
           options={options2}
+          value={props.data.q1}
           onChange={value => props.simpleChange(value, 'q1')}
         />
       </Box>
@@ -222,6 +233,7 @@ const MetaData = props => (
           conducting it?"
       />
       <CheckboxesGroup
+        values={props.data.q2}
         options={checkBoxOptions2}
         onChange={value => props.checkBoxChange(value, 'q2')}
       />
@@ -237,6 +249,7 @@ const MetaData = props => (
       />
       <Box direction="row">
         <RadioButtonGroup
+          value={props.data.q21}
           direction="row"
           options={options2}
           onChange={value => props.simpleChange(value, 'q21')}
@@ -252,6 +265,7 @@ const MetaData = props => (
       />
       <Box direction="row">
         <RadioButtonGroup
+          value={props.data.q22}
           direction="row"
           options={options2}
           onChange={value => props.simpleChange(value, 'q22')}
@@ -263,6 +277,7 @@ const MetaData = props => (
     <FieldContainer>
       <InputFieldLabel text="3. How did you select respondents?" />
       <CheckboxesGroup
+        values={props.data.q3}
         options={checkBoxOptions3}
         onChange={value => props.checkBoxChange(value, 'q3', 'q3Text')}
       />
@@ -272,6 +287,7 @@ const MetaData = props => (
         InputProps={{
           disableUnderline: false,
         }}
+        value={props.data.q3Text}
         onChange={e => props.otherCheckBoxText(e.target.value, 'q3', 'q3Text')}
       />
     </FieldContainer>
@@ -299,6 +315,7 @@ const MetaData = props => (
           InputProps={{
             disableUnderline: false,
           }}
+          value={props.data.q4Text}
           onChange={e =>
             props.otherDropdownText(
               e.target.value,
@@ -317,6 +334,7 @@ const MetaData = props => (
       <RadioButtonGroup
         direction="row"
         options={options2}
+        value={props.data.q5}
         onChange={value => props.simpleChange(value, 'q5')}
       />
     </FieldContainer>
@@ -327,6 +345,7 @@ const MetaData = props => (
     <FieldContainer>
       <InputFieldLabel text="5.1 Which data cleaning techniques did you use?" />
       <CheckboxesGroup
+        values={props.data.q51}
         options={checkBoxOptions51}
         onChange={value => props.checkBoxChange(value, 'q51', 'q51Text')}
       />
@@ -336,6 +355,7 @@ const MetaData = props => (
         InputProps={{
           disableUnderline: false,
         }}
+        value={props.data.q51Text}
         onChange={e =>
           props.otherCheckBoxText(e.target.value, 'q51', 'q51Text')
         }

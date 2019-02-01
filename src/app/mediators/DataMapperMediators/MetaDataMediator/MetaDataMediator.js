@@ -5,7 +5,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MetaData from 'modules/datamapper/fragments/MetaData/MetaData';
 import { createFragmentContainer, graphql } from 'react-relay';
+
+/* utils */
 import findIndex from 'lodash/findIndex';
+
+/* consts */
+import { step1InitialData } from '__consts__/MetaDataStepConsts';
 
 const propTypes = {
   dropDownData: PropTypes.shape({
@@ -19,10 +24,63 @@ const propTypes = {
       ),
     }),
   }),
+  saveStepData: PropTypes.func,
+  data: PropTypes.shape({
+    title: PropTypes.string,
+    desc: PropTypes.string,
+    tags: PropTypes.arrayOf(PropTypes.string),
+    dataSource: PropTypes.shape({
+      key: PropTypes.string,
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+    shared: PropTypes.Boolean,
+    surveyData: PropTypes.Boolean,
+    q1: PropTypes.string,
+    q2: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        value: PropTypes.string,
+      }),
+    ),
+    q21: PropTypes.string,
+    q22: PropTypes.string,
+    q3: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        value: PropTypes.string,
+      }),
+    ),
+    q4: PropTypes.shape({
+      key: PropTypes.string,
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+    q5: PropTypes.string,
+    q51: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        value: PropTypes.string,
+      }),
+    ),
+    sourceText: PropTypes.string,
+    q3Text: PropTypes.string,
+    q4Text: PropTypes.string,
+    q51Text: PropTypes.string,
+    fileSources: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        value: PropTypes.string,
+      }),
+    ),
+    environment: PropTypes.shape({}),
+  }),
 };
 
 const defaultProps = {
   dropDownData: {},
+  saveStepData: undefined,
+  data: step1InitialData,
 };
 
 class MetaDataMediator extends React.Component {
@@ -30,35 +88,7 @@ class MetaDataMediator extends React.Component {
     super(props);
 
     this.state = {
-      data: {
-        title: undefined,
-        desc: undefined,
-        tags: [],
-        dataSource: {
-          key: '',
-          label: '',
-          value: '',
-        },
-        shared: false,
-        surveyData: false,
-        q1: undefined,
-        q2: [],
-        q21: undefined,
-        q22: undefined,
-        q3: [],
-        q4: {
-          key: '',
-          label: '',
-          value: '',
-        },
-        q5: undefined,
-        q51: [],
-        sourceText: '',
-        q3Text: '',
-        q4Text: '',
-        q51Text: '',
-      },
-      fileSources: [],
+      data: props.data,
     };
 
     this.simpleChange = this.simpleChange.bind(this);
@@ -66,15 +96,36 @@ class MetaDataMediator extends React.Component {
     this.otherCheckBoxText = this.otherCheckBoxText.bind(this);
     this.dropDownChange = this.dropDownChange.bind(this);
     this.otherDropdownText = this.otherDropdownText.bind(this);
+    this.onChipAdd = this.onChipAdd.bind(this);
+    this.onChipDelete = this.onChipDelete.bind(this);
   }
 
   componentDidMount() {
     const fileSources = this.props.dropDownData.allFileSources.edges.map(
       node => {
-        return { label: node.node.name, value: node.node.name };
+        return { label: node.node.name, value: node.node.entryId };
       },
     );
-    this.setState({ fileSources });
+    this.simpleChange(fileSources, 'fileSources');
+    this.simpleChange(this.props.relay.environment, 'environment');
+  }
+
+  // So we will save the step data when this component will be unmounting
+  // as this data will be used in other components
+  componentWillUnmount() {
+    this.props.saveStepData(this.state.data, 1);
+  }
+
+  onChipAdd(value) {
+    const { tags } = this.state.data;
+    tags.push(value);
+    this.simpleChange(tags, 'tags');
+  }
+
+  onChipDelete(index) {
+    const { tags } = this.state.data;
+    tags.splice(index, 1);
+    this.simpleChange(tags, 'tags');
   }
 
   simpleChange(value, question) {
@@ -178,13 +229,14 @@ class MetaDataMediator extends React.Component {
   render() {
     return (
       <MetaData
-        fileSources={this.state.fileSources}
         data={this.state.data}
         simpleChange={this.simpleChange}
         checkBoxChange={this.checkBoxChange}
         otherCheckBoxText={this.otherCheckBoxText}
         dropDownChange={this.dropDownChange}
         otherDropdownText={this.otherDropdownText}
+        onChipAdd={this.onChipAdd}
+        onChipDelete={this.onChipDelete}
       />
     );
   }
@@ -201,6 +253,7 @@ export default createFragmentContainer(
         edges {
           node {
             name
+            entryId
           }
         }
       }

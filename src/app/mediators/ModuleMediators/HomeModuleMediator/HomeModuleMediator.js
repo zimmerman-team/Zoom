@@ -151,7 +151,7 @@ class HomeModuleMediator extends Component {
       indicators.push({
         type: 'layer',
         data: countryLayerData,
-        legendName: `${this.state.selectedInd1} ${this.state.selectedSubInd1} ${
+        legendName: `${this.state.selectedInd1} ${
           this.state.yearPeriod[0]
         } -  ${this.state.yearPeriod[this.state.yearPeriod.length - 1]}`,
       });
@@ -161,7 +161,7 @@ class HomeModuleMediator extends Component {
       indicators.push({
         type: 'circle',
         data: countryCircleData,
-        legendName: `${this.state.selectedInd2} ${this.state.selectedSubInd2} ${
+        legendName: `${this.state.selectedInd2} ${
           this.state.yearPeriod[0]
         } -  ${this.state.yearPeriod[this.state.yearPeriod.length - 1]}`,
       });
@@ -193,8 +193,8 @@ class HomeModuleMediator extends Component {
       singleInd1: ind1 ? ind1 : 'null',
       singleInd2: ind2 ? ind2 : 'null',
       datePeriod,
-      subInd1: [subInd1],
-      subInd2: [subInd2],
+      subInd1: subInd1.length > 0 ? subInd1 : ['undefined'],
+      subInd2: subInd2.length > 0 ? subInd2 : ['undefined'],
     };
 
     this.props.relay.refetch(refetchVars);
@@ -205,7 +205,7 @@ class HomeModuleMediator extends Component {
     // we reset the selected subindicator
     this.setState(
       {
-        selectedInd1: val.value.value,
+        selectedInd1: val.value,
         selectedSubInd1: 'Select sub indicator',
       },
       this.refetch,
@@ -217,56 +217,87 @@ class HomeModuleMediator extends Component {
     // we reset the selected subindicator
     this.setState(
       {
-        selectedInd2: val.value.value,
+        selectedInd2: val.value,
         selectedSubInd2: 'Select sub indicator',
       },
       this.refetch,
     );
   }
 
-  selectSubInd1(val) {
-    this.setState({ selectedSubInd1: val.value.value }, this.refetch);
+  selectSubInd1(item) {
+    const selectedSubInd1 = [...this.state.selectedSubInd1];
+    const subIndicatorIndex = selectedSubInd1.indexOf(item.value);
+
+    if (subIndicatorIndex === -1)
+      // so if it doesn't exist we add it
+      selectedSubInd1.push(item.value);
+    // if it does exist we remove it
+    else selectedSubInd1.splice(subIndicatorIndex, 1);
+
+    this.setState({ selectedSubInd1 }, this.refetch);
   }
 
-  selectSubInd2(val) {
-    this.setState({ selectedSubInd2: val.value.value }, this.refetch);
+  selectSubInd2(item) {
+    const selectedSubInd2 = [...this.state.selectedSubInd2];
+    const subIndicatorIndex = selectedSubInd2.indexOf(item.value);
+
+    if (subIndicatorIndex === -1)
+      // so if it doesn't exist we add it
+      selectedSubInd2.push(item.value);
+    // if it does exist we remove it
+    else selectedSubInd2.splice(subIndicatorIndex, 1);
+
+    this.setState({ selectedSubInd2 }, this.refetch);
   }
 
   selectYear(val) {
     this.setState({ yearPeriod: formatYearParam(val) }, this.refetch);
   }
 
-  selectCountry(item) {
+  selectCountry(item, array = false) {
     let selectedCountryVal = [];
 
+    // so we set up this logic for select/deselect all logic
+    // if all is selected all of the options will be passed in
     if (item !== 'reset') {
-      selectedCountryVal = [...this.state.selectedCountryVal];
-
-      const countryIndex = selectedCountryVal.indexOf(item.value);
-
-      if (countryIndex === -1)
-        // so if it doesn't exist we add it
-        selectedCountryVal.push(item.value);
-      // if it does exist we remove it
-      else selectedCountryVal.splice(countryIndex, 1);
+      if (array) {
+        item.forEach(it => {
+          selectedCountryVal.push(it.value);
+        });
+      } else {
+        selectedCountryVal = [...this.state.selectedCountryVal];
+        const countryIndex = selectedCountryVal.indexOf(item.value);
+        if (countryIndex === -1)
+          // so if it doesn't exist we add it
+          selectedCountryVal.push(item.value);
+        // if it does exist we remove it
+        else selectedCountryVal.splice(countryIndex, 1);
+      }
     }
 
     this.setState({ selectedCountryVal }, this.refetch);
   }
 
-  selectRegion(item) {
+  selectRegion(item, array = false) {
     let selectedRegionVal = [];
 
+    // so we set up this logic for select/deselect all logic
+    // if all is selected all of the options will be passed in
     if (item !== 'reset') {
-      selectedRegionVal = [...this.state.selectedRegionVal];
+      if (array) {
+        item.forEach(it => {
+          selectedRegionVal.push(it.value);
+        });
+      } else {
+        selectedRegionVal = [...this.state.selectedRegionVal];
+        const regionIndex = selectedRegionVal.indexOf(item.value);
 
-      const regionIndex = selectedRegionVal.indexOf(item.value);
-
-      if (regionIndex === -1)
-        // so if it doesn't exist we add it
-        selectedRegionVal.push(item.value);
-      // if it does exist we remove it
-      else selectedRegionVal.splice(regionIndex, 1);
+        if (regionIndex === -1)
+          // so if it doesn't exist we add it
+          selectedRegionVal.push(item.value);
+        // if it does exist we remove it
+        else selectedRegionVal.splice(regionIndex, 1);
+      }
     }
 
     this.setState({ selectedRegionVal }, this.refetch);

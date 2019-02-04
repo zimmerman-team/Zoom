@@ -13,6 +13,9 @@ export const ComponentBase = styled.div`
   ::-webkit-input-placeholder {
     color: ${aidsFondsRed};
   }
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const PointerContainer = styled.div`

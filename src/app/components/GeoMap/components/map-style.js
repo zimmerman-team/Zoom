@@ -8,15 +8,16 @@ const mapStyle = {
 };
 
 export const colorStops = [
-  [0, '#e4f4fb'],
-  [1, '#c7e9f6'],
-  [2, '#a5dcf1'],
-  [3, '#7fcdec'],
-  [4, '#51bae5'],
-  [5, '#14a3dc'],
-  [6, '#1293c6'],
-  [7, '#0f81ae'],
-  [8, '#0d6a90'],
+  [0, '#E3E2FF'],
+  [1, '#C7C5FF'],
+  [2, '#ACA9FF'],
+  [3, '#918DFF'],
+  [4, '#7671FF'],
+  [5, '#5A54FF'],
+  [6, '#3F38FF'],
+  [6, '#241CFF'],
+  [7, '#2119FF'],
+  [8, '#0900FF'],
 ];
 
 // For more information on data-driven styles, see https://www.mapbox.com/help/gl-dds-ref/
@@ -30,7 +31,7 @@ export const dataLayer = fromJS({
       property: 'percentile',
       stops: colorStops,
     },
-    'fill-opacity': 0.8,
+    'fill-opacity': 0.68,
   },
 });
 

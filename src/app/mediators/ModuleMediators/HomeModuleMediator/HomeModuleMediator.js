@@ -206,7 +206,7 @@ class HomeModuleMediator extends Component {
     this.setState(
       {
         selectedInd1: val.value,
-        selectedSubInd1: 'Select sub indicator',
+        selectedSubInd1: [],
       },
       this.refetch,
     );
@@ -218,7 +218,7 @@ class HomeModuleMediator extends Component {
     this.setState(
       {
         selectedInd2: val.value,
-        selectedSubInd2: 'Select sub indicator',
+        selectedSubInd2: [],
       },
       this.refetch,
     );

@@ -1,7 +1,7 @@
 import { Marker } from 'react-map-gl';
 import React from 'react';
-import CircleMarkerIcon from 'components/GeoMap/components/Markers/CircleMarker/CircleMarker.icon';
 import { CircleContainer } from 'components/GeoMap/components/Markers/CircleMarker/CircleMarker.styles';
+import SvgCircleMarker from 'assets/icons/CircleMarkerIcon';
 
 // so this basically returns the percentage of the
 // indicators value compared to the max and min values
@@ -41,7 +41,7 @@ const circleMarker = (indicator, index, setMarkerInfo) =>
         onMouseEnter={() => setMarkerInfo(indicator)}
         onMouseLeave={() => setMarkerInfo(null)}
       >
-        <CircleMarkerIcon
+        <SvgCircleMarker
           height={getMeasure(
             indicator.value,
             indicator.maxValue,

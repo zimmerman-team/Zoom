@@ -9,6 +9,7 @@ const propTypes = {
   options: PropTypes.array,
   direction: PropTypes.string,
   onChange: PropTypes.func,
+  value: PropTypes.string,
 };
 const defaultProps = {
   options: [
@@ -27,11 +28,12 @@ const defaultProps = {
   ],
   direction: 'row',
   onChange: null,
+  value: 'female',
 };
 
 class RadioButtonGroup extends React.Component {
   state = {
-    value: 'female',
+    value: this.props.value,
   };
 
   handleChange = (event, checked) => {

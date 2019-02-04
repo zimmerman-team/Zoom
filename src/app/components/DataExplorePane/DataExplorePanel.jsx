@@ -156,6 +156,7 @@ class DataExplorePane extends React.Component {
             <FilterContainer>
               <DropDownCont>
                 <ZoomSelect
+                  selectAll
                   multiple
                   placeHolder={
                     'Select region (' + this.props.regions.length + ')'
@@ -168,6 +169,7 @@ class DataExplorePane extends React.Component {
               </DropDownCont>
               <DropDownCont>
                 <ZoomSelect
+                  selectAll
                   reset={() => this.props.selectCountry('reset')}
                   multiple
                   placeHolder={
@@ -189,9 +191,8 @@ class DataExplorePane extends React.Component {
             <FilterContainer>
               <DropDownCont>
                 <ZoomSelect
-                  reset={() =>
-                    this.props.selectInd1({ value: { value: undefined } })
-                  }
+                  categorise
+                  reset={() => this.props.selectInd1({ value: undefined })}
                   placeHolder={
                     'Select indicator (' + this.props.indNames.length + ')'
                   }
@@ -202,9 +203,11 @@ class DataExplorePane extends React.Component {
               </DropDownCont>
               <DropDownCont>
                 <ZoomSelect
+                  categorise
                   placeHolder="Select sub indicator"
                   data={this.props.subIndicators1}
-                  valueSelected={this.props.selectedSubInd1}
+                  multiple
+                  arraySelected={this.props.selectedSubInd1}
                   selectVal={this.props.selectSubInd1}
                 />
               </DropDownCont>
@@ -212,9 +215,8 @@ class DataExplorePane extends React.Component {
             <FilterContainer>
               <DropDownCont>
                 <ZoomSelect
-                  reset={() =>
-                    this.props.selectInd2({ value: { value: undefined } })
-                  }
+                  categorise
+                  reset={() => this.props.selectInd2({ value: undefined })}
                   placeHolder={
                     'Select indicator (' + this.props.indNames.length + ')'
                   }
@@ -225,9 +227,11 @@ class DataExplorePane extends React.Component {
               </DropDownCont>
               <DropDownCont>
                 <ZoomSelect
+                  categorise
                   placeHolder="Select sub indicator"
                   data={this.props.subIndicators2}
-                  valueSelected={this.props.selectedSubInd2}
+                  multiple
+                  arraySelected={this.props.selectedSubInd2}
                   selectVal={this.props.selectSubInd2}
                 />
               </DropDownCont>

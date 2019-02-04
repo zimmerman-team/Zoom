@@ -8,6 +8,7 @@ import { Box } from 'grommet';
 import { ControlPanelContainer } from 'modules/home/HomeModule.styles';
 import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
 import PropTypes from 'prop-types';
+import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
 const ModuleContainer = styled(Box)``;
 

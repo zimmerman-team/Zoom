@@ -108,10 +108,11 @@ export function formatCountryParam(countryCodes, regionCountryCodes) {
   jointCountries = jointCountries.concat(countryCodes);
 
   regionCountryCodes.forEach(region => {
-    region.forEach(countryCode => {
-      if (jointCountries.indexOf(countryCode.iso2) === -1)
-        jointCountries.push(countryCode.iso2);
-    });
+    if (region !== 'select all')
+      region.forEach(countryCode => {
+        if (jointCountries.indexOf(countryCode.iso2) === -1)
+          jointCountries.push(countryCode.iso2);
+      });
   });
 
   return jointCountries;

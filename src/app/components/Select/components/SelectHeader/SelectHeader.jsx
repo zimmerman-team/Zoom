@@ -18,7 +18,12 @@ const defaultProps = {
 };
 
 const SelectHeader = props => (
-  <ComponentBase style={props.headerStyle ? props.headerStyle : ''}>
+  <ComponentBase
+    data-name="selectHeader"
+    style={props.headerStyle ? props.headerStyle : ''}
+    onClick={props.onClick}
+  >
+    <input style={{ display: 'none' }} />
     <PointerContainer
       style={{ margin: props.arrowMargins ? props.arrowMargins : '' }}
     >

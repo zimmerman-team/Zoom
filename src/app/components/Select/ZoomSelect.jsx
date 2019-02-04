@@ -29,7 +29,6 @@ const propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
-      value: PropTypes.string,
     }),
   ),
   placeHolder: PropTypes.string,
@@ -75,7 +74,11 @@ class ZoomSelect extends React.Component {
         this.setState({ allSelected: false });
     }
 
-    if (!isEqual(this.props.data, prevProps.data) && this.props.data) {
+    if (
+      !isEqual(this.props.data, prevProps.data) &&
+      this.props.data &&
+      this.props.data.length > 0
+    ) {
       // this is where we'll add extra 'categorization' items
       // if the dropdown needs to be categorized,
       // basically now will be categorized alphabetically
@@ -165,12 +168,13 @@ class ZoomSelect extends React.Component {
     }
   }
 
-  renderDropDownItem(item) {
+  renderDropDownItem(item, index) {
     const category = item.value === 'category';
     const style = category ? categoryStyle : {};
 
     return (
       <DropDownItem
+        key={`dropDownItem-${index}`}
         style={style}
         onClick={() => this.handleItemClick(item, category)}
       >

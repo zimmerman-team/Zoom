@@ -1,5 +1,5 @@
 import React from 'react';
-import CircleMarkerIcon from 'components/GeoMap/components/Markers/CircleMarker/CircleMarker.icon';
+import CircleMarkerIcon from 'assets/icons/CircleMarkerIcon';
 import {
   LegendIcon,
   LegendLabel,

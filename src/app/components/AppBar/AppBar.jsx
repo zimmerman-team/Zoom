@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Box } from 'grommet';
 import { Menu } from 'grommet-icons';
 import { aidsFondsRed } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 // import {}
 
 /* Components */

@@ -3,13 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
-  aidsFondsBlue,
-  aidsFondsRed,
   FragmentContent,
-  zoomFontFamOne,
-  zoomGreyZero,
   FragmentContainer,
 } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import { Box } from 'grommet';
 import { scroller } from 'react-scroll';
@@ -40,13 +37,13 @@ const PageNavItem = styled.li`
   padding: 0;
   align-items: center;
   justify-content: center;
-  font-family: ${zoomFontFamOne};
+  font-family: ${theme.font.zoomFontFamOne};
   font-size: 14px;
-  color: ${aidsFondsRed};
+  color: ${theme.color.aidsFondsRed};
   cursor: pointer;
 
   &:hover {
-    color: ${aidsFondsBlue};
+    color: ${theme.color.aidsFondsBlue};
   }
 
   &:after {
@@ -76,7 +73,7 @@ const PageNavigation = props => {
 
   return (
     <NavigationContainer
-      background={zoomGreyZero}
+      background={theme.color.zoomGreyZero}
       data-cy="navbar-country-detail"
     >
       <FragmentContent>

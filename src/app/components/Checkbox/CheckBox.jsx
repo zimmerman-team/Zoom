@@ -5,7 +5,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import IconBoxUnchecked from 'assets/icons/IconBoxUnchecked';
 import NoSsr from '@material-ui/core/NoSsr';
-import { aidsFondsBlue } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 
 /*TODO: add checked icon*/
 const IconUnchecked = (
@@ -23,7 +23,7 @@ export default styled(props => (
     padding: 0;
     margin-right: 5px;
     svg {
-      fill: ${aidsFondsBlue};
+      fill: ${theme.color.aidsFondsBlue};
     }
   }
 `;

@@ -1,12 +1,6 @@
 import styled from 'styled-components';
 import { Box } from 'grommet';
-import {
-  zoomFontFamOne,
-  zoomFontFamTwo,
-  aidsFondsBlue,
-} from 'components/theme/ThemeSheet';
-
-// const ComponentBase = styled.div``;
+import theme from 'theme/Theme';
 
 export const DetailList = styled.ul`
   list-style: none;
@@ -28,13 +22,13 @@ export const DetailListItem = styled.li`
 
 export const ItemLabel = styled.div`
   color: #000;
-  font-family: ${zoomFontFamOne};
+  font-family: ${theme.font.zoomFontFamOne};
   line-height: 1;
   margin-bottom: 9px;
 `;
 export const ItemInfo = styled.div`
-  font-family: ${zoomFontFamTwo};
-  color: ${aidsFondsBlue};
+  font-family: ${theme.font.zoomFontFamTwo};
+  color: ${theme.color.aidsFondsBlue};
   line-height: 1;
   position: relative;
 `;
@@ -44,10 +38,10 @@ export const Tooltip = styled(Box)`
   top: 20px;
   right: 20px;
   width: 250px;
-  background-color: white;
+  background-color: ${theme.color.aidsFondsWhite};
   padding: 20px;
   z-index: 2;
   border-radius: 2%;
-  font-family: ${zoomFontFamTwo};
+  font-family: ${theme.font.zoomFontFamTwo};
   line-height: 1.3;
 `;

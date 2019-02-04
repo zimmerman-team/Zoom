@@ -21,6 +21,7 @@ export default {
     zoomGreyEight: '#d8d8d8',
     zoomBlack: '#000000',
     // export const colHeadColor = zoomGreyFive;
+    colHeadColor: '#9b9b9b',
     errorCellColor: '#ff807f',
   },
   space: {},

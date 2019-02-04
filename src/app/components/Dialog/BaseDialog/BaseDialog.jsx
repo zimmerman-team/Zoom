@@ -4,18 +4,18 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box, Layer } from 'grommet';
 import {
-  aidsFondsWhite,
   DialogHeading,
   SimpleText,
   ZoomButton,
 } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 
 const DialogLayer = styled(Layer)`
   width: 840px;
   height: 200px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   border-radius: 20px;
-  background-color: ${aidsFondsWhite};
+  background-color: ${theme.color.aidsFondsWhite};
   display: flex;
   justify-content: center;
   align-items: center;

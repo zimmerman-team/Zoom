@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Box, Button, Image } from 'grommet';
-import { aidsFondsWhite } from 'components/theme/ThemeSheet';
+
+import theme from 'theme/Theme';
 
 export const ComponentBase = styled(Box)`
   height: 40px;
@@ -11,7 +12,7 @@ export const ComponentBase = styled(Box)`
   z-index: 10;
   position: sticky;
   top: 0;
-  background-color: ${aidsFondsWhite};
+  background-color: ${theme.color.aidsFondsWhite};
 `;
 
 export const AidsFondLogo = styled(Image)`

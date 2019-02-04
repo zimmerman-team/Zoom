@@ -1,10 +1,7 @@
 // (C) Copyright 2017-2018 Hewlett Packard Enterprise Development LP
 import { css } from 'styled-components';
-import {
-  aidsFondsRed,
-  aidsFondsBlue,
-  zoomBlack,
-} from 'components/theme/ThemeSheet';
+
+import theme from 'theme/Theme';
 const isObject = item =>
   item && typeof item === 'object' && !Array.isArray(item);
 
@@ -27,7 +24,7 @@ const statusColors = {
 };
 
 const colors = {
-  brand: aidsFondsRed,
+  brand: theme.color.aidsFondsRed,
   focus: accentColors[0],
 };
 
@@ -88,7 +85,7 @@ export const zoom = deepFreeze({
       width: '1px',
     },
     extend: css`
-      color: ${zoomBlack};
+      color: ${theme.color.zoomBlack};
       font-size: 14px;
       font-weight: 300;
     `,
@@ -101,7 +98,7 @@ export const zoom = deepFreeze({
     check: {
       radius: '100%',
       color: {
-        light: zoomBlack,
+        light: theme.color.zoomBlack,
       },
     },
     icon: {

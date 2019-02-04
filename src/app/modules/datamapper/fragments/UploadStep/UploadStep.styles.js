@@ -1,13 +1,9 @@
 import styled from 'styled-components';
 import { Box, Text } from 'grommet';
-import {
-  aidsFondsWhite,
-  zoomFontFamTwo,
-  aidsFondsRed,
-} from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 
 export const ModuleContainer = styled(Box)`
-  background-color: ${aidsFondsWhite};
+  background-color: ${theme.color.aidsFondsWhite};
   margin-bottom: 192px;
 `;
 
@@ -24,7 +20,7 @@ export const IconContainer = styled(Box)`
 
 const UploadText = styled(Text)`
   color: rgba(0, 0, 0, 0.87);
-  font-family: ${zoomFontFamTwo};
+  font-family: ${theme.color.zoomFontFamTwo};
   font-size: 16px;
 `;
 
@@ -37,7 +33,7 @@ export const EmptyInput = styled.input`
 `;
 
 export const BrowseLink = styled(UploadText)`
-  color: ${aidsFondsRed};
+  color: ${theme.color.aidsFondsRed};
   text-decoration: underline;
   cursor: pointer;
 `;

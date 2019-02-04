@@ -1,20 +1,12 @@
 import styled from 'styled-components';
-import {
-  zoomFontFamOne,
-  aidsFondsRed,
-  aidsFondsWhite,
-  zoomGreyZero,
-  zoomGreyEight,
-  zoomGreySeven,
-} from 'components/theme/ThemeSheet';
-
+import theme from 'theme/Theme';
 export const DropDownItem = styled.li`
   padding: 6px 16px;
   width: 250px;
   display: flex;
   &:hover {
     cursor: pointer;
-    background-color: ${zoomGreyZero};
+    background-color: ${theme.color.zoomGreyZero};
   }
   &:first-child {
     padding-top: 12px;
@@ -25,8 +17,8 @@ export const DropDownItem = styled.li`
 `;
 
 export const DropDownLabel = styled.div`
-  color: ${aidsFondsRed};
-  font-family: ${zoomFontFamOne};
+  color: ${theme.color.aidsFondsRed};
+  font-family: ${theme.font.zoomFontFamOne};
   font-size: 14px;
   margin: auto 0;
 `;
@@ -49,7 +41,7 @@ export const ResetContainer = styled.div`
 
 export const DropDownContainer = styled.ul`
   position: absolute;
-  background-color: ${aidsFondsWhite};
+  background-color: ${theme.color.aidsFondsWhite};
   margin-top: 44px;
   z-index: 1;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
@@ -75,7 +67,7 @@ export const OptionsContainer = styled.ul`
   /* Handle */
   ::-webkit-scrollbar-thumb {
     border-radius: 3px;
-    background: ${zoomGreyEight};
+    background: ${theme.color.zoomGreyEight};
   }
 
   /* Handle on hover */
@@ -85,10 +77,10 @@ export const OptionsContainer = styled.ul`
 `;
 
 export const SelectAll = styled(DropDownItem)`
-  border-bottom: 1px solid ${zoomGreySeven};
+  border-bottom: 1px solid ${theme.color.zoomGreySeven};
   padding-bottom: 12px;
 `;
 
 export const categoryStyle = {
-  borderBottom: `1px solid ${zoomGreySeven}`,
+  borderBottom: `1px solid ${theme.color.zoomGreySeven}`,
 };

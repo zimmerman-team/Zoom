@@ -3,11 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 import NoSsr from '@material-ui/core/NoSsr';
-import {
-  zoomFontFamTwo,
-  aidsFondsBlue,
-  aidsFondsWhite,
-} from 'components/theme/ThemeSheet';
 import ChipInput from 'material-ui-chip-input';
 
 export default styled(props => (

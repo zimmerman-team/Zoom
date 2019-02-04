@@ -1,17 +1,15 @@
 import styled from 'styled-components';
 import { Box } from 'grommet';
 import {
-  aidsFondsRed,
-  aidsFondsWhite,
   CellValue,
   ColumnHeader,
   SectionHeading,
-  zoomFontFamOne,
   ZoomTable,
 } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 
 export const ModuleContainer = styled(Box)`
-  background-color: ${aidsFondsWhite};
+  background-color: ${theme.color.aidsFondsWhite};
   padding: 0 1% 40px 1%;
 `;
 
@@ -57,13 +55,13 @@ export const ErrorTable = styled(ZoomTable)`
 
 export const TabContainer = styled.div`
   display: flex;
-  wdith: fit-content;
+  width: fit-content;
   margin: 0 auto 14px auto;
 `;
 
 export const TabText = styled.div`
-  color: ${aidsFondsRed};
-  font-family: ${zoomFontFamOne};
+  color: ${theme.color.aidsFondsRed};
+  font-family: ${theme.font.zoomFontFamOne};
   font-size: 14px;
   margin: 0 9px;
   &:hover {

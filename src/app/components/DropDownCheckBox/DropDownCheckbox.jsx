@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Checkbox from '@material-ui/core/Checkbox';
 import NoSsr from '@material-ui/core/NoSsr';
-import { aidsFondsRed } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 
 export default styled(props => (
   <NoSsr>
@@ -17,7 +17,7 @@ export default styled(props => (
       width: 18px;
       height: 18px;
       border-radius: 3px;
-      fill: ${aidsFondsRed};
+      fill: ${theme.color.aidsFondsRed};
     }
   }
 `;

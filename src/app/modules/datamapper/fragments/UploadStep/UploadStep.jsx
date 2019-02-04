@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SectionHeading, zoomGreyZero } from 'components/theme/ThemeSheet';
+import { SectionHeading } from 'components/theme/ThemeSheet';
 import {
   ModuleContainer,
   UploadContainer,
@@ -11,6 +11,7 @@ import {
   UploadedContainer,
 } from 'modules/datamapper/fragments/UploadStep/UploadStep.styles';
 import IconUpload from 'assets/icons/IconUpload';
+import theme from 'theme/Theme';
 
 const propTypes = {
   handleFileUpload: PropTypes.func,
@@ -60,7 +61,9 @@ class UploadStep extends React.Component {
           onDragLeave={this.onDragLeave}
           onDragOver={this.onDragOver}
           onDrop={this.onDrop}
-          style={{ backgroundColor: this.state.active ? zoomGreyZero : '' }}
+          style={{
+            backgroundColor: this.state.active ? theme.color.zoomGreyZero : '',
+          }}
         >
           <IconContainer>
             <IconUpload />

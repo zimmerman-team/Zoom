@@ -1,22 +1,18 @@
 import styled from 'styled-components';
-import {
-  zoomFontFamOne,
-  aidsFondsRed,
-  zoomGreyThree,
-} from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 
 export const FilterLabel = styled.div`
-  font-family: ${zoomFontFamOne};
+  font-family: ${theme.font.zoomFontFamOne};
   font-size: 14px;
   height: fit-content;
   margin-bottom: auto;
   margin-top: auto;
-  color: ${aidsFondsRed};
+  color: ${theme.color.aidsFondsRed};
 `;
 
 export const ComponentBase = styled.div`
   display: flex;
-  color: #ff0100;
+  color: ${theme.color.aidsFondsRed};
 `;
 
 export const IconContainer = styled.div`

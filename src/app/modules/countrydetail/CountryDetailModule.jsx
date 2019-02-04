@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box } from 'grommet';
-import { aidsFondsWhite, zoomGreyZero } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 
 import CountryInfo from 'modules/countrydetail/fragments/CountryInfo/CountryInfo';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
@@ -15,7 +15,7 @@ import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';
 import Projects from 'modules/countrydetail/fragments/Projects/Projects';
 
 const ModuleContainer = styled(Box)`
-  background-color: ${aidsFondsWhite};
+  background-color: ${theme.color.aidsFondsWhite};
 `;
 
 const propTypes = {
@@ -82,7 +82,7 @@ class CountryDetailModule extends React.Component {
 
         {/* Fragment 2: aids epidemic */}
         <AidsEpidemic
-          background={zoomGreyZero}
+          background={theme.color.zoomGreyZero}
           aidsLineChartData={this.props.aidsLineChartData}
         />
 
@@ -90,13 +90,13 @@ class CountryDetailModule extends React.Component {
         <EconomicIndicators />
 
         {/* Fragment 4: civic space */}
-        <CivicSpace background={zoomGreyZero} />
+        <CivicSpace background={theme.color.zoomGreyZero} />
 
         {/* Fragment 5: human rights */}
         <HumanRights />
 
         {/* Fragment 5: aidsfonds financial transactions */}
-        <AidsfondsTransactions background={zoomGreyZero} />
+        <AidsfondsTransactions background={theme.color.zoomGreyZero} />
 
         {/* Fragment 5: Projects */}
         <Projects projectData={this.props.projectData} />

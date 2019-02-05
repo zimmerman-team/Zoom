@@ -151,9 +151,7 @@ class HomeModuleMediator extends Component {
       indicators.push({
         type: 'layer',
         data: countryLayerData,
-        legendName: `${this.state.selectedInd1} ${
-          this.state.yearPeriod[0]
-        } -  ${this.state.yearPeriod[this.state.yearPeriod.length - 1]}`,
+        legendName: ` ${this.state.selectedInd1} `,
       });
     }
 
@@ -161,9 +159,7 @@ class HomeModuleMediator extends Component {
       indicators.push({
         type: 'circle',
         data: countryCircleData,
-        legendName: `${this.state.selectedInd2} ${
-          this.state.yearPeriod[0]
-        } -  ${this.state.yearPeriod[this.state.yearPeriod.length - 1]}`,
+        legendName: ` ${this.state.selectedInd2} `,
       });
     }
 

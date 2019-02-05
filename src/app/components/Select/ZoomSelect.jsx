@@ -22,7 +22,7 @@ import {
   DropDownContainer,
   SelectAll,
   OptionsContainer,
-  categoryStyle,
+  CategoryItem,
 } from 'components/Select/ZoomSelect.styles';
 
 const propTypes = {
@@ -161,24 +161,24 @@ class ZoomSelect extends React.Component {
     else this.props.selectVal(this.props.data, true);
   }
 
-  handleItemClick(item, category = false) {
-    if (!category) {
-      if (!this.props.multiple) this.setState({ open: false });
-      this.props.selectVal(item);
-    }
+  handleItemClick(item) {
+    if (!this.props.multiple) this.setState({ open: false });
+    this.props.selectVal(item);
   }
 
   renderDropDownItem(item, index) {
-    const category = item.value === 'category';
-    const style = category ? categoryStyle : {};
-
+    if (item.value === 'category')
+      return (
+        <CategoryItem key={`dropDownItem-${index}`}>
+          <DropDownLabel>{item.label}</DropDownLabel>
+        </CategoryItem>
+      );
     return (
       <DropDownItem
         key={`dropDownItem-${index}`}
-        style={style}
-        onClick={() => this.handleItemClick(item, category)}
+        onClick={() => this.handleItemClick(item)}
       >
-        {this.props.multiple && !category && (
+        {this.props.multiple && (
           <DropDownCheckbox
             checked={this.props.arraySelected.indexOf(item.value) !== -1}
           />

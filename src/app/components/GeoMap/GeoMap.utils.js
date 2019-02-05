@@ -40,13 +40,27 @@ export function generateLegends(indicatorData) {
   indicatorData.forEach((item, index) => {
     switch (item.type) {
       case 'layer':
-        legendArray.push(layerLegend(item.legendName, index));
+        legendArray.push(
+          layerLegend(
+            item.legendName,
+            index,
+            item.data.minValue,
+            item.data.maxValue,
+          ),
+        );
         break;
       case 'location':
         legendArray.push(locationLegend(item.legendName, index));
         break;
       case 'circle':
-        legendArray.push(circleLegend(item.legendName, index));
+        legendArray.push(
+          circleLegend(
+            item.legendName,
+            index,
+            item.data[0].minValue,
+            item.data[0].maxValue,
+          ),
+        );
         break;
       default:
         break;

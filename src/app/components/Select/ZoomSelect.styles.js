@@ -89,6 +89,10 @@ export const SelectAll = styled(DropDownItem)`
   padding-bottom: 12px;
 `;
 
-export const categoryStyle = {
-  borderBottom: `1px solid ${zoomGreySeven}`,
-};
+export const CategoryItem = styled(DropDownItem)`
+  border-bottom: 1px solid ${zoomGreySeven};
+  &:hover {
+    cursor: unset;
+    background-color: inherit;
+  }
+`;

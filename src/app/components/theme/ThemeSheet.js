@@ -30,6 +30,7 @@ export const zoomGreySix = '#cecece';
 export const zoomGreySeven = '#cfcfcf';
 export const zoomGreyEight = '#d8d8d8';
 export const zoomBlack = '#000000';
+export const smallTextBlack = '#4a4a4a';
 export const zoomFontFamOne = 'FFMarkProAF-Bold';
 export const zoomFontFamTwo = 'FFMarkProAF-Book';
 

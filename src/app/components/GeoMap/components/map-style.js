@@ -7,18 +7,7 @@ const mapStyle = {
   layers: MAP_STYLE.layers.slice(),
 };
 
-export const colorStops = [
-  [0, '#E3E2FF'],
-  [1, '#C7C5FF'],
-  [2, '#ACA9FF'],
-  [3, '#918DFF'],
-  [4, '#7671FF'],
-  [5, '#5A54FF'],
-  [6, '#3F38FF'],
-  [6, '#241CFF'],
-  [7, '#2119FF'],
-  [8, '#0900FF'],
-];
+export const colorStops = [[0, '#FFFFFF'], [8, '#0900FF']];
 
 // For more information on data-driven styles, see https://www.mapbox.com/help/gl-dds-ref/
 export const dataLayer = fromJS({

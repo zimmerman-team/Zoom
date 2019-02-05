@@ -1,27 +1,37 @@
 import React from 'react';
-import {
-  LayerLegendItem,
-  LegendLabel,
-} from 'components/GeoMap/components/Legends/LayerLegend/LayerLegend.styles';
-import { colorStops } from 'components/GeoMap/components/map-style';
 
-const layerLegend = (legendName, index) =>
-  legendName && (
-    <LayerLegendItem key={`legend-${index}`}>
-      <LegendLabel>{legendName}</LegendLabel>
-      <svg height={35} width="100%">
-        <defs>
-          <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor={colorStops[0][1]} />
-            <stop
-              offset="100%"
-              stopColor={colorStops[colorStops.length - 1][1]}
-            />
-          </linearGradient>
-        </defs>
-        <rect x="10" y="10" width="95%" height="20" fill="url(#linear)" />
-      </svg>
-    </LayerLegendItem>
+/* styles */
+import {
+  LegendItem,
+  LegendLabel,
+  LegendNumberContainer,
+  LegendNumber,
+} from 'components/GeoMap/components/Legends/Legend.styles';
+import { ColorGradient } from 'components/GeoMap/components/Legends/LayerLegend/LayerLegend.styles';
+
+/* utils */
+import { formatNumber } from 'utils/genericUtils';
+
+const layerLegend = (legendName, index, min, max) => {
+  const third = Math.round((max - min) / 3);
+
+  const firstThird = min + third;
+  const secondThird = firstThird + third;
+
+  return (
+    legendName && (
+      <LegendItem key={`legend-${index}`}>
+        <LegendLabel>{legendName}</LegendLabel>
+        <ColorGradient />
+        <LegendNumberContainer>
+          <LegendNumber>{formatNumber(min)}</LegendNumber>
+          <LegendNumber>{formatNumber(firstThird)}</LegendNumber>
+          <LegendNumber>{formatNumber(secondThird)}</LegendNumber>
+          <LegendNumber>{formatNumber(max)}</LegendNumber>
+        </LegendNumberContainer>
+      </LegendItem>
+    )
   );
+};
 
 export default layerLegend;

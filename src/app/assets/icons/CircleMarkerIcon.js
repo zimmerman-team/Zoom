@@ -7,6 +7,7 @@ const SvgCircleMarker = props => (
     width={props.width}
     height={props.height}
     viewBox="0 0 47 48"
+    style={{ margin: props.margin }}
     {...props}
     fill="rgba(255, 255, 255, 0.65)"
   >

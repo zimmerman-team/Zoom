@@ -37,6 +37,21 @@ export function formatCountryLayerData(indicators) {
     }
   });
 
+  // And we add min and max values to be used for legends and what not
+  countryLayers.minValue = Math.min.apply(
+    Math,
+    countryLayers.features.map(feature => {
+      return feature.properties.value;
+    }),
+  );
+
+  countryLayers.maxValue = Math.max.apply(
+    Math,
+    countryLayers.features.map(feature => {
+      return feature.properties.value;
+    }),
+  );
+
   return countryLayers;
 }
 
@@ -91,7 +106,7 @@ export function formatCountryCenterData(indicators) {
     }),
   );
 
-  countryCenteredData.map(indicator => {
+  countryCenteredData.forEach(indicator => {
     indicator.maxValue = maxValue;
     indicator.minValue = minValue;
   });

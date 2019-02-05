@@ -23,6 +23,7 @@ export default {
     // export const colHeadColor = zoomGreyFive;
     colHeadColor: '#9b9b9b',
     errorCellColor: '#ff807f',
+    smallTextBlack: '#4a4a4a',
   },
   space: {},
   height: {},

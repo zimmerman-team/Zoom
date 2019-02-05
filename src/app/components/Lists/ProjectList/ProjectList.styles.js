@@ -1,21 +1,13 @@
 import styled from 'styled-components';
 import { Box, Heading } from 'grommet';
-
-import {
-  zoomGreyZero,
-  zoomFontFamOne,
-  zoomFontFamTwo,
-  aidsFondsRed,
-} from 'components/theme/ThemeSheet';
-
-// const ComponentBase = styled.div``;
+import theme from 'theme/Theme';
 
 export const List = styled(Box)`
   display: flex;
   flex-direction: column;
 `;
 export const ListItem = styled(Box)`
-  background-color: ${zoomGreyZero};
+  background-color: ${theme.color.zoomGreyZero};
   margin-bottom: 2px;
   padding: 20px;
 `;
@@ -25,20 +17,20 @@ export const PropertyContainer = styled(Box)`
 `;
 
 export const Label = styled.div`
-  font-family: ${zoomFontFamOne};
+  font-family: ${theme.font.zoomFontFamOne};
   font-size: 14px;
   line-height: 1;
   margin-right: 4px;
 `;
 export const Value = styled.div`
-  font-family: ${zoomFontFamTwo};
+  font-family: ${theme.font.zoomFontFamTwo};
   font-size: 14px;
   line-height: 1;
 `;
 
 export const TitleContainer = styled(Heading)`
-  color: ${aidsFondsRed};
-  font-family: ${zoomFontFamTwo};
+  color: ${theme.color.aidsFondsRed};
+  font-family: ${theme.font.zoomFontFamTwo};
   font-weight: normal;
   font-size: 18px;
   margin: 0;
@@ -47,7 +39,7 @@ export const TitleContainer = styled(Heading)`
 `;
 export const DateContainer = styled(Box)``;
 export const Separator = styled(Box)`
-  font-family: ${zoomFontFamOne};
+  font-family: ${theme.font.zoomFontFamOne};
   margin-left: 4px;
   margin-right: 4px;
 `;

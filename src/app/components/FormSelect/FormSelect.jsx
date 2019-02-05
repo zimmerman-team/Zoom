@@ -5,15 +5,16 @@ import styled from 'styled-components';
 
 /* components */
 import { Select, CheckBox, Box } from 'grommet';
-import { zoomFontFamOne, aidsFondsRed } from 'components/theme/ThemeSheet';
+
+import theme from 'theme/Theme';
 
 const CustomSelect = styled(Select)`
-  font-family: ${zoomFontFamOne};
+  font-family: ${theme.font.zoomFontFamOne};
   font-weight: normal;
   font-size: 14px;
-  color: ${aidsFondsRed};
+  color: ${theme.color.aidsFondsRed};
   ::-webkit-input-placeholder {
-    color: ${aidsFondsRed};
+    color: ${theme.color.aidsFondsRed};
   }
 `;
 

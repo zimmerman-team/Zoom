@@ -12,13 +12,14 @@ import {
   TextField,
   UsersTable,
 } from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
-import { aidsFondsRed, zoomGreyFive } from 'components/theme/ThemeSheet';
+
 import Pagination from 'components/Pagination/Pagination';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import IconSearch from 'assets/icons/IconSearch';
 import getColumns from 'modules/UserManagement/CreateTeam/comps/TableColumns';
+import theme from 'theme/Theme';
 
 const propTypes = {
   success: PropTypes.bool,
@@ -78,7 +79,7 @@ const CreateTeam = props => {
           </Message>
         )}
         {!props.success && props.errorMessage && (
-          <Message theme={{ color: aidsFondsRed }}>
+          <Message theme={{ color: theme.color.aidsFondsRed }}>
             {props.errorMessage}
           </Message>
         )}
@@ -98,7 +99,7 @@ const CreateTeam = props => {
           onChange={props.changeName}
         />
 
-        <Text color={zoomGreyFive} size="15px">
+        <Text color={theme.color.zoomGreyFive} size="15px">
           Add team members
         </Text>
         <TextField

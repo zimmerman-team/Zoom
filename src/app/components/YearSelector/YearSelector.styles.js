@@ -1,16 +1,10 @@
 import styled from 'styled-components';
 import './YearSelector.css';
 import { Range } from 'rc-slider';
-import {
-  zoomBlack,
-  zoomFontFamOne,
-  aidsFondsRed,
-  aidsFondsWhite,
-} from 'components/theme/ThemeSheet';
-
+import theme from 'theme/Theme';
 export const YearLabel = styled.div`
-  color: ${zoomBlack};
-  font-family: ${zoomFontFamOne};
+  color: ${theme.color.zoomBlack};
+  font-family: ${theme.font.zoomFontFamOne};
   font-size: 12px;
   line-height: 24px;
   height: fit-content;
@@ -37,14 +31,14 @@ export const CustomHandle = styled.div`
   cursor: -webkit-grab;
   cursor: grab;
   border-radius: 50%;
-  border: solid 2px ${aidsFondsRed};
-  background-color: ${aidsFondsRed};
+  border: solid 2px ${theme.color.aidsFondsRed};
+  background-color: ${theme.color.aidsFondsRed};
   text-align: center;
   -ms-touch-action: pan-x;
   touch-action: pan-x;
-  color: ${aidsFondsWhite};
+  color: ${theme.color.aidsFondsWhite};
   font-size: 12px;
-  font-family: ${zoomFontFamOne};
+  font-family: ${theme.font.zoomFontFamOne};
   &:focus {
     border-color: #57c5f7;
     box-shadow: 0 0 0 5px #96dbfa;

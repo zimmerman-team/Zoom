@@ -4,7 +4,7 @@ import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
 import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
-import { chartColorThree, chartColorTwo } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 import { split } from 'sentence-splitter';
 
 /*
@@ -114,9 +114,9 @@ export function formatBarChartInfoIndicators(
       barChartData.push({
         indicator: name,
         [countryName]: countryIndValue,
-        CountryColor: chartColorTwo,
+        CountryColor: theme.color.chartColorTwo,
         Global: globalIndValue,
-        GlobalColor: chartColorThree,
+        GlobalColor: theme.color.chartColorThree,
       });
     }
   });

@@ -1,10 +1,5 @@
 import styled from 'styled-components';
-import {
-  zoomBlack,
-  zoomFontFamOne,
-  smallTextBlack,
-  zoomFontFamTwo,
-} from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 
 export const LegendItem = styled.div`
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
@@ -19,8 +14,8 @@ export const LegendLabel = styled.div`
   padding: 10px 0;
   margin-left: 3px;
   line-height: 12px;
-  color: ${zoomBlack};
-  font-family: ${zoomFontFamOne};
+  color: ${theme.color.zoomBlack};
+  font-family: ${theme.font.zoomFontFamOne};
   font-size: 10px;
 `;
 
@@ -34,9 +29,9 @@ export const LegendNumberContainer = styled.div`
 `;
 
 export const LegendNumber = styled.div`
-  color: ${smallTextBlack};
+  color: ${theme.color.smallTextBlack};
   margin: auto;
-  font-family: ${zoomFontFamTwo};
+  font-family: ${theme.font.zoomFontFamTwo};
   font-size: 10px;
   line-height: 12px;
   &:first-child {

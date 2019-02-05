@@ -1,10 +1,8 @@
 import styled from 'styled-components';
 import { Box, TextInput, Text } from 'grommet';
-import {
-  zoomGreyZero,
-  ZoomButton,
-  aidsFondsRed,
-} from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
+
+import ZoomButton from 'components/theme/ThemeSheet';
 
 export const ComponentBase = styled.form`
   padding: 20px;
@@ -27,7 +25,7 @@ export const TextField = styled(TextInput)`
   font-size: 12px;
   margin: 10px 0;
   border-radius: 0;
-  background: ${zoomGreyZero};
+  background: ${theme.color.zoomGreyZero};
   border-color: ${props => props.theme.borderColor};
   border-style: ${props => props.theme.borderStyle};
   -webkit-box-shadow: 0px 2px 4px 0px rgba(239, 239, 239, 0.5);
@@ -41,7 +39,7 @@ export const FormButton = styled(ZoomButton)`
 
 export const ForgotPassLink = styled(Text)`
   text-decoration: none;
-  color: ${aidsFondsRed};
+  color: ${theme.color.aidsFondsRed};
 
   &:hover {
     opacity: 0.5;
@@ -56,15 +54,15 @@ export const InfoText = styled(Text)`
 
 export const Link = styled.a`
   text-decoration: none;
-  color: ${aidsFondsRed};
+  color: ${theme.color.aidsFondsRed};
 `;
 
 export const ErrorMessage = styled(Box)`
   padding: 10px;
-  background: ${zoomGreyZero};
+  background: ${theme.color.zoomGreyZero};
   border-width: 1px;
   border-style: solid;
-  border-color: ${aidsFondsRed};
+  border-color: ${theme.color.aidsFondsRed};
 `;
 
 export const ErrorText = styled(Text)`

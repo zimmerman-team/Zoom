@@ -3,7 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'grommet';
 import styled from 'styled-components';
-import { ZoomButton, zoomGreySix } from 'components/theme/ThemeSheet';
+import { ZoomButton } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 import StepItem from 'components/Stepper/StepItem';
 
 const ComponentBase = styled.div`
@@ -87,7 +88,9 @@ class Stepper extends React.Component {
         <Box direction="row">
           <Box margin="small">
             <ZoomButton
-              style={{ backgroundColor: !prevEnabled ? zoomGreySix : '' }}
+              style={{
+                backgroundColor: !prevEnabled ? theme.color.zoomGreySix : '',
+              }}
               onClick={prevEnabled ? this.props.prevStep : undefined}
             >
               back
@@ -95,7 +98,9 @@ class Stepper extends React.Component {
           </Box>
           <Box margin="small">
             <ZoomButton
-              style={{ backgroundColor: !nextEnabled ? zoomGreySix : '' }}
+              style={{
+                backgroundColor: !nextEnabled ? theme.color.zoomGreySix : '',
+              }}
               onClick={nextEnabled ? this.props.nextStep : undefined}
             >
               next

@@ -3,8 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'grommet';
 import { Menu } from 'grommet-icons';
-import { aidsFondsRed } from 'components/theme/ThemeSheet';
-// import {}
+import theme from 'theme/Theme';
 
 /* Components */
 import {
@@ -37,7 +36,7 @@ class AppBar extends React.Component {
         <Box direction="row" justify="center">
           <MenuButton
             plain
-            icon={<Menu color={aidsFondsRed} />}
+            icon={<Menu color={theme.color.aidsFondsRed} />}
             onClick={this.props.toggleSideBar}
             data-cy="sidebar-toggle"
           />

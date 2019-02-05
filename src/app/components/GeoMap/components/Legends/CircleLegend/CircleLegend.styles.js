@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { LegendLabel } from 'components/GeoMap/components/Legends/Legend.styles';
-import { smallTextBlack, zoomFontFamTwo } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 
 export const CircleLegendItem = styled.div`
   display: flex;
@@ -28,8 +28,8 @@ export const CircleLegendLabel = styled(LegendLabel)`
 
 export const CircleLegendNum = styled.div`
   margin: 0 auto;
-  color: ${smallTextBlack};
-  font-family: ${zoomFontFamTwo};
+  color: ${theme.color.smallTextBlack};
+  font-family: ${theme.font.zoomFontFamTwo};
   font-size: 10px;
   line-height: 12px;
 `;

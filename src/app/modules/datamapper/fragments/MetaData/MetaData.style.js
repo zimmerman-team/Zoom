@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Box, Text } from 'grommet';
-import { zoomFontFamOne, zoomGreyZero } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 
 export const FieldContainer = styled(Box)`
   margin-bottom: 20px;
@@ -13,7 +13,7 @@ export const ModuleContainer = styled(Box)`
 `;
 
 export const SelectSurround = styled(Box)`
-  background-color: ${zoomGreyZero};
+  background-color: ${theme.color.zoomGreyZero};
 `;
 
 export const SelectContainer = styled(Box)`
@@ -33,7 +33,7 @@ export const TwoFieldContainer = styled(FieldContainer)`
 
 export const OrLabel = styled(Text)`
   color: rgba(0, 0, 0, 0.87);
-  font-family: ${zoomFontFamOne};
+  font-family: ${theme.font.zoomFontFamOne};
   font-size: 14px;
   margin: auto 48px 6px 26px;
 `;

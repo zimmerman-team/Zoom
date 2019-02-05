@@ -6,7 +6,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import IconRadioUnchecked from 'assets/icons/IconRadioUnchecked';
 import TextField from '@material-ui/core/TextField';
 import NoSsr from '@material-ui/core/NoSsr';
-import { zoomFontFamTwo } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 
 export default styled(props => (
   <NoSsr>
@@ -28,7 +28,7 @@ export default styled(props => (
   && {
     font-size: 14px;
     color: black;
-    font-family: ${zoomFontFamTwo};
+    font-family: ${theme.font.zoomFontFamTwo};
     margin: 0;
 
     /*  &:before {
@@ -55,7 +55,7 @@ export default styled(props => (
     }*/
 
     input {
-      font-family: ${zoomFontFamTwo};
+      font-family: ${theme.font.zoomFontFamTwo};
       font-size: 14px;
     }
   }

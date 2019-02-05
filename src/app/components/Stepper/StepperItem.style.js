@@ -1,11 +1,6 @@
 import styled from 'styled-components';
-import {
-  aidsFondsBlue,
-  zoomFontFamOne,
-  zoomGreyThree,
-} from 'components/theme/ThemeSheet';
 import iconCheck from 'assets/icons/IconCheck';
-
+import theme from 'theme/Theme';
 /*TODO: clean up, and put variables in the themesheet*/
 
 // STEP ITEM
@@ -22,13 +17,15 @@ export const StepLabel = styled.div`
   margin-top: 10px;
   font-size: 14px;
   line-height: 1;
-  font-family: ${zoomFontFamOne};
-  color: ${props => (props.colores ? aidsFondsBlue : zoomGreyThree)};
+  font-family: ${theme.color.zoomFontFamOne};
+  color: ${props =>
+    props.colores ? theme.color.aidsFondsBlue : theme.color.zoomGreyThree};
 `;
 
 export const StepIcon = styled.div`
   border-radius: 50%;
-  background-color: ${props => (props.colores ? aidsFondsBlue : zoomGreyThree)};
+  background-color: ${props =>
+    props.colores ? theme.color.aidsFondsBlue : theme.color.zoomGreyThree};
   height: 20px;
   width: 20px;
   display: flex;
@@ -46,12 +43,13 @@ export const StepNumber = styled.span`
   font-size: 12px;
   line-height: 1;
   color: white;
-  font-family: ${zoomFontFamOne};
+  font-family: ${theme.color.zoomFontFamOne};
 `;
 
 export const StepSpacer = styled.div`
   height: 2px;
   width: 50%;
   visibility: ${props => (props.outer ? 'hidden' : 'visible')};
-  background: ${props => (props.colores ? aidsFondsBlue : zoomGreyThree)};
+  background: ${props =>
+    props.colores ? theme.color.aidsFondsBlue : theme.color.zoomGreyThree};
 `;

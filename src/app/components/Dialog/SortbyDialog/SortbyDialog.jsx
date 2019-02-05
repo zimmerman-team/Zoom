@@ -2,7 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 /* components */
-import { aidsFondsWhite, zoomGreyZero } from 'components/theme/ThemeSheet';
+
+import theme from 'theme/Theme';
 import { ComponentBase, OptionRow } from './SortbyDialog.styles';
 
 const propTypes = {
@@ -50,7 +51,11 @@ const SortbyDialog = ({
                 key={o.value}
                 id={o.value}
                 onClick={onOptionClick}
-                theme={{ background: selected ? zoomGreyZero : aidsFondsWhite }}
+                theme={{
+                  background: selected
+                    ? theme.color.zoomGreyZero
+                    : theme.color.aidsFondsWhite,
+                }}
               >
                 {o.label}
               </OptionRow>

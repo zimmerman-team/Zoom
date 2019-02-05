@@ -18,9 +18,9 @@ export const NavContainer = styled.div`
 export const LegendContainer = styled.div`
   position: absolute;
   width: fit-content;
-  left: 20px;
-  bottom: 60px;
+  left: 10px;
   display: flex;
+  flex-direction: column;
 `;
 
 export const NavControlContainer = styled.div`

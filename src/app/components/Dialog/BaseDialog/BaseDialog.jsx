@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Box, Layer } from 'grommet';
 import { SimpleText } from 'components/sort/Misc';
 import { DialogHeading } from 'components/sort/Headings';
-import ZoomButton from 'components/ZoomButton';
+import ZoomButton from 'components/ZoomButton/ZoomButton';
 import theme from 'theme/Theme';
 
 const DialogLayer = styled(Layer)`

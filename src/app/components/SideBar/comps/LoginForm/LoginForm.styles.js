@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Box, TextInput, Text } from 'grommet';
 import theme from 'theme/Theme';
 
-import ZoomButton from 'components/ZoomButton';
+import ZoomButton from 'components/ZoomButton/ZoomButton';
 
 export const ComponentBase = styled.form`
   padding: 20px;

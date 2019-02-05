@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 import { SimpleText } from 'components/sort/Misc';
 import { DialogHeading } from 'components/sort/Headings';
-import ZoomButton from 'components/ZoomButton';
+import ZoomButton from 'components/ZoomButton/ZoomButton';
 
 const wrapper = shallow(<BaseDialog />);
 

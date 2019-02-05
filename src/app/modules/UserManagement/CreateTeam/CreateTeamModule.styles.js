@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Box, TextInput } from 'grommet';
 
-import ZoomButton from 'components/ZoomButton';
+import ZoomButton from 'components/ZoomButton/ZoomButton';
 import IconSort from 'assets/icons/IconSort';
 import theme from 'theme/Theme';
 import ColumnHeader from 'components/ZoomTable/ColumnHeader';

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Box, Text, Form } from 'grommet';
 
-import ZoomButton from 'components/ZoomButton';
+import ZoomButton from 'components/ZoomButton/ZoomButton';
 
 export const AddUserForm = styled.form`
   padding: 0 40px;

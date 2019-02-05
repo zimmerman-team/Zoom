@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Box } from 'grommet';
-import { DescriptionParagraph, PageHeading } from 'components/theme/ThemeSheet';
+import { DescriptionParagraph } from 'components/sort/Paragraphs';
+import { PageHeading } from 'components/sort/Headings';
 import theme from 'theme/Theme';
 
 export const ModuleContainer = styled(Box)`

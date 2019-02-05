@@ -17,7 +17,7 @@ import {
   ManMapTable,
   ManMapTitle,
 } from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.syles';
-import { CellValue } from 'components/theme/ThemeSheet';
+import CellValue from 'components/ZoomTable/CellValue';
 
 /* mock */
 import {

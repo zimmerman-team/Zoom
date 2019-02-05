@@ -16,8 +16,9 @@ import {
   TabText,
   TabDivider,
 } from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
-import { Divider } from 'components/theme/ThemeSheet';
+// import { Divider } from 'components/theme/ThemeSheet';
 import theme from 'theme/Theme';
+import Divider from 'components/Dividers/Divider';
 
 /* mock */
 import { columns, data, errorCells } from './ErrorsStep.mock';

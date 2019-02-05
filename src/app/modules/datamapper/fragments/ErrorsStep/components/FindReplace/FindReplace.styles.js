@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { ZoomButton } from 'components/theme/ThemeSheet';
+
 import theme from 'theme/Theme';
+import ZoomButton from 'components/ZoomButton';
 
 export const ComponentBase = styled.div`
   position: fixed;

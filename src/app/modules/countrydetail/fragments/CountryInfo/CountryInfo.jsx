@@ -4,11 +4,11 @@ import BarChartHorizontal from 'components/charts/barcharts/horizontal/BarChartH
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import { Box } from 'grommet';
 import { Element } from 'react-scroll/modules';
+import { SimpleText } from 'components/sort/Misc';
 import {
   PageIntroInitial,
   PageIntroSecondary,
-  SimpleText,
-} from 'components/theme/ThemeSheet';
+} from 'components/sort/Paragraphs';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { CountryName } from 'modules/countrydetail/fragments/CountryInfo/CountryInfo.styles';
 import PropTypes from 'prop-types';

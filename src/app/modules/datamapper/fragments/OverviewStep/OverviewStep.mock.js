@@ -1,5 +1,5 @@
 import React from 'react';
-import { CellValue } from 'components/theme/ThemeSheet';
+import CellValue from 'components/ZoomTable/CellValue';
 import {
   CellLine,
   CellText,

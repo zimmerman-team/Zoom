@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'grommet';
 import styled from 'styled-components';
-import { ZoomButton } from 'components/theme/ThemeSheet';
+import ZoomButton from 'components/ZoomButton';
 import theme from 'theme/Theme';
 import StepItem from 'components/Stepper/StepItem';
 

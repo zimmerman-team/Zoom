@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SectionHeading } from 'components/theme/ThemeSheet';
+import { SectionHeading } from 'components/sort/Headings';
 import {
   ModuleContainer,
   UploadContainer,

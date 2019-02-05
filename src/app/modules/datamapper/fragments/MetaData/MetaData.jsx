@@ -14,7 +14,7 @@ import InputFieldDivider from 'components/Dividers/InputFieldDivider';
 import ChipInput from 'components/ChipInput/ChipInput';
 
 /* style */
-import { SectionHeading } from 'components/theme/ThemeSheet';
+import { SectionHeading } from 'components/sort/Headings';
 import {
   FieldContainer,
   ModuleContainer,

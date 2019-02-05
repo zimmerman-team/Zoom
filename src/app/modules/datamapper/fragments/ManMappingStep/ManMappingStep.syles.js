@@ -1,13 +1,11 @@
 import styled from 'styled-components';
 import { Box } from 'grommet';
-import {
-  ColumnHeader,
-  ZoomTable,
-  CellValue,
-  SectionHeading,
-} from 'components/theme/ThemeSheet';
+import { SectionHeading } from 'components/sort/Headings';
 import TextField from '@material-ui/core/TextField';
 import theme from 'theme/Theme';
+import ZoomTable from 'components/ZoomTable/ZoomTable';
+import ColumnHeader from 'components/ZoomTable/ColumnHeader';
+import CellValue from 'components/ZoomTable/CellValue';
 
 export const ModuleContainer = styled(Box)`
   background-color: ${theme.color.aidsFondsWhite};

@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import Header from 'modules/IATI_Detail/fragments/Header/Header';
 import { iatiDetailMockData } from '__mocks__/iatiDetailMock';
 // Components
-import { PageHeading } from 'components/theme/ThemeSheet';
+import { PageHeading } from 'components/sort/Headings';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import {
   DetailList,

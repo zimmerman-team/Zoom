@@ -13,7 +13,8 @@ import {
 
 /* styles */
 import { ModuleContainer } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
-import { SectionHeading, ZoomTable } from 'components/theme/ThemeSheet';
+import { SectionHeading } from 'components/sort/Headings';
+import ZoomTable from 'components/ZoomTable/ZoomTable';
 
 const propTypes = {
   data: PropTypes.arrayOf(

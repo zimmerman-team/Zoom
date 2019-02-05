@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { Box } from 'grommet';
-import { CellValue, ColumnHeader } from 'components/theme/ThemeSheet';
+import ColumnHeader from 'components/ZoomTable/ColumnHeader';
 import theme from 'theme/Theme';
+import CellValue from 'components/ZoomTable/CellValue';
 
 export const ModuleContainer = styled(Box)`
   background-color: ${theme.color.aidsFondsWhite};

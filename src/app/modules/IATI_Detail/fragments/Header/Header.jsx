@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-// import { iatiDetailMockData } from '__mocks__/iatiDetailMock';
-import { PageHeading } from 'components/theme/ThemeSheet';
+
+import { PageHeading } from 'components/sort/Headings';
 import theme from 'theme/Theme';
 import {
   DetailList,

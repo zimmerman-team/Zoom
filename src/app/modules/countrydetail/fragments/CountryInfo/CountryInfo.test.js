@@ -4,11 +4,11 @@ import CountryInfo from './CountryInfo';
 // Components
 import { Box } from 'grommet';
 import BarChartHorizontal from 'components/charts/barcharts/horizontal/BarChartHorizontal';
+import { SimpleText } from 'components/sort/Misc';
 import {
   PageIntroInitial,
   PageIntroSecondary,
-  SimpleText,
-} from 'components/theme/ThemeSheet';
+} from 'components/sort/Paragraphs';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { CountryName } from 'modules/countrydetail/fragments/CountryInfo/CountryInfo.styles';
 

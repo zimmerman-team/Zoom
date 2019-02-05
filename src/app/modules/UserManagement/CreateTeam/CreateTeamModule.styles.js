@@ -1,13 +1,12 @@
 import styled from 'styled-components';
 import { Box, TextInput } from 'grommet';
-import {
-  ZoomTable,
-  ZoomButton,
-  ColumnHeader,
-  CellValue,
-} from 'components/theme/ThemeSheet';
+
+import ZoomButton from 'components/ZoomButton';
 import IconSort from 'assets/icons/IconSort';
 import theme from 'theme/Theme';
+import ColumnHeader from 'components/ZoomTable/ColumnHeader';
+import ZoomTable from 'components/ZoomTable/ZoomTable';
+import CellValue from 'components/ZoomTable/CellValue';
 
 export const CreateTeamForm = styled.form`
   padding: 0 40px;

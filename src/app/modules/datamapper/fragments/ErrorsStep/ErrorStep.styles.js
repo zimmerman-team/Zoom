@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 import { Box } from 'grommet';
-import {
-  CellValue,
-  ColumnHeader,
-  SectionHeading,
-  ZoomTable,
-} from 'components/theme/ThemeSheet';
+import { SectionHeading } from 'components/sort/Headings';
+
+import ZoomTable from 'components/ZoomTable/ZoomTable';
+import ColumnHeader from 'components/ZoomTable/ColumnHeader';
+import CellValue from 'components/ZoomTable/CellValue';
 import theme from 'theme/Theme';
 
 export const ModuleContainer = styled(Box)`

@@ -3,6 +3,7 @@ import * as actions from 'services/actions/index';
 import * as mutationActions from 'services/actions/mutation';
 import * as api from 'services/index';
 import * as oipaActions from 'services/actions/oipa';
+import * as generalActions from 'services/actions/general';
 
 export function* uploadRequest(action) {
   try {
@@ -106,8 +107,13 @@ export function* countryExcerptRequest(action) {
   }
 }
 
+export function* dataPaneToggleRequest(action) {
+  yield put(generalActions.dataPaneToggleDone(action.open));
+}
+
 function* sagas() {
   yield [
+    takeLatest('DATA_PANE_TOGGLE_REQUEST', dataPaneToggleRequest),
     takeLatest('COUNTRY_ACTIVITIES_REQUEST', countryActivitiesRequest),
     takeLatest('UPLOAD_REQUEST', uploadRequest),
     takeLatest('VALIDATE_REQUEST', validateRequest),

@@ -1,6 +1,7 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 
 /* styles */
 import {
@@ -14,19 +15,27 @@ const propTypes = {};
 
 const defaultProps = {};
 
-// As discussed with Siem default year period selected should be
-// current year and 15 years before
-const now = new Date();
-const currentYear = now.getFullYear();
-const yearBefore = currentYear - 15;
-
 class YearSelector extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      value: { min: 2, max: 10 },
+      yearPeriod: [
+        props.selectedYears[0],
+        props.selectedYears[this.props.selectedYears.length - 1],
+      ],
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!isEqual(this.props.selectedYears, prevProps.selectedYears)) {
+      this.setState({
+        yearPeriod: [
+          this.props.selectedYears[0],
+          this.props.selectedYears[this.props.selectedYears.length - 1],
+        ],
+      });
+    }
   }
 
   lastTwoDigits(value) {
@@ -48,13 +57,14 @@ class YearSelector extends React.Component {
   render() {
     return (
       <ComponentBase>
-        <YearLabel> 1968 </YearLabel>
+        <YearLabel> 1990 </YearLabel>
         <RangeContainer
-          min={1968}
+          min={1990}
           max={2019}
-          defaultValue={[yearBefore, currentYear]}
+          value={this.state.yearPeriod}
           handle={val => this.renderHandle(val)}
-          onAfterChange={val => this.props.selectYear(val)}
+          onAfterChange={() => this.props.selectYear(this.state.yearPeriod)}
+          onChange={yearPeriod => this.setState({ yearPeriod })}
         />
         <YearLabel> 2019 </YearLabel>
       </ComponentBase>

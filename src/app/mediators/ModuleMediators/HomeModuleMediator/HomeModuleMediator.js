@@ -330,6 +330,7 @@ class HomeModuleMediator extends Component {
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
         defaultYear={this.state.defaultYear}
+        yearPeriod={this.state.yearPeriod}
       />
     );
   }

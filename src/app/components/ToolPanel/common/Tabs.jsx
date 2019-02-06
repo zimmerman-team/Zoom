@@ -5,6 +5,7 @@ import Tabs from '@material-ui/core/Tabs';
 import NoSsr from '@material-ui/core/NoSsr';
 import theme from 'theme/Theme';
 import Tab from 'components/ToolPanel/common/Tab';
+import { withStyles } from '@material-ui/core/styles';
 
 export default styled(props => (
   <NoSsr>
@@ -12,13 +13,13 @@ export default styled(props => (
       TabIndicatorProps={{
         style: {
           backgroundColor: theme.color.aidsFondsBlue,
+
           transition: 'none',
           width: '49px',
-        },
-      }}
-      TabsProps={{
-        style: {
-          selectedBackgroundColor: theme.color.aidsFondsBlue,
+          // height: '20px',
+          '&$tabSelected': {
+            color: '#000',
+          },
         },
       }}
       {...props}

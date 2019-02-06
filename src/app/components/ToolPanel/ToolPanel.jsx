@@ -7,13 +7,43 @@ import Tab from './common/Tab';
 import PhoneIcon from '@material-ui/icons/Phone';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
+import themes from 'theme/Theme';
+import Typography from '@material-ui/core/Typography';
 import IconFilter from 'assets/icons/toolpanel/IconFilter';
 import IconContext from 'assets/icons/toolpanel/IconContext';
 import IconPreview from 'assets/icons/toolpanel/IconPreview';
 import IconDownload from 'assets/icons/toolpanel/IconDownload';
 import IconDuplicate from 'assets/icons/toolpanel/IconDuplicate';
 import IconVisibility from 'assets/icons/toolpanel/IconVisibility';
-// import IconFilter from 'assets/icons/toolpanel/IconFilter'
+
+/*TODO: refactor styling*/
+
+const styles = theme => ({
+  tabRoot: {
+    backgroundColor: themes.color.aidsFondsRed,
+    borderRight: '1px solid #e8e8e8',
+    opacity: 1,
+    '&:hover': {
+      backgroundColor: themes.color.aidsFondsBlue,
+      opacity: 1,
+    },
+  },
+  tabSelected: {
+    backgroundColor: themes.color.aidsFondsBlue,
+  },
+});
+
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 class ToolPanel extends React.Component {
   state = {
@@ -25,23 +55,50 @@ class ToolPanel extends React.Component {
   };
 
   render() {
+    const { classes } = this.props;
+    const { value } = this.state;
     return (
-      <Paper square>
+      <React.Fragment>
         <Tabs
           value={this.state.value}
           onChange={this.handleChange}
-          // variant="fullWidth"
-          // indicatorColor="primary"
-          // textColor="primary"
+          classes={{
+            root: classes.tabsRoot,
+          }}
         >
-          <Tab icon={<IconFilter />} />
-          <Tab icon={<IconContext />} />
-          <Tab icon={<IconPreview />} />
-          <Tab icon={<IconDownload />} />
-          <Tab icon={<IconDuplicate />} />
-          <Tab icon={<IconVisibility />} />
+          <Tab
+            classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
+            icon={<IconFilter />}
+          />
+          <Tab
+            classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
+            icon={<IconContext />}
+          />
+          <Tab
+            classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
+            icon={<IconPreview />}
+          />
+          <Tab
+            classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
+            icon={<IconDownload />}
+          />
+          <Tab
+            classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
+            icon={<IconDuplicate />}
+          />
+          <Tab
+            classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
+            icon={<IconVisibility />}
+          />
         </Tabs>
-      </Paper>
+
+        {value === 0 && <TabContainer>Item One</TabContainer>}
+        {value === 1 && <TabContainer>Item Two</TabContainer>}
+        {value === 2 && <TabContainer>Item Three</TabContainer>}
+        {value === 3 && <TabContainer>Item Four</TabContainer>}
+        {value === 4 && <TabContainer>Item Five</TabContainer>}
+        {value === 5 && <TabContainer>Item Six</TabContainer>}
+      </React.Fragment>
     );
   }
 }
@@ -50,4 +107,4 @@ ToolPanel.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default ToolPanel;
+export default withStyles(styles)(ToolPanel);

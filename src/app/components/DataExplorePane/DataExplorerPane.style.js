@@ -29,6 +29,7 @@ export const PanelAccordion = styled(Accordion)`
 export const AccordionSection = styled(AccordionPanel)``;
 
 export const ResetContainer = styled.div`
+  width: fit-content;
   display: flex;
   margin: 15px 0 0 12px;
   &:hover {

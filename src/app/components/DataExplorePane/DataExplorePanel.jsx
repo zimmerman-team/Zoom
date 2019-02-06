@@ -184,7 +184,10 @@ class DataExplorePane extends React.Component {
           </AccordionSection>
           <AccordionSection header={this.renderHeader('Time period')}>
             <FilterContainer>
-              <YearSelector selectYear={this.props.selectYear} />
+              <YearSelector
+                selectYear={this.props.selectYear}
+                selectedYears={this.props.yearPeriod}
+              />
             </FilterContainer>
           </AccordionSection>
           <AccordionSection header={this.renderHeader('Indicators')}>

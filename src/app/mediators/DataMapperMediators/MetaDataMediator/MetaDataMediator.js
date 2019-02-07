@@ -8,6 +8,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 
 /* utils */
 import findIndex from 'lodash/findIndex';
+import isEqual from 'lodash/isEqual';
 
 /* consts */
 import { step1InitialData } from '__consts__/MetaDataStepConsts';
@@ -73,14 +74,15 @@ const propTypes = {
         value: PropTypes.string,
       }),
     ),
-    environment: PropTypes.shape({}),
   }),
+  environment: PropTypes.shape({}),
 };
 
 const defaultProps = {
   dropDownData: {},
   saveStepData: undefined,
   data: step1InitialData,
+  environment: null,
 };
 
 class MetaDataMediator extends React.Component {
@@ -107,7 +109,9 @@ class MetaDataMediator extends React.Component {
       },
     );
     this.simpleChange(fileSources, 'fileSources');
-    this.simpleChange(this.props.relay.environment, 'environment');
+
+    if (!this.props.environment)
+      this.props.saveEnvironment(this.props.relay.environment);
   }
 
   // So we will save the step data when this component will be unmounting

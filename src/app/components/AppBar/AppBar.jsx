@@ -18,7 +18,7 @@ import {
 
 /* icons */
 import SvgIconPlus from 'assets/icons/IconPlus';
-import SvgIconClose from 'assets/icons/IconClose';
+import SvgIconCloseSmall from 'assets/icons/IconCloseSmaller';
 
 /* actions */
 import * as actions from 'services/actions/general';
@@ -62,9 +62,9 @@ class AppBar extends React.Component {
               )
             }
           >
-            {!this.props.dataPaneOpen ? <SvgIconPlus /> : <SvgIconClose />}
+            {!this.props.dataPaneOpen ? <SvgIconPlus /> : <SvgIconCloseSmall />}
             <PaneButtonText>
-              {!this.props.dataPaneOpen ? 'Geo map filters' : 'Close'}
+              {!this.props.dataPaneOpen ? 'Geo map filters' : 'Close & save '}
             </PaneButtonText>
           </PaneButton>
         );

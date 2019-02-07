@@ -13,10 +13,8 @@ export default styled(props => (
       TabIndicatorProps={{
         style: {
           backgroundColor: theme.color.aidsFondsBlue,
-
           transition: 'none',
           width: '49px',
-          // height: '20px',
           '&$tabSelected': {
             color: '#000',
           },

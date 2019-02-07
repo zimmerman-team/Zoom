@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Paper from './common/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Tabs from './common/Tabs';
-import Tab from './common/Tab';
+// import Tab from './common/Tab';
 import PhoneIcon from '@material-ui/icons/Phone';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
@@ -15,6 +15,8 @@ import IconPreview from 'assets/icons/toolpanel/IconPreview';
 import IconDownload from 'assets/icons/toolpanel/IconDownload';
 import IconDuplicate from 'assets/icons/toolpanel/IconDuplicate';
 import IconVisibility from 'assets/icons/toolpanel/IconVisibility';
+
+import Tab from './common/Tab';
 
 /*TODO: refactor styling*/
 
@@ -34,11 +36,7 @@ const styles = theme => ({
 });
 
 function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
-    </Typography>
-  );
+  return <div>{props.children}</div>;
 }
 
 TabContainer.propTypes = {
@@ -66,30 +64,13 @@ class ToolPanel extends React.Component {
             root: classes.tabsRoot,
           }}
         >
-          <Tab
-            classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
-            icon={<IconFilter />}
-          />
-          <Tab
-            classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
-            icon={<IconContext />}
-          />
-          <Tab
-            classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
-            icon={<IconPreview />}
-          />
-          <Tab
-            classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
-            icon={<IconDownload />}
-          />
-          <Tab
-            classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
-            icon={<IconDuplicate />}
-          />
-          <Tab
-            classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
-            icon={<IconVisibility />}
-          />
+          {/*<TabVariant icon={<IconFilter />} />*/}
+          <Tab icon={<IconFilter />} />
+          <Tab icon={<IconContext />} />
+          <Tab icon={<IconPreview />} />
+          <Tab icon={<IconDownload />} />
+          <Tab icon={<IconDuplicate />} />
+          <Tab icon={<IconVisibility />} />
         </Tabs>
 
         {value === 0 && <TabContainer>Item One</TabContainer>}
@@ -104,7 +85,7 @@ class ToolPanel extends React.Component {
 }
 
 ToolPanel.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object,
 };
 
 export default withStyles(styles)(ToolPanel);

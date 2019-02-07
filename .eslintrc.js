@@ -23,7 +23,7 @@ module.exports = {
     node: true,
     browser: true,
   },
-  plugins: ['prettier'],
+  plugins: ['prettier', 'react-hooks'],
   rules: {
     'react/jsx-filename-extension': [0, { extensions: ['.js', '.jsx'] }],
     'react/jsx-no-duplicate-props': [
@@ -57,5 +57,6 @@ module.exports = {
     'arrow-body-style': 0,
     'react/no-did-update-set-state': 0,
     'class-methods-use-this': 0,
+    'react-hooks/rules-of-hooks': 'error',
   },
 };

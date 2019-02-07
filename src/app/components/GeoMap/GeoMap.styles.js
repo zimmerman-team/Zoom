@@ -23,6 +23,14 @@ export const LegendContainer = styled.div`
   flex-direction: column;
 `;
 
+export const YearContainer = styled.div`
+  position: fixed;
+  width: 98%;
+  bottom: 12px;
+  z-index: 2;
+  left: 1%;
+`;
+
 export const NavControlContainer = styled.div`
   height: 100px;
 `;

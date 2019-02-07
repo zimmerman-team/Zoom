@@ -15,6 +15,7 @@ import reducers from 'services/reducers';
 import mutationReducers from 'services/reducers/mutation';
 import syncReducers from 'services/reducers/sync';
 import sagas from 'services/sagas';
+import generalReducers from 'services/reducers/general';
 
 const sagaMiddleware = createSagaMiddleware();
 const history = createHistory();
@@ -26,6 +27,7 @@ const store = createStore(
     ...reducers,
     ...mutationReducers,
     ...syncReducers,
+    ...generalReducers,
   }),
   composeEnhancers(applyMiddleware(sagaMiddleware, routerMiddleware(history))),
 );

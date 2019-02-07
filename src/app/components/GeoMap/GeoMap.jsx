@@ -16,8 +16,9 @@ import {
 import { generateLegends, generateMarkers } from './GeoMap.utils';
 import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
 import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
+import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 
-import { LegendContainer, MapContainer } from './GeoMap.styles';
+import { LegendContainer, MapContainer, YearContainer } from './GeoMap.styles';
 
 const MAPBOX_TOKEN =
   'pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw';
@@ -39,6 +40,7 @@ class GeoMap extends Component {
         pitch: 0,
       },
       hoverMarkerInfo: null,
+      values: [12, 16],
     };
 
     this.setMarkerInfo = this.setMarkerInfo.bind(this);
@@ -152,6 +154,7 @@ class GeoMap extends Component {
 
   render() {
     const { viewport, mapStyle, markerArray, legends } = this.state;
+
     return (
       <MapContainer>
         <MapGL
@@ -176,6 +179,12 @@ class GeoMap extends Component {
 
           <LegendContainer>{legends}</LegendContainer>
         </MapGL>
+        <YearContainer>
+          <CustomYearSelector
+            selectedYears={this.props.selectedYears}
+            selectYear={this.props.selectYear}
+          />
+        </YearContainer>
       </MapContainer>
     );
   }

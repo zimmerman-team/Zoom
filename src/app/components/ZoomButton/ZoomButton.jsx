@@ -30,7 +30,11 @@ const propTypes = {};
 const defaultProps = {};
 
 const ZoomButton = props => {
-  return <ComponentBase>{props.children}</ComponentBase>;
+  return (
+    <ComponentBase onClick={props.onClick} style={props.style}>
+      {props.children}
+    </ComponentBase>
+  );
 };
 
 ZoomButton.propTypes = propTypes;

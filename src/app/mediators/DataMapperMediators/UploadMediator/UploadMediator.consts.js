@@ -1,4 +1,6 @@
 export const uploadInitialstate = {
   url: '',
-  file: '',
+  file: {},
+  fileId: '',
+  sourceId: '',
 };

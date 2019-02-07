@@ -3,18 +3,22 @@ import { commitMutation, graphql } from 'react-relay';
 // TODO: move the mutation files to the correct places
 
 const mutation = graphql`
-  mutation AddSourceMutation($input: FileSourceMutationInput!) {
-    fileSource(input: $input) {
-      entryId
-      name
+  mutation fileValidationResultsMutation(
+    $input: FileValidationResultsMutationInput!
+  ) {
+    fileValidationResults(input: $input) {
+      id
+      foundList
+      missingList
+      summary
     }
   }
 `;
 
-function commit(environment, name, handleCompleted, handleError) {
+function commit(environment, id, handleCompleted, handleError) {
   const variables = {
     input: {
-      name,
+      id,
     },
   };
 

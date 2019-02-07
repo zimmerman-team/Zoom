@@ -3,4 +3,5 @@ export const uploadInitialstate = {
   file: {},
   fileId: '',
   sourceId: '',
+  overviewData: [],
 };

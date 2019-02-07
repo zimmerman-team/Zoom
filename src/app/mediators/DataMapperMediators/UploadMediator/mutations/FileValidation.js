@@ -3,11 +3,8 @@ import { commitMutation, graphql } from 'react-relay';
 // TODO: move the mutation files to the correct places
 
 const mutation = graphql`
-  mutation fileValidationResultsMutation(
-    $input: FileValidationResultsMutationInput!
-  ) {
+  mutation FileValidationMutation($input: FileValidationResultsMutationInput!) {
     fileValidationResults(input: $input) {
-      id
       foundList
       missingList
       summary

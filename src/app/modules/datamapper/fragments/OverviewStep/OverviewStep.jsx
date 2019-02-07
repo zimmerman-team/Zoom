@@ -5,11 +5,9 @@ import PropTypes from 'prop-types';
 /* components */
 import { Box } from 'grommet';
 
-/* mock */
-import {
-  columns,
-  data,
-} from 'modules/datamapper/fragments/OverviewStep/OverviewStep.mock';
+/* consts */
+import { uploadInitialstate } from '__consts__/UploadMediatorConst';
+import { columns } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.const';
 
 /* styles */
 import { ModuleContainer } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
@@ -32,7 +30,7 @@ const propTypes = {
   ),
 };
 const defaultProps = {
-  data,
+  data: uploadInitialstate.overviewData,
 };
 
 const OverviewStep = props => {

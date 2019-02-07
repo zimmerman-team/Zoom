@@ -5,80 +5,56 @@ import React from 'react';
 import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
 
-/* utils */
-import isEqual from 'lodash/isEqual';
+/* mutations */
+import AddFileMutation from 'mediators/DataMapperMediators/UploadMediator/mutations/UploadFileMutation';
+import AddSourceMutation from 'mediators/DataMapperMediators/UploadMediator/mutations/AddSourceMutation';
+import FileValidationMutation from 'mediators/DataMapperMediators/UploadMediator/mutations/FileValidation';
+
+/* consts */
+import { step1InitialData } from '__consts__/MetaDataStepConsts';
+import { uploadInitialstate } from '__consts__/UploadMediatorConst';
+
+/* actions */
+import * as actions from 'services/actions';
 
 /* components */
 import UploadStep from 'modules/datamapper/fragments/UploadStep/UploadStep';
 
-/* mutations */
-import AddFileMutation from 'mediators/DataMapperMediators/UploadMediator/mutations/UploadFileMutation';
-import AddSourceMutation from 'mediators/DataMapperMediators/UploadMediator/mutations/AddSourceMutation';
-
-/* consts */
-import { step1InitialData } from '__consts__/MetaDataStepConsts';
-import { uploadInitialstate } from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.consts';
-import * as actions from 'services/actions';
+/* utils */
+import isEqual from 'lodash/isEqual';
+import { formatOverviewData } from './UploadMediator.util';
 
 const propTypes = {
-  prevStepData: PropTypes.shape({
-    title: PropTypes.string,
-    desc: PropTypes.string,
-    tags: PropTypes.arrayOf(PropTypes.string),
-    dataSource: PropTypes.shape({
-      key: PropTypes.string,
-      label: PropTypes.string,
-      value: PropTypes.string,
-    }),
-    shared: PropTypes.Boolean,
-    surveyData: PropTypes.Boolean,
-    q1: PropTypes.string,
-    q2: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string,
-        value: PropTypes.string,
-      }),
-    ),
-    q21: PropTypes.string,
-    q22: PropTypes.string,
-    q3: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string,
-        value: PropTypes.string,
-      }),
-    ),
-    q4: PropTypes.shape({
-      key: PropTypes.string,
-      label: PropTypes.string,
-      value: PropTypes.string,
-    }),
-    q5: PropTypes.string,
-    q51: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string,
-        value: PropTypes.string,
-      }),
-    ),
-    sourceText: PropTypes.string,
-    q3Text: PropTypes.string,
-    q4Text: PropTypes.string,
-    q51Text: PropTypes.string,
-    fileSources: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string,
-        value: PropTypes.string,
-      }),
-    ),
-    environment: PropTypes.shape({}),
+  dataSource: PropTypes.shape({
+    key: PropTypes.string,
+    label: PropTypes.string,
+    value: PropTypes.string,
   }),
+  environment: PropTypes.shape({}),
   data: PropTypes.shape({
     url: PropTypes.string,
     file: PropTypes.object,
+    fileId: PropTypes.string,
+    sourceId: PropTypes.string,
+    overviewData: PropTypes.arrayOf(
+      PropTypes.shape({
+        fileColumn: PropTypes.string,
+        summary: PropTypes.arrayOf(
+          PropTypes.shape({
+            label: PropTypes.string,
+            value: PropTypes.any, // cause it can be number or string
+          }),
+        ),
+        dataTypes: PropTypes.arrayOf(PropTypes.string),
+        blankCells: PropTypes.number,
+      }),
+    ),
   }),
 };
 
 const defaultProps = {
-  prevStepData: step1InitialData,
+  environment: {},
+  dataSource: step1InitialData.dataSource,
   data: uploadInitialstate,
 };
 
@@ -104,6 +80,9 @@ class UploadMediator extends React.Component {
     this.handleMetaDataCompleted = this.handleMetaDataCompleted.bind(this);
     this.handleMetaDataError = this.handleMetaDataError.bind(this);
     this.addMetaData = this.addMetaData.bind(this);
+    this.handleValidationCompleted = this.handleValidationCompleted.bind(this);
+    this.handleValidationError = this.handleValidationError.bind(this);
+    this.fileValidation = this.fileValidation.bind(this);
     this.afterFileInput = this.afterFileInput.bind(this);
   }
 
@@ -137,7 +116,7 @@ class UploadMediator extends React.Component {
 
   addDataSource(name) {
     AddSourceMutation.commit(
-      this.props.prevStepData.environment,
+      this.props.environment,
       name,
       this.handleSourceCompleted,
       this.handleSourceError,
@@ -147,7 +126,7 @@ class UploadMediator extends React.Component {
   handleMetaDataCompleted(response, error) {
     if (error) console.log('error uploading file:', error);
     if (response) {
-      this.setState({ fileId: response.file.entryId });
+      this.setState({ fileId: response.file.entryId }, this.fileValidation);
     }
   }
 
@@ -210,10 +189,36 @@ class UploadMediator extends React.Component {
 
     // and here we upload all the metadata for the file
     AddFileMutation.commit(
-      this.props.prevStepData.environment,
+      this.props.environment,
       variables,
       this.handleMetaDataCompleted,
       this.handleMetaDataError,
+    );
+  }
+
+  // NOTE: So this whole file validation logic which retrieves
+  // data for the overview step needs to be here, cause it should change whenever a new file is uploaded
+  // same will be with other steps that are dependant on the file
+  handleValidationCompleted(response) {
+    if (response)
+      this.setState({
+        overviewData: formatOverviewData(
+          response.fileValidationResults.summary,
+          response.fileValidationResults.foundList,
+        ),
+      });
+  }
+
+  handleValidationError(error) {
+    console.log('error validating file: ', error);
+  }
+
+  fileValidation() {
+    FileValidationMutation.commit(
+      this.props.environment,
+      this.state.fileId,
+      this.handleValidationCompleted,
+      this.handleValidationError,
     );
   }
 
@@ -224,12 +229,12 @@ class UploadMediator extends React.Component {
     // to just be able to upload the file for following steps
     // more explenation about this step is above the class name
     // TODO: add the actual source in the final step
-    if (this.props.prevStepData.fileSources.length <= 0)
-      this.addDataSource(this.props.prevStepData.dataSource.value);
+    if (this.props.fileSources.length <= 0)
+      this.addDataSource(this.props.dataSource.value);
     // otherwise we just add the file to the first source
     else
       this.setState(
-        { sourceId: this.props.prevStepData.fileSources[0].value },
+        { sourceId: this.props.fileSources[0].value },
         this.addMetaData,
       );
   }
@@ -237,11 +242,14 @@ class UploadMediator extends React.Component {
   handleFileUpload(e) {
     // we save the uploaded file in state
     const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-    this.setState({ file });
-    // and we upload the file to the server
-    const values = new FormData();
-    values.append('file', file);
-    this.props.dispatch(actions.uploadRequest(values));
+
+    if (file) {
+      this.setState({ file });
+      // and we upload the file to the server
+      const values = new FormData();
+      values.append('file', file);
+      this.props.dispatch(actions.uploadRequest(values));
+    }
   }
 
   render() {

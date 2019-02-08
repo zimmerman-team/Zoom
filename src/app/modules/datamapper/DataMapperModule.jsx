@@ -95,7 +95,14 @@ class DataMapperModule extends React.Component {
       case 4:
         return <ErrorStep />;
       case 5:
-        return <ManMappingStep />;
+        return (
+          this.state.stepData[1] && (
+            <ManMappingStep
+              modelOptions={this.state.stepData[1].modelOptions}
+              data={this.state.stepData[1].manMapData}
+            />
+          )
+        );
       case 6:
         return <WrapUpStep />;
       default:
@@ -104,7 +111,7 @@ class DataMapperModule extends React.Component {
   }
 
   render() {
-    console.log(this.state.stepData[1]);
+    console.log(this.state);
     return (
       <ModuleContainer>
         <ModuleHeader>

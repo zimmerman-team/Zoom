@@ -22,7 +22,11 @@ import UploadStep from 'modules/datamapper/fragments/UploadStep/UploadStep';
 
 /* utils */
 import isEqual from 'lodash/isEqual';
-import { formatOverviewData } from './UploadMediator.util';
+import {
+  formatOverviewData,
+  formatModelOptions,
+  formatManData,
+} from './UploadMediator.util';
 
 const propTypes = {
   dataSource: PropTypes.shape({
@@ -47,6 +51,20 @@ const propTypes = {
         ),
         dataTypes: PropTypes.arrayOf(PropTypes.string),
         blankCells: PropTypes.number,
+      }),
+    ),
+    modelOptions: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        value: PropTypes.string,
+      }),
+    ),
+    manMapData: PropTypes.arrayOf(
+      PropTypes.shape({
+        lockedIn: PropTypes.boolean,
+        fileType: PropTypes.string,
+        zoomModel: PropTypes.string,
+        label: PropTypes.string,
       }),
     ),
   }),
@@ -126,7 +144,15 @@ class UploadMediator extends React.Component {
   handleMetaDataCompleted(response, error) {
     if (error) console.log('error uploading file:', error);
     if (response) {
-      this.setState({ fileId: response.file.entryId }, this.fileValidation);
+      this.setState(
+        {
+          modelOptions: formatModelOptions(
+            JSON.parse(response.file.dataModelHeading.replace(/'/g, '"')),
+          ),
+          fileId: response.file.entryId,
+        },
+        this.fileValidation,
+      );
     }
   }
 
@@ -202,6 +228,7 @@ class UploadMediator extends React.Component {
   handleValidationCompleted(response) {
     if (response)
       this.setState({
+        manMapData: formatManData(response.fileValidationResults.foundList),
         overviewData: formatOverviewData(
           response.fileValidationResults.summary,
           response.fileValidationResults.foundList,

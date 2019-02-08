@@ -8,6 +8,7 @@ export default {
     chartColorOne: '#f2c987',
     chartColorTwo: '#091799',
     chartColorThree: '#CDE9EE',
+    zoomYellow: '#f5a623',
     zoomGreyZero: '#efefef',
     zoomGreyOne: '#818181',
     zoomGreyTwo: '#505050',

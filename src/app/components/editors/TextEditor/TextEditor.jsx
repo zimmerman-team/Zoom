@@ -11,8 +11,6 @@ import theme from 'theme/Theme';
  * @param {Object} customProperty - please describe component property
  */
 
-const ComponentBase = styled.div``;
-
 const propTypes = {
   placeholder: PropTypes.string,
 };
@@ -20,7 +18,7 @@ const defaultProps = {
   data: [],
 };
 
-class QuiEditor extends React.Component {
+class TextEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = { editorHtml: '', theme: 'snow' };
@@ -46,8 +44,8 @@ class QuiEditor extends React.Component {
         theme={this.state.theme}
         onChange={this.handleChange}
         value={this.state.editorHtml}
-        modules={QuiEditor.modules}
-        formats={QuiEditor.formats}
+        modules={TextEditor.modules}
+        formats={TextEditor.formats}
         bounds={'.app'}
         placeholder={this.props.placeholder}
       />
@@ -55,9 +53,9 @@ class QuiEditor extends React.Component {
   }
 }
 
-QuiEditor.propTypes = propTypes;
-QuiEditor.defaultProps = defaultProps;
-QuiEditor.formats = [
+TextEditor.propTypes = propTypes;
+TextEditor.defaultProps = defaultProps;
+TextEditor.formats = [
   'header',
   'font',
   'size',
@@ -74,7 +72,7 @@ QuiEditor.formats = [
   'video',
 ];
 
-QuiEditor.modules = {
+TextEditor.modules = {
   toolbar: [
     [{ header: '1' }, { header: '2' }, { font: [] }],
     [{ size: [] }],
@@ -94,4 +92,4 @@ QuiEditor.modules = {
   },
 };
 
-export default QuiEditor;
+export default TextEditor;

@@ -10,7 +10,8 @@ import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTran
 import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';
 import Projects from 'modules/countrydetail/fragments/Projects/Projects';
 
-storiesOf('Module: Country Detail', module)
+storiesOf('Country Detail|Modules/Fragments', module)
+  .add('0. Full Page', () => <CountryDetailModule />)
   .add('0. Full Page', () => <CountryDetailModule />)
   .add('1. Page Navigation', () => <PageNavigation />)
   .add('2. Country Info', () => <CountryInfo />)

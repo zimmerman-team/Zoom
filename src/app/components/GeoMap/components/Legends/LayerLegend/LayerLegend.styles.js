@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const ColorGradient = styled.div`
-  width: 268px;
+  min-width: 268px;
   height: 12px;
   margin: 0 3px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);

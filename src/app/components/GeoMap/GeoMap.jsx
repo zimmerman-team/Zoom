@@ -143,9 +143,7 @@ class GeoMap extends Component {
 
   _showLayerInfo() {
     const { hoverLayerInfo, hoverMarkerInfo } = this.state;
-    if (!hoverMarkerInfo) {
-      return layerInfo(hoverLayerInfo);
-    }
+    if (!hoverMarkerInfo) return layerInfo(hoverLayerInfo);
     return null;
   }
 

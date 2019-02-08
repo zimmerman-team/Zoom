@@ -83,9 +83,7 @@ export function formatCountryCenterData(indicators) {
           minValue,
           longitude: coord[0],
           latitude: coord[1],
-          tooltipText: `Country: ${indicator.geolocationTag}, Value: ${
-            indicator.value
-          }`,
+          country: indicator.geolocationTag,
         });
       } else
         countryCenteredData[existCountryIndex].value =

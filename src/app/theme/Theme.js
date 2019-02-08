@@ -30,6 +30,9 @@ export default {
   },
   weight: {},
   shadow: {},
-  borderRadiu: {},
+  borderRadius: {},
   icon: {},
+  border: {
+    dashboardTab: '2px solid #0000ff',
+  },
 };

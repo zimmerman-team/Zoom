@@ -144,6 +144,7 @@ export class LoginForm extends React.Component {
 
                 <FormButton
                   type="submit"
+                  onClick={this.onSubmit}
                   disabled={
                     this.state.username === '' || this.state.password === ''
                   }

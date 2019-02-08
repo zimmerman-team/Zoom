@@ -1,24 +1,35 @@
-/* global window, fetch */
+/* base */
 import React, { Component } from 'react';
 import MapGL from 'react-map-gl';
 import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
 
+/* utils */
 import { fromJS } from 'immutable';
 import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
+import { generateLegends, generateMarkers } from './GeoMap.util';
 
+/* styles */
 import {
   borderStyle,
   dataLayer,
   defaultMapStyle,
 } from './components/map-style';
-import { generateLegends, generateMarkers } from './GeoMap.utils';
+
+/* components */
 import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
 import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
+import MapControls from 'components/GeoMap/components/MapControls/MapControls';
+import Fullscreen from 'react-full-screen';
 
-import { LegendContainer, MapContainer, YearContainer } from './GeoMap.styles';
+import {
+  LegendContainer,
+  MapContainer,
+  YearContainer,
+  ControlsContainer,
+} from './GeoMap.style';
 
 const MAPBOX_TOKEN =
   'pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw';
@@ -35,15 +46,19 @@ class GeoMap extends Component {
       viewport: {
         latitude: 15,
         longitude: 0,
-        zoom: 2,
         bearing: 0,
         pitch: 0,
       },
       hoverMarkerInfo: null,
       values: [12, 16],
+      zoom: 2,
+      fullScreen: false,
     };
 
     this.setMarkerInfo = this.setMarkerInfo.bind(this);
+    this.zoomIn = this.zoomIn.bind(this);
+    this.zoomOut = this.zoomOut.bind(this);
+    this.fullScreen = this.fullScreen.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -152,40 +167,71 @@ class GeoMap extends Component {
     if (feature) this.props.history.push(`country/${feature.properties.iso2}`);
   };
 
+  zoomIn() {
+    // cause when its 25 it gets white
+    if (this.state.zoom < 25)
+      this.setState(prevState => {
+        return { zoom: prevState.zoom + 0.2 };
+      });
+  }
+
+  zoomOut() {
+    if (this.state.zoom > 1)
+      this.setState(prevState => {
+        return { zoom: prevState.zoom - 0.2 };
+      });
+  }
+
+  fullScreen() {
+    this.setState(prevState => {
+      return { fullScreen: !prevState.fullScreen };
+    });
+  }
+
   render() {
-    const { viewport, mapStyle, markerArray, legends } = this.state;
-
+    const { viewport, mapStyle, markerArray, legends, fullScreen } = this.state;
     return (
-      <MapContainer>
-        <MapGL
-          {...viewport}
-          width="100%"
-          height="100%"
-          mapStyle={mapStyle}
-          onViewportChange={this._onViewportChange}
-          onHover={this._setLayerInfo}
-          onClick={this._onCountryClick}
-          mapboxApiAccessToken={MAPBOX_TOKEN}
-        >
-          {/*So this is the layer tooltip, and we seperate it from the
-            martker tooltip, cause its functionality as a tooltip is a bit different
-            and also because we implement the layers a bit more differently
-            than normal markers*/}
-          {this._showLayerInfo()}
+      <Fullscreen enabled={fullScreen}>
+        <MapContainer>
+          <ControlsContainer>
+            <MapControls
+              zoomIn={this.zoomIn}
+              zoomOut={this.zoomOut}
+              fullScreen={this.fullScreen}
+            />
+          </ControlsContainer>
+          <MapGL
+            {...viewport}
+            scrollZoom={false}
+            width="100%"
+            height="100%"
+            mapStyle={mapStyle}
+            onViewportChange={this._onViewportChange}
+            onHover={this._setLayerInfo}
+            onClick={this._onCountryClick}
+            mapboxApiAccessToken={MAPBOX_TOKEN}
+            zoom={this.state.zoom}
+          >
+            {/*So this is the layer tooltip, and we seperate it from the
+              martker tooltip, cause its functionality as a tooltip is a bit different
+              and also because we implement the layers a bit more differently
+              than normal markers*/}
+            {this._showLayerInfo()}
 
-          {this._showMarkerInfo()}
+            {this._showMarkerInfo()}
 
-          {markerArray}
+            {markerArray}
 
-          <LegendContainer>{legends}</LegendContainer>
-        </MapGL>
-        <YearContainer>
-          <CustomYearSelector
-            selectedYears={this.props.selectedYears}
-            selectYear={this.props.selectYear}
-          />
-        </YearContainer>
-      </MapContainer>
+            <LegendContainer>{legends}</LegendContainer>
+          </MapGL>
+          <YearContainer>
+            <CustomYearSelector
+              selectedYears={this.props.selectedYears}
+              selectYear={this.props.selectYear}
+            />
+          </YearContainer>
+        </MapContainer>
+      </Fullscreen>
     );
   }
 }

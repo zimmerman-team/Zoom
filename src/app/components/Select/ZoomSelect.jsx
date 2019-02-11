@@ -27,25 +27,25 @@ import {
   CategoryItem,
   ItemContainer,
   InfoLabel,
-  EmptyOptions,
+  EmptyOptions
 } from 'components/Select/ZoomSelect.styles';
 
 const propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.string,
-    }),
+      label: PropTypes.string
+    })
   ),
   placeHolder: PropTypes.string,
   reset: PropTypes.func,
   categorise: PropTypes.bool,
-  search: PropTypes.bool,
+  search: PropTypes.bool
 };
 const defaultProps = {
   categorise: false,
   placeHolder: 'Has no indicators',
   reset: undefined,
-  search: true,
+  search: true
 };
 
 class ZoomSelect extends React.Component {
@@ -56,7 +56,7 @@ class ZoomSelect extends React.Component {
       allSelected: false,
       open: false,
       options: props.data,
-      searchWord: '',
+      searchWord: ''
     };
 
     this.renderDropDownItem = this.renderDropDownItem.bind(this);

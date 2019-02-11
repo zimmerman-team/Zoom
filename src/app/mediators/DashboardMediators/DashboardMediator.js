@@ -13,33 +13,33 @@ const tabs = [
   {
     key: 'charts',
     label: 'Charts',
-    route: '/dashboard/charts',
+    route: '/dashboard/charts'
   },
   {
     key: 'data-sets',
     label: 'Data sets',
-    route: '/dashboard/data-sets',
+    route: '/dashboard/data-sets'
   },
   {
     key: 'focus-pages',
     label: 'Focus pages',
-    route: '/dashboard/focus-pages',
+    route: '/dashboard/focus-pages'
   },
   {
     key: 'users',
     label: 'Users',
-    route: '/dashboard/users',
+    route: '/dashboard/users'
   },
   {
     key: 'teams',
     label: 'Teams',
-    route: '/dashboard/teams',
+    route: '/dashboard/teams'
   },
   {
     key: 'trash',
     label: 'Trash',
-    route: '/dashboard/trash',
-  },
+    route: '/dashboard/trash'
+  }
 ];
 
 const tabCounts = {
@@ -48,7 +48,7 @@ const tabCounts = {
   'focus-pages': 0,
   users: 1,
   teams: 1,
-  trash: 0,
+  trash: 0
 };
 
 class DashboardMediator extends React.Component {
@@ -57,7 +57,7 @@ class DashboardMediator extends React.Component {
 
     this.state = {
       sort: 'name:1',
-      isSortByOpen: false,
+      isSortByOpen: false
     };
 
     this.changeSortBy = this.changeSortBy.bind(this);
@@ -80,7 +80,7 @@ class DashboardMediator extends React.Component {
 
   setIsSortByOpen() {
     this.setState(prevState => ({
-      isSortByOpen: !prevState.isSortByOpen,
+      isSortByOpen: !prevState.isSortByOpen
     }));
   }
 

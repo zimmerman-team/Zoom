@@ -9,7 +9,7 @@ import {
   HeaderIcon,
   HeaderGreeting,
   SearchBox,
-  ViewContainer,
+  ViewContainer
 } from 'modules/dashboard/DashboardModule.styles';
 import SvgIconUser from 'assets/icons/IconUser';
 import SvgIconSearch from 'assets/icons/IconSearch';
@@ -22,8 +22,8 @@ const propTypes = {
     PropTypes.shape({
       key: PropTypes.string,
       label: PropTypes.string,
-      value: PropTypes.string,
-    }),
+      value: PropTypes.string
+    })
   ),
   tabCounts: PropTypes.shape({}),
   sort: PropTypes.string,
@@ -32,7 +32,7 @@ const propTypes = {
   isSortByOpen: PropTypes.bool,
   setWrapperRef: PropTypes.func,
   greetingName: PropTypes.string,
-  setIsSortByOpen: PropTypes.func,
+  setIsSortByOpen: PropTypes.func
 };
 const defaultProps = {
   tabs: [],
@@ -43,7 +43,7 @@ const defaultProps = {
   changeSortBy: null,
   setWrapperRef: null,
   isSortByOpen: false,
-  setIsSortByOpen: null,
+  setIsSortByOpen: null
 };
 
 const getTabView = (
@@ -53,7 +53,7 @@ const getTabView = (
   setIsSortByOpen,
   setWrapperRef,
   sort,
-  changeSortBy,
+  changeSortBy
 ) => {
   switch (tab) {
     case tabs[0].key:
@@ -98,7 +98,7 @@ const DashboardModule = ({
   setIsSortByOpen,
   setWrapperRef,
   sort,
-  changeSortBy,
+  changeSortBy
 }) => (
   <ModuleContainer>
     <PageHeading>Zoom dashboard</PageHeading>
@@ -116,7 +116,7 @@ const DashboardModule = ({
         setIsSortByOpen,
         setWrapperRef,
         sort,
-        changeSortBy,
+        changeSortBy
       )}
     </ViewContainer>
   </ModuleContainer>

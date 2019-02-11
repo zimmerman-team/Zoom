@@ -6,28 +6,28 @@ export const steps = [
     label: 'Meta Data',
     isActive: true,
     isDone: true,
-    isFirst: true,
+    isFirst: true
   },
   {
     id: 2,
     label: 'Upload CSV Data',
-    isActive: true,
+    isActive: true
   },
   {
     id: 3,
-    label: 'Overview',
+    label: 'Overview'
   },
   {
     id: 4,
-    label: 'Correct errors',
+    label: 'Correct errors'
   },
   {
     id: 5,
-    label: 'Manual mapping',
+    label: 'Manual mapping'
   },
   {
     id: 6,
     label: 'Done',
-    isLast: true,
-  },
+    isLast: true
+  }
 ];

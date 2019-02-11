@@ -9,16 +9,16 @@ import {
   CenterTabs,
   Tab,
   TabBadge,
-  TabText,
+  TabText
 } from './TabContainer.styles';
 
 const activeTheme = {
   border: Theme.border.dashboardTab,
-  color: Theme.color.zoomBlack,
+  color: Theme.color.zoomBlack
 };
 
 const theme = {
-  color: Theme.color.aidsFondsRed,
+  color: Theme.color.aidsFondsRed
 };
 
 const propTypes = {
@@ -26,16 +26,16 @@ const propTypes = {
     PropTypes.shape({
       key: PropTypes.string,
       label: PropTypes.string,
-      route: PropTypes.string,
-    }),
+      route: PropTypes.string
+    })
   ),
   tabCounts: PropTypes.shape({}),
-  activeTab: PropTypes.string,
+  activeTab: PropTypes.string
 };
 const defaultProps = {
   tabs: [],
   tabCounts: {},
-  activeTab: '',
+  activeTab: ''
 };
 
 const TabContainer = ({ tabs, tabCounts, activeTab }) => (

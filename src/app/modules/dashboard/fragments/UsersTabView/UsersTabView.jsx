@@ -18,14 +18,14 @@ const users = [
       Role: 'Admin',
       'Mapped data sets': 1,
       Charts: 2,
-      Twitter: '',
-    },
-  },
+      Twitter: ''
+    }
+  }
 ];
 
 const sortByOptions = [
   { label: 'Name (asc)', value: 'name:1' },
-  { label: 'Name (desc)', value: 'name:-1' },
+  { label: 'Name (desc)', value: 'name:-1' }
 ];
 
 const propTypes = {
@@ -33,14 +33,14 @@ const propTypes = {
   changeSortBy: PropTypes.func,
   isSortByOpen: PropTypes.bool,
   setWrapperRef: PropTypes.func,
-  setIsSortByOpen: PropTypes.func,
+  setIsSortByOpen: PropTypes.func
 };
 const defaultProps = {
   sort: '',
   changeSortBy: null,
   setWrapperRef: null,
   isSortByOpen: false,
-  setIsSortByOpen: null,
+  setIsSortByOpen: null
 };
 
 const UsersTabView = ({
@@ -48,7 +48,7 @@ const UsersTabView = ({
   setIsSortByOpen,
   setWrapperRef,
   sort,
-  changeSortBy,
+  changeSortBy
 }) => (
   <ViewContainer>
     <ControlsRow>

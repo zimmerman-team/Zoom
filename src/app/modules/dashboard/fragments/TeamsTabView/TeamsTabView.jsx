@@ -17,14 +17,14 @@ const teams = [
     info: {
       'Created by': 'Jane Doe',
       'Publication date': '01-01-2019',
-      'Linked organisations': 'Aidsfonds',
-    },
-  },
+      'Linked organisations': 'Aidsfonds'
+    }
+  }
 ];
 
 const sortByOptions = [
   { label: 'Name (asc)', value: 'name:1' },
-  { label: 'Name (desc)', value: 'name:-1' },
+  { label: 'Name (desc)', value: 'name:-1' }
 ];
 
 const propTypes = {
@@ -32,14 +32,14 @@ const propTypes = {
   changeSortBy: PropTypes.func,
   isSortByOpen: PropTypes.bool,
   setWrapperRef: PropTypes.func,
-  setIsSortByOpen: PropTypes.func,
+  setIsSortByOpen: PropTypes.func
 };
 const defaultProps = {
   sort: '',
   changeSortBy: null,
   setWrapperRef: null,
   isSortByOpen: false,
-  setIsSortByOpen: null,
+  setIsSortByOpen: null
 };
 
 const TeamsTabView = ({
@@ -47,7 +47,7 @@ const TeamsTabView = ({
   setIsSortByOpen,
   setWrapperRef,
   sort,
-  changeSortBy,
+  changeSortBy
 }) => (
   <ViewContainer>
     <ControlsRow>

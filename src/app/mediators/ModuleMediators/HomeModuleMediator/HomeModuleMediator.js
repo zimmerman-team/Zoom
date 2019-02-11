@@ -6,7 +6,7 @@ import {
   formatCountryLayerData,
   formatCountryParam,
   formatYearParam,
-  updatePercentiles,
+  updatePercentiles
 } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
 import HomeModule from 'modules/home/HomeModule';
 import PropTypes from 'prop-types';
@@ -20,8 +20,8 @@ const propTypes = {
         geolocationIso2: PropTypes.string,
         geolocationTag: PropTypes.string,
         date: PropTypes.string,
-        value: PropTypes.number,
-      }),
+        value: PropTypes.number
+      })
     ),
     indicators2: PropTypes.arrayOf(
       PropTypes.shape({
@@ -29,54 +29,54 @@ const propTypes = {
         geolocationIso2: PropTypes.string,
         geolocationTag: PropTypes.string,
         date: PropTypes.string,
-        value: PropTypes.number,
-      }),
+        value: PropTypes.number
+      })
     ),
     subIndicators1: PropTypes.shape({
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
-            name: PropTypes.string,
-          }),
-        }),
-      ),
+            name: PropTypes.string
+          })
+        })
+      )
     }),
     subIndicators2: PropTypes.shape({
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
-            name: PropTypes.string,
-          }),
-        }),
-      ),
-    }),
+            name: PropTypes.string
+          })
+        })
+      )
+    })
   }),
   dropDownData: PropTypes.shape({
     allIndicators: PropTypes.shape({
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
-            name: PropTypes.string,
-          }),
-        }),
-      ),
+            name: PropTypes.string
+          })
+        })
+      )
     }),
     allCountries: PropTypes.shape({
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
             name: PropTypes.string,
-            iso2: PropTypes.string,
-          }),
-        }),
-      ),
-    }),
-  }),
+            iso2: PropTypes.string
+          })
+        })
+      )
+    })
+  })
 };
 
 const defaultProps = {
   dropDownData: {},
-  indicatorAggregations: {},
+  indicatorAggregations: {}
 };
 
 // As discussed with Siem default year period selected should be
@@ -90,7 +90,7 @@ class HomeModuleMediator extends Component {
     super(props);
     this.state = {
       yearPeriod: formatYearParam([yearBefore, currentYear]),
-      ...initialState,
+      ...initialState
     };
 
     this.selectInd1 = this.selectInd1.bind(this);
@@ -108,7 +108,7 @@ class HomeModuleMediator extends Component {
     if (
       !isEqual(
         this.props.indicatorAggregations,
-        prevProps.indicatorAggregations,
+        prevProps.indicatorAggregations
       )
     ) {
       this.updateIndicators();
@@ -127,20 +127,20 @@ class HomeModuleMediator extends Component {
     const subIndicators1 = this.props.indicatorAggregations.subIndicators1.edges.map(
       indicator => {
         return { label: indicator.node.name, value: indicator.node.name };
-      },
+      }
     );
 
     const subIndicators2 = this.props.indicatorAggregations.subIndicators2.edges.map(
       indicator => {
         return { label: indicator.node.name, value: indicator.node.name };
-      },
+      }
     );
 
     const countryLayerData = formatCountryLayerData(
-      this.props.indicatorAggregations.indicators1,
+      this.props.indicatorAggregations.indicators1
     );
     const countryCircleData = formatCountryCenterData(
-      this.props.indicatorAggregations.indicators2,
+      this.props.indicatorAggregations.indicators2
     );
 
     updatePercentiles(countryLayerData, f => f.properties.value);
@@ -151,7 +151,7 @@ class HomeModuleMediator extends Component {
       indicators.push({
         type: 'layer',
         data: countryLayerData,
-        legendName: ` ${this.state.selectedInd1} `,
+        legendName: ` ${this.state.selectedInd1} `
       });
     }
 
@@ -159,7 +159,7 @@ class HomeModuleMediator extends Component {
       indicators.push({
         type: 'circle',
         data: countryCircleData,
-        legendName: ` ${this.state.selectedInd2} `,
+        legendName: ` ${this.state.selectedInd2} `
       });
     }
 
@@ -173,13 +173,13 @@ class HomeModuleMediator extends Component {
     subInd1 = this.state.selectedSubInd1,
     subInd2 = this.state.selectedSubInd2,
     countriesCodes = this.state.selectedCountryVal,
-    regionCountriesCodes = this.state.selectedRegionVal,
+    regionCountriesCodes = this.state.selectedRegionVal
   ) {
     // We forming the param for countries from the selected countries of a region
     // and single selected countries
     const countriesISO2 = formatCountryParam(
       countriesCodes,
-      regionCountriesCodes,
+      regionCountriesCodes
     );
 
     const refetchVars = {
@@ -190,7 +190,7 @@ class HomeModuleMediator extends Component {
       singleInd2: ind2 ? ind2 : 'null',
       datePeriod,
       subInd1: subInd1.length > 0 ? subInd1 : ['undefined'],
-      subInd2: subInd2.length > 0 ? subInd2 : ['undefined'],
+      subInd2: subInd2.length > 0 ? subInd2 : ['undefined']
     };
 
     this.props.relay.refetch(refetchVars);
@@ -202,9 +202,9 @@ class HomeModuleMediator extends Component {
     this.setState(
       {
         selectedInd1: val.value,
-        selectedSubInd1: [],
+        selectedSubInd1: []
       },
-      this.refetch,
+      this.refetch
     );
   }
 
@@ -214,9 +214,9 @@ class HomeModuleMediator extends Component {
     this.setState(
       {
         selectedInd2: val.value,
-        selectedSubInd2: [],
+        selectedSubInd2: []
       },
-      this.refetch,
+      this.refetch
     );
   }
 
@@ -302,9 +302,9 @@ class HomeModuleMediator extends Component {
   resetAll() {
     this.setState(
       {
-        ...initialState,
+        ...initialState
       },
-      this.refetch,
+      this.refetch
     );
   }
 
@@ -436,5 +436,5 @@ export default createRefetchContainer(
           subInd2: $subInd2
         )
     }
-  `,
+  `
 );

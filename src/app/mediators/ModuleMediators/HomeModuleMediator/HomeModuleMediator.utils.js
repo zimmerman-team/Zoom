@@ -5,7 +5,7 @@ import { range } from 'd3-array';
 export function formatCountryLayerData(indicators) {
   const countryLayers = {
     type: 'FeatureCollection',
-    features: [],
+    features: []
   };
 
   indicators.forEach(indicator => {
@@ -28,8 +28,8 @@ export function formatCountryLayerData(indicators) {
           name: indicator.geolocationTag,
           iso2: indicator.geolocationIso2,
           value: indicator.value,
-          percentile: 0,
-        },
+          percentile: 0
+        }
       });
     } else {
       const changeFeat = countryLayers.features[existLayerIndex];
@@ -42,14 +42,14 @@ export function formatCountryLayerData(indicators) {
     Math,
     countryLayers.features.map(feature => {
       return feature.properties.value;
-    }),
+    })
   );
 
   countryLayers.maxValue = Math.max.apply(
     Math,
     countryLayers.features.map(feature => {
       return feature.properties.value;
-    }),
+    })
   );
 
   return countryLayers;
@@ -61,7 +61,7 @@ export function formatCountryCenterData(indicators) {
   indicators.forEach(indicator => {
     const existCountryIndex = findIndex(countryCenteredData, [
       'geolocationIso2',
-      indicator.geolocationIso2,
+      indicator.geolocationIso2
     ]);
 
     if (indicator.geolocationCenterLongLat) {
@@ -83,7 +83,7 @@ export function formatCountryCenterData(indicators) {
           minValue,
           longitude: coord[0],
           latitude: coord[1],
-          country: indicator.geolocationTag,
+          country: indicator.geolocationTag
         });
       } else
         countryCenteredData[existCountryIndex].value =
@@ -95,13 +95,13 @@ export function formatCountryCenterData(indicators) {
     Math,
     countryCenteredData.map(indicator => {
       return indicator.value;
-    }),
+    })
   );
   const minValue = Math.min.apply(
     Math,
     countryCenteredData.map(indicator => {
       return indicator.value;
-    }),
+    })
   );
 
   countryCenteredData.forEach(indicator => {

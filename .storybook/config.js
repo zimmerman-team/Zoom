@@ -6,32 +6,8 @@ import { withBackgrounds } from '@storybook/addon-backgrounds';
 import { configureViewport } from '@storybook/addon-viewport';
 import { withState } from '@dump247/storybook-state';
 import { themes } from '@storybook/components';
-
-/*
-const newViewports = {
-  kindleFire2: {
-    name: 'Kindle Fire 2',
-    styles: {
-      width: '600px',
-      height: '963px'
-    }
-  },
-  kindleFireHD: {
-    name: 'Kindle Fire HD',
-    styles: {
-      width: '533px',
-      height: '801px'
-    }
-  }
-};
-
-configureViewport({
-  viewports: newViewports
-});
-*/
-
-// automatically import all files ending in *.stories.js
-// const req = require.context('../stories', true, /.stories.js$/);
+import { withKnobs } from '@storybook/addon-knobs';
+import { withSmartKnobs } from 'storybook-addon-smart-knobs';
 
 const req = require.context('../src/app', true, /.story.js$/);
 
@@ -43,64 +19,11 @@ setConsoleOptions({
   panelExclude: [],
 });
 
-/*module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.svg$/,
-        loader: '@svgr/webpack',
-      },
-    ],
-  },
-};*/
-
-/*const path = require('path');
-
-const pathToInlineSvg = path.resolve(__dirname, '../src/app/assets/icons');
-
-module.exports = defaultConfig => {
-  const rules = defaultConfig.module.rules;
-
-  // modify storybook's file-loader rule to avoid conflicts with svgr
-  const fileLoaderRule = rules.find(rule => rule.test.test('.svg'));
-  // fileLoaderRule.exclude = pathToInlineSvg;
-
-  rules.push({
-    test: /\.svg$/,
-    // include: pathToInlineSvg,
-    use: [
-      {
-        loader: '@svgr/webpack',
-        options: {
-          icon: true,
-        },
-      },
-    ],
-  });
-
-  return defaultConfig;
-};*/
-
-/*
-addDecorator(
-  withInfo({
-    header: false, // Global configuration for the info addon across all of your stories.
-    inline: false,
-  }),
-);
-*/
-
-/*
-addDecorator(
-  withBackgrounds([
-    { name: 'default', value: '#474747', default: true },
-    { name: 'color2', value: '#ffffff' },
-  ]),
-);
-*/
-
 addDecorator((storyFn, context) => withConsole()(storyFn)(context));
 
+// addDecorator(withInfo);
+// addDecorator(withKnobs);
+// addDecorator(withSmartKnobs);
 // Option defaults:
 addDecorator(
   withOptions({
@@ -111,10 +34,10 @@ addDecorator(
     showStoriesPanel: true,
     showAddonPanel: true,
     showSearchBox: false,
-    addonPanelInRight: true,
+    addonPanelInRight: false,
     sortStoriesByKind: false,
-    hierarchySeparator: null,
-    hierarchyRootSeparator: null,
+    hierarchySeparator: /\//,
+    hierarchyRootSeparator: /\|/,
     sidebarAnimations: false,
     selectedAddonPanel: undefined,
     enableShortcuts: false,

@@ -3,7 +3,7 @@ import React from 'react';
 import {
   DescriptionParagraph,
   DescriptionParagraphBold,
-} from 'components/theme/ThemeSheet';
+} from 'components/sort/Paragraphs';
 import {
   AboutTitle,
   ModuleContainer,

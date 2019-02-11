@@ -7,7 +7,7 @@ import {
   UsersTableCellValue,
   UsersTableColHeader,
 } from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
-import { aidsFondsRed } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
 
 const sortByOptions = [
@@ -48,7 +48,7 @@ export default function getColumns(
       property: 'name',
       header: <UsersTableColHeader>Name</UsersTableColHeader>,
       render: val => (
-        <UsersTableCellValue theme={{ color: aidsFondsRed }}>
+        <UsersTableCellValue theme={{ color: theme.color.aidsFondsRed }}>
           {val.name}
         </UsersTableCellValue>
       ),

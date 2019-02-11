@@ -1,16 +1,12 @@
 import styled from 'styled-components';
-import { zoomFontFamOne } from 'components/theme/ThemeSheet';
 
+import theme from 'theme/Theme';
 /* todo: needs further tweaking from a design perspective and speccing from a business perspective */
 export const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  //align-content: space-between;
   justify-content: space-around;
-  //justify-items: center;
-  //padding: 10%;
-  //padding-top: 20px;
   height: 100%;
   &:hover {
     opacity: 0.5;
@@ -21,17 +17,14 @@ export const NodeLabel = styled.span`
   user-select: none;
   width: 80%;
   overflow: hidden;
-  //white-space: nowrap;
   text-overflow: ellipsis;
-  font-family: ${zoomFontFamOne};
+  font-family: ${theme.font.zoomFontFamOne};
   line-height: 1;
 `;
 export const NodeValue = styled.span`
   user-select: none;
-  font-family: ${zoomFontFamOne};
-  //font-size: 25px;
+  font-family: ${theme.font.zoomFontFamOne};
   line-height: 1;
-  //color: cornflowerblue;
 `;
 
 export const WidthDefiner = styled.div`

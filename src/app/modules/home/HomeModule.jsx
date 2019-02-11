@@ -2,12 +2,14 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import GeoMap from 'components/GeoMap/GeoMap';
+import { connect } from 'react-redux';
 // import AppBar from 'components/navigation/AppBar/AppBar';
 import { Box } from 'grommet';
 // import SideBar from 'components/navigation/SideBar/SideBar';
 import { ControlPanelContainer } from 'modules/home/HomeModule.styles';
 import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
 import PropTypes from 'prop-types';
+import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
 const ModuleContainer = styled(Box)``;
 
@@ -50,11 +52,16 @@ class HomeModule extends Component {
         <ModuleContainer>
           {/*<BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />*/}
 
-          <GeoMap indicatorData={indicators} />
-
-          <ControlPanelContainer>
-            <ExplorePanelMediator {...otherProps} />
-          </ControlPanelContainer>
+          <GeoMap
+            indicatorData={indicators}
+            selectedYears={this.props.yearPeriod}
+            selectYear={this.props.selectYear}
+          />
+          {this.props.dataPaneOpen && (
+            <ControlPanelContainer>
+              <ExplorePanelMediator {...otherProps} />
+            </ControlPanelContainer>
+          )}
         </ModuleContainer>
       </React.Fragment>
     );
@@ -63,4 +70,10 @@ class HomeModule extends Component {
 HomeModule.propTypes = propTypes;
 HomeModule.defaultProps = defaultProps;
 
-export default HomeModule;
+const mapStateToProps = state => {
+  return {
+    dataPaneOpen: state.dataPaneOpen.open,
+  };
+};
+
+export default connect(mapStateToProps)(HomeModule);

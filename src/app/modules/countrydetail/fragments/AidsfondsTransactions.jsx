@@ -2,10 +2,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+
 import {
   FragmentHeader,
   FragmentVisualisation,
-} from 'components/theme/ThemeSheet';
+} from 'components/sort/Fragments';
+
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import PieChart from 'components/charts/piechart/PieChart';
 import LineChart from 'components/charts/linechart/LineChart';

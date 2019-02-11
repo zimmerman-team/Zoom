@@ -7,7 +7,7 @@ import {
   FragmentDescription,
   FragmentHeader,
   FragmentVisualisation,
-} from 'components/theme/ThemeSheet';
+} from 'components/sort/Fragments';
 import { FragmentInfo, FragmentInfoButton } from './ModuleFragment.style';
 
 const propTypes = {

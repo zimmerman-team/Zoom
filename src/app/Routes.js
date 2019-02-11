@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 // Utils
 import PageLoader from 'modules/common/pageloader/PageLoader';
 // always active
-import ThemeSheet from 'components/theme/ThemeSheet';
+
 import DataExplorePanel from 'components/DataExplorePane/DataExplorePanel';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
@@ -28,6 +28,9 @@ const AddUserMediator = lazy(() =>
 );
 const CreateTeamMediator = lazy(() =>
   import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator'),
+);
+const DashboardMediator = lazy(() =>
+  import('mediators/DashboardMediators/DashboardMediator'),
 );
 
 const About = lazy(() => import('modules/about/About'));
@@ -90,12 +93,28 @@ const Routes = props => {
               )
             }
           />
+          <Route
+            exact
+            path="/dashboard"
+            render={() => <Redirect to="/dashboard/charts" />}
+          />
+          <Route
+            path="/dashboard/:tab"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <DashboardMediator auth0Client={props.auth0Client} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
           <Route path="/about" render={() => <About />} />
           <Route
             path="/mapper"
             render={() => <DataMapperModule dropDownData={props} />}
           />
-          <Route exact path="/theme" render={() => <ThemeSheet />} />
+
           <Route exact path="/component" render={() => <DataExplorePanel />} />
           <Route exact path="/step" render={() => <ManMappingStep />} />
         </Switch>

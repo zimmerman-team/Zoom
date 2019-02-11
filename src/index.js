@@ -15,6 +15,7 @@ import reducers from 'services/reducers';
 import mutationReducers from 'services/reducers/mutation';
 import syncReducers from 'services/reducers/sync';
 import sagas from 'services/sagas';
+import generalReducers from 'services/reducers/general';
 
 const sagaMiddleware = createSagaMiddleware();
 const history = createHistory();
@@ -26,8 +27,9 @@ const store = createStore(
     ...reducers,
     ...mutationReducers,
     ...syncReducers,
+    ...generalReducers
   }),
-  composeEnhancers(applyMiddleware(sagaMiddleware, routerMiddleware(history))),
+  composeEnhancers(applyMiddleware(sagaMiddleware, routerMiddleware(history)))
 );
 
 sagaMiddleware.run(sagas);
@@ -38,10 +40,12 @@ ReactDOM.render(
       <App />
     </Provider>
   </CookiesProvider>,
-  document.getElementById('root'),
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+console.log('ZOOM V1.2');

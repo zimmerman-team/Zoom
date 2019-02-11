@@ -16,13 +16,9 @@ import {
   TabText,
   TabDivider,
 } from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
-import {
-  aidsFondsBlue,
-  aidsFondsRed,
-  Divider,
-  errorCellColor,
-  zoomGreyZero,
-} from 'components/theme/ThemeSheet';
+// import { Divider } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
+import Divider from 'components/Dividers/Divider';
 
 /* mock */
 import { columns, data, errorCells } from './ErrorsStep.mock';
@@ -85,7 +81,7 @@ class ErrorStep extends React.Component {
     errorCells.forEach(cell => {
       document.querySelector(
         `tbody tr:nth-child(${cell.row}) td:nth-child(${cell.col})`,
-      ).style.backgroundColor = errorCellColor;
+      ).style.backgroundColor = theme.color.errorCellColor;
     });
   }
 
@@ -97,7 +93,7 @@ class ErrorStep extends React.Component {
   clickOverview() {
     const allCells = document.querySelectorAll('td');
     allCells.forEach(cell => {
-      cell.style.backgroundColor = zoomGreyZero;
+      cell.style.backgroundColor = theme.color.zoomGreyZero;
     });
     this.setState({ tab: 'overview' });
   }
@@ -115,7 +111,9 @@ class ErrorStep extends React.Component {
           <TabText
             style={{
               color:
-                this.state.tab === 'overview' ? aidsFondsBlue : aidsFondsRed,
+                this.state.tab === 'overview'
+                  ? theme.color.aidsFondsBlue
+                  : theme.color.aidsFondsRed,
             }}
             onClick={() => this.clickOverview()}
           >
@@ -125,7 +123,9 @@ class ErrorStep extends React.Component {
           <TabText
             style={{
               color:
-                this.state.tab === 'findErrors' ? aidsFondsBlue : aidsFondsRed,
+                this.state.tab === 'findErrors'
+                  ? theme.color.aidsFondsBlue
+                  : theme.coloraidsFondsRed,
             }}
             onClick={() => this.clickFindErrors()}
           >
@@ -135,7 +135,9 @@ class ErrorStep extends React.Component {
           <TabText
             style={{
               color:
-                this.state.tab === 'findReplace' ? aidsFondsBlue : aidsFondsRed,
+                this.state.tab === 'findReplace'
+                  ? theme.color.aidsFondsBlue
+                  : theme.color.aidsFondsRed,
             }}
             onClick={() => this.clickFindReplace()}
           >

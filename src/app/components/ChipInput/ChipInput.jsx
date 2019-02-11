@@ -1,13 +1,8 @@
 /* base */
 import React from 'react';
 import styled from 'styled-components';
-
+import theme from 'theme/Theme';
 import NoSsr from '@material-ui/core/NoSsr';
-import {
-  zoomFontFamTwo,
-  aidsFondsBlue,
-  aidsFondsWhite,
-} from 'components/theme/ThemeSheet';
 import ChipInput from 'material-ui-chip-input';
 
 export default styled(props => (
@@ -26,12 +21,12 @@ export default styled(props => (
     }
 
     & div[role='button'] {
-      background-color: ${aidsFondsBlue};
+      background-color: ${theme.color.aidsFondsBlue};
       border-radius: 5px;
       & span {
         line-height: 1;
-        color: ${aidsFondsWhite};
-        font-family: ${zoomFontFamTwo};
+        color: ${theme.color.aidsFondsWhite};
+        font-family: ${theme.color.zoomFontFamTwo};
         font-size: 14px;
         margin-right: 10px;
       }

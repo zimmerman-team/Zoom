@@ -1,14 +1,11 @@
 import styled from 'styled-components';
 import { Box } from 'grommet';
-import {
-  aidsFondsWhite,
-  CellValue,
-  zoomFontFamTwo,
-  ColumnHeader,
-} from 'components/theme/ThemeSheet';
+import ColumnHeader from 'components/ZoomTable/ColumnHeader';
+import theme from 'theme/Theme';
+import CellValue from 'components/ZoomTable/CellValue';
 
 export const ModuleContainer = styled(Box)`
-  background-color: ${aidsFondsWhite};
+  background-color: ${theme.color.aidsFondsWhite};
   padding: 0px 1% 95px 1%;
 `;
 
@@ -17,7 +14,7 @@ export const CellLine = styled.div`
 `;
 
 export const CellText = styled(CellValue)`
-  font-family: ${zoomFontFamTwo};
+  font-family: ${theme.font.zoomFontFamTwo};
   margin-left: 4px;
 `;
 

@@ -1,20 +1,16 @@
 import styled from 'styled-components';
 import { Box, Button, Layer, RoutedButton } from 'grommet';
-import {
-  aidsFondsRed,
-  zoomFontFamTwo,
-  zoomGreyZero,
-} from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 
 export const CloseButton = styled(Button)`
   padding: 0;
-  color: ${aidsFondsRed};
-  font-family: ${zoomFontFamTwo};
+  color: ${theme.color.aidsFondsRed};
+  font-family: ${theme.font.zoomFontFamTwo};
   font-size: 14px;
 `;
 
 export const SidebarNavListContainer = styled(Box)`
-  background-color: ${zoomGreyZero};
+  background-color: ${theme.color.zoomGreyZero};
   padding: 20px;
 `;
 
@@ -25,9 +21,9 @@ export const SidebarNavList = styled(Box)`
 
 export const SidebarNavListItem = styled(RoutedButton)`
   border: none;
-  color: ${aidsFondsRed};
+  color: ${theme.color.aidsFondsRed};
   border-radius: initial;
-  font-family: ${zoomFontFamTwo};
+  font-family: ${theme.font.zoomFontFamTwo};
   display: flex;
   padding-left: 0;
   padding-right: 0;

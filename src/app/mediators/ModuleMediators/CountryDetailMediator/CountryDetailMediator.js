@@ -10,6 +10,7 @@ import { withRouter } from 'react-router';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import {
+  titleCase,
   formatBarChartInfoIndicators,
   formatLineChartData,
   formatProjectData,
@@ -179,7 +180,7 @@ class CountryDetailMediator extends React.Component {
 
       // We dispatch wiki api here, cause this is the place where we get the country name
       const wikiParams = this.state.wikiParams;
-      wikiParams.titles = countryName;
+      wikiParams.titles = titleCase(countryName);
       this.props.dispatch(actions.countryExcerptRequest(this.state.wikiParams));
 
       const aidsLineChartData = formatLineChartData(

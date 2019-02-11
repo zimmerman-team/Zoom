@@ -4,15 +4,15 @@ import BarChartHorizontal from 'components/charts/barcharts/horizontal/BarChartH
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import { Box } from 'grommet';
 import { Element } from 'react-scroll/modules';
+import { SimpleText } from 'components/sort/Misc';
 import {
-  aidsFondsRed,
   PageIntroInitial,
   PageIntroSecondary,
-  SimpleText,
-} from 'components/theme/ThemeSheet';
+} from 'components/sort/Paragraphs';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { CountryName } from 'modules/countrydetail/fragments/CountryInfo/CountryInfo.styles';
 import PropTypes from 'prop-types';
+import theme from 'theme/Theme';
 
 // FRAGMENT 2: country info
 
@@ -43,7 +43,7 @@ const CountryInfo = props => {
           <Box width="50%">
             <PageIntroInitial>{props.excerpts[0]}</PageIntroInitial>
             <PageIntroSecondary>{props.excerpts[1]}</PageIntroSecondary>
-            <SimpleText color={aidsFondsRed}>
+            <SimpleText color={theme.color.aidsFondsRed}>
               {countryDetailMockData.fragments[0].description[2]}
             </SimpleText>
           </Box>

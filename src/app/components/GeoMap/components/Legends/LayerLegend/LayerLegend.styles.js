@@ -1,15 +1,13 @@
 import styled from 'styled-components';
 
-export const LayerLegendItem = styled.div`
-  border-radius: 5px;
-  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
-    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
-  background-color: white;
-  margin: 0 10px 0 0;
-  padding: 10px;
-`;
-
-export const LegendLabel = styled.div`
-  padding: 5px 0;
-  font-size: 16px;
+export const ColorGradient = styled.div`
+  min-width: 268px;
+  height: 12px;
+  margin: 0 3px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.5) 0%,
+    #5961bb 100%
+  );
 `;

@@ -1,4 +1,3 @@
-import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
 import { scaleQuantile } from 'd3-scale';
 import { range } from 'd3-array';
@@ -38,6 +37,21 @@ export function formatCountryLayerData(indicators) {
     }
   });
 
+  // And we add min and max values to be used for legends and what not
+  countryLayers.minValue = Math.min.apply(
+    Math,
+    countryLayers.features.map(feature => {
+      return feature.properties.value;
+    }),
+  );
+
+  countryLayers.maxValue = Math.max.apply(
+    Math,
+    countryLayers.features.map(feature => {
+      return feature.properties.value;
+    }),
+  );
+
   return countryLayers;
 }
 
@@ -45,12 +59,12 @@ export function formatCountryCenterData(indicators) {
   const countryCenteredData = [];
 
   indicators.forEach(indicator => {
-    if (indicator.geolocationIso2) {
-      const existCountryIndex = findIndex(countryCenteredData, [
-        'geolocationIso2',
-        indicator.geolocationIso2,
-      ]);
+    const existCountryIndex = findIndex(countryCenteredData, [
+      'geolocationIso2',
+      indicator.geolocationIso2,
+    ]);
 
+    if (indicator.geolocationCenterLongLat) {
       // so here we check if we already added a country to the countries layers
       // and if it has been added we just add the indicators value instead of pushing
       // another country
@@ -69,9 +83,7 @@ export function formatCountryCenterData(indicators) {
           minValue,
           longitude: coord[0],
           latitude: coord[1],
-          tooltipText: `Country: ${indicator.geolocationTag}, Value: ${
-            indicator.value
-          }`,
+          country: indicator.geolocationTag,
         });
       } else
         countryCenteredData[existCountryIndex].value =
@@ -92,7 +104,7 @@ export function formatCountryCenterData(indicators) {
     }),
   );
 
-  countryCenteredData.map(indicator => {
+  countryCenteredData.forEach(indicator => {
     indicator.maxValue = maxValue;
     indicator.minValue = minValue;
   });
@@ -109,10 +121,11 @@ export function formatCountryParam(countryCodes, regionCountryCodes) {
   jointCountries = jointCountries.concat(countryCodes);
 
   regionCountryCodes.forEach(region => {
-    region.forEach(countryCode => {
-      if (jointCountries.indexOf(countryCode.iso2) === -1)
-        jointCountries.push(countryCode.iso2);
-    });
+    if (region !== 'select all')
+      region.forEach(countryCode => {
+        if (jointCountries.indexOf(countryCode.iso2) === -1)
+          jointCountries.push(countryCode.iso2);
+      });
   });
 
   return jointCountries;

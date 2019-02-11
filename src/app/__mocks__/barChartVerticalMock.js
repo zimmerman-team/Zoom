@@ -1,26 +1,26 @@
-import { chartColorTwo, chartColorThree } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 
 export const IATIDetailBarChartMockData = [
   {
     year: '2012',
     Budget: 17,
-    BudgetColor: chartColorTwo,
+    BudgetColor: theme.color.chartColorTwo,
     Spent: 169,
-    SpentColor: chartColorThree,
+    SpentColor: theme.color.chartColorThree,
   },
   {
     year: '2013',
     Budget: 125,
-    BudgetColor: chartColorTwo,
+    BudgetColor: theme.color.chartColorTwo,
     Spent: 163,
-    SpentColor: chartColorThree,
+    SpentColor: theme.color.chartColorThree,
   },
   {
     year: '2014',
     Budget: 135,
-    BudgetColor: chartColorTwo,
+    BudgetColor: theme.color.chartColorTwo,
     Spent: 131,
-    SpentColor: chartColorThree,
+    SpentColor: theme.color.chartColorThree,
   },
 ];
 
@@ -28,22 +28,22 @@ export const barChartMockData = [
   {
     indicator: 'AI',
     Kenya: 17,
-    CountryColor: chartColorTwo,
+    CountryColor: theme.color.chartColorTwo,
     Global: 169,
-    GlobalColor: chartColorThree,
+    GlobalColor: theme.color.chartColorThree,
   },
   {
     indicator: 'AL',
     Kenya: 125,
-    CountryColor: chartColorTwo,
+    CountryColor: theme.color.chartColorTwo,
     Global: 163,
-    GlobalColor: chartColorThree,
+    GlobalColor: theme.color.chartColorThree,
   },
   {
     indicator: 'AM',
     Kenya: 135,
-    CountryColor: chartColorTwo,
+    CountryColor: theme.color.chartColorTwo,
     Global: 131,
-    GlobalColor: chartColorThree,
+    GlobalColor: theme.color.chartColorThree,
   },
 ];

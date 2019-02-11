@@ -5,15 +5,14 @@ import PropTypes from 'prop-types';
 /* components */
 import { Box } from 'grommet';
 
-/* mock */
-import {
-  columns,
-  data,
-} from 'modules/datamapper/fragments/OverviewStep/OverviewStep.mock';
+/* consts */
+import { uploadInitialstate } from '__consts__/UploadMediatorConst';
+import { columns } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.const';
 
 /* styles */
 import { ModuleContainer } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
-import { SectionHeading, ZoomTable } from 'components/theme/ThemeSheet';
+import { SectionHeading } from 'components/sort/Headings';
+import ZoomTable from 'components/ZoomTable/ZoomTable';
 
 const propTypes = {
   data: PropTypes.arrayOf(
@@ -31,7 +30,7 @@ const propTypes = {
   ),
 };
 const defaultProps = {
-  data,
+  data: uploadInitialstate.overviewData,
 };
 
 const OverviewStep = props => {

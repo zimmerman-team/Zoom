@@ -9,7 +9,7 @@ import get from 'lodash/get';
 import * as syncActions from 'services/actions/sync';
 
 /* components */
-import { aidsFondsRed } from 'components/theme/ThemeSheet';
+import theme from 'theme/Theme';
 import IconSignIn from 'assets/icons/IconSignIn';
 import {
   ComponentBase,
@@ -104,7 +104,7 @@ export class LoginForm extends React.Component {
   render() {
     const textFieldTheme = {
       borderStyle: this.state.error ? 'solid' : 'none',
-      borderColor: this.state.error ? aidsFondsRed : 'none',
+      borderColor: this.state.error ? theme.color.aidsFondsRed : 'none',
     };
     let headerText = this.props.auth0Client.isAuthenticated()
       ? `Welcome ${get(this.props.auth0Client.getProfile(), 'nickname', '')}`
@@ -144,6 +144,7 @@ export class LoginForm extends React.Component {
 
                 <FormButton
                   type="submit"
+                  onClick={this.onSubmit}
                   disabled={
                     this.state.username === '' || this.state.password === ''
                   }

@@ -3,8 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-// import { iatiDetailMockData } from '__mocks__/iatiDetailMock';
-import { PageHeading, zoomGreyZero } from 'components/theme/ThemeSheet';
+
+import { PageHeading } from 'components/sort/Headings';
+import theme from 'theme/Theme';
 import {
   DetailList,
   DetailListItem,
@@ -62,7 +63,7 @@ class Header extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <ModuleFragment background={zoomGreyZero}>
+        <ModuleFragment background={theme.color.zoomGreyZero}>
           <DetailList>
             {get(this.props.data, 'timeline', []).map(item => (
               <DetailListItem key={item.id}>
@@ -75,7 +76,7 @@ class Header extends React.Component {
         <ModuleFragment>
           <PageHeading>{this.props.data.title}</PageHeading>
         </ModuleFragment>
-        <ModuleFragment background={zoomGreyZero}>
+        <ModuleFragment background={theme.color.zoomGreyZero}>
           <DetailList>
             {get(this.props.data, 'detail', []).map(item => (
               <DetailListItem key={item.info}>

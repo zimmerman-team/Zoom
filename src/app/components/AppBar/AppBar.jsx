@@ -3,15 +3,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'grommet';
 import { Menu } from 'grommet-icons';
-import { aidsFondsRed } from 'components/theme/ThemeSheet';
-// import {}
+import theme from 'theme/Theme';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 /* Components */
 import {
   AidsFondLogo,
   MenuButton,
   ComponentBase,
+  PaneButton,
+  PaneButtonText,
 } from 'components/AppBar/AppBar.styles';
+
+/* icons */
+import SvgIconPlus from 'assets/icons/IconPlus';
+import SvgIconCloseSmall from 'assets/icons/IconCloseSmaller';
+
+/* actions */
+import * as actions from 'services/actions/general';
 
 const propTypes = {
   toggleSideBar: PropTypes.func,
@@ -24,7 +34,47 @@ class AppBar extends React.Component {
   state = {
     auth: true,
     anchorEl: null,
+    paneButton: null,
   };
+
+  componentDidMount() {
+    this.loadPaneButton();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (
+      this.props.location.pathname !== prevProps.location.pathname ||
+      this.props.dataPaneOpen !== prevProps.dataPaneOpen
+    ) {
+      this.loadPaneButton();
+    }
+  }
+
+  loadPaneButton() {
+    let paneButton = '';
+    switch (this.props.location.pathname) {
+      case '/home':
+        paneButton = (
+          <PaneButton
+            onClick={() =>
+              this.props.dispatch(
+                actions.dataPaneToggleRequest(!this.props.dataPaneOpen),
+              )
+            }
+          >
+            {!this.props.dataPaneOpen ? <SvgIconPlus /> : <SvgIconCloseSmall />}
+            <PaneButtonText>
+              {!this.props.dataPaneOpen ? 'Geo map filters' : 'Close & save '}
+            </PaneButtonText>
+          </PaneButton>
+        );
+        break;
+      default:
+        break;
+    }
+
+    this.setState({ paneButton });
+  }
 
   render() {
     return (
@@ -37,7 +87,7 @@ class AppBar extends React.Component {
         <Box direction="row" justify="center">
           <MenuButton
             plain
-            icon={<Menu color={aidsFondsRed} />}
+            icon={<Menu color={theme.color.aidsFondsRed} />}
             onClick={this.props.toggleSideBar}
             data-cy="sidebar-toggle"
           />
@@ -49,6 +99,8 @@ class AppBar extends React.Component {
           />
         </Box>
 
+        {this.state.paneButton}
+
         <Box direction="row">{/*<div>button</div>*/}</Box>
       </ComponentBase>
     );
@@ -58,4 +110,10 @@ class AppBar extends React.Component {
 AppBar.propTypes = propTypes;
 AppBar.defaultProps = defaultProps;
 
-export default AppBar;
+const mapStateToProps = state => {
+  return {
+    dataPaneOpen: state.dataPaneOpen.open,
+  };
+};
+
+export default connect(mapStateToProps)(withRouter(AppBar));

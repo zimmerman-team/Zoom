@@ -1,17 +1,14 @@
 import styled from 'styled-components';
 import { Box } from 'grommet';
-import {
-  aidsFondsWhite,
-  ColumnHeader,
-  ZoomTable,
-  CellValue,
-  aidsFondsRed,
-  SectionHeading,
-} from 'components/theme/ThemeSheet';
+import { SectionHeading } from 'components/sort/Headings';
 import TextField from '@material-ui/core/TextField';
+import theme from 'theme/Theme';
+import ZoomTable from 'components/ZoomTable/ZoomTable';
+import ColumnHeader from 'components/ZoomTable/ColumnHeader';
+import CellValue from 'components/ZoomTable/CellValue';
 
 export const ModuleContainer = styled(Box)`
-  background-color: ${aidsFondsWhite};
+  background-color: ${theme.color.aidsFondsWhite};
   padding: 0px 1% 364px 1%;
 `;
 
@@ -65,7 +62,7 @@ export const CellTextField = styled(TextField)`
   width: 88%;
   height: 24px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  background-color: #ffffff;
+  background-color: ${theme.color.aidsFondsWhite};
   & fieldset {
     border: 0;
   }
@@ -76,9 +73,9 @@ export const CellTextField = styled(TextField)`
 `;
 
 export const CellButton = styled(CellValue)`
-  height: fit-content
+  height: fit-content;
   margin: auto 20px auto auto;
-  color: ${aidsFondsRed};
+  color: ${theme.color.aidsFondsRed};
   &:hover {
     cursor: pointer;
   }

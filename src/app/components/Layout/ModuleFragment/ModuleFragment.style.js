@@ -1,18 +1,12 @@
 import styled from 'styled-components';
-import {
-  aidsFondsRed,
-  aidsFondsWhite,
-  zoomFontFamOne,
-  zoomFontFamTwo,
-} from 'components/theme/ThemeSheet';
-
+import theme from 'theme/Theme';
 import { Box } from 'grommet';
 
 export const FragmentInfoButton = styled.div`
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background-color: ${aidsFondsRed};
+  background-color: ${theme.color.aidsFondsRed};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,8 +23,8 @@ export const FragmentInfoButton = styled.div`
     content: 'i';
     font-size: 13px;
     text-align: center;
-    color: ${aidsFondsWhite};
-    font-family: ${zoomFontFamOne};
+    color: ${theme.color.aidsFondsWhite};
+    font-family: ${theme.color.zoomFontFamOne};
     user-select: none;
   }
 `;
@@ -44,5 +38,5 @@ export const FragmentInfo = styled(Box)`
   padding: 20px;
   z-index: 2;
   border-radius: 2%;
-  font-family: ${zoomFontFamTwo};
+  font-family: ${theme.font.zoomFontFamTwo};
 `;

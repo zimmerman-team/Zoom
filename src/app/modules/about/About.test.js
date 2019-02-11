@@ -7,7 +7,7 @@ import { ModuleContainer, AboutTitle, Text, RedLink } from './About.styles';
 import {
   DescriptionParagraph,
   DescriptionParagraphBold,
-} from 'components/theme/ThemeSheet';
+} from 'components/sort/Paragraphs';
 import BarChartVertical from 'components/charts/barcharts/vertical/BarChartVertical';
 
 const wrapper = shallow(<About />);

@@ -3,6 +3,7 @@ import * as actions from 'services/actions/index';
 import * as mutationActions from 'services/actions/mutation';
 import * as api from 'services/index';
 import * as oipaActions from 'services/actions/oipa';
+import * as generalActions from 'services/actions/general';
 
 export function* uploadRequest(action) {
   try {
@@ -106,8 +107,13 @@ export function* countryExcerptRequest(action) {
   }
 }
 
+export function* dataPaneToggleRequest(action) {
+  yield put(generalActions.dataPaneToggleDone(action.open));
+}
+
 function* sagas() {
   yield [
+    takeLatest('DATA_PANE_TOGGLE_REQUEST', dataPaneToggleRequest),
     takeLatest('COUNTRY_ACTIVITIES_REQUEST', countryActivitiesRequest),
     takeLatest('UPLOAD_REQUEST', uploadRequest),
     takeLatest('VALIDATE_REQUEST', validateRequest),
@@ -115,7 +121,7 @@ function* sagas() {
     takeLatest('ERROR_CORRECTION_SAVE_REQUEST', errorCorrectionSaveRequest),
     takeLatest(
       'ERROR_CORRECTION_DELETE_ROW_REQUEST',
-      errorCorrectionDeleteRowRequest,
+      errorCorrectionDeleteRowRequest
     ),
     takeLatest('GET_FILE_ERRORS', getFileErrorsRequest),
     takeLatest('MANUAL_MAP_DATA_REQUEST', manualMapDataRequest),
@@ -123,7 +129,7 @@ function* sagas() {
     takeLatest('FILE_SOURCE_REQUEST', fileSourceRequest),
     takeLatest('FILE_REQUEST', fileRequest),
     takeLatest('ACTIVITY_DATA_REQUEST', activityDataRequest),
-    takeLatest('COUNTRY_EXCERPT_REQUEST', countryExcerptRequest),
+    takeLatest('COUNTRY_EXCERPT_REQUEST', countryExcerptRequest)
   ];
 }
 

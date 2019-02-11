@@ -1,13 +1,13 @@
 import {
   LegendLabel,
-  MarkerLegendItem,
-} from 'components/GeoMap/components/Legends/MarkerLegend.styles';
+  LegendItem,
+} from 'components/GeoMap/components/Legends/Legend.styles';
 import React from 'react';
 import LocationMarkerIcon from 'components/GeoMap/components/Markers/LocationMarker/LocationMarker.icon';
 
 const locationLegend = (legendName, index) =>
   legendName && (
-    <MarkerLegendItem key={`legend-${index}`}>
+    <LegendItem key={`legend-${index}`}>
       <LegendLabel>{legendName}</LegendLabel>
       <div>
         <LocationMarkerIcon
@@ -15,7 +15,7 @@ const locationLegend = (legendName, index) =>
           extraStyle={{ position: 'relative', top: '25px', left: '15px' }}
         />
       </div>
-    </MarkerLegendItem>
+    </LegendItem>
   );
 
 export default locationLegend;

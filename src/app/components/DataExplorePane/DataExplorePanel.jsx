@@ -79,8 +79,8 @@ const propTypes = {
   selectYear: PropTypes.func,
   selectInd1: PropTypes.func,
   selectInd2: PropTypes.func,
-  selectedSubInd1: PropTypes.string,
-  selectedSubInd2: PropTypes.string,
+  selectedSubInd1: PropTypes.arrayOf(PropTypes.string),
+  selectedSubInd2: PropTypes.arrayOf(PropTypes.string),
   selectSubInd1: PropTypes.func,
   selectSubInd2: PropTypes.func,
   resetAll: PropTypes.func,
@@ -100,8 +100,8 @@ const defaultProps = {
   selectRegion: null,
   selectInd1: null,
   selectInd2: null,
-  selectedSubInd1: undefined,
-  selectedSubInd2: undefined,
+  selectedSubInd1: [],
+  selectedSubInd2: [],
   selectSubInd1: null,
   selectSubInd2: null,
   resetAll: null,
@@ -156,6 +156,7 @@ class DataExplorePane extends React.Component {
             <FilterContainer>
               <DropDownCont>
                 <ZoomSelect
+                  selectAll
                   multiple
                   placeHolder={
                     'Select region (' + this.props.regions.length + ')'
@@ -168,6 +169,7 @@ class DataExplorePane extends React.Component {
               </DropDownCont>
               <DropDownCont>
                 <ZoomSelect
+                  selectAll
                   reset={() => this.props.selectCountry('reset')}
                   multiple
                   placeHolder={
@@ -182,16 +184,18 @@ class DataExplorePane extends React.Component {
           </AccordionSection>
           <AccordionSection header={this.renderHeader('Time period')}>
             <FilterContainer>
-              <YearSelector selectYear={this.props.selectYear} />
+              <YearSelector
+                selectYear={this.props.selectYear}
+                selectedYears={this.props.yearPeriod}
+              />
             </FilterContainer>
           </AccordionSection>
           <AccordionSection header={this.renderHeader('Indicators')}>
             <FilterContainer>
               <DropDownCont>
                 <ZoomSelect
-                  reset={() =>
-                    this.props.selectInd1({ value: { value: undefined } })
-                  }
+                  categorise
+                  reset={() => this.props.selectInd1({ value: undefined })}
                   placeHolder={
                     'Select indicator (' + this.props.indNames.length + ')'
                   }
@@ -202,9 +206,11 @@ class DataExplorePane extends React.Component {
               </DropDownCont>
               <DropDownCont>
                 <ZoomSelect
+                  categorise
                   placeHolder="Select sub indicator"
                   data={this.props.subIndicators1}
-                  valueSelected={this.props.selectedSubInd1}
+                  multiple
+                  arraySelected={this.props.selectedSubInd1}
                   selectVal={this.props.selectSubInd1}
                 />
               </DropDownCont>
@@ -212,9 +218,8 @@ class DataExplorePane extends React.Component {
             <FilterContainer>
               <DropDownCont>
                 <ZoomSelect
-                  reset={() =>
-                    this.props.selectInd2({ value: { value: undefined } })
-                  }
+                  categorise
+                  reset={() => this.props.selectInd2({ value: undefined })}
                   placeHolder={
                     'Select indicator (' + this.props.indNames.length + ')'
                   }
@@ -225,9 +230,11 @@ class DataExplorePane extends React.Component {
               </DropDownCont>
               <DropDownCont>
                 <ZoomSelect
+                  categorise
                   placeHolder="Select sub indicator"
                   data={this.props.subIndicators2}
-                  valueSelected={this.props.selectedSubInd2}
+                  multiple
+                  arraySelected={this.props.selectedSubInd2}
                   selectVal={this.props.selectSubInd2}
                 />
               </DropDownCont>

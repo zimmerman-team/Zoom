@@ -39,3 +39,10 @@ export const SearchBox = styled(TextInput)`
   // -moz-box-shadow: 0px 2px 4px 0px rgba(239, 239, 239, 0.5);
   // box-shadow: 0px 2px 4px 0px rgba(220, 220, 220, 0.5);
 `;
+
+export const ViewContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-top: 10px;
+`;

@@ -53,7 +53,7 @@ const TabContainer = ({ tabs, tabCounts, activeTab }) => (
         </Tab>
       ))}
     </CenterTabs>
-    <Tab theme={{ marginLeft: 'auto' }}>
+    <Tab theme={{ marginLeft: 'auto', paddingRight: 0 }}>
       <TabBadge>{tabCounts[tabs[tabs.length - 1].key]}</TabBadge>
       <TabText
         to={tabs[tabs.length - 1].route}

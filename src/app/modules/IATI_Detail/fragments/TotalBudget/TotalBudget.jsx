@@ -7,6 +7,7 @@ import BarChartVertical from 'components/charts/barcharts/vertical/BarChartVerti
 
 const Title = styled.span`
   width: 100%;
+  line-height: 40px;
   text-align: center;
 `;
 
@@ -17,14 +18,14 @@ const propTypes = {
       Budget: PropTypes.number,
       BudgetColor: PropTypes.string,
       Spent: PropTypes.number,
-      SpentColor: PropTypes.string,
-    }),
+      SpentColor: PropTypes.string
+    })
   ),
-  totalBudget: PropTypes.number,
+  totalBudget: PropTypes.number
 };
 const defaultProps = {
   data: [],
-  totalBudget: 0,
+  totalBudget: 0
 };
 
 const TotalBudget = props => (
@@ -38,8 +39,8 @@ const TotalBudget = props => (
           {},
           {
             minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          },
+            maximumFractionDigits: 2
+          }
         )}
       </Title>
     }

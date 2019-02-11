@@ -16,7 +16,7 @@ import {
   ModuleContainer,
   ManMapTable,
   ManMapTitle
-} from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.style';
+} from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.syles';
 import CellValue from 'components/ZoomTable/CellValue';
 
 /* mock */
@@ -71,8 +71,6 @@ class ManMappingStep extends React.Component {
               <CellValue>{val.zoomModel}</CellValue>
             ) : (
               <ZoomSelect
-                dropDownStyles={{ marginTop: 30 }}
-                search={false}
                 headerStyle={{ fontSize: 12, height: 'unset' }}
                 arrowMargins="auto 22px auto 4px"
                 placeHolder="-None-"

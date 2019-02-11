@@ -18,7 +18,7 @@ import {
   Stepz,
   StepzLabel,
   StyledStepper,
-  materialStyles,
+  materialStyles
 } from './Stepper.style';
 
 /* consts */
@@ -26,11 +26,11 @@ import { steps } from './Stepper.const';
 
 const propTypes = {
   data: PropTypes.object,
-  onlyButtons: PropTypes.bool,
+  onlyButtons: PropTypes.bool
 };
 const defaultProps = {
   data: undefined,
-  onlyButtons: false,
+  onlyButtons: false
 };
 
 class Stepperz extends React.Component {
@@ -46,7 +46,7 @@ class Stepperz extends React.Component {
           active: classes.connectorActive,
           completed: classes.connectorCompleted,
           disabled: classes.connectorDisabled,
-          line: classes.connectorLine,
+          line: classes.connectorLine
         }}
       />
     );
@@ -75,7 +75,7 @@ class Stepperz extends React.Component {
             <ZoomButton
               style={{
                 backgroundColor: !prevEnabled ? theme.color.zoomGreySix : '',
-                ...stepButStyle,
+                ...stepButStyle
               }}
               onClick={prevEnabled ? this.props.prevStep : undefined}
             >
@@ -86,7 +86,7 @@ class Stepperz extends React.Component {
             <ZoomButton
               style={{
                 backgroundColor: !nextEnabled ? theme.color.zoomGreySix : '',
-                ...stepButStyle,
+                ...stepButStyle
               }}
               onClick={nextEnabled ? this.props.nextStep : undefined}
             >

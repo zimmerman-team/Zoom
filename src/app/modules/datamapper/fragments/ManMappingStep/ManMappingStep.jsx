@@ -15,8 +15,8 @@ import {
   CellButton,
   ModuleContainer,
   ManMapTable,
-  ManMapTitle,
-} from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.syles';
+  ManMapTitle
+} from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.style';
 import CellValue from 'components/ZoomTable/CellValue';
 
 /* mock */
@@ -32,19 +32,19 @@ const propTypes = {
       lockedIn: PropTypes.bool,
       fileType: PropTypes.string,
       zoomModel: PropTypes.string,
-      label: PropTypes.string,
-    }),
+      label: PropTypes.string
+    })
   ),
   modelOptions: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
-      value: PropTypes.string,
-    }),
-  ),
+      value: PropTypes.string
+    })
+  )
 };
 const defaultProps = {
   data: uploadInitialstate.manMapData,
-  modelOptions: uploadInitialstate.modelOptions,
+  modelOptions: uploadInitialstate.modelOptions
 };
 
 class ManMappingStep extends React.Component {
@@ -60,7 +60,7 @@ class ManMappingStep extends React.Component {
             <CellValue>{val.fileType}</CellValue>
             <CellLine> </CellLine>
           </Cell>
-        ),
+        )
       },
       {
         property: 'zoomModel',
@@ -82,7 +82,7 @@ class ManMappingStep extends React.Component {
               />
             )}
           </Cell>
-        ),
+        )
       },
       {
         property: 'label',
@@ -102,12 +102,12 @@ class ManMappingStep extends React.Component {
               {val.lockedIn ? 'Edit' : 'Add'}
             </CellButton>
           </Cell>
-        ),
-      },
+        )
+      }
     ];
 
     this.state = {
-      data: props.data,
+      data: props.data
     };
   }
 

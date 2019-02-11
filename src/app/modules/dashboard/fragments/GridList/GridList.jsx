@@ -12,14 +12,14 @@ import {
   GridListItemTitle,
   GridListItemRow,
   GridListItemRowLabel,
-  GridListItemRowValue,
+  GridListItemRowValue
 } from './GridList.styles';
 
 const propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({})),
+  items: PropTypes.arrayOf(PropTypes.shape({}))
 };
 const defaultProps = {
-  items: [],
+  items: []
 };
 
 const GridList = ({ items }) => (

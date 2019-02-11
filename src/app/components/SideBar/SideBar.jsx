@@ -13,7 +13,7 @@ import {
   SideBarLayer,
   SidebarNavList,
   SidebarNavListContainer,
-  SidebarNavListItem,
+  SidebarNavListItem
 } from 'components/SideBar/SideBar.styles';
 import LoginForm from 'components/SideBar/comps/LoginForm/LoginForm';
 
@@ -21,15 +21,15 @@ import LoginForm from 'components/SideBar/comps/LoginForm/LoginForm';
 const propTypes = {
   // auth0Client: PropTypes.object,
   open: PropTypes.bool,
-  toggleSideBar: PropTypes.func,
+  toggleSideBar: PropTypes.func
 };
 const defaultProps = {
-  open: undefined,
+  open: undefined
 };
 
 class SideBar extends React.Component {
   state = {
-    open: this.props.open,
+    open: this.props.open
   };
 
   render() {

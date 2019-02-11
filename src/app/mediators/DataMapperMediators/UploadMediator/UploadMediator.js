@@ -25,14 +25,14 @@ import isEqual from 'lodash/isEqual';
 import {
   formatOverviewData,
   formatModelOptions,
-  formatManData,
+  formatManData
 } from './UploadMediator.util';
 
 const propTypes = {
   dataSource: PropTypes.shape({
     key: PropTypes.string,
     label: PropTypes.string,
-    value: PropTypes.string,
+    value: PropTypes.string
   }),
   environment: PropTypes.shape({}),
   data: PropTypes.shape({
@@ -46,34 +46,34 @@ const propTypes = {
         summary: PropTypes.arrayOf(
           PropTypes.shape({
             label: PropTypes.string,
-            value: PropTypes.any, // cause it can be number or string
-          }),
+            value: PropTypes.any // cause it can be number or string
+          })
         ),
         dataTypes: PropTypes.arrayOf(PropTypes.string),
-        blankCells: PropTypes.number,
-      }),
+        blankCells: PropTypes.number
+      })
     ),
     modelOptions: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string,
-      }),
+        value: PropTypes.string
+      })
     ),
     manMapData: PropTypes.arrayOf(
       PropTypes.shape({
         lockedIn: PropTypes.boolean,
         fileType: PropTypes.string,
         zoomModel: PropTypes.string,
-        label: PropTypes.string,
-      }),
-    ),
-  }),
+        label: PropTypes.string
+      })
+    )
+  })
 };
 
 const defaultProps = {
   environment: {},
   dataSource: step1InitialData.dataSource,
-  data: uploadInitialstate,
+  data: uploadInitialstate
 };
 
 // Note: even though survey data is is part of the files metada
@@ -124,7 +124,7 @@ class UploadMediator extends React.Component {
     if (response)
       this.setState(
         { sourceId: response.fileSource.entryId },
-        this.addMetaData,
+        this.addMetaData
       );
   }
 
@@ -137,7 +137,7 @@ class UploadMediator extends React.Component {
       this.props.environment,
       name,
       this.handleSourceCompleted,
-      this.handleSourceError,
+      this.handleSourceError
     );
   }
 
@@ -147,11 +147,11 @@ class UploadMediator extends React.Component {
       this.setState(
         {
           modelOptions: formatModelOptions(
-            JSON.parse(response.file.dataModelHeading.replace(/'/g, '"')),
+            JSON.parse(response.file.dataModelHeading.replace(/'/g, '"'))
           ),
-          fileId: response.file.entryId,
+          fileId: response.file.entryId
         },
-        this.fileValidation,
+        this.fileValidation
       );
     }
   }
@@ -203,7 +203,7 @@ class UploadMediator extends React.Component {
       location: '2',
       source: this.state.sourceId,
       tags: [],
-      file: this.state.url,
+      file: this.state.url
     };
 
     // but if the user has already uploaded a file
@@ -218,7 +218,7 @@ class UploadMediator extends React.Component {
       this.props.environment,
       variables,
       this.handleMetaDataCompleted,
-      this.handleMetaDataError,
+      this.handleMetaDataError
     );
   }
 
@@ -231,8 +231,8 @@ class UploadMediator extends React.Component {
         manMapData: formatManData(response.fileValidationResults.foundList),
         overviewData: formatOverviewData(
           response.fileValidationResults.summary,
-          response.fileValidationResults.foundList,
-        ),
+          response.fileValidationResults.foundList
+        )
       });
   }
 
@@ -245,7 +245,7 @@ class UploadMediator extends React.Component {
       this.props.environment,
       this.state.fileId,
       this.handleValidationCompleted,
-      this.handleValidationError,
+      this.handleValidationError
     );
   }
 
@@ -262,7 +262,7 @@ class UploadMediator extends React.Component {
     else
       this.setState(
         { sourceId: this.props.fileSources[0].value },
-        this.addMetaData,
+        this.addMetaData
       );
   }
 
@@ -294,7 +294,7 @@ UploadMediator.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
-    upload: state.upload,
+    upload: state.upload
   };
 };
 

@@ -1,6 +1,7 @@
 import theme from 'theme/Theme';
 import styled from 'styled-components';
 import { Checkmark, Close } from 'grommet-icons';
+import { Text } from 'grommet';
 export const fragmentContentWidth = '1024px';
 
 /* Buttons */

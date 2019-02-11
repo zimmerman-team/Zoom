@@ -144,7 +144,7 @@ export function formatLineChartData(indicatorData) {
         x: item.date,
         y: item.value
       });
-      ConstlineChartData[chartItemInd].data = itemData;
+      lineChartData[chartItemInd].data = itemData;
     } else {
       lineChartData.push({
         id: item.indicatorName,

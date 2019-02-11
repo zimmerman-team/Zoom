@@ -7,7 +7,7 @@ import { Box } from 'grommet';
 
 /* consts */
 import { uploadInitialstate } from '__consts__/UploadMediatorConst';
-import { columns } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.const';
+import Const from 'modules/datamapper/fragments/OverviewStep/OverviewStep.const';
 
 /* styles */
 import { ModuleContainer } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
@@ -21,16 +21,16 @@ const propTypes = {
       summary: PropTypes.arrayOf(
         PropTypes.shape({
           label: PropTypes.string,
-          value: PropTypes.any, // cause it can be number or string
-        }),
+          value: PropTypes.any // cause it can be number or string
+        })
       ),
       dataTypes: PropTypes.arrayOf(PropTypes.string),
-      blankCells: PropTypes.number,
-    }),
-  ),
+      blankCells: PropTypes.number
+    })
+  )
 };
 const defaultProps = {
-  data: uploadInitialstate.overviewData,
+  data: uploadInitialstate.overviewData
 };
 
 const OverviewStep = props => {
@@ -38,7 +38,7 @@ const OverviewStep = props => {
     <ModuleContainer>
       <SectionHeading>Overview</SectionHeading>
       <Box>
-        <ZoomTable columns={columns} data={props.data} />
+        <ZoomTable columns={Const.columns} data={props.data} />
       </Box>
     </ModuleContainer>
   );
@@ -47,4 +47,4 @@ const OverviewStep = props => {
 OverviewStep.propTypes = propTypes;
 OverviewStep.defaultProps = defaultProps;
 
-export default OverviewStep;
+export default Const;

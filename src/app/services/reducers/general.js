@@ -2,7 +2,7 @@ import update from 'immutability-helper';
 import * as actions from 'services/actions/general';
 
 const initial = {
-  open: false,
+  open: false
 };
 
 function dataPaneOpen(state = initial, action) {
@@ -17,7 +17,7 @@ function dataPaneOpen(state = initial, action) {
 }
 
 const reducers = {
-  dataPaneOpen,
+  dataPaneOpen
 };
 
 export default reducers;

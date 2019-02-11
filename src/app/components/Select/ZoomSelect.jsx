@@ -7,6 +7,8 @@ import SelectHeader from 'components/Select/components/SelectHeader/SelectHeader
 import { Tooltip } from 'react-tippy';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import DropDownCheckbox from 'components/DropDownCheckBox/DropDownCheckbox';
+import SearchField from 'components/Select/components/SearchField/SearchField';
+
 /* icons */
 import ResetIconSmall from 'assets/icons/ResetIconSmall';
 
@@ -23,22 +25,27 @@ import {
   SelectAll,
   OptionsContainer,
   CategoryItem,
+  ItemContainer,
+  InfoLabel,
+  EmptyOptions
 } from 'components/Select/ZoomSelect.styles';
 
 const propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.string,
-    }),
+      label: PropTypes.string
+    })
   ),
   placeHolder: PropTypes.string,
   reset: PropTypes.func,
   categorise: PropTypes.bool,
+  search: PropTypes.bool
 };
 const defaultProps = {
   categorise: false,
   placeHolder: 'Has no indicators',
   reset: undefined,
+  search: true
 };
 
 class ZoomSelect extends React.Component {
@@ -49,6 +56,7 @@ class ZoomSelect extends React.Component {
       allSelected: false,
       open: false,
       options: props.data,
+      searchWord: ''
     };
 
     this.renderDropDownItem = this.renderDropDownItem.bind(this);
@@ -207,15 +215,50 @@ class ZoomSelect extends React.Component {
         />
         {this.state.open && (
           <DropDownContainer ref={this.setWrapperRef}>
-            {this.props.selectAll && this.props.multiple && (
-              <SelectAll onClick={() => this.selectAllClick()}>
-                <DropDownCheckbox checked={this.state.allSelected} />
-                <DropDownLabel>Select / Deselect all</DropDownLabel>
-              </SelectAll>
+            {this.state.options.length > 0 ? (
+              <div>
+                {this.props.multiple && (
+                  <ItemContainer>
+                    <InfoLabel>
+                      {this.props.arraySelected.length} of{' '}
+                      {this.props.data.length} selected
+                    </InfoLabel>
+                  </ItemContainer>
+                )}
+                {this.props.search && (
+                  <ItemContainer>
+                    <SearchField
+                      value={this.state.searchWord}
+                      onChange={e =>
+                        this.setState({ searchWord: e.target.value })
+                      }
+                    />
+                  </ItemContainer>
+                )}
+                {this.props.selectAll && this.props.multiple && (
+                  <SelectAll onClick={() => this.selectAllClick()}>
+                    <DropDownCheckbox checked={this.state.allSelected} />
+                    <DropDownLabel>Select / Deselect all</DropDownLabel>
+                  </SelectAll>
+                )}
+                <OptionsContainer>
+                  {this.state.options.map((option, index) => {
+                    if (
+                      this.state.searchWord.length > 0 &&
+                      (option.value === 'category' ||
+                        option.label
+                          .toLowerCase()
+                          .includes(this.state.searchWord.toLowerCase()))
+                    )
+                      return this.renderDropDownItem(option, index);
+                    else if (this.state.searchWord.length === 0)
+                      return this.renderDropDownItem(option, index);
+                  })}
+                </OptionsContainer>
+              </div>
+            ) : (
+              <EmptyOptions> No options </EmptyOptions>
             )}
-            <OptionsContainer>
-              {this.state.options.map(this.renderDropDownItem)}
-            </OptionsContainer>
           </DropDownContainer>
         )}
         {this.props.reset && (

@@ -8,6 +8,7 @@ export default {
     chartColorOne: '#f2c987',
     chartColorTwo: '#091799',
     chartColorThree: '#CDE9EE',
+    zoomYellow: '#f5a623',
     zoomGreyZero: '#efefef',
     zoomGreyOne: '#818181',
     zoomGreyTwo: '#505050',
@@ -20,16 +21,19 @@ export default {
     zoomBlack: '#000000',
     colHeadColor: '#9b9b9b',
     errorCellColor: '#ff807f',
-    smallTextBlack: '#4a4a4a',
+    smallTextBlack: '#4a4a4a'
   },
   space: {},
   height: {},
   font: {
     zoomFontFamOne: 'FFMarkProAF-Bold',
-    zoomFontFamTwo: 'FFMarkProAF-Book',
+    zoomFontFamTwo: 'FFMarkProAF-Book'
   },
   weight: {},
   shadow: {},
-  borderRadiu: {},
+  borderRadius: {},
   icon: {},
+  border: {
+    dashboardTab: '2px solid #0000ff'
+  }
 };

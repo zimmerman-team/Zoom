@@ -15,15 +15,12 @@ import {
   CellButton,
   ModuleContainer,
   ManMapTable,
-  ManMapTitle,
-} from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.syles';
+  ManMapTitle
+} from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.style';
 import CellValue from 'components/ZoomTable/CellValue';
 
 /* mock */
-import {
-  mockData,
-  mockOptions,
-} from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.mock';
+import { uploadInitialstate } from '__consts__/UploadMediatorConst';
 
 /* helpers */
 import isEqual from 'lodash/isEqual';
@@ -35,12 +32,19 @@ const propTypes = {
       lockedIn: PropTypes.bool,
       fileType: PropTypes.string,
       zoomModel: PropTypes.string,
-      label: PropTypes.string,
-    }),
+      label: PropTypes.string
+    })
   ),
+  modelOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string
+    })
+  )
 };
 const defaultProps = {
-  data: mockData,
+  data: uploadInitialstate.manMapData,
+  modelOptions: uploadInitialstate.modelOptions
 };
 
 class ManMappingStep extends React.Component {
@@ -56,7 +60,7 @@ class ManMappingStep extends React.Component {
             <CellValue>{val.fileType}</CellValue>
             <CellLine> </CellLine>
           </Cell>
-        ),
+        )
       },
       {
         property: 'zoomModel',
@@ -70,15 +74,15 @@ class ManMappingStep extends React.Component {
                 headerStyle={{ fontSize: 12, height: 'unset' }}
                 arrowMargins="auto 22px auto 4px"
                 placeHolder="-None-"
-                data={mockOptions}
+                data={this.props.modelOptions}
                 valueSelected={val.zoomModel}
                 selectVal={zoomModel =>
-                  this.selectDataType(zoomModel.option.value, val.fileType)
+                  this.selectDataType(zoomModel.value, val.fileType)
                 }
               />
             )}
           </Cell>
-        ),
+        )
       },
       {
         property: 'label',
@@ -98,12 +102,12 @@ class ManMappingStep extends React.Component {
               {val.lockedIn ? 'Edit' : 'Add'}
             </CellButton>
           </Cell>
-        ),
-      },
+        )
+      }
     ];
 
     this.state = {
-      data: props.data,
+      data: props.data
     };
   }
 

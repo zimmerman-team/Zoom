@@ -13,7 +13,7 @@ import {
   SectorListItem,
   Separator,
   TitleContainer,
-  Value,
+  Value
 } from 'components/Lists/ProjectList/ProjectList.styles';
 
 const projectData = [
@@ -25,10 +25,10 @@ const projectData = [
     budget: 19620,
     sectors: [
       {
-        name: 'Sectors 1',
-      },
-    ],
-  },
+        name: 'Sectors 1'
+      }
+    ]
+  }
 ];
 
 const wrapper = shallow(<ProjectList projectData={projectData} />);

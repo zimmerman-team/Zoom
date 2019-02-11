@@ -14,7 +14,7 @@ import {
   formatBarChartInfoIndicators,
   formatLineChartData,
   formatProjectData,
-  formatWikiExcerpts,
+  formatWikiExcerpts
 } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
 
 /* actions */
@@ -36,7 +36,7 @@ const propTypes = {
       exsectionformat: PropTypes.string,
       formatversion: PropTypes.number,
       titles: PropTypes.string,
-      format: PropTypes.string,
+      format: PropTypes.string
     }),
     request: PropTypes.bool,
     success: PropTypes.bool,
@@ -48,23 +48,23 @@ const propTypes = {
             pageid: PropTypes.number,
             ns: PropTypes.number,
             title: PropTypes.string,
-            extract: PropTypes.string,
-          }),
-        ),
-      }),
+            extract: PropTypes.string
+          })
+        )
+      })
     }),
     error: PropTypes.shape({
       status: PropTypes.string,
       statusText: PropTypes.string,
-      result: PropTypes.object,
-    }),
+      result: PropTypes.object
+    })
   }),
   countryActivities: PropTypes.shape({
     values: PropTypes.shape({
       recipient_country: PropTypes.string,
       page: PropTypes.number,
       page_size: PropTypes.number,
-      fields: PropTypes.string,
+      fields: PropTypes.string
     }),
     request: PropTypes.bool,
     success: PropTypes.bool,
@@ -72,41 +72,41 @@ const propTypes = {
       count: PropTypes.number,
       next: PropTypes.string,
       previous: PropTypes.string,
-      results: PropTypes.array,
+      results: PropTypes.array
     }),
     error: PropTypes.shape({
       status: PropTypes.string,
       statusText: PropTypes.string,
-      result: PropTypes.object,
-    }),
+      result: PropTypes.object
+    })
   }),
   indicatorAggregations: PropTypes.shape({
     country: PropTypes.arrayOf(
       PropTypes.shape({
         indicatorName: PropTypes.string,
         geolocationTag: PropTypes.string,
-        value: PropTypes.number,
-      }),
+        value: PropTypes.number
+      })
     ),
     global: PropTypes.arrayOf(
       PropTypes.shape({
         indicatorName: PropTypes.string,
-        value: PropTypes.number,
-      }),
+        value: PropTypes.number
+      })
     ),
     aidsEpidemic: PropTypes.arrayOf(
       PropTypes.shape({
         indicatorName: PropTypes.string,
         date: PropTypes.string,
-        value: PropTypes.number,
-      }),
-    ),
-  }),
+        value: PropTypes.number
+      })
+    )
+  })
 };
 const defaultProps = {
   excerpts: {},
   countryActivities: {},
-  indicatorAggregations: {},
+  indicatorAggregations: {}
 };
 
 class CountryDetailMediator extends React.Component {
@@ -121,7 +121,7 @@ class CountryDetailMediator extends React.Component {
       aidsEpIndicators: mock.aidsEpIndicators,
       aidsLineChartData: [],
       countryName: '',
-      infoBarData: [],
+      infoBarData: []
     };
   }
 
@@ -142,11 +142,11 @@ class CountryDetailMediator extends React.Component {
     if (
       !isEqual(
         this.props.countryActivities.data,
-        prevProps.countryActivities.data,
+        prevProps.countryActivities.data
       )
     ) {
       const projectData = formatProjectData(
-        get(this.props.countryActivities, 'data.results', []),
+        get(this.props.countryActivities, 'data.results', [])
       );
       this.setState({ projectData });
     }
@@ -160,7 +160,7 @@ class CountryDetailMediator extends React.Component {
     if (
       !isEqual(
         this.props.indicatorAggregations,
-        prevProps.indicatorAggregations,
+        prevProps.indicatorAggregations
       )
     ) {
       // Save the countries name that we retrieved
@@ -168,14 +168,14 @@ class CountryDetailMediator extends React.Component {
       const countryName = get(
         this.props.indicatorAggregations,
         'country[0].geolocationTag',
-        'CountryNotFound',
+        'CountryNotFound'
       );
       // Here we format the bar chart indicator data
       const infoBarData = formatBarChartInfoIndicators(
         this.props.indicatorAggregations.country,
         this.props.indicatorAggregations.global,
         this.state.barChartIndicators,
-        countryName,
+        countryName
       );
 
       // We dispatch wiki api here, cause this is the place where we get the country name
@@ -184,14 +184,14 @@ class CountryDetailMediator extends React.Component {
       this.props.dispatch(actions.countryExcerptRequest(this.state.wikiParams));
 
       const aidsLineChartData = formatLineChartData(
-        this.props.indicatorAggregations.aidsEpidemic,
+        this.props.indicatorAggregations.aidsEpidemic
       );
 
       this.setState({
         infoBarData,
         countryName,
         aidsLineChartData,
-        wikiParams,
+        wikiParams
       });
     }
   }
@@ -200,7 +200,7 @@ class CountryDetailMediator extends React.Component {
     this.props.relay.refetch({
       countryCode: [this.props.match.params.iso2.toLowerCase()],
       barChartIndicators: this.state.barChartIndicators,
-      aidsEpIndicators: this.state.aidsEpIndicators,
+      aidsEpIndicators: this.state.aidsEpIndicators
     });
   }
 
@@ -220,7 +220,7 @@ class CountryDetailMediator extends React.Component {
 const mapStateToProps = state => {
   return {
     excerpts: state.countryExcerpt,
-    countryActivities: state.countryActivities,
+    countryActivities: state.countryActivities
   };
 };
 
@@ -282,5 +282,5 @@ export default createRefetchContainer(
           aidsEpIndicators: $aidsEpIndicators
         )
     }
-  `,
+  `
 );

@@ -4,4 +4,6 @@ export const uploadInitialstate = {
   fileId: '',
   sourceId: '',
   overviewData: [],
+  modelOptions: [],
+  manMapData: []
 };

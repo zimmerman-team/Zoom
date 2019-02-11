@@ -88,3 +88,27 @@ export const CategoryItem = styled(DropDownItem)`
     background-color: inherit;
   }
 `;
+
+export const ItemContainer = styled.div`
+  display: flex;
+`;
+
+export const InfoLabel = styled.div`
+  color: ${theme.color.zoomYellow};
+  font-size: 14px;
+  font-family: ${theme.font.zoomFontFamOne};
+  line-height: 21px;
+  width: 88%;
+  margin: 8px auto 0 auto;
+`;
+
+export const EmptyOptions = styled(DropDownItem)`
+  color: ${theme.color.zoomGreyThree};
+  font-size: 14px;
+  font-family: ${theme.font.zoomFontFamTwo};
+
+  &:hover {
+    cursor: unset;
+    background-color: unset;
+  }
+`;

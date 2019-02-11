@@ -17,7 +17,7 @@ export function formatOverviewData(sumString, typesString, cellsString = '') {
     '25%': '25%',
     '50%': '50%',
     '75%': '75%',
-    max: 'Max value',
+    max: 'Max value'
   };
 
   const overviewData = [];
@@ -56,7 +56,7 @@ export function formatOverviewData(sumString, typesString, cellsString = '') {
 
       summary.push({
         label: properNames[summKey],
-        value: summValues[keyIndex],
+        value: summValues[keyIndex]
       });
     });
 
@@ -68,7 +68,7 @@ export function formatOverviewData(sumString, typesString, cellsString = '') {
       dataTypes: types[typeKey][1],
       // currently 0 until graphql is adjusted accordingly
       blankCells: 0,
-      summary,
+      summary
     });
   });
 
@@ -89,4 +89,50 @@ export function formatOverviewData(sumString, typesString, cellsString = '') {
   });
 
   return overviewData;
+}
+
+export function formatModelOptions(dataModelHeading) {
+  const modelOptions = [];
+
+  // We push in the default label none
+  modelOptions.push({
+    label: '-None-',
+    value: '-None-'
+  });
+  // So we push in the 'filter_headings' just like this
+  // cause the data formed is super weird...
+  modelOptions.push({
+    label: 'filter_headings',
+    value: 'filter_headings'
+  });
+
+  Object.keys(dataModelHeading.mapping_dict).map(key => {
+    // and now we push in the rest
+    modelOptions.push({
+      label: key,
+      value: key
+    });
+  });
+
+  return modelOptions;
+}
+
+export function formatManData(typesString) {
+  const manMapData = [];
+
+  // so yeah the types we retrieve from the overview step contains the actual column headers
+  // so we're gonna form the manual mapping data using that
+  const types = JSON.parse(JSON.parse(typesString));
+
+  // yet again this is super weird data so we form it in a weird way.
+  Object.keys(types).forEach(typeKey => {
+    manMapData.push({
+      lockedIn: false,
+      fileType: types[typeKey][0],
+      zoomModel: '-None-',
+      label: undefined
+    });
+  });
+
+  return manMapData;
 }

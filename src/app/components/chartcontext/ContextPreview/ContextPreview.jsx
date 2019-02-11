@@ -9,12 +9,7 @@ import theme from 'theme/Theme';
  * @param {Object} customProperty - please describe component property
  */
 
-const ComponentBase = styled.div`
-  outline: 1px solid ${theme.color.aidsFondsRed};
-
-  height: 300px;
-  width: 500px;
-`;
+const ComponentBase = styled.div``;
 
 const propTypes = {
   data: PropTypes.array,
@@ -23,15 +18,11 @@ const defaultProps = {
   data: [],
 };
 
-class TextEditor extends React.Component {
-  state = {};
+const ContextPreview = props => {
+  return <ComponentBase />;
+};
 
-  render() {
-    return <ComponentBase />;
-  }
-}
+ContextPreview.propTypes = propTypes;
+ContextPreview.defaultProps = defaultProps;
 
-TextEditor.propTypes = propTypes;
-TextEditor.defaultProps = defaultProps;
-
-export default TextEditor;
+export default ContextPreview;

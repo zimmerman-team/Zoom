@@ -2,7 +2,7 @@ import React from 'react';
 import {
   ToolTipContainer,
   ToolTipText,
-  ToolTipLabel,
+  ToolTipLabel
 } from 'components/GeoMap/components/ToolTips/ToolTip.style';
 
 // This component is specific for the react-map-gl, thus there's no story books

@@ -3,7 +3,7 @@ import { getMeasure } from 'components/GeoMap/components/Markers/CircleMarker/Ci
 import {
   ToolTipContainer,
   ToolTipLabel,
-  ToolTipText,
+  ToolTipText
 } from 'components/GeoMap/components/ToolTips/ToolTip.style';
 
 // So if the marker changes in size depending on its value we use
@@ -18,7 +18,7 @@ function getOffsetTop(hoverMarkerInfo) {
     const percentage = getMeasure(
       hoverMarkerInfo.value,
       hoverMarkerInfo.maxValue,
-      hoverMarkerInfo.minValue,
+      hoverMarkerInfo.minValue
     );
     offset = -percentage / 2;
   }

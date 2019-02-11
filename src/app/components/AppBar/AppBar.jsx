@@ -24,6 +24,9 @@ import SvgIconCloseSmall from 'assets/icons/IconCloseSmaller';
 import * as actions from 'services/actions/general';
 
 const propTypes = {
+  /**
+   Lorem ipsum dolor simet
+   */
   toggleSideBar: PropTypes.func,
 };
 const defaultProps = {

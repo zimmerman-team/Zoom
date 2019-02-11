@@ -14,7 +14,7 @@ import { generateLegends, generateMarkers } from './GeoMap.util';
 import {
   borderStyle,
   dataLayer,
-  defaultMapStyle,
+  defaultMapStyle
 } from './components/map-style';
 
 /* components */
@@ -28,7 +28,7 @@ import {
   LegendContainer,
   MapContainer,
   YearContainer,
-  ControlsContainer,
+  ControlsContainer
 } from './GeoMap.style';
 
 const MAPBOX_TOKEN =
@@ -47,12 +47,12 @@ class GeoMap extends Component {
         latitude: 15,
         longitude: 0,
         bearing: 0,
-        pitch: 0,
+        pitch: 0
       },
       hoverMarkerInfo: null,
       values: [12, 16],
       zoom: 2,
-      fullScreen: false,
+      fullScreen: false
     };
 
     this.setMarkerInfo = this.setMarkerInfo.bind(this);
@@ -94,14 +94,14 @@ class GeoMap extends Component {
         // Add geojson layer source to map
         .setIn(
           ['sources', 'layer'],
-          fromJS({ type: 'geojson', data: layers.data }),
+          fromJS({ type: 'geojson', data: layers.data })
         )
         // Add point layer to map
         .set('layers', mapStyle.get('layers').push(dataLayer))
         // Add geojson border source to map
         .setIn(
           ['sources', 'outline'],
-          fromJS({ type: 'geojson', data: borderData }),
+          fromJS({ type: 'geojson', data: borderData })
         );
       this.setState({ mapStyle });
     } else if (!isEqual(this.state.mapStyle, fromJS(defaultMapStyle))) {
@@ -133,11 +133,11 @@ class GeoMap extends Component {
     if (feature) {
       hoverLayerInfo = {
         lngLat: event.lngLat,
-        properties: feature.properties,
+        properties: feature.properties
       };
     }
     this.setState({
-      hoverLayerInfo,
+      hoverLayerInfo
     });
   };
 
@@ -149,7 +149,7 @@ class GeoMap extends Component {
 
   setMarkerInfo(indicator) {
     this.setState({
-      hoverMarkerInfo: indicator,
+      hoverMarkerInfo: indicator
     });
   }
 

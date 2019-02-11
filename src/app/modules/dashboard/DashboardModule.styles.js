@@ -46,3 +46,14 @@ export const ViewContainer = styled.div`
   width: 100%;
   padding-top: 10px;
 `;
+
+export const NoItems = styled.div`
+  display: flex;
+  font-size: 32px;
+  font-weight: 700;
+  padding-top: 105px;
+  text-align: center;
+  align-self: center;
+  color: ${Theme.color.zoomBlack};
+  font-family: ${Theme.font.zoomFontFamOne};
+`;

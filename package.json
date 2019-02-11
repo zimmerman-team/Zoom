@@ -59,6 +59,7 @@
     "slate-editor": "^5.1.0",
     "slate-html-serializer": "^0.7.34",
     "slate-react": "^0.21.16",
+    "storybook-react-router": "^1.0.2",
     "slate-schema-violations": "^0.1.39",
     "styled-components": "4.1.3",
     "styled-theming": "^2.2.0"

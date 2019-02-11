@@ -9,7 +9,8 @@ import {
   HeaderIcon,
   HeaderGreeting,
   SearchBox,
-  ViewContainer
+  ViewContainer,
+  NoItems
 } from 'modules/dashboard/DashboardModule.styles';
 import SvgIconUser from 'assets/icons/IconUser';
 import SvgIconSearch from 'assets/icons/IconSearch';
@@ -25,28 +26,34 @@ const propTypes = {
       value: PropTypes.string
     })
   ),
-  tabCounts: PropTypes.shape({}),
   sort: PropTypes.string,
   activeTab: PropTypes.string,
   changeSortBy: PropTypes.func,
   isSortByOpen: PropTypes.bool,
   setWrapperRef: PropTypes.func,
   greetingName: PropTypes.string,
-  setIsSortByOpen: PropTypes.func
+  setIsSortByOpen: PropTypes.func,
+  changeSearchKeyword: PropTypes.func,
+  users: PropTypes.arrayOf(PropTypes.shape({})),
+  teams: PropTypes.arrayOf(PropTypes.shape({}))
 };
 const defaultProps = {
   tabs: [],
-  tabCounts: [],
   sort: '',
   activeTab: '',
   greetingName: '',
   changeSortBy: null,
   setWrapperRef: null,
   isSortByOpen: false,
-  setIsSortByOpen: null
+  setIsSortByOpen: null,
+  changeSearchKeyword: null,
+  users: [],
+  teams: []
 };
 
 const getTabView = (
+  users,
+  teams,
   tabs,
   tab,
   isSortByOpen,
@@ -57,15 +64,16 @@ const getTabView = (
 ) => {
   switch (tab) {
     case tabs[0].key:
-      return null;
+      return <NoItems>No items in {tabs[0].label}</NoItems>;
     case tabs[1].key:
-      return null;
+      return <NoItems>No items in {tabs[1].label}</NoItems>;
     case tabs[2].key:
-      return null;
+      return <NoItems>No items in {tabs[2].label}</NoItems>;
     case tabs[3].key:
       return (
         <UsersTabView
           sort={sort}
+          users={users}
           changeSortBy={changeSortBy}
           isSortByOpen={isSortByOpen}
           setWrapperRef={setWrapperRef}
@@ -76,6 +84,7 @@ const getTabView = (
       return (
         <TeamsTabView
           sort={sort}
+          teams={teams}
           changeSortBy={changeSortBy}
           isSortByOpen={isSortByOpen}
           setWrapperRef={setWrapperRef}
@@ -83,22 +92,24 @@ const getTabView = (
         />
       );
     case tabs[5].key:
-      return null;
+      return <NoItems>No items in {tabs[5].label}</NoItems>;
     default:
-      return null;
+      return <NoItems>No items</NoItems>;
   }
 };
 
 const DashboardModule = ({
   tabs,
-  tabCounts,
+  sort,
+  users,
+  teams,
   activeTab,
   greetingName,
   isSortByOpen,
-  setIsSortByOpen,
+  changeSortBy,
   setWrapperRef,
-  sort,
-  changeSortBy
+  setIsSortByOpen,
+  changeSearchKeyword
 }) => (
   <ModuleContainer>
     <PageHeading>Zoom dashboard</PageHeading>
@@ -106,10 +117,23 @@ const DashboardModule = ({
       <SvgIconUser />
     </HeaderIcon>
     <HeaderGreeting>Welcome back {greetingName}</HeaderGreeting>
-    <SearchBox placeholder={<SvgIconSearch />} />
-    <TabContainer tabs={tabs} tabCounts={tabCounts} activeTab={activeTab} />
+    <SearchBox onChange={changeSearchKeyword} placeholder={<SvgIconSearch />} />
+    <TabContainer
+      tabs={tabs}
+      tabCounts={{
+        charts: 0,
+        'data-sets': 0,
+        'focus-pages': 0,
+        users: users.length,
+        teams: teams.length,
+        trash: 0
+      }}
+      activeTab={activeTab}
+    />
     <ViewContainer>
       {getTabView(
+        users,
+        teams,
         tabs,
         activeTab,
         isSortByOpen,

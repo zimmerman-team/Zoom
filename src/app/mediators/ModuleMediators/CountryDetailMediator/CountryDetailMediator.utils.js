@@ -19,7 +19,7 @@ export function formatProjectData(activities) {
 
     activity.sectors.forEach(sector => {
       sectors.push({
-        name: get(sector, 'sector.name', 'No sector name'),
+        name: get(sector, 'sector.name', 'No sector name')
       });
     });
 
@@ -53,13 +53,13 @@ export function formatProjectData(activities) {
       organisation: get(
         activity,
         'reporting_organisation.narratives[0].text',
-        'No reporting organisation title',
+        'No reporting organisation title'
       ),
       budget: get(
         activity,
         'aggregations.activity.budget_value',
-        'Not Specified',
-      ),
+        'Not Specified'
+      )
     });
   });
 
@@ -71,7 +71,7 @@ export function formatProjectData(activities) {
 */
 export function formatWikiExcerpts(excerpts) {
   let excerptSentences = split(
-    get(excerpts, 'data.query.pages[0].extract', ''),
+    get(excerpts, 'data.query.pages[0].extract', '')
   );
   excerptSentences = map(
     filter(excerptSentences, sentence => {
@@ -79,7 +79,7 @@ export function formatWikiExcerpts(excerpts) {
     }),
     sentence => {
       return sentence.raw;
-    },
+    }
   );
   const excerpt0 = excerptSentences.slice(0, 2).join(' ');
   const excerpt1 = excerptSentences.slice(2).join(' ');
@@ -92,7 +92,7 @@ export function formatBarChartInfoIndicators(
   countryData,
   globalData,
   indicatorNames,
-  countryName,
+  countryName
 ) {
   const barChartData = [];
 
@@ -116,7 +116,7 @@ export function formatBarChartInfoIndicators(
         [countryName]: countryIndValue,
         CountryColor: theme.color.chartColorTwo,
         Global: globalIndValue,
-        GlobalColor: theme.color.chartColorThree,
+        GlobalColor: theme.color.chartColorThree
       });
     }
   });
@@ -132,7 +132,7 @@ export function formatLineChartData(indicatorData) {
     'hsl(91, 70%, 50%)',
     'hsl(313, 70%, 50%)',
     'hsl(221, 70%, 50%)',
-    'hsl(48, 70%, 50%)',
+    'hsl(48, 70%, 50%)'
   ];
 
   let colorInd = 0;
@@ -142,9 +142,9 @@ export function formatLineChartData(indicatorData) {
       const itemData = lineChartData[chartItemInd].data;
       itemData.push({
         x: item.date,
-        y: item.value,
+        y: item.value
       });
-      lineChartData[chartItemInd].data = itemData;
+      ConstlineChartData[chartItemInd].data = itemData;
     } else {
       lineChartData.push({
         id: item.indicatorName,
@@ -155,9 +155,9 @@ export function formatLineChartData(indicatorData) {
         data: [
           {
             x: item.date,
-            y: item.value,
-          },
-        ],
+            y: item.value
+          }
+        ]
       });
       colorInd += 1;
     }

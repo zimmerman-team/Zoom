@@ -7,7 +7,7 @@ import { Box } from 'grommet';
 
 /* consts */
 import { uploadInitialstate } from '__consts__/UploadMediatorConst';
-import { columns } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.const';
+import Const from 'modules/datamapper/fragments/OverviewStep/OverviewStep.const';
 
 /* styles */
 import {
@@ -40,7 +40,7 @@ const OverviewStep = props => {
     <ModuleContainer>
       <SectionHeading>Overview</SectionHeading>
       <Box>
-        <OverviewTable columns={columns} data={props.data} />
+        <OverviewTable columns={Const.columns} data={props.data} />
       </Box>
     </ModuleContainer>
   );

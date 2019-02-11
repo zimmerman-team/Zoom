@@ -17,9 +17,19 @@ import IconDuplicate from 'assets/icons/toolpanel/IconDuplicate';
 import IconVisibility from 'assets/icons/toolpanel/IconVisibility';
 
 import Tab from './common/Tab';
+import TextEditor from 'components/editors/TextEditor/TextEditor';
+import ContextEditor from 'components/chartcontext/ContextEditor/ContextEditor';
+import styled from 'styled-components';
+
+const Box = styled.div`
+  display: flex;
+  flex-direction: column;
+  //align-content: flex-end;
+  justify-content: flex-end;
+  align-items: flex-end;
+`;
 
 /*TODO: refactor styling*/
-
 const styles = theme => ({
   tabRoot: {
     backgroundColor: themes.color.aidsFondsRed,
@@ -27,12 +37,12 @@ const styles = theme => ({
     opacity: 1,
     '&:hover': {
       backgroundColor: themes.color.aidsFondsBlue,
-      opacity: 1,
-    },
+      opacity: 1
+    }
   },
   tabSelected: {
-    backgroundColor: themes.color.aidsFondsBlue,
-  },
+    backgroundColor: themes.color.aidsFondsBlue
+  }
 });
 
 function TabContainer(props) {
@@ -40,12 +50,12 @@ function TabContainer(props) {
 }
 
 TabContainer.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 class ToolPanel extends React.Component {
   state = {
-    value: 0,
+    value: 0
   };
 
   handleChange = (event, value) => {
@@ -57,35 +67,37 @@ class ToolPanel extends React.Component {
     const { value } = this.state;
     return (
       <React.Fragment>
-        <Tabs
-          value={this.state.value}
-          onChange={this.handleChange}
-          classes={{
-            root: classes.tabsRoot,
-          }}
-        >
-          {/*<TabVariant icon={<IconFilter />} />*/}
-          <Tab icon={<IconFilter />} />
-          <Tab icon={<IconContext />} />
-          <Tab icon={<IconPreview />} />
-          <Tab icon={<IconDownload />} />
-          <Tab icon={<IconDuplicate />} />
-          <Tab icon={<IconVisibility />} />
-        </Tabs>
+        <Box>
+          <Tabs
+            value={this.state.value}
+            onChange={this.handleChange}
+            classes={{
+              root: classes.tabsRoot
+            }}
+          >
+            {/*<TabVariant icon={<IconFilter />} />*/}
+            <Tab icon={<IconFilter />} />
+            <Tab icon={<IconContext />} />
+            <Tab icon={<IconPreview />} />
+            <Tab icon={<IconDownload />} />
+            <Tab icon={<IconDuplicate />} />
+            <Tab icon={<IconVisibility />} />
+          </Tabs>
 
-        {value === 0 && <TabContainer>Item One</TabContainer>}
-        {value === 1 && <TabContainer>Item Two</TabContainer>}
-        {value === 2 && <TabContainer>Item Three</TabContainer>}
-        {value === 3 && <TabContainer>Item Four</TabContainer>}
-        {value === 4 && <TabContainer>Item Five</TabContainer>}
-        {value === 5 && <TabContainer>Item Six</TabContainer>}
+          {value === 0 && <TabContainer>Item One</TabContainer>}
+          {value === 1 && <ContextEditor />}
+          {value === 2 && <TabContainer>Item Three</TabContainer>}
+          {value === 3 && <TabContainer>Item Four</TabContainer>}
+          {value === 4 && <TabContainer>Item Five</TabContainer>}
+          {value === 5 && <TabContainer>Item Six</TabContainer>}
+        </Box>
       </React.Fragment>
     );
   }
 }
 
 ToolPanel.propTypes = {
-  classes: PropTypes.object,
+  classes: PropTypes.object
 };
 
 export default withStyles(styles)(ToolPanel);

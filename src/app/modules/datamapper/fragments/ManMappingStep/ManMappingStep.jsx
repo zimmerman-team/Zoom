@@ -16,7 +16,7 @@ import {
   ModuleContainer,
   ManMapTable,
   ManMapTitle
-} from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.syles';
+} from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.style';
 import CellValue from 'components/ZoomTable/CellValue';
 
 /* mock */

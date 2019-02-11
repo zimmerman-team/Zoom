@@ -11,7 +11,7 @@ import {
   FormButton,
   LoginHeaderLabel,
   InfoText,
-  Link,
+  Link
 } from './LoginForm.styles';
 import ForgetPassword from '../ForgetPassword/ForgetPassword';
 

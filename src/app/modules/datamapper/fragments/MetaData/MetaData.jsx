@@ -38,6 +38,9 @@ import {
 } from './MetaData.consts';
 
 const propTypes = {
+  /**
+   Label for the button.
+   */
   simpleChange: PropTypes.func,
   checkBoxChange: PropTypes.func,
   otherCheckBoxText: PropTypes.func,

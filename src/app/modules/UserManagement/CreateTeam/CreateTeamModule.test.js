@@ -7,7 +7,7 @@ import {
   SubmitButton,
   TableBox,
   TextField,
-  UsersTable,
+  UsersTable
 } from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
 import { Text } from 'grommet';
 import Pagination from 'components/Pagination/Pagination';

@@ -25,6 +25,8 @@ export const ButtonContainer = styled(Box)`
 export const Stepz = styled(Step)`
   & .MuiStepIcon-root-52 {
     color: ${theme.color.zoomGreyThree};
+    width: 21px;
+    height: 21px;
   }
 
   & .MuiStepIcon-active-54 {
@@ -40,6 +42,10 @@ export const StepzLabel = styled(StepLabel)`
   & span {
     font-size: 14px;
     font-family: ${theme.font.zoomFontFamOne} !important;
+  }
+
+  & .MuiTypography-root-66 {
+    margin-top: 12px !important;
   }
 
   & .MuiStepLabel-active-45 {
@@ -59,26 +65,26 @@ export const StyledStepper = styled(Stepper)`
 `;
 
 export const stepButStyle = {
-  width: '75px',
+  width: '75px'
 };
 
 export const materialStyles = uiTheme => ({
   connectorActive: {
     '& $connectorLine': {
-      border: `1px solid ${theme.color.aidsFondsBlue}`,
-    },
+      border: `1px solid ${theme.color.aidsFondsBlue}`
+    }
   },
   connectorCompleted: {
     '& $connectorLine': {
-      border: `1px solid ${theme.color.aidsFondsBlue}`,
-    },
+      border: `1px solid ${theme.color.aidsFondsBlue}`
+    }
   },
   connectorDisabled: {
     '& $connectorLine': {
-      border: `1px solid ${theme.color.zoomGreySeven}`,
-    },
+      border: `1px solid ${theme.color.zoomGreySeven}`
+    }
   },
   connectorLine: {
-    transition: uiTheme.transitions.create('border-color'),
-  },
+    transition: uiTheme.transitions.create('border-color')
+  }
 });

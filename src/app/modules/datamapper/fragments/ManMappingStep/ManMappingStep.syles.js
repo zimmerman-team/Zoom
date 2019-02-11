@@ -8,6 +8,7 @@ import ColumnHeader from 'components/ZoomTable/ColumnHeader';
 import CellValue from 'components/ZoomTable/CellValue';
 
 export const ModuleContainer = styled(Box)`
+  width: 100%;
   background-color: ${theme.color.aidsFondsWhite};
   padding: 0px 1% 364px 1%;
 `;
@@ -44,15 +45,14 @@ export const ManMapTable = styled(ZoomTable)`
   }
 
   & tbody {
-    & td {
+    & th {
       height: 45px;
       vertical-align: middle;
-      &:first-child {
-        width: 42%;
-      }
-      &:last-child {
-        width: 42%;
-      }
+    }
+
+    & td {
+      height: 45px;
+      vertical-align: middle !important;
     }
   }
 `;
@@ -74,7 +74,8 @@ export const CellTextField = styled(TextField)`
 
 export const CellButton = styled(CellValue)`
   height: fit-content;
-  margin: auto 20px auto auto;
+  margin: auto 0 auto auto;
+  padding: 0 20px;
   color: ${theme.color.aidsFondsRed};
   &:hover {
     cursor: pointer;

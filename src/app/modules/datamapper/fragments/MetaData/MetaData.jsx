@@ -22,7 +22,7 @@ import {
   SelectSurround,
   TwoFieldContainer,
   SelectContainer,
-  OrLabel,
+  OrLabel
 } from './MetaData.style';
 
 /* const data */
@@ -34,7 +34,7 @@ import {
   checkBoxOptions3,
   checkBoxOptions51,
   numberOptions,
-  dataSourceOptions,
+  dataSourceOptions
 } from './MetaData.consts';
 
 const propTypes = {
@@ -50,7 +50,7 @@ const propTypes = {
     dataSource: PropTypes.shape({
       key: PropTypes.string,
       label: PropTypes.string,
-      value: PropTypes.string,
+      value: PropTypes.string
     }),
     shared: PropTypes.Boolean,
     surveyData: PropTypes.Boolean,
@@ -58,28 +58,28 @@ const propTypes = {
     q2: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string,
-      }),
+        value: PropTypes.string
+      })
     ),
     q21: PropTypes.string,
     q22: PropTypes.string,
     q3: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string,
-      }),
+        value: PropTypes.string
+      })
     ),
     q4: PropTypes.shape({
       key: PropTypes.string,
       label: PropTypes.string,
-      value: PropTypes.string,
+      value: PropTypes.string
     }),
     q5: PropTypes.string,
     q51: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string,
-      }),
+        value: PropTypes.string
+      })
     ),
     sourceText: PropTypes.string,
     q3Text: PropTypes.string,
@@ -88,11 +88,11 @@ const propTypes = {
     fileSources: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string,
-      }),
+        value: PropTypes.string
+      })
     ),
-    environment: PropTypes.shape({}),
-  }),
+    environment: PropTypes.shape({})
+  })
 };
 const defaultProps = {
   data: step1InitialData,
@@ -100,7 +100,7 @@ const defaultProps = {
   checkBoxChange: undefined,
   otherCheckBoxText: undefined,
   dropDownChange: undefined,
-  otherDropdownText: undefined,
+  otherDropdownText: undefined
 };
 
 const MetaData = props => (
@@ -111,10 +111,10 @@ const MetaData = props => (
       <InputFieldLabel text="Title data set*" />
       <TextField
         placeholder={undefined}
-        InputProps={{
-          disableUnderline: false,
-        }}
         value={props.data.title}
+        InputProps={{
+          disableUnderline: false
+        }}
         onChange={e => props.simpleChange(e.target.value, 'title')}
       />
     </FieldContainer>
@@ -125,7 +125,7 @@ const MetaData = props => (
       <TextField
         placeholder={undefined}
         InputProps={{
-          disableUnderline: false,
+          disableUnderline: false
         }}
         value={props.data.desc}
         onChange={e => props.simpleChange(e.target.value, 'desc')}
@@ -148,7 +148,9 @@ const MetaData = props => (
         <InputFieldLabel text="Select data source*" />
         <SelectSurround>
           <ZoomSelect
-            placeHolder={'Connect to Zoom data source'}
+            search={false}
+            dropDownWidth={290}
+            placeHolder="Connect to Zoom data source"
             data={dataSourceOptions.concat(props.data.fileSources)}
             valueSelected={props.data.dataSource.label}
             selectVal={e =>
@@ -163,7 +165,7 @@ const MetaData = props => (
         <TextField
           placeholder={undefined}
           InputProps={{
-            disableUnderline: false,
+            disableUnderline: false
           }}
           value={props.data.sourceText}
           onChange={e =>
@@ -171,7 +173,7 @@ const MetaData = props => (
               e.target.value,
               'dataSource',
               'sourceText',
-              dataSourceOptions,
+              dataSourceOptions
             )
           }
         />
@@ -195,7 +197,7 @@ const MetaData = props => (
 
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
-      <InputFieldLabel text="Is this a servey data set?" />
+      <InputFieldLabel text="Is this a survey data set?" />
       <Box>
         <RadioButtonGroup
           direction="column"
@@ -257,6 +259,8 @@ const MetaData = props => (
       </Box>
     </FieldContainer>
 
+    <InputFieldDivider />
+
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
       <InputFieldLabel
@@ -273,6 +277,8 @@ const MetaData = props => (
       </Box>
     </FieldContainer>
 
+    <InputFieldDivider />
+
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
       <InputFieldLabel text="3. How did you select respondents?" />
@@ -285,7 +291,7 @@ const MetaData = props => (
       <TextField
         placeholder={undefined}
         InputProps={{
-          disableUnderline: false,
+          disableUnderline: false
         }}
         value={props.data.q3Text}
         onChange={e => props.otherCheckBoxText(e.target.value, 'q3', 'q3Text')}
@@ -300,7 +306,9 @@ const MetaData = props => (
         <InputFieldLabel text="4. How many respondents were interviewed/participated?" />
         <SelectSurround>
           <ZoomSelect
-            placeHolder={'Select or add number of respondents'}
+            dropDownWidth={290}
+            search={false}
+            placeHolder="Select or add number of respondents"
             data={numberOptions}
             valueSelected={props.data.q4.label}
             selectVal={e => props.dropDownChange(e.value, 'q4', 'q4Text')}
@@ -313,7 +321,7 @@ const MetaData = props => (
         <TextField
           placeholder={undefined}
           InputProps={{
-            disableUnderline: false,
+            disableUnderline: false
           }}
           value={props.data.q4Text}
           onChange={e =>
@@ -321,12 +329,14 @@ const MetaData = props => (
               e.target.value,
               'q4',
               'q4Text',
-              numberOptions,
+              numberOptions
             )
           }
         />
       </DataSourceTextCont>
     </TwoFieldContainer>
+
+    <InputFieldDivider />
 
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
@@ -353,7 +363,7 @@ const MetaData = props => (
       <TextField
         placeholder={undefined}
         InputProps={{
-          disableUnderline: false,
+          disableUnderline: false
         }}
         value={props.data.q51Text}
         onChange={e =>

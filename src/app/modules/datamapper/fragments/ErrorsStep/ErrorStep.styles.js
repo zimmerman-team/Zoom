@@ -8,6 +8,7 @@ import CellValue from 'components/ZoomTable/CellValue';
 import theme from 'theme/Theme';
 
 export const ModuleContainer = styled(Box)`
+  width: 100%;
   background-color: ${theme.color.aidsFondsWhite};
   padding: 0 1% 40px 1%;
 `;
@@ -22,11 +23,10 @@ export const HeaderCheckBox = styled.div`
 `;
 
 export const CheckBox = styled(HeaderCheckBox)`
-  margin: 7px auto 0 auto;
+  margin: 6px auto 6px auto;
 `;
 
 export const ErrorCell = styled(CellValue)`
-  padding-top: 6px;
   padding-left: 20px;
   padding-right: 8px;
 `;
@@ -37,7 +37,11 @@ export const ErrorColHeader = styled(ColumnHeader)`
 
 export const ErrorTable = styled(ZoomTable)`
   & tbody {
+    & th {
+      vertical-align: middle;
+    }
     & td {
+      vertical-align: middle !important;
       &:first-child {
         width: 52px;
         height: 44px;

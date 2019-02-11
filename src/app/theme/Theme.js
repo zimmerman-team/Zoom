@@ -18,22 +18,23 @@ export default {
     zoomGreySix: '#cecece',
     zoomGreySeven: '#cfcfcf',
     zoomGreyEight: '#d8d8d8',
+    zoomGreyNine: '#dcdcdc',
     zoomBlack: '#000000',
     colHeadColor: '#9b9b9b',
     errorCellColor: '#ff807f',
-    smallTextBlack: '#4a4a4a',
+    smallTextBlack: '#4a4a4a'
   },
   space: {},
   height: {},
   font: {
     zoomFontFamOne: 'FFMarkProAF-Bold',
-    zoomFontFamTwo: 'FFMarkProAF-Book',
+    zoomFontFamTwo: 'FFMarkProAF-Book'
   },
   weight: {},
   shadow: {},
   borderRadius: {},
   icon: {},
   border: {
-    dashboardTab: '2px solid #0000ff',
-  },
+    dashboardTab: '2px solid #0000ff'
+  }
 };

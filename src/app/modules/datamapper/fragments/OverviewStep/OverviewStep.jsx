@@ -10,9 +10,11 @@ import { uploadInitialstate } from '__consts__/UploadMediatorConst';
 import { columns } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.const';
 
 /* styles */
-import { ModuleContainer } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
+import {
+  ModuleContainer,
+  OverviewTable
+} from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
 import { SectionHeading } from 'components/sort/Headings';
-import ZoomTable from 'components/ZoomTable/ZoomTable';
 
 const propTypes = {
   data: PropTypes.arrayOf(
@@ -21,16 +23,16 @@ const propTypes = {
       summary: PropTypes.arrayOf(
         PropTypes.shape({
           label: PropTypes.string,
-          value: PropTypes.any, // cause it can be number or string
-        }),
+          value: PropTypes.any // cause it can be number or string
+        })
       ),
       dataTypes: PropTypes.arrayOf(PropTypes.string),
-      blankCells: PropTypes.number,
-    }),
-  ),
+      blankCells: PropTypes.number
+    })
+  )
 };
 const defaultProps = {
-  data: uploadInitialstate.overviewData,
+  data: uploadInitialstate.overviewData
 };
 
 const OverviewStep = props => {
@@ -38,7 +40,7 @@ const OverviewStep = props => {
     <ModuleContainer>
       <SectionHeading>Overview</SectionHeading>
       <Box>
-        <ZoomTable columns={columns} data={props.data} />
+        <OverviewTable columns={columns} data={props.data} />
       </Box>
     </ModuleContainer>
   );

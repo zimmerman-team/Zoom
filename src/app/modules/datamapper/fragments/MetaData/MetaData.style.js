@@ -3,11 +3,11 @@ import { Box, Text } from 'grommet';
 import theme from 'theme/Theme';
 
 export const FieldContainer = styled(Box)`
-  margin-bottom: 20px;
+  margin: 12px 0;
 `;
 
 export const ModuleContainer = styled(Box)`
-  width: 100%;
+  width: 1024px;
   margin: auto;
   padding-bottom: 12px;
 `;
@@ -17,7 +17,7 @@ export const SelectSurround = styled(Box)`
 `;
 
 export const SelectContainer = styled(Box)`
-  width: 32%;
+  width: 360px;
 `;
 
 export const DataSourceTextCont = styled(Box)`

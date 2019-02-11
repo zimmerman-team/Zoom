@@ -8,7 +8,7 @@ import {
   ModuleContainer,
   ModuleHeader,
   ModuleFooter,
-  ModuleContent,
+  ModuleContent
 } from './DataMapperModule.styles';
 
 /* fragments */
@@ -27,7 +27,7 @@ class DataMapperModule extends React.Component {
       step: 1,
       // So this will basically store the data required for each step
       stepData: [],
-      environment: null,
+      environment: null
     };
 
     this.nextStep = this.nextStep.bind(this);
@@ -121,7 +121,7 @@ class DataMapperModule extends React.Component {
           />
         </ModuleHeader>
 
-        <ModuleContent>{this.renderStep()}</ModuleContent>
+        {this.renderStep()}
 
         <ModuleFooter>
           <Stepper

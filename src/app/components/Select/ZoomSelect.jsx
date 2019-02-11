@@ -27,25 +27,29 @@ import {
   CategoryItem,
   ItemContainer,
   InfoLabel,
-  EmptyOptions,
+  EmptyOptions
 } from 'components/Select/ZoomSelect.styles';
 
 const propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.string,
-    }),
+      label: PropTypes.string
+    })
   ),
   placeHolder: PropTypes.string,
   reset: PropTypes.func,
   categorise: PropTypes.bool,
   search: PropTypes.bool,
+  dropDownWidth: PropTypes.number,
+  dropDownStyles: PropTypes.shape()
 };
 const defaultProps = {
   categorise: false,
   placeHolder: 'Has no indicators',
   reset: undefined,
   search: true,
+  dropDownWidth: undefined,
+  dropDownStyles: undefined
 };
 
 class ZoomSelect extends React.Component {
@@ -56,7 +60,7 @@ class ZoomSelect extends React.Component {
       allSelected: false,
       open: false,
       options: props.data,
-      searchWord: '',
+      searchWord: ''
     };
 
     this.renderDropDownItem = this.renderDropDownItem.bind(this);
@@ -183,6 +187,9 @@ class ZoomSelect extends React.Component {
       );
     return (
       <DropDownItem
+        style={{
+          width: this.props.dropDownWidth ? this.props.dropDownWidth : ''
+        }}
         key={`dropDownItem-${index}`}
         onClick={() => this.handleItemClick(item)}
       >
@@ -214,7 +221,10 @@ class ZoomSelect extends React.Component {
           }
         />
         {this.state.open && (
-          <DropDownContainer ref={this.setWrapperRef}>
+          <DropDownContainer
+            ref={this.setWrapperRef}
+            style={this.props.dropDownStyles}
+          >
             {this.state.options.length > 0 ? (
               <div>
                 {this.props.multiple && (

@@ -39,7 +39,6 @@ export const InputLabel = styled.label`
 `;
 
 export const FindReplaceButton = styled(ZoomButton)`
-  width: 98px;
   height: 30px;
   font-size: 14px;
   font-family: ${theme.font.zoomFontFamOne};
@@ -47,3 +46,18 @@ export const FindReplaceButton = styled(ZoomButton)`
   margin-top: auto;
   margin-left: 28px;
 `;
+
+export const ButtonLabel = styled.div`
+  font-size: 14px;
+  font-family: ${theme.font.zoomFontFamOne};
+  text-transform: capitalize;
+`;
+
+export const ButtonContainer = styled.div`
+  margin-top: auto;
+  margin-left: 28px;
+`;
+
+export const buttonStyle = {
+  width: 98
+};

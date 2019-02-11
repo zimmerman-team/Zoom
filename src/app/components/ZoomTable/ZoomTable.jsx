@@ -12,7 +12,7 @@ export default styled(props => (
 ))`
   && {
     & th {
-      border: 2px solid ${theme.color.zoomGreyFour};
+      border: 2px solid ${theme.color.zoomGreyNine};
       border-bottom: 0;
       &:first-child {
         border-left: 0;
@@ -34,13 +34,13 @@ export default styled(props => (
           }
         }
         &:last-child {
-          border-color: ${theme.color.zoomGreyFour};
+          border-color: ${theme.color.zoomGreyNine};
         }
       }
       & td {
         vertical-align: top;
-        border-left: 2px solid ${theme.color.zoomGreyFour};
-        border-right: 2px solid ${theme.color.zoomGreyFour};
+        border-left: 2px solid ${theme.color.zoomGreyNine};
+        border-right: 2px solid ${theme.color.zoomGreyNine};
         &:first-child {
           border-left: 0;
         }

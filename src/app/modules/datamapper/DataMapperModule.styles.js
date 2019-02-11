@@ -14,7 +14,8 @@ export const ModuleHeader = styled.div`
   justify-content: center;
   width: 100%;
   background-color: ${theme.color.zoomGreyZero};
-  padding-top: 20px;
+  padding-top: 10px;
+  padding-bottom: 20px;
 `;
 export const ModuleContent = styled.div`
   width: 1024px;
@@ -26,4 +27,6 @@ export const ModuleFooter = styled.div`
   background-color: ${theme.color.zoomGreyZero};
   justify-content: center;
   margin-top: auto;
+  padding-top: 20px;
+  padding-bottom: 12px;
 `;

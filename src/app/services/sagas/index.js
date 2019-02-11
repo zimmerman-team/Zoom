@@ -121,7 +121,7 @@ function* sagas() {
     takeLatest('ERROR_CORRECTION_SAVE_REQUEST', errorCorrectionSaveRequest),
     takeLatest(
       'ERROR_CORRECTION_DELETE_ROW_REQUEST',
-      errorCorrectionDeleteRowRequest,
+      errorCorrectionDeleteRowRequest
     ),
     takeLatest('GET_FILE_ERRORS', getFileErrorsRequest),
     takeLatest('MANUAL_MAP_DATA_REQUEST', manualMapDataRequest),
@@ -129,7 +129,7 @@ function* sagas() {
     takeLatest('FILE_SOURCE_REQUEST', fileSourceRequest),
     takeLatest('FILE_REQUEST', fileRequest),
     takeLatest('ACTIVITY_DATA_REQUEST', activityDataRequest),
-    takeLatest('COUNTRY_EXCERPT_REQUEST', countryExcerptRequest),
+    takeLatest('COUNTRY_EXCERPT_REQUEST', countryExcerptRequest)
   ];
 }
 

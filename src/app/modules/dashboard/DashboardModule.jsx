@@ -9,63 +9,97 @@ import {
   HeaderIcon,
   HeaderGreeting,
   SearchBox,
+  ViewContainer,
 } from 'modules/dashboard/DashboardModule.styles';
 import SvgIconUser from 'assets/icons/IconUser';
 import SvgIconSearch from 'assets/icons/IconSearch';
 import TabContainer from './fragments/TabContainer/TabContainer';
-
-const tabs = [
-  {
-    key: 'charts',
-    label: 'Charts',
-    route: '/dashboard/charts',
-  },
-  {
-    key: 'data-sets',
-    label: 'Data sets',
-    route: '/dashboard/data-sets',
-  },
-  {
-    key: 'focus-pages',
-    label: 'Focus pages',
-    route: '/dashboard/focus-pages',
-  },
-  {
-    key: 'users',
-    label: 'Users',
-    route: '/dashboard/users',
-  },
-  {
-    key: 'teams',
-    label: 'Teams',
-    route: '/dashboard/teams',
-  },
-  {
-    key: 'trash',
-    label: 'Trash',
-    route: '/dashboard/trash',
-  },
-];
-
-const tabCounts = {
-  charts: 1,
-  'data-sets': 1,
-  'focus-pages': 1,
-  users: 1,
-  teams: 1,
-  trash: 1,
-};
+import UsersTabView from './fragments/UsersTabView/UsersTabView';
+import TeamsTabView from './fragments/TeamsTabView/TeamsTabView';
 
 const propTypes = {
+  tabs: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.string,
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+  ),
+  tabCounts: PropTypes.shape({}),
+  sort: PropTypes.string,
   activeTab: PropTypes.string,
+  changeSortBy: PropTypes.func,
+  isSortByOpen: PropTypes.bool,
+  setWrapperRef: PropTypes.func,
   greetingName: PropTypes.string,
+  setIsSortByOpen: PropTypes.func,
 };
 const defaultProps = {
+  tabs: [],
+  tabCounts: [],
+  sort: '',
   activeTab: '',
   greetingName: '',
+  changeSortBy: null,
+  setWrapperRef: null,
+  isSortByOpen: false,
+  setIsSortByOpen: null,
 };
 
-const DashboardModule = ({ activeTab, greetingName }) => (
+const getTabView = (
+  tabs,
+  tab,
+  isSortByOpen,
+  setIsSortByOpen,
+  setWrapperRef,
+  sort,
+  changeSortBy,
+) => {
+  switch (tab) {
+    case tabs[0].key:
+      return null;
+    case tabs[1].key:
+      return null;
+    case tabs[2].key:
+      return null;
+    case tabs[3].key:
+      return (
+        <UsersTabView
+          sort={sort}
+          changeSortBy={changeSortBy}
+          isSortByOpen={isSortByOpen}
+          setWrapperRef={setWrapperRef}
+          setIsSortByOpen={setIsSortByOpen}
+        />
+      );
+    case tabs[4].key:
+      return (
+        <TeamsTabView
+          sort={sort}
+          changeSortBy={changeSortBy}
+          isSortByOpen={isSortByOpen}
+          setWrapperRef={setWrapperRef}
+          setIsSortByOpen={setIsSortByOpen}
+        />
+      );
+    case tabs[5].key:
+      return null;
+    default:
+      return null;
+  }
+};
+
+const DashboardModule = ({
+  tabs,
+  tabCounts,
+  activeTab,
+  greetingName,
+  isSortByOpen,
+  setIsSortByOpen,
+  setWrapperRef,
+  sort,
+  changeSortBy,
+}) => (
   <ModuleContainer>
     <PageHeading>Zoom dashboard</PageHeading>
     <HeaderIcon>
@@ -74,6 +108,17 @@ const DashboardModule = ({ activeTab, greetingName }) => (
     <HeaderGreeting>Welcome back {greetingName}</HeaderGreeting>
     <SearchBox placeholder={<SvgIconSearch />} />
     <TabContainer tabs={tabs} tabCounts={tabCounts} activeTab={activeTab} />
+    <ViewContainer>
+      {getTabView(
+        tabs,
+        activeTab,
+        isSortByOpen,
+        setIsSortByOpen,
+        setWrapperRef,
+        sort,
+        changeSortBy,
+      )}
+    </ViewContainer>
   </ModuleContainer>
 );
 

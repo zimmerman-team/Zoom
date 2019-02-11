@@ -105,13 +105,13 @@ class SideBar extends React.Component {
                     (this.props.auth0Client.isAuthenticated() &&
                       this.props.auth0Client.isAdministrator() && (
                         <SidebarNavListItem
-                          label="Add user"
-                          path="/add-user"
+                          label="Dashboard"
+                          path="/dashboard"
                           onClick={this.props.toggleSideBar}
                           icon={<IconCharts />}
                           type="button"
                           plain={true}
-                          data-cy="sidebar-add-user"
+                          data-cy="sidebar-dashboard"
                         />
                       ))}
 

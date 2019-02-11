@@ -43,7 +43,7 @@ const SortbyDialog = ({
   return (
     <React.Fragment>
       {open && (
-        <ComponentBase onClickOutside={closeDialog} ref={setWrapperRef}>
+        <ComponentBase onClick={closeDialog} ref={setWrapperRef}>
           {options.map(o => {
             const selected = selectedOptionValue === o.value;
             return (

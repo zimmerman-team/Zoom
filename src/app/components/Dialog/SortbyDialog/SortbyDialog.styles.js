@@ -2,12 +2,13 @@ import styled from 'styled-components';
 import theme from 'theme/Theme';
 
 export const ComponentBase = styled.div`
-  position: fixed;
+  position: absolute;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   border-radius: 0;
   background-color: ${theme.color.aidsFondsWhite};
   margin-top: 10px;
   padding: 10px 0;
+  z-index: 1;
 `;
 
 export const OptionRow = styled.div`

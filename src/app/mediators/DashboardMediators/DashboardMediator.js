@@ -7,71 +7,56 @@ import get from 'lodash/get';
 
 /* components */
 import DashboardModule from 'modules/dashboard/DashboardModule';
+import { formatUsersTabData, formatTeamsTabData } from 'utils/dashboardUtils';
 
 /* consts */
-const tabs = [
-  {
-    key: 'charts',
-    label: 'Charts',
-    route: '/dashboard/charts',
-  },
-  {
-    key: 'data-sets',
-    label: 'Data sets',
-    route: '/dashboard/data-sets',
-  },
-  {
-    key: 'focus-pages',
-    label: 'Focus pages',
-    route: '/dashboard/focus-pages',
-  },
-  {
-    key: 'users',
-    label: 'Users',
-    route: '/dashboard/users',
-  },
-  {
-    key: 'teams',
-    label: 'Teams',
-    route: '/dashboard/teams',
-  },
-  {
-    key: 'trash',
-    label: 'Trash',
-    route: '/dashboard/trash',
-  },
-];
-
-const tabCounts = {
-  charts: 0,
-  'data-sets': 0,
-  'focus-pages': 0,
-  users: 1,
-  teams: 1,
-  trash: 0,
-};
+import tabs from '__consts__/DashboardTabsConsts';
 
 class DashboardMediator extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      users: [],
+      teams: [],
       sort: 'name:1',
-      isSortByOpen: false,
+      searchKeyword: '',
+      isSortByOpen: false
     };
 
+    this.setUsers = this.setUsers.bind(this);
+    this.reloadData = this.reloadData.bind(this);
     this.changeSortBy = this.changeSortBy.bind(this);
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.setIsSortByOpen = this.setIsSortByOpen.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.changeSearchKeyword = this.changeSearchKeyword.bind(this);
   }
 
   componentDidMount() {
+    this.reloadData();
     document.addEventListener('mousedown', this.handleClickOutside);
   }
 
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  getAllUsers() {
+    this.props.auth0Client.getAllUsers(
+      this.setUsers,
+      this.state.page,
+      this.state.sort,
+      this.state.searchKeyword !== ''
+        ? ` AND name:${this.state.searchKeyword}*`
+        : ''
+    );
+  }
+
+  setUsers(data) {
+    this.setState({
+      users: formatUsersTabData(data)
+    });
   }
 
   setWrapperRef(node) {
@@ -80,12 +65,19 @@ class DashboardMediator extends React.Component {
 
   setIsSortByOpen() {
     this.setState(prevState => ({
-      isSortByOpen: !prevState.isSortByOpen,
+      isSortByOpen: !prevState.isSortByOpen
     }));
   }
 
   changeSortBy(e) {
-    this.setState({ sort: e.target.id });
+    this.setState(
+      {
+        sort: e.target.id
+      },
+      () => {
+        this.reloadData('sort');
+      }
+    );
   }
 
   handleClickOutside(event) {
@@ -94,17 +86,45 @@ class DashboardMediator extends React.Component {
     }
   }
 
+  changeSearchKeyword(e) {
+    this.setState(
+      {
+        searchKeyword: e.target.value
+      },
+      () => {
+        this.reloadData();
+      }
+    );
+  }
+
+  reloadData(typeOfChange) {
+    if (typeOfChange === 'sort' && this.props.match.params.tab === 'users') {
+      this.getAllUsers();
+    }
+    if (typeOfChange !== 'sort') {
+      this.getAllUsers();
+      this.props.auth0Client.getUserGroups(this, 'teams');
+    }
+  }
+
   render() {
     return (
       <DashboardModule
         tabs={tabs}
-        tabCounts={tabCounts}
         sort={this.state.sort}
+        users={this.state.users}
         changeSortBy={this.changeSortBy}
         setWrapperRef={this.setWrapperRef}
         setIsSortByOpen={this.setIsSortByOpen}
         isSortByOpen={this.state.isSortByOpen}
         activeTab={this.props.match.params.tab}
+        searchKeyword={this.state.searchKeyword}
+        changeSearchKeyword={this.changeSearchKeyword}
+        teams={formatTeamsTabData(
+          this.state.teams,
+          this.state.sort,
+          this.state.searchKeyword
+        )}
         greetingName={get(this.props.auth0Client.getProfile(), 'nickname', '')}
       />
     );

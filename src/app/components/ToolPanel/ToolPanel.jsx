@@ -17,19 +17,9 @@ import IconDuplicate from 'assets/icons/toolpanel/IconDuplicate';
 import IconVisibility from 'assets/icons/toolpanel/IconVisibility';
 
 import Tab from './common/Tab';
-import TextEditor from 'components/editors/TextEditor/TextEditor';
-import ContextEditor from 'components/chartcontext/ContextEditor/ContextEditor';
-import styled from 'styled-components';
-
-const Box = styled.div`
-  display: flex;
-  flex-direction: column;
-  //align-content: flex-end;
-  justify-content: flex-end;
-  align-items: flex-end;
-`;
 
 /*TODO: refactor styling*/
+
 const styles = theme => ({
   tabRoot: {
     backgroundColor: themes.color.aidsFondsRed,
@@ -67,30 +57,28 @@ class ToolPanel extends React.Component {
     const { value } = this.state;
     return (
       <React.Fragment>
-        <Box>
-          <Tabs
-            value={this.state.value}
-            onChange={this.handleChange}
-            classes={{
-              root: classes.tabsRoot
-            }}
-          >
-            {/*<TabVariant icon={<IconFilter />} />*/}
-            <Tab icon={<IconFilter />} />
-            <Tab icon={<IconContext />} />
-            <Tab icon={<IconPreview />} />
-            <Tab icon={<IconDownload />} />
-            <Tab icon={<IconDuplicate />} />
-            <Tab icon={<IconVisibility />} />
-          </Tabs>
+        <Tabs
+          value={this.state.value}
+          onChange={this.handleChange}
+          classes={{
+            root: classes.tabsRoot
+          }}
+        >
+          {/*<TabVariant icon={<IconFilter />} />*/}
+          <Tab icon={<IconFilter />} />
+          <Tab icon={<IconContext />} />
+          <Tab icon={<IconPreview />} />
+          <Tab icon={<IconDownload />} />
+          <Tab icon={<IconDuplicate />} />
+          <Tab icon={<IconVisibility />} />
+        </Tabs>
 
-          {value === 0 && <TabContainer>Item One</TabContainer>}
-          {value === 1 && <ContextEditor />}
-          {value === 2 && <TabContainer>Item Three</TabContainer>}
-          {value === 3 && <TabContainer>Item Four</TabContainer>}
-          {value === 4 && <TabContainer>Item Five</TabContainer>}
-          {value === 5 && <TabContainer>Item Six</TabContainer>}
-        </Box>
+        {value === 0 && <TabContainer>Item One</TabContainer>}
+        {value === 1 && <TabContainer>Item Two</TabContainer>}
+        {value === 2 && <TabContainer>Item Three</TabContainer>}
+        {value === 3 && <TabContainer>Item Four</TabContainer>}
+        {value === 4 && <TabContainer>Item Five</TabContainer>}
+        {value === 5 && <TabContainer>Item Six</TabContainer>}
       </React.Fragment>
     );
   }

@@ -7,7 +7,7 @@ import { Element } from 'react-scroll/modules';
 import { SimpleText } from 'components/sort/Misc';
 import {
   PageIntroInitial,
-  PageIntroSecondary,
+  PageIntroSecondary
 } from 'components/sort/Paragraphs';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { CountryName } from 'modules/countrydetail/fragments/CountryInfo/CountryInfo.styles';
@@ -23,15 +23,15 @@ const propTypes = {
       CountryColor: PropTypes.string,
       Global: PropTypes.number,
       GlobalColor: PropTypes.string,
-      indicator: PropTypes.string,
-    }),
+      indicator: PropTypes.string
+    })
   ),
-  countryName: PropTypes.string,
+  countryName: PropTypes.string
 };
 const defaultProps = {
   excerpts: [],
   infoBarData: [],
-  countryName: countryDetailMockData.country,
+  countryName: countryDetailMockData.country
 };
 
 const CountryInfo = props => {

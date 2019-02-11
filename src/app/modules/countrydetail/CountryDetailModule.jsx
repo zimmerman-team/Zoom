@@ -28,12 +28,12 @@ const propTypes = {
       organisation: PropTypes.string,
       sectors: PropTypes.arrayOf(
         PropTypes.shape({
-          name: PropTypes.string,
-        }),
+          name: PropTypes.string
+        })
       ),
       startDate: PropTypes.string,
-      title: PropTypes.string,
-    }),
+      title: PropTypes.string
+    })
   ),
   countryName: PropTypes.string,
   infoBarData: PropTypes.arrayOf(
@@ -41,8 +41,8 @@ const propTypes = {
       CountryColor: PropTypes.string,
       Global: PropTypes.number,
       GlobalColor: PropTypes.string,
-      indicator: PropTypes.string,
-    }),
+      indicator: PropTypes.string
+    })
   ),
   aidsLineChartData: PropTypes.arrayOf(
     PropTypes.shape({
@@ -50,12 +50,12 @@ const propTypes = {
       data: PropTypes.arrayOf(
         PropTypes.shape({
           x: PropTypes.string,
-          y: PropTypes.number,
-        }),
+          y: PropTypes.number
+        })
       ),
-      id: PropTypes.string,
-    }),
-  ),
+      id: PropTypes.string
+    })
+  )
 };
 const defaultProps = {
   // data: undefined,
@@ -63,7 +63,7 @@ const defaultProps = {
   projectData: [],
   countryName: '',
   infoBarData: [],
-  aidsLineChartData: [],
+  aidsLineChartData: []
 };
 
 class CountryDetailModule extends React.Component {

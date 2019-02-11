@@ -16,7 +16,7 @@ function loadStories() {
 }
 
 setConsoleOptions({
-  panelExclude: [],
+  panelExclude: []
 });
 
 addDecorator((storyFn, context) => withConsole()(storyFn)(context));
@@ -40,8 +40,8 @@ addDecorator(
     hierarchyRootSeparator: /\|/,
     sidebarAnimations: false,
     selectedAddonPanel: undefined,
-    enableShortcuts: false,
-  }),
+    enableShortcuts: false
+  })
 );
 
 // config.js

@@ -53,8 +53,6 @@ class Stepperz extends React.Component {
 
     const activeStep = this.props.step - 1;
 
-    console.log('STEPS', steps);
-
     return (
       <ComponentBase>
         {!this.props.onlyButtons && (

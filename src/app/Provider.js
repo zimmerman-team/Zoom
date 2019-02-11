@@ -21,9 +21,9 @@ const store = createStore(
   combineReducers({
     ...reducers,
     ...mutationReducers,
-    ...syncReducers,
+    ...syncReducers
   }),
-  composeEnhancers(applyMiddleware(sagaMiddleware, routerMiddleware(history))),
+  composeEnhancers(applyMiddleware(sagaMiddleware, routerMiddleware(history)))
 );
 
 sagaMiddleware.run(sagas);

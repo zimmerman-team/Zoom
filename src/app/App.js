@@ -14,19 +14,19 @@ import { ZoomTheme } from 'styles/ZoomTheme';
 
 const modernEnvironment = new Environment({
   network: Network.create(fetchQuery),
-  store: new Store(new RecordSource()),
+  store: new Store(new RecordSource())
 });
 
 function fetchQuery(operation, variables) {
   return fetch(`${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       query: operation.text,
-      variables,
-    }),
+      variables
+    })
   }).then(response => {
     return response.json();
   });
@@ -35,7 +35,7 @@ function fetchQuery(operation, variables) {
 class App extends React.Component {
   state = {
     showSidebar: false,
-    checkingSession: true,
+    checkingSession: true
   };
 
   componentDidMount() {

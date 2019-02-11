@@ -25,6 +25,8 @@ export const ButtonContainer = styled(Box)`
 export const Stepz = styled(Step)`
   & .MuiStepIcon-root-52 {
     color: ${theme.color.zoomGreyThree};
+    width: 21px;
+    height: 21px;
   }
 
   & .MuiStepIcon-active-54 {
@@ -40,6 +42,10 @@ export const StepzLabel = styled(StepLabel)`
   & span {
     font-size: 14px;
     font-family: ${theme.font.zoomFontFamOne} !important;
+  }
+
+  & .MuiTypography-root-66 {
+    margin-top: 12px !important;
   }
 
   & .MuiStepLabel-active-45 {

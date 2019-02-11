@@ -121,7 +121,7 @@ class DataMapperModule extends React.Component {
           />
         </ModuleHeader>
 
-        <ModuleContent>{this.renderStep()}</ModuleContent>
+        {this.renderStep()}
 
         <ModuleFooter>
           <Stepper

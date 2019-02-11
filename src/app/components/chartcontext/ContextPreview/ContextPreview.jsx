@@ -12,10 +12,10 @@ import theme from 'theme/Theme';
 const ComponentBase = styled.div``;
 
 const propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.array
 };
 const defaultProps = {
-  data: [],
+  data: []
 };
 
 const ContextPreview = props => {

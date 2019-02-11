@@ -37,12 +37,12 @@ const styles = theme => ({
     opacity: 1,
     '&:hover': {
       backgroundColor: themes.color.aidsFondsBlue,
-      opacity: 1,
-    },
+      opacity: 1
+    }
   },
   tabSelected: {
-    backgroundColor: themes.color.aidsFondsBlue,
-  },
+    backgroundColor: themes.color.aidsFondsBlue
+  }
 });
 
 function TabContainer(props) {
@@ -50,12 +50,12 @@ function TabContainer(props) {
 }
 
 TabContainer.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 class ToolPanel extends React.Component {
   state = {
-    value: 0,
+    value: 0
   };
 
   handleChange = (event, value) => {
@@ -72,7 +72,7 @@ class ToolPanel extends React.Component {
             value={this.state.value}
             onChange={this.handleChange}
             classes={{
-              root: classes.tabsRoot,
+              root: classes.tabsRoot
             }}
           >
             {/*<TabVariant icon={<IconFilter />} />*/}
@@ -97,7 +97,7 @@ class ToolPanel extends React.Component {
 }
 
 ToolPanel.propTypes = {
-  classes: PropTypes.object,
+  classes: PropTypes.object
 };
 
 export default withStyles(styles)(ToolPanel);

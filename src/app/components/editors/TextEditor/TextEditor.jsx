@@ -12,10 +12,10 @@ import theme from 'theme/Theme';
  */
 
 const propTypes = {
-  placeholder: PropTypes.string,
+  placeholder: PropTypes.string
 };
 const defaultProps = {
-  data: [],
+  data: []
 };
 
 class TextEditor extends React.Component {
@@ -69,7 +69,7 @@ TextEditor.formats = [
   'indent',
   'link',
   'image',
-  'video',
+  'video'
 ];
 
 TextEditor.modules = {
@@ -81,15 +81,15 @@ TextEditor.modules = {
       { list: 'ordered' },
       { list: 'bullet' },
       { indent: '-1' },
-      { indent: '+1' },
+      { indent: '+1' }
     ],
     ['link', 'image', 'video'],
-    ['clean'],
+    ['clean']
   ],
   clipboard: {
     // toggle to add extra line breaks when pasting HTML:
-    matchVisual: false,
-  },
+    matchVisual: false
+  }
 };
 
 export default TextEditor;

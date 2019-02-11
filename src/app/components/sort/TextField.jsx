@@ -2,8 +2,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import SvgIcon from '@material-ui/core/SvgIcon';
-import IconRadioUnchecked from 'assets/icons/IconRadioUnchecked';
 import TextField from '@material-ui/core/TextField';
 import NoSsr from '@material-ui/core/NoSsr';
 import theme from 'theme/Theme';
@@ -16,10 +14,10 @@ export default styled(props => (
       fullWidth
       margin="none"
       InputProps={{
-        disableUnderline: true,
+        disableUnderline: true
       }}
       InputLabelProps={{
-        disableAnimation: true,
+        disableAnimation: true
       }}
       {...props}
     />

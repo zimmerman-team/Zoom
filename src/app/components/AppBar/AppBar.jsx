@@ -13,7 +13,7 @@ import {
   MenuButton,
   ComponentBase,
   PaneButton,
-  PaneButtonText,
+  PaneButtonText
 } from 'components/AppBar/AppBar.styles';
 
 /* icons */
@@ -27,7 +27,7 @@ const propTypes = {
   /**
    Lorem ipsum dolor simet
    */
-  toggleSideBar: PropTypes.func,
+  toggleSideBar: PropTypes.func
 };
 const defaultProps = {
   // toggleSideBar: undefined,
@@ -37,7 +37,7 @@ class AppBar extends React.Component {
   state = {
     auth: true,
     anchorEl: null,
-    paneButton: null,
+    paneButton: null
   };
 
   componentDidMount() {
@@ -61,7 +61,7 @@ class AppBar extends React.Component {
           <PaneButton
             onClick={() =>
               this.props.dispatch(
-                actions.dataPaneToggleRequest(!this.props.dataPaneOpen),
+                actions.dataPaneToggleRequest(!this.props.dataPaneOpen)
               )
             }
           >
@@ -115,7 +115,7 @@ AppBar.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
-    dataPaneOpen: state.dataPaneOpen.open,
+    dataPaneOpen: state.dataPaneOpen.open
   };
 };
 

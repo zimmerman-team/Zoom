@@ -10,9 +10,11 @@ import { uploadInitialstate } from '__consts__/UploadMediatorConst';
 import Const from 'modules/datamapper/fragments/OverviewStep/OverviewStep.const';
 
 /* styles */
-import { ModuleContainer } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
+import {
+  ModuleContainer,
+  OverviewTable
+} from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
 import { SectionHeading } from 'components/sort/Headings';
-import ZoomTable from 'components/ZoomTable/ZoomTable';
 
 const propTypes = {
   data: PropTypes.arrayOf(
@@ -38,7 +40,7 @@ const OverviewStep = props => {
     <ModuleContainer>
       <SectionHeading>Overview</SectionHeading>
       <Box>
-        <ZoomTable columns={Const.columns} data={props.data} />
+        <OverviewTable columns={Const.columns} data={props.data} />
       </Box>
     </ModuleContainer>
   );
@@ -47,4 +49,4 @@ const OverviewStep = props => {
 OverviewStep.propTypes = propTypes;
 OverviewStep.defaultProps = defaultProps;
 
-export default Const;
+export default OverviewStep;

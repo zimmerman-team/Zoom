@@ -6,20 +6,23 @@ import {
   InputLabel,
   InputContainer,
   EmptyInput,
-  FindReplaceButton,
+  ButtonContainer,
+  buttonStyle,
+  ButtonLabel
 } from 'modules/datamapper/fragments/ErrorsStep/components/FindReplace/FindReplace.styles';
 import PropTypes from 'prop-types';
 import { data } from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep.mock';
 import ErrorStep from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep';
+import ZoomButton from 'components/ZoomButton/ZoomButton';
 
 const propTypes = {
   open: PropTypes.bool,
-  setWrapperRef: PropTypes.func,
+  setWrapperRef: PropTypes.func
 };
 
 const defaultProps = {
   open: false,
-  setWrapperRef: null,
+  setWrapperRef: null
 };
 
 class FindReplace extends React.Component {
@@ -38,12 +41,16 @@ class FindReplace extends React.Component {
                   />
                 </InputContainer>
               </InputLabelContainer>
-              <FindReplaceButton
-                plain
-                label="Find"
-                focusIndicator={false}
-                onClick={() => console.log('Find clicked')}
-              />
+              <ButtonContainer>
+                <ZoomButton
+                  style={buttonStyle}
+                  plain
+                  focusIndicator={false}
+                  onClick={() => console.log('Find clicked')}
+                >
+                  <ButtonLabel>Find</ButtonLabel>
+                </ZoomButton>
+              </ButtonContainer>
             </FieldContainer>
             <FieldContainer>
               <InputLabelContainer>
@@ -57,12 +64,16 @@ class FindReplace extends React.Component {
                   />
                 </InputContainer>
               </InputLabelContainer>
-              <FindReplaceButton
-                plain
-                label="Replace"
-                focusIndicator={false}
-                onClick={() => console.log('Replace clicked')}
-              />
+              <ButtonContainer>
+                <ZoomButton
+                  style={buttonStyle}
+                  plain
+                  focusIndicator={false}
+                  onClick={() => console.log('Replace clicked')}
+                >
+                  <ButtonLabel>Replace</ButtonLabel>
+                </ZoomButton>
+              </ButtonContainer>
             </FieldContainer>
           </ComponentBase>
         )}

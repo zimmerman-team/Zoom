@@ -52,12 +52,12 @@ const Details = styled.span`
 const propTypes = {
   title: PropTypes.string,
   author: PropTypes.string,
-  publishDate: PropTypes.string,
+  publishDate: PropTypes.string
 };
 const defaultProps = {
   title: 'Untitled chart 01',
   author: 'Jane Doe',
-  publishDate: 'January 12th 2019',
+  publishDate: 'January 12th 2019'
 };
 
 const ContextEditor = props => {

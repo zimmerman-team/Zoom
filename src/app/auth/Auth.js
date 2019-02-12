@@ -4,8 +4,8 @@ import auth0 from 'auth0-js';
 class Auth {
   constructor() {
     this.auth0 = new auth0.WebAuth({
-      domain: process.env.REACT_APP_AUTH_DOMAIN,
-      audience: process.env.REACT_APP_AUTH_AUDIENCE,
+      domain: process.env.REACT_APP_AUTH_CUSTOM_DOMAIN,
+      audience: `${process.env.REACT_APP_AUTH_DOMAIN}/userinfo`,
       clientID: process.env.REACT_APP_CLIENT_ID,
       redirectUri: `${process.env.REACT_APP_PROJECT_URL}/callback`,
       responseType: 'token id_token',
@@ -116,7 +116,7 @@ class Auth {
   getUserGroup(that = null) {
     if (this.profile) {
       axios
-        .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+        .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
           client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
           client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
           audience: 'urn:auth0-authz-api',
@@ -157,7 +157,7 @@ class Auth {
   getUserRole() {
     if (this.profile) {
       axios
-        .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+        .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
           client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
           client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
           audience: 'urn:auth0-authz-api',
@@ -194,16 +194,18 @@ class Auth {
 
   getAllUsers(stateAction = null, page = 0, sort, search) {
     axios
-      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
         client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
         client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-        audience: 'https://zimmermanzimmerman.eu.auth0.com/api/v2/',
+        audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
         grant_type: 'client_credentials'
       })
       .then(response => {
         axios
           .get(
-            `https://zimmermanzimmerman.eu.auth0.com/api/v2/users?include_totals=true&per_page=10&page=${page}&sort=${sort}&q=identities.connection:"Username-Password-Authentication"${search}&search_engine=v3`,
+            `${
+              process.env.REACT_APP_AUTH_DOMAIN
+            }/api/v2/users?include_totals=true&per_page=10&page=${page}&sort=${sort}&q=identities.connection:"Username-Password-Authentication"${search}&search_engine=v3`,
             {
               headers: {
                 Authorization: `${response.data.token_type} ${
@@ -228,7 +230,7 @@ class Auth {
 
   getUserGroups(that = null, stateVar = 'userGroups') {
     axios
-      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
         client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
         client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
         audience: 'urn:auth0-authz-api',
@@ -268,7 +270,7 @@ class Auth {
 
   getUserRoles(that = null) {
     axios
-      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
         client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
         client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
         audience: 'urn:auth0-authz-api',
@@ -308,7 +310,7 @@ class Auth {
 
   addUserToGroup(user_id, group_id, parent) {
     axios
-      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
         client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
         client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
         audience: 'urn:auth0-authz-api',
@@ -349,7 +351,7 @@ class Auth {
 
   assignRoleToUser(user_id, role_id) {
     axios
-      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
         client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
         client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
         audience: 'urn:auth0-authz-api',
@@ -391,16 +393,16 @@ class Auth {
   addUser(name, surname, email, group_id, role_id, parent) {
     const _this = this;
     axios
-      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
         client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
         client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-        audience: 'https://zimmermanzimmerman.eu.auth0.com/api/v2/',
+        audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
         grant_type: 'client_credentials'
       })
       .then(res1 => {
         axios
           .post(
-            'https://zimmermanzimmerman.eu.auth0.com/api/v2/users',
+            `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/users`,
             {
               email,
               blocked: false,
@@ -497,7 +499,7 @@ class Auth {
     let yyyy = today.getFullYear();
     today = `${dd}/${mm}/${yyyy}`;
     axios
-      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
         client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
         client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
         audience: 'urn:auth0-authz-api',

@@ -7,6 +7,10 @@ import { Box } from 'grommet';
 import FindReplace from 'modules/datamapper/fragments/ErrorsStep/components/FindReplace/FindReplace';
 import Pagination from 'components/Pagination/Pagination';
 
+/* utils */
+import { formatColumns } from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep.util';
+import isEqual from 'lodash/isEqual';
+
 /* styles */
 import {
   ErrorTitle,
@@ -14,14 +18,11 @@ import {
   ErrorTable,
   TabContainer,
   TabText,
-  TabDivider,
+  TabDivider
 } from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
-// import { Divider } from 'components/theme/ThemeSheet';
+
 import theme from 'theme/Theme';
 import Divider from 'components/Dividers/Divider';
-
-/* mock */
-import { columns, data, errorCells } from './ErrorsStep.mock';
 
 const propTypes = {
   data: PropTypes.arrayOf(
@@ -36,13 +37,20 @@ const propTypes = {
       timePeriod: PropTypes.number,
       source: PropTypes.string,
       dateValue: PropTypes.number,
-      footnotes: PropTypes.string,
-    }),
+      footnotes: PropTypes.string
+    })
   ),
+  errorCells: PropTypes.arrayOf(
+    PropTypes.shape({
+      row: PropTypes.number,
+      columnName: PropTypes.string
+    })
+  )
 };
 
 const defaultProps = {
-  data,
+  data: [],
+  errorCells: []
 };
 
 class ErrorStep extends React.Component {
@@ -53,6 +61,7 @@ class ErrorStep extends React.Component {
       tab: 'overview',
       dialogOpen: false,
       data: props.data,
+      columns: []
     };
 
     this.setWrapperRef = this.setWrapperRef.bind(this);
@@ -61,6 +70,14 @@ class ErrorStep extends React.Component {
 
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClickOutside);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!isEqual(this.props.data, prevProps.data))
+      this.setState({
+        data: this.props.data,
+        columns: formatColumns(this.props.data)
+      });
   }
 
   componentWillUnmount() {
@@ -78,10 +95,19 @@ class ErrorStep extends React.Component {
   }
 
   colorErrors() {
-    errorCells.forEach(cell => {
-      document.querySelector(
-        `tbody tr:nth-child(${cell.row}) td:nth-child(${cell.col})`,
-      ).style.backgroundColor = theme.color.errorCellColor;
+    this.props.errorCells.forEach(cell => {
+      if (cell.row < 10) {
+        // so we check the first data entry to get the
+        // column number according to the column name
+        // and this can work only with the first, cause everyt data
+        // entry has all the columns listed(at least should have)
+        const colIndex =
+          Object.keys(this.props.data[0]).indexOf(cell.columnName) + 1;
+        const rowIndex = cell.row + 1;
+        document.querySelector(
+          `tbody tr:nth-child(${rowIndex}) td:nth-child(${colIndex})`
+        ).style.backgroundColor = theme.color.errorCellColor;
+      }
     });
   }
 
@@ -104,6 +130,7 @@ class ErrorStep extends React.Component {
   }
 
   render() {
+    console.log(this.props.data);
     return (
       <ModuleContainer>
         <ErrorTitle>Check & correct erorrs</ErrorTitle>
@@ -113,7 +140,7 @@ class ErrorStep extends React.Component {
               color:
                 this.state.tab === 'overview'
                   ? theme.color.aidsFondsBlue
-                  : theme.color.aidsFondsRed,
+                  : theme.color.aidsFondsRed
             }}
             onClick={() => this.clickOverview()}
           >
@@ -125,7 +152,7 @@ class ErrorStep extends React.Component {
               color:
                 this.state.tab === 'findErrors'
                   ? theme.color.aidsFondsBlue
-                  : theme.coloraidsFondsRed,
+                  : theme.coloraidsFondsRed
             }}
             onClick={() => this.clickFindErrors()}
           >
@@ -137,7 +164,7 @@ class ErrorStep extends React.Component {
               color:
                 this.state.tab === 'findReplace'
                   ? theme.color.aidsFondsBlue
-                  : theme.color.aidsFondsRed,
+                  : theme.color.aidsFondsRed
             }}
             onClick={() => this.clickFindReplace()}
           >
@@ -149,7 +176,7 @@ class ErrorStep extends React.Component {
           />
         </TabContainer>
         <Box>
-          <ErrorTable columns={columns} data={this.state.data} />
+          <ErrorTable columns={this.state.columns} data={this.state.data} />
         </Box>
         <Pagination />
         <Divider />

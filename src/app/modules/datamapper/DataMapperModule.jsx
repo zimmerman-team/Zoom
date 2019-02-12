@@ -7,17 +7,16 @@ import Stepper from 'components/Stepper/Stepper';
 import {
   ModuleContainer,
   ModuleHeader,
-  ModuleFooter,
-  ModuleContent
+  ModuleFooter
 } from './DataMapperModule.styles';
 
 /* fragments */
-import ErrorStep from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep';
 import ManMappingStep from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep';
 import WrapUpStep from 'modules/datamapper/fragments/WrapUpStep/WrapUpStep';
 import MetaDataMediator from 'mediators/DataMapperMediators/MetaDataMediator/MetaDataMediator';
 import UploadMediator from 'mediators/DataMapperMediators/UploadMediator/UploadMediator';
 import OverviewStep from 'modules/datamapper/fragments/OverviewStep/OverviewStep';
+import CorrectErrorsMediator from 'mediators/DataMapperMediators/CorrectErrorsMediator/CorrectErrorsMediator';
 
 class DataMapperModule extends React.Component {
   constructor(props) {
@@ -93,7 +92,14 @@ class DataMapperModule extends React.Component {
           )
         );
       case 4:
-        return <ErrorStep />;
+        return (
+          this.state.stepData[1] && (
+            <CorrectErrorsMediator
+              fileId={this.state.stepData[1].fileId}
+              fileCorrection={this.props.fileCorrection}
+            />
+          )
+        );
       case 5:
         return (
           this.state.stepData[1] && (
@@ -111,6 +117,7 @@ class DataMapperModule extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     return (
       <ModuleContainer>
         <ModuleHeader>

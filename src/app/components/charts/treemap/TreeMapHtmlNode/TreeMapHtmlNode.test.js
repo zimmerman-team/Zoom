@@ -7,7 +7,7 @@ import {
   TextContainer,
   NodeLabel,
   NodeValue,
-  TreeNodeBase,
+  TreeNodeBase
 } from 'components/charts/treemap/TreeMapHtmlNode/TreeMapHtmlNode.styles';
 import { treeMapNodeMockData } from '__mocks__/treeMapMock';
 
@@ -15,7 +15,7 @@ const wrapper = shallow(
   <TreeMapHtmlNode
     node={treeMapNodeMockData.node}
     style={treeMapNodeMockData.style}
-  />,
+  />
 );
 
 describe('<TreeMapHtmlNode />', () => {

@@ -72,7 +72,7 @@ module.exports = {
     '^__mocks__[/](.+)': '<rootDir>/src/app/__mocks__/$1',
     '^modules[/](.+)': '<rootDir>/src/app/modules/$1',
     '\\.(svg)$': '<rootDir>src/app/__mocks__/svgMock.js',
-    '^.+\\.(css|less)$': 'identity-obj-proxy',
+    '^.+\\.(css|less)$': 'identity-obj-proxy'
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -173,5 +173,5 @@ module.exports = {
   // Whether to use watchman for file crawling
   // watchman: true,
 
-  setupTestFrameworkScriptFile: './rtl.setup.js',
+  setupTestFrameworkScriptFile: './rtl.setup.js'
 };

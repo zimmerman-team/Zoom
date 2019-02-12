@@ -19,7 +19,7 @@ const defaultProps = {};
 const About = props => {
   return (
     <ModuleContainer>
-      <AboutTitle>Sjabout zoom</AboutTitle>
+      <AboutTitle>About zoom</AboutTitle>
       <DescriptionParagraphBold>
         The major aim of ZOOM is to develop and implement an open data platform
         enabling Aids Fonds to conduct data informed decision making and

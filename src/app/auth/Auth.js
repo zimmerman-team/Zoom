@@ -4,7 +4,7 @@ import auth0 from 'auth0-js';
 class Auth {
   constructor() {
     this.auth0 = new auth0.WebAuth({
-      domain: 'zimmermanzimmerman.eu.auth0.com',
+      domain: 'auth.nyuki.io',
       audience: 'https://zimmermanzimmerman.eu.auth0.com/userinfo',
       clientID: process.env.REACT_APP_CLIENT_ID,
       redirectUri: `${process.env.REACT_APP_PROJECT_URL}/callback`,

@@ -1,7 +1,7 @@
 {
   "core": {
     "workingDir": ".reg",
-    "actualDir": ".loki/reference",
+    "actualDir": ".loki/current",
     "thresholdRate": 0,
     "addIgnore": true,
     "ximgdiff": {

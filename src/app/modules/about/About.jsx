@@ -2,13 +2,13 @@
 import React from 'react';
 import {
   DescriptionParagraph,
-  DescriptionParagraphBold,
+  DescriptionParagraphBold
 } from 'components/sort/Paragraphs';
 import {
   AboutTitle,
   ModuleContainer,
   RedLink,
-  Text,
+  Text
 } from 'modules/about/About.styles';
 import BarChartVertical from 'components/charts/barcharts/vertical/BarChartVertical';
 import { IATIDetailBarChartMockData } from '__mocks__/barChartVerticalMock';
@@ -19,7 +19,7 @@ const defaultProps = {};
 const About = props => {
   return (
     <ModuleContainer>
-      <AboutTitle>About zoom</AboutTitle>
+      <AboutTitle>Sjabout zoom</AboutTitle>
       <DescriptionParagraphBold>
         The major aim of ZOOM is to develop and implement an open data platform
         enabling Aids Fonds to conduct data informed decision making and

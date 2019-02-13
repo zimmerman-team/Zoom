@@ -55,6 +55,7 @@ class SideBar extends React.Component {
                   icon={<IconClose />}
                   onClick={this.props.toggleSideBar}
                   label="Close"
+                  data-cy="sidebar-close"
                 />
               </SidebarHeader>
 

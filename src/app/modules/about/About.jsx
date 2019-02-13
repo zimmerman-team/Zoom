@@ -2,13 +2,13 @@
 import React from 'react';
 import {
   DescriptionParagraph,
-  DescriptionParagraphBold,
+  DescriptionParagraphBold
 } from 'components/sort/Paragraphs';
 import {
   AboutTitle,
   ModuleContainer,
   RedLink,
-  Text,
+  Text
 } from 'modules/about/About.styles';
 import BarChartVertical from 'components/charts/barcharts/vertical/BarChartVertical';
 import { IATIDetailBarChartMockData } from '__mocks__/barChartVerticalMock';

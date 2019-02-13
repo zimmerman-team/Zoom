@@ -1,11 +1,8 @@
-
 {
   "baseUrl": "http://localhost:3000",
   "chromeWebSecurity": false,
-  "viewportWidth": 1440,
-  "viewportHeight": 900,
-  "env": {
-    "targetURL": "http://localhost:3000"
-  },
+  "viewportWidth": 1680,
+  "viewportHeight": 954,
+  "env": {},
   "projectId": "pz1mie"
 }

@@ -71,6 +71,7 @@ const getTabView = (
       return <NoItems>No items in {tabs[2].label}</NoItems>;
     case tabs[3].key:
       return (
+        // todo: UsersTabView and TeamsTabView are very similar in code, maybe it's possible to create a more generic component?
         <UsersTabView
           sort={sort}
           users={users}

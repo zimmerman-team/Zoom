@@ -25,6 +25,7 @@ const defaultProps = {
 const GridList = ({ items }) => (
   <Container cellHeight={153} cols={3} spacing={40}>
     {items.map(item => (
+      // todo: evaluate if ListItems should be own component
       <GridListItem key={item.id}>
         <div>
           <GridListItemTitle>{item.title}</GridListItemTitle>

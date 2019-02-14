@@ -1,6 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/* mock */
+import { uploadInitialstate } from '__consts__/UploadMediatorConst';
+
+/* utils */
+import findIndex from 'lodash/findIndex';
+import keys from 'lodash/keys';
+import pickBy from 'lodash/pickBy';
+
 /* components */
 import { Box } from 'grommet';
 import ZoomSelect from 'components/Select/ZoomSelect';
@@ -15,16 +23,11 @@ import {
   CellButton,
   ModuleContainer,
   ManMapTable,
-  ManMapTitle
+  ManMapTitle,
+  ErrorLabel
 } from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.style';
 import CellValue from 'components/ZoomTable/CellValue';
-
-/* mock */
-import { uploadInitialstate } from '__consts__/UploadMediatorConst';
-
-/* helpers */
-import isEqual from 'lodash/isEqual';
-import findIndex from 'lodash/findIndex';
+import theme from 'theme/Theme';
 
 const propTypes = {
   data: PropTypes.arrayOf(
@@ -32,7 +35,8 @@ const propTypes = {
       lockedIn: PropTypes.bool,
       fileType: PropTypes.string,
       zoomModel: PropTypes.string,
-      label: PropTypes.string
+      label: PropTypes.string,
+      selectDisabled: PropTypes.bool
     })
   ),
   modelOptions: PropTypes.arrayOf(
@@ -40,11 +44,17 @@ const propTypes = {
       label: PropTypes.string,
       value: PropTypes.string
     })
-  )
+  ),
+  emptyValue: PropTypes.bool,
+  manMapEmptyFields: PropTypes.bool,
+  mapReqFields: PropTypes.arrayOf(PropTypes.string)
 };
 const defaultProps = {
   data: uploadInitialstate.manMapData,
-  modelOptions: uploadInitialstate.modelOptions
+  modelOptions: uploadInitialstate.modelOptions,
+  emptyValue: false,
+  manMapEmptyFields: false,
+  mapReqFields: []
 };
 
 class ManMappingStep extends React.Component {
@@ -58,7 +68,7 @@ class ManMappingStep extends React.Component {
         render: val => (
           <Cell>
             <CellValue>{val.fileType}</CellValue>
-            <CellLine> </CellLine>
+            <CellLine />
           </Cell>
         )
       },
@@ -71,6 +81,8 @@ class ManMappingStep extends React.Component {
               <CellValue>{val.zoomModel}</CellValue>
             ) : (
               <ZoomSelect
+                disabled={val.emptyFieldRow}
+                search={false}
                 headerStyle={{ fontSize: 12, height: 'unset' }}
                 arrowMargins="auto 22px auto 4px"
                 placeHolder="-None-"
@@ -93,6 +105,7 @@ class ManMappingStep extends React.Component {
               <CellValue>{val.label}</CellValue>
             ) : (
               <CellTextField
+                disabled={val.zoomModel !== '-None-' && !val.emptyFieldRow}
                 value={val.label}
                 onChange={e => this.changeLabel(e.target.value, val.fileType)}
                 variant="outlined"
@@ -106,41 +119,80 @@ class ManMappingStep extends React.Component {
       }
     ];
 
-    this.state = {
-      data: props.data
-    };
+    this.colorMissingRows = this.colorMissingRows.bind(this);
   }
 
-  componentDidUpdate(prevProps) {
-    if (!isEqual(this.props.data, prevProps.data))
-      this.setState({ data: this.props.data });
+  componentDidMount() {
+    // this should not be here, we only have this here for coloring to trigger
+    // but this and the coloring should be removed when we actually
+    // implement the proper man mapping userflow
+    this.setState({ data: this.props.data });
+  }
+
+  componentDidUpdate() {
+    this.colorMissingRows();
+  }
+
+  // basically colors the background of newly added rows
+  // for missing fields
+  colorMissingRows() {
+    const { data } = this.props;
+    const itemIndexes = keys(pickBy(data, { emptyFieldRow: true }));
+
+    itemIndexes.forEach(ind => {
+      const index = parseInt(ind, 10);
+
+      const firstCell = document.querySelector(
+        `tbody tr:nth-child(${index + 1}) > th`
+      );
+
+      const secondCell = document.querySelector(
+        `tbody tr:nth-child(${index + 1}) > td:nth-child(2)`
+      );
+
+      // we color the third cell
+      const thirdCell = document.querySelector(
+        `tbody tr:nth-child(${index + 1}) > td:nth-child(3)`
+      );
+
+      if (firstCell && secondCell && thirdCell) {
+        firstCell.style.backgroundColor = theme.color.errorCellColor;
+        secondCell.style.backgroundColor = theme.color.errorCellColor;
+        thirdCell.style.backgroundColor = theme.color.errorCellColor;
+      }
+    });
   }
 
   selectDataType(zoomModel, fileType) {
-    this.setState(prevState => {
-      const { data } = prevState;
-      const itemIndex = findIndex(data, ['fileType', fileType]);
-      data[itemIndex].zoomModel = zoomModel;
-      return { data };
-    });
+    const { data } = this.props;
+    const itemIndex = findIndex(data, ['fileType', fileType]);
+
+    if (this.props.mapReqFields.indexOf(zoomModel) !== -1) {
+      // so we will remove the extra rows here if a required field was selected
+      // after the rows have been shown
+      const extraRowInd = findIndex(data, item => {
+        return item.zoomModel === zoomModel && item.emptyFieldRow;
+      });
+
+      if (extraRowInd !== -1) data.splice(extraRowInd, 1);
+    }
+
+    data[itemIndex].zoomModel = zoomModel;
+    this.props.saveStepData(data, 5);
   }
 
   changeLabel(label, fileType) {
-    this.setState(prevState => {
-      const { data } = prevState;
-      const itemIndex = findIndex(data, ['fileType', fileType]);
-      data[itemIndex].label = label;
-      return { data };
-    });
+    const { data } = this.props;
+    const itemIndex = findIndex(data, ['fileType', fileType]);
+    data[itemIndex].label = label;
+    this.props.saveStepData(data, 5);
   }
 
   lockInOut(fileType) {
-    this.setState(prevState => {
-      const { data } = prevState;
-      const itemIndex = findIndex(data, ['fileType', fileType]);
-      data[itemIndex].lockedIn = !data[itemIndex].lockedIn;
-      return { data };
-    });
+    const { data } = this.props;
+    const itemIndex = findIndex(data, ['fileType', fileType]);
+    data[itemIndex].lockedIn = !data[itemIndex].lockedIn;
+    this.props.saveStepData(data, 5);
   }
 
   render() {
@@ -148,7 +200,20 @@ class ManMappingStep extends React.Component {
       <ModuleContainer>
         <ManMapTitle>Manual mapping</ManMapTitle>
         <Box>
-          <ManMapTable columns={this.columns} data={this.state.data} />
+          <ErrorLabel>
+            {this.props.emptyValue
+              ? '*Please select a value for one of your columns, your csv file\n' +
+                '              needs to contain some numeric or percentile values'
+              : ' '}
+          </ErrorLabel>
+          <ErrorLabel>
+            {this.props.manMapEmptyFields
+              ? '*Please add values to populate the required data model\n' +
+                '                fields(theyve appeared at the bottom and are marked in red) and\n' +
+                '                press "Add"'
+              : ' '}
+          </ErrorLabel>
+          <ManMapTable columns={this.columns} data={this.props.data} />
         </Box>
       </ModuleContainer>
     );

@@ -37,6 +37,7 @@ const About = props => {
         position in combating the Aids epidemic.
       </Text>
       <BarChartVertical
+        data-cy="test"
         data={IATIDetailBarChartMockData}
         enableLabels
         disabledLegend
@@ -53,6 +54,7 @@ const About = props => {
       <DescriptionParagraph>Check the new website</DescriptionParagraph>
       <DescriptionParagraph>
         <RedLink
+          data-cy="about-link-to-web"
           target="_blank"
           rel="noopener noreferrer"
           href="https://aidsfonds.nl/"

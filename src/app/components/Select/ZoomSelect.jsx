@@ -198,7 +198,9 @@ class ZoomSelect extends React.Component {
 
   render() {
     return (
-      <ComponentBase >
+      <ComponentBase
+        style={this.props.disabled ? { pointerEvents: 'none' } : {}}
+      >
         <SelectHeader
           headerStyle={this.props.headerStyle}
           arrowMargins={this.props.arrowMargins}

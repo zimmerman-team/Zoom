@@ -5,7 +5,7 @@ export const step1InitialData = {
   dataSource: {
     key: '',
     label: '',
-    value: '',
+    value: ''
   },
   shared: false,
   surveyData: false,
@@ -17,7 +17,7 @@ export const step1InitialData = {
   q4: {
     key: '',
     label: '',
-    value: '',
+    value: ''
   },
   q5: undefined,
   q51: [],
@@ -25,6 +25,5 @@ export const step1InitialData = {
   q3Text: '',
   q4Text: '',
   q51Text: '',
-  fileSources: [],
-  environment: {},
+  fileSources: []
 };

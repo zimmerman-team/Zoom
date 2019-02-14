@@ -25,7 +25,8 @@ import isEqual from 'lodash/isEqual';
 import {
   formatOverviewData,
   formatModelOptions,
-  formatManData
+  formatManData,
+  getRowCount
 } from './UploadMediator.util';
 
 const propTypes = {
@@ -64,9 +65,12 @@ const propTypes = {
         lockedIn: PropTypes.boolean,
         fileType: PropTypes.string,
         zoomModel: PropTypes.string,
-        label: PropTypes.string
+        label: PropTypes.string,
+        selectDisabled: PropTypes.bool
       })
-    )
+    ),
+    rowCount: PropTypes.number,
+    mappingJson: PropTypes.shape({})
   })
 };
 
@@ -143,12 +147,16 @@ class UploadMediator extends React.Component {
 
   handleMetaDataCompleted(response, error) {
     if (error) console.log('error uploading file:', error);
+
     if (response) {
+      const mappingJson = JSON.parse(
+        response.file.dataModelHeading.replace(/'/g, '"')
+      );
+
       this.setState(
         {
-          modelOptions: formatModelOptions(
-            JSON.parse(response.file.dataModelHeading.replace(/'/g, '"'))
-          ),
+          mappingJson,
+          modelOptions: formatModelOptions(mappingJson),
           fileId: response.file.entryId
         },
         this.fileValidation
@@ -226,14 +234,18 @@ class UploadMediator extends React.Component {
   // data for the overview step needs to be here, cause it should change whenever a new file is uploaded
   // same will be with other steps that are dependant on the file
   handleValidationCompleted(response) {
-    if (response)
+    if (response) {
+      const overviewData = formatOverviewData(
+        response.fileValidationResults.summary,
+        response.fileValidationResults.foundList
+      );
+      const rowCount = getRowCount(overviewData);
       this.setState({
         manMapData: formatManData(response.fileValidationResults.foundList),
-        overviewData: formatOverviewData(
-          response.fileValidationResults.summary,
-          response.fileValidationResults.foundList
-        )
+        overviewData,
+        rowCount
       });
+    }
   }
 
   handleValidationError(error) {

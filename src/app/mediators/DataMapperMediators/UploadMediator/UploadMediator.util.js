@@ -3,7 +3,7 @@ import find from 'lodash/find';
 
 //  Note this whole types and summary data is formed in a very very weird way
 // so there's lots seemingly weird stuff happening in this function
-export function formatOverviewData(sumString, typesString, cellsString = '') {
+export function formatOverviewData(sumString, typesString) {
   const properNames = {
     count: 'Count of values',
     unique: 'Number of unique values',
@@ -91,6 +91,37 @@ export function formatOverviewData(sumString, typesString, cellsString = '') {
   return overviewData;
 }
 
+// So for the errors correction step to actually make pagination
+// work with this weird way that data is retrieved, we will need to
+// get the count of all the rows, and the overview data is the only thing that
+// is closest to giving us a count of rows ...
+export function getRowCount(overviewData) {
+  // so by default we will make the count of rows be 100
+  // just in case, the count here cannot be found
+  let countOfRows = '100';
+
+  // so the overview data that doesn't state blank values
+  // will actually have all of the rows mentioned as count of values
+  let valueWithoutBlanks = null;
+
+  for (let i = 0; i < overviewData.length; i += 1) {
+    let notBlank = false;
+    overviewData[i].dataTypes.forEach(type => {
+      notBlank = type.indexOf('blank') === -1;
+    });
+    if (notBlank) {
+      valueWithoutBlanks = overviewData[i];
+      break;
+    }
+  }
+
+  if (valueWithoutBlanks)
+    countOfRows = find(valueWithoutBlanks.summary, ['label', 'Count of values'])
+      .value;
+
+  return parseInt(countOfRows, 10);
+}
+
 export function formatModelOptions(dataModelHeading) {
   const modelOptions = [];
 
@@ -99,11 +130,17 @@ export function formatModelOptions(dataModelHeading) {
     label: '-None-',
     value: '-None-'
   });
-  // So we push in the 'filter_headings' just like this
-  // cause the data formed is super weird...
+
+  // We push in the Longitude, for the Longitude column selection
   modelOptions.push({
-    label: 'filter_headings',
-    value: 'filter_headings'
+    label: 'Longitude',
+    value: 'Longitude'
+  });
+
+  // We push in the Latitude, for the Latitude column selection
+  modelOptions.push({
+    label: 'Latitude',
+    value: 'Latitude'
   });
 
   Object.keys(dataModelHeading.mapping_dict).map(key => {
@@ -130,7 +167,8 @@ export function formatManData(typesString) {
       lockedIn: false,
       fileType: types[typeKey][0],
       zoomModel: '-None-',
-      label: undefined
+      label: undefined,
+      emptyFieldRow: false
     });
   });
 

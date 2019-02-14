@@ -198,7 +198,7 @@ class ZoomSelect extends React.Component {
 
   render() {
     return (
-      <ComponentBase>
+      <ComponentBase >
         <SelectHeader
           headerStyle={this.props.headerStyle}
           arrowMargins={this.props.arrowMargins}
@@ -228,6 +228,7 @@ class ZoomSelect extends React.Component {
                 {this.props.search && (
                   <ItemContainer>
                     <SearchField
+                      data-cy="geo-map-search"
                       value={this.state.searchWord}
                       onChange={e =>
                         this.setState({ searchWord: e.target.value })

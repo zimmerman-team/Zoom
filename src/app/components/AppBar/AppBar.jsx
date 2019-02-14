@@ -56,6 +56,7 @@ class AppBar extends React.Component {
       case '/home':
         paneButton = (
           <PaneButton
+            data-cy="geomap-filter-button"
             onClick={() =>
               this.props.dispatch(
                 actions.dataPaneToggleRequest(!this.props.dataPaneOpen)

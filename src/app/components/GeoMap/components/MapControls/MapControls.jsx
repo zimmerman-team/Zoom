@@ -23,13 +23,13 @@ const defaultProps = {
 
 const MapControls = props => (
   <ComponentBase>
-    <ButtonContainer onClick={props.zoomIn}>
+    <ButtonContainer onClick={props.zoomIn} data-cy="home-zoom-out-button">
       <IconOnlyPlus />
     </ButtonContainer>
-    <ButtonContainer onClick={props.zoomOut}>
+    <ButtonContainer onClick={props.zoomOut} data-cy="home-zoom-in-button">
       <IconOnlyMinus />
     </ButtonContainer>
-    <ButtonContainer onClick={props.fullScreen}>
+    <ButtonContainer onClick={props.fullScreen} data-cy="home-fullscreen-button">
       <IconOnlyFullScreen />
     </ButtonContainer>
   </ComponentBase>

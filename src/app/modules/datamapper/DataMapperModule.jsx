@@ -185,7 +185,6 @@ class DataMapperModule extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <ModuleContainer>
         <ModuleHeader>

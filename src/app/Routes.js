@@ -15,28 +15,28 @@ import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';*/
 
 // Modules lazy load
 const CountryDetailMediator = lazy(() =>
-  import('mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator'),
+  import('mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator')
 );
 const HomeModuleMediator = lazy(() =>
-  import('mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator'),
+  import('mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator')
 );
 const IatiDetailMediator = lazy(() =>
-  import('mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator'),
+  import('mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator')
 );
 const AddUserMediator = lazy(() =>
-  import('mediators/ModuleMediators/AddUserMediator/AddUserMediator'),
+  import('mediators/ModuleMediators/AddUserMediator/AddUserMediator')
 );
 const CreateTeamMediator = lazy(() =>
-  import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator'),
+  import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator')
 );
 const DashboardMediator = lazy(() =>
-  import('mediators/DashboardMediators/DashboardMediator'),
+  import('mediators/DashboardMediators/DashboardMediator')
 );
 
 const About = lazy(() => import('modules/about/About'));
 
 const ManMappingStep = lazy(() =>
-  import('modules/datamapper/fragments/ManMappingStep/ManMappingStep'),
+  import('modules/datamapper/fragments/ManMappingStep/ManMappingStep')
 );
 
 // Routes
@@ -112,7 +112,9 @@ const Routes = props => {
           <Route path="/about" render={() => <About />} />
           <Route
             path="/mapper"
-            render={() => <DataMapperModule dropDownData={props} />}
+            render={() => (
+              <DataMapperModule dropDownData={props} fileCorrection={props} />
+            )}
           />
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />

@@ -4,7 +4,7 @@ import theme from 'theme/Theme';
 import ZoomButton from 'components/ZoomButton/ZoomButton';
 
 export const ComponentBase = styled.div`
-  position: fixed;
+  position: absolute;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   border-radius: 0;
   background-color: ${theme.color.aidsFondsWhite};

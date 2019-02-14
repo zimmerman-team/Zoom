@@ -65,10 +65,12 @@ const propTypes = {
         lockedIn: PropTypes.boolean,
         fileType: PropTypes.string,
         zoomModel: PropTypes.string,
-        label: PropTypes.string
+        label: PropTypes.string,
+        selectDisabled: PropTypes.bool
       })
     ),
-    rowCount: PropTypes.number
+    rowCount: PropTypes.number,
+    mappingJson: PropTypes.shape({})
   })
 };
 
@@ -145,12 +147,16 @@ class UploadMediator extends React.Component {
 
   handleMetaDataCompleted(response, error) {
     if (error) console.log('error uploading file:', error);
+
     if (response) {
+      const mappingJson = JSON.parse(
+        response.file.dataModelHeading.replace(/'/g, '"')
+      );
+
       this.setState(
         {
-          modelOptions: formatModelOptions(
-            JSON.parse(response.file.dataModelHeading.replace(/'/g, '"'))
-          ),
+          mappingJson,
+          modelOptions: formatModelOptions(mappingJson),
           fileId: response.file.entryId
         },
         this.fileValidation

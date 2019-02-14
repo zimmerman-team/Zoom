@@ -25,7 +25,8 @@ import isEqual from 'lodash/isEqual';
 import {
   formatOverviewData,
   formatModelOptions,
-  formatManData
+  formatManData,
+  getRowCount
 } from './UploadMediator.util';
 
 const propTypes = {
@@ -66,7 +67,8 @@ const propTypes = {
         zoomModel: PropTypes.string,
         label: PropTypes.string
       })
-    )
+    ),
+    rowCount: PropTypes.number
   })
 };
 
@@ -226,14 +228,18 @@ class UploadMediator extends React.Component {
   // data for the overview step needs to be here, cause it should change whenever a new file is uploaded
   // same will be with other steps that are dependant on the file
   handleValidationCompleted(response) {
-    if (response)
+    if (response) {
+      const overviewData = formatOverviewData(
+        response.fileValidationResults.summary,
+        response.fileValidationResults.foundList
+      );
+      const rowCount = getRowCount(overviewData);
       this.setState({
         manMapData: formatManData(response.fileValidationResults.foundList),
-        overviewData: formatOverviewData(
-          response.fileValidationResults.summary,
-          response.fileValidationResults.foundList
-        )
+        overviewData,
+        rowCount
       });
+    }
   }
 
   handleValidationError(error) {

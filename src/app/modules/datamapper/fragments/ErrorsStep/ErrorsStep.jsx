@@ -10,6 +10,7 @@ import Pagination from 'components/Pagination/Pagination';
 /* utils */
 import { formatColumns } from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep.util';
 import isEqual from 'lodash/isEqual';
+import findIndex from 'lodash/findIndex';
 
 /* styles */
 import {
@@ -43,14 +44,29 @@ const propTypes = {
   errorCells: PropTypes.arrayOf(
     PropTypes.shape({
       row: PropTypes.number,
-      columnName: PropTypes.string
+      col: PropTypes.number
     })
-  )
+  ),
+  columnHeaders: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string
+    })
+  ),
+  pageCount: PropTypes.number,
+  changePage: PropTypes.func,
+  findReplaceValues: PropTypes.func,
+  resetTable: PropTypes.func
 };
 
 const defaultProps = {
   data: [],
-  errorCells: []
+  errorCells: [],
+  columnHeaders: [],
+  pageCount: 100,
+  changePage: undefined,
+  findReplaceValues: undefined,
+  resetTable: undefined
 };
 
 class ErrorStep extends React.Component {
@@ -61,11 +77,13 @@ class ErrorStep extends React.Component {
       tab: 'overview',
       dialogOpen: false,
       data: props.data,
-      columns: []
+      columns: [],
+      selectedHeader: undefined
     };
 
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.colorFoundReplaced = this.colorFoundReplaced.bind(this);
   }
 
   componentDidMount() {
@@ -73,11 +91,15 @@ class ErrorStep extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!isEqual(this.props.data, prevProps.data))
-      this.setState({
-        data: this.props.data,
-        columns: formatColumns(this.props.data)
-      });
+    if (!isEqual(this.props.data, prevProps.data)) {
+      this.setState(
+        {
+          data: this.props.data,
+          columns: formatColumns(this.props.data)
+        },
+        this.changeColors
+      );
+    }
   }
 
   componentWillUnmount() {
@@ -94,43 +116,87 @@ class ErrorStep extends React.Component {
     }
   }
 
+  // so this will basically color the cells depending on the tab
+  // and the data in the tab
+  changeColors() {
+    if (this.state.tab === 'findErrors' || this.state.tab === 'findReplace') {
+      this.resetColors();
+      this.colorErrors();
+      this.colorFoundReplaced();
+    }
+  }
+
   colorErrors() {
     this.props.errorCells.forEach(cell => {
-      if (cell.row < 10) {
-        // so we check the first data entry to get the
-        // column number according to the column name
-        // and this can work only with the first, cause everyt data
-        // entry has all the columns listed(at least should have)
-        const colIndex =
-          Object.keys(this.props.data[0]).indexOf(cell.columnName) + 1;
-        const rowIndex = cell.row + 1;
-        document.querySelector(
-          `tbody tr:nth-child(${rowIndex}) td:nth-child(${colIndex})`
-        ).style.backgroundColor = theme.color.errorCellColor;
-      }
+      document.querySelector(
+        `tbody tr:nth-child(${cell.row}) td:nth-child(${cell.col})`
+      ).style.backgroundColor = theme.color.errorCellColor;
     });
   }
 
-  clickFindErrors() {
-    this.colorErrors();
-    this.setState({ tab: 'findErrors' });
+  // so to color the found and replaced values
+  // we don't actually need to format anything
+  // because we already have the selected column header
+  // from where we can get the col index
+  // and basically all rows in that retrieved table need to be colored
+  // cause only rows where the value was found are actually shown
+  colorFoundReplaced() {
+    if (this.state.selectedHeader && this.state.tab === 'findReplace') {
+      const colIndex =
+        findIndex(this.props.columnHeaders, [
+          'label',
+          this.state.selectedHeader
+        ]) + 3;
+
+      const cells = document.querySelectorAll(
+        `tbody td:nth-child(${colIndex}) > div > div`
+      );
+
+      cells.forEach(cell => {
+        // do whatever
+        cell.style.color = theme.color.aidsFondsBlue;
+      });
+    }
   }
 
-  clickOverview() {
+  resetColors() {
     const allCells = document.querySelectorAll('td');
     allCells.forEach(cell => {
       cell.style.backgroundColor = theme.color.zoomGreyZero;
     });
-    this.setState({ tab: 'overview' });
+    const allCellsText = document.querySelectorAll('td > div > div');
+    allCellsText.forEach(text => {
+      text.style.color = theme.color.zoomBlack;
+    });
+  }
+
+  clickFindErrors() {
+    if (this.state.tab !== 'findErrors') {
+      this.props.resetTable();
+      this.colorErrors();
+      this.setState({ tab: 'findErrors', selectedHeader: undefined });
+    }
+  }
+
+  clickOverview() {
+    if (this.state.tab !== 'overview') {
+      this.props.resetTable();
+      this.resetColors();
+      this.setState({ tab: 'overview', selectedHeader: undefined });
+    }
   }
 
   clickFindReplace() {
-    this.colorErrors();
-    this.setState({ tab: 'findReplace', dialogOpen: true });
+    if (this.state.tab !== 'findReplace') {
+      this.props.resetTable();
+      this.colorErrors();
+      this.setState({ tab: 'findReplace', dialogOpen: true });
+    } else {
+      this.setState({ dialogOpen: true });
+    }
   }
 
   render() {
-    console.log(this.props.data);
     return (
       <ModuleContainer>
         <ErrorTitle>Check & correct erorrs</ErrorTitle>
@@ -171,6 +237,11 @@ class ErrorStep extends React.Component {
             Find & replace
           </TabText>
           <FindReplace
+            findReplaceValues={this.props.findReplaceValues}
+            columnHeaders={this.props.columnHeaders}
+            saveSelectedHeader={value =>
+              this.setState({ selectedHeader: value })
+            }
             open={this.state.dialogOpen}
             setWrapperRef={this.setWrapperRef}
           />
@@ -178,7 +249,14 @@ class ErrorStep extends React.Component {
         <Box>
           <ErrorTable columns={this.state.columns} data={this.state.data} />
         </Box>
-        <Pagination />
+
+        {this.state.tab !== 'findReplace' && (
+          <Pagination
+            pageCount={this.props.pageCount}
+            changePage={this.props.changePage}
+          />
+        )}
+
         <Divider />
       </ModuleContainer>
     );

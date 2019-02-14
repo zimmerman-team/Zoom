@@ -11,18 +11,21 @@ import FileErrorResultMutation from 'mediators/DataMapperMediators/CorrectErrors
 
 /* utils */
 import get from 'lodash/get';
+import isEqual from 'lodash/isEqual';
 import { formatErrorCells } from './CorrectErrorsMediator.util';
 
 const propTypes = {
   fileId: PropTypes.string,
   relay: PropTypes.shape({}),
-  fileCorrection: PropTypes.shape({})
+  fileCorrection: PropTypes.shape({}),
+  rowCount: PropTypes.number
 };
 
 const defaultProps = {
   fileId: '-1',
   relay: {},
-  fileCorrection: {}
+  fileCorrection: {},
+  rowCount: 100
 };
 
 class CorrectErrorsMediator extends React.Component {
@@ -32,7 +35,10 @@ class CorrectErrorsMediator extends React.Component {
     this.state = {
       correctCommand: {},
       errorTableData: [],
-      errorCells: []
+      errorCells: [],
+      pageSize: 10,
+      columnHeaders: [],
+      page: 0
     };
 
     this.handleCellsErrorsCompleted = this.handleCellsErrorsCompleted.bind(
@@ -41,16 +47,13 @@ class CorrectErrorsMediator extends React.Component {
     this.handleCellsErrorsError = this.handleCellsErrorsError.bind(this);
     this.getFileCellsErrors = this.getFileCellsErrors.bind(this);
     this.saveCorrectionCommand = this.saveCorrectionCommand.bind(this);
+    this.changePage = this.changePage.bind(this);
     this.refetch = this.refetch.bind(this);
+    this.findReplaceValues = this.findReplaceValues.bind(this);
   }
 
   componentDidMount() {
-    console.log('MOUNT', this.props.fileId);
     if (this.props.fileId !== '-1') this.refetch();
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.fileId !== prevProps.fileId) this.refetch();
   }
 
   handleCellsErrorsCompleted(response) {
@@ -59,10 +62,37 @@ class CorrectErrorsMediator extends React.Component {
         JSON.parse(response.fileErrorCorrection.result)
       );
 
-      const errorCells = formatErrorCells(results.error_data.error_messages);
-
       const errorTableData = JSON.parse(results.data_table);
-      this.setState({ errorTableData, errorCells });
+      const command = JSON.parse(
+        JSON.parse(response.fileErrorCorrection.command)
+      );
+
+      let repCol = null;
+      if (command.replace_pressed && command.filter_column_heading)
+        repCol = command.filter_column_heading;
+
+      const errorCells = formatErrorCells(
+        results.error_data.error_messages,
+        results.columns,
+        errorTableData,
+        repCol
+      );
+
+      if (this.state.columnHeaders.length === 0) {
+        const columnHeaders = results.columns.map(column => {
+          return {
+            label: column,
+            value: column
+          };
+        });
+
+        this.setState({ columnHeaders });
+      }
+
+      this.setState({
+        errorTableData,
+        errorCells
+      });
     }
   }
 
@@ -70,17 +100,27 @@ class CorrectErrorsMediator extends React.Component {
     console.log('error while getting file cells and their errors: ', error);
   }
 
-  getFileCellsErrors() {
+  getFileCellsErrors(correctCommand = this.state.correctCommand) {
+    // We will calculate the start position and end position for the
+    // files rows, and we'll call the general fileCellsErrors
+    const startPos = this.state.pageSize * this.state.page;
+    const endPos = startPos + this.state.pageSize;
+
     // so here we will adjust the command for error corrections
     // so that we would retrieve the actual errors for cells
     // and the cell values in one go
-    const command = { ...this.state.correctCommand };
+    const command = { ...correctCommand };
     command.error_toggle = true;
+    if (isEqual(correctCommand, this.state.correctCommand)) {
+      command.start_pos = startPos;
+      command.end_pos = endPos;
+    }
     const input = {
       id: command.file_id,
       // cause it needs to be passed in as a double stringified json ...
       command: JSON.stringify(JSON.stringify(command))
     };
+
     FileErrorResultMutation.commit(
       this.props.relay.environment,
       input,
@@ -105,6 +145,37 @@ class CorrectErrorsMediator extends React.Component {
     this.setState({ correctCommand }, this.getFileCellsErrors);
   }
 
+  // NOTE: this is not your normal everyday pagination
+  // this is some weird json string data, row count pagination
+  // using the weird command for variables
+  changePage(value) {
+    // NOTE this value selected is 1 smaller than an actual page would be
+    // so page 1 is returned as 0 and etc.
+    const page = value.selected;
+
+    this.setState({ page }, this.getFileCellsErrors);
+  }
+
+  findReplaceValues(header, findValue, replaceValue) {
+    const command = { ...this.state.correctCommand };
+
+    command.filter_column_heading = header;
+    command.find_value = findValue;
+    command.filter_toggle = true;
+
+    // we need to retrieve all of the found values, cause pagination cannot be applied
+    // to these cells as of now
+    command.start_pos = 0;
+    command.end_pos = 10000;
+
+    if (replaceValue) {
+      command.replace_value = replaceValue;
+      command.replace_pressed = true;
+    }
+
+    this.getFileCellsErrors(command);
+  }
+
   refetch() {
     const refetchVars = {
       entryId: this.props.fileId
@@ -116,11 +187,15 @@ class CorrectErrorsMediator extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <ErrorStep
+        pageCount={this.props.rowCount / this.state.pageSize}
+        changePage={this.changePage}
         data={this.state.errorTableData}
         errorCells={this.state.errorCells}
+        findReplaceValues={this.findReplaceValues}
+        columnHeaders={this.state.columnHeaders}
+        resetTable={this.getFileCellsErrors}
       />
     );
   }

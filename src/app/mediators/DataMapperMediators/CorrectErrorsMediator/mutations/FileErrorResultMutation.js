@@ -5,6 +5,7 @@ import { commitMutation, graphql } from 'react-relay';
 const mutation = graphql`
   mutation FileErrorResultMutation($input: FileErrorCorrectionMutationInput!) {
     fileErrorCorrection(input: $input) {
+      command
       result
     }
   }

@@ -14,16 +14,17 @@ import find from 'lodash/find';
 import {
   ModuleContainer,
   ModuleHeader,
-  ModuleFooter
+  ModuleFooter,
+  ModuleContent
 } from './DataMapperModule.styles';
 
 /* fragments */
 import ManMappingStep from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep';
-import WrapUpStep from 'modules/datamapper/fragments/WrapUpStep/WrapUpStep';
 import MetaDataMediator from 'mediators/DataMapperMediators/MetaDataMediator/MetaDataMediator';
 import UploadMediator from 'mediators/DataMapperMediators/UploadMediator/UploadMediator';
 import OverviewStep from 'modules/datamapper/fragments/OverviewStep/OverviewStep';
 import CorrectErrorsMediator from 'mediators/DataMapperMediators/CorrectErrorsMediator/CorrectErrorsMediator';
+import WrapUpMediator from 'mediators/DataMapperMediators/WrapUpMediator/WrapUpMediator';
 
 class DataMapperModule extends React.Component {
   constructor(props) {
@@ -42,7 +43,8 @@ class DataMapperModule extends React.Component {
       mapReqFields: ['indicator', 'date', 'value_format', 'value'],
 
       manMapEmptyValue: false,
-      manMapEmptyFields: false
+      manMapEmptyFields: false,
+      stepsDisabled: false
     };
 
     this.nextStep = this.nextStep.bind(this);
@@ -162,13 +164,12 @@ class DataMapperModule extends React.Component {
           this.state.stepData[1] && (
             <ManMappingStep
               saveStepData={this.saveStepData}
-              mappingJson={this.state.stepData[1].mappingJson}
               modelOptions={this.state.stepData[1].modelOptions}
               // so the data from the upload step is the initial data
               // for the manual mapping
               data={
-                this.state.stepData[5]
-                  ? this.state.stepData[5]
+                this.state.stepData[4]
+                  ? this.state.stepData[4]
                   : this.state.stepData[1].manMapData
               }
               emptyValue={this.state.manMapEmptyValue}
@@ -178,7 +179,22 @@ class DataMapperModule extends React.Component {
           )
         );
       case 6:
-        return <WrapUpStep />;
+        return (
+          this.state.stepData[0] &&
+          this.state.stepData[1] && (
+            <WrapUpMediator
+              environment={this.state.environment}
+              metaData={this.state.stepData[0]}
+              fileId={this.state.stepData[1].fileId}
+              file={this.state.stepData[1].file}
+              fileUrl={this.state.stepData[1].url}
+              mappingJson={this.state.stepData[1].mappingJson}
+              mappingData={this.state.stepData[4]}
+              disableSteps={() => this.setState({ stepsDisabled: true })}
+              stepsDisabled={this.state.stepsDisabled}
+            />
+          )
+        );
       default:
         return <div> No Such Step </div>;
     }
@@ -195,7 +211,15 @@ class DataMapperModule extends React.Component {
           />
         </ModuleHeader>
 
-        {this.renderStep()}
+        <ModuleContent
+          style={
+            this.state.stepsDisabled && this.state.step !== 6
+              ? { pointerEvents: 'none', opacity: '0.4' }
+              : {}
+          }
+        >
+          {this.renderStep()}
+        </ModuleContent>
 
         <ModuleFooter>
           <Stepper

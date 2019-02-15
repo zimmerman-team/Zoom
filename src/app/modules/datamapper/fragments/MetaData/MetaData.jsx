@@ -176,7 +176,7 @@ const MetaData = props => (
               e.target.value,
               'dataSource',
               'sourceText',
-              dataSourceOptions
+              dataSourceOptions.concat(props.data.fileSources)
             )
           }
         />

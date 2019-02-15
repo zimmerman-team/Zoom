@@ -226,6 +226,17 @@ class MetaDataMediator extends React.Component {
       );
     }
 
+    const existingItem = findIndex(options, ['label', value]);
+    if (existingItem !== -1)
+      this.simpleChange(
+        {
+          key: value,
+          label: value,
+          value: options[existingItem].value
+        },
+        question
+      );
+
     this.simpleChange(value, qText);
   }
 

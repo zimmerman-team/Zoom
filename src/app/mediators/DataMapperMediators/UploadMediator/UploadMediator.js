@@ -6,8 +6,8 @@ import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
 
 /* mutations */
-import AddFileMutation from 'mediators/DataMapperMediators/UploadMediator/mutations/UploadFileMutation';
-import AddSourceMutation from 'mediators/DataMapperMediators/UploadMediator/mutations/AddSourceMutation';
+import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
+import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
 import FileValidationMutation from 'mediators/DataMapperMediators/UploadMediator/mutations/FileValidation';
 
 /* consts */
@@ -38,7 +38,7 @@ const propTypes = {
   environment: PropTypes.shape({}),
   data: PropTypes.shape({
     url: PropTypes.string,
-    file: PropTypes.object,
+    file: PropTypes.shape({}),
     fileId: PropTypes.string,
     sourceId: PropTypes.string,
     overviewData: PropTypes.arrayOf(

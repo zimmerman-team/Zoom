@@ -14,7 +14,8 @@ import find from 'lodash/find';
 import {
   ModuleContainer,
   ModuleHeader,
-  ModuleFooter
+  ModuleFooter,
+  ModuleContent
 } from './DataMapperModule.styles';
 
 /* fragments */
@@ -42,7 +43,8 @@ class DataMapperModule extends React.Component {
       mapReqFields: ['indicator', 'date', 'value_format', 'value'],
 
       manMapEmptyValue: false,
-      manMapEmptyFields: false
+      manMapEmptyFields: false,
+      stepsDisabled: false
     };
 
     this.nextStep = this.nextStep.bind(this);
@@ -188,6 +190,8 @@ class DataMapperModule extends React.Component {
               fileUrl={this.state.stepData[1].url}
               mappingJson={this.state.stepData[1].mappingJson}
               mappingData={this.state.stepData[4]}
+              disableSteps={() => this.setState({ stepsDisabled: true })}
+              stepsDisabled={this.state.stepsDisabled}
             />
           )
         );
@@ -207,7 +211,15 @@ class DataMapperModule extends React.Component {
           />
         </ModuleHeader>
 
-        {this.renderStep()}
+        <ModuleContent
+          style={
+            this.state.stepsDisabled && this.state.step !== 6
+              ? { pointerEvents: 'none', opacity: '0.4' }
+              : {}
+          }
+        >
+          {this.renderStep()}
+        </ModuleContent>
 
         <ModuleFooter>
           <Stepper

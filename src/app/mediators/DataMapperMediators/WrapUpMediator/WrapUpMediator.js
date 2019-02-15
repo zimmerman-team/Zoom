@@ -117,16 +117,19 @@ export default class WrapUpMediator extends React.Component {
   }
 
   componentDidMount() {
-    // so here we'll handle the metada step
-    if (this.props.metaData.surveyData === 'Yes')
-      // we add the survey data
-      this.addSurveyData();
-    else if (this.props.metaData.dataSource.key === 'other')
-      // we add the new source
-      this.addDataSource(this.props.metaData.dataSource.value);
-    // otherwise we just add the existing source id
-    // and then add the metadata
-    else this.addMetaData();
+    if (!this.props.stepsDisabled) {
+      this.props.disableSteps();
+      // so here we'll handle the metada step
+      if (this.props.metaData.surveyData === 'Yes')
+        // we add the survey data
+        this.addSurveyData();
+      else if (this.props.metaData.dataSource.key === 'other')
+        // we add the new source
+        this.addDataSource(this.props.metaData.dataSource.value);
+      // otherwise we just add the existing source id
+      // and then add the metadata
+      else this.addMetaData();
+    }
   }
 
   handleSourceCompleted(response) {

@@ -189,6 +189,7 @@ class GeoMap extends Component {
   render() {
     const { viewport, mapStyle, markerArray, legends, fullScreen } = this.state;
     return (
+      /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
       <Fullscreen enabled={fullScreen}>
         <MapContainer>
           <ControlsContainer>
@@ -200,7 +201,7 @@ class GeoMap extends Component {
           </ControlsContainer>
           <MapGL
             {...viewport}
-            scrollZoom={false}
+            scrollZoom={true}
             width="100%"
             height="100%"
             mapStyle={mapStyle}
@@ -208,7 +209,8 @@ class GeoMap extends Component {
             onHover={this._setLayerInfo}
             onClick={this._onCountryClick}
             mapboxApiAccessToken={MAPBOX_TOKEN}
-            zoom={this.state.zoom}
+            /*todo: refactor zooming functionality to facilitate both zooming by using the zoom controls and zooming by scrolling*/
+            // zoom={this.state.zoom}
           >
             {/*So this is the layer tooltip, and we seperate it from the
               martker tooltip, cause its functionality as a tooltip is a bit different

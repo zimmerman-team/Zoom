@@ -69,6 +69,12 @@ export const CellTextField = styled(TextField)`
   & input {
     margin-top: 2px;
     padding: 0;
+
+    &:disabled {
+      background-color: ${theme.color.zoomGreyZero};
+      margin-top: 0;
+      padding-bottom: 5px;
+    }
   }
 `;
 
@@ -84,4 +90,11 @@ export const CellButton = styled(CellValue)`
 
 export const ManMapTitle = styled(SectionHeading)`
   margin-bottom: 86px;
+`;
+
+export const ErrorLabel = styled.div`
+  color: ${theme.color.aidsFondsRed};
+  font-size: 14px;
+  padding: 0 0 10px 10px;
+  font-family: ${theme.font.zoomFontFamTwo};
 `;

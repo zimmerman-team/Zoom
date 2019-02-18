@@ -16,11 +16,11 @@ const ModuleContainer = styled(Box)``;
 const DataPaneContainer = styled.div``;
 
 const propTypes = {
-  indicators: PropTypes.arrayOf(PropTypes.shape),
+  indicators: PropTypes.arrayOf(PropTypes.shape)
 };
 
 const defaultProps = {
-  indicators: [],
+  indicators: []
 };
 
 class HomeModule extends Component {
@@ -29,7 +29,7 @@ class HomeModule extends Component {
     this.state = {
       dialogOpen: true,
       sideBarOpen: false,
-      indicators: [],
+      indicators: []
     };
 
     this.onClose = this.onClose.bind(this);
@@ -72,7 +72,7 @@ HomeModule.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
-    dataPaneOpen: state.dataPaneOpen.open,
+    dataPaneOpen: state.dataPaneOpen.open
   };
 };
 

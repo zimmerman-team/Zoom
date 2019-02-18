@@ -47,7 +47,8 @@ class GeoMap extends Component {
         latitude: 15,
         longitude: 0,
         bearing: 0,
-        pitch: 0
+        pitch: 0,
+        zoom: 2
       },
       hoverMarkerInfo: null,
       values: [12, 16],
@@ -190,15 +191,16 @@ class GeoMap extends Component {
     const { viewport, mapStyle, markerArray, legends, fullScreen } = this.state;
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
-      <Fullscreen enabled={fullScreen}>
+
+      <React.Fragment>
         <MapContainer>
-          <ControlsContainer>
+          {/*<ControlsContainer>
             <MapControls
               zoomIn={this.zoomIn}
               zoomOut={this.zoomOut}
               fullScreen={this.fullScreen}
             />
-          </ControlsContainer>
+          </ControlsContainer>*/}
           <MapGL
             {...viewport}
             scrollZoom={true}
@@ -231,7 +233,7 @@ class GeoMap extends Component {
             />
           </YearContainer>
         </MapContainer>
-      </Fullscreen>
+      </React.Fragment>
     );
   }
 }

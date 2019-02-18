@@ -50,7 +50,7 @@ class HomeModule extends Component {
     return (
       <React.Fragment>
         <ModuleContainer>
-          {/*<BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />*/}
+          <BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />
 
           <GeoMap
             indicatorData={indicators}

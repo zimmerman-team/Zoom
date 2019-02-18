@@ -99,7 +99,10 @@ class CountryDetailModule extends React.Component {
         <AidsfondsTransactions background={theme.color.zoomGreyZero} />
 
         {/* Fragment 5: Projects */}
-        <Projects projectData={this.props.projectData} />
+        <Projects
+          projectData={this.props.projectData}
+          projectInfo={this.props.projectInfo}
+        />
       </ModuleContainer>
     );
   }

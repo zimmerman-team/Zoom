@@ -16,23 +16,25 @@ const propTypes = {
       organisation: PropTypes.string,
       sectors: PropTypes.arrayOf(
         PropTypes.shape({
-          name: PropTypes.string,
-        }),
+          name: PropTypes.string
+        })
       ),
       startDate: PropTypes.string,
-      title: PropTypes.string,
-    }),
-  ),
+      title: PropTypes.string
+    })
+  )
 };
 const defaultProps = {
-  projectData: [],
+  projectData: []
 };
 
 const Projects = props => {
   return (
     <Element name="Projects">
       <ModuleFragment
-        title={countryDetailMockData.fragments[6].title}
+        title={`${props.projectInfo.count} Projects with a total of ${
+          props.projectInfo.commitment
+        } commitment`}
         description={countryDetailMockData.fragments[6].description[0]}
       >
         <ProjectList projectData={props.projectData} />

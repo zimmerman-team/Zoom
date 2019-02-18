@@ -137,9 +137,9 @@ export function formatBarChartInfoIndicators(
       barChartData.push({
         indicator: name,
         [countryName]: countryIndValue,
-        CountryColor: theme.color.chartColorTwo,
-        Global: globalIndValue,
-        GlobalColor: theme.color.chartColorThree
+        CountryColor: theme.color.chartColorTwo
+        // Global: globalIndValue,
+        // GlobalColor: theme.color.chartColorThree
       });
     }
   });

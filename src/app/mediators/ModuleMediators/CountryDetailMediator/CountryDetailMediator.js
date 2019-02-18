@@ -253,15 +253,6 @@ export default createRefetchContainer(
         geolocationTag
         value
       }
-      global: datapointsAggregation(
-        groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
-        orderBy: ["indicatorName"]
-        aggregation: ["Sum(value)"]
-        indicatorName_In: $barChartIndicators
-      ) {
-        indicatorName
-        value
-      }
       aidsEpidemic: datapointsAggregation(
         groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
         orderBy: ["indicatorName"]

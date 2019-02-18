@@ -88,8 +88,6 @@ export function formatOverviewData(sumString, typesString) {
     return item;
   });
 
-  getRowCount(overviewData);
-
   return overviewData;
 }
 
@@ -132,11 +130,17 @@ export function formatModelOptions(dataModelHeading) {
     label: '-None-',
     value: '-None-'
   });
-  // So we push in the 'filter_headings' just like this
-  // cause the data formed is super weird...
+
+  // We push in the Longitude, for the Longitude column selection
   modelOptions.push({
-    label: 'filter_headings',
-    value: 'filter_headings'
+    label: 'Longitude',
+    value: 'Longitude'
+  });
+
+  // We push in the Latitude, for the Latitude column selection
+  modelOptions.push({
+    label: 'Latitude',
+    value: 'Latitude'
   });
 
   Object.keys(dataModelHeading.mapping_dict).map(key => {
@@ -163,7 +167,8 @@ export function formatManData(typesString) {
       lockedIn: false,
       fileType: types[typeKey][0],
       zoomModel: '-None-',
-      label: undefined
+      label: undefined,
+      emptyFieldRow: false
     });
   });
 

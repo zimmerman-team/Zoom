@@ -6,5 +6,6 @@ export const uploadInitialstate = {
   overviewData: [],
   modelOptions: [],
   manMapData: [],
-  rowCount: 100
+  rowCount: 100,
+  mappingJson: {}
 };

@@ -11,20 +11,15 @@ export const ModuleContainer = styled.div`
   align-items: center;
 `;
 
+
 export const PageHeading = styled(_PageHeading)`
-  font-size: 32px;
+  font-size: ${Theme.fontSize.pageHeadingSmall};
   margin-bottom: 15px;
 `;
-
-export const HeaderIcon = styled.div``;
-
-export const HeaderGreeting = styled.div`
-  margin: 5px 0;
-  font-size: 14px;
-  font-weight: 300;
-  color: ${Theme.color.aidsFondsRed};
-  font-family: ${Theme.font.zoomFontFamTwo};
+export const header = styled.header`
+    align-items: center;
 `;
+
 
 export const SearchBox = styled(TextInput)`
   height: 48px;

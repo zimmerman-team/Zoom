@@ -9,7 +9,7 @@ export const Container = styled.div`
   border-bottom: 1px solid ${Theme.color.zoomGreyZero};
 `;
 
-export const CenterTabs = styled.div`
+export const TabItems = styled.div`
   display: flex;
   margin-left: auto;
 `;

@@ -6,17 +6,16 @@ import PropTypes from 'prop-types';
 import {
   ModuleContainer,
   PageHeading,
-  HeaderIcon,
-  HeaderGreeting,
   SearchBox,
   ViewContainer,
   NoItems
 } from 'modules/dashboard/DashboardModule.styles';
-import SvgIconUser from 'assets/icons/IconUser';
 import SvgIconSearch from 'assets/icons/IconSearch';
+import Searchbox from './fragments/Searchbox/Searchbox';
 import TabContainer from './fragments/TabContainer/TabContainer';
 import UsersTabView from './fragments/UsersTabView/UsersTabView';
 import TeamsTabView from './fragments/TeamsTabView/TeamsTabView';
+import UserGreeting from './fragments/UserGreeting/UserGreeting';
 
 const propTypes = {
   tabs: PropTypes.arrayOf(
@@ -113,15 +112,12 @@ const DashboardModule = ({
   changeSearchKeyword
 }) => (
   <ModuleContainer>
-    {/*todo: evaluate the dom structure of this component*/}
+    {/*Fixed: evaluate the dom structure of this component*/}
     <header>
-      {/*fixme: make re-usable header component and relocate fontsize to theme file*/}
+      {/*Fixed: make re-usable header component and relocate fontsize to theme file*/}
       <PageHeading>Zoom dashboard</PageHeading>
-      {/*todo: is this optimal? maybe make a re-usable component for this*/}
-      <HeaderIcon>
-        <SvgIconUser />
-      </HeaderIcon>
-      <HeaderGreeting>Welcome back {greetingName}</HeaderGreeting>
+      {/*Fixed: is this optimal? maybe make a re-usable component for this*/}
+    <UserGreeting message='Welcome back' user={greetingName}/>
     </header>
 
     <div>
@@ -131,6 +127,7 @@ const DashboardModule = ({
           onChange={changeSearchKeyword}
           placeholder={<SvgIconSearch />}
         />
+        <Searchbox></Searchbox>
       </section>
 
       <section>

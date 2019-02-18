@@ -55,15 +55,38 @@ export function formatProjectData(activities) {
         'reporting_organisation.narratives[0].text',
         'No reporting organisation title'
       ),
-      budget: get(
+      budget: `${get(
+        activity,
+        'aggregations.activity.budget_currency',
+        ''
+      )} ${get(
         activity,
         'aggregations.activity.budget_value',
         'Not Specified'
-      )
+      )}`
     });
   });
 
   return projectData;
+}
+
+/*
+  Calculates the total count of projects retrieved
+  and total commitment of them
+*/
+export function getProjectCountNCommitment(activities) {
+  let commitment = 0;
+  activities.forEach(activity => {
+    commitment += get(activity, 'aggregations.activity.commitment_value', 0);
+  });
+  return {
+    count: activities.length,
+    commitment: `${get(
+      activities,
+      '[0].aggregations.activity.commitment_currency',
+      ''
+    )} ${commitment}`
+  };
 }
 
 /*

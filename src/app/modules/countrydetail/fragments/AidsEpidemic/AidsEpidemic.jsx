@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 // import LineChart from 'components/charts/linechart/LineChart';
-import LineChart2 from 'components/charts/linechart2/LineChart';
+import LineChart2 from 'components/charts/recharts_linechart/LineChart';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';
 

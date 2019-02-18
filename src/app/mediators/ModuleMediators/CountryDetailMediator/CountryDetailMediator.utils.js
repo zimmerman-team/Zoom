@@ -117,22 +117,27 @@ export function formatBarChartInfoIndicators(
   indicatorNames,
   countryName
 ) {
+  let total = 0;
+  let results = [];
   const barChartData = [];
+
+  // console.log(countryData);
 
   indicatorNames.forEach((name, index) => {
     if (index < 3) {
       const countryDataPoints = filter(countryData, ['indicatorName', name]);
-      const globalDataPoints = filter(globalData, ['indicatorName', name]);
+      // const globalDataPoints = filter(globalData, ['indicatorName', name]);
 
       let countryIndValue = 0;
       countryDataPoints.forEach(point => {
         countryIndValue += point.value;
       });
+      total += countryIndValue;
 
-      let globalIndValue = 0;
-      globalDataPoints.forEach(point => {
-        globalIndValue += point.value;
-      });
+      // let globalIndValue = 0;
+      // globalDataPoints.forEach(point => {
+      //   globalIndValue += point.value;
+      // });
 
       barChartData.push({
         indicator: name,
@@ -144,7 +149,12 @@ export function formatBarChartInfoIndicators(
     }
   });
 
-  return barChartData;
+  results = sortBy(barChartData, [countryName]).map(bcd => ({
+    ...bcd,
+    percentage: total !== 0 ? (100 * bcd[countryName]) / total : 0
+  }));
+
+  return results.reverse();
 }
 
 // formats linechart data from indicators

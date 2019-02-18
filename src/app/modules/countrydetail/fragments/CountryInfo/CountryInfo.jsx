@@ -1,7 +1,8 @@
 /* base */
 import React from 'react';
-import BarChartHorizontal from 'components/charts/barcharts/horizontal/BarChartHorizontal';
-import { countryDetailMockData } from '__mocks__/countryDetailMock';
+import PropTypes from 'prop-types';
+
+/* components */
 import { Box } from 'grommet';
 import { Element } from 'react-scroll/modules';
 import { SimpleText } from 'components/sort/Misc';
@@ -11,13 +12,17 @@ import {
 } from 'components/sort/Paragraphs';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { CountryName } from 'modules/countrydetail/fragments/CountryInfo/CountryInfo.styles';
-import PropTypes from 'prop-types';
+import HorizontalBarChart from 'components/charts/barcharts/horizontal/HorizontalBarChart';
+
+/* theme */
 import theme from 'theme/Theme';
 
-// FRAGMENT 2: country info
+/* mock */
+import { countryDetailMockData } from '__mocks__/countryDetailMock';
 
+// FRAGMENT 2: country info
 const propTypes = {
-  excerpts: PropTypes.array,
+  excerpts: PropTypes.arrayOf(PropTypes.string),
   infoBarData: PropTypes.arrayOf(
     PropTypes.shape({
       CountryColor: PropTypes.string,
@@ -48,7 +53,11 @@ const CountryInfo = props => {
             </SimpleText>
           </Box>
           <Box width="50%">
-            <BarChartHorizontal
+            {/* <BarChartHorizontal
+              data={props.infoBarData}
+              countryName={props.countryName}
+            /> */}
+            <HorizontalBarChart
               data={props.infoBarData}
               countryName={props.countryName}
             />

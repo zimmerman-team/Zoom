@@ -294,7 +294,7 @@ export default class WrapUpMediator extends React.Component {
   }
 
   handleMappingCompleted(response, error) {
-    if (response) {
+    if (error) {
       console.log('MAPPING ERROR', error);
     }
     if (response) {

@@ -23,7 +23,7 @@ const propTypes = {
   excerpts: PropTypes.arrayOf(PropTypes.string),
   projectData: PropTypes.arrayOf(
     PropTypes.shape({
-      budget: PropTypes.number,
+      budget: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       endDat: PropTypes.string,
       organisation: PropTypes.string,
       sectors: PropTypes.arrayOf(
@@ -35,6 +35,10 @@ const propTypes = {
       title: PropTypes.string
     })
   ),
+  projectInfo: PropTypes.shape({
+    count: PropTypes.number,
+    commitment: PropTypes.string
+  }),
   countryName: PropTypes.string,
   infoBarData: PropTypes.arrayOf(
     PropTypes.shape({
@@ -61,6 +65,10 @@ const defaultProps = {
   // data: undefined,
   excerpts: [],
   projectData: [],
+  projectInfo: {
+    count: 0,
+    commitment: ''
+  },
   countryName: '',
   infoBarData: [],
   aidsLineChartData: []

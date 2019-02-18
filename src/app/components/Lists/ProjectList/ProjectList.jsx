@@ -30,10 +30,18 @@ const propTypes = {
       startDate: PropTypes.string,
       title: PropTypes.string
     })
-  )
+  ),
+  projectInfo: PropTypes.shape({
+    count: PropTypes.number,
+    commitment: PropTypes.string
+  })
 };
 const defaultProps = {
-  projectData: []
+  projectData: [],
+  projectInfo: {
+    count: 0,
+    commitment: ''
+  }
 };
 
 const ProjectList = props => {

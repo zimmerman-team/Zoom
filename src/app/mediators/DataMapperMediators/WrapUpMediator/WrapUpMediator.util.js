@@ -24,14 +24,16 @@ export function formatMapJson(mappingJson, mapData, fileId) {
       } else
         mapJson.extra_information.empty_entries[`empty_${item.zoomModel}`] =
           item.label;
-    } else if (item.zoomModel === 'Longitude')
+    } else if (item.zoomModel === 'Longitude') {
       // we check if there's longitude or
       // latitude selected and we save, we need to check for this
       // differently because its saved differently from the other mappings
       mapJson.point_based_info.coord.lon = item.fileType;
-    else if (item.zoomModel === 'Latitude')
+      mapJson.mapping_dict.geolocation.push(item.fileType);
+    } else if (item.zoomModel === 'Latitude') {
       mapJson.point_based_info.coord.lat = item.fileType;
-    else if (item.zoomModel !== '-None-') {
+      mapJson.mapping_dict.geolocation.push(item.fileType);
+    } else if (item.zoomModel !== '-None-') {
       // and here we do the simple mapping
       // and we will be pushing an array
       // of selections into these mapping dicts
@@ -45,8 +47,16 @@ export function formatMapJson(mappingJson, mapData, fileId) {
   // but the user does not need to have it in their file
   // if its not selected in the mapping we can just pass
   // some default values
-  if (mapJson.mapping_dict.filters.length === 0)
+  if (mapJson.mapping_dict.filters.length === 0) {
     mapJson.extra_information.empty_entries.empty_filter = 'all';
+    mapJson.filter_headings.filters = 'Category';
+  } else {
+    // we add the appropriate filter headings for each filter
+    mapJson.mapping_dict.filters.forEach(filterCol => {
+      mapJson.filter_headings[filterCol] = filterCol;
+    });
+  }
+
   if (mapJson.mapping_dict.geolocation.length === 0) {
     mapJson.extra_information.empty_entries.empty_geolocation.value = 'Global';
     mapJson.extra_information.empty_entries.empty_geolocation.type = 'country';
@@ -54,9 +64,6 @@ export function formatMapJson(mappingJson, mapData, fileId) {
 
   // and we add the meta_data id here
   mapJson.metadata_id = fileId;
-
-  // and we also need to add the filter headings for everything to work
-  mapJson.filter_headings.Subgroup = 'Subgroup';
 
   return mapJson;
 }

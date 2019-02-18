@@ -7,7 +7,7 @@ import {
   SideBarLayer,
   SidebarNavList,
   SidebarNavListContainer,
-  SidebarNavListItem,
+  SidebarNavListItem
 } from 'components/SideBar/SideBar.styles';
 import { Box } from 'grommet';
 import LoginForm from './comps/LoginForm/LoginForm';

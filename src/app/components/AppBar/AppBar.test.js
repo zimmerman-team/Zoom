@@ -7,7 +7,7 @@ import { Box } from 'grommet';
 import {
   AidsFondLogo,
   MenuButton,
-  ModuleContainer,
+  ModuleContainer
 } from 'components/AppBar/AppBar.styles';
 
 const wrapper = shallow(<AppBar />);

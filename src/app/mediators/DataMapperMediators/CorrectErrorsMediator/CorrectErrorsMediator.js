@@ -52,63 +52,76 @@ class CorrectErrorsMediator extends React.Component {
     this.refetch = this.refetch.bind(this);
     this.findReplaceValues = this.findReplaceValues.bind(this);
     this.resetFindReplace = this.resetFindReplace.bind(this);
+    this.updateCell = this.updateCell.bind(this);
   }
 
   componentDidMount() {
     if (this.props.fileId !== '-1') this.refetch();
   }
 
-  handleCellsErrorsCompleted(response) {
+  handleCellsErrorsCompleted(response, error) {
     if (response) {
-      const results = JSON.parse(
-        JSON.parse(response.fileErrorCorrection.result)
-      );
-
-      const errorTableData = JSON.parse(results.data_table);
       const command = JSON.parse(
         JSON.parse(response.fileErrorCorrection.command)
       );
 
-      let repCol = null;
-      if (command.replace_pressed && command.filter_column_heading)
-        repCol = command.filter_column_heading;
+      if (command.update) {
+        // so because when we update a cell
+        // we don't get back the error data
+        // we need to reset the update after it is done
+        // and then call data again to get the updated
+        // datas errors
+        command.update = false;
+        this.setState({ correctCommand: command }, this.getFileCellsErrors);
+      } else {
+        const results = JSON.parse(
+          JSON.parse(response.fileErrorCorrection.result)
+        );
 
-      const errorCells = formatErrorCells(
-        results.error_data.error_messages,
-        results.columns,
-        errorTableData,
-        repCol
-      );
+        const errorTableData = JSON.parse(results.data_table);
 
-      if (this.state.columnHeaders.length === 0) {
-        const columnHeaders = results.columns.map(column => {
-          return {
-            label: column,
-            value: column
-          };
-        });
+        let repCol = null;
+        if (command.replace_pressed && command.filter_column_heading)
+          repCol = command.filter_column_heading;
 
-        this.setState({ columnHeaders });
-      }
-
-      // so if replace was activated we need to
-      // we need to re-toggle the replace value
-      // cause we don't want to replace stuff again
-      // and we need to set the find value as the newly replaced value
-      // as thats what we'll want to show the user, what they actually replaced
-      if (command.replace_pressed) {
-        command.replace_pressed = false;
-        command.find_value = command.replace_value;
-      }
-
-      this.setState(
-        {
+        const errorCells = formatErrorCells(
+          results.error_data.error_messages,
+          results.columns,
           errorTableData,
-          errorCells,
-          rowCount: results.total_amount
-        },
-        () => this.props.saveStepData(this.state.errorCells, 4)
-      );
+          repCol
+        );
+
+        if (this.state.columnHeaders.length === 0) {
+          const columnHeaders = results.columns.map(column => {
+            return {
+              label: column,
+              value: column
+            };
+          });
+
+          this.setState({ columnHeaders });
+        }
+
+        // so if replace was activated we need to
+        // we need to re-toggle the replace value
+        // cause we don't want to replace stuff again
+        // and we need to set the find value as the newly replaced value
+        // as thats what we'll want to show the user, what they actually replaced
+        if (command.replace_pressed) {
+          command.replace_pressed = false;
+          command.find_value = command.replace_value;
+        }
+
+        this.setState(
+          {
+            errorTableData,
+            errorCells,
+            correctCommand: command,
+            rowCount: results.total_amount
+          },
+          () => this.props.saveStepData(this.state.errorCells, 4)
+        );
+      }
     }
   }
 
@@ -214,9 +227,21 @@ class CorrectErrorsMediator extends React.Component {
     );
   }
 
+  updateCell(text, otherVal) {
+    const command = { ...this.state.correctCommand };
+
+    command.update = true;
+    command.update_data.column = otherVal.colName;
+    command.update_data.line_no = parseInt(otherVal.rowInd, 10);
+    command.update_data.cell_value = text;
+
+    this.getFileCellsErrors(command);
+  }
+
   render() {
     return (
       <ErrorStep
+        updateCell={this.updateCell}
         forcePage={this.state.page}
         resetFindReplace={this.resetFindReplace}
         pageCount={this.state.rowCount / this.state.pageSize}

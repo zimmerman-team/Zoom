@@ -9,11 +9,11 @@ import connect from 'react-redux/es/connect/connect';
 import actions from 'services/actions';
 
 const propTypes = {
-  fileId: PropTypes.string, // Somehow needs to be passed through props
+  fileId: PropTypes.string // Somehow needs to be passed through props
 };
 
 const defaultProps = {
-  fileId: '',
+  fileId: ''
 };
 
 class CorrectErrorsMediator extends React.Component {
@@ -30,7 +30,7 @@ class CorrectErrorsMediator extends React.Component {
       find_value: '',
       filter_toggle: false,
       replace_pressed: false,
-      replace_value: '',
+      replace_value: ''
     };
 
     this.getColumns = this.getColumns.bind(this);
@@ -61,8 +61,8 @@ class CorrectErrorsMediator extends React.Component {
         replace_value: this.state.replace_value,
         replace_pressed: this.state.replace_pressed,
         error_toggle: this.state.error_toggle,
-        error_filter_value: this.state.error_filter_value,
-      }),
+        error_filter_value: this.state.error_filter_value
+      })
     );
   }
 
@@ -76,8 +76,8 @@ class CorrectErrorsMediator extends React.Component {
         type: this.state.type,
         error_filter_value: this.state.error_filter_value,
         apiError: false,
-        apiErrorMessage: '',
-      }),
+        apiErrorMessage: ''
+      })
     );
   }
 
@@ -88,8 +88,8 @@ class CorrectErrorsMediator extends React.Component {
         column: cellName,
         row,
         type: this.state.type,
-        save: 1,
-      }),
+        save: 1
+      })
     );
   }
 
@@ -99,8 +99,8 @@ class CorrectErrorsMediator extends React.Component {
         file_id: this.props.fileId,
         row_keys: rowKeys,
         type: this.state.type,
-        delete: 1,
-      }),
+        delete: 1
+      })
     );
   }
 
@@ -137,7 +137,7 @@ const mapStateToProps = state => {
     fileErrors: state.fileErrors,
     columns: state.errorCorrection,
     errorCorrectionSave: state.errorCorrectionSave,
-    errorCorrectionDeleteRow: state.errorCorrectionDeleteRow,
+    errorCorrectionDeleteRow: state.errorCorrectionDeleteRow
   };
 };
 

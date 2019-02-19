@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import SvgIconUser from 'assets/icons/IconUser';
 import Theme from 'theme/Theme';
 
-
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
@@ -17,7 +16,7 @@ const HeaderIcon = styled.div`
   justify-content: center;
 `;
 
-const HeaderGreeting  = styled.div`
+const HeaderGreeting = styled.div`
   display: flex;
   justify-content: center;
   margin: 5px 0;
@@ -30,11 +29,11 @@ const HeaderGreeting  = styled.div`
 const propTypes = {
   message: '',
   user: '',
-  userPicture: '',
+  userPicture: ''
 };
 const defaultProps = {
   message: 'Welcome back',
-  userPicture: <SvgIconUser/>
+  userPicture: <SvgIconUser />
 };
 const UserGreeting = props => {
   return (
@@ -43,8 +42,11 @@ const UserGreeting = props => {
         {/*Insert profile picture here*/}
         {props.userPicture}
       </HeaderIcon>
-      <HeaderGreeting>{props.message} {props.user}</HeaderGreeting>
-    </ComponentBase>);
+      <HeaderGreeting>
+        {props.message} {props.user}
+      </HeaderGreeting>
+    </ComponentBase>
+  );
 };
 UserGreeting.propTypes = propTypes;
 UserGreeting.defaultProps = defaultProps;

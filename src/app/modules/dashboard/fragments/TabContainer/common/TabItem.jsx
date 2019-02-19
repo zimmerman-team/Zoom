@@ -16,7 +16,7 @@ const propTypes = {
   activeTheme: PropTypes.object,
 
   to: PropTypes.string,
-  textTheme: PropTypes.string,
+  textTheme: PropTypes.string
 };
 
 const defaultProps = {};
@@ -24,14 +24,17 @@ const defaultProps = {};
 const TabItem = props => {
   return (
     <Tab key={props.tab.key}>
-    <TabBadge label={props.tabCounts[props.tab.key]}/>
-    <TabText
-      to={props.tab.route}
-      textTheme={props.activeTab === props.tab.key ? props.activeTheme : theme}
-    >
-      {props.tab.label}
-    </TabText>
-  </Tab>);
+      <TabBadge label={props.tabCounts[props.tab.key]} />
+      <TabText
+        to={props.tab.route}
+        textTheme={
+          props.activeTab === props.tab.key ? props.activeTheme : theme
+        }
+      >
+        {props.tab.label}
+      </TabText>
+    </Tab>
+  );
 };
 
 TabItem.propTypes = propTypes;

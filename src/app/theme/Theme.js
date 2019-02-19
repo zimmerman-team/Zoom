@@ -1,7 +1,7 @@
 export default {
   fontSize: {
     pageHeadingBig: '48px',
-    pageHeadingSmall: '32px',
+    pageHeadingSmall: '32px'
   },
 
   color: {

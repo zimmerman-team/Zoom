@@ -21,15 +21,13 @@ const ComponentBase = styled.div`
 `;
 
 const propTypes = {
-  label: PropTypes.string,
+  label: PropTypes.string
 };
 
 const defaultProps = {};
 
 const TabBadge = props => {
-  return (
-    <ComponentBase>{props.label}</ComponentBase>
-  );
+  return <ComponentBase>{props.label}</ComponentBase>;
 };
 
 TabBadge.propTypes = propTypes;

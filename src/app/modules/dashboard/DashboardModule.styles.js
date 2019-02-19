@@ -11,15 +11,13 @@ export const ModuleContainer = styled.div`
   align-items: center;
 `;
 
-
 export const PageHeading = styled(_PageHeading)`
   font-size: ${Theme.fontSize.pageHeadingSmall};
   margin-bottom: 15px;
 `;
 export const header = styled.header`
-    align-items: center;
+  align-items: center;
 `;
-
 
 export const SearchBox = styled(TextInput)`
   height: 48px;

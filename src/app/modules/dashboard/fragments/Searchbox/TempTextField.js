@@ -6,7 +6,9 @@ import NoSsr from '@material-ui/core/NoSsr';
 import theme from 'theme/Theme';
 
 export default styled(props => (
-  <NoSsr><TempTextField {...props} /></NoSsr>
+  <NoSsr>
+    <TempTextField {...props} />
+  </NoSsr>
 ))`
   && {
     padding: 0;

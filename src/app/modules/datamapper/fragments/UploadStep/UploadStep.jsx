@@ -8,16 +8,16 @@ import {
   TextContainer,
   BrowseLink,
   EmptyInput,
-  UploadedContainer,
+  UploadedContainer
 } from 'modules/datamapper/fragments/UploadStep/UploadStep.styles';
 import IconUpload from 'assets/icons/IconUpload';
 import theme from 'theme/Theme';
 
 const propTypes = {
-  handleFileUpload: PropTypes.func,
+  handleFileUpload: PropTypes.func
 };
 const defaultProps = {
-  handleFileUpload: undefined,
+  handleFileUpload: undefined
 };
 
 class UploadStep extends React.Component {
@@ -25,7 +25,7 @@ class UploadStep extends React.Component {
     super(props);
 
     this.state = {
-      active: false,
+      active: false
     };
 
     this.onDragEnter = this.onDragEnter.bind(this);
@@ -62,7 +62,7 @@ class UploadStep extends React.Component {
           onDragOver={this.onDragOver}
           onDrop={this.onDrop}
           style={{
-            backgroundColor: this.state.active ? theme.color.zoomGreyZero : '',
+            backgroundColor: this.state.active ? theme.color.zoomGreyZero : ''
           }}
         >
           <IconContainer>

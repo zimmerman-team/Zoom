@@ -19,13 +19,13 @@ const propTypes = {
       GlobalColor: PropTypes.string,
       Kenya: PropTypes.number,
       KenyaColor: PropTypes.string,
-      country: PropTypes.string,
-    }),
-  ),
+      country: PropTypes.string
+    })
+  )
 };
 const defaultProps = {
   data: [],
-  countryName: 'Kenya',
+  countryName: 'Kenya'
 };
 
 const BarChart = props => {
@@ -52,7 +52,7 @@ const BarChart = props => {
           top: 0,
           right: 0,
           bottom: 20,
-          left: 10,
+          left: 10
         }}
         padding={0.4}
         innerPadding={10}
@@ -72,7 +72,7 @@ const BarChart = props => {
             color: '#38bcb2',
             size: 4,
             padding: 1,
-            stagger: true,
+            stagger: true
           },
           {
             id: 'lines',
@@ -81,28 +81,28 @@ const BarChart = props => {
             color: '#eed312',
             rotation: -45,
             lineWidth: 6,
-            spacing: 10,
-          },
+            spacing: 10
+          }
         ]}
         fill={[
           {
             match: {
-              id: 'fries',
+              id: 'fries'
             },
-            id: 'dots',
+            id: 'dots'
           },
           {
             match: {
-              id: 'sandwich',
+              id: 'sandwich'
             },
-            id: 'lines',
-          },
+            id: 'lines'
+          }
         ]}
         borderColor="inherit:darker(1.6)"
         axisBottom={null}
         enableGridY={false}
         axisLeft={{
-          renderTick: customTick,
+          renderTick: customTick
         }}
         labelSkipWidth={12}
         labelSkipHeight={12}
@@ -128,11 +128,11 @@ const BarChart = props => {
               {
                 on: 'hover',
                 style: {
-                  itemOpacity: 1,
-                },
-              },
-            ],
-          },
+                  itemOpacity: 1
+                }
+              }
+            ]
+          }
         ]}
       />
     </ComponentBase>

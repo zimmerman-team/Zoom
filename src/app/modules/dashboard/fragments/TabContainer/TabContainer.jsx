@@ -5,11 +5,7 @@ import PropTypes from 'prop-types';
 /* components */
 import Theme from 'theme/Theme';
 import TabItem from './common/TabItem';
-import {
-  Container,
-  TabItems,
-} from './TabContainer.styles';
-
+import { Container, TabItems } from './TabContainer.styles';
 
 const activeTheme = {
   border: Theme.border.dashboardTab,
@@ -43,26 +39,29 @@ const TabContainer = ({ tabs, tabCounts, activeTab }) => (
     {/*FIXED: rename centertabs to something more descriptive*/}
     <TabItems>
       {tabs.slice(0, tabs.length - 1).map(tab => (
-        <TabItem tab={tab}
-                 activeTab={activeTab}
-                 activeTheme={activeTheme}
-                 tabCounts={tabCounts}
-                 to={tab.route}
-                 textTheme={activeTab === tab.key ? activeTheme :theme}
+        <TabItem
+          tab={tab}
+          activeTab={activeTab}
+          activeTheme={activeTheme}
+          tabCounts={tabCounts}
+          to={tab.route}
+          textTheme={activeTab === tab.key ? activeTheme : theme}
         />
-        ))}
+      ))}
     </TabItems>
 
-    {tabs.slice(tabs.length -1, tabs.length).map(tab => (
-    <TabItem tab={tab}
-             activeTab={activeTab}
-             theme={{ marginLeft: 'auto', paddingRight: 0 }}
-             tabCounts={tabCounts}
-             to={tabs[tabs.length - 1].route}
-             textTheme={activeTab === tabs[tabs.length - 1].key ? activeTheme : theme}
-    />
+    {tabs.slice(tabs.length - 1, tabs.length).map(tab => (
+      <TabItem
+        tab={tab}
+        activeTab={activeTab}
+        theme={{ marginLeft: 'auto', paddingRight: 0 }}
+        tabCounts={tabCounts}
+        to={tabs[tabs.length - 1].route}
+        textTheme={
+          activeTab === tabs[tabs.length - 1].key ? activeTheme : theme
+        }
+      />
     ))}
-
   </Container>
 );
 

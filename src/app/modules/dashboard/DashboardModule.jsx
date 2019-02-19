@@ -117,7 +117,7 @@ const DashboardModule = ({
       {/*Fixed: make re-usable header component and relocate fontsize to theme file*/}
       <PageHeading>Zoom dashboard</PageHeading>
       {/*Fixed: is this optimal? maybe make a re-usable component for this*/}
-    <UserGreeting message='Welcome back' user={greetingName}/>
+      <UserGreeting message="Welcome back" user={greetingName} />
     </header>
 
     <div>
@@ -127,7 +127,7 @@ const DashboardModule = ({
           onChange={changeSearchKeyword}
           placeholder={<SvgIconSearch />}
         />
-        <Searchbox></Searchbox>
+        <Searchbox />
       </section>
 
       <section>

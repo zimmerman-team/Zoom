@@ -26,6 +26,9 @@ export function formatOverviewData(sumString, typesString) {
 
   const summaries = JSON.parse(JSON.parse(sumString));
 
+  console.log('types', types);
+  console.log('summaries', summaries);
+
   // so basically because we don't retrieve the column headers with the summary
   // we will form everything in accordance to the types, because these do have
   // the column header names in them and each index in the summary array
@@ -41,19 +44,6 @@ export function formatOverviewData(sumString, typesString) {
     const summary = [];
 
     summKeys.forEach((summKey, keyIndex) => {
-      // // so we need to do this adjustment
-      // // to the proper name of frequency count
-      // // of the most frequent value, because it needs
-      // // to look something like this 'Netherlands count'
-      // // where in this case 'Netherlands' would be the most
-      // // frequent value in an Area column
-      // let freqName = properNames.freq;
-      // if(key === 'freq'){
-      //   // and its okay to play with indexes here, because 'freq'
-      //   // will always be the
-      //   freqName = freqName
-      // }
-
       summary.push({
         label: properNames[summKey],
         value: summValues[keyIndex]
@@ -66,8 +56,8 @@ export function formatOverviewData(sumString, typesString) {
       // so type[1] in the types array the actual
       // string array we'd see in the data types column
       dataTypes: types[typeKey][1],
-      // currently 0 until graphql is adjusted accordingly
-      blankCells: 0,
+      // so type[2] in the types array is actually the blank cell number of a column
+      blankCells: types[typeKey][2],
       summary
     });
   });

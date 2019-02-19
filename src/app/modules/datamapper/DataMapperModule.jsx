@@ -9,6 +9,7 @@ import {
   addInEmptyFieldRows
 } from 'modules/datamapper/DataMapperModule.util';
 import find from 'lodash/find';
+import { ToastsStore } from 'react-toasts';
 
 /* styles */
 import {
@@ -17,6 +18,7 @@ import {
   ModuleFooter,
   ModuleContent
 } from './DataMapperModule.styles';
+import { SimpleErrorText } from 'components/sort/Misc';
 
 /* fragments */
 import ManMappingStep from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep';
@@ -51,6 +53,42 @@ class DataMapperModule extends React.Component {
     this.prevStep = this.prevStep.bind(this);
     this.saveStepData = this.saveStepData.bind(this);
     this.saveEnvironment = this.saveEnvironment.bind(this);
+    this.nextDisabled = this.nextDisabled.bind(this);
+  }
+
+  // basically checks if next button should be disabled
+  // depending on the current step
+  nextDisabled() {
+    if (this.state.step === 1)
+      // we check if the title is empty
+      return (
+        !this.state.stepData[0] ||
+        !this.state.stepData[0].title ||
+        this.state.stepData[0].title.length === 0 ||
+        !this.state.stepData[0].desc ||
+        this.state.stepData[0].desc.length === 0 ||
+        !this.state.stepData[0].dataSource.value ||
+        this.state.stepData[0].dataSource.value.length === 0
+      );
+
+    if (this.state.step === 2)
+      return (
+        !this.state.stepData[1] ||
+        this.state.stepData[1].manMapData.length === 0
+      );
+
+    if (this.state.step === 4)
+      // So here we check if the fourth steps data has been saved
+      // and if it contains anything because what we actually save here
+      // are the error that we retrieve for this step
+      // and the user should be able to progress only if they've fixed
+      // all the found errors
+      return (
+        !this.state.stepsDisabled &&
+        (!this.state.stepData[3] || this.state.stepData[3].length > 0)
+      );
+
+    return false;
   }
 
   nextStep() {
@@ -60,10 +98,73 @@ class DataMapperModule extends React.Component {
     // in a DataMapperMediator, cause now its scattered
     // all over the place
     this.setState(prevState => {
+      const { stepData } = prevState;
+      if (prevState.step === 1) {
+        // and this bool will be used to save the general state if some
+        // fields are undefined
+        let emptyFields = false;
+
+        // we check if the title is empty
+        if (!stepData[0].title || stepData[0].title.length === 0) {
+          emptyFields = true;
+          stepData[0].title = undefined;
+        }
+
+        // we check if the description is empty
+        if (!stepData[0].desc || stepData[0].desc.length === 0) {
+          emptyFields = true;
+          stepData[0].desc = undefined;
+        }
+
+        // we check if the datasource is empty
+        if (
+          !stepData[0].dataSource.value ||
+          stepData[0].dataSource.value.length === 0
+        ) {
+          emptyFields = true;
+          stepData[0].dataSource.value = undefined;
+        }
+
+        if (emptyFields) {
+          ToastsStore.error(
+            <SimpleErrorText> Please fill the required fields </SimpleErrorText>
+          );
+          return { stepData };
+        }
+      } else if (prevState.step === 2) {
+        if (!stepData[1]) {
+          ToastsStore.error(
+            <SimpleErrorText> Please upload a file </SimpleErrorText>
+          );
+          return { stepData };
+        } else if (stepData[1].manMapData.length === 0) {
+          ToastsStore.error(
+            <SimpleErrorText> File Uploading please wait... </SimpleErrorText>
+          );
+          return { stepData };
+        }
+      } else if (prevState.step === 4) {
+        // So here we check if the fourth steps data has been saved
+        // and if it contains anything because what we actually save here
+        // are the error that we retrieve for this step
+        // and the user should be able to progress only if they've fixed
+        // all the found errors
+        if (
+          !this.state.stepsDisabled &&
+          (!stepData[3] || stepData[3].length > 0)
+        ) {
+          ToastsStore.error(
+            <SimpleErrorText>
+              {' '}
+              Please fix the errors before proceeding{' '}
+            </SimpleErrorText>
+          );
+          return { stepData };
+        }
+      }
       // restriction for the manual mapping step
-      if (prevState.step === 5) {
-        const { stepData } = prevState;
-        const manMapData = stepData[5] ? stepData[5] : stepData[1].manMapData;
+      else if (prevState.step === 5) {
+        const manMapData = stepData[4] ? stepData[4] : stepData[1].manMapData;
 
         const emptyFields = checkEmptyFields(
           manMapData,
@@ -156,6 +257,7 @@ class DataMapperModule extends React.Component {
               fileId={this.state.stepData[1].fileId}
               rowCount={this.state.stepData[1].rowCount}
               fileCorrection={this.props.fileCorrection}
+              saveStepData={this.saveStepData}
             />
           )
         );
@@ -208,6 +310,7 @@ class DataMapperModule extends React.Component {
             step={this.state.step}
             nextStep={this.nextStep}
             prevStep={this.prevStep}
+            nextDisabled={this.nextDisabled}
           />
         </ModuleHeader>
 
@@ -227,6 +330,7 @@ class DataMapperModule extends React.Component {
             step={this.state.step}
             nextStep={this.nextStep}
             prevStep={this.prevStep}
+            nextDisabled={this.nextDisabled}
           />
         </ModuleFooter>
       </ModuleContainer>

@@ -306,6 +306,7 @@ class UploadMediator extends React.Component {
   }
 
   render() {
+    console.log('fileID', this.state.fileId);
     return (
       <UploadStep
         loading={this.state.file.name && this.state.manMapData.length === 0}

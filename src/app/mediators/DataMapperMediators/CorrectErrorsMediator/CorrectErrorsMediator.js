@@ -11,7 +11,7 @@ import FileErrorResultMutation from 'mediators/DataMapperMediators/CorrectErrors
 
 /* utils */
 import get from 'lodash/get';
-import isEqual from 'lodash/isEqual';
+import findIndex from 'lodash/findIndex';
 import { formatErrorCells } from './CorrectErrorsMediator.util';
 
 const propTypes = {
@@ -39,6 +39,7 @@ class CorrectErrorsMediator extends React.Component {
       pageSize: 10,
       columnHeaders: [],
       page: 0,
+      checkedRows: false,
       rowCount: 100
     };
 
@@ -52,63 +53,92 @@ class CorrectErrorsMediator extends React.Component {
     this.refetch = this.refetch.bind(this);
     this.findReplaceValues = this.findReplaceValues.bind(this);
     this.resetFindReplace = this.resetFindReplace.bind(this);
+    this.checkRows = this.checkRows.bind(this);
+    this.deleteRows = this.deleteRows.bind(this);
   }
 
   componentDidMount() {
     if (this.props.fileId !== '-1') this.refetch();
   }
 
-  handleCellsErrorsCompleted(response) {
+  handleCellsErrorsCompleted(response, error) {
     if (response) {
-      const results = JSON.parse(
-        JSON.parse(response.fileErrorCorrection.result)
-      );
+      const command = this.state.correctCommand;
 
-      const errorTableData = JSON.parse(results.data_table);
-      const command = JSON.parse(
-        JSON.parse(response.fileErrorCorrection.command)
-      );
+      const results =
+        response.fileErrorCorrection &&
+        JSON.parse(JSON.parse(response.fileErrorCorrection.result));
 
-      let repCol = null;
-      if (command.replace_pressed && command.filter_column_heading)
-        repCol = command.filter_column_heading;
+      const errorTableData = results && JSON.parse(results.data_table);
 
-      const errorCells = formatErrorCells(
-        results.error_data.error_messages,
-        results.columns,
-        errorTableData,
-        repCol
-      );
+      // same as replacement we do for row deleting
+      // as we don't want to delete rows each time a page is changed
+      // or some other action been made
+      // and because after deleting rows we get no error data
+      // we recall the whole file correction
+      // with delete toggle set to false
+      if (command.delete) {
+        command.delete = false;
+        command.delete_data.row_keys = [];
 
-      if (this.state.columnHeaders.length === 0) {
-        const columnHeaders = results.columns.map(column => {
-          return {
-            label: column,
-            value: column
-          };
-        });
+        const delCommand = { ...this.state.correctCommand };
 
-        this.setState({ columnHeaders });
-      }
+        console.log('Delete ERROR', { error });
+        console.log('Delete command', delCommand);
+        console.log('Delete results', results);
+        console.log('Delete errorTableData', errorTableData);
+        console.log('Delete response', response);
+        this.getFileCellsErrors(command);
+      } else {
+        const afterDelCommand = { ...this.state.correctCommand };
+        console.log('AFTER DELETE ERROR', error);
+        console.log('After Delete command', afterDelCommand);
+        console.log('After Delete results', results);
+        console.log('After Delete errorTableData', errorTableData);
+        console.log('After Delete response', response);
 
-      // so if replace was activated we need to
-      // we need to re-toggle the replace value
-      // cause we don't want to replace stuff again
-      // and we need to set the find value as the newly replaced value
-      // as thats what we'll want to show the user, what they actually replaced
-      if (command.replace_pressed) {
-        command.replace_pressed = false;
-        command.find_value = command.replace_value;
-      }
+        let repCol = null;
+        if (command.replace_pressed && command.filter_column_heading)
+          repCol = command.filter_column_heading;
 
-      this.setState(
-        {
+        const errorCells = formatErrorCells(
+          results.error_data.error_messages,
+          results.columns,
           errorTableData,
-          errorCells,
-          rowCount: results.total_amount
-        },
-        () => this.props.saveStepData(this.state.errorCells, 4)
-      );
+          repCol
+        );
+
+        if (this.state.columnHeaders.length === 0) {
+          const columnHeaders = results.columns.map(column => {
+            return {
+              label: column,
+              value: column
+            };
+          });
+
+          this.setState({ columnHeaders });
+        }
+
+        // so if replace was activated we need to
+        // we need to re-toggle the replace value
+        // cause we don't want to replace stuff again
+        // and we need to set the find value as the newly replaced value
+        // as thats what we'll want to show the user, what they actually replaced
+        if (command.replace_pressed) {
+          command.replace_pressed = false;
+          command.find_value = command.replace_value;
+        }
+
+        this.setState(
+          {
+            errorTableData,
+            errorCells,
+            correctCommand: command,
+            rowCount: results.total_amount
+          },
+          () => this.props.saveStepData(this.state.errorCells, 4)
+        );
+      }
     }
   }
 
@@ -214,9 +244,56 @@ class CorrectErrorsMediator extends React.Component {
     );
   }
 
+  checkRows(index, checked) {
+    this.setState(prevState => {
+      const errorTableData = [...prevState.errorTableData];
+      let checkedRows = false;
+      if (index === 'all') {
+        // so if all is checked === true, it means that all rows are checked
+        // and viceversa unchecked so we can set the checked rows thingy here
+        checkedRows = checked;
+
+        errorTableData.map(row => {
+          row.checked = checked;
+          return row;
+        });
+      } else {
+        const actualInd = findIndex(errorTableData, ['index', index]);
+        errorTableData[actualInd].checked = !errorTableData[actualInd].checked;
+        checkedRows = findIndex(errorTableData, ['checked', true]) !== -1;
+      }
+      return { errorTableData, checkedRows };
+    });
+  }
+
+  deleteRows() {
+    console.log('DELETE THEM ROWS - DATA', this.state.errorTableData);
+
+    const command = this.state.correctCommand;
+    console.log('command', command);
+
+    const delIndex = [];
+
+    this.state.errorTableData.forEach(row => {
+      if (row.checked) {
+        delIndex.push(parseInt(row.index, 10));
+      }
+    });
+
+    if (delIndex.length > 0) {
+      command.delete = true;
+      command.delete_data.row_keys = delIndex;
+
+      this.getFileCellsErrors(command);
+    }
+  }
+
   render() {
     return (
       <ErrorStep
+        checkedRows={this.state.checkedRows}
+        deleteRows={this.deleteRows}
+        checkRows={this.checkRows}
         forcePage={this.state.page}
         resetFindReplace={this.resetFindReplace}
         pageCount={this.state.rowCount / this.state.pageSize}

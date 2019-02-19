@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { Box } from 'grommet';
 import FindReplace from 'modules/datamapper/fragments/ErrorsStep/components/FindReplace/FindReplace';
 import Pagination from 'components/Pagination/Pagination';
+import ZoomButton from 'components/ZoomButton/ZoomButton';
 
 /* utils */
 import { formatColumns } from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep.util';
@@ -19,6 +20,8 @@ import {
   ErrorTable,
   TabContainer,
   TabText,
+  ButtonContainer,
+  AboveTableOptions,
   TabDivider
 } from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
 
@@ -58,6 +61,9 @@ const propTypes = {
   findReplaceValues: PropTypes.func,
   resetFindReplace: PropTypes.func,
   loading: PropTypes.bool,
+  checkRows: PropTypes.func,
+  deleteRows: PropTypes.func,
+  checkedRows: PropTypes.bool,
   forcePage: PropTypes.number
 };
 
@@ -70,6 +76,9 @@ const defaultProps = {
   findReplaceValues: undefined,
   resetFindReplace: undefined,
   loading: false,
+  checkRows: undefined,
+  deleteRows: undefined,
+  checkedRows: false,
   forcePage: 0
 };
 
@@ -99,7 +108,7 @@ class ErrorStep extends React.Component {
       this.setState(
         {
           data: this.props.data,
-          columns: formatColumns(this.props.data)
+          columns: formatColumns(this.props.data, this.props.checkRows)
         },
         this.changeColors
       );
@@ -249,6 +258,13 @@ class ErrorStep extends React.Component {
             setWrapperRef={this.setWrapperRef}
           />
         </TabContainer>
+        <ButtonContainer>
+          {this.props.checkedRows && (
+            <ZoomButton plain onClick={() => this.props.deleteRows()}>
+              Delete rows
+            </ZoomButton>
+          )}
+        </ButtonContainer>
         <Box>
           <ErrorTable columns={this.state.columns} data={this.state.data} />
         </Box>

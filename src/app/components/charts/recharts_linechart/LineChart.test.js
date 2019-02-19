@@ -14,9 +14,7 @@ import {
 } from 'recharts';
 import mock from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
 
-const wrapper = shallow(
-  <LineChart indicators={mock.lineChartInd.map(lci => lci.name)} />
-);
+const wrapper = shallow(<LineChart indicators={mock.lineChartInd} />);
 
 describe('<LineChart />', () => {
   it('renders one <ResponsiveContainer/> component', () => {

@@ -34,7 +34,7 @@ import {
 const MAPBOX_TOKEN =
   'pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw';
 
-class GeoMap extends Component {
+export class GeoMap extends Component {
   constructor(props) {
     super(props);
 

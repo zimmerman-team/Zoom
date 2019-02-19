@@ -1,19 +1,16 @@
 /* base */
 import React, { Component } from 'react';
-import styled from 'styled-components';
-import GeoMap from 'components/GeoMap/GeoMap';
-import { connect } from 'react-redux';
-// import AppBar from 'components/navigation/AppBar/AppBar';
-import { Box } from 'grommet';
-// import SideBar from 'components/navigation/SideBar/SideBar';
-import { ControlPanelContainer } from 'modules/home/HomeModule.styles';
-import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
 import PropTypes from 'prop-types';
-import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
+import { connect } from 'react-redux';
 
-const ModuleContainer = styled(Box)``;
-
-const DataPaneContainer = styled.div``;
+/* components */
+import GeoMap from 'components/GeoMap/GeoMap';
+import {
+  ModuleContainer,
+  ControlPanelContainer
+} from 'modules/home/HomeModule.styles';
+import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
+// import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
 const propTypes = {
   indicators: PropTypes.arrayOf(PropTypes.shape)
@@ -23,7 +20,7 @@ const defaultProps = {
   indicators: []
 };
 
-class HomeModule extends Component {
+export class HomeModule extends Component {
   constructor(props) {
     super(props);
     this.state = {

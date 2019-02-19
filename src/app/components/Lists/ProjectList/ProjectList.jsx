@@ -58,26 +58,24 @@ const ProjectList = props => {
             />
           </TitleContainer>
 
-          {/* date container */}
-          <PropertyContainer
-            width="100%"
-            direction="row"
-            justify="start"
-            align="center"
-          >
-            <Box direction="row">
-              <Label>Start date:</Label>
-              <Value>{project.startDate}</Value>
-            </Box>
-            <Separator>|</Separator>
-            <Box direction="row">
-              <Label>End date:</Label>
-              <Value>{project.endDate}</Value>
-            </Box>
-          </PropertyContainer>
-
           {/* mixed properties */}
           <Box>
+            <PropertyContainer
+              width="100%"
+              direction="row"
+              justify="start"
+              align="center"
+            >
+              <Box direction="row">
+                <Label>Start date:</Label>
+                <Value>{project.startDate}</Value>
+              </Box>
+              <Separator>|</Separator>
+              <Box direction="row">
+                <Label>End date:</Label>
+                <Value>{project.endDate}</Value>
+              </Box>
+            </PropertyContainer>
             <PropertyContainer direction="row">
               <Label>Reporting organisation:</Label>
               <Value>{project.organisation}</Value>

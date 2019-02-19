@@ -27,23 +27,17 @@ export const IATIDetailBarChartMockData = [
 export const barChartMockData = [
   {
     indicator: 'AI',
-    Kenya: 17,
-    CountryColor: theme.color.chartColorTwo,
-    Global: 169,
-    GlobalColor: theme.color.chartColorThree
+    Kenya: 18,
+    CountryColor: theme.color.chartColorTwo
   },
   {
     indicator: 'AL',
     Kenya: 125,
-    CountryColor: theme.color.chartColorTwo,
-    Global: 163,
-    GlobalColor: theme.color.chartColorThree
+    CountryColor: theme.color.chartColorTwo
   },
   {
     indicator: 'AM',
     Kenya: 135,
-    CountryColor: theme.color.chartColorTwo,
-    Global: 131,
-    GlobalColor: theme.color.chartColorThree
+    CountryColor: theme.color.chartColorTwo
   }
 ];

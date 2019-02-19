@@ -6,10 +6,19 @@ export const fragmentContentWidth = '1024px';
 
 /* Buttons */
 const fontSizeParagraph = '20px';
+const simpleTextSize = '14px';
 
 export const SimpleText = styled(Text)`
   font-family: ${theme.font.zoomFontFamTwo};
   font-size: ${fontSizeParagraph};
+  font-weight: 300;
+  width: 100%;
+  line-height: 1;
+`;
+
+export const SimpleErrorText = styled(Text)`
+  font-family: ${theme.font.zoomFontFamTwo};
+  font-size: ${simpleTextSize};
   font-weight: 300;
   width: 100%;
   line-height: 1;

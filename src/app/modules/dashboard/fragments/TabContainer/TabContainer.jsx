@@ -4,14 +4,10 @@ import PropTypes from 'prop-types';
 
 /* components */
 import Theme from 'theme/Theme';
-import TabBadge from './common/TabBadge';
 import TabItem from './common/TabItem';
 import {
   Container,
   TabItems,
-  Tab,
-//  TabBadge,
-  TabText
 } from './TabContainer.styles';
 
 
@@ -47,30 +43,26 @@ const TabContainer = ({ tabs, tabCounts, activeTab }) => (
     {/*FIXED: rename centertabs to something more descriptive*/}
     <TabItems>
       {tabs.slice(0, tabs.length - 1).map(tab => (
-        <Tab key={tab.key}>
-          <TabBadge label={tabCounts[tab.key]}/>
-          <TabText
-            to={tab.route}
-            theme={activeTab === tab.key ? activeTheme : theme}
-          >
-            {tab.label}
-          </TabText>
-        </Tab>
-      ))}
+        <TabItem tab={tab}
+                 activeTab={activeTab}
+                 activeTheme={activeTheme}
+                 tabCounts={tabCounts}
+                 to={tab.route}
+                 textTheme={activeTab === tab.key ? activeTheme :theme}
+        />
+        ))}
     </TabItems>
 
-    {/*todo: lets minimize the use of inline styling*/}
-    /*todo: make reusable component */}
-    <Tab theme={{ marginLeft: 'auto', paddingRight: 0 }}>
-      {/*fixed: make reusable component */}
-      <TabBadge label= {tabCounts[tabs[tabs.length - 1].key]}/>
-      <TabText
-        to={tabs[tabs.length - 1].route}
-        theme={activeTab === tabs[tabs.length - 1].key ? activeTheme : theme}
-      >
-        {tabs[tabs.length - 1].label}
-      </TabText>
-    </Tab>
+    {tabs.slice(tabs.length -1, tabs.length).map(tab => (
+    <TabItem tab={tab}
+             activeTab={activeTab}
+             theme={{ marginLeft: 'auto', paddingRight: 0 }}
+             tabCounts={tabCounts}
+             to={tabs[tabs.length - 1].route}
+             textTheme={activeTab === tabs[tabs.length - 1].key ? activeTheme : theme}
+    />
+    ))}
+
   </Container>
 );
 

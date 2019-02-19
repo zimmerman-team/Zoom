@@ -22,21 +22,6 @@ export const Tab = styled.div`
   padding-right: ${props => props.theme.paddingRight};
 `;
 
-export const TabBadge = styled.div`
-  width: 18px;
-  height: 18px;
-  display: flex;
-  font-size: 12px;
-  font-weight: 700;
-  margin-right: 5px;
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
-  color: ${Theme.color.aidsFondsWhite};
-  font-family: ${Theme.font.zoomFontFamOne};
-  background-color: ${Theme.color.aidsFondsRed};
-`;
-
 export const TabText = styled(Link)`
   font-size: 14px;
   cursor: pointer;
@@ -48,6 +33,7 @@ export const TabText = styled(Link)`
   border-bottom: ${props => props.theme.border};
 
   &:hover {
+    position: relative;
     color: ${Theme.color.zoomBlack};
     border-bottom: ${Theme.border.dashboardTab};
   }

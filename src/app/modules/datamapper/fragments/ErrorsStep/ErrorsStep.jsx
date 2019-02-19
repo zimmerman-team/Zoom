@@ -29,7 +29,7 @@ const propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
-      index: PropTypes.number,
+      index: PropTypes.string,
       indicator: PropTypes.string,
       unit: PropTypes.string,
       subgroup: PropTypes.string,
@@ -56,8 +56,9 @@ const propTypes = {
   pageCount: PropTypes.number,
   changePage: PropTypes.func,
   findReplaceValues: PropTypes.func,
-  resetTable: PropTypes.func,
-  loading: PropTypes.bool
+  resetFindReplace: PropTypes.func,
+  loading: PropTypes.bool,
+  forcePage: PropTypes.number
 };
 
 const defaultProps = {
@@ -67,8 +68,9 @@ const defaultProps = {
   pageCount: 100,
   changePage: undefined,
   findReplaceValues: undefined,
-  resetTable: undefined,
-  loading: false
+  resetFindReplace: undefined,
+  loading: false,
+  forcePage: 0
 };
 
 class ErrorStep extends React.Component {
@@ -174,7 +176,7 @@ class ErrorStep extends React.Component {
 
   clickFindErrors() {
     if (this.state.tab !== 'findErrors') {
-      this.props.resetTable();
+      this.props.resetFindReplace();
       this.colorErrors();
       this.setState({ tab: 'findErrors', selectedHeader: undefined });
     }
@@ -182,7 +184,7 @@ class ErrorStep extends React.Component {
 
   clickOverview() {
     if (this.state.tab !== 'overview') {
-      this.props.resetTable();
+      this.props.resetFindReplace();
       this.resetColors();
       this.setState({ tab: 'overview', selectedHeader: undefined });
     }
@@ -190,7 +192,6 @@ class ErrorStep extends React.Component {
 
   clickFindReplace() {
     if (this.state.tab !== 'findReplace') {
-      this.props.resetTable();
       this.colorErrors();
       this.setState({ tab: 'findReplace', dialogOpen: true });
     } else {
@@ -252,12 +253,11 @@ class ErrorStep extends React.Component {
           <ErrorTable columns={this.state.columns} data={this.state.data} />
         </Box>
 
-        {this.state.tab !== 'findReplace' && (
-          <Pagination
-            pageCount={this.props.pageCount}
-            changePage={this.props.changePage}
-          />
-        )}
+        <Pagination
+          forcePage={this.props.forcePage}
+          pageCount={this.props.pageCount}
+          changePage={this.props.changePage}
+        />
 
         <Divider />
       </ModuleContainer>

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SectionHeading } from 'components/sort/Headings';
+
+/* styles */
 import {
   ModuleContainer,
   UploadContainer,
@@ -8,16 +9,26 @@ import {
   TextContainer,
   BrowseLink,
   EmptyInput,
-  UploadedContainer,
+  UploadedContainer
 } from 'modules/datamapper/fragments/UploadStep/UploadStep.styles';
-import IconUpload from 'assets/icons/IconUpload';
 import theme from 'theme/Theme';
+
+/* icons */
+import IconUpload from 'assets/icons/IconUpload';
+
+/* component */
+import { SectionHeading } from 'components/sort/Headings';
+import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
 const propTypes = {
   handleFileUpload: PropTypes.func,
+  error: PropTypes.bool,
+  loading: PropTypes.bool
 };
 const defaultProps = {
   handleFileUpload: undefined,
+  error: false,
+  loading: false
 };
 
 class UploadStep extends React.Component {
@@ -25,7 +36,7 @@ class UploadStep extends React.Component {
     super(props);
 
     this.state = {
-      active: false,
+      active: false
     };
 
     this.onDragEnter = this.onDragEnter.bind(this);
@@ -55,6 +66,7 @@ class UploadStep extends React.Component {
   render() {
     return (
       <ModuleContainer>
+        {this.props.loading && <ProgressIcon />}
         <SectionHeading>Upload CSV</SectionHeading>
         <UploadContainer
           onDragEnter={this.onDragEnter}
@@ -63,6 +75,7 @@ class UploadStep extends React.Component {
           onDrop={this.onDrop}
           style={{
             backgroundColor: this.state.active ? theme.color.zoomGreyZero : '',
+            borderColor: this.props.error ? theme.color.aidsFondsRed : ''
           }}
         >
           <IconContainer>

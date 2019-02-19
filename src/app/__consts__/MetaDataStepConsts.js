@@ -1,25 +1,25 @@
 export const step1InitialData = {
-  title: undefined,
-  desc: undefined,
+  title: '',
+  desc: '',
   tags: [],
   dataSource: {
     key: '',
     label: '',
     value: ''
   },
-  shared: false,
-  surveyData: false,
-  q1: undefined,
+  shared: 'Yes',
+  surveyData: 'No',
+  q1: "Don't know",
   q2: [],
-  q21: undefined,
-  q22: undefined,
+  q21: "Don't know",
+  q22: "Don't know",
   q3: [],
   q4: {
     key: '',
     label: '',
     value: ''
   },
-  q5: undefined,
+  q5: "Don't know",
   q51: [],
   sourceText: '',
   q3Text: '',

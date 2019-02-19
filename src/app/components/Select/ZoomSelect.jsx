@@ -39,13 +39,15 @@ const propTypes = {
   placeHolder: PropTypes.string,
   reset: PropTypes.func,
   categorise: PropTypes.bool,
-  search: PropTypes.bool
+  search: PropTypes.bool,
+  dropDownWidth: PropTypes.number
 };
 const defaultProps = {
   categorise: false,
   placeHolder: 'Has no indicators',
   reset: undefined,
-  search: true
+  search: true,
+  dropDownWidth: undefined
 };
 
 class ZoomSelect extends React.Component {
@@ -183,6 +185,9 @@ class ZoomSelect extends React.Component {
       );
     return (
       <DropDownItem
+        style={{
+          width: this.props.dropDownWidth ? this.props.dropDownWidth : ''
+        }}
         key={`dropDownItem-${index}`}
         onClick={() => this.handleItemClick(item)}
       >
@@ -198,7 +203,9 @@ class ZoomSelect extends React.Component {
 
   render() {
     return (
-      <ComponentBase>
+      <ComponentBase
+        style={this.props.disabled ? { pointerEvents: 'none' } : {}}
+      >
         <SelectHeader
           headerStyle={this.props.headerStyle}
           arrowMargins={this.props.arrowMargins}

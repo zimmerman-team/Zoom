@@ -7,10 +7,17 @@ import auth0Client from 'auth/Auth';
 
 // Routes
 import Routes from './Routes';
-import AppBar from 'components/AppBar/AppBar';
-import SideBar from 'components/SideBar/SideBar';
 import { Grommet } from 'grommet';
 import { ZoomTheme } from 'styles/ZoomTheme';
+
+/* global app components */
+import AppBar from 'components/AppBar/AppBar';
+import SideBar from 'components/SideBar/SideBar';
+import {
+  ToastsContainer,
+  ToastsStore,
+  ToastsContainerPosition
+} from 'react-toasts';
 
 const modernEnvironment = new Environment({
   network: Network.create(fetchQuery),
@@ -60,6 +67,7 @@ class App extends React.Component {
               ...CountryDetailMediator_indicatorAggregations
               ...ExplorePanelMediator_dropDownData
               ...MetaDataMediator_dropDownData
+              ...CorrectErrorsMediator_fileCorrection
             }
           `}
           variables={{}}
@@ -68,6 +76,10 @@ class App extends React.Component {
               return (
                 <Router>
                   <React.Fragment>
+                    <ToastsContainer
+                      store={ToastsStore}
+                      position={ToastsContainerPosition.TOP_CENTER}
+                    />
                     <AppBar
                       toggleSideBar={() =>
                         this.setState({ showSidebar: !this.state.showSidebar })

@@ -14,7 +14,8 @@ import {
   formatBarChartInfoIndicators,
   formatLineChartData,
   formatProjectData,
-  formatWikiExcerpts
+  formatWikiExcerpts,
+  getProjectCountNCommitment
 } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
 
 /* actions */
@@ -115,6 +116,7 @@ class CountryDetailMediator extends React.Component {
     this.state = {
       transParams: mock.transParams,
       wikiParams: mock.wikiParams,
+      projectInfo: {},
       projectData: [],
       excerpts: ['', ''],
       barChartIndicators: mock.barChartIndicators,
@@ -148,7 +150,10 @@ class CountryDetailMediator extends React.Component {
       const projectData = formatProjectData(
         get(this.props.countryActivities, 'data.results', [])
       );
-      this.setState({ projectData });
+      const projectInfo = getProjectCountNCommitment(
+        get(this.props.countryActivities, 'data.results', [])
+      );
+      this.setState({ projectData, projectInfo });
     }
 
     if (!isEqual(this.props.excerpts.data, prevProps.excerpts.data)) {
@@ -208,6 +213,7 @@ class CountryDetailMediator extends React.Component {
     return (
       <CountryDetailModule
         projectData={this.state.projectData}
+        projectInfo={this.state.projectInfo}
         infoBarData={this.state.infoBarData}
         aidsLineChartData={this.state.aidsLineChartData}
         countryName={this.state.countryName}
@@ -245,15 +251,6 @@ export default createRefetchContainer(
       ) {
         indicatorName
         geolocationTag
-        value
-      }
-      global: datapointsAggregation(
-        groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
-        orderBy: ["indicatorName"]
-        aggregation: ["Sum(value)"]
-        indicatorName_In: $barChartIndicators
-      ) {
-        indicatorName
         value
       }
       aidsEpidemic: datapointsAggregation(

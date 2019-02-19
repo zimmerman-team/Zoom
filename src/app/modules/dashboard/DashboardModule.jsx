@@ -15,7 +15,10 @@ import Searchbox from './fragments/Searchbox/Searchbox';
 import TabContainer from './fragments/TabContainer/TabContainer';
 import UsersTabView from './fragments/UsersTabView/UsersTabView';
 import TeamsTabView from './fragments/TeamsTabView/TeamsTabView';
-import UserGreeting from './fragments/UserGreeting/UserGreeting';
+import UserGreeting from './fragments/DashboardHeader/component/UserGreeting/UserGreeting';
+import DashboardHeader from 'modules/dashboard/fragments/DashboardHeader/DashboardHeader';
+
+import styled from 'styled-components';
 
 const propTypes = {
   tabs: PropTypes.arrayOf(
@@ -98,6 +101,15 @@ const getTabView = (
   }
 };
 
+const Box = styled.div`
+  display: flex;
+  //max-width: 1024px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
+
 const DashboardModule = ({
   tabs,
   sort,
@@ -112,23 +124,12 @@ const DashboardModule = ({
   changeSearchKeyword
 }) => (
   <ModuleContainer>
-    {/*Fixed: evaluate the dom structure of this component*/}
-    <header>
-      {/*Fixed: make re-usable header component and relocate fontsize to theme file*/}
-      <PageHeading>Zoom dashboard</PageHeading>
-      {/*Fixed: is this optimal? maybe make a re-usable component for this*/}
-      <UserGreeting message="Welcome back" user={greetingName} />
-    </header>
+    <DashboardHeader title="Zoom dashboard" userName={greetingName} />
+
+    <Searchbox inputChange={changeSearchKeyword} />
 
     <div>
-      <section>
-        {/*fixme: make re-usable component and use material-ui instead of grommet*/}
-        <SearchBox
-          onChange={changeSearchKeyword}
-          placeholder={<SvgIconSearch />}
-        />
-        <Searchbox />
-      </section>
+      {/*fixme: make re-usable component and use material-ui instead of grommet*/}
 
       <section>
         <TabContainer

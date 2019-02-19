@@ -55,15 +55,38 @@ export function formatProjectData(activities) {
         'reporting_organisation.narratives[0].text',
         'No reporting organisation title'
       ),
-      budget: get(
+      budget: `${get(
+        activity,
+        'aggregations.activity.budget_currency',
+        ''
+      )} ${get(
         activity,
         'aggregations.activity.budget_value',
         'Not Specified'
-      )
+      )}`
     });
   });
 
   return projectData;
+}
+
+/*
+  Calculates the total count of projects retrieved
+  and total commitment of them
+*/
+export function getProjectCountNCommitment(activities) {
+  let commitment = 0;
+  activities.forEach(activity => {
+    commitment += get(activity, 'aggregations.activity.commitment_value', 0);
+  });
+  return {
+    count: activities.length,
+    commitment: `${get(
+      activities,
+      '[0].aggregations.activity.commitment_currency',
+      ''
+    )} ${commitment}`
+  };
 }
 
 /*
@@ -94,34 +117,44 @@ export function formatBarChartInfoIndicators(
   indicatorNames,
   countryName
 ) {
+  let total = 0;
+  let results = [];
   const barChartData = [];
+
+  // console.log(countryData);
 
   indicatorNames.forEach((name, index) => {
     if (index < 3) {
       const countryDataPoints = filter(countryData, ['indicatorName', name]);
-      const globalDataPoints = filter(globalData, ['indicatorName', name]);
+      // const globalDataPoints = filter(globalData, ['indicatorName', name]);
 
       let countryIndValue = 0;
       countryDataPoints.forEach(point => {
         countryIndValue += point.value;
       });
+      total += countryIndValue;
 
-      let globalIndValue = 0;
-      globalDataPoints.forEach(point => {
-        globalIndValue += point.value;
-      });
+      // let globalIndValue = 0;
+      // globalDataPoints.forEach(point => {
+      //   globalIndValue += point.value;
+      // });
 
       barChartData.push({
         indicator: name,
         [countryName]: countryIndValue,
-        CountryColor: theme.color.chartColorTwo,
-        Global: globalIndValue,
-        GlobalColor: theme.color.chartColorThree
+        CountryColor: theme.color.chartColorTwo
+        // Global: globalIndValue,
+        // GlobalColor: theme.color.chartColorThree
       });
     }
   });
 
-  return barChartData;
+  results = sortBy(barChartData, [countryName]).map(bcd => ({
+    ...bcd,
+    percentage: total !== 0 ? (100 * bcd[countryName]) / total : 0
+  }));
+
+  return results.reverse();
 }
 
 // formats linechart data from indicators

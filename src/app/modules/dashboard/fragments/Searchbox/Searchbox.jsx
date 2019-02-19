@@ -10,42 +10,51 @@ import SvgIconSearch from '../../../../assets/icons/IconSearch';
 const styles = () => ({
   root: {
     display: 'flex',
-    flexWrap: 'wrap'
-    // outline: '2px solid blue',
+    flexWrap: 'wrap',
+    height: '50px'
   },
 
-  fullWidth: {
-    outline: '2px solid red',
-    padding: 0
+  input: {
+    height: '50px'
   },
 
-  MuiOutlinedInput: {
-    outline: '6px solid yellow'
+  MuiInputAdornment: {
+    height: 'initial'
   }
 });
 
 const StyledTextField = styled(TextField)`
   && {
     padding: 0;
+    width: 100%;
+    margin-bottom: 20px;
+
+    fieldset {
+      border-radius: 0;
+      /*todo: find way to set padding without using !important*/
+      padding: 0 !important;
+    }
+
+    input {
+      padding: 15px;
+      padding-left: 0;
+    }
   }
 `;
 
 class OutlinedInputAdornments extends React.Component {
   render() {
-    const { classes } = this.props;
     return (
       <StyledTextField
-        id="outlined-adornment-password"
-        // className={classNames(classes.root, classes.OutlinedInput)}
         classes={{
-          root: classes.root,
-          fullWidth: classes.fullWidth,
-          MuiOutlinedInput: classes.MuiOutlinedInput
+          root: this.props.classes.root,
+          input: this.props.classes.input,
+          /*todo: find out how to reset height of input adornment*/
+          MuiInputAdornment: this.props.classes.MuiInputAdornment
         }}
         variant="outlined"
         type="search"
         placeholder="Search"
-        fullWidth={true}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -53,13 +62,15 @@ class OutlinedInputAdornments extends React.Component {
             </InputAdornment>
           )
         }}
+        onChange={this.props.inputChange}
       />
     );
   }
 }
 
 OutlinedInputAdornments.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  inputChange: PropTypes.func
 };
 
 export default withStyles(styles)(OutlinedInputAdornments);

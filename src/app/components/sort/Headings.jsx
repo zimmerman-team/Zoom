@@ -25,7 +25,7 @@ export const PageHeading = styled(BaseHeading)`
   font-family: ${theme.font.zoomFontFamTwo};
   font-size: ${headSizeOne};
   font-weight: 700;
-  line-height: 55px;
+  line-height: 1;
 `;
 
 export const SectionHeading = styled(BaseHeading)`

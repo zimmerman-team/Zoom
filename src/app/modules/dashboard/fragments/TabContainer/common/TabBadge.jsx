@@ -5,29 +5,38 @@ import styled from 'styled-components';
 import Theme from 'theme/Theme';
 
 const ComponentBase = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 18px;
   min-width: 18px;
   height: 18px;
-  display: flex;
-  font-size: 12px;
-  font-weight: 700;
   margin-right: 5px;
   border-radius: 50%;
-  align-items: center;
-  justify-content: center;
-  color: ${Theme.color.aidsFondsWhite};
-  font-family: ${Theme.font.zoomFontFamOne};
   background-color: ${Theme.color.aidsFondsRed};
 `;
 
+const Label = styled.span`
+  color: ${Theme.color.aidsFondsWhite};
+  font-family: ${Theme.font.zoomFontFamOne};
+  line-height: 1;
+  font-size: 12px;
+  font-weight: 700;
+`;
 const propTypes = {
   label: PropTypes.string
 };
 
-const defaultProps = {};
+const defaultProps = {
+  label: '0'
+};
 
 const TabBadge = props => {
-  return <ComponentBase>{props.label}</ComponentBase>;
+  return (
+    <ComponentBase>
+      <Label>{props.label}</Label>
+    </ComponentBase>
+  );
 };
 
 TabBadge.propTypes = propTypes;

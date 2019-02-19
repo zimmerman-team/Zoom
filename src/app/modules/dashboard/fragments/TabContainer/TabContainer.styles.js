@@ -7,6 +7,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid ${Theme.color.zoomGreyZero};
+  padding-bottom: 10px;
 `;
 
 export const TabItems = styled.div`
@@ -22,19 +23,37 @@ export const Tab = styled.div`
   padding-right: ${props => props.theme.paddingRight};
 `;
 
-export const TabText = styled(Link)`
+export const TabText = styled.div`
+
+display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   font-size: 14px;
   cursor: pointer;
   font-weight: 700;
   text-decoration: none;
   padding: 6px 2px 0 2px;
+  
   color: ${props => props.theme.color};
+
   font-family: ${Theme.font.zoomFontFamOne};
   border-bottom: ${props => props.theme.border};
+  
+     &:before{
+   background-color: blue;
+   width: 10px;
+   height: 10px;
+    }
 
   &:hover {
-    position: relative;
+    //position: relative;
     color: ${Theme.color.zoomBlack};
-    border-bottom: ${Theme.border.dashboardTab};
-  }
+     //border-bottom: ${Theme.border.dashboardTab};
+   
+  
+  
+
+}
+
 `;

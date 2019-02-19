@@ -1,29 +1,28 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 
+/* components */
+import Theme from 'theme/Theme';
 import {
   FragmentHeader,
   FragmentVisualisation
 } from 'components/sort/Fragments';
-
-import { countryDetailMockData } from '__mocks__/countryDetailMock';
-import PieChart from 'components/charts/piechart/PieChart';
-import LineChart from 'components/charts/linechart/LineChart';
-import { pieChartMockData } from '__mocks__/pieChartMock';
-import { lineChartMockData } from '__mocks__/lineChartMock';
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';
+import PieChart from 'components/charts/piechart/PieChart';
+import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 
-const ComponentBase = styled.div``;
+/* mock */
+import { countryDetailMockData } from '__mocks__/countryDetailMock';
+import { pieChartMockData } from '__mocks__/pieChartMock';
 
 const propTypes = {
   data: PropTypes.object,
   background: PropTypes.string
 };
 const defaultProps = {
-  data: undefined
+  data: undefined,
+  background: Theme.color.aidsFondsWhite
 };
 
 const AidsfondsTransactions = props => {
@@ -38,9 +37,6 @@ const AidsfondsTransactions = props => {
         <FragmentVisualisation direction="row">
           <PieChart data={pieChartMockData} />
           <PieChart data={pieChartMockData} />
-        </FragmentVisualisation>
-        <FragmentVisualisation>
-          <LineChart data={lineChartMockData} />
         </FragmentVisualisation>
       </ModuleFragment>
     </Element>

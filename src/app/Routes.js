@@ -112,7 +112,9 @@ const Routes = props => {
           <Route path="/about" render={() => <About />} />
           <Route
             path="/mapper"
-            render={() => <DataMapperModule dropDownData={props} />}
+            render={() => (
+              <DataMapperModule dropDownData={props} fileCorrection={props} />
+            )}
           />
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />

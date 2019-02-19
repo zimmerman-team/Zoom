@@ -4,10 +4,11 @@
 import React from 'react';
 import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
+import { ToastsStore } from 'react-toasts';
 
 /* mutations */
-import AddFileMutation from 'mediators/DataMapperMediators/UploadMediator/mutations/UploadFileMutation';
-import AddSourceMutation from 'mediators/DataMapperMediators/UploadMediator/mutations/AddSourceMutation';
+import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
+import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
 import FileValidationMutation from 'mediators/DataMapperMediators/UploadMediator/mutations/FileValidation';
 
 /* consts */
@@ -19,13 +20,15 @@ import * as actions from 'services/actions';
 
 /* components */
 import UploadStep from 'modules/datamapper/fragments/UploadStep/UploadStep';
+import { SimpleErrorText } from 'components/sort/Misc';
 
 /* utils */
 import isEqual from 'lodash/isEqual';
 import {
   formatOverviewData,
   formatModelOptions,
-  formatManData
+  formatManData,
+  getRowCount
 } from './UploadMediator.util';
 
 const propTypes = {
@@ -37,7 +40,7 @@ const propTypes = {
   environment: PropTypes.shape({}),
   data: PropTypes.shape({
     url: PropTypes.string,
-    file: PropTypes.object,
+    file: PropTypes.shape({}),
     fileId: PropTypes.string,
     sourceId: PropTypes.string,
     overviewData: PropTypes.arrayOf(
@@ -64,9 +67,12 @@ const propTypes = {
         lockedIn: PropTypes.boolean,
         fileType: PropTypes.string,
         zoomModel: PropTypes.string,
-        label: PropTypes.string
+        label: PropTypes.string,
+        selectDisabled: PropTypes.bool
       })
-    )
+    ),
+    rowCount: PropTypes.number,
+    mappingJson: PropTypes.shape({})
   })
 };
 
@@ -113,13 +119,6 @@ class UploadMediator extends React.Component {
     }
   }
 
-  // So we will save the step data when this component will be unmounting
-  // as this data will be used in other components
-  // or when the user comes back to this component
-  componentWillUnmount() {
-    this.props.saveStepData(this.state, 2);
-  }
-
   handleSourceCompleted(response) {
     if (response)
       this.setState(
@@ -143,12 +142,16 @@ class UploadMediator extends React.Component {
 
   handleMetaDataCompleted(response, error) {
     if (error) console.log('error uploading file:', error);
+
     if (response) {
+      const mappingJson = JSON.parse(
+        response.file.dataModelHeading.replace(/'/g, '"')
+      );
+
       this.setState(
         {
-          modelOptions: formatModelOptions(
-            JSON.parse(response.file.dataModelHeading.replace(/'/g, '"'))
-          ),
+          mappingJson,
+          modelOptions: formatModelOptions(mappingJson),
           fileId: response.file.entryId
         },
         this.fileValidation
@@ -226,14 +229,21 @@ class UploadMediator extends React.Component {
   // data for the overview step needs to be here, cause it should change whenever a new file is uploaded
   // same will be with other steps that are dependant on the file
   handleValidationCompleted(response) {
-    if (response)
-      this.setState({
-        manMapData: formatManData(response.fileValidationResults.foundList),
-        overviewData: formatOverviewData(
-          response.fileValidationResults.summary,
-          response.fileValidationResults.foundList
-        )
-      });
+    if (response) {
+      const overviewData = formatOverviewData(
+        response.fileValidationResults.summary,
+        response.fileValidationResults.foundList
+      );
+      const rowCount = getRowCount(overviewData);
+      this.setState(
+        {
+          manMapData: formatManData(response.fileValidationResults.foundList),
+          overviewData,
+          rowCount
+        },
+        () => this.props.saveStepData(this.state, 2)
+      );
+    }
   }
 
   handleValidationError(error) {
@@ -270,18 +280,39 @@ class UploadMediator extends React.Component {
     // we save the uploaded file in state
     const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
 
-    if (file) {
+    const fileType = /[.]/.exec(file.name) ? /[^.]+$/.exec(file.name) : [''];
+
+    if (fileType[0] !== 'csv') {
+      ToastsStore.error(
+        <SimpleErrorText> Only csv files are accepted </SimpleErrorText>
+      );
+      this.setState({ url: undefined });
+    } else if (file) {
       this.setState({ file });
       // and we upload the file to the server
       const values = new FormData();
       values.append('file', file);
       this.props.dispatch(actions.uploadRequest(values));
+      // we also reset the manMapData when a new file is uploaded
+      // so that the loading icon would initiate
+      this.setState(
+        { file, manMapData: [] },
+        this.props.saveStepData(this.state, 2)
+      );
+    } else {
+      ToastsStore.error(
+        <SimpleErrorText>
+          Some error uploading the file occurred
+        </SimpleErrorText>
+      );
     }
   }
 
   render() {
     return (
       <UploadStep
+        loading={this.state.file.name && this.state.manMapData.length === 0}
+        error={this.state.url === undefined}
         file={this.state.file}
         handleFileUpload={this.handleFileUpload}
       />

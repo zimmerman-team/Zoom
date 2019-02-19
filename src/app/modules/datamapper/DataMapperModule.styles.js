@@ -18,7 +18,7 @@ export const ModuleHeader = styled.div`
   padding-bottom: 20px;
 `;
 export const ModuleContent = styled.div`
-  width: 1024px;
+  width: 100%;
 `;
 export const ModuleFooter = styled.div`
   width: 100%;

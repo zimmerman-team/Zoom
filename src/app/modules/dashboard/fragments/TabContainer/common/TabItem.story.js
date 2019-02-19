@@ -2,4 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import TabItem from './TabItem';
 
-storiesOf('Components', module).add('TabItem', () => <TabItem />);
+storiesOf('Dashboard|Modules/Fragments/Components', module).add(
+  'TabItem',
+  () => <TabItem />
+);

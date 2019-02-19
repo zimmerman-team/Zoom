@@ -5,16 +5,11 @@ import Theme from 'theme/Theme';
 import TabBadge from './TabBadge';
 import { Tab, TabText } from '../TabContainer.styles';
 
-const theme = {
-  color: Theme.color.aidsFondsRed
-};
-
 const propTypes = {
   tab: PropTypes.object,
   tabCounts: PropTypes.array,
   activeTab: PropTypes.string,
   activeTheme: PropTypes.object,
-
   to: PropTypes.string,
   textTheme: PropTypes.string
 };
@@ -28,7 +23,9 @@ const TabItem = props => {
       <TabText
         to={props.tab.route}
         textTheme={
-          props.activeTab === props.tab.key ? props.activeTheme : theme
+          props.activeTab === props.tab.key
+            ? props.activeTheme
+            : Theme.color.aidsFondsRed
         }
       >
         {props.tab.label}

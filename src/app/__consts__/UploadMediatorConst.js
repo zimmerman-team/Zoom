@@ -5,5 +5,7 @@ export const uploadInitialstate = {
   sourceId: '',
   overviewData: [],
   modelOptions: [],
-  manMapData: []
+  manMapData: [],
+  rowCount: 100,
+  mappingJson: {}
 };

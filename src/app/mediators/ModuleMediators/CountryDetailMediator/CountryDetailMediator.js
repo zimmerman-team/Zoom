@@ -12,10 +12,11 @@ import isEqual from 'lodash/isEqual';
 import {
   titleCase,
   formatBarChartInfoIndicators,
-  formatLineChartData,
+  // formatLineChartData,
   formatProjectData,
   formatWikiExcerpts,
-  getProjectCountNCommitment
+  getProjectCountNCommitment,
+  formatLineChart2Data
 } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
 
 /* actions */
@@ -120,7 +121,7 @@ class CountryDetailMediator extends React.Component {
       projectData: [],
       excerpts: ['', ''],
       barChartIndicators: mock.barChartIndicators,
-      aidsEpIndicators: mock.aidsEpIndicators,
+      aidsEpIndicators: mock.lineChartInd.map(lci => lci.name),
       aidsLineChartData: [],
       countryName: '',
       infoBarData: []
@@ -188,7 +189,7 @@ class CountryDetailMediator extends React.Component {
       wikiParams.titles = titleCase(countryName);
       this.props.dispatch(actions.countryExcerptRequest(this.state.wikiParams));
 
-      const aidsLineChartData = formatLineChartData(
+      const aidsLineChartData = formatLineChart2Data(
         this.props.indicatorAggregations.aidsEpidemic
       );
 
@@ -218,6 +219,7 @@ class CountryDetailMediator extends React.Component {
         aidsLineChartData={this.state.aidsLineChartData}
         countryName={this.state.countryName}
         excerpts={this.state.excerpts}
+        aidsEpIndicators={mock.lineChartInd}
       />
     );
   }

@@ -91,6 +91,7 @@ class CountryDetailModule extends React.Component {
         {/* Fragment 2: aids epidemic */}
         <AidsEpidemic
           background={theme.color.zoomGreyZero}
+          indicators={this.props.aidsEpIndicators}
           aidsLineChartData={this.props.aidsLineChartData}
         />
 

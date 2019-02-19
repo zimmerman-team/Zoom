@@ -218,6 +218,27 @@ export function formatLineChartData(indicatorData) {
   return lineChartData;
 }
 
+export function formatLineChart2Data(indicatorData) {
+  const lineChartData = [];
+
+  indicatorData.forEach(item => {
+    const chartItemInd = findIndex(lineChartData, ['year', item.date]);
+    if (chartItemInd > -1) {
+      lineChartData[chartItemInd] = {
+        ...lineChartData[chartItemInd],
+        [item.indicatorName]: item.value
+      };
+    } else {
+      lineChartData.push({
+        year: item.date,
+        [item.indicatorName]: item.value
+      });
+    }
+  });
+
+  return lineChartData;
+}
+
 export function titleCase(str) {
   const splitStr = str.toLowerCase().split(' ');
   for (let i = 0; i < splitStr.length; i++) {

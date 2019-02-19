@@ -4,6 +4,7 @@
 import React from 'react';
 import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
+import { ToastsStore } from 'react-toasts';
 
 /* mutations */
 import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
@@ -19,6 +20,7 @@ import * as actions from 'services/actions';
 
 /* components */
 import UploadStep from 'modules/datamapper/fragments/UploadStep/UploadStep';
+import { SimpleErrorText } from 'components/sort/Misc';
 
 /* utils */
 import isEqual from 'lodash/isEqual';
@@ -115,13 +117,6 @@ class UploadMediator extends React.Component {
     ) {
       this.setState({ url: this.props.upload.data.url }, this.afterFileInput);
     }
-  }
-
-  // So we will save the step data when this component will be unmounting
-  // as this data will be used in other components
-  // or when the user comes back to this component
-  componentWillUnmount() {
-    this.props.saveStepData(this.state, 2);
   }
 
   handleSourceCompleted(response) {
@@ -240,11 +235,14 @@ class UploadMediator extends React.Component {
         response.fileValidationResults.foundList
       );
       const rowCount = getRowCount(overviewData);
-      this.setState({
-        manMapData: formatManData(response.fileValidationResults.foundList),
-        overviewData,
-        rowCount
-      });
+      this.setState(
+        {
+          manMapData: formatManData(response.fileValidationResults.foundList),
+          overviewData,
+          rowCount
+        },
+        () => this.props.saveStepData(this.state, 2)
+      );
     }
   }
 
@@ -282,18 +280,39 @@ class UploadMediator extends React.Component {
     // we save the uploaded file in state
     const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
 
-    if (file) {
+    const fileType = /[.]/.exec(file.name) ? /[^.]+$/.exec(file.name) : [''];
+
+    if (fileType[0] !== 'csv') {
+      ToastsStore.error(
+        <SimpleErrorText> Only csv files are accepted </SimpleErrorText>
+      );
+      this.setState({ url: undefined });
+    } else if (file) {
       this.setState({ file });
       // and we upload the file to the server
       const values = new FormData();
       values.append('file', file);
       this.props.dispatch(actions.uploadRequest(values));
+      // we also reset the manMapData when a new file is uploaded
+      // so that the loading icon would initiate
+      this.setState(
+        { file, manMapData: [] },
+        this.props.saveStepData(this.state, 2)
+      );
+    } else {
+      ToastsStore.error(
+        <SimpleErrorText>
+          Some error uploading the file occurred
+        </SimpleErrorText>
+      );
     }
   }
 
   render() {
     return (
       <UploadStep
+        loading={this.state.file.name && this.state.manMapData.length === 0}
+        error={this.state.url === undefined}
         file={this.state.file}
         handleFileUpload={this.handleFileUpload}
       />

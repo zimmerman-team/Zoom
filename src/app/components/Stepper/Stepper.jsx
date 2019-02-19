@@ -26,18 +26,20 @@ import { steps } from './Stepper.const';
 
 const propTypes = {
   data: PropTypes.object,
-  onlyButtons: PropTypes.bool
+  onlyButtons: PropTypes.bool,
+  nextDisabled: PropTypes.func
 };
 const defaultProps = {
   data: undefined,
-  onlyButtons: false
+  onlyButtons: false,
+  nextDisabled: undefined
 };
 
 class Stepperz extends React.Component {
   render() {
     const { classes } = this.props;
 
-    const nextEnabled = this.props.step !== 6;
+    const nextDisabled = this.props.nextDisabled() || this.props.step === 6;
     const prevEnabled = this.props.step !== 1;
 
     const connector = (
@@ -83,10 +85,10 @@ class Stepperz extends React.Component {
           <ButtonContainer margin="small">
             <ZoomButton
               style={{
-                backgroundColor: !nextEnabled ? theme.color.zoomGreySix : '',
+                backgroundColor: nextDisabled ? theme.color.zoomGreySix : '',
                 ...stepButStyle
               }}
-              onClick={nextEnabled ? this.props.nextStep : undefined}
+              onClick={this.props.nextStep}
             >
               <ButtonLabel>next</ButtonLabel>
             </ZoomButton>

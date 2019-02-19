@@ -18,14 +18,16 @@ const propTypes = {
   fileId: PropTypes.string,
   relay: PropTypes.shape({}),
   fileCorrection: PropTypes.shape({}),
-  rowCount: PropTypes.number
+  rowCount: PropTypes.number,
+  saveStepData: PropTypes.func
 };
 
 const defaultProps = {
   fileId: '-1',
   relay: {},
   fileCorrection: {},
-  rowCount: 100
+  rowCount: 100,
+  saveStepData: undefined
 };
 
 class CorrectErrorsMediator extends React.Component {
@@ -89,10 +91,13 @@ class CorrectErrorsMediator extends React.Component {
         this.setState({ columnHeaders });
       }
 
-      this.setState({
-        errorTableData,
-        errorCells
-      });
+      this.setState(
+        {
+          errorTableData,
+          errorCells
+        },
+        () => this.props.saveStepData(this.state.errorCells, 4)
+      );
     }
   }
 

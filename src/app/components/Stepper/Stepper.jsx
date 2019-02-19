@@ -88,7 +88,7 @@ class Stepperz extends React.Component {
                 backgroundColor: nextDisabled ? theme.color.zoomGreySix : '',
                 ...stepButStyle
               }}
-              onClick={this.props.nextStep}
+              onClick={this.props.step !== 6 ? this.props.nextStep : undefined}
             >
               <ButtonLabel>next</ButtonLabel>
             </ZoomButton>

@@ -56,7 +56,8 @@ const propTypes = {
   pageCount: PropTypes.number,
   changePage: PropTypes.func,
   findReplaceValues: PropTypes.func,
-  resetTable: PropTypes.func
+  resetTable: PropTypes.func,
+  loading: PropTypes.bool
 };
 
 const defaultProps = {
@@ -66,7 +67,8 @@ const defaultProps = {
   pageCount: 100,
   changePage: undefined,
   findReplaceValues: undefined,
-  resetTable: undefined
+  resetTable: undefined,
+  loading: false
 };
 
 class ErrorStep extends React.Component {

@@ -8,7 +8,7 @@ import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll';
 
 const propTypes = {
-  background: PropTypes.string,
+  background: PropTypes.string
 };
 const defaultProps = {};
 

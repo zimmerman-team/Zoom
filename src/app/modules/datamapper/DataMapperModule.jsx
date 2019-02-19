@@ -255,7 +255,6 @@ class DataMapperModule extends React.Component {
           this.state.stepData[1] && (
             <CorrectErrorsMediator
               fileId={this.state.stepData[1].fileId}
-              rowCount={this.state.stepData[1].rowCount}
               fileCorrection={this.props.fileCorrection}
               saveStepData={this.saveStepData}
             />

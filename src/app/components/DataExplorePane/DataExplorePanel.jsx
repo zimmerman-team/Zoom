@@ -23,7 +23,7 @@ import {
   FilterContainer,
   PanelAccordion,
   AccordionSection,
-  DropDownCont,
+  DropDownCont
 } from './DataExplorerPane.style';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
@@ -35,44 +35,44 @@ const propTypes = {
   indNames: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
-      value: PropTypes.string,
-    }),
+      value: PropTypes.string
+    })
   ),
   countries: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
-      value: PropTypes.string,
-    }),
+      value: PropTypes.string
+    })
   ),
   regions: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
       value: PropTypes.arrayOf(
         PropTypes.shape({
-          iso2: PropTypes.string,
-        }),
-      ),
-    }),
+          iso2: PropTypes.string
+        })
+      )
+    })
   ),
   subIndicators1: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
-      value: PropTypes.string,
-    }),
+      value: PropTypes.string
+    })
   ),
   subIndicators2: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
-      value: PropTypes.string,
-    }),
+      value: PropTypes.string
+    })
   ),
   selectedCountryVal: PropTypes.arrayOf(PropTypes.string),
   selectedRegionVal: PropTypes.arrayOf(
     PropTypes.arrayOf(
       PropTypes.shape({
-        iso2: PropTypes.string,
-      }),
-    ),
+        iso2: PropTypes.string
+      })
+    )
   ),
   selectCountry: PropTypes.func,
   selectRegion: PropTypes.func,
@@ -83,7 +83,7 @@ const propTypes = {
   selectedSubInd2: PropTypes.arrayOf(PropTypes.string),
   selectSubInd1: PropTypes.func,
   selectSubInd2: PropTypes.func,
-  resetAll: PropTypes.func,
+  resetAll: PropTypes.func
 };
 const defaultProps = {
   selectedInd2: undefined,
@@ -104,12 +104,12 @@ const defaultProps = {
   selectedSubInd2: [],
   selectSubInd1: null,
   selectSubInd2: null,
-  resetAll: null,
+  resetAll: null
 };
 
 class DataExplorePane extends React.Component {
   state = {
-    activeIndex: [],
+    activeIndex: []
   };
 
   renderHeader(label) {
@@ -206,6 +206,7 @@ class DataExplorePane extends React.Component {
               </DropDownCont>
               <DropDownCont>
                 <ZoomSelect
+                  selectAll
                   categorise
                   placeHolder="Select sub indicator"
                   data={this.props.subIndicators1}
@@ -230,6 +231,7 @@ class DataExplorePane extends React.Component {
               </DropDownCont>
               <DropDownCont>
                 <ZoomSelect
+                  selectAll
                   categorise
                   placeHolder="Select sub indicator"
                   data={this.props.subIndicators2}

@@ -19,11 +19,11 @@ const propTypes = {
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
-            name: PropTypes.string,
-          }),
-        }),
-      ),
-    }),
+            name: PropTypes.string
+          })
+        })
+      )
+    })
   }),
   saveStepData: PropTypes.func,
   data: PropTypes.shape({
@@ -33,7 +33,7 @@ const propTypes = {
     dataSource: PropTypes.shape({
       key: PropTypes.string,
       label: PropTypes.string,
-      value: PropTypes.string,
+      value: PropTypes.string
     }),
     shared: PropTypes.Boolean,
     surveyData: PropTypes.Boolean,
@@ -41,28 +41,28 @@ const propTypes = {
     q2: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string,
-      }),
+        value: PropTypes.string
+      })
     ),
     q21: PropTypes.string,
     q22: PropTypes.string,
     q3: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string,
-      }),
+        value: PropTypes.string
+      })
     ),
     q4: PropTypes.shape({
       key: PropTypes.string,
       label: PropTypes.string,
-      value: PropTypes.string,
+      value: PropTypes.string
     }),
     q5: PropTypes.string,
     q51: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string,
-      }),
+        value: PropTypes.string
+      })
     ),
     sourceText: PropTypes.string,
     q3Text: PropTypes.string,
@@ -71,18 +71,18 @@ const propTypes = {
     fileSources: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string,
-      }),
-    ),
+        value: PropTypes.string
+      })
+    )
   }),
-  environment: PropTypes.shape({}),
+  environment: PropTypes.shape({})
 };
 
 const defaultProps = {
   dropDownData: {},
   saveStepData: undefined,
   data: step1InitialData,
-  environment: null,
+  environment: null
 };
 
 class MetaDataMediator extends React.Component {
@@ -90,7 +90,7 @@ class MetaDataMediator extends React.Component {
     super(props);
 
     this.state = {
-      data: props.data,
+      data: props.data
     };
 
     this.simpleChange = this.simpleChange.bind(this);
@@ -106,7 +106,7 @@ class MetaDataMediator extends React.Component {
     const fileSources = this.props.dropDownData.allFileSources.edges.map(
       node => {
         return { label: node.node.name, value: node.node.entryId };
-      },
+      }
     );
     this.simpleChange(fileSources, 'fileSources');
 
@@ -156,7 +156,7 @@ class MetaDataMediator extends React.Component {
       }
       check.push({
         label: value,
-        value: val,
+        value: val
       });
     } else {
       check.splice(checkInd, 1);
@@ -172,7 +172,7 @@ class MetaDataMediator extends React.Component {
 
     const otherInd = findIndex(
       check,
-      item => item.label.toLowerCase() === 'other',
+      item => item.label.toLowerCase() === 'other'
     );
 
     // so if 'other' label exists in the selected checkboxes
@@ -197,9 +197,9 @@ class MetaDataMediator extends React.Component {
       {
         key: value.value,
         label: value.label,
-        value: val,
+        value: val
       },
-      question,
+      question
     );
   }
 
@@ -211,9 +211,9 @@ class MetaDataMediator extends React.Component {
         {
           key: this.state.data[question].key,
           label: this.state.data[question].label,
-          value,
+          value
         },
-        question,
+        question
       );
     else if (this.state.data[question].key === '') {
       const labelInd = findIndex(options, ['value', 'other']);
@@ -221,9 +221,9 @@ class MetaDataMediator extends React.Component {
         {
           key: 'other',
           label: options[labelInd].label,
-          value,
+          value
         },
-        question,
+        question
       );
     }
 
@@ -262,5 +262,5 @@ export default createFragmentContainer(
         }
       }
     }
-  `,
+  `
 );

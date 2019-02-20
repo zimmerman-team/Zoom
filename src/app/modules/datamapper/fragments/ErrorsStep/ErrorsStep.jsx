@@ -14,7 +14,7 @@ import {
   ErrorTable,
   TabContainer,
   TabText,
-  TabDivider,
+  TabDivider
 } from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
 // import { Divider } from 'components/theme/ThemeSheet';
 import theme from 'theme/Theme';
@@ -36,13 +36,13 @@ const propTypes = {
       timePeriod: PropTypes.number,
       source: PropTypes.string,
       dateValue: PropTypes.number,
-      footnotes: PropTypes.string,
-    }),
-  ),
+      footnotes: PropTypes.string
+    })
+  )
 };
 
 const defaultProps = {
-  data,
+  data
 };
 
 class ErrorStep extends React.Component {
@@ -52,7 +52,7 @@ class ErrorStep extends React.Component {
     this.state = {
       tab: 'overview',
       dialogOpen: false,
-      data: props.data,
+      data: props.data
     };
 
     this.setWrapperRef = this.setWrapperRef.bind(this);
@@ -80,7 +80,7 @@ class ErrorStep extends React.Component {
   colorErrors() {
     errorCells.forEach(cell => {
       document.querySelector(
-        `tbody tr:nth-child(${cell.row}) td:nth-child(${cell.col})`,
+        `tbody tr:nth-child(${cell.row}) td:nth-child(${cell.col})`
       ).style.backgroundColor = theme.color.errorCellColor;
     });
   }
@@ -113,7 +113,7 @@ class ErrorStep extends React.Component {
               color:
                 this.state.tab === 'overview'
                   ? theme.color.aidsFondsBlue
-                  : theme.color.aidsFondsRed,
+                  : theme.color.aidsFondsRed
             }}
             onClick={() => this.clickOverview()}
           >
@@ -125,7 +125,7 @@ class ErrorStep extends React.Component {
               color:
                 this.state.tab === 'findErrors'
                   ? theme.color.aidsFondsBlue
-                  : theme.coloraidsFondsRed,
+                  : theme.coloraidsFondsRed
             }}
             onClick={() => this.clickFindErrors()}
           >
@@ -137,7 +137,7 @@ class ErrorStep extends React.Component {
               color:
                 this.state.tab === 'findReplace'
                   ? theme.color.aidsFondsBlue
-                  : theme.color.aidsFondsRed,
+                  : theme.color.aidsFondsRed
             }}
             onClick={() => this.clickFindReplace()}
           >

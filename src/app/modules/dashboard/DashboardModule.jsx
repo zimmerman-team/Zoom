@@ -19,6 +19,7 @@ import UserGreeting from './fragments/DashboardHeader/component/UserGreeting/Use
 import DashboardHeader from 'modules/dashboard/fragments/DashboardHeader/DashboardHeader';
 
 import styled from 'styled-components';
+import GridListOptionsPane from './fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
 
 const propTypes = {
   tabs: PropTypes.arrayOf(
@@ -129,8 +130,6 @@ const DashboardModule = ({
     <Searchbox inputChange={changeSearchKeyword} />
 
     <div>
-      {/*fixme: make re-usable component and use material-ui instead of grommet*/}
-
       <section>
         <TabContainer
           tabs={tabs}
@@ -145,7 +144,7 @@ const DashboardModule = ({
           activeTab={activeTab}
         />
       </section>
-
+      <GridListOptionsPane/>
       <section>
         <ViewContainer>
           {/*todo: evaluate if we can handle this in a simpler way by using react router*/}
@@ -163,6 +162,8 @@ const DashboardModule = ({
         </ViewContainer>
       </section>
     </div>
+
+
   </ModuleContainer>
 );
 

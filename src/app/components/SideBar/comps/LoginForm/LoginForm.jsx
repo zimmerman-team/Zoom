@@ -123,7 +123,10 @@ export class LoginForm extends React.Component {
         </LoginHeader>
 
         {this.props.auth0Client.isAuthenticated() ? (
-          <FormButton onClick={this.props.auth0Client.signOut}>
+          <FormButton
+            onClick={this.props.auth0Client.signOut}
+            data-cy="sidebar-logout-button"
+          >
             Sign out
           </FormButton>
         ) : (
@@ -134,12 +137,14 @@ export class LoginForm extends React.Component {
                   placeholder="Email or Username"
                   onChange={this.onUsernameChange}
                   theme={textFieldTheme}
+                  data-cy="sidebar-login-email-input"
                 />
                 <TextField
                   placeholder="Password"
                   type="password"
                   onChange={this.onPasswordChange}
                   theme={textFieldTheme}
+                  data-cy="sidebar-pass-email-input"
                 />
 
                 <FormButton
@@ -148,6 +153,7 @@ export class LoginForm extends React.Component {
                   disabled={
                     this.state.username === '' || this.state.password === ''
                   }
+                  data-cy="sidebar-login-button"
                 >
                   Sign in
                 </FormButton>

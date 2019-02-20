@@ -2,10 +2,10 @@ const data = {
   transParams: {
     recipient_country: 'KE',
     page: 1,
-    page_size: 10,
+    page_size: 400,
     fields:
       'sectors,title,id,activity_dates,reporting_organisation,aggregations',
-    ordering: 'activity_budget_value',
+    ordering: '-activity_budget_value',
     reporting_organisation_identifier: 'NL-KVK-41207989'
   },
   wikiParams: {
@@ -31,11 +31,18 @@ const data = {
   // So currently for aids epidemics data we will use
   // this array of indicators
   aidsEpIndicators: [
-    'people living with hiv',
     'new hiv infections',
     'aids-related deaths',
+    'people living with hiv',
     'children living with hiv',
     'coverage of people receiving art'
+  ],
+  lineChartInd: [
+    { name: 'new hiv infections', color: 'hsl(172, 70%, 50%)' },
+    { name: 'aids-related deaths', color: 'hsl(91, 70%, 50%)' },
+    { name: 'people living with hiv', color: 'hsl(313, 70%, 50%)' },
+    { name: 'children living with hiv', color: 'hsl(221, 70%, 50%)' },
+    { name: 'coverage of people receiving art', color: 'hsl(48, 70%, 50%)' }
   ]
 };
 

@@ -11,42 +11,97 @@ import {
   ButtonLabel
 } from 'modules/datamapper/fragments/ErrorsStep/components/FindReplace/FindReplace.styles';
 import PropTypes from 'prop-types';
-import { data } from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep.mock';
-import ErrorStep from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep';
 import ZoomButton from 'components/ZoomButton/ZoomButton';
+import ZoomSelect from 'components/Select/ZoomSelect';
 
 const propTypes = {
   open: PropTypes.bool,
-  setWrapperRef: PropTypes.func
+  findReplaceValues: PropTypes.func,
+  setWrapperRef: PropTypes.func,
+  columnHeaders: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string
+    })
+  ),
+  saveSelectedHeader: PropTypes.func
 };
 
 const defaultProps = {
   open: false,
-  setWrapperRef: null
+  findReplaceValues: undefined,
+  columnHeaders: [],
+  setWrapperRef: null,
+  saveSelectedHeader: undefined
 };
 
 class FindReplace extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      findValue: '',
+      replaceValue: '',
+      selectedHeader: undefined
+    };
+
+    this.handleSelectHeader = this.handleSelectHeader.bind(this);
+    this.handleFind = this.handleFind.bind(this);
+  }
+
+  handleSelectHeader(e) {
+    this.setState({ selectedHeader: e.value });
+  }
+
+  handleFind() {
+    this.props.saveSelectedHeader(this.state.selectedHeader);
+    this.props.findReplaceValues(
+      this.state.selectedHeader,
+      this.state.findValue
+    );
+  }
+
+  handleReplace() {
+    this.props.saveSelectedHeader(this.state.selectedHeader);
+    this.props.findReplaceValues(
+      this.state.selectedHeader,
+      this.state.findValue,
+      this.state.replaceValue
+    );
+  }
+
   render() {
     return (
       <div>
         {this.props.open && (
           <ComponentBase ref={this.props.setWrapperRef}>
             <FieldContainer>
+              <ZoomSelect
+                search={false}
+                placeHolder="Select column"
+                data={this.props.columnHeaders}
+                valueSelected={this.state.selectedHeader}
+                selectVal={this.handleSelectHeader}
+              />
+            </FieldContainer>
+            <FieldContainer>
               <InputLabelContainer>
                 <InputLabel>Find in file</InputLabel>
                 <InputContainer>
                   <EmptyInput
                     type="text"
-                    onChange={e => console.log('Find text: ', e.target.value)}
+                    value={this.state.findValue}
+                    onChange={e => this.setState({ findValue: e.target.value })}
                   />
                 </InputContainer>
               </InputLabelContainer>
               <ButtonContainer>
                 <ZoomButton
+                  disabled={!this.state.selectedHeader}
                   style={buttonStyle}
                   plain
                   focusIndicator={false}
-                  onClick={() => console.log('Find clicked')}
+                  onClick={() => this.handleFind()}
                 >
                   <ButtonLabel>Find</ButtonLabel>
                 </ZoomButton>
@@ -58,18 +113,20 @@ class FindReplace extends React.Component {
                 <InputContainer>
                   <EmptyInput
                     type="text"
+                    value={this.state.replaceValue}
                     onChange={e =>
-                      console.log('Replace text: ', e.target.value)
+                      this.setState({ replaceValue: e.target.value })
                     }
                   />
                 </InputContainer>
               </InputLabelContainer>
               <ButtonContainer>
                 <ZoomButton
+                  disabled={!this.state.selectedHeader}
                   style={buttonStyle}
                   plain
                   focusIndicator={false}
-                  onClick={() => console.log('Replace clicked')}
+                  onClick={() => this.handleReplace()}
                 >
                   <ButtonLabel>Replace</ButtonLabel>
                 </ZoomButton>

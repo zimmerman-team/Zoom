@@ -1,13 +1,11 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
-import LineChart from 'components/charts/linechart/LineChart';
+// import LineChart from 'components/charts/linechart/LineChart';
+import LineChart2 from 'components/charts/recharts_linechart/LineChart';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';
-
-const ComponentBase = styled.div``;
 
 const propTypes = {
   // data: PropTypes.object,
@@ -39,7 +37,11 @@ const AidsEpidemic = props => {
         title={countryDetailMockData.fragments[1].title}
         showInfoButton
       >
-        <LineChart data={props.aidsLineChartData} />
+        {/* <LineChart data={props.aidsLineChartData} /> */}
+        <LineChart2
+          indicators={props.indicators}
+          data={props.aidsLineChartData}
+        />
       </ModuleFragment>
     </Element>
   );

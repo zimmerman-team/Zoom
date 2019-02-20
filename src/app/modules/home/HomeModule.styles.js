@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Box } from 'grommet';
 
 export const ControlPanelContainer = styled.div`
   position: fixed;
@@ -26,3 +27,5 @@ export const DropDownContainer = styled.div`
   margin-left: 5px;
   margin-right: 5px;
 `;
+
+export const ModuleContainer = styled(Box)``;

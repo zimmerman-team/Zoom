@@ -4,7 +4,7 @@ import LineChart from './LineChart';
 
 // Components
 import { ResponsiveLine } from '@nivo/line';
-import { ComponentBase } from 'components/charts/linechart/LineChart.styles';
+import { ComponentBase } from 'components/charts/nivo_linechart/LineChart.styles';
 
 const wrapper = shallow(<LineChart />);
 

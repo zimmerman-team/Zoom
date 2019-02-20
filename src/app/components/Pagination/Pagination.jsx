@@ -8,11 +8,11 @@ import './Pagination.css';
 
 const propTypes = {
   pageCount: PropTypes.number,
-  changePage: PropTypes.func,
+  changePage: PropTypes.func
 };
 const defaultProps = {
   pageCount: 0,
-  changePage: null,
+  changePage: null
 };
 
 const Pagination = props => (

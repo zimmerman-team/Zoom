@@ -12,7 +12,7 @@ import {
   SectorListItem,
   Separator,
   TitleContainer,
-  Value,
+  Value
 } from 'components/Lists/ProjectList/ProjectList.styles';
 
 const propTypes = {
@@ -24,16 +24,16 @@ const propTypes = {
       organisation: PropTypes.string,
       sectors: PropTypes.arrayOf(
         PropTypes.shape({
-          name: PropTypes.string,
-        }),
+          name: PropTypes.string
+        })
       ),
       startDate: PropTypes.string,
-      title: PropTypes.string,
-    }),
-  ),
+      title: PropTypes.string
+    })
+  )
 };
 const defaultProps = {
-  projectData: [],
+  projectData: []
 };
 
 const ProjectList = props => {

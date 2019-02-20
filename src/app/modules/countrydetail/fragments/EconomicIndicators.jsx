@@ -11,10 +11,10 @@ import { Element } from 'react-scroll/modules';
 const ComponentBase = styled.div``;
 
 const propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.object
 };
 const defaultProps = {
-  data: undefined,
+  data: undefined
 };
 
 const EconomicIndicators = props => {

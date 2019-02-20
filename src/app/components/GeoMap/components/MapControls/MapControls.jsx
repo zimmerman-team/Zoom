@@ -13,12 +13,12 @@ import { ComponentBase, ButtonContainer } from './MapControls.style';
 const propTypes = {
   zoomIn: PropTypes.func,
   zoomOut: PropTypes.func,
-  fullScreen: PropTypes.func,
+  fullScreen: PropTypes.func
 };
 const defaultProps = {
   zoomIn: null,
   zoomOut: null,
-  fullScreen: null,
+  fullScreen: null
 };
 
 const MapControls = props => (

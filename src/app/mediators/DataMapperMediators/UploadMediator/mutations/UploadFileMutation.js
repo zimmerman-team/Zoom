@@ -28,7 +28,7 @@ const mutation = graphql`
 
 function commit(environment, input, handleCompleted, handleError) {
   const variables = {
-    input: { ...input },
+    input: { ...input }
   };
 
   commitMutation(environment, {
@@ -37,7 +37,7 @@ function commit(environment, input, handleCompleted, handleError) {
     onCompleted: (response, errors) => {
       handleCompleted(response, errors);
     },
-    onError: error => handleError(error),
+    onError: error => handleError(error)
   });
 }
 

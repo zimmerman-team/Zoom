@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import {
   EmptyInput,
   ComponentBase,
-  CheckBoxStyle,
+  CheckBoxStyle
 } from 'components/CustomCheckBox/CustomCheckBox.styles';
 
 /*TODO: rename this component to something better*/
 const propTypes = {
-  onChange: PropTypes.func,
+  onChange: PropTypes.func
 };
 
 const defaultProps = {
-  onChange: undefined,
+  onChange: undefined
 };
 
 class CustomCheckBox extends React.Component {
@@ -20,7 +20,7 @@ class CustomCheckBox extends React.Component {
     super(props);
 
     this.state = {
-      checked: false,
+      checked: false
     };
   }
 

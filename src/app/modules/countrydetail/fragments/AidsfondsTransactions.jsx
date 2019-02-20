@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import {
   FragmentHeader,
-  FragmentVisualisation,
+  FragmentVisualisation
 } from 'components/sort/Fragments';
 
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
@@ -20,10 +20,10 @@ const ComponentBase = styled.div``;
 
 const propTypes = {
   data: PropTypes.object,
-  background: PropTypes.string,
+  background: PropTypes.string
 };
 const defaultProps = {
-  data: undefined,
+  data: undefined
 };
 
 const AidsfondsTransactions = props => {

@@ -219,6 +219,8 @@ class DataMapperModule extends React.Component {
   }
 
   renderStep() {
+    console.log(this.state.stepData[1]);
+
     switch (this.state.step) {
       case 1:
         return (

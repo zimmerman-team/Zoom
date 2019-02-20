@@ -10,21 +10,21 @@ import SvgIconDelete from '../../../../../../../assets/icons/IconDelete';
 import SvgIconDuplicate from '../../../../../../../assets/icons/IconDuplicate';
 
 const ComponentBase = styled.div`
-display: flex;
-flex-direction: column;
-align-items: flex-end;
-margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 10px;
 `;
 
 const GridItemToolbar = props => {
   return (
     <ComponentBase>
-      <GridItemToolbarTab icon={<SvgIconEdit/>} indexTab="0"/>
-      <GridItemToolbarTab icon={<SvgIconList/>} indexTab="1"/>
-      <GridItemToolbarTab icon={<SvgIconDuplicate/>} indexTab="2"/>
-      <GridItemToolbarTab icon={<SvgIconDelete/>} indexTab="3"/>
+      <GridItemToolbarTab icon={<SvgIconEdit />} indexTab="0" />
+      <GridItemToolbarTab icon={<SvgIconList />} indexTab="1" />
+      <GridItemToolbarTab icon={<SvgIconDuplicate />} indexTab="2" />
+      <GridItemToolbarTab icon={<SvgIconDelete />} indexTab="3" />
     </ComponentBase>
-    );
+  );
 };
 
 export default GridItemToolbar;

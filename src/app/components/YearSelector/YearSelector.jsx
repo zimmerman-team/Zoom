@@ -8,7 +8,7 @@ import {
   YearLabel,
   ComponentBase,
   RangeContainer,
-  CustomHandle,
+  CustomHandle
 } from 'components/YearSelector/YearSelector.styles';
 
 const propTypes = {};
@@ -22,8 +22,8 @@ class YearSelector extends React.Component {
     this.state = {
       yearPeriod: [
         props.selectedYears[0],
-        props.selectedYears[this.props.selectedYears.length - 1],
-      ],
+        props.selectedYears[this.props.selectedYears.length - 1]
+      ]
     };
   }
 
@@ -32,8 +32,8 @@ class YearSelector extends React.Component {
       this.setState({
         yearPeriod: [
           this.props.selectedYears[0],
-          this.props.selectedYears[this.props.selectedYears.length - 1],
-        ],
+          this.props.selectedYears[this.props.selectedYears.length - 1]
+        ]
       });
     }
   }

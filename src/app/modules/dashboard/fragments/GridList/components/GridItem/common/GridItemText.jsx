@@ -5,21 +5,20 @@ import styled from 'styled-components';
 import Theme from 'theme/Theme';
 
 const ComponentBase = styled.div`
-display: flex;
-margin-top: 6px;
-margin-bottom: 6px;
-
+  display: flex;
+  margin-top: 6px;
+  margin-bottom: 6px;
 `;
 
 const GridItemTextLabel = styled.div`
-color: ${Theme.color.zoomBlack};
-font-family: ${Theme.font.zoomFontFamOne};
-font-size: 14px;
+  color: ${Theme.color.zoomBlack};
+  font-family: ${Theme.font.zoomFontFamOne};
+  font-size: 14px;
 `;
 
 const GridItemTextValue = styled.div`
-font-family: ${Theme.font.zoomFontFamTwo};;
-font-size: 14px;
+  font-family: ${Theme.font.zoomFontFamTwo};
+  font-size: 14px;
 `;
 
 const propTypes = {
@@ -33,10 +32,10 @@ const defaultProps = {
 
 const GridItemText = props => {
   return (
-<ComponentBase>
-  <GridItemTextLabel>{props.label}: &nbsp;</GridItemTextLabel>
-  <GridItemTextValue> {props.value}</GridItemTextValue>
-</ComponentBase>
+    <ComponentBase>
+      <GridItemTextLabel>{props.label}: &nbsp;</GridItemTextLabel>
+      <GridItemTextValue> {props.value}</GridItemTextValue>
+    </ComponentBase>
   );
 };
 

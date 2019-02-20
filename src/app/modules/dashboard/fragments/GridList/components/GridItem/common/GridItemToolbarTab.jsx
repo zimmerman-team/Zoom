@@ -5,35 +5,39 @@ import styled from 'styled-components';
 import Theme from 'theme/Theme';
 
 const TabIconButton = styled.a`
-margin-bottom: 10px;
+  margin-bottom: 10px;
 
-&:hover{
-cursor: pointer;
-}
+  &:hover {
+    cursor: pointer;
+  }
 
-&:hover path{
-fill: ${Theme.color.aidsFondsBlue} !important;
-}
+  &:hover path {
+    fill: ${Theme.color.aidsFondsBlue} !important;
+  }
 `;
 
 const propTypes = {
   icon: PropTypes.node,
-  indexTab: PropTypes.Number,
+  indexTab: PropTypes.Number
 };
 
 const defaultProps = {};
 
 const GridItemToolbarTab = props => {
-
   function handleClick(indexTab) {
-    console.log("Clicked: " + indexTab);
+    console.log('Clicked: ' + indexTab);
   }
 
   return (
     // todo: Evaluate element, React.Fragment only takes key/children attribute.
-    <TabIconButton onClick={() => {handleClick(props.indexTab)}}>
+    <TabIconButton
+      onClick={() => {
+        handleClick(props.indexTab);
+      }}
+    >
       {props.icon}
-    </TabIconButton>);
+    </TabIconButton>
+  );
 };
 GridItemToolbarTab.propTypes = propTypes;
 GridItemToolbarTab.defaultProps = defaultProps;

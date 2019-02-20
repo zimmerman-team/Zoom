@@ -23,7 +23,7 @@ const propTypes = {
   excerpts: PropTypes.arrayOf(PropTypes.string),
   projectData: PropTypes.arrayOf(
     PropTypes.shape({
-      budget: PropTypes.number,
+      budget: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       endDat: PropTypes.string,
       organisation: PropTypes.string,
       sectors: PropTypes.arrayOf(
@@ -35,6 +35,10 @@ const propTypes = {
       title: PropTypes.string
     })
   ),
+  projectInfo: PropTypes.shape({
+    count: PropTypes.number,
+    commitment: PropTypes.string
+  }),
   countryName: PropTypes.string,
   infoBarData: PropTypes.arrayOf(
     PropTypes.shape({
@@ -55,15 +59,31 @@ const propTypes = {
       ),
       id: PropTypes.string
     })
-  )
+  ),
+  projectsLoading: PropTypes.bool,
+  projectSort: PropTypes.string,
+  changeSortBy: PropTypes.func,
+  setWrapperRef: PropTypes.func,
+  setIsSortByOpen: PropTypes.func,
+  isSortByOpen: PropTypes.bool
 };
 const defaultProps = {
   // data: undefined,
   excerpts: [],
   projectData: [],
+  projectInfo: {
+    count: 0,
+    commitment: ''
+  },
   countryName: '',
   infoBarData: [],
-  aidsLineChartData: []
+  aidsLineChartData: [],
+  projectsLoading: false,
+  projectSort: '',
+  changeSortBy: null,
+  setWrapperRef: null,
+  setIsSortByOpen: null,
+  isSortByOpen: false
 };
 
 class CountryDetailModule extends React.Component {
@@ -83,6 +103,7 @@ class CountryDetailModule extends React.Component {
         {/* Fragment 2: aids epidemic */}
         <AidsEpidemic
           background={theme.color.zoomGreyZero}
+          indicators={this.props.aidsEpIndicators}
           aidsLineChartData={this.props.aidsLineChartData}
         />
 
@@ -99,7 +120,16 @@ class CountryDetailModule extends React.Component {
         <AidsfondsTransactions background={theme.color.zoomGreyZero} />
 
         {/* Fragment 5: Projects */}
-        <Projects projectData={this.props.projectData} />
+        <Projects
+          projectData={this.props.projectData}
+          projectInfo={this.props.projectInfo}
+          projectsLoading={this.props.projectsLoading}
+          sort={this.props.projectSort}
+          changeSortBy={this.props.changeSortBy}
+          setWrapperRef={this.props.setWrapperRef}
+          setIsSortByOpen={this.props.setIsSortByOpen}
+          isSortByOpen={this.props.isSortByOpen}
+        />
       </ModuleContainer>
     );
   }

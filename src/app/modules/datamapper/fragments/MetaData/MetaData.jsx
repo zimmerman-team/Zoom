@@ -24,6 +24,7 @@ import {
   SelectContainer,
   OrLabel
 } from './MetaData.style';
+import theme from 'theme/Theme';
 
 /* const data */
 import { step1InitialData } from '__consts__/MetaDataStepConsts';
@@ -111,12 +112,13 @@ const MetaData = props => (
     <SectionHeading>Describe meta data</SectionHeading>
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
-      <InputFieldLabel text="Title data set*" />
       <TextField
+        error={props.data.title === undefined}
         placeholder={undefined}
         value={props.data.title}
-        InputProps={{
-          disableUnderline: false
+        label="Title data set*"
+        InputLabelProps={{
+          shrink: true
         }}
         onChange={e => props.simpleChange(e.target.value, 'title')}
       />
@@ -124,11 +126,13 @@ const MetaData = props => (
 
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
-      <InputFieldLabel text="Description*" />
       <TextField
+        multiline
+        error={props.data.desc === undefined}
         placeholder={undefined}
-        InputProps={{
-          disableUnderline: false
+        label="Description*"
+        InputLabelProps={{
+          shrink: true
         }}
         value={props.data.desc}
         onChange={e => props.simpleChange(e.target.value, 'desc')}
@@ -137,8 +141,12 @@ const MetaData = props => (
 
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
-      <InputFieldLabel text="Tags*" />
       <ChipInput
+        placeholder={undefined}
+        label="Tags"
+        InputLabelProps={{
+          shrink: true
+        }}
         value={props.data.tags}
         onAdd={chip => props.onChipAdd(chip)}
         onDelete={(chip, index) => props.onChipDelete(index)}
@@ -148,7 +156,15 @@ const MetaData = props => (
     {/*////////////////////////////////////////////////////////////////////*/}
     <TwoFieldContainer>
       <SelectContainer>
-        <InputFieldLabel text="Select data source*" />
+        <InputFieldLabel
+          text="Select data source*"
+          style={{
+            color:
+              props.data.dataSource.value === undefined
+                ? theme.color.aidsFondsRed
+                : ''
+          }}
+        />
         <SelectSurround>
           <ZoomSelect
             search={false}
@@ -164,11 +180,12 @@ const MetaData = props => (
       </SelectContainer>
       <OrLabel> or </OrLabel>
       <DataSourceTextCont>
-        <InputFieldLabel text="Create new name for  data source" />
         <TextField
+          error={props.data.dataSource.value === undefined}
           placeholder={undefined}
-          InputProps={{
-            disableUnderline: false
+          label="Create new name for  data source"
+          InputLabelProps={{
+            shrink: true
           }}
           value={props.data.sourceText}
           onChange={e =>
@@ -176,7 +193,7 @@ const MetaData = props => (
               e.target.value,
               'dataSource',
               'sourceText',
-              dataSourceOptions
+              dataSourceOptions.concat(props.data.fileSources)
             )
           }
         />
@@ -290,11 +307,11 @@ const MetaData = props => (
         options={checkBoxOptions3}
         onChange={value => props.checkBoxChange(value, 'q3', 'q3Text')}
       />
-      <InputFieldLabel text="If other, explain" />
       <TextField
         placeholder={undefined}
-        InputProps={{
-          disableUnderline: false
+        label="If other, explain"
+        InputLabelProps={{
+          shrink: true
         }}
         value={props.data.q3Text}
         onChange={e => props.otherCheckBoxText(e.target.value, 'q3', 'q3Text')}
@@ -320,11 +337,11 @@ const MetaData = props => (
       </SelectContainer>
       <OrLabel> or </OrLabel>
       <DataSourceTextCont>
-        <InputFieldLabel text="Enter a number" />
         <TextField
           placeholder={undefined}
-          InputProps={{
-            disableUnderline: false
+          label="Enter a number"
+          InputLabelProps={{
+            shrink: true
           }}
           value={props.data.q4Text}
           onChange={e =>
@@ -362,11 +379,11 @@ const MetaData = props => (
         options={checkBoxOptions51}
         onChange={value => props.checkBoxChange(value, 'q51', 'q51Text')}
       />
-      <InputFieldLabel text="If other, explain" />
       <TextField
         placeholder={undefined}
-        InputProps={{
-          disableUnderline: false
+        label="If other, explain"
+        InputLabelProps={{
+          shrink: true
         }}
         value={props.data.q51Text}
         onChange={e =>

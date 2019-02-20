@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import AidsEpidemic from './AidsEpidemic';
 // Components
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-import LineChart from 'components/charts/linechart/LineChart';
+import LineChart from 'components/charts/recharts_linechart/LineChart';
 
 const wrapper = shallow(<AidsEpidemic />);
 

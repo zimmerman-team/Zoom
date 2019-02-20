@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 import { Box } from 'grommet';
 import get from 'lodash/get';
+import Theme from 'theme/Theme';
 const ComponentBase = styled(Box)`
   height: 280px;
   width: 100%;
@@ -19,13 +20,13 @@ const propTypes = {
       GlobalColor: PropTypes.string,
       Kenya: PropTypes.number,
       KenyaColor: PropTypes.string,
-      country: PropTypes.string,
-    }),
-  ),
+      country: PropTypes.string
+    })
+  )
 };
 const defaultProps = {
   data: [],
-  countryName: 'Kenya',
+  countryName: 'Kenya'
 };
 
 const BarChart = props => {
@@ -33,11 +34,11 @@ const BarChart = props => {
     // console.log(tick);
     return (
       <g
-        transform={`translate(0, ${tick.y - 30})`}
+        transform={`translate(0, ${tick.y - 40})`}
         style={{ opacity: 1 }}
         key={`indicator-${tick.key}`}
       >
-        <text style={{ fontSize: 11 }}>{tick.key}</text>
+        <text style={{ fontSize: 11, fontWeight: '700' }}>{tick.key}</text>
       </g>
     );
   };
@@ -52,18 +53,14 @@ const BarChart = props => {
           top: 0,
           right: 0,
           bottom: 20,
-          left: 10,
+          left: 10
         }}
         padding={0.4}
         innerPadding={10}
         groupMode="grouped"
         layout="horizontal"
         colors="nivo"
-        colorBy={function(e) {
-          return e.id === 'Global'
-            ? get(e, 'data.GlobalColor', '#000')
-            : get(e, 'data.CountryColor', '#000');
-        }}
+        colorBy={e => get(e, 'data.CountryColor', '#000')}
         defs={[
           {
             id: 'dots',
@@ -72,7 +69,7 @@ const BarChart = props => {
             color: '#38bcb2',
             size: 4,
             padding: 1,
-            stagger: true,
+            stagger: true
           },
           {
             id: 'lines',
@@ -81,33 +78,19 @@ const BarChart = props => {
             color: '#eed312',
             rotation: -45,
             lineWidth: 6,
-            spacing: 10,
-          },
-        ]}
-        fill={[
-          {
-            match: {
-              id: 'fries',
-            },
-            id: 'dots',
-          },
-          {
-            match: {
-              id: 'sandwich',
-            },
-            id: 'lines',
-          },
+            spacing: 10
+          }
         ]}
         borderColor="inherit:darker(1.6)"
         axisBottom={null}
         enableGridY={false}
         axisLeft={{
-          renderTick: customTick,
+          renderTick: customTick
         }}
-        labelSkipWidth={12}
-        labelSkipHeight={12}
-        labelTextColor="#000"
-        animate={true}
+        enableLabel
+        labelTextColor={Theme.color.zoomBlack}
+        label={d => <tspan y={-2}>{d.value}</tspan>}
+        animate
         motionStiffness={90}
         motionDamping={15}
         legends={[
@@ -128,11 +111,11 @@ const BarChart = props => {
               {
                 on: 'hover',
                 style: {
-                  itemOpacity: 1,
-                },
-              },
-            ],
-          },
+                  itemOpacity: 1
+                }
+              }
+            ]
+          }
         ]}
       />
     </ComponentBase>

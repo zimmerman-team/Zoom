@@ -41,19 +41,6 @@ export function formatOverviewData(sumString, typesString) {
     const summary = [];
 
     summKeys.forEach((summKey, keyIndex) => {
-      // // so we need to do this adjustment
-      // // to the proper name of frequency count
-      // // of the most frequent value, because it needs
-      // // to look something like this 'Netherlands count'
-      // // where in this case 'Netherlands' would be the most
-      // // frequent value in an Area column
-      // let freqName = properNames.freq;
-      // if(key === 'freq'){
-      //   // and its okay to play with indexes here, because 'freq'
-      //   // will always be the
-      //   freqName = freqName
-      // }
-
       summary.push({
         label: properNames[summKey],
         value: summValues[keyIndex]
@@ -66,8 +53,8 @@ export function formatOverviewData(sumString, typesString) {
       // so type[1] in the types array the actual
       // string array we'd see in the data types column
       dataTypes: types[typeKey][1],
-      // currently 0 until graphql is adjusted accordingly
-      blankCells: 0,
+      // so type[2] in the types array is actually the blank cell number of a column
+      blankCells: types[typeKey][2],
       summary
     });
   });
@@ -89,37 +76,6 @@ export function formatOverviewData(sumString, typesString) {
   });
 
   return overviewData;
-}
-
-// So for the errors correction step to actually make pagination
-// work with this weird way that data is retrieved, we will need to
-// get the count of all the rows, and the overview data is the only thing that
-// is closest to giving us a count of rows ...
-export function getRowCount(overviewData) {
-  // so by default we will make the count of rows be 100
-  // just in case, the count here cannot be found
-  let countOfRows = '100';
-
-  // so the overview data that doesn't state blank values
-  // will actually have all of the rows mentioned as count of values
-  let valueWithoutBlanks = null;
-
-  for (let i = 0; i < overviewData.length; i += 1) {
-    let notBlank = false;
-    overviewData[i].dataTypes.forEach(type => {
-      notBlank = type.indexOf('blank') === -1;
-    });
-    if (notBlank) {
-      valueWithoutBlanks = overviewData[i];
-      break;
-    }
-  }
-
-  if (valueWithoutBlanks)
-    countOfRows = find(valueWithoutBlanks.summary, ['label', 'Count of values'])
-      .value;
-
-  return parseInt(countOfRows, 10);
 }
 
 export function formatModelOptions(dataModelHeading) {

@@ -113,12 +113,6 @@ class MetaDataMediator extends React.Component {
       this.props.saveEnvironment(this.props.relay.environment);
   }
 
-  // So we will save the step data when this component will be unmounting
-  // as this data will be used in other components
-  componentWillUnmount() {
-    this.props.saveStepData(this.state.data, 1);
-  }
-
   onChipAdd(value) {
     const { tags } = this.state.data;
     tags.push(value);
@@ -132,11 +126,14 @@ class MetaDataMediator extends React.Component {
   }
 
   simpleChange(value, question) {
-    this.setState(prevState => {
-      const { data } = prevState;
-      data[question] = value;
-      return { data };
-    });
+    this.setState(
+      prevState => {
+        const { data } = prevState;
+        data[question] = value;
+        return { data };
+      },
+      () => this.props.saveStepData(this.state.data, 1)
+    );
   }
 
   // so for check box change we tweek the changing a little
@@ -225,6 +222,17 @@ class MetaDataMediator extends React.Component {
         question
       );
     }
+
+    const existingItem = findIndex(options, ['label', value]);
+    if (existingItem !== -1)
+      this.simpleChange(
+        {
+          key: value,
+          label: value,
+          value: options[existingItem].value
+        },
+        question
+      );
 
     this.simpleChange(value, qText);
   }

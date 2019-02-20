@@ -7,7 +7,7 @@ import theme from 'theme/Theme';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-/* Components */
+/* components */
 import {
   AidsFondLogo,
   MenuButton,
@@ -30,7 +30,7 @@ const defaultProps = {
   // toggleSideBar: undefined,
 };
 
-class AppBar extends React.Component {
+export class AppBar extends React.Component {
   state = {
     auth: true,
     anchorEl: null,

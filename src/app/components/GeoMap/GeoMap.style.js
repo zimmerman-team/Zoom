@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 
 export const MapContainer = styled.div`
-  height: 100vh;
-  //width: 100vw;
+  height: calc(100vh - 40px);
 `;
 
 export const NavContainer = styled.div`
@@ -16,7 +15,7 @@ export const NavContainer = styled.div`
 `;
 
 export const LegendContainer = styled.div`
-  position: absolute;
+  position: fixed;
   width: fit-content;
   left: 10px;
   display: flex;

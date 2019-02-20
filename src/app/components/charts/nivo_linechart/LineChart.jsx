@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ResponsiveLine } from '@nivo/line';
-import { ComponentBase } from 'components/charts/linechart/LineChart.styles';
+import { ComponentBase } from 'components/charts/nivo_linechart/LineChart.styles';
 
 const propTypes = {
   data: PropTypes.arrayOf(
@@ -11,15 +11,15 @@ const propTypes = {
       data: PropTypes.PropTypes.arrayOf(
         PropTypes.shape({
           x: PropTypes.string,
-          y: PropTypes.number,
-        }),
+          y: PropTypes.number
+        })
       ),
-      id: PropTypes.string,
-    }),
-  ),
+      id: PropTypes.string
+    })
+  )
 };
 const defaultProps = {
-  data: [],
+  data: []
 };
 
 const LineChart = props => {
@@ -31,14 +31,14 @@ const LineChart = props => {
           top: 20,
           right: 30,
           bottom: 30,
-          left: 50,
+          left: 50
         }}
         xScale={{
-          type: 'point',
+          type: 'point'
         }}
         yScale={{
           type: 'linear',
-          stacked: true,
+          stacked: true
         }}
         minY="auto"
         maxY="auto"
@@ -52,7 +52,7 @@ const LineChart = props => {
           tickRotation: 0,
           legend: '',
           legendOffset: 36,
-          legendPosition: 'middle',
+          legendPosition: 'middle'
         }}
         axisLeft={{
           orient: 'left',
@@ -61,7 +61,7 @@ const LineChart = props => {
           tickRotation: 0,
           legend: '',
           legendOffset: -40,
-          legendPosition: 'middle',
+          legendPosition: 'middle'
         }}
         dotSize={9}
         dotColor="inherit:darker(0.3)"

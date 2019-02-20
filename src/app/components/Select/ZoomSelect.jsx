@@ -159,16 +159,9 @@ class ZoomSelect extends React.Component {
     if (
       this.wrapperRef &&
       !this.wrapperRef.contains(event.target) &&
-      this.state.open !== false
+      this.state.open
     ) {
-      // so here we ignore the closing if the actual input/header element is pressed
-      // cause there's already an on click for closing when that is pressed
-      if (
-        typeof event.srcElement.className === 'string' &&
-        event.srcElement.className.indexOf('SelectHeader') === -1
-      ) {
-        this.setState({ open: false });
-      }
+      this.setState({ open: false });
     }
   }
 
@@ -216,6 +209,7 @@ class ZoomSelect extends React.Component {
     return (
       <ComponentBase
         style={this.props.disabled ? { pointerEvents: 'none' } : {}}
+        ref={this.setWrapperRef}
       >
         <SelectHeader
           headerStyle={this.props.headerStyle}
@@ -232,7 +226,7 @@ class ZoomSelect extends React.Component {
           }
         />
         {this.state.open && (
-          <DropDownContainer ref={this.setWrapperRef}>
+          <DropDownContainer>
             {this.state.options.length > 0 ? (
               <div>
                 {this.props.multiple && (

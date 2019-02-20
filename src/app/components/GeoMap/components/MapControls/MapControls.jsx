@@ -8,7 +8,11 @@ import IconOnlyMinus from 'assets/icons/IconOnlyMinus';
 import IconOnlyFullScreen from 'assets/icons/IconOnlyFullScreen';
 
 /* styles */
-import { ComponentBase, ButtonContainer } from './MapControls.style';
+import {
+  ComponentBase,
+  ButtonContainer,
+  DisabledElement
+} from './MapControls.style';
 
 const propTypes = {
   onZoomIn: PropTypes.func,
@@ -29,9 +33,11 @@ const MapControls = props => (
     <ButtonContainer onClick={props.onZoomOut}>
       <IconOnlyMinus />
     </ButtonContainer>
-    {/*<ButtonContainer onClick={props.onFullScreen}>
-      <IconOnlyFullScreen />
-    </ButtonContainer>*/}
+    <DisabledElement>
+      <ButtonContainer onClick={props.onFullScreen}>
+        <IconOnlyFullScreen />
+      </ButtonContainer>
+    </DisabledElement>
   </ComponentBase>
 );
 

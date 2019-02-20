@@ -11,27 +11,27 @@ import IconOnlyFullScreen from 'assets/icons/IconOnlyFullScreen';
 import { ComponentBase, ButtonContainer } from './MapControls.style';
 
 const propTypes = {
-  zoomIn: PropTypes.func,
-  zoomOut: PropTypes.func,
-  fullScreen: PropTypes.func,
+  onZoomIn: PropTypes.func,
+  onZoomOut: PropTypes.func,
+  onFullScreen: PropTypes.func
 };
 const defaultProps = {
-  zoomIn: null,
-  zoomOut: null,
-  fullScreen: null,
+  onZoomIn: null,
+  onZoomOut: null,
+  onFullScreen: null
 };
 
 const MapControls = props => (
   <ComponentBase>
-    <ButtonContainer onClick={props.zoomIn}>
+    <ButtonContainer onClick={props.onZoomIn}>
       <IconOnlyPlus />
     </ButtonContainer>
-    <ButtonContainer onClick={props.zoomOut}>
+    <ButtonContainer onClick={props.onZoomOut}>
       <IconOnlyMinus />
     </ButtonContainer>
-    <ButtonContainer onClick={props.fullScreen}>
+    {/*<ButtonContainer onClick={props.onFullScreen}>
       <IconOnlyFullScreen />
-    </ButtonContainer>
+    </ButtonContainer>*/}
   </ComponentBase>
 );
 

@@ -1,6 +1,7 @@
 /* base */
 import React, { Component } from 'react';
 import MapGL from 'react-map-gl';
+// import NavigationControl from 'components/GeoMap/components/BaseController/BaseController';
 import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
 
@@ -22,7 +23,6 @@ import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
 import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import MapControls from 'components/GeoMap/components/MapControls/MapControls';
-import Fullscreen from 'react-full-screen';
 
 import {
   LegendContainer,
@@ -33,6 +33,13 @@ import {
 
 const MAPBOX_TOKEN =
   'pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw';
+
+const navStyle = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  padding: '10px'
+};
 
 class GeoMap extends Component {
   constructor(props) {
@@ -52,14 +59,13 @@ class GeoMap extends Component {
       },
       hoverMarkerInfo: null,
       values: [12, 16],
-      zoom: 2,
       fullScreen: false
     };
 
     this.setMarkerInfo = this.setMarkerInfo.bind(this);
-    this.zoomIn = this.zoomIn.bind(this);
-    this.zoomOut = this.zoomOut.bind(this);
-    this.fullScreen = this.fullScreen.bind(this);
+    this.handleZoomIn = this.handleZoomIn.bind(this);
+    this.handleZoomOut = this.handleZoomOut.bind(this);
+    this.handleFullscreen = this.handleFullscreen.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -124,7 +130,7 @@ class GeoMap extends Component {
     this.setState({ markerArray, legends });
   }
 
-  _onViewportChange = viewport => this.setState({ viewport });
+  _updateViewport = viewport => this.setState({ viewport });
 
   _setLayerInfo = event => {
     let hoverLayerInfo = null;
@@ -166,24 +172,26 @@ class GeoMap extends Component {
     if (feature) this.props.history.push(`country/${feature.properties.iso2}`);
   };
 
-  zoomIn() {
+  handleZoomIn = () => {
     // cause when its 25 it gets white
-    if (this.state.zoom < 25)
+    /*if (this.state.zoom < 25)
       this.setState(prevState => {
         return { zoom: prevState.zoom + 0.2 };
-      });
-  }
+      });*/
+    this._updateViewport({ zoom: this.state.viewport.zoom + 1 });
+  };
 
-  zoomOut() {
-    if (this.state.zoom > 1)
+  handleZoomOut = () => {
+    /*if (this.state.zoom > 1)
       this.setState(prevState => {
         return { zoom: prevState.zoom - 0.2 };
-      });
-  }
+      });*/
+    this._updateViewport({ zoom: this.state.viewport.zoom - 1 });
+  };
 
-  fullScreen() {
+  handleFullscreen() {
     this.setState(prevState => {
-      return { fullScreen: !prevState.fullScreen };
+      return { fullScreen: !prevState.handleFullscreen };
     });
   }
 
@@ -192,48 +200,49 @@ class GeoMap extends Component {
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
 
-      <React.Fragment>
-        <MapContainer>
-          {/*<ControlsContainer>
-            <MapControls
-              zoomIn={this.zoomIn}
-              zoomOut={this.zoomOut}
-              fullScreen={this.fullScreen}
-            />
-          </ControlsContainer>*/}
-          <MapGL
-            {...viewport}
-            scrollZoom={true}
-            width="100%"
-            height="100%"
-            mapStyle={mapStyle}
-            onViewportChange={this._onViewportChange}
-            onHover={this._setLayerInfo}
-            onClick={this._onCountryClick}
-            mapboxApiAccessToken={MAPBOX_TOKEN}
-            /*todo: refactor zooming functionality to facilitate both zooming by using the zoom controls and zooming by scrolling*/
-            // zoom={this.state.zoom}
-          >
-            {/*So this is the layer tooltip, and we seperate it from the
+      <MapContainer>
+        <ControlsContainer>
+          <MapControls
+            onZoomIn={this.handleZoomIn}
+            onZoomOut={this.handleZoomOut}
+            onFullScreen={this.handleFullscreen}
+          />
+        </ControlsContainer>
+
+        <YearContainer>
+          <CustomYearSelector
+            selectedYears={this.props.selectedYears}
+            selectYear={this.props.selectYear}
+          />
+        </YearContainer>
+
+        <MapGL
+          {...viewport}
+          scrollZoom={true}
+          width="100%"
+          height="100%"
+          mapStyle={mapStyle}
+          onViewportChange={this._updateViewport}
+          onHover={this._setLayerInfo}
+          onClick={this._onCountryClick}
+          mapboxApiAccessToken={MAPBOX_TOKEN}
+          /*todo: refactor zooming functionality to facilitate both zooming by using the zoom controls and zooming by scrolling*/
+        >
+          {/*So this is the layer tooltip, and we seperate it from the
               martker tooltip, cause its functionality as a tooltip is a bit different
               and also because we implement the layers a bit more differently
               than normal markers*/}
-            {this._showLayerInfo()}
+          {this._showLayerInfo()}
 
-            {this._showMarkerInfo()}
+          {this._showMarkerInfo()}
 
-            {markerArray}
+          {markerArray}
 
-            <LegendContainer>{legends}</LegendContainer>
-          </MapGL>
-          <YearContainer>
-            <CustomYearSelector
-              selectedYears={this.props.selectedYears}
-              selectYear={this.props.selectYear}
-            />
-          </YearContainer>
-        </MapContainer>
-      </React.Fragment>
+          {/*contains zoom in/out and fullscreen toggle*/}
+
+          <LegendContainer>{legends}</LegendContainer>
+        </MapGL>
+      </MapContainer>
     );
   }
 }

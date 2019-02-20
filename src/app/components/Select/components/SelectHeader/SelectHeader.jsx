@@ -3,18 +3,18 @@ import PropTypes from 'prop-types';
 import {
   ComponentBase,
   PointerContainer,
-  LabelContainer,
+  LabelContainer
 } from 'components/Select/components/SelectHeader/SelectHeader.styles';
 
 import IconPointer from 'assets/icons/IconPointer';
 
 const propTypes = {
   headerStyle: PropTypes.object,
-  arrowMargins: PropTypes.string,
+  arrowMargins: PropTypes.string
 };
 const defaultProps = {
   headerStyle: {},
-  arrowMargins: null,
+  arrowMargins: null
 };
 
 const SelectHeader = props => (

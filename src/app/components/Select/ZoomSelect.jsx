@@ -40,6 +40,7 @@ const propTypes = {
   reset: PropTypes.func,
   categorise: PropTypes.bool,
   search: PropTypes.bool,
+  selectAll: PropTypes.bool,
   dropDownWidth: PropTypes.number
 };
 const defaultProps = {
@@ -47,6 +48,7 @@ const defaultProps = {
   placeHolder: 'Has no indicators',
   reset: undefined,
   search: true,
+  selectAll: false,
   dropDownWidth: undefined
 };
 
@@ -58,6 +60,10 @@ class ZoomSelect extends React.Component {
       allSelected: false,
       open: false,
       options: props.data,
+      // so we'll basically use this variable
+      // to select all choices by default when data with
+      // select all functionality comes in
+      initialSelect: true,
       searchWord: ''
     };
 
@@ -125,6 +131,11 @@ class ZoomSelect extends React.Component {
         this.setState({ options });
       } else {
         this.setState({ options: this.props.data });
+      }
+
+      if (this.props.selectAll && this.state.initialSelect) {
+        this.props.selectVal(this.props.data, true);
+        this.setState({ initialSelect: false });
       }
     }
   }

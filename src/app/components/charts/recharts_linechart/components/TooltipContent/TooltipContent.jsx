@@ -3,7 +3,7 @@ import React from 'react';
 import { Container, Row, Title, Rect } from './TooltipContent.styles';
 
 const TooltipContent = ({ active, payload, label }) => {
-  if (active) {
+  if (active && payload) {
     return (
       <Container>
         <Title>

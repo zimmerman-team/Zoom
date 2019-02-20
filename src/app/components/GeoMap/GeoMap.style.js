@@ -15,7 +15,7 @@ export const NavContainer = styled.div`
 `;
 
 export const LegendContainer = styled.div`
-  position: absolute;
+  position: fixed;
   width: fit-content;
   left: 10px;
   display: flex;

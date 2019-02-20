@@ -6,11 +6,11 @@ import {
   AddUserForm,
   DropDown,
   DropDownLabel,
-  SubmitButton,
+  SubmitButton
 } from 'modules/UserManagement/AddUser/AddUserModule.styles';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';
-import ZoomSelect from 'components/Select/ZoomSelect';
+import FormSelect from 'components/FormSelect/FormSelect';
 import { Box } from 'grommet';
 
 const wrapper = shallow(<AddUserModule />);
@@ -34,8 +34,8 @@ describe('<AddUserModule />', () => {
   it('renders two <DropDownLabel/> components', () => {
     expect(wrapper.find(DropDownLabel)).toHaveLength(2);
   });
-  it('renders two <ZoomSelect/> components', () => {
-    expect(wrapper.find(ZoomSelect)).toHaveLength(2);
+  it('renders two <FormSelect/> components', () => {
+    expect(wrapper.find(FormSelect)).toHaveLength(2);
   });
   it('renders one <SubmitButton/> component', () => {
     expect(wrapper.find(SubmitButton)).toHaveLength(1);

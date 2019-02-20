@@ -13,6 +13,7 @@ export const ComponentBase = styled.div`
 
 export const OptionRow = styled.div`
   font-size: 14px;
+  white-space: nowrap;
   color: ${theme.color.aidsFondsRed};
   padding: 5px 10px;
   background-color: ${props => props.theme.background};

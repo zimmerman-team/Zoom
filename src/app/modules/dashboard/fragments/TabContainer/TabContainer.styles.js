@@ -12,7 +12,7 @@ export const Container = styled.div`
 
 export const TabItems = styled.div`
   display: flex;
-  margin-left: auto;
+  margin: 0 auto;
 `;
 
 export const Tab = styled.div`
@@ -24,8 +24,7 @@ export const Tab = styled.div`
 `;
 
 export const TabText = styled.div`
-
-display: flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -34,26 +33,13 @@ display: flex;
   font-weight: 700;
   text-decoration: none;
   padding: 6px 2px 0 2px;
-  
-  color: ${props => props.theme.color};
 
+  color: ${props => props.theme.color};
   font-family: ${Theme.font.zoomFontFamOne};
   border-bottom: ${props => props.theme.border};
-  
-     &:before{
-   background-color: blue;
-   width: 10px;
-   height: 10px;
-    }
 
   &:hover {
-    //position: relative;
-    color: ${Theme.color.zoomBlack};
-     //border-bottom: ${Theme.border.dashboardTab};
-   
-  
-  
-
-}
-
+    color: ${Theme.color.aidsFondsBlue};
+    border-bottom: ${Theme.border.dashboardTab};
+  }
 `;

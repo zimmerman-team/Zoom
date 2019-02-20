@@ -103,12 +103,7 @@ const getTabView = (
 };
 
 const Box = styled.div`
-  display: flex;
-  //max-width: 1024px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+width: 100%;
 `;
 
 const DashboardModule = ({
@@ -126,10 +121,9 @@ const DashboardModule = ({
 }) => (
   <ModuleContainer>
     <DashboardHeader title="Zoom dashboard" userName={greetingName} />
-
     <Searchbox inputChange={changeSearchKeyword} />
 
-    <div>
+    <Box>
       <section>
         <TabContainer
           tabs={tabs}
@@ -161,9 +155,7 @@ const DashboardModule = ({
           )}
         </ViewContainer>
       </section>
-    </div>
-
-
+    </Box>
   </ModuleContainer>
 );
 

@@ -23,17 +23,17 @@ export const ButtonContainer = styled(Box)`
 `;
 
 export const Stepz = styled(Step)`
-  & .MuiStepIcon-root-52 {
+  & [class*='MuiStepIcon-root'] {
     color: ${theme.color.zoomGreyThree};
     width: 21px;
     height: 21px;
   }
 
-  & .MuiStepIcon-active-54 {
+  & [class*='MuiStepIcon-active'] {
     color: ${theme.color.aidsFondsBlue} !important;
   }
 
-  & .MuiStepIcon-completed-55 {
+  & [class*='MuiStepIcon-completed'] {
     color: ${theme.color.aidsFondsBlue} !important;
   }
 `;
@@ -44,15 +44,15 @@ export const StepzLabel = styled(StepLabel)`
     font-family: ${theme.font.zoomFontFamOne} !important;
   }
 
-  & .MuiTypography-root-66 {
+  & [class*='MuiTypography-root'] {
     margin-top: 12px !important;
   }
 
-  & .MuiStepLabel-active-45 {
+  & [class*='MuiStepLabel-active'] {
     color: ${theme.color.aidsFondsBlue} !important;
   }
 
-  & .MuiStepLabel-completed-46 {
+  & [class*='MuiStepLabel-completed'] {
     color: ${theme.color.aidsFondsBlue} !important;
   }
 `;

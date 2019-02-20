@@ -35,13 +35,17 @@ export const TitleContainer = styled(Heading)`
   font-size: 18px;
   margin: 0;
   margin-bottom: 10px;
-  line-height: 1;
+  line-height: 1.5;
+  max-width: 100%;
 `;
+
 export const DateContainer = styled(Box)``;
+
 export const Separator = styled(Box)`
   font-family: ${theme.font.zoomFontFamOne};
   margin-left: 4px;
   margin-right: 4px;
+  line-height: 14px;
 `;
 
 export const SectorList = styled(Box)`

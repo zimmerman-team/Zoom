@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 import { Box } from 'grommet';
 import get from 'lodash/get';
+import Theme from 'theme/Theme';
 const ComponentBase = styled(Box)`
   height: 280px;
   width: 100%;
@@ -33,11 +34,11 @@ const BarChart = props => {
     // console.log(tick);
     return (
       <g
-        transform={`translate(0, ${tick.y - 30})`}
+        transform={`translate(0, ${tick.y - 40})`}
         style={{ opacity: 1 }}
         key={`indicator-${tick.key}`}
       >
-        <text style={{ fontSize: 11 }}>{tick.key}</text>
+        <text style={{ fontSize: 11, fontWeight: '700' }}>{tick.key}</text>
       </g>
     );
   };
@@ -59,11 +60,7 @@ const BarChart = props => {
         groupMode="grouped"
         layout="horizontal"
         colors="nivo"
-        colorBy={function(e) {
-          return e.id === 'Global'
-            ? get(e, 'data.GlobalColor', '#000')
-            : get(e, 'data.CountryColor', '#000');
-        }}
+        colorBy={e => get(e, 'data.CountryColor', '#000')}
         defs={[
           {
             id: 'dots',
@@ -84,30 +81,16 @@ const BarChart = props => {
             spacing: 10
           }
         ]}
-        fill={[
-          {
-            match: {
-              id: 'fries'
-            },
-            id: 'dots'
-          },
-          {
-            match: {
-              id: 'sandwich'
-            },
-            id: 'lines'
-          }
-        ]}
         borderColor="inherit:darker(1.6)"
         axisBottom={null}
         enableGridY={false}
         axisLeft={{
           renderTick: customTick
         }}
-        labelSkipWidth={12}
-        labelSkipHeight={12}
-        labelTextColor="#000"
-        animate={true}
+        enableLabel
+        labelTextColor={Theme.color.zoomBlack}
+        label={d => <tspan y={-2}>{d.value}</tspan>}
+        animate
         motionStiffness={90}
         motionDamping={15}
         legends={[

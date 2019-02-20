@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import MapGL from 'react-map-gl';
 import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
+import MAP_STYLE from 'components/GeoMap/data/map-style-basic-v8';
 
 /* utils */
 import { fromJS } from 'immutable';
@@ -11,11 +12,7 @@ import findIndex from 'lodash/findIndex';
 import { generateLegends, generateMarkers } from './GeoMap.util';
 
 /* styles */
-import {
-  borderStyle,
-  dataLayer,
-  defaultMapStyle
-} from './components/map-style';
+import { borderStyle, dataLayer } from './components/map-style';
 
 /* components */
 import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
@@ -38,8 +35,14 @@ export class GeoMap extends Component {
   constructor(props) {
     super(props);
 
+    this.defaultMapStyle = {
+      ...MAP_STYLE,
+      sources: { ...MAP_STYLE.sources },
+      layers: MAP_STYLE.layers.slice()
+    };
+
     this.state = {
-      mapStyle: fromJS(defaultMapStyle),
+      mapStyle: fromJS(this.defaultMapStyle),
       markerArray: [],
       legends: [],
       hoverLayerInfo: null,
@@ -62,10 +65,13 @@ export class GeoMap extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // console.log(this.props.indicatorData);
     if (!isEqual(this.props.indicatorData, prevProps.indicatorData)) {
       this.updateMap(this.props.indicatorData);
     }
+  }
+
+  componentWillUnmount() {
+    // so yeah because of annoying
   }
 
   updateMap(indicatorData) {
@@ -77,7 +83,7 @@ export class GeoMap extends Component {
     // cause it kind of makes sense for some cases
     const layers = find(indicatorData, ['type', 'layer']);
     if (layers) {
-      let mapStyle = defaultMapStyle;
+      let mapStyle = this.defaultMapStyle;
       const borderData = layers.borderData ? layers.borderData : layers.data;
 
       // here we need to push in the border line style seperately like this
@@ -104,11 +110,11 @@ export class GeoMap extends Component {
           fromJS({ type: 'geojson', data: borderData })
         );
       this.setState({ mapStyle });
-    } else if (!isEqual(this.state.mapStyle, fromJS(defaultMapStyle))) {
+    } else if (!isEqual(this.state.mapStyle, fromJS(this.defaultMapStyle))) {
       //Here we set the map back to default when no layer data has been passed in
       // And we need to remove the borderStyle cause it gets added there
       // and while its there, the map will not set itself to default
-      let mapStylez = defaultMapStyle;
+      let mapStylez = this.defaultMapStyle;
       const ind = findIndex(mapStylez.layers, ['id', 'outline']);
       mapStylez.layers.splice(ind, 1);
       this.setState({ mapStyle: fromJS(mapStylez) });

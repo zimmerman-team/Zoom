@@ -1,4 +1,4 @@
-describe("Home page E2E test", function() {
+describe('Home page E2E test', function() {
   it('Visit Home page ', function() {
     cy.visit('/');
   });
@@ -12,13 +12,13 @@ describe("Home page E2E test", function() {
   });
 
   it('Zooms in 3 times ', function() {
-    for (let i = 0; i < 3; i+=1) {
+    for (let i = 0; i < 3; i += 1) {
       cy.get('[data-cy="home-zoom-in-button"]').click();
     }
   });
 
   it('Zooms out 3 times ', function() {
-    for (let i = 0; i < 3; i+=1) {
+    for (let i = 0; i < 3; i += 1) {
       cy.get('[data-cy="home-zoom-out-button"]').click();
     }
   });
@@ -37,7 +37,10 @@ describe("Home page E2E test", function() {
   });
 
   it('Types eu in searchbar ', function() {
-    cy.get('[data-cy="geo-map-search"]').children().children().type('eu');
+    cy.get('[data-cy="geo-map-search"]')
+      .children()
+      .children()
+      .type('eu');
   });
 
   it('Selects Europe from the dropdown ', function() {
@@ -52,4 +55,3 @@ describe("Home page E2E test", function() {
     cy.get('[data-cy="geo-map-container"]').click();
   });
 });
-

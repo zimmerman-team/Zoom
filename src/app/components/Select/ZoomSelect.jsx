@@ -240,6 +240,7 @@ class ZoomSelect extends React.Component {
                 {this.props.search && (
                   <ItemContainer>
                     <SearchField
+                      data-cy="geo-map-search"
                       value={this.state.searchWord}
                       onChange={e =>
                         this.setState({ searchWord: e.target.value })

@@ -90,47 +90,47 @@ class ZoomSelect extends React.Component {
         this.setState({ allSelected: false });
     }
 
-    if (
-      !isEqual(this.props.data, prevProps.data) &&
-      this.props.data &&
-      this.props.data.length > 0
-    ) {
-      // this is where we'll add extra 'categorization' items
-      // if the dropdown needs to be categorized,
-      // basically now will be categorized alphabetically
-      // this should happen only once
-      // IMPORTANT: the data needs to come already sorted
-      // and ofcourse it also needs to come in as array of {label: '', value: ''}
-      if (this.props.categorise) {
-        const regexLetter = /^[a-zA-Z]+$/;
-        const options = [];
-        // so here we define the first character of the category, depending on the first items
-        // first character, we also check if it is a letter, then we put it in letter category
-        // otherwise we put it under '#' category
-        let prevCat = regexLetter.test(this.props.data[0].label[0])
-          ? this.props.data[0].label[0].toUpperCase()
-          : '#';
-
-        options.push({ label: prevCat, value: 'category' });
-
-        // and now we loop and add all other categories along with the actual values
-        this.props.data.forEach(item => {
-          const category = regexLetter.test(item.label[0])
-            ? item.label[0].toUpperCase()
+    if (!isEqual(this.props.data, prevProps.data) && this.props.data) {
+      if (this.props.data.length > 0) {
+        // this is where we'll add extra 'categorization' items
+        // if the dropdown needs to be categorized,
+        // basically now will be categorized alphabetically
+        // this should happen only once
+        // IMPORTANT: the data needs to come already sorted
+        // and ofcourse it also needs to come in as array of {label: '', value: ''}
+        if (this.props.categorise) {
+          const regexLetter = /^[a-zA-Z]+$/;
+          const options = [];
+          // so here we define the first character of the category, depending on the first items
+          // first character, we also check if it is a letter, then we put it in letter category
+          // otherwise we put it under '#' category
+          let prevCat = regexLetter.test(this.props.data[0].label[0])
+            ? this.props.data[0].label[0].toUpperCase()
             : '#';
-          // so if the previous category is not equals to the new category
-          // we push it in and set it to be the prevCategory
-          if (prevCat !== category) {
-            prevCat = category;
-            options.push({ label: prevCat, value: 'category' });
-          }
 
-          options.push(item);
-        });
+          options.push({ label: prevCat, value: 'category' });
 
-        this.setState({ options });
+          // and now we loop and add all other categories along with the actual values
+          this.props.data.forEach(item => {
+            const category = regexLetter.test(item.label[0])
+              ? item.label[0].toUpperCase()
+              : '#';
+            // so if the previous category is not equals to the new category
+            // we push it in and set it to be the prevCategory
+            if (prevCat !== category) {
+              prevCat = category;
+              options.push({ label: prevCat, value: 'category' });
+            }
+
+            options.push(item);
+          });
+
+          this.setState({ options });
+        } else {
+          this.setState({ options: this.props.data });
+        }
       } else {
-        this.setState({ options: this.props.data });
+        this.setState({ initialSelect: true });
       }
 
       if (this.props.selectAll && this.state.initialSelect) {

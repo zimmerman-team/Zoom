@@ -202,6 +202,7 @@ class HomeModuleMediator extends Component {
     this.setState(
       {
         selectedInd1: val.value,
+        subIndicators1: [],
         selectedSubInd1: []
       },
       this.refetch
@@ -214,34 +215,57 @@ class HomeModuleMediator extends Component {
     this.setState(
       {
         selectedInd2: val.value,
+        subIndicators2: [],
         selectedSubInd2: []
       },
       this.refetch
     );
   }
 
-  selectSubInd1(item) {
-    const selectedSubInd1 = [...this.state.selectedSubInd1];
-    const subIndicatorIndex = selectedSubInd1.indexOf(item.value);
+  selectSubInd1(item, array = false) {
+    let selectedSubInd1 = [];
 
-    if (subIndicatorIndex === -1)
-      // so if it doesn't exist we add it
-      selectedSubInd1.push(item.value);
-    // if it does exist we remove it
-    else selectedSubInd1.splice(subIndicatorIndex, 1);
+    // so we set up this logic for select/deselect all logic
+    // if all is selected all of the options will be passed in
+    if (item !== 'reset') {
+      if (array) {
+        item.forEach(it => {
+          selectedSubInd1.push(it.value);
+        });
+      } else {
+        selectedSubInd1 = [...this.state.selectedSubInd1];
+        const subIndicatorIndex = selectedSubInd1.indexOf(item.value);
+        if (subIndicatorIndex === -1)
+          // so if it doesn't exist we add it
+          selectedSubInd1.push(item.value);
+        // if it does exist we remove it
+        else selectedSubInd1.splice(subIndicatorIndex, 1);
+      }
+    }
 
     this.setState({ selectedSubInd1 }, this.refetch);
   }
 
-  selectSubInd2(item) {
-    const selectedSubInd2 = [...this.state.selectedSubInd2];
-    const subIndicatorIndex = selectedSubInd2.indexOf(item.value);
+  selectSubInd2(item, array = false) {
+    let selectedSubInd2 = [];
 
-    if (subIndicatorIndex === -1)
-      // so if it doesn't exist we add it
-      selectedSubInd2.push(item.value);
-    // if it does exist we remove it
-    else selectedSubInd2.splice(subIndicatorIndex, 1);
+    // so we set up this logic for select/deselect all logic
+    // if all is selected all of the options will be passed in
+    if (item !== 'reset') {
+      if (array) {
+        item.forEach(it => {
+          selectedSubInd2.push(it.value);
+        });
+      } else {
+        selectedSubInd2 = [...this.state.selectedSubInd2];
+        const subIndicatorIndex = selectedSubInd2.indexOf(item.value);
+        if (subIndicatorIndex === -1)
+          // so if it doesn't exist we add it
+          selectedSubInd2.push(item.value);
+        // if it does exist we remove it
+        else selectedSubInd2.splice(subIndicatorIndex, 1);
+      }
+    }
 
     this.setState({ selectedSubInd2 }, this.refetch);
   }

@@ -18,17 +18,17 @@ const propTypes = {
       data: PropTypes.arrayOf(
         PropTypes.shape({
           x: PropTypes.string,
-          y: PropTypes.number,
-        }),
+          y: PropTypes.number
+        })
       ),
-      id: PropTypes.string,
-    }),
-  ),
+      id: PropTypes.string
+    })
+  )
 };
 const defaultProps = {
   // data: undefined,
   background: '',
-  aidsLineChartData: [],
+  aidsLineChartData: []
 };
 
 const AidsEpidemic = props => {

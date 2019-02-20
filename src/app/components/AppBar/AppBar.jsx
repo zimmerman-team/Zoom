@@ -64,7 +64,7 @@ export class AppBar extends React.Component {
           >
             {!this.props.dataPaneOpen ? <SvgIconPlus /> : <SvgIconCloseSmall />}
             <PaneButtonText>
-              {!this.props.dataPaneOpen ? 'Filters' : 'Hide'}
+              {!this.props.dataPaneOpen ? 'Geo map filters' : 'Hide'}
             </PaneButtonText>
           </PaneButton>
         );

@@ -3,8 +3,6 @@ import find from 'lodash/find';
 export function checkEmptyFields(manMapData, mapReqFields) {
   const emptyFields = [];
 
-  console.log('check empty fields manMapData', manMapData);
-
   mapReqFields.forEach(field => {
     //  so yeah if a required field is not found
     //  as in zoom data model of the data
@@ -15,14 +13,12 @@ export function checkEmptyFields(manMapData, mapReqFields) {
     // and we'll check if one of these fields have been selected
     if (field === 'value') {
       if (
-        !find(manMapData, ['zoomModel', 'Number Value']) ||
+        !find(manMapData, ['zoomModel', 'Number Value']) &&
         !find(manMapData, ['zoomModel', 'Percentage Value'])
       ) {
-        console.log('VALUE IF FIELD');
         emptyFields.push(field);
       }
     } else if (!find(manMapData, ['zoomModel', field])) {
-      console.log('ELSE IF FIELD', field);
       emptyFields.push(field);
     }
   });

@@ -243,7 +243,10 @@ class DataExplorePane extends React.Component {
             </FilterContainer>
           </AccordionSection>
         </PanelAccordion>
-        <ResetContainer data-cy="data-explorer-panel-reset" onClick={() => this.props.resetAll()}>
+        <ResetContainer
+          data-cy="data-explorer-panel-reset"
+          onClick={() => this.props.resetAll()}
+        >
           <Tooltip
             html={<SimpleToolTip title="Reset" />}
             position="top"

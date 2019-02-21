@@ -6,7 +6,8 @@ export const ComponentBase = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 312px;
+  margin-bottom: 39px;
+  width: 285px;
   height: 168px;
   padding: 15px;
   background-color: ${Theme.color.zoomGreyZero};

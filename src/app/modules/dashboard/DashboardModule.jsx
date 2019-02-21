@@ -11,17 +11,14 @@ import {
   NoItems,
   Box
 } from 'modules/dashboard/DashboardModule.styles';
-import SvgIconSearch from 'assets/icons/IconSearch';
 import Searchbox from './fragments/Searchbox/Searchbox';
 import TabContainer from './fragments/TabContainer/TabContainer';
 import UsersTabView from './fragments/UsersTabView/UsersTabView';
 import TeamsTabView from './fragments/TeamsTabView/TeamsTabView';
-import UserGreeting from './fragments/DashboardHeader/component/UserGreeting/UserGreeting';
 import DashboardHeader from 'modules/dashboard/fragments/DashboardHeader/DashboardHeader';
-
-import styled from 'styled-components';
 import GridListOptionsPane from './fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
-import { TabItems } from './fragments/TabContainer/TabContainer.styles';
+import GridItem from './fragments/GridList/components/GridItem/GridItem';
+
 
 const propTypes = {
   tabs: PropTypes.arrayOf(
@@ -139,17 +136,27 @@ const DashboardModule = ({
       <section>
         <ViewContainer>
           {/*todo: evaluate if we can handle this in a simpler way by using react router*/}
-          {getTabView(
-            users,
-            teams,
-            tabs,
-            activeTab,
-            isSortByOpen,
-            setIsSortByOpen,
-            setWrapperRef,
-            sort,
-            changeSortBy
-          )}
+          {/*{getTabView(*/}
+            {/*users,*/}
+            {/*teams,*/}
+            {/*tabs,*/}
+            {/*activeTab,*/}
+            {/*isSortByOpen,*/}
+            {/*setIsSortByOpen,*/}
+            {/*setWrapperRef,*/}
+            {/*sort,*/}
+            {/*changeSortBy*/}
+          {/*)}*/}
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
         </ViewContainer>
       </section>
     </Box>

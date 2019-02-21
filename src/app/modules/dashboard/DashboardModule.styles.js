@@ -10,7 +10,7 @@ export const ModuleContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  margin: 0 auto;
   max-width: 1024px;
 `;
 
@@ -38,9 +38,10 @@ export const SearchBox = styled(TextInput)`
 
 export const ViewContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
   width: 100%;
-  padding-top: 10px;
 `;
 
 export const NoItems = styled.div`

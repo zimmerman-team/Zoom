@@ -15,7 +15,9 @@ import {
 } from './LoginForm.styles';
 import ForgetPassword from '../ForgetPassword/ForgetPassword';
 
-const wrapper = shallow(<LoginForm />);
+const wrapper = shallow(
+  <LoginForm auth0Client={{ isAuthenticated: () => false }} />
+);
 
 describe('<LoginForm />', () => {
   it('renders one <ComponentBase/> component', () => {

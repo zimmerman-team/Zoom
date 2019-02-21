@@ -29,6 +29,9 @@ export const CheckBox = styled(HeaderCheckBox)`
 export const ErrorCell = styled(CellValue)`
   padding-left: 20px;
   padding-right: 8px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const ErrorColHeader = styled(ColumnHeader)`

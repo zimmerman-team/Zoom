@@ -12,7 +12,7 @@ import {
 import CustomCheckBox from 'components/CustomCheckBox/CustomCheckBox';
 
 // so yeah here the columns will need to be formatted according to the data
-export function formatColumns(tableData, checkRows) {
+export function formatColumns(tableData, checkRows, handleCellClick) {
   const columns = [];
 
   if (tableData.length > 0) {
@@ -21,7 +21,7 @@ export function formatColumns(tableData, checkRows) {
     columns.push({
       property: 'id',
       header: (
-        <HeaderCheckBox>
+        <HeaderCheckBox key={0}>
           <CustomCheckBox
             key={0}
             onChange={checked => checkRows('all', checked)}
@@ -46,15 +46,25 @@ export function formatColumns(tableData, checkRows) {
     // value, cause the first value indicates the first row
     // and each of its columns, similarly to how the table
     // takes in the data
-    Object.keys(row).forEach(key => {
+    Object.keys(row).forEach((key, index) => {
       // because it seems to be the same as the index
       // and i think its just extra generated stuff from graphql
       if (key !== 'line no.' && key !== 'checked')
         columns.push({
           property: key,
-          header: <ErrorColHeader key={key}>{key}</ErrorColHeader>,
+          header: (
+            <ErrorColHeader key={`header-${index}`}>{key}</ErrorColHeader>
+          ),
           render: val => (
-            <ErrorCell key={`${val.index}-${key}`}>{val[key]}</ErrorCell>
+            <ErrorCell
+              onClick={
+                key !== 'index'
+                  ? () => handleCellClick(val[key], key, val.index)
+                  : undefined
+              }
+            >
+              {val[key]}
+            </ErrorCell>
           )
         });
     });

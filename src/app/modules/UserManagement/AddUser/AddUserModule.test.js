@@ -6,7 +6,7 @@ import {
   AddUserForm,
   DropDown,
   DropDownLabel,
-  SubmitButton,
+  SubmitButton
 } from 'modules/UserManagement/AddUser/AddUserModule.styles';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';

@@ -34,7 +34,10 @@ const MapControls = props => (
       <IconOnlyMinus />
     </ButtonContainer>
     <DisabledElement>
-      <ButtonContainer onClick={props.onFullScreen} data-cy="home-fullscreen-button">
+      <ButtonContainer
+        onClick={props.onFullScreen}
+        data-cy="home-fullscreen-button"
+      >
         <IconOnlyFullScreen />
       </ButtonContainer>
     </DisabledElement>

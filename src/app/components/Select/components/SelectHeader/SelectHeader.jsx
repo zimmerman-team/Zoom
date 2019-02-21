@@ -20,7 +20,7 @@ const defaultProps = {
 const SelectHeader = props => (
   <ComponentBase
     data-name="selectHeader"
-   // data-cy="select-header"
+    // data-cy="select-header"
     style={props.headerStyle ? props.headerStyle : ''}
     onClick={props.onClick}
   >

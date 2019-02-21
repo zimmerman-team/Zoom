@@ -2,10 +2,10 @@ const data = {
   transParams: {
     recipient_country: 'KE',
     page: 1,
-    page_size: 10,
+    page_size: 400,
     fields:
       'sectors,title,id,activity_dates,reporting_organisation,aggregations',
-    ordering: 'activity_budget_value',
+    ordering: '-activity_budget_value',
     reporting_organisation_identifier: 'NL-KVK-41207989'
   },
   wikiParams: {

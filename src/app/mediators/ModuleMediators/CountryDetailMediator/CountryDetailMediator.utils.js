@@ -63,6 +63,12 @@ export function formatProjectData(activities) {
         activity,
         'aggregations.activity.budget_value',
         'Not Specified'
+      ).toLocaleString(
+        {},
+        {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2
+        }
       )}`
     });
   });
@@ -76,16 +82,23 @@ export function formatProjectData(activities) {
 */
 export function getProjectCountNCommitment(activities) {
   let commitment = 0;
+  const currency =
+    get(activities, '[0].aggregations.activity.commitment_currency', '') ===
+    null
+      ? get(activities, '[0].aggregations.activity.budget_currency', '')
+      : get(activities, '[0].aggregations.activity.commitment_currency', '');
   activities.forEach(activity => {
     commitment += get(activity, 'aggregations.activity.commitment_value', 0);
   });
   return {
     count: activities.length,
-    commitment: `${get(
-      activities,
-      '[0].aggregations.activity.commitment_currency',
-      ''
-    )} ${commitment}`
+    commitment: `${currency} ${commitment.toLocaleString(
+      {},
+      {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      }
+    )}`
   };
 }
 

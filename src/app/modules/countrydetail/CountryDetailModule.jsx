@@ -59,7 +59,13 @@ const propTypes = {
       ),
       id: PropTypes.string
     })
-  )
+  ),
+  projectsLoading: PropTypes.bool,
+  projectSort: PropTypes.string,
+  changeSortBy: PropTypes.func,
+  setWrapperRef: PropTypes.func,
+  setIsSortByOpen: PropTypes.func,
+  isSortByOpen: PropTypes.bool
 };
 const defaultProps = {
   // data: undefined,
@@ -71,7 +77,13 @@ const defaultProps = {
   },
   countryName: '',
   infoBarData: [],
-  aidsLineChartData: []
+  aidsLineChartData: [],
+  projectsLoading: false,
+  projectSort: '',
+  changeSortBy: null,
+  setWrapperRef: null,
+  setIsSortByOpen: null,
+  isSortByOpen: false
 };
 
 class CountryDetailModule extends React.Component {
@@ -111,6 +123,12 @@ class CountryDetailModule extends React.Component {
         <Projects
           projectData={this.props.projectData}
           projectInfo={this.props.projectInfo}
+          projectsLoading={this.props.projectsLoading}
+          sort={this.props.projectSort}
+          changeSortBy={this.props.changeSortBy}
+          setWrapperRef={this.props.setWrapperRef}
+          setIsSortByOpen={this.props.setIsSortByOpen}
+          isSortByOpen={this.props.isSortByOpen}
         />
       </ModuleContainer>
     );

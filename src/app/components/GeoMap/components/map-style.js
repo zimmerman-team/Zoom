@@ -1,11 +1,4 @@
 import { fromJS } from 'immutable';
-import MAP_STYLE from 'components/GeoMap/data/map-style-basic-v8.json';
-
-const mapStyle = {
-  ...MAP_STYLE,
-  sources: { ...MAP_STYLE.sources },
-  layers: MAP_STYLE.layers.slice()
-};
 
 export const colorStops = [[0, '#FFFFFF'], [8, '#0900FF']];
 
@@ -34,5 +27,3 @@ export const borderStyle = {
     'line-color': '#0080ef'
   }
 };
-
-export const defaultMapStyle = mapStyle;

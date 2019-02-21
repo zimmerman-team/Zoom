@@ -8,6 +8,7 @@ import ErrorStep from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep';
 
 /* mutations */
 import FileErrorResultMutation from 'mediators/DataMapperMediators/CorrectErrorsMediator/mutations/FileErrorResultMutation';
+import FileValidationMutation from 'mediators/DataMapperMediators/mutations/FileValidation';
 
 /* utils */
 import get from 'lodash/get';
@@ -40,9 +41,13 @@ class CorrectErrorsMediator extends React.Component {
       columnHeaders: [],
       page: 0,
       checkedRows: false,
+      rowsDeleted: false,
       rowCount: 100
     };
 
+    this.handleValidationCompleted = this.handleValidationCompleted.bind(this);
+    this.handleValidationError = this.handleValidationError.bind(this);
+    this.fileValidation = this.fileValidation.bind(this);
     this.handleCellsErrorsCompleted = this.handleCellsErrorsCompleted.bind(
       this
     );
@@ -53,49 +58,57 @@ class CorrectErrorsMediator extends React.Component {
     this.refetch = this.refetch.bind(this);
     this.findReplaceValues = this.findReplaceValues.bind(this);
     this.resetFindReplace = this.resetFindReplace.bind(this);
+    this.updateCell = this.updateCell.bind(this);
     this.checkRows = this.checkRows.bind(this);
     this.deleteRows = this.deleteRows.bind(this);
+    this.afterErrorTableUpdate = this.afterErrorTableUpdate.bind(this);
   }
 
   componentDidMount() {
     if (this.props.fileId !== '-1') this.refetch();
   }
 
-  handleCellsErrorsCompleted(response, error) {
+  handleValidationCompleted(response, error) {
+    if (response) this.getFileCellsErrors();
+    if (error) console.log('file validation error', error);
+  }
+
+  handleValidationError(error) {
+    console.log('error validating file: ', error);
+  }
+
+  fileValidation() {
+    FileValidationMutation.commit(
+      this.props.relay.environment,
+      this.props.fileId,
+      this.handleValidationCompleted,
+      this.handleValidationError
+    );
+  }
+
+  handleCellsErrorsCompleted(response) {
     if (response) {
-      const command = this.state.correctCommand;
-
-      const results =
-        response.fileErrorCorrection &&
-        JSON.parse(JSON.parse(response.fileErrorCorrection.result));
-
-      const errorTableData = results && JSON.parse(results.data_table);
-
-      // same as replacement we do for row deleting
-      // as we don't want to delete rows each time a page is changed
-      // or some other action been made
-      // and because after deleting rows we get no error data
-      // we recall the whole file correction
-      // with delete toggle set to false
+      const command = JSON.parse(
+        JSON.parse(response.fileErrorCorrection.command)
+      );
       if (command.delete) {
         command.delete = false;
         command.delete_data.row_keys = [];
-
-        const delCommand = { ...this.state.correctCommand };
-
-        console.log('Delete ERROR', { error });
-        console.log('Delete command', delCommand);
-        console.log('Delete results', results);
-        console.log('Delete errorTableData', errorTableData);
-        console.log('Delete response', response);
-        this.getFileCellsErrors(command);
+        this.setState({ correctCommand: command }, this.fileValidation);
+      } else if (command.update) {
+        // so because when we update a cell
+        // we don't get back the error data
+        // we need to reset the update after it is done
+        // and then call data again to get the updated
+        // datas errors
+        command.update = false;
+        this.setState({ correctCommand: command }, this.fileValidation);
       } else {
-        const afterDelCommand = { ...this.state.correctCommand };
-        console.log('AFTER DELETE ERROR', error);
-        console.log('After Delete command', afterDelCommand);
-        console.log('After Delete results', results);
-        console.log('After Delete errorTableData', errorTableData);
-        console.log('After Delete response', response);
+        const results = JSON.parse(
+          JSON.parse(response.fileErrorCorrection.result)
+        );
+
+        const errorTableData = JSON.parse(results.data_table);
 
         let repCol = null;
         if (command.replace_pressed && command.filter_column_heading)
@@ -128,7 +141,6 @@ class CorrectErrorsMediator extends React.Component {
           command.replace_pressed = false;
           command.find_value = command.replace_value;
         }
-
         this.setState(
           {
             errorTableData,
@@ -136,10 +148,20 @@ class CorrectErrorsMediator extends React.Component {
             correctCommand: command,
             rowCount: results.total_amount
           },
-          () => this.props.saveStepData(this.state.errorCells, 4)
+          this.afterErrorTableUpdate
         );
       }
     }
+  }
+
+  afterErrorTableUpdate() {
+    if (this.state.rowsDeleted) {
+      // we also reset the checkboxes
+      this.checkRows('all', false);
+      this.setState({ rowsDeleted: false });
+    }
+
+    this.props.saveStepData(this.state.errorCells, 4);
   }
 
   handleCellsErrorsError(error) {
@@ -244,6 +266,17 @@ class CorrectErrorsMediator extends React.Component {
     );
   }
 
+  updateCell(text, otherVal) {
+    const command = { ...this.state.correctCommand };
+
+    command.update = true;
+    command.update_data.column = otherVal.colName;
+    command.update_data.line_no = parseInt(otherVal.rowInd, 10);
+    command.update_data.cell_value = text;
+
+    this.getFileCellsErrors(command);
+  }
+
   checkRows(index, checked) {
     this.setState(prevState => {
       const errorTableData = [...prevState.errorTableData];
@@ -267,10 +300,7 @@ class CorrectErrorsMediator extends React.Component {
   }
 
   deleteRows() {
-    console.log('DELETE THEM ROWS - DATA', this.state.errorTableData);
-
     const command = this.state.correctCommand;
-    console.log('command', command);
 
     const delIndex = [];
 
@@ -284,13 +314,16 @@ class CorrectErrorsMediator extends React.Component {
       command.delete = true;
       command.delete_data.row_keys = delIndex;
 
-      this.getFileCellsErrors(command);
+      this.setState({ checkedRows: false, rowsDeleted: true }, () =>
+        this.getFileCellsErrors(command)
+      );
     }
   }
 
   render() {
     return (
       <ErrorStep
+        updateCell={this.updateCell}
         checkedRows={this.state.checkedRows}
         deleteRows={this.deleteRows}
         checkRows={this.checkRows}

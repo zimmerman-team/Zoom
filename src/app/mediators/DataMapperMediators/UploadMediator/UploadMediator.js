@@ -9,7 +9,7 @@ import { ToastsStore } from 'react-toasts';
 /* mutations */
 import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
 import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
-import FileValidationMutation from 'mediators/DataMapperMediators/UploadMediator/mutations/FileValidation';
+import FileValidationMutation from 'mediators/DataMapperMediators/mutations/FileValidation';
 
 /* consts */
 import { step1InitialData } from '__consts__/MetaDataStepConsts';
@@ -306,7 +306,6 @@ class UploadMediator extends React.Component {
   }
 
   render() {
-    console.log('fileID', this.state.fileId);
     return (
       <UploadStep
         loading={this.state.file.name && this.state.manMapData.length === 0}

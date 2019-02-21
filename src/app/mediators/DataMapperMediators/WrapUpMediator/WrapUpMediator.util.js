@@ -45,10 +45,8 @@ export function formatMapJson(mappingJson, mapData, fileId) {
     mapJson.mapping_dict.value.push(item.fileType);
 
     // and here we indicate what type of format it is
-    mapJson.extra_information.empty_entries.empty_value_format[
-      zoomValues[0].fileType
-    ] =
-      zoomValues[0].zoomModel.toLowerCase().indexOf('number') !== -1
+    mapJson.extra_information.empty_entries.empty_value_format[item.fileType] =
+      item.zoomModel.toLowerCase().indexOf('number') !== -1
         ? 'Number'
         : 'Percentage';
 
@@ -57,8 +55,15 @@ export function formatMapJson(mappingJson, mapData, fileId) {
       // yeah and this is done according to the mapping instructions in DUCT wiki
       mapJson.extra_information.multi_mapped.column_heading[item.fileType] =
         'filters';
-      mapJson.extra_information.multi_mapped.column_heading[item.fileType] =
+      mapJson.extra_information.multi_mapped.column_values[item.fileType] =
         'value';
+
+      // and also theses columns need to be added to filters as well
+      // according to the instructions
+      mapJson.mapping_dict.filters.push(item.fileType);
+
+      // Note filter headings for these values will be added below with all other
+      //  filters
     }
   });
 
@@ -83,6 +88,8 @@ export function formatMapJson(mappingJson, mapData, fileId) {
 
   // and we add the meta_data id here
   mapJson.metadata_id = fileId;
+
+  console.log('mapJson', mapJson);
 
   return mapJson;
 }

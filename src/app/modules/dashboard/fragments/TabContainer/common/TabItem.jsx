@@ -11,7 +11,7 @@ const propTypes = {
   activeTab: PropTypes.string,
   activeTheme: PropTypes.object,
   to: PropTypes.string,
-  textTheme: PropTypes.string
+  textTheme: PropTypes.object
 };
 
 const defaultProps = {};
@@ -19,13 +19,11 @@ const defaultProps = {};
 const TabItem = props => {
   return (
     <Tab key={props.tab.key}>
-      <TabBadge label={props.tabCounts[props.tab.key]} />
+      <TabBadge label={props.tabCounts[props.tab.key]} theme={props.textTheme} />
       <TabText
         to={props.tab.route}
         textTheme={
-          props.activeTab === props.tab.key
-            ? props.activeTheme
-            : Theme.color.aidsFondsRed
+          props.textTheme
         }
       >
         {props.tab.label}

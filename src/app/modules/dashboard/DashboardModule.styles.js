@@ -53,3 +53,7 @@ export const NoItems = styled.div`
   color: ${Theme.color.zoomBlack};
   font-family: ${Theme.font.zoomFontFamOne};
 `;
+
+export const Box = styled.div`
+  width: 100%;
+`;

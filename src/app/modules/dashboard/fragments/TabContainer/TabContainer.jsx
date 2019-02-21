@@ -16,6 +16,11 @@ const theme = {
   color: Theme.color.aidsFondsRed
 };
 
+const trashTheme = {
+  color: Theme.color.aidsFondsRed,
+  opacity: 0.57
+};
+
 const propTypes = {
   tabs: PropTypes.arrayOf(
     PropTypes.shape({
@@ -36,7 +41,6 @@ const defaultProps = {
 const TabContainer = ({ tabs, tabCounts, activeTab }) => (
   /*todo: see if it makes sense to make a re-usable component for component containers*/
   <Container>
-    {/*FIXED: rename centertabs to something more descriptive*/}
     <TabItems>
       {tabs.slice(0, tabs.length - 1).map(tab => (
         <TabItem
@@ -54,11 +58,11 @@ const TabContainer = ({ tabs, tabCounts, activeTab }) => (
       <TabItem
         tab={tab}
         activeTab={activeTab}
-        theme={{ marginLeft: 'auto', paddingRight: 0 }}
+        theme={{ marginLeft: 'auto', paddingRight: 0, }}
         tabCounts={tabCounts}
         to={tabs[tabs.length - 1].route}
         textTheme={
-          activeTab === tabs[tabs.length - 1].key ? activeTheme : theme
+          activeTab === tabs[tabs.length - 1].key ? activeTheme : trashTheme
         }
       />
     ))}

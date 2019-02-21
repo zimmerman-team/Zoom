@@ -14,6 +14,7 @@ const ComponentBase = styled.div`
   margin-right: 5px;
   border-radius: 50%;
   background-color: ${Theme.color.aidsFondsRed};
+  opacity: ${props => props.theme};
 `;
 
 const Label = styled.span`
@@ -23,17 +24,19 @@ const Label = styled.span`
   font-size: 12px;
   font-weight: 700;
 `;
+
 const propTypes = {
-  label: PropTypes.string
+  label: PropTypes.number,
+  theme: PropTypes.object
 };
 
 const defaultProps = {
-  label: '0'
+  label: 0,
 };
 
 const TabBadge = props => {
   return (
-    <ComponentBase>
+    <ComponentBase theme={props.theme}>
       <Label>{props.label}</Label>
     </ComponentBase>
   );

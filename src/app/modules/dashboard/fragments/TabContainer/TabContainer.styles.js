@@ -34,11 +34,14 @@ export const TabText = styled.div`
   text-decoration: none;
   padding: 6px 2px 0 2px;
 
-  color: ${props => props.theme.color};
+  color: ${props => props.textTheme.color};
+  opacity: ${props => props.textTheme.opacity};
   font-family: ${Theme.font.zoomFontFamOne};
-  border-bottom: ${props => props.theme.border};
+  //border-bottom: ${props => props.theme.border};
+  border-bottom: 2px solid transparent;
 
   &:hover {
+    opacity: 100;  
     color: ${Theme.color.aidsFondsBlue};
     border-bottom: ${Theme.border.dashboardTab};
   }

@@ -54,7 +54,6 @@ class OutlinedInputAdornments extends React.Component {
         }}
         variant="outlined"
         type="search"
-        placeholder="Search"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

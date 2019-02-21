@@ -8,7 +8,8 @@ import {
   PageHeading,
   SearchBox,
   ViewContainer,
-  NoItems
+  NoItems,
+  Box
 } from 'modules/dashboard/DashboardModule.styles';
 import SvgIconSearch from 'assets/icons/IconSearch';
 import Searchbox from './fragments/Searchbox/Searchbox';
@@ -20,6 +21,7 @@ import DashboardHeader from 'modules/dashboard/fragments/DashboardHeader/Dashboa
 
 import styled from 'styled-components';
 import GridListOptionsPane from './fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
+import { TabItems } from './fragments/TabContainer/TabContainer.styles';
 
 const propTypes = {
   tabs: PropTypes.arrayOf(
@@ -74,7 +76,6 @@ const getTabView = (
       return <NoItems>No items in {tabs[2].label}</NoItems>;
     case tabs[3].key:
       return (
-        // todo: UsersTabView and TeamsTabView are very similar in code, maybe it's possible to create a more generic component?
         <UsersTabView
           sort={sort}
           users={users}
@@ -101,10 +102,6 @@ const getTabView = (
       return <NoItems>No items</NoItems>;
   }
 };
-
-const Box = styled.div`
-width: 100%;
-`;
 
 const DashboardModule = ({
   tabs,

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const SvgIconSort = props => (
-  <svg width={18} height={12} {...props}>
+  <svg width={18} height={12} {...props} style={{ cursor: 'pointer' }}>
     <defs>
       <path
         d="M1115 370h12v2h-12zm18-5v2h-18v-2zm-18 10h6v2h-6z"

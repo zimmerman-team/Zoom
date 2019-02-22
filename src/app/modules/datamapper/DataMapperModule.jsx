@@ -52,6 +52,7 @@ class DataMapperModule extends React.Component {
 
       manMapEmptyValue: false,
       manMapEmptyFields: false,
+      mapStepDisabled: false,
       stepsDisabled: false
     };
 
@@ -260,6 +261,7 @@ class DataMapperModule extends React.Component {
         return (
           this.state.stepData[1] && (
             <CorrectErrorsMediator
+              stepsDisabled={this.state.stepsDisabled}
               fileId={this.state.stepData[1].fileId}
               fileCorrection={this.props.fileCorrection}
               saveStepData={this.saveStepData}
@@ -298,7 +300,12 @@ class DataMapperModule extends React.Component {
               mappingJson={this.state.stepData[1].mappingJson}
               mappingData={this.state.stepData[4]}
               disableSteps={() => this.setState({ stepsDisabled: true })}
-              stepsDisabled={this.state.stepsDisabled}
+              disableMapStep={value =>
+                this.setState({ mapStepDisabled: value })
+              }
+              mapStepDisabled={this.state.mapStepDisabled}
+              wrapUpData={this.state.stepData[5]}
+              saveStepData={this.saveStepData}
             />
           )
         );
@@ -308,6 +315,18 @@ class DataMapperModule extends React.Component {
   }
 
   render() {
+    let moduleDisabled = false;
+
+    if (this.state.step === 5 && this.state.mapStepDisabled) {
+      moduleDisabled = true;
+    } else if (
+      this.state.stepsDisabled &&
+      this.state.step !== 6 &&
+      this.state.step !== 5
+    ) {
+      moduleDisabled = true;
+    }
+
     return (
       <ModuleContainer>
         <ModuleHeader>
@@ -321,9 +340,7 @@ class DataMapperModule extends React.Component {
 
         <ModuleContent
           style={
-            this.state.stepsDisabled && this.state.step !== 6
-              ? { pointerEvents: 'none', opacity: '0.4' }
-              : {}
+            moduleDisabled ? { pointerEvents: 'none', opacity: '0.4' } : {}
           }
         >
           {this.renderStep()}

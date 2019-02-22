@@ -4,7 +4,38 @@ import find from 'lodash/find';
 // according to the retrieved mapping json
 // and the mapping data
 export function formatMapJson(mappingJson, mapData, fileId) {
-  const mapJson = { ...mappingJson };
+  const mapJson = {
+    metadata_id: '',
+    filter_headings: {},
+    extra_information: {
+      empty_entries: {
+        empty_indicator: '',
+        empty_geolocation: { value: '', type: '' },
+        empty_filter: '',
+        empty_value_format: {},
+        empty_date: ''
+      },
+      multi_mapped: {
+        column_heading: {},
+        column_values: {}
+      },
+      point_based_info: {
+        coord: { lat: '', lon: '' },
+        subnational: '',
+        country: '',
+        type: ''
+      }
+    },
+    mapping_dict: {
+      indicator: [],
+      filters: [],
+      geolocation: [],
+      date: [],
+      value_format: [],
+      value: [],
+      comment: []
+    }
+  };
 
   mapData.forEach(item => {
     if (item.emptyFieldRow) {
@@ -67,8 +98,6 @@ export function formatMapJson(mappingJson, mapData, fileId) {
 
   // and we add the meta_data id here
   mapJson.metadata_id = fileId;
-
-  console.log('mapJson', mapJson);
 
   return mapJson;
 }

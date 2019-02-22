@@ -12,10 +12,11 @@ import isEqual from 'lodash/isEqual';
 import {
   titleCase,
   formatBarChartInfoIndicators,
-  formatLineChartData,
+  // formatLineChartData,
   formatProjectData,
   formatWikiExcerpts,
-  getProjectCountNCommitment
+  getProjectCountNCommitment,
+  formatLineChart2Data
 } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
 
 /* actions */
@@ -120,14 +121,23 @@ class CountryDetailMediator extends React.Component {
       projectData: [],
       excerpts: ['', ''],
       barChartIndicators: mock.barChartIndicators,
-      aidsEpIndicators: mock.aidsEpIndicators,
+      aidsEpIndicators: mock.lineChartInd.map(lci => lci.name),
       aidsLineChartData: [],
       countryName: '',
-      infoBarData: []
+      infoBarData: [],
+      projectSort: mock.transParams.ordering,
+      isSortByOpen: false,
+      projectsLoading: false
     };
+
+    this.changeSortBy = this.changeSortBy.bind(this);
+    this.setWrapperRef = this.setWrapperRef.bind(this);
+    this.setIsSortByOpen = this.setIsSortByOpen.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
   }
 
   componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
     // We get countries related activities here
     const transParams = this.state.transParams;
     transParams.recipient_country = this.props.match.params.iso2.toUpperCase();
@@ -153,7 +163,11 @@ class CountryDetailMediator extends React.Component {
       const projectInfo = getProjectCountNCommitment(
         get(this.props.countryActivities, 'data.results', [])
       );
-      this.setState({ projectData, projectInfo });
+      this.setState({
+        projectData,
+        projectInfo,
+        projectsLoading: this.props.countryActivities.request
+      });
     }
 
     if (!isEqual(this.props.excerpts.data, prevProps.excerpts.data)) {
@@ -188,7 +202,7 @@ class CountryDetailMediator extends React.Component {
       wikiParams.titles = titleCase(countryName);
       this.props.dispatch(actions.countryExcerptRequest(this.state.wikiParams));
 
-      const aidsLineChartData = formatLineChartData(
+      const aidsLineChartData = formatLineChart2Data(
         this.props.indicatorAggregations.aidsEpidemic
       );
 
@@ -201,12 +215,49 @@ class CountryDetailMediator extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  setIsSortByOpen() {
+    this.setState(prevState => ({
+      isSortByOpen: !prevState.isSortByOpen
+    }));
+  }
+
+  setWrapperRef(node) {
+    this.wrapperRef = node;
+  }
+
   refetch() {
     this.props.relay.refetch({
       countryCode: [this.props.match.params.iso2.toLowerCase()],
       barChartIndicators: this.state.barChartIndicators,
       aidsEpIndicators: this.state.aidsEpIndicators
     });
+  }
+
+  changeSortBy(e) {
+    const value = e.target.id;
+    this.setState(
+      {
+        projectSort: value
+      },
+      () => {
+        this.props.dispatch(
+          oipaActions.countryActivitiesRequest({
+            ...this.state.transParams,
+            ordering: value
+          })
+        );
+      }
+    );
+  }
+
+  handleClickOutside(event) {
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+      this.setState({ isSortByOpen: false });
+    }
   }
 
   render() {
@@ -218,6 +269,13 @@ class CountryDetailMediator extends React.Component {
         aidsLineChartData={this.state.aidsLineChartData}
         countryName={this.state.countryName}
         excerpts={this.state.excerpts}
+        aidsEpIndicators={mock.lineChartInd}
+        projectSort={this.state.projectSort}
+        changeSortBy={this.changeSortBy}
+        setWrapperRef={this.setWrapperRef}
+        setIsSortByOpen={this.setIsSortByOpen}
+        isSortByOpen={this.state.isSortByOpen}
+        projectsLoading={this.state.projectsLoading}
       />
     );
   }

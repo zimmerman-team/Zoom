@@ -1,4 +1,5 @@
 import { addDecorator, configure } from '@storybook/react';
+import 'loki/configure-react';
 import { withOptions } from '@storybook/addon-options';
 import { withInfo } from '@storybook/addon-info';
 import { setConsoleOptions, withConsole } from '@storybook/addon-console';

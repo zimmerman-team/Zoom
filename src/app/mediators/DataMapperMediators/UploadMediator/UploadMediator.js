@@ -9,7 +9,7 @@ import { ToastsStore } from 'react-toasts';
 /* mutations */
 import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
 import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
-import FileValidationMutation from 'mediators/DataMapperMediators/UploadMediator/mutations/FileValidation';
+import FileValidationMutation from 'mediators/DataMapperMediators/mutations/FileValidation';
 
 /* consts */
 import { step1InitialData } from '__consts__/MetaDataStepConsts';
@@ -27,8 +27,7 @@ import isEqual from 'lodash/isEqual';
 import {
   formatOverviewData,
   formatModelOptions,
-  formatManData,
-  getRowCount
+  formatManData
 } from './UploadMediator.util';
 
 const propTypes = {
@@ -71,7 +70,6 @@ const propTypes = {
         selectDisabled: PropTypes.bool
       })
     ),
-    rowCount: PropTypes.number,
     mappingJson: PropTypes.shape({})
   })
 };
@@ -234,12 +232,11 @@ class UploadMediator extends React.Component {
         response.fileValidationResults.summary,
         response.fileValidationResults.foundList
       );
-      const rowCount = getRowCount(overviewData);
+
       this.setState(
         {
           manMapData: formatManData(response.fileValidationResults.foundList),
-          overviewData,
-          rowCount
+          overviewData
         },
         () => this.props.saveStepData(this.state, 2)
       );

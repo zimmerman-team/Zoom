@@ -97,7 +97,7 @@ class App extends React.Component {
                 </Router>
               );
             } else {
-              return <div>Loading - 0</div>;
+              return <div>Loading</div>;
             }
           }}
         />

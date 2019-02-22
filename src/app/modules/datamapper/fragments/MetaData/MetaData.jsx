@@ -113,33 +113,19 @@ const MetaData = props => (
     <SectionHeading>Describe meta data</SectionHeading>
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
-
       <TextFieldRefactor
         error={props.data.title === undefined}
-        placeholder={undefined}
         value={props.data.title}
         label="Title data set*"
-        InputLabelProps={{
-          shrink: true
-        }}
-        InputProps={{
-          autoFocus: true
-        }}
-        onChange={e => props.simpleChange(e.target.value, 'title')}>
-
-      </TextFieldRefactor>
+        onChange={e => props.simpleChange(e.target.value, 'title')}
+      />
     </FieldContainer>
 
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
-      <TextField
-        multiline
-        error={props.data.desc === undefined}
-        placeholder={undefined}
+      <TextFieldRefactor
+        error={props.data.title === undefined}
         label="Description*"
-        InputLabelProps={{
-          shrink: true
-        }}
         value={props.data.desc}
         onChange={e => props.simpleChange(e.target.value, 'desc')}
       />

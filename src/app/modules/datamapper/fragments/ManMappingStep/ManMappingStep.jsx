@@ -138,21 +138,21 @@ class ManMappingStep extends React.Component {
   }
 
   changeDisabledVal(value, prevVal) {
-    if (value !== 'filters')
-      this.setState(prevState => {
-        const { disabledValues } = prevState;
-        const prevIndex = disabledValues.indexOf(prevVal);
+    this.setState(prevState => {
+      const { disabledValues } = prevState;
+      const prevIndex = disabledValues.indexOf(prevVal);
 
-        // so if a previous value is changed
-        // we remove the previous value and add the new one
-        if (prevIndex !== -1) {
-          disabledValues.splice(prevIndex, 1);
-        }
+      // so if a previous value is changed
+      // we remove the previous value and add the new one
+      if (prevIndex !== -1) {
+        disabledValues.splice(prevIndex, 1);
+      }
 
+      if (value !== 'filters' && value !== '-None-')
         // and we push in the new value either way
         disabledValues.push(value);
-        return { disabledValues };
-      });
+      return { disabledValues };
+    });
   }
 
   // basically colors the background of newly added rows

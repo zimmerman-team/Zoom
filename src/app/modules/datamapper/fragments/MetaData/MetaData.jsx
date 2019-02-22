@@ -172,8 +172,8 @@ const MetaData = props => (
             placeHolder="Connect to Zoom data source"
             data={dataSourceOptions.concat(props.data.fileSources)}
             valueSelected={props.data.dataSource.label}
-            selectVal={e =>
-              props.dropDownChange(e.value, 'dataSource', 'sourceText')
+            selectVal={value =>
+              props.dropDownChange(value, 'dataSource', 'sourceText')
             }
           />
         </SelectSurround>
@@ -331,7 +331,7 @@ const MetaData = props => (
             placeHolder="Select or add number of respondents"
             data={numberOptions}
             valueSelected={props.data.q4.label}
-            selectVal={e => props.dropDownChange(e.value, 'q4', 'q4Text')}
+            selectVal={value => props.dropDownChange(value, 'q4', 'q4Text')}
           />
         </SelectSurround>
       </SelectContainer>

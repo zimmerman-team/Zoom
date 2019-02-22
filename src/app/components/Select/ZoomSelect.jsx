@@ -41,6 +41,7 @@ const propTypes = {
   categorise: PropTypes.bool,
   search: PropTypes.bool,
   selectAll: PropTypes.bool,
+  disabledValues: PropTypes.arrayOf(PropTypes.string),
   dropDownWidth: PropTypes.number
 };
 const defaultProps = {
@@ -49,6 +50,7 @@ const defaultProps = {
   reset: undefined,
   search: true,
   selectAll: false,
+  disabledValues: [],
   dropDownWidth: undefined
 };
 
@@ -187,10 +189,13 @@ class ZoomSelect extends React.Component {
           <DropDownLabel>{item.label}</DropDownLabel>
         </CategoryItem>
       );
+    const itemDisabled = this.props.disabledValues.indexOf(item.value) !== -1;
     return (
       <DropDownItem
         style={{
-          width: this.props.dropDownWidth ? this.props.dropDownWidth : ''
+          width: this.props.dropDownWidth ? this.props.dropDownWidth : '',
+          pointerEvents: itemDisabled ? 'none' : '',
+          opacity: itemDisabled ? '0.5' : ''
         }}
         key={`dropDownItem-${index}`}
         onClick={() => this.handleItemClick(item)}

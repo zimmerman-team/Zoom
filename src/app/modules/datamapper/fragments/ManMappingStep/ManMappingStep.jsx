@@ -135,6 +135,13 @@ class ManMappingStep extends React.Component {
     this.generatePlaceholder = this.generatePlaceholder.bind(this);
   }
 
+  componentDidMount() {
+    // so this is only needed for the coloring to activate
+    this.setState({
+      data: this.props.data
+    });
+  }
+
   componentDidUpdate() {
     this.colorMissingRows();
   }

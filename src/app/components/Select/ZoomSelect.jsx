@@ -41,6 +41,7 @@ const propTypes = {
   categorise: PropTypes.bool,
   search: PropTypes.bool,
   selectAll: PropTypes.bool,
+  disabledValues: PropTypes.arrayOf(PropTypes.string),
   dropDownWidth: PropTypes.number
 };
 const defaultProps = {
@@ -49,6 +50,7 @@ const defaultProps = {
   reset: undefined,
   search: true,
   selectAll: false,
+  disabledValues: [],
   dropDownWidth: undefined
 };
 
@@ -90,47 +92,47 @@ class ZoomSelect extends React.Component {
         this.setState({ allSelected: false });
     }
 
-    if (
-      !isEqual(this.props.data, prevProps.data) &&
-      this.props.data &&
-      this.props.data.length > 0
-    ) {
-      // this is where we'll add extra 'categorization' items
-      // if the dropdown needs to be categorized,
-      // basically now will be categorized alphabetically
-      // this should happen only once
-      // IMPORTANT: the data needs to come already sorted
-      // and ofcourse it also needs to come in as array of {label: '', value: ''}
-      if (this.props.categorise) {
-        const regexLetter = /^[a-zA-Z]+$/;
-        const options = [];
-        // so here we define the first character of the category, depending on the first items
-        // first character, we also check if it is a letter, then we put it in letter category
-        // otherwise we put it under '#' category
-        let prevCat = regexLetter.test(this.props.data[0].label[0])
-          ? this.props.data[0].label[0].toUpperCase()
-          : '#';
-
-        options.push({ label: prevCat, value: 'category' });
-
-        // and now we loop and add all other categories along with the actual values
-        this.props.data.forEach(item => {
-          const category = regexLetter.test(item.label[0])
-            ? item.label[0].toUpperCase()
+    if (!isEqual(this.props.data, prevProps.data) && this.props.data) {
+      if (this.props.data.length > 0) {
+        // this is where we'll add extra 'categorization' items
+        // if the dropdown needs to be categorized,
+        // basically now will be categorized alphabetically
+        // this should happen only once
+        // IMPORTANT: the data needs to come already sorted
+        // and ofcourse it also needs to come in as array of {label: '', value: ''}
+        if (this.props.categorise) {
+          const regexLetter = /^[a-zA-Z]+$/;
+          const options = [];
+          // so here we define the first character of the category, depending on the first items
+          // first character, we also check if it is a letter, then we put it in letter category
+          // otherwise we put it under '#' category
+          let prevCat = regexLetter.test(this.props.data[0].label[0])
+            ? this.props.data[0].label[0].toUpperCase()
             : '#';
-          // so if the previous category is not equals to the new category
-          // we push it in and set it to be the prevCategory
-          if (prevCat !== category) {
-            prevCat = category;
-            options.push({ label: prevCat, value: 'category' });
-          }
 
-          options.push(item);
-        });
+          options.push({ label: prevCat, value: 'category' });
 
-        this.setState({ options });
+          // and now we loop and add all other categories along with the actual values
+          this.props.data.forEach(item => {
+            const category = regexLetter.test(item.label[0])
+              ? item.label[0].toUpperCase()
+              : '#';
+            // so if the previous category is not equals to the new category
+            // we push it in and set it to be the prevCategory
+            if (prevCat !== category) {
+              prevCat = category;
+              options.push({ label: prevCat, value: 'category' });
+            }
+
+            options.push(item);
+          });
+
+          this.setState({ options });
+        } else {
+          this.setState({ options: this.props.data });
+        }
       } else {
-        this.setState({ options: this.props.data });
+        this.setState({ initialSelect: true });
       }
 
       if (this.props.selectAll && this.state.initialSelect) {
@@ -159,16 +161,9 @@ class ZoomSelect extends React.Component {
     if (
       this.wrapperRef &&
       !this.wrapperRef.contains(event.target) &&
-      this.state.open !== false
+      this.state.open
     ) {
-      // so here we ignore the closing if the actual input/header element is pressed
-      // cause there's already an on click for closing when that is pressed
-      if (
-        typeof event.srcElement.className === 'string' &&
-        event.srcElement.className.indexOf('SelectHeader') === -1
-      ) {
-        this.setState({ open: false });
-      }
+      this.setState({ open: false });
     }
   }
 
@@ -194,10 +189,13 @@ class ZoomSelect extends React.Component {
           <DropDownLabel>{item.label}</DropDownLabel>
         </CategoryItem>
       );
+    const itemDisabled = this.props.disabledValues.indexOf(item.value) !== -1;
     return (
       <DropDownItem
         style={{
-          width: this.props.dropDownWidth ? this.props.dropDownWidth : ''
+          width: this.props.dropDownWidth ? this.props.dropDownWidth : '',
+          pointerEvents: itemDisabled ? 'none' : '',
+          opacity: itemDisabled ? '0.5' : ''
         }}
         key={`dropDownItem-${index}`}
         onClick={() => this.handleItemClick(item)}
@@ -216,6 +214,7 @@ class ZoomSelect extends React.Component {
     return (
       <ComponentBase
         style={this.props.disabled ? { pointerEvents: 'none' } : {}}
+        ref={this.setWrapperRef}
       >
         <SelectHeader
           headerStyle={this.props.headerStyle}
@@ -232,7 +231,7 @@ class ZoomSelect extends React.Component {
           }
         />
         {this.state.open && (
-          <DropDownContainer ref={this.setWrapperRef}>
+          <DropDownContainer>
             {this.state.options.length > 0 ? (
               <div>
                 {this.props.multiple && (
@@ -246,6 +245,7 @@ class ZoomSelect extends React.Component {
                 {this.props.search && (
                   <ItemContainer>
                     <SearchField
+                      data-cy="geo-map-search"
                       value={this.state.searchWord}
                       onChange={e =>
                         this.setState({ searchWord: e.target.value })

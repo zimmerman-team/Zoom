@@ -1,0 +1,12 @@
+import React from 'react';
+
+const SvgIconList = props => (
+  <svg width={18} height={18} {...props}>
+    <path
+      fill="#FF0100"
+      d="M16 2v14H2V2h14zm1.1-2H.9C.4 0 0 .4 0 .9v16.2c0 .4.4.9.9.9h16.2c.4 0 .9-.5.9-.9V.9c0-.5-.5-.9-.9-.9zM8 4h6v2H8V4zm0 4h6v2H8V8zm0 4h6v2H8v-2zM4 4h2v2H4V4zm0 4h2v2H4V8zm0 4h2v2H4v-2z"
+    />
+  </svg>
+);
+
+export default SvgIconList;

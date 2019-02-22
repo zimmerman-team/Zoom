@@ -21,8 +21,8 @@ class YearSelector extends React.Component {
 
     this.state = {
       yearPeriod: [
-        props.selectedYears[0],
-        props.selectedYears[this.props.selectedYears.length - 1]
+        parseInt(props.selectedYears[0], 10),
+        parseInt(props.selectedYears[this.props.selectedYears.length - 1], 10)
       ]
     };
   }
@@ -31,8 +31,11 @@ class YearSelector extends React.Component {
     if (!isEqual(this.props.selectedYears, prevProps.selectedYears)) {
       this.setState({
         yearPeriod: [
-          this.props.selectedYears[0],
-          this.props.selectedYears[this.props.selectedYears.length - 1]
+          parseInt(this.props.selectedYears[0], 10),
+          parseInt(
+            this.props.selectedYears[this.props.selectedYears.length - 1],
+            10
+          )
         ]
       });
     }

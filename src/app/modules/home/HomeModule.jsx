@@ -48,7 +48,6 @@ export class HomeModule extends Component {
       <React.Fragment>
         <ModuleContainer>
           {/*<BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />*/}
-
           <GeoMap
             indicatorData={indicators}
             selectedYears={this.props.yearPeriod}

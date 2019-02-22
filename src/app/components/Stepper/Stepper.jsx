@@ -17,12 +17,16 @@ import {
   ButtonContainer,
   Stepz,
   StepzLabel,
+  StepLabelClass,
   StyledStepper,
   materialStyles
 } from './Stepper.style';
 
 /* consts */
 import { steps } from './Stepper.const';
+import StepLabel from '@material-ui/core/StepLabel';
+import Step from '@material-ui/core/Step';
+import { StepIcon } from '@material-ui/core';
 
 const propTypes = {
   data: PropTypes.object,
@@ -35,11 +39,12 @@ const defaultProps = {
   nextDisabled: undefined
 };
 
+
 class Stepperz extends React.Component {
   render() {
     const { classes } = this.props;
 
-    const nextDisabled = this.props.nextDisabled() || this.props.step === 6;
+    const nextDisabled = this.props.nextDisabled || this.props.step === 6;
     const prevEnabled = this.props.step !== 1;
 
     const connector = (
@@ -64,9 +69,24 @@ class Stepperz extends React.Component {
             connector={connector}
           >
             {steps.map(step => (
-              <Stepz key={step.label}>
-                <StepzLabel>{step.label}</StepzLabel>
-              </Stepz>
+              <Step key={step.label}>
+                <StepLabel
+                  classes={{
+                    label: classes.stepLabel,
+                    active: classes.stepLabelActive,
+                    completed: classes.stepLabelActive
+                  }}
+                  StepIconProps={{
+                      classes: {
+                          root: classes.stepIcon,
+                          active: classes.stepIconActive,
+                          completed: classes.stepIconCompleted,
+                          text: classes.stepIconText,
+                        }}}
+                >
+                  {step.label}
+                </StepLabel>
+              </Step>
             ))}
           </StyledStepper>
         )}

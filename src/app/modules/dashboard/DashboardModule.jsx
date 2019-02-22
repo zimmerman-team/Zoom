@@ -132,7 +132,7 @@ const DashboardModule = ({
           activeTab={activeTab}
         />
       </section>
-      <GridListOptionsPane/>
+      <GridListOptionsPane activeTab={activeTab}/>
       <section>
         <ViewContainer>
           {/*todo: evaluate if we can handle this in a simpler way by using react router*/}

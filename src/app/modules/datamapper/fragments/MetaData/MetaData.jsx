@@ -9,6 +9,7 @@ import ZoomSelect from 'components/Select/ZoomSelect';
 import CheckboxesGroup from 'components/CheckboxesGroup/CheckboxesGroup';
 import RadioButtonGroup from 'components/RadioButtonGroup/RadioButtonGroup';
 import TextField from 'components/sort/TextField';
+import TextFieldRefactor from 'components/sort/TextFieldRefactor';
 import InputFieldLabel from 'components/InputFieldLabel/InputFieldLabel';
 import InputFieldDivider from 'components/Dividers/InputFieldDivider';
 import ChipInput from 'components/ChipInput/ChipInput';
@@ -112,7 +113,8 @@ const MetaData = props => (
     <SectionHeading>Describe meta data</SectionHeading>
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
-      <TextField
+
+      <TextFieldRefactor
         error={props.data.title === undefined}
         placeholder={undefined}
         value={props.data.title}
@@ -120,8 +122,12 @@ const MetaData = props => (
         InputLabelProps={{
           shrink: true
         }}
-        onChange={e => props.simpleChange(e.target.value, 'title')}
-      />
+        InputProps={{
+          autoFocus: true
+        }}
+        onChange={e => props.simpleChange(e.target.value, 'title')}>
+
+      </TextFieldRefactor>
     </FieldContainer>
 
     {/*////////////////////////////////////////////////////////////////////*/}

@@ -23,6 +23,7 @@ export default {
     zoomGreySeven: '#cfcfcf',
     zoomGreyEight: '#d8d8d8',
     zoomGreyNine: '#dcdcdc',
+    zoomGreyTen: '#959595',
     zoomBlack: '#000000',
     colHeadColor: '#9b9b9b',
     errorCellColor: '#ff807f',
@@ -32,7 +33,8 @@ export default {
   height: {},
   font: {
     zoomFontFamOne: 'FFMarkProAF-Bold',
-    zoomFontFamTwo: 'FFMarkProAF-Book'
+    zoomFontFamTwo: 'FFMarkProAF-Book',
+    zoomFontFamThree: 'FFMarkProAF-Medium'
   },
   weight: {},
   shadow: {

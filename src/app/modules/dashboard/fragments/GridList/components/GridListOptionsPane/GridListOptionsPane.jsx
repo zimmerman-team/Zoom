@@ -14,12 +14,15 @@ margin-top: 17px;
 margin-bottom: 17px;
 `;
 
-const propTypes = {};
+const propTypes = {
+  activeTab: PropTypes.string,
+};
 const defaultProps = {};
 
 const GridListOptionsPane = props => {
   return (
     <ComponentBase>
+      {props.activeTab === tab.key}
       <GridListOption icon={<SvgIconAdd/>} label="add chart"  />
       <GridListOption icon={<SvgIconSort/>} />
     </ComponentBase>);

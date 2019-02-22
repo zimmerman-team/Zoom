@@ -21,6 +21,14 @@ export function formatMapJson(mappingJson, mapData, fileId) {
 
         mapJson.extra_information.empty_entries.empty_value_format[valueCol] =
           item.label;
+      } else if (item.zoomModel === 'geolocation') {
+        mapJson.extra_information.empty_entries[
+          `empty_${item.zoomModel}`
+        ].value = item.label;
+
+        mapJson.extra_information.empty_entries[
+          `empty_${item.zoomModel}`
+        ].type = 'country';
       } else
         mapJson.extra_information.empty_entries[`empty_${item.zoomModel}`] =
           item.label;
@@ -57,13 +65,10 @@ export function formatMapJson(mappingJson, mapData, fileId) {
     });
   }
 
-  if (mapJson.mapping_dict.geolocation.length === 0) {
-    mapJson.extra_information.empty_entries.empty_geolocation.value = 'Global';
-    mapJson.extra_information.empty_entries.empty_geolocation.type = 'country';
-  }
-
   // and we add the meta_data id here
   mapJson.metadata_id = fileId;
+
+  console.log('mapJson', mapJson);
 
   return mapJson;
 }

@@ -42,6 +42,9 @@ export default {
   },
   borderRadius: {},
   icon: {},
+  opacity: {
+    iconInLabel: '0.74'
+  },
   border: {
     dashboardTab: '2px solid #0000ff'
   }

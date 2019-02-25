@@ -53,7 +53,7 @@ export const materialStyles = uiTheme => ({
     transition: uiTheme.transitions.create('border-color')
   },
 
-  // todo: See the repetitive code??
+  // todo: See the repetitive code? Put on that abstraction hat!
   stepLabel: {
     fontSize: '14px',
     fontFamily: theme.font.zoomFontFamOne,
@@ -77,9 +77,9 @@ export const materialStyles = uiTheme => ({
     '&$stepIconActive': {
       color: theme.color.aidsFondsBlue
     },
-    // fixme: overwrite the font-family does not work?.
-    '&$stepIconText': {
-      'font-family': theme.font.zoomFontFamOne
+    // fixme: not conform material-ui guidelines
+    '& text': {
+      fontFamily: theme.font.zoomFontFamOne
     }
   },
   stepIconActive: {},

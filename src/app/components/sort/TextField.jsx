@@ -1,92 +1,73 @@
-/* base */
 import React from 'react';
-import styled from 'styled-components';
-
+import PropTypes from 'prop-types';
+import { withStyles,MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import NoSsr from '@material-ui/core/NoSsr';
 import theme from 'theme/Theme';
 
-export default styled(props => (
-  <NoSsr>
-    <TextField
-      id="standard-full-width"
-      placeholder="Placeholder"
-      fullWidth
-      margin="none"
-      InputProps={{
-        disableUnderline: true
-      }}
-      InputLabelProps={{
-        disableAnimation: true
-      }}
-      {...props}
-    />
-  </NoSsr>
-))`
-  && {
-    font-size: 14px;
-    color: black;
-    font-family: ${theme.font.zoomFontFamTwo};
-    margin: 0;
+const styles = () => ({
+  inputLabel: {
+    transform: 'scale(1)',
+    fontSize: '14px',
+    fontFamily: theme.font.zoomFontFamOne,
+    color: theme.color.zoomGreyFive,
 
-    &:before {
-      left: 0;
-      right: 0;
-      bottom: 0;
-      content: '\\00a0';
-      position: absolute;
-      transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-      border-bottom: 1px solid #9b9b9b;
-      pointer-events: none;
-    }
+    '&$inputLabelFocused': {
+      color: theme.color.aidsFondsBlue
+    },
+    '&$inputLabelError': {
+      color: theme.color.aidsFondsRed
+    },
+  },
+  inputLabelFocused: {},
+  inputLabelError: {},
 
-    &:after {
-      left: 0;
-      right: 0;
-      bottom: 0;
-      content: '';
-      position: absolute;
-      transform: scaleX(0);
-      transition: transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-      border-bottom: 1px solid #303f9f;
-      pointer-events: none;
-    }
+  input: {
+    fontFamily: theme.font.zoomFontFamTwo,
+    fontSize: '14px',
+  },
+});
 
-    // & [class*='MuiFormLabel-root'] {
-    //   color: ${theme.color.colHeadColor};
-    //   font-weight: 500;
-    //   font-size: 18px;
-    //   font-family: ${theme.font.zoomFontFamOne};
-    // }
-    //
-    // & [class*='MuiInputLabel-focused'] {
-    //   color: ${theme.color.aidsFondsBlue};
-    // }
-    //
-    // & [class*='MuiInputBase-focused'] {
-    //   border-bottom: 1px solid ${theme.color.aidsFondsBlue};
-    // }
-    //
-    // & [class*='MuiInputLabel-error'] {
-    //   color: ${theme.color.aidsFondsRed};
-    // }
-    //
-    // & [class*='MuiPrivateTextarea-root'] {
-    //   padding-top: 10px;
-    // }
-    //
-    // & input,
-    // textarea {
-    //   font-family: ${theme.font.zoomFontFamTwo};
-    //   font-size: 14px;
-    // }
-    //
-    // & input {
-    //   padding-top: 14px;
-    // }
-    //
-    // & [class*='MuiInput-error'] {
-    //   border-bottom: 1px solid ${theme.color.aidsFondsRed};
-    // }
+//General theme provided for the ui element.
+const muiTheme = createMuiTheme({
+  palette:{
+    primary: {main: theme.color.aidsFondsBlue},
   }
-`;
+});
+
+class TextFields extends React.Component {
+  render() {
+    const { classes, ...props} = this.props;
+
+    return(
+      <MuiThemeProvider theme={muiTheme}>
+        <TextField
+          id="standard-full-width"
+          fullWidth
+          margin="none"
+          InputLabelProps={{
+            disableAnimation: false,
+            shrink: true,
+            classes:{
+              root: classes.inputLabel,
+              focused: classes.inputLabelFocused,
+              error: classes.inputLabelError
+            }
+          }}
+
+          InputProps={{
+            classes:{
+              root: classes.input,
+            }
+          }}
+          {...props}
+        />
+      </MuiThemeProvider>
+    );
+  }
+}
+
+TextFields.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(TextFields);

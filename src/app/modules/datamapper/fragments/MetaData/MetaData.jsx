@@ -9,7 +9,6 @@ import ZoomSelect from 'components/Select/ZoomSelect';
 import CheckboxesGroup from 'components/CheckboxesGroup/CheckboxesGroup';
 import RadioButtonGroup from 'components/RadioButtonGroup/RadioButtonGroup';
 import TextField from 'components/sort/TextField';
-import TextFieldRefactor from 'components/sort/TextFieldRefactor';
 import InputFieldLabel from 'components/InputFieldLabel/InputFieldLabel';
 import InputFieldDivider from 'components/Dividers/InputFieldDivider';
 import ChipInput from 'components/ChipInput/ChipInput';
@@ -113,7 +112,7 @@ const MetaData = props => (
     <SectionHeading>Describe meta data</SectionHeading>
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
-      <TextFieldRefactor
+      <TextField
         error={props.data.title === undefined}
         value={props.data.title}
         label="Title data set*"
@@ -123,7 +122,7 @@ const MetaData = props => (
 
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
-      <TextFieldRefactor
+      <TextField
         error={props.data.title === undefined}
         label="Description*"
         value={props.data.desc}
@@ -134,11 +133,7 @@ const MetaData = props => (
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
       <ChipInput
-        placeholder={undefined}
         label="Tags"
-        InputLabelProps={{
-          shrink: true
-        }}
         value={props.data.tags}
         onAdd={chip => props.onChipAdd(chip)}
         onDelete={(chip, index) => props.onChipDelete(index)}
@@ -174,11 +169,7 @@ const MetaData = props => (
       <DataSourceTextCont>
         <TextField
           error={props.data.dataSource.value === undefined}
-          placeholder={undefined}
           label="Create new name for  data source"
-          InputLabelProps={{
-            shrink: true
-          }}
           value={props.data.sourceText}
           onChange={e =>
             props.otherDropdownText(
@@ -300,13 +291,10 @@ const MetaData = props => (
         onChange={value => props.checkBoxChange(value, 'q3', 'q3Text')}
       />
       <TextField
-        placeholder={undefined}
         label="If other, explain"
-        InputLabelProps={{
-          shrink: true
-        }}
         value={props.data.q3Text}
-        onChange={e => props.otherCheckBoxText(e.target.value, 'q3', 'q3Text')}
+        onChange={e =>
+          props.otherCheckBoxText(e.target.value, 'q3', 'q3Text')}
       />
     </FieldContainer>
 
@@ -330,20 +318,10 @@ const MetaData = props => (
       <OrLabel> or </OrLabel>
       <DataSourceTextCont>
         <TextField
-          placeholder={undefined}
           label="Enter a number"
-          InputLabelProps={{
-            shrink: true
-          }}
           value={props.data.q4Text}
           onChange={e =>
-            props.otherDropdownText(
-              e.target.value,
-              'q4',
-              'q4Text',
-              numberOptions
-            )
-          }
+            props.otherCheckBoxText(e.target.value, 'q4', 'q4Text', numberOptions)}
         />
       </DataSourceTextCont>
     </TwoFieldContainer>
@@ -372,15 +350,10 @@ const MetaData = props => (
         onChange={value => props.checkBoxChange(value, 'q51', 'q51Text')}
       />
       <TextField
-        placeholder={undefined}
         label="If other, explain"
-        InputLabelProps={{
-          shrink: true
-        }}
         value={props.data.q51Text}
         onChange={e =>
-          props.otherCheckBoxText(e.target.value, 'q51', 'q51Text')
-        }
+          props.otherCheckBoxText(e.target.value, 'q51', 'q51Text')}
       />
     </FieldContainer>
   </ModuleContainer>

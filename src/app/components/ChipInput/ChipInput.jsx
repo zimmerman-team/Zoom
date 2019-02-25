@@ -1,101 +1,84 @@
-/* base */
- import React from 'react';
-import styled from 'styled-components';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import theme from 'theme/Theme';
-import NoSsr from '@material-ui/core/NoSsr';
 import ChipInput from 'material-ui-chip-input';
 
-export default styled(props => (
-  <NoSsr>
-    <ChipInput {...props} />
-  </NoSsr>
-))`
-  && {
-    & [class*='MuiInputBase-root'] {
-      display: flex;
-    }
+//Custom styles of material ui components. Used in classes attribute.
+const styles = () => ({
+  chip:{
+    fontFamily: theme.font.zoomFontFamTwo,
+    fontWeight: '100',
+    color: theme.color.aidsFondsWhite,
+    backgroundColor: theme.color.aidsFondsBlue,
+    borderRadius: '5px',
+    height: '25px',
 
-    & [class*='ChipInput-chipContainer'] {
-      margin-top: 20px !important;
-    }
+    '&:hover, &:focus' :{
+      backgroundColor: theme.color.aidsFondsBlue,
+    },
+    // fixme: not conform material-ui guidelines
+    '& svg': {
+    fill: theme.color.aidsFondsWhite,
+    fillOpacity: theme.opacity.iconInLabel
+    },
+  },
+  chipContainer:{
+    minHeight: '30px',
+  },
 
-    & [class*='ChipInput-underline'] {
-      &:hover:before {
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 1px;
-        content: '';
-        position: absolute;
-        transition: background-color 200ms cubic-bezier(0.4, 0, 1, 1) 0ms;
-        pointer-events: none;
-        background-color: rgba(0, 0, 0, 0.42);
-      }
+  label:{
+    transform: 'scale(1)',
+    fontSize: '14px',
+    fontWeight: '500',
+    fontFamily: theme.font.zoomFontFamOne,
+    color: theme.color.zoomGreyFive,
+    marginBottom: '5px',
+  },
 
-      &:after {
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 1px;
-        content: '';
-        position: absolute;
-        transition: background-color 200ms cubic-bezier(0.4, 0, 1, 1) 0ms;
-        pointer-events: none;
-        background-color: ${theme.color.aidsFondsBlue};
-      }
-    }
+  input:{
+    fontSize: '14px',
+  },
+});
 
-    & [class*='ChipInput-error'] {
-      &:after {
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 1px;
-        content: '';
-        position: absolute;
-        transition: background-color 200ms cubic-bezier(0.4, 0, 1, 1) 0ms;
-        pointer-events: none;
-        background-color: ${theme.color.aidsFondsRed};
-      }
-    }
+//General theme provided for the ui element.
+const muiTheme = createMuiTheme({
+  palette:{
+    primary: {main: theme.color.aidsFondsBlue},
+  },
+  typography:{
+    fontFamily: theme.font.zoomFontFamTwo,
+    //Using typography v2 for no deprecation warnings...
+    useNextVariants: true,
+},
+});
 
-    & [class*='MuiInputLabel-root'] {
-      color: ${theme.color.colHeadColor};
-      font-weight: 500;
-      font-size: 18px;
-      font-family: ${theme.font.zoomFontFamOne};
-    }
+class ChipInputs extends React.Component {
+  render() {
+    const { classes, ...props} = this.props;
 
-    & [class*='MuiInputLabel-focused'] {
-      color: ${theme.color.aidsFondsBlue};
-    }
-
-    & [class*='MuiInputLabel-error'] {
-      color: ${theme.color.aidsFondsRed};
-    }
-
-    & input {
-      padding-bottom: 6px;
-      padding-top: 12px;
-      font-family: ${theme.font.zoomFontFamTwo};
-      font-size: 14px;
-    }
-
-    & div[role='button'] {
-      background-color: ${theme.color.aidsFondsBlue};
-      border-radius: 5px;
-      & span {
-        line-height: 1;
-        color: ${theme.color.aidsFondsWhite};
-        font-family: ${theme.color.zoomFontFamTwo};
-        font-size: 14px;
-        margin-right: 10px;
-      }
-
-      & svg {
-        fill: white;
-        fill-opacity: 0.7;
-      }
-    }
+    return(
+      <MuiThemeProvider theme={muiTheme}>
+      <ChipInput
+        clickable={false}
+        classes={{
+          chip: classes.chip,
+          chipContainer: classes.chipContainer,
+          label: classes.label,
+          input: classes.input
+        }}
+        InputLabelProps={{
+          shrink: true
+        }}
+        {...props}
+      />
+      </MuiThemeProvider>
+    );
   }
-`;
+}
+
+ChipInput.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(ChipInputs);

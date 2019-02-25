@@ -123,7 +123,7 @@ const MetaData = props => (
     {/*////////////////////////////////////////////////////////////////////*/}
     <FieldContainer>
       <TextField
-        error={props.data.title === undefined}
+        error={props.data.desc === undefined}
         label="Description*"
         value={props.data.desc}
         onChange={e => props.simpleChange(e.target.value, 'desc')}
@@ -293,8 +293,7 @@ const MetaData = props => (
       <TextField
         label="If other, explain"
         value={props.data.q3Text}
-        onChange={e =>
-          props.otherCheckBoxText(e.target.value, 'q3', 'q3Text')}
+        onChange={e => props.otherCheckBoxText(e.target.value, 'q3', 'q3Text')}
       />
     </FieldContainer>
 
@@ -321,7 +320,13 @@ const MetaData = props => (
           label="Enter a number"
           value={props.data.q4Text}
           onChange={e =>
-            props.otherCheckBoxText(e.target.value, 'q4', 'q4Text', numberOptions)}
+            props.otherCheckBoxText(
+              e.target.value,
+              'q4',
+              'q4Text',
+              numberOptions
+            )
+          }
         />
       </DataSourceTextCont>
     </TwoFieldContainer>
@@ -353,7 +358,8 @@ const MetaData = props => (
         label="If other, explain"
         value={props.data.q51Text}
         onChange={e =>
-          props.otherCheckBoxText(e.target.value, 'q51', 'q51Text')}
+          props.otherCheckBoxText(e.target.value, 'q51', 'q51Text')
+        }
       />
     </FieldContainer>
   </ModuleContainer>

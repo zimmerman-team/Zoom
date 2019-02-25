@@ -19,13 +19,11 @@ const defaultProps = {};
 const TabItem = props => {
   return (
     <Tab key={props.tab.key}>
-      <TabBadge label={props.tabCounts[props.tab.key]} theme={props.textTheme} />
-      <TabText
-        to={props.tab.route}
-        textTheme={
-          props.textTheme
-        }
-      >
+      <TabBadge
+        label={props.tabCounts[props.tab.key]}
+        theme={props.textTheme}
+      />
+      <TabText to={props.tab.route} textTheme={props.textTheme}>
         {props.tab.label}
       </TabText>
     </Tab>

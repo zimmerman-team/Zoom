@@ -19,7 +19,6 @@ import DashboardHeader from 'modules/dashboard/fragments/DashboardHeader/Dashboa
 import GridListOptionsPane from './fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
 import GridItem from './fragments/GridList/components/GridItem/GridItem';
 
-
 const propTypes = {
   tabs: PropTypes.arrayOf(
     PropTypes.shape({
@@ -132,20 +131,20 @@ const DashboardModule = ({
           activeTab={activeTab}
         />
       </section>
-      <GridListOptionsPane activeTab={activeTab}/>
+      <GridListOptionsPane activeTab={activeTab} />
       <section>
         <ViewContainer>
           {/*todo: evaluate if we can handle this in a simpler way by using react router*/}
           {/*{getTabView(*/}
-            {/*users,*/}
-            {/*teams,*/}
-            {/*tabs,*/}
-            {/*activeTab,*/}
-            {/*isSortByOpen,*/}
-            {/*setIsSortByOpen,*/}
-            {/*setWrapperRef,*/}
-            {/*sort,*/}
-            {/*changeSortBy*/}
+          {/*users,*/}
+          {/*teams,*/}
+          {/*tabs,*/}
+          {/*activeTab,*/}
+          {/*isSortByOpen,*/}
+          {/*setIsSortByOpen,*/}
+          {/*setWrapperRef,*/}
+          {/*sort,*/}
+          {/*changeSortBy*/}
           {/*)}*/}
           <GridItem />
           <GridItem />

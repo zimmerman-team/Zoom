@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import {
+  withStyles,
+  MuiThemeProvider,
+  createMuiTheme
+} from '@material-ui/core/styles';
 import theme from 'theme/Theme';
 import ChipInput from 'material-ui-chip-input';
 
 //Custom styles of material ui components. Used in classes attribute.
 const styles = () => ({
-  chip:{
+  chip: {
     fontFamily: theme.font.zoomFontFamTwo,
     fontWeight: '100',
     color: theme.color.aidsFondsWhite,
@@ -14,71 +18,71 @@ const styles = () => ({
     borderRadius: '5px',
     height: '25px',
 
-    '&:hover, &:focus' :{
-      backgroundColor: theme.color.aidsFondsBlue,
+    '&:hover, &:focus': {
+      backgroundColor: theme.color.aidsFondsBlue
     },
     // fixme: not conform material-ui guidelines
     '& svg': {
-    fill: theme.color.aidsFondsWhite,
-    fillOpacity: theme.opacity.iconInLabel
-    },
+      fill: theme.color.aidsFondsWhite,
+      fillOpacity: theme.opacity.iconInLabel
+    }
   },
-  chipContainer:{
-    minHeight: '30px',
+  chipContainer: {
+    minHeight: '30px'
   },
 
-  label:{
+  label: {
     transform: 'scale(1)',
     fontSize: '14px',
     fontWeight: '500',
     fontFamily: theme.font.zoomFontFamOne,
     color: theme.color.zoomGreyFive,
-    marginBottom: '5px',
+    marginBottom: '5px'
   },
 
-  input:{
-    fontSize: '14px',
-  },
+  input: {
+    fontSize: '14px'
+  }
 });
 
 //General theme provided for the ui element.
 const muiTheme = createMuiTheme({
-  palette:{
-    primary: {main: theme.color.aidsFondsBlue},
+  palette: {
+    primary: { main: theme.color.aidsFondsBlue }
   },
-  typography:{
+  typography: {
     fontFamily: theme.font.zoomFontFamTwo,
     //Using typography v2 for no deprecation warnings...
-    useNextVariants: true,
-},
+    useNextVariants: true
+  }
 });
 
 class ChipInputs extends React.Component {
   render() {
-    const { classes, ...props} = this.props;
+    const { classes, ...props } = this.props;
 
-    return(
+    return (
       <MuiThemeProvider theme={muiTheme}>
-      <ChipInput
-        clickable={false}
-        classes={{
-          chip: classes.chip,
-          chipContainer: classes.chipContainer,
-          label: classes.label,
-          input: classes.input
-        }}
-        InputLabelProps={{
-          shrink: true
-        }}
-        {...props}
-      />
+        <ChipInput
+          clickable={false}
+          classes={{
+            chip: classes.chip,
+            chipContainer: classes.chipContainer,
+            label: classes.label,
+            input: classes.input
+          }}
+          InputLabelProps={{
+            shrink: true
+          }}
+          {...props}
+        />
       </MuiThemeProvider>
     );
   }
 }
 
 ChipInput.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(ChipInputs);

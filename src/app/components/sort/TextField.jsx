@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles,MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import {
+  withStyles,
+  MuiThemeProvider,
+  createMuiTheme
+} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import theme from 'theme/Theme';
 
@@ -16,29 +20,29 @@ const styles = () => ({
     },
     '&$inputLabelError': {
       color: theme.color.aidsFondsRed
-    },
+    }
   },
   inputLabelFocused: {},
   inputLabelError: {},
 
   input: {
     fontFamily: theme.font.zoomFontFamTwo,
-    fontSize: '14px',
-  },
+    fontSize: '14px'
+  }
 });
 
 //General theme provided for the ui element.
 const muiTheme = createMuiTheme({
-  palette:{
-    primary: {main: theme.color.aidsFondsBlue},
+  palette: {
+    primary: { main: theme.color.aidsFondsBlue }
   }
 });
 
 class TextFields extends React.Component {
   render() {
-    const { classes, ...props} = this.props;
+    const { classes, ...props } = this.props;
 
-    return(
+    return (
       <MuiThemeProvider theme={muiTheme}>
         <TextField
           id="standard-full-width"
@@ -47,16 +51,15 @@ class TextFields extends React.Component {
           InputLabelProps={{
             disableAnimation: false,
             shrink: true,
-            classes:{
+            classes: {
               root: classes.inputLabel,
               focused: classes.inputLabelFocused,
               error: classes.inputLabelError
             }
           }}
-
           InputProps={{
-            classes:{
-              root: classes.input,
+            classes: {
+              root: classes.input
             }
           }}
           {...props}
@@ -67,7 +70,7 @@ class TextFields extends React.Component {
 }
 
 TextFields.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(TextFields);

@@ -12,7 +12,7 @@ import {
 import CustomCheckBox from 'components/CustomCheckBox/CustomCheckBox';
 
 // so yeah here the columns will need to be formatted according to the data
-export function formatColumns(tableData, handleCellClick) {
+export function formatColumns(tableData, checkRows, handleCellClick) {
   const columns = [];
 
   if (tableData.length > 0) {
@@ -22,14 +22,18 @@ export function formatColumns(tableData, handleCellClick) {
       property: 'id',
       header: (
         <HeaderCheckBox key={0}>
-          <CustomCheckBox onChange={() => console.log('all checked')} />
+          <CustomCheckBox
+            key={0}
+            onChange={checked => checkRows('all', checked)}
+          />
         </HeaderCheckBox>
       ),
       render: val => (
         <CheckBox>
           <CustomCheckBox
-            key={val.id}
-            onChange={() => console.log(`item ${val.id} checked`)}
+            key={val.index}
+            checked={val.checked}
+            onChange={() => checkRows(val.index)}
           />
         </CheckBox>
       )
@@ -45,7 +49,7 @@ export function formatColumns(tableData, handleCellClick) {
     Object.keys(row).forEach((key, index) => {
       // because it seems to be the same as the index
       // and i think its just extra generated stuff from graphql
-      if (key !== 'line no.') {
+      if (key !== 'line no.' && key !== 'checked')
         columns.push({
           property: key,
           header: (
@@ -63,7 +67,6 @@ export function formatColumns(tableData, handleCellClick) {
             </ErrorCell>
           )
         });
-      }
     });
   }
 

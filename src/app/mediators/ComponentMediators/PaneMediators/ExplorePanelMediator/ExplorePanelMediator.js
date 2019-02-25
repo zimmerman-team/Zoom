@@ -1,7 +1,7 @@
 /* base */
 import React from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import DataExplorePane from 'components/DataExplorePane/DataExplorePanel';
+import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePanel';
 import PropTypes from 'prop-types';
 
 /* helpers */
@@ -14,26 +14,26 @@ const propTypes = {
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
-            name: PropTypes.string,
-          }),
-        }),
-      ),
+            name: PropTypes.string
+          })
+        })
+      )
     }),
     allCountries: PropTypes.shape({
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
             name: PropTypes.string,
-            iso2: PropTypes.string,
-          }),
-        }),
-      ),
-    }),
-  }),
+            iso2: PropTypes.string
+          })
+        })
+      )
+    })
+  })
 };
 
 const defaultProps = {
-  dropDownData: {},
+  dropDownData: {}
 };
 
 class ExplorePanelMediator extends React.Component {
@@ -42,7 +42,7 @@ class ExplorePanelMediator extends React.Component {
     this.state = {
       allIndNames: [],
       allCountries: [],
-      allRegions: [],
+      allRegions: []
     };
   }
 
@@ -54,7 +54,7 @@ class ExplorePanelMediator extends React.Component {
     let allIndNames = this.props.dropDownData.allIndicators.edges.map(
       indicator => {
         return { label: indicator.node.name, value: indicator.node.name };
-      },
+      }
     );
 
     // We make the array only from unique indicators
@@ -67,7 +67,7 @@ class ExplorePanelMediator extends React.Component {
     let allCountries = this.props.dropDownData.allCountries.edges.map(
       indicator => {
         return { label: indicator.node.name, value: indicator.node.iso2 };
-      },
+      }
     );
 
     allCountries = sortBy(allCountries, ['label']);
@@ -81,7 +81,7 @@ class ExplorePanelMediator extends React.Component {
     this.setState({
       allIndNames,
       allCountries,
-      allRegions,
+      allRegions
     });
   }
 
@@ -132,5 +132,5 @@ export default createFragmentContainer(
         }
       }
     }
-  `,
+  `
 );

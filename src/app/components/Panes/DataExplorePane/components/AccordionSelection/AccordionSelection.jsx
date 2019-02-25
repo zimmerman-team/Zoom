@@ -3,15 +3,15 @@ import {
   FilterLabel,
   ComponentBase,
   IconContainer,
-  PointerContainer,
-} from 'components/DataExplorePane/components/AccordionSelection/AccordionSelection.styles';
+  PointerContainer
+} from 'components/Panes/DataExplorePane/components/AccordionSelection/AccordionSelection.styles';
 import IconPointer from 'assets/icons/IconPointer';
 import theme from 'theme/Theme';
 const AccordionSelection = props => {
   const compStyle = props.active
     ? {
         backgroundColor: theme.color.zoomGreyZero,
-        borderBottom: `1px solid ${theme.color.zoomGreyFour}`,
+        borderBottom: `1px solid ${theme.color.zoomGreyFour}`
       }
     : { backgroundColor: theme.color.aidsFondsWhite };
   return (
@@ -21,7 +21,7 @@ const AccordionSelection = props => {
         style={{
           color: props.active
             ? theme.color.aidsFondsBlue
-            : theme.color.aidsFondsRed,
+            : theme.color.aidsFondsRed
         }}
       >
         {props.label}

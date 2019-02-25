@@ -1,5 +1,6 @@
 /* base */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import MapGL from 'react-map-gl';
 import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
@@ -26,9 +27,22 @@ import {
   YearContainer,
   ControlsContainer
 } from './GeoMap.style';
+import { HomeModule } from 'modules/home/HomeModule';
 
 const MAPBOX_TOKEN =
   'pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw';
+
+const propTypes = {
+  lat: PropTypes.number,
+  long: PropTypes.number,
+  zoom: PropTypes.number
+};
+
+const defaultProps = {
+  lat: 52.1326,
+  long: 5.2913,
+  zoom: 7
+};
 
 export class GeoMap extends Component {
   constructor(props) {
@@ -46,17 +60,32 @@ export class GeoMap extends Component {
       legends: [],
       hoverLayerInfo: null,
       viewport: {
-        latitude: 15,
-        longitude: 0,
+        latitude: this.props.lat,
+        longitude: this.props.long,
         bearing: 0,
         pitch: 0,
-        zoom: 2
+        zoom: this.props.zoom
+      },
+      settings: {
+        dragPan: true,
+        dragRotate: false,
+        scrollZoom: true,
+        touchZoom: true,
+        touchRotate: false,
+        keyboard: true,
+        doubleClickZoom: false,
+        minZoom: this.props.zoom,
+        maxZoom: 20,
+        minPitch: 0,
+        maxPitch: 85
       },
       hoverMarkerInfo: null,
       values: [12, 16],
       fullScreen: false
     };
 
+    this._mapRef = React.createRef();
+    this._handleMapLoaded = this._handleMapLoaded.bind(this);
     this.setMarkerInfo = this.setMarkerInfo.bind(this);
     this.handleZoomIn = this.handleZoomIn.bind(this);
     this.handleZoomOut = this.handleZoomOut.bind(this);
@@ -170,21 +199,31 @@ export class GeoMap extends Component {
     if (feature) this.props.history.push(`country/${feature.properties.iso2}`);
   };
 
+  _handleMapLoaded = event => {
+    console.log(event.target.getBounds());
+    const map = this._getMap();
+    // const map = event.target;
+
+    /*map.setMaxBounds = [
+      [3.31497114423, 50.803721015],
+      [7.09205325687, 53.5104033474]
+    ];
+*/
+    console.log('_handleMapLoaded', map);
+  };
+
+  _getMap = () => {
+    return this._mapRef.current ? this._mapRef.current.getMap() : null;
+  };
+
   handleZoomIn = () => {
-    // cause when its 25 it gets white
-    /*if (this.state.zoom < 25)
-      this.setState(prevState => {
-        return { zoom: prevState.zoom + 0.2 };
-      });*/
     this._updateViewport({ zoom: this.state.viewport.zoom + 1 });
   };
 
   handleZoomOut = () => {
-    /*if (this.state.zoom > 1)
-      this.setState(prevState => {
-        return { zoom: prevState.zoom - 0.2 };
-      });*/
-    this._updateViewport({ zoom: this.state.viewport.zoom - 1 });
+    if (this.state.viewport.zoom <= this.state.settings.maxZoom) {
+      this._updateViewport({ zoom: this.state.viewport.zoom - 1 });
+    }
   };
 
   handleFullscreen() {
@@ -193,8 +232,12 @@ export class GeoMap extends Component {
     });
   }
 
+  componentDidMount() {
+    console.log(this._mapRef);
+  }
+
   render() {
-    const { viewport, mapStyle, markerArray, legends, fullScreen } = this.state;
+    const { viewport, settings, mapStyle, markerArray, legends } = this.state;
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
 
@@ -216,6 +259,8 @@ export class GeoMap extends Component {
 
         <MapGL
           {...viewport}
+          {...settings}
+          ref={this._mapRef}
           scrollZoom={true}
           width="100%"
           height="100%"
@@ -223,8 +268,10 @@ export class GeoMap extends Component {
           onViewportChange={this._updateViewport}
           onHover={this._setLayerInfo}
           onClick={this._onCountryClick}
+          onLoad={this._handleMapLoaded}
           mapboxApiAccessToken={MAPBOX_TOKEN}
           /*todo: refactor zooming functionality to facilitate both zooming by using the zoom controls and zooming by scrolling*/
+          ref={map => (this.mapRef = map)}
         >
           {/*So this is the layer tooltip, and we seperate it from the
               martker tooltip, cause its functionality as a tooltip is a bit different
@@ -244,5 +291,8 @@ export class GeoMap extends Component {
     );
   }
 }
+
+GeoMap.propTypes = propTypes;
+GeoMap.defaultProps = defaultProps;
 
 export default withRouter(GeoMap);

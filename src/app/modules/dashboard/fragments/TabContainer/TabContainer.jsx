@@ -58,7 +58,7 @@ const TabContainer = ({ tabs, tabCounts, activeTab }) => (
       <TabItem
         tab={tab}
         activeTab={activeTab}
-        theme={{ marginLeft: 'auto', paddingRight: 0, }}
+        theme={{ marginLeft: 'auto', paddingRight: 0 }}
         tabCounts={tabCounts}
         to={tabs[tabs.length - 1].route}
         textTheme={

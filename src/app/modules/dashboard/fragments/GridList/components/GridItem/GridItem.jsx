@@ -4,7 +4,7 @@ import React from 'react';
 /* components...*/
 import GridItemText from './common/GridItemText';
 import GridItemToolbar from './common/GridItemToolbar';
-import {ComponentBase, GridItemHeading, Box} from './GridItem.styles';
+import { ComponentBase, GridItemHeading, Box } from './GridItem.styles';
 
 const propTypes = {};
 const defaultProps = {};

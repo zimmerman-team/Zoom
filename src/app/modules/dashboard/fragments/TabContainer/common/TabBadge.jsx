@@ -31,7 +31,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  label: 0,
+  label: 0
 };
 
 const TabBadge = props => {

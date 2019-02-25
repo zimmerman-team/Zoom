@@ -16,32 +16,35 @@ const ComponentBase = styled.div`
 `;
 
 const IconLabel = styled.label`
-color: ${theme.color.aidsFondsRed};
-font-family: ${theme.font.zoomFontFamOne};
-font-size: 19px;
-margin-left: 3px;
+  color: ${theme.color.aidsFondsRed};
+  font-family: ${theme.font.zoomFontFamOne};
+  font-size: 19px;
+  margin-left: 3px;
 `;
 
 const propTypes = {
-    icon: PropTypes.node.isRequired,
-    label: PropTypes.string,
+  icon: PropTypes.node.isRequired,
+  label: PropTypes.string
 };
 const defaultProps = {
-    label: ''
+  label: ''
 };
 
 const GridListOption = props => {
-  function handleClick(){
-    console.log('Click!')
+  function handleClick() {
+    console.log('Click!');
   }
 
   return (
-    <ComponentBase onClick={() => {
-      handleClick();
-    }}>
-        {props.icon}
-        <IconLabel>{props.label}</IconLabel>
-    </ComponentBase>);
+    <ComponentBase
+      onClick={() => {
+        handleClick();
+      }}
+    >
+      {props.icon}
+      <IconLabel>{props.label}</IconLabel>
+    </ComponentBase>
+  );
 };
 GridListOption.propTypes = propTypes;
 GridListOption.defaultProps = defaultProps;

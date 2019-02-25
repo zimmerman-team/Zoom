@@ -39,7 +39,6 @@ const defaultProps = {
   nextDisabled: undefined
 };
 
-
 class Stepperz extends React.Component {
   render() {
     const { classes } = this.props;
@@ -77,12 +76,13 @@ class Stepperz extends React.Component {
                     completed: classes.stepLabelActive
                   }}
                   StepIconProps={{
-                      classes: {
-                          root: classes.stepIcon,
-                          active: classes.stepIconActive,
-                          completed: classes.stepIconCompleted,
-                          text: classes.stepIconText,
-                        }}}
+                    classes: {
+                      root: classes.stepIcon,
+                      active: classes.stepIconActive,
+                      completed: classes.stepIconCompleted,
+                      text: classes.stepIconText
+                    }
+                  }}
                 >
                   {step.label}
                 </StepLabel>

@@ -11,9 +11,9 @@ import IconBlueLocation from 'assets/icons/IconBlueLocation';
 import IconBluePeriod from 'assets/icons/IconBluePeriod';
 
 /* components */
-import ZoomSelect from 'components/Select/ZoomSelect';
-import AccordionSelection from 'components/DataExplorePane/components/AccordionSelection/AccordionSelection';
-import YearSelector from 'components/YearSelector/YearSelector';
+import ZoomSelect from '../../Select/ZoomSelect';
+import AccordionSelection from './components/AccordionSelection/AccordionSelection';
+import YearSelector from '../../YearSelector/YearSelector';
 import ResetIcon from 'assets/icons/IconReset';
 
 /* styles */
@@ -25,7 +25,7 @@ import {
   AccordionSection,
   DropDownCont
 } from './DataExplorerPane.style';
-import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
+import SimpleToolTip from '../../ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
 
 const propTypes = {

@@ -25,6 +25,7 @@ import {
 import ForgetPassword from '../ForgetPassword/ForgetPassword';
 
 const propTypes = {
+  updateComponents: PropTypes.func,
   loginStatusMessage: PropTypes.shape({
     original: PropTypes.shape({
       error: PropTypes.string,
@@ -37,6 +38,7 @@ const propTypes = {
   })
 };
 const defaultProps = {
+  updateComponents: undefined,
   loginStatusMessage: null
 };
 

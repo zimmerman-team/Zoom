@@ -7,6 +7,12 @@ import theme from 'theme/Theme';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+/* consts */
+import paneTypes from '__consts__/PaneTypesConst';
+
+/* utils */
+import isEqual from 'lodash/isEqual';
+
 /* components */
 import {
   AidsFondLogo,
@@ -19,6 +25,7 @@ import {
 /* icons */
 import SvgIconPlus from 'assets/icons/IconPlus';
 import SvgIconCloseSmall from 'assets/icons/IconCloseSmaller';
+import SvgIconBack from 'assets/icons/IconBack';
 
 /* actions */
 import * as actions from 'services/actions/general';
@@ -52,21 +59,48 @@ export class AppBar extends React.Component {
 
   loadPaneButton() {
     let paneButton = '';
-    switch (this.props.location.pathname) {
-      case '/home':
+    let buttonLabel = '';
+    let paneType = 'none';
+
+    if (this.props.auth0Client.isAuthenticated()) {
+      paneType =
+        this.props.dataPaneOpen === paneTypes.none
+          ? paneTypes.privPane
+          : paneTypes.none;
+      buttonLabel = paneType !== paneTypes.none ? 'Create' : 'Close';
+    } else {
+      paneType =
+        this.props.dataPaneOpen === paneTypes.none
+          ? paneTypes.pubPane
+          : paneTypes.none;
+      buttonLabel = paneType !== paneTypes.none ? 'Geo map filters' : 'Hide';
+    }
+
+    let paneIcon =
+      paneType !== paneTypes.none ? <SvgIconPlus /> : <SvgIconCloseSmall />;
+
+    // so this be some extra confusing logic for navpane
+    if (
+      this.props.dataPaneOpen === paneTypes.createChart ||
+      this.props.dataPaneOpen === paneTypes.convertData
+    ) {
+      paneType = paneTypes.privPane;
+      buttonLabel = 'back';
+      paneIcon = <SvgIconBack />;
+    }
+
+    switch (true) {
+      case this.props.location.pathname === '/home' ||
+        this.props.location.pathname === '/callback':
         paneButton = (
           <PaneButton
             data-cy="geomap-filter-button"
             onClick={() =>
-              this.props.dispatch(
-                actions.dataPaneToggleRequest(!this.props.dataPaneOpen)
-              )
+              this.props.dispatch(actions.dataPaneToggleRequest(paneType))
             }
           >
-            {!this.props.dataPaneOpen ? <SvgIconPlus /> : <SvgIconCloseSmall />}
-            <PaneButtonText>
-              {!this.props.dataPaneOpen ? 'Geo map filters' : 'Hide'}
-            </PaneButtonText>
+            {paneIcon}
+            <PaneButtonText>{buttonLabel}</PaneButtonText>
           </PaneButton>
         );
         break;

@@ -9,7 +9,7 @@ import {
   ModuleContainer,
   ControlPanelContainer
 } from 'modules/home/HomeModule.styles';
-import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
+import ExplorePanelMediator from 'mediators/ComponentMediators/PaneMediators/ExplorePanelMediator/ExplorePanelMediator';
 
 const wrapper = shallow(<HomeModule dataPaneOpen />);
 

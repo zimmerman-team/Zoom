@@ -61,6 +61,10 @@ class ManMappingStep extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      disabledValues: []
+    };
+
     this.columns = [
       {
         property: 'fileType',
@@ -81,6 +85,7 @@ class ManMappingStep extends React.Component {
               <CellValue>{val.zoomModel}</CellValue>
             ) : (
               <ZoomSelect
+                disabledValues={this.state.disabledValues}
                 disabled={val.emptyFieldRow}
                 search={false}
                 headerStyle={{ fontSize: 12, height: 'unset' }}
@@ -89,7 +94,11 @@ class ManMappingStep extends React.Component {
                 data={this.props.modelOptions}
                 valueSelected={val.zoomModel}
                 selectVal={zoomModel =>
-                  this.selectDataType(zoomModel.value, val.fileType)
+                  this.selectDataType(
+                    zoomModel.value,
+                    val.fileType,
+                    val.zoomModel
+                  )
                 }
               />
             )}
@@ -120,17 +129,30 @@ class ManMappingStep extends React.Component {
     ];
 
     this.colorMissingRows = this.colorMissingRows.bind(this);
-  }
-
-  componentDidMount() {
-    // this should not be here, we only have this here for coloring to trigger
-    // but this and the coloring should be removed when we actually
-    // implement the proper man mapping userflow
-    this.setState({ data: this.props.data });
+    this.changeDisabledVal = this.changeDisabledVal.bind(this);
+    this.selectDataType = this.selectDataType.bind(this);
   }
 
   componentDidUpdate() {
     this.colorMissingRows();
+  }
+
+  changeDisabledVal(value, prevVal) {
+    if (value !== 'filters')
+      this.setState(prevState => {
+        const { disabledValues } = prevState;
+        const prevIndex = disabledValues.indexOf(prevVal);
+
+        // so if a previous value is changed
+        // we remove the previous value and add the new one
+        if (prevIndex !== -1) {
+          disabledValues.splice(prevIndex, 1);
+        }
+
+        // and we push in the new value either way
+        disabledValues.push(value);
+        return { disabledValues };
+      });
   }
 
   // basically colors the background of newly added rows
@@ -163,7 +185,7 @@ class ManMappingStep extends React.Component {
     });
   }
 
-  selectDataType(zoomModel, fileType) {
+  selectDataType(zoomModel, fileType, prevModel) {
     const { data } = this.props;
     const itemIndex = findIndex(data, ['fileType', fileType]);
 
@@ -176,6 +198,10 @@ class ManMappingStep extends React.Component {
 
       if (extraRowInd !== -1) data.splice(extraRowInd, 1);
     }
+
+    // so we want some values to only be selected once
+    // thust we will generate an array of disabled values using this
+    this.changeDisabledVal(zoomModel, prevModel);
 
     data[itemIndex].zoomModel = zoomModel;
     this.props.saveStepData(data, 5);

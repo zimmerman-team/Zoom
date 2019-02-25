@@ -228,7 +228,7 @@ class ManMappingStep extends React.Component {
         <Box>
           <ErrorLabel>
             {this.props.emptyValue
-              ? '*Please select a value for one of your columns, your csv file\n' +
+              ? '*Please select at least one value for one of your columns, your csv file\n' +
                 '              needs to contain some numeric or percentile values'
               : ' '}
           </ErrorLabel>

@@ -81,6 +81,11 @@ export function formatMapJson(mappingJson, mapData, fileId) {
     });
   }
 
+  if (zoomValues.length > 1) {
+    // and we also need to add this for everything to work
+    mapJson.filter_headings.filters = 'Type';
+  }
+
   if (mapJson.mapping_dict.geolocation.length === 0) {
     mapJson.extra_information.empty_entries.empty_geolocation.value = 'Global';
     mapJson.extra_information.empty_entries.empty_geolocation.type = 'country';
@@ -88,8 +93,6 @@ export function formatMapJson(mappingJson, mapData, fileId) {
 
   // and we add the meta_data id here
   mapJson.metadata_id = fileId;
-
-  console.log('mapJson', mapJson);
 
   return mapJson;
 }

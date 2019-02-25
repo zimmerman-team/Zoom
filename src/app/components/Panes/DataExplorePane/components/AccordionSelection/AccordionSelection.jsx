@@ -4,7 +4,7 @@ import {
   ComponentBase,
   IconContainer,
   PointerContainer
-} from 'components/Panes/DataExplorePane/components/AccordionSelection/AccordionSelection.styles';
+} from 'components/DataExplorePane/components/AccordionSelection/AccordionSelection.styles';
 import IconPointer from 'assets/icons/IconPointer';
 import theme from 'theme/Theme';
 const AccordionSelection = props => {

@@ -8,7 +8,7 @@ import GeoMap from 'components/GeoMap/GeoMap';
 import {
   ModuleContainer,
   ControlPanelContainer
-} from 'modules/focus/FocusModule.styles';
+} from 'modules/focus/FocuseModule.styles';
 import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
 // import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
@@ -20,7 +20,7 @@ const defaultProps = {
   indicators: []
 };
 
-export class FocusModule extends Component {
+class FocusModule extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -43,7 +43,6 @@ export class FocusModule extends Component {
 
   render() {
     const { indicators, ...otherProps } = this.props;
-
     return (
       <React.Fragment>
         <ModuleContainer>

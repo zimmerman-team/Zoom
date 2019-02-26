@@ -64,6 +64,7 @@ class App extends React.Component {
           query={graphql`
             query AppQuery {
               ...HomeModuleMediator_indicatorAggregations
+              ...FocusModuleMediator_indicatorAggregations
               ...CountryDetailMediator_indicatorAggregations
               ...ExplorePanelMediator_dropDownData
               ...MetaDataMediator_dropDownData

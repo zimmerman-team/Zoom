@@ -11,7 +11,7 @@ import {
 
 import PropTypes from 'prop-types';
 import { initialState } from 'mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator.consts';
-import { FocusModule } from 'modules/focus/FocusModule';
+import FocusModule from 'modules/focus/FocusModule';
 
 const propTypes = {
   indicatorAggregations: PropTypes.shape({

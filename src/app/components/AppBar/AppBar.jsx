@@ -52,8 +52,9 @@ export class AppBar extends React.Component {
 
   loadPaneButton() {
     let paneButton = '';
-    switch (this.props.location.pathname) {
-      case '/home':
+    switch (true) {
+      case this.props.location.pathname === '/home' ||
+        this.props.location.pathname === '/focus':
         paneButton = (
           <PaneButton
             onClick={() =>

@@ -1,4 +1,4 @@
-import find from 'lodash/find';
+import filter from 'lodash/filter';
 
 // so this will basically format the json for mapping
 // according to the retrieved mapping json
@@ -39,20 +39,7 @@ export function formatMapJson(mappingJson, mapData, fileId) {
 
   mapData.forEach(item => {
     if (item.emptyFieldRow) {
-      // so first we check if the item is an empty field
-      // that needs to be populated with a value
-      // and populate it ofcourse
-      if (item.zoomModel === 'value_format') {
-        // and ofcourse we need to save value_format differently
-        // then others, because people cant make the data consistent
-
-        // so we need to use the selected values column name as the
-        // dictionary key for the value format...
-        const valueCol = find(mapData, ['zoomModel', 'value']).fileType;
-
-        mapJson.extra_information.empty_entries.empty_value_format[valueCol] =
-          item.label;
-      } else if (item.zoomModel === 'geolocation') {
+      if (item.zoomModel === 'geolocation') {
         mapJson.extra_information.empty_entries[
           `empty_${item.zoomModel}`
         ].value = item.label;
@@ -73,12 +60,50 @@ export function formatMapJson(mappingJson, mapData, fileId) {
       mapJson.point_based_info.coord.lat = item.fileType;
       mapJson.mapping_dict.geolocation.push(item.fileType);
     } else if (item.zoomModel !== '-None-') {
-      // and here we do the simple mapping
-      // and we will be pushing an array
-      // of selections into these mapping dicts
-      // for there can be several columns
-      // with the same zoomModel
-      mapJson.mapping_dict[item.zoomModel].push(item.fileType);
+      // okay so here we'll skip the data models for value
+      // as they need to be processed seperatly as there
+      // might be two values and the zoomModel selections
+      // for these values are not actual zoomModel types
+      if (item.zoomModel.toLowerCase().indexOf('value') === -1)
+        // and here we do the simple mapping
+        // and we will be pushing an array
+        // of selections into these mapping dicts
+        // for there can be several columns
+        // with the same zoomModel
+        mapJson.mapping_dict[item.zoomModel].push(item.fileType);
+    }
+  });
+
+  // so here we'll process the value selections
+  // first we'll find the amount of values selected(max can be two)
+  const zoomValues = filter(mapData, item => {
+    return item.zoomModel.toLowerCase().indexOf('value') !== -1;
+  });
+
+  zoomValues.forEach(item => {
+    // so ye here we push in the selected values column
+    mapJson.mapping_dict.value.push(item.fileType);
+
+    // and here we indicate what type of format it is
+    mapJson.extra_information.empty_entries.empty_value_format[item.fileType] =
+      item.zoomModel.toLowerCase().indexOf('number') !== -1
+        ? 'Number'
+        : 'Percentage';
+
+    // and now there's some extra logic if there's more than one value selected
+    if (zoomValues.length > 1) {
+      // yeah and this is done according to the mapping instructions in DUCT wiki
+      mapJson.extra_information.multi_mapped.column_heading[item.fileType] =
+        'filters';
+      mapJson.extra_information.multi_mapped.column_values[item.fileType] =
+        'value';
+
+      // and also theses columns need to be added to filters as well
+      // according to the instructions
+      mapJson.mapping_dict.filters.push(item.fileType);
+
+      // Note filter headings for these values will be added below with all other
+      //  filters
     }
   });
 
@@ -94,6 +119,11 @@ export function formatMapJson(mappingJson, mapData, fileId) {
     mapJson.mapping_dict.filters.forEach(filterCol => {
       mapJson.filter_headings[filterCol] = filterCol;
     });
+  }
+
+  if (zoomValues.length > 1) {
+    // and we also need to add this for everything to work
+    mapJson.filter_headings.filters = 'Type';
   }
 
   // and we add the meta_data id here

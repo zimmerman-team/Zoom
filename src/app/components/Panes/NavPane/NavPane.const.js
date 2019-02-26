@@ -1,11 +1,18 @@
+/* consts */
+import paneTypes from '__consts__/PaneTypesConst';
+
 export const startItems = [
   {
     label: 'Create chart',
-    navTo: 'createChart'
+    navTo: paneTypes.createChart
   },
   {
     label: 'Convert data',
-    navTo: 'convertData'
+    navTo: paneTypes.convertData
+  },
+  {
+    label: 'Explore data',
+    navTo: paneTypes.pubPane
   }
 ];
 

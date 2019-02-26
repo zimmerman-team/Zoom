@@ -8,6 +8,7 @@ export default {
     aidsFondsBlue: '#0000ff',
     aidsFondsRed: '#ff0100',
     aidsFondsWhite: '#ffffff',
+    aidsFondsWhiteOpacity: 'rgba(255, 255, 255, 0.74)',
     toolTipColor: '#414141',
     chartColorOne: '#f2c987',
     chartColorTwo: '#091799',
@@ -44,9 +45,6 @@ export default {
   },
   borderRadius: {},
   icon: {},
-  opacity: {
-    iconInLabel: '0.74'
-  },
   border: {
     dashboardTab: '2px solid #0000ff'
   }

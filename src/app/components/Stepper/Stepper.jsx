@@ -26,13 +26,13 @@ import {
 import { steps } from './Stepper.const';
 import StepLabel from '@material-ui/core/StepLabel';
 import Step from '@material-ui/core/Step';
-import { StepIcon } from '@material-ui/core';
 
 const propTypes = {
   data: PropTypes.object,
   onlyButtons: PropTypes.bool,
   nextDisabled: PropTypes.func
 };
+
 const defaultProps = {
   data: undefined,
   onlyButtons: false,

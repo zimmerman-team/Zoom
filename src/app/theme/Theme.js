@@ -27,7 +27,8 @@ export default {
     zoomBlack: '#000000',
     colHeadColor: '#9b9b9b',
     errorCellColor: '#ff807f',
-    smallTextBlack: '#4a4a4a'
+    smallTextBlack: '#4a4a4a',
+    inputBorderBlack: 'rgba(0, 0, 0, 0.42)'
   },
   space: {},
   height: {},

@@ -16,7 +16,7 @@ const styles = () => ({
     color: theme.color.zoomGreyFive,
 
     '&$inputLabelFocused': {
-      color: theme.color.aidsFondsBlue
+      color: theme.color.aidsFondsBlue,
     },
     '&$inputLabelError': {
       color: theme.color.aidsFondsRed
@@ -27,15 +27,21 @@ const styles = () => ({
 
   input: {
     fontFamily: theme.font.zoomFontFamTwo,
-    fontSize: '14px'
-  }
+    fontSize: '14px',
+  },
 });
 
-//General theme provided for the ui element.
-const muiTheme = createMuiTheme({
-  palette: {
-    primary: { main: theme.color.aidsFondsBlue }
-  }
+
+const styleOverrides = createMuiTheme({
+  overrides: {
+    MuiInput: {
+      underline: {
+        '&:after': {
+          borderBottom: '2px solid' + theme.color.aidsFondsBlue
+        },
+      },
+    },
+  },
 });
 
 class TextFields extends React.Component {
@@ -43,8 +49,8 @@ class TextFields extends React.Component {
     const { classes, ...props } = this.props;
 
     return (
-      <MuiThemeProvider theme={muiTheme}>
-        <TextField
+      <MuiThemeProvider theme={styleOverrides}>
+      <TextField
           id="standard-full-width"
           fullWidth
           margin="none"
@@ -54,18 +60,19 @@ class TextFields extends React.Component {
             classes: {
               root: classes.inputLabel,
               focused: classes.inputLabelFocused,
-              error: classes.inputLabelError
+              error: classes.inputLabelError,
             }
           }}
           InputProps={{
             classes: {
-              root: classes.input
+              root: classes.input,
+              focused: classes.underline
             }
           }}
           {...props}
         />
       </MuiThemeProvider>
-    );
+        );
   }
 }
 

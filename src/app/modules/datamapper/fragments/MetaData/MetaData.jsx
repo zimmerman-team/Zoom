@@ -127,6 +127,7 @@ const MetaData = props => (
         label="Description*"
         value={props.data.desc}
         onChange={e => props.simpleChange(e.target.value, 'desc')}
+        multiline
       />
     </FieldContainer>
 

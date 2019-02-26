@@ -388,7 +388,6 @@ export default class WrapUpMediator extends React.Component {
   }
 
   render() {
-    console.log('mapping Errors', this.state.mappingErrors);
     return (
       <WrapUpStep
         loading={this.state.loading}

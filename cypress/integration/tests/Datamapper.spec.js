@@ -87,11 +87,11 @@ const fileSummaries = [
     'Count of values',
     '27',
     'Number of unique values',
-    '27',
+    '26',
     'Most frequent value',
-    '1996',
-    '1996 count',
-    '1'
+    '1999',
+    '1999 count',
+    '2'
   ],
   [
     'Count of values',
@@ -160,7 +160,7 @@ const fileDataType = [
   ['100% of data a text value.'],
   ['100% of data a text value.'],
   ['85% of data a country value.', '15% of data a text value.'],
-  ['100% of data a text value.'],
+  ['93% of data a iso3 value.', '7% of data a text value.'],
   ['96% of data a date value.', '4% of data a text value.'],
   ['100% of data a text value.'],
   ['100% of data a numeric value.'],
@@ -173,6 +173,16 @@ const fileDataType = [
 const blankCells = [0, 0, 0, 0, 0, 0, 0, 0, 12, 27];
 
 describe('Datamapper e2e tests', function() {
+  function selectItem(rowNumber, valNumber) {
+    //  we click the column selection to select which column values to find
+    cy.get(
+      `tbody tr:nth-child(${rowNumber}) td:nth-child(2) [data-name="selectHeader"]`
+    ).click();
+
+    // we click the 'Source.1' column to check find all the 'nan' values
+    cy.get(`li:nth-child(${valNumber})`).click();
+  }
+
   it('Go to datamapper', function() {
     cy.visit('/mapper');
   });
@@ -406,22 +416,22 @@ describe('Datamapper e2e tests', function() {
 
     // verify that the errors are found correctly at least for the first page
     // in total for the file 'CypressSample.csv' there should be 6 errors shown
-    cy.get('tbody tr:nth-child(1) td:nth-child(6)').should($el => {
+    cy.get('tbody tr:nth-child(1) td:nth-child(2)').should($el => {
       expect($el).to.have.css('background-color', 'rgb(255, 128, 127)');
     });
-    cy.get('tbody tr:nth-child(6) td:nth-child(6)').should($el => {
+    cy.get('tbody tr:nth-child(6) td:nth-child(2)').should($el => {
       expect($el).to.have.css('background-color', 'rgb(255, 128, 127)');
     });
-    cy.get('tbody tr:nth-child(7) td:nth-child(11)').should($el => {
+    cy.get('tbody tr:nth-child(7) td:nth-child(4)').should($el => {
       expect($el).to.have.css('background-color', 'rgb(255, 128, 127)');
     });
-    cy.get('tbody tr:nth-child(8) td:nth-child(11)').should($el => {
+    cy.get('tbody tr:nth-child(8) td:nth-child(4)').should($el => {
       expect($el).to.have.css('background-color', 'rgb(255, 128, 127)');
     });
-    cy.get('tbody tr:nth-child(9) td:nth-child(11)').should($el => {
+    cy.get('tbody tr:nth-child(9) td:nth-child(4)').should($el => {
       expect($el).to.have.css('background-color', 'rgb(255, 128, 127)');
     });
-    cy.get('tbody tr:nth-child(10) td:nth-child(11)').should($el => {
+    cy.get('tbody tr:nth-child(10) td:nth-child(4)').should($el => {
       expect($el).to.have.css('background-color', 'rgb(255, 128, 127)');
     });
   });
@@ -461,7 +471,7 @@ describe('Datamapper e2e tests', function() {
     const cellText = 'Lithuania';
 
     // so we will update an area cell with the cellText it should contain a valid country name
-    cy.get('tbody tr:nth-child(1) td:nth-child(6) [class*=CellValue]').click();
+    cy.get('tbody tr:nth-child(1) td:nth-child(2) [class*=CellValue]').click();
 
     cy.get('[type=text]').clear();
     cy.get('[type=text]').type(cellText);
@@ -473,7 +483,7 @@ describe('Datamapper e2e tests', function() {
 
     cy.wait(1000);
 
-    cy.get('tbody tr:nth-child(1) td:nth-child(6) [class*=CellValue]').should(
+    cy.get('tbody tr:nth-child(1) td:nth-child(2) [class*=CellValue]').should(
       'contain',
       cellText
     );
@@ -505,12 +515,12 @@ describe('Datamapper e2e tests', function() {
 
     // we verify that at least the first column contains the findValue
     //  and the texts color is blue
-    cy.get('tbody tr:nth-child(1) td:nth-child(11) [class*=CellValue]').should(
+    cy.get('tbody tr:nth-child(1) td:nth-child(4) [class*=CellValue]').should(
       'contain',
       findValue
     );
 
-    cy.get('tbody tr:nth-child(1) td:nth-child(11) [class*=CellValue]').should(
+    cy.get('tbody tr:nth-child(1) td:nth-child(4) [class*=CellValue]').should(
       $el => {
         expect($el).to.have.css('color', 'rgb(0, 0, 255)');
       }
@@ -537,12 +547,12 @@ describe('Datamapper e2e tests', function() {
 
     // we verify that at least the first column contains the replaceValue
     //  and the texts color is blue
-    cy.get('tbody tr:nth-child(1) td:nth-child(11) [class*=CellValue]').should(
+    cy.get('tbody tr:nth-child(1) td:nth-child(4) [class*=CellValue]').should(
       'contain',
       replaceValue
     );
 
-    cy.get('tbody tr:nth-child(1) td:nth-child(11) [class*=CellValue]').should(
+    cy.get('tbody tr:nth-child(1) td:nth-child(4) [class*=CellValue]').should(
       $el => {
         expect($el).to.have.css('color', 'rgb(0, 0, 255)');
       }
@@ -568,6 +578,13 @@ describe('Datamapper e2e tests', function() {
 
     cy.wait(1000);
 
+    // and we select the fourth row
+    cy.get('tbody tr:nth-child(4) th [class*=CustomCheckBoxstyles]')
+      .first()
+      .click();
+
+    cy.wait(1000);
+
     // and we select the sixth row
     cy.get('tbody tr:nth-child(6) th [class*=CustomCheckBoxstyles]')
       .first()
@@ -579,6 +596,8 @@ describe('Datamapper e2e tests', function() {
     cy.get('tbody tr:nth-child(7) th [class*=CustomCheckBoxstyles]')
       .first()
       .click();
+
+    cy.wait(1000);
 
     cy.wait(1000);
 
@@ -596,6 +615,42 @@ describe('Datamapper e2e tests', function() {
     cy.get('[class*=Headings__BaseHeading]').should(
       'contain',
       'Manual mapping'
+    );
+  });
+
+  it('Try progressing without doing any mapping', function() {
+    cy.contains('next').click();
+    cy.wait(1000);
+    // verify its still the same page
+    cy.get('[class*=Headings__BaseHeading]').should(
+      'contain',
+      'Manual mapping'
+    );
+  });
+
+  it('Map the data by selecting zoom model types', function() {
+    // we select the indicator
+    selectItem(1, 9);
+
+    // we select the sub indicator
+    selectItem(3, 8);
+
+    // we select the geolocation
+    selectItem(4, 7);
+
+    // we select the date
+    selectItem(6, 6);
+
+    // we select the value as number value
+    selectItem(8, 4);
+
+    // and we progress and check what the wrapup step tells us
+    cy.contains('next').click();
+    cy.wait(1000);
+
+    cy.get('[class*=Headings__BaseHeading]').should(
+      'contain',
+      'Your data set was updated/uploaded succesfully!'
     );
   });
 });

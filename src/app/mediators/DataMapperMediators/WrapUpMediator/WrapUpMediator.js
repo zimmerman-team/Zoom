@@ -81,7 +81,14 @@ const propTypes = {
       label: PropTypes.string,
       selectDisabled: PropTypes.bool
     })
-  )
+  ),
+  wrapUpData: PropTypes.shape({
+    sourceId: PropTypes.string,
+    surveyId: PropTypes.string
+  }),
+  disableMapStep: PropTypes.func,
+  saveStepData: PropTypes.func,
+  disableSteps: PropTypes.func
 };
 const defaultProps = {
   metaData: step1InitialData,
@@ -89,8 +96,12 @@ const defaultProps = {
   fileId: uploadInitialstate.fileId,
   fileUrl: '',
   environment: {},
+  wrapUpData: {},
   mappingJson: uploadInitialstate.mappingJson,
-  mappingData: uploadInitialstate.manMapData
+  mappingData: uploadInitialstate.manMapData,
+  disableMapStep: undefined,
+  saveStepData: undefined,
+  disableSteps: undefined
 };
 
 export default class WrapUpMediator extends React.Component {
@@ -98,6 +109,8 @@ export default class WrapUpMediator extends React.Component {
     super(props);
 
     this.state = {
+      loading: true,
+      mappingErrors: [],
       sourceId: undefined,
       surveyId: ''
     };
@@ -114,17 +127,17 @@ export default class WrapUpMediator extends React.Component {
     this.handleMappingCompleted = this.handleMappingCompleted.bind(this);
     this.handleMappingError = this.handleMappingError.bind(this);
     this.addMapping = this.addMapping.bind(this);
+    this.afterSurvey = this.afterSurvey.bind(this);
+    this.afterSource = this.afterSource.bind(this);
   }
 
   componentDidMount() {
     if (!this.props.stepsDisabled) {
       this.props.disableSteps();
-      // so here we'll handle the metada step
       if (this.props.metaData.surveyData === 'Yes')
         // we add the survey data
         this.addSurveyData();
       else if (this.props.metaData.dataSource.key === 'other')
-        // we add the new source
         this.addDataSource(this.props.metaData.dataSource.value);
       // otherwise we just add the existing source id
       // and then add the metadata
@@ -146,11 +159,30 @@ export default class WrapUpMediator extends React.Component {
   }
 
   addDataSource(name) {
-    AddSourceMutation.commit(
-      this.props.environment,
-      name,
-      this.handleSourceCompleted,
-      this.handleSourceError
+    if (!this.props.wrapUpData && !this.props.wrapUpData.sourceId)
+      AddSourceMutation.commit(
+        this.props.environment,
+        name,
+        this.handleSourceCompleted,
+        this.handleSourceError
+      );
+    else {
+      this.setState(
+        { sourceId: this.props.wrapUpData.sourceId },
+        this.afterSource
+      );
+    }
+  }
+
+  afterSource() {
+    this.addMetaData();
+
+    this.props.saveStepData(
+      {
+        sourceId: this.state.sourceId,
+        surveyId: this.state.surveyId
+      },
+      6
     );
   }
 
@@ -161,11 +193,23 @@ export default class WrapUpMediator extends React.Component {
         {
           surveyId: response.surveyData.id
         },
-        this.props.metaData.dataSource.key === 'other'
-          ? () => this.addDataSource(this.props.metaData.dataSource.value)
-          : () => this.addMetaData()
+        this.afterSurvey
       );
     }
+  }
+
+  afterSurvey() {
+    if (this.props.metaData.dataSource.key === 'other')
+      this.addDataSource(this.props.metaData.dataSource.value);
+    else this.addMetaData();
+
+    this.props.saveStepData(
+      {
+        sourceId: this.state.sourceId,
+        surveyId: this.state.surveyId
+      },
+      6
+    );
   }
 
   handleSurveyError(error) {
@@ -173,44 +217,50 @@ export default class WrapUpMediator extends React.Component {
   }
 
   addSurveyData() {
-    const { metaData } = this.props;
+    if (!this.props.wrapUpData && !this.props.wrapUpData.surveyId) {
+      const { metaData } = this.props;
 
-    const selectRespondents = [];
-    metaData.q3.forEach(q => {
-      // Cause currently we need to skip the other option
-      // as the only accepted value is 'Other'
-      if (q.label !== 'Other') selectRespondents.push(q.value);
-    });
+      const selectRespondents = [];
+      metaData.q3.forEach(q => {
+        // Cause currently we need to skip the other option
+        // as the only accepted value is 'Other'
+        if (q.label !== 'Other') selectRespondents.push(q.value);
+      });
 
-    const dataCleaningTechniques = [];
-    metaData.q51.forEach(q => {
-      // Cause currently we need to skip the other option
-      // as the only accepted value is 'Other'
-      if (q.label !== 'Other') dataCleaningTechniques.push(q.value);
-    });
+      const dataCleaningTechniques = [];
+      metaData.q51.forEach(q => {
+        // Cause currently we need to skip the other option
+        // as the only accepted value is 'Other'
+        if (q.label !== 'Other') dataCleaningTechniques.push(q.value);
+      });
 
-    const variables = {
-      haveYouTestedTool: metaData.q1,
-      whoDidYouTestWith: metaData.q2.map(q => {
-        return q.value;
-      }),
-      consideredSenstive: metaData.q22,
-      staffTrained: metaData.q21,
-      askSensitive: metaData.q22,
-      selectRespondents,
-      other: 'Not needed field',
-      howManyRespondents: metaData.q4.value,
-      editSheet: metaData.q5,
-      dataCleaningTechniques
-    };
+      const variables = {
+        haveYouTestedTool: metaData.q1,
+        whoDidYouTestWith: metaData.q2.map(q => {
+          return q.value;
+        }),
+        consideredSenstive: metaData.q22,
+        staffTrained: metaData.q21,
+        askSensitive: metaData.q22,
+        selectRespondents,
+        other: 'Not needed field',
+        howManyRespondents: metaData.q4.value,
+        editSheet: metaData.q5,
+        dataCleaningTechniques
+      };
 
-    // and here we upload all the metadata for the file
-    SurveyMutation.commit(
-      this.props.environment,
-      variables,
-      this.handleSurveyCompleted,
-      this.handleSurveyError
-    );
+      // and here we upload all the metadata for the file
+      SurveyMutation.commit(
+        this.props.environment,
+        variables,
+        this.handleSurveyCompleted,
+        this.handleSurveyError
+      );
+    } else {
+      this.setState({ surveyId: this.props.wrapUpData.surveyId }, () =>
+        this.addDataSource(this.props.metaData.dataSource.value)
+      );
+    }
   }
 
   handleMetaDataCompleted(response, error) {
@@ -294,16 +344,26 @@ export default class WrapUpMediator extends React.Component {
   }
 
   handleMappingCompleted(response, error) {
+    const mappingErrors = [...this.state.mappingErrors];
     if (error) {
-      console.log('MAPPING ERROR', error);
+      this.props.disableMapStep(false);
+      mappingErrors.push(error);
     }
-    if (response) {
+    if (response && !error) {
+      this.props.disableMapStep(true);
       // console.log('MAPPING FINISHED', response);
     }
+
+    this.setState({ loading: false, mappingErrors });
   }
 
   handleMappingError(error) {
-    console.log('error mapping data: ', error);
+    const mappingErrors = [...this.state.mappingErrors];
+    if (error) {
+      this.props.disableMapStep(false);
+      mappingErrors.push(error);
+    }
+    this.setState({ loading: false, mappingErrors });
   }
 
   addMapping() {
@@ -328,7 +388,12 @@ export default class WrapUpMediator extends React.Component {
   }
 
   render() {
-    return <WrapUpStep />;
+    return (
+      <WrapUpStep
+        loading={this.state.loading}
+        errors={this.state.mappingErrors}
+      />
+    );
   }
 }
 

@@ -167,10 +167,8 @@ class ErrorStep extends React.Component {
   colorFoundReplaced() {
     if (this.state.selectedHeader && this.state.tab === 'findReplace') {
       const colIndex =
-        findIndex(this.props.columnHeaders, [
-          'label',
-          this.state.selectedHeader
-        ]) + 3;
+        findIndex(this.state.columns, ['property', this.state.selectedHeader]) +
+        1;
 
       const cells = document.querySelectorAll(
         `tbody td:nth-child(${colIndex}) > div > div`

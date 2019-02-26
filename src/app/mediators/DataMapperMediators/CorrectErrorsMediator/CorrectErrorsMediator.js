@@ -19,10 +19,12 @@ const propTypes = {
   fileId: PropTypes.string,
   relay: PropTypes.shape({}),
   fileCorrection: PropTypes.shape({}),
+  stepsDisabled: PropTypes.bool,
   saveStepData: PropTypes.func
 };
 
 const defaultProps = {
+  stepsDisabled: false,
   fileId: '-1',
   relay: {},
   fileCorrection: {},
@@ -161,7 +163,8 @@ class CorrectErrorsMediator extends React.Component {
       this.setState({ rowsDeleted: false });
     }
 
-    this.props.saveStepData(this.state.errorCells, 4);
+    if (!this.props.stepsDisabled)
+      this.props.saveStepData(this.state.errorCells, 4);
   }
 
   handleCellsErrorsError(error) {

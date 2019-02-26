@@ -114,6 +114,7 @@ class ManMappingStep extends React.Component {
               <CellValue>{val.label}</CellValue>
             ) : (
               <CellTextField
+                placeholder={this.generatePlaceholder(val)}
                 disabled={val.zoomModel !== '-None-' && !val.emptyFieldRow}
                 value={val.label}
                 onChange={e => this.changeLabel(e.target.value, val.fileType)}
@@ -131,6 +132,14 @@ class ManMappingStep extends React.Component {
     this.colorMissingRows = this.colorMissingRows.bind(this);
     this.changeDisabledVal = this.changeDisabledVal.bind(this);
     this.selectDataType = this.selectDataType.bind(this);
+    this.generatePlaceholder = this.generatePlaceholder.bind(this);
+  }
+
+  componentDidMount() {
+    // so this is only needed for the coloring to activate
+    this.setState({
+      data: this.props.data
+    });
   }
 
   componentDidUpdate() {
@@ -138,21 +147,40 @@ class ManMappingStep extends React.Component {
   }
 
   changeDisabledVal(value, prevVal) {
-    if (value !== 'filters')
-      this.setState(prevState => {
-        const { disabledValues } = prevState;
-        const prevIndex = disabledValues.indexOf(prevVal);
+    this.setState(prevState => {
+      const { disabledValues } = prevState;
+      const prevIndex = disabledValues.indexOf(prevVal);
 
-        // so if a previous value is changed
-        // we remove the previous value and add the new one
-        if (prevIndex !== -1) {
-          disabledValues.splice(prevIndex, 1);
-        }
+      // so if a previous value is changed
+      // we remove the previous value and add the new one
+      if (prevIndex !== -1) {
+        disabledValues.splice(prevIndex, 1);
+      }
 
+      if (value !== 'filters' && value !== '-None-')
         // and we push in the new value either way
         disabledValues.push(value);
-        return { disabledValues };
-      });
+      return { disabledValues };
+    });
+  }
+
+  generatePlaceholder(row) {
+    // so we only generate placeholders
+    // for emptyFieldRows to inform the user about
+    // what needs to be inputed there
+    if (row.emptyFieldRow)
+      switch (row.zoomModel) {
+        case 'indicator':
+          return 'Please enter any text';
+        case 'geolocation':
+          return 'Please enter any country name example: "Lesotho", "Zimbabwe"';
+        case 'date':
+          return 'Please enter a year for your data set';
+        default:
+          return '';
+      }
+
+    return '';
   }
 
   // basically colors the background of newly added rows

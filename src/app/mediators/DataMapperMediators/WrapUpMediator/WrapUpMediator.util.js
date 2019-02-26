@@ -4,12 +4,52 @@ import filter from 'lodash/filter';
 // according to the retrieved mapping json
 // and the mapping data
 export function formatMapJson(mappingJson, mapData, fileId) {
-  const mapJson = { ...mappingJson };
+  const mapJson = {
+    metadata_id: '',
+    filter_headings: {},
+    extra_information: {
+      empty_entries: {
+        empty_indicator: '',
+        empty_geolocation: { value: '', type: '' },
+        empty_filter: '',
+        empty_value_format: {},
+        empty_date: ''
+      },
+      multi_mapped: {
+        column_heading: {},
+        column_values: {}
+      },
+      point_based_info: {
+        coord: { lat: '', lon: '' },
+        subnational: '',
+        country: '',
+        type: ''
+      }
+    },
+    mapping_dict: {
+      indicator: [],
+      filters: [],
+      geolocation: [],
+      date: [],
+      value_format: [],
+      value: [],
+      comment: []
+    }
+  };
 
   mapData.forEach(item => {
     if (item.emptyFieldRow) {
-      mapJson.extra_information.empty_entries[`empty_${item.zoomModel}`] =
-        item.label;
+      if (item.zoomModel === 'geolocation') {
+        mapJson.extra_information.empty_entries[
+          `empty_${item.zoomModel}`
+        ].value = item.label;
+
+        mapJson.extra_information.empty_entries[
+          `empty_${item.zoomModel}`
+        ].type = 'country';
+      } else
+        mapJson.extra_information.empty_entries[`empty_${item.zoomModel}`] =
+          item.label;
     } else if (item.zoomModel === 'Longitude') {
       // we check if there's longitude or
       // latitude selected and we save, we need to check for this
@@ -84,11 +124,6 @@ export function formatMapJson(mappingJson, mapData, fileId) {
   if (zoomValues.length > 1) {
     // and we also need to add this for everything to work
     mapJson.filter_headings.filters = 'Type';
-  }
-
-  if (mapJson.mapping_dict.geolocation.length === 0) {
-    mapJson.extra_information.empty_entries.empty_geolocation.value = 'Global';
-    mapJson.extra_information.empty_entries.empty_geolocation.type = 'country';
   }
 
   // and we add the meta_data id here

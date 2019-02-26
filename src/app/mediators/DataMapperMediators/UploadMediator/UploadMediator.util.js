@@ -99,12 +99,28 @@ export function formatModelOptions(dataModelHeading) {
     value: 'Latitude'
   });
 
+  // We also push in a field for number value
+  modelOptions.push({
+    label: 'Number Value',
+    value: 'Number Value'
+  });
+
+  // We also push in a field for number value
+  modelOptions.push({
+    label: 'Percentage Value',
+    value: 'Percentage Value'
+  });
+
   Object.keys(dataModelHeading.mapping_dict).map(key => {
-    // and now we push in the rest
-    modelOptions.push({
-      label: key,
-      value: key
-    });
+    // so since we already pushed in the only available value selections
+    // with types/formats we don't need the default value and value_format
+    if (key !== 'value' && key !== 'value_format') {
+      // and now we push in the rest
+      modelOptions.push({
+        label: key,
+        value: key
+      });
+    }
   });
 
   return modelOptions;

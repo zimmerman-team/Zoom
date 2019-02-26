@@ -69,6 +69,12 @@
     "styled-theming": "^2.2.0"
   },
   "scripts": {
+    "visual:test": "loki:update; yarn loki:test; yarn reg:compare;",
+    "reg:update": "reg-cli .loki/current .loki/reference .loki/difference -U ./report/index.html",
+    "reg:compare": "reg-cli .loki/current .loki/reference .loki/difference -R ./report/index.html",
+    "loki:update": "loki update",
+    "loki:test": "loki test",
+    "loki:aprove": "loki approve",
     "lint:css": "stylelint './src/**/*.jsx'",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
@@ -171,6 +177,7 @@
     "jest-resolve": "23.6.0",
     "lighthouse-ci": "^1.4.1",
     "lint-staged": "^7.3.0",
+    "loki": "^0.14.2",
     "mini-css-extract-plugin": "^0.5.0",
     "node-sass": "^4.11.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",

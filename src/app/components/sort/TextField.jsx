@@ -16,7 +16,7 @@ const styles = () => ({
     color: theme.color.zoomGreyFive,
 
     '&$inputLabelFocused': {
-      color: theme.color.aidsFondsBlue,
+      color: theme.color.aidsFondsBlue
     },
     '&$inputLabelError': {
       color: theme.color.aidsFondsRed
@@ -27,10 +27,9 @@ const styles = () => ({
 
   input: {
     fontFamily: theme.font.zoomFontFamTwo,
-    fontSize: '14px',
-  },
+    fontSize: '14px'
+  }
 });
-
 
 const styleOverrides = createMuiTheme({
   overrides: {
@@ -38,10 +37,10 @@ const styleOverrides = createMuiTheme({
       underline: {
         '&:after': {
           borderBottom: '2px solid' + theme.color.aidsFondsBlue
-        },
-      },
-    },
-  },
+        }
+      }
+    }
+  }
 });
 
 class TextFields extends React.Component {
@@ -50,7 +49,7 @@ class TextFields extends React.Component {
 
     return (
       <MuiThemeProvider theme={styleOverrides}>
-      <TextField
+        <TextField
           id="standard-full-width"
           fullWidth
           margin="none"
@@ -60,7 +59,7 @@ class TextFields extends React.Component {
             classes: {
               root: classes.inputLabel,
               focused: classes.inputLabelFocused,
-              error: classes.inputLabelError,
+              error: classes.inputLabelError
             }
           }}
           InputProps={{
@@ -72,7 +71,7 @@ class TextFields extends React.Component {
           {...props}
         />
       </MuiThemeProvider>
-        );
+    );
   }
 }
 

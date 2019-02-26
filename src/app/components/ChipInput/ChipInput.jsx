@@ -1,11 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  withStyles,
-  MuiThemeProvider,
-} from '@material-ui/core/styles';
+import { withStyles, MuiThemeProvider } from '@material-ui/core/styles';
 import ChipInput from 'material-ui-chip-input';
-import { styleOverrides, styles} from './ChipInput.style'
+import { styleOverrides, styles } from './ChipInput.style';
 
 class ChipInputs extends React.Component {
   render() {
@@ -14,7 +11,7 @@ class ChipInputs extends React.Component {
     return (
       <MuiThemeProvider theme={styleOverrides}>
         <ChipInput
-          clickable='false'
+          clickable="false"
           classes={{
             chip: classes.chip,
             chipContainer: classes.chipContainer,

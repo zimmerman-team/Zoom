@@ -1,5 +1,10 @@
 /* base */
 import React from 'react';
+import { connect } from 'react-redux';
+
+/* actions */
+import * as actions from 'services/actions/general';
+
 /* components */
 import Stepper from 'components/Stepper/Stepper';
 
@@ -34,8 +39,6 @@ class DataMapperModule extends React.Component {
 
     this.state = {
       step: 1,
-      // So this will basically store the data required for each step
-      stepData: [],
       environment: null,
       // these are the required fields that the users
       // needs to have in their data model and map it
@@ -63,19 +66,19 @@ class DataMapperModule extends React.Component {
     if (this.state.step === 1)
       // we check if the title is empty
       return (
-        !this.state.stepData[0] ||
-        !this.state.stepData[0].title ||
-        this.state.stepData[0].title.length === 0 ||
-        !this.state.stepData[0].desc ||
-        this.state.stepData[0].desc.length === 0 ||
-        !this.state.stepData[0].dataSource.value ||
-        this.state.stepData[0].dataSource.value.length === 0
+        !this.props.stepData[0] ||
+        !this.props.stepData[0].title ||
+        this.props.stepData[0].title.length === 0 ||
+        !this.props.stepData[0].desc ||
+        this.props.stepData[0].desc.length === 0 ||
+        !this.props.stepData[0].dataSource.value ||
+        this.props.stepData[0].dataSource.value.length === 0
       );
 
     if (this.state.step === 2)
       return (
-        !this.state.stepData[1] ||
-        this.state.stepData[1].manMapData.length === 0
+        !this.props.stepData[1] ||
+        this.props.stepData[1].manMapData.length === 0
       );
 
     if (this.state.step === 4)
@@ -85,8 +88,8 @@ class DataMapperModule extends React.Component {
       // and the user should be able to progress only if they've fixed
       // all the found errors
       return (
-        !this.state.stepsDisabled &&
-        (!this.state.stepData[3] || this.state.stepData[3].length > 0)
+        !this.props.stepsDisabled &&
+        (!this.props.stepData[3] || this.props.stepData[3].length > 0)
       );
 
     return false;
@@ -98,8 +101,8 @@ class DataMapperModule extends React.Component {
     // TODO: retweek the whole datamapper data saving
     // in a DataMapperMediator, cause now its scattered
     // all over the place
-    this.setState(prevState => {
-      const { stepData } = prevState;
+    this.setState((prevState, props) => {
+      const { stepData } = props;
       if (prevState.step === 1) {
         // and this bool will be used to save the general state if some
         // fields are undefined
@@ -130,19 +133,19 @@ class DataMapperModule extends React.Component {
           ToastsStore.error(
             <SimpleErrorText> Please fill the required fields </SimpleErrorText>
           );
-          return { stepData };
+          props.dispatch(actions.saveStepDataRequest(stepData));
         }
       } else if (prevState.step === 2) {
         if (!stepData[1]) {
           ToastsStore.error(
             <SimpleErrorText> Please upload a file </SimpleErrorText>
           );
-          return { stepData };
+          props.dispatch(actions.saveStepDataRequest(stepData));
         } else if (stepData[1].manMapData.length === 0) {
           ToastsStore.error(
             <SimpleErrorText> File Uploading please wait... </SimpleErrorText>
           );
-          return { stepData };
+          props.dispatch(actions.saveStepDataRequest(stepData));
         }
       } else if (prevState.step === 4) {
         // So here we check if the fourth steps data has been saved
@@ -151,7 +154,7 @@ class DataMapperModule extends React.Component {
         // and the user should be able to progress only if they've fixed
         // all the found errors
         if (
-          !this.state.stepsDisabled &&
+          !prevState.stepsDisabled &&
           (!stepData[3] || stepData[3].length > 0)
         ) {
           ToastsStore.error(
@@ -160,7 +163,7 @@ class DataMapperModule extends React.Component {
               Please fix the errors before proceeding{' '}
             </SimpleErrorText>
           );
-          return { stepData };
+          props.dispatch(actions.saveStepDataRequest(stepData));
         }
       }
       // restriction for the manual mapping step
@@ -189,15 +192,17 @@ class DataMapperModule extends React.Component {
 
           stepData[5] = addInEmptyFieldRows(emptyFields, manMapData);
 
-          return { manMapEmptyValue: emptyValue, stepData, manMapEmptyFields };
-        }
-      }
+          props.dispatch(actions.saveStepDataRequest(stepData));
 
-      return {
-        step: prevState.step + 1,
-        manMapEmptyFields: false,
-        manMapEmptyValue: false
-      };
+          return { manMapEmptyValue: emptyValue, manMapEmptyFields };
+        }
+      } else {
+        return {
+          step: prevState.step + 1,
+          manMapEmptyFields: false,
+          manMapEmptyValue: false
+        };
+      }
     });
   }
 
@@ -208,11 +213,7 @@ class DataMapperModule extends React.Component {
   }
 
   saveStepData(data, step) {
-    this.setState(prevState => {
-      const { stepData } = prevState;
-      stepData[step - 1] = data;
-      return { stepData };
-    });
+    console.log('saving temporarily', step, data);
   }
 
   saveEnvironment(environment) {
@@ -226,7 +227,6 @@ class DataMapperModule extends React.Component {
           <MetaDataMediator
             saveEnvironment={this.saveEnvironment}
             environment={this.state.environment}
-            data={this.state.stepData[0]}
             saveStepData={this.saveStepData}
             dropDownData={this.props.dropDownData}
           />
@@ -309,6 +309,8 @@ class DataMapperModule extends React.Component {
   }
 
   render() {
+    console.log('props step data', this.props.stepData);
+
     let moduleDisabled = false;
 
     if (this.state.step === 5 && this.state.mapStepDisabled) {
@@ -354,4 +356,10 @@ class DataMapperModule extends React.Component {
   }
 }
 
-export default DataMapperModule;
+const mapStateToProps = state => {
+  return {
+    stepData: state.stepData.stepzData
+  };
+};
+
+export default connect(mapStateToProps)(DataMapperModule);

@@ -5,10 +5,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MetaData from 'modules/datamapper/fragments/MetaData/MetaData';
 import { createFragmentContainer, graphql } from 'react-relay';
+import { connect } from 'react-redux';
+
+/* actions */
+import * as actions from 'services/actions/general';
 
 /* utils */
 import findIndex from 'lodash/findIndex';
-import isEqual from 'lodash/isEqual';
 
 /* consts */
 import { step1InitialData } from '__consts__/MetaDataStepConsts';
@@ -88,10 +91,6 @@ class MetaDataMediator extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      data: props.data
-    };
-
     this.simpleChange = this.simpleChange.bind(this);
     this.checkBoxChange = this.checkBoxChange.bind(this);
     this.otherCheckBoxText = this.otherCheckBoxText.bind(this);
@@ -102,6 +101,11 @@ class MetaDataMediator extends React.Component {
   }
 
   componentDidMount() {
+    // so we set the initial state of the step data
+    const data = { ...this.props.stepData };
+    data['0'] = step1InitialData;
+    this.props.dispatch(actions.saveStepDataRequest(data));
+
     const fileSources = this.props.dropDownData.allFileSources.edges.map(
       node => {
         return { label: node.node.name, value: node.node.entryId };
@@ -114,32 +118,29 @@ class MetaDataMediator extends React.Component {
   }
 
   onChipAdd(value) {
-    const { tags } = this.state.data;
+    const { tags } = this.props.data[0];
     tags.push(value);
     this.simpleChange(tags, 'tags');
   }
 
   onChipDelete(index) {
-    const { tags } = this.state.data;
+    const { tags } = this.props.data[0];
     tags.splice(index, 1);
     this.simpleChange(tags, 'tags');
   }
 
   simpleChange(value, question) {
-    this.setState(
-      prevState => {
-        const { data } = prevState;
-        data[question] = value;
-        return { data };
-      },
-      () => this.props.saveStepData(this.state.data, 1)
-    );
+    const dataz = this.props.stepData && this.props.stepData[0];
+    if (dataz) {
+      dataz[question] = value;
+      this.props.dispatch(actions.saveStepDataRequest(dataz));
+    }
   }
 
   // so for check box change we tweek the changing a little
   // bit to encapsulate the 'other' logic
   checkBoxChange(value, question, qText = false) {
-    const check = this.state.data[question];
+    const check = this.props.data[0][question];
     const checkInd = findIndex(check, ['label', value]);
 
     if (checkInd === -1) {
@@ -148,7 +149,7 @@ class MetaDataMediator extends React.Component {
       let val = value;
       // so if its other we gonna add the text as value for it
       if (value.toLowerCase() === 'other' && qText) {
-        val = this.state.data[qText];
+        val = this.props.data[0][qText];
       }
       check.push({
         label: value,
@@ -164,7 +165,7 @@ class MetaDataMediator extends React.Component {
   // so this will happen when the other text will be changed,
   // and it will be a bit more than just
   otherCheckBoxText(value, question, qText) {
-    const check = this.state.data[question];
+    const check = this.props.data[0][question];
 
     const otherInd = findIndex(
       check,
@@ -187,7 +188,7 @@ class MetaDataMediator extends React.Component {
   // of change logic, cause of those freetexts as well
   dropDownChange(value, question, qText) {
     let val = value.value;
-    if (val === 'other') val = this.state.data[qText];
+    if (val === 'other') val = this.props.data[0][qText];
 
     this.simpleChange(
       {
@@ -202,16 +203,16 @@ class MetaDataMediator extends React.Component {
   // and we'll have a specific text change
   // if 'other' option is chosen from the dropdowns
   otherDropdownText(value, question, qText, options) {
-    if (this.state.data[question].key === 'other')
+    if (this.props.data[0][question].key === 'other')
       this.simpleChange(
         {
-          key: this.state.data[question].key,
-          label: this.state.data[question].label,
+          key: this.props.data[0][question].key,
+          label: this.props.data[0][question].label,
           value
         },
         question
       );
-    else if (this.state.data[question].key === '') {
+    else if (this.props.data[0][question].key === '') {
       const labelInd = findIndex(options, ['value', 'other']);
       this.simpleChange(
         {
@@ -238,9 +239,10 @@ class MetaDataMediator extends React.Component {
   }
 
   render() {
+    console.log('meta data step from redux', this.props.stepData);
     return (
       <MetaData
-        data={this.state.data}
+        data={this.props.data[0]}
         simpleChange={this.simpleChange}
         checkBoxChange={this.checkBoxChange}
         otherCheckBoxText={this.otherCheckBoxText}
@@ -256,8 +258,14 @@ class MetaDataMediator extends React.Component {
 MetaDataMediator.propTypes = propTypes;
 MetaDataMediator.defaultProps = defaultProps;
 
+const mapStateToProps = state => {
+  return {
+    data: state.stepData.stepzData
+  };
+};
+
 export default createFragmentContainer(
-  MetaDataMediator,
+  connect(mapStateToProps)(MetaDataMediator),
   graphql`
     fragment MetaDataMediator_dropDownData on Query {
       allFileSources {

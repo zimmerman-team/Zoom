@@ -1,7 +1,5 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import ChipInputRefactor from './ChipInputRefactor';
+import ChipInput from './ChipInput';
 
-storiesOf('Components', module).add('ChipInputRefactor', () => (
-  <ChipInputRefactor />
-));
+storiesOf('Components', module).add('ChipInput', () => <ChipInput />);

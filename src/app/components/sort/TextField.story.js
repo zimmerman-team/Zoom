@@ -1,7 +1,5 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import TextFieldRefactor from './TextFieldRefactor';
+import TextField from './TextField';
 
-storiesOf('Components', module).add('TextFieldRefactor', () => (
-  <TextFieldRefactor />
-));
+storiesOf('Components', module).add('TextField', () => <TextField />);

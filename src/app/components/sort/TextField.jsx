@@ -1,82 +1,58 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {
-  withStyles,
-  MuiThemeProvider,
-  createMuiTheme
-} from '@material-ui/core/styles';
+import NoSsr from '@material-ui/core/NoSsr';
 import TextField from '@material-ui/core/TextField';
+import styled from 'styled-components';
 import theme from 'theme/Theme';
 
-const styles = () => ({
-  inputLabel: {
-    transform: 'scale(1)',
-    fontSize: '14px',
-    fontFamily: theme.font.zoomFontFamOne,
-    color: theme.color.zoomGreyFive,
+const Component = styled(TextField)`
+  && {
+    display: flex;
+    flex-direction: column;
 
-    '&$inputLabelFocused': {
-      color: theme.color.aidsFondsBlue
-    },
-    '&$inputLabelError': {
-      color: theme.color.aidsFondsRed
+    label {
+      position: relative;
+      margin-bottom: 10px;
+      color: ${theme.color.colHeadColor};
+      font-family: ${theme.font.zoomFontFamOne};
+      font-size: 14px;
+      line-height: 1;
     }
-  },
-  inputLabelFocused: {},
-  inputLabelError: {},
 
-  input: {
-    fontFamily: theme.font.zoomFontFamTwo,
-    fontSize: '14px'
-  }
-});
+    textarea,
+    input {
+      color: ${theme.color.zoomBlack};
+      font-family: ${theme.font.zoomFontFamTwo};
+      font-size: 14px;
+      line-height: 1;
+      border-bottom: 1px solid ${theme.color.colHeadColor};
+      padding-bottom: 5px;
 
-const styleOverrides = createMuiTheme({
-  overrides: {
-    MuiInput: {
-      underline: {
-        '&:after': {
-          borderBottom: '2px solid' + theme.color.aidsFondsBlue
-        }
+      &:focus {
+        border-bottom: 1px solid ${theme.color.aidsFondsBlue};
       }
     }
   }
-});
+`;
 
-class TextFields extends React.Component {
-  render() {
-    const { classes, ...props } = this.props;
-
-    return (
-      <MuiThemeProvider theme={styleOverrides}>
-        <TextField
-          id="standard-full-width"
-          fullWidth
-          margin="none"
-          InputLabelProps={{
-            disableAnimation: false,
-            shrink: true,
-            classes: {
-              root: classes.inputLabel,
-              focused: classes.inputLabelFocused,
-              error: classes.inputLabelError
-            }
-          }}
-          InputProps={{
-            classes: {
-              root: classes.input,
-              focused: classes.underline
-            }
-          }}
-          {...props}
-        />
-      </MuiThemeProvider>
-    );
-  }
-}
-
-TextFields.propTypes = {
-  classes: PropTypes.object.isRequired
+const Container = props => {
+  return (
+    <NoSsr>
+      <Component
+        id="standard-full-width"
+        fullWidth
+        margin="none"
+        label="Empty"
+        InputLabelProps={{
+          disableAnimation: true,
+          shrink: false
+        }}
+        InputProps={{
+          disableUnderline: true
+        }}
+        {...props}
+      />
+    </NoSsr>
+  );
 };
 
-export default withStyles(styles)(TextFields);
+export default Container;

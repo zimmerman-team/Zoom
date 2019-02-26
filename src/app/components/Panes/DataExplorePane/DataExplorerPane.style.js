@@ -2,10 +2,7 @@ import styled from 'styled-components';
 import { Box, Accordion, AccordionPanel } from 'grommet';
 import theme from 'theme/Theme';
 
-export const ComponentBase = styled.div`
-  width: 320px;
-  padding-top: 20px;
-`;
+export const ComponentBase = styled.div``;
 
 export const FilterTitle = styled.span`
   font-family: ${theme.font.zoomFontFamTwo};

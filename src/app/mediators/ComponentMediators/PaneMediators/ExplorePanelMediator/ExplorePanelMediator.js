@@ -1,7 +1,7 @@
 /* base */
 import React from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import DataExplorePane from 'components/DataExplorePane/DataExplorePanel';
+import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePanel';
 import PropTypes from 'prop-types';
 
 /* helpers */

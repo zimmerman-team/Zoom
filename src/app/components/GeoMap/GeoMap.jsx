@@ -144,6 +144,8 @@ export class GeoMap extends Component {
     this.setState({
       hoverLayerInfo
     });
+
+    console.log({feature, features});
   };
 
   _showLayerInfo() {
@@ -198,7 +200,7 @@ export class GeoMap extends Component {
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
 
-      <MapContainer data-cy="geo-map-container">
+      <MapContainer data-cy="geo-map-container" test={this.state.hoverLayerInfo}>
         <ControlsContainer>
           <MapControls
             onZoomIn={this.handleZoomIn}

@@ -191,7 +191,7 @@ class CustomYearSelector extends React.Component {
 
   render() {
     return (
-      <ComponentBase ref={this.setWrapperRef}>
+      <ComponentBase ref={this.setWrapperRef} data-cy="custom-year-selector">
         {this.state.numArray.map(this.renderYearLabels)}
       </ComponentBase>
     );

@@ -11,6 +11,7 @@ const Component = styled(ChipInput)`
    flex-direction: column;
    border-bottom: 1px solid ${theme.color.colHeadColor};
    
+   // fixme
    div {
    min-height: 30px;
    }
@@ -45,7 +46,7 @@ const Component = styled(ChipInput)`
       
       span{
        color: ${theme.color.aidsFondsWhite};
-       font-family: ${theme.font.zoomFontFamOne};
+       font-family: ${theme.font.zoomFontFamTwo};
       }
       
       svg{

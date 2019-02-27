@@ -115,8 +115,9 @@ const MetaData = props => (
       <TextField
         error={props.data.title === undefined}
         value={props.data.title}
-        label="Title data set*"
+        label="Title data set"
         onChange={e => props.simpleChange(e.target.value, 'title')}
+        required
       />
     </FieldContainer>
 
@@ -124,9 +125,10 @@ const MetaData = props => (
     <FieldContainer>
       <TextField
         error={props.data.desc === undefined}
-        label="Description*"
+        label="Description"
         value={props.data.desc}
         onChange={e => props.simpleChange(e.target.value, 'desc')}
+        required
         multiline
       />
     </FieldContainer>
@@ -170,7 +172,7 @@ const MetaData = props => (
       <DataSourceTextCont>
         <TextField
           error={props.data.dataSource.value === undefined}
-          label="Create new name for  data source"
+          label="Create new name for data source"
           value={props.data.sourceText}
           onChange={e =>
             props.otherDropdownText(

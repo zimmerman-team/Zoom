@@ -281,13 +281,13 @@ class ZoomSelect extends React.Component {
         )}
         {this.props.reset && (
           <ResetContainer onClick={this.props.reset}>
-            <Tooltip
-              html={<SimpleToolTip title="Reset" />}
-              position="top-start"
-              trigger="mouseenter"
-            >
-              <ResetIconSmall />
-            </Tooltip>
+          <Tooltip
+          html={<SimpleToolTip title="Reset" />}
+          position="top-start"
+          trigger="mouseenter"
+          >
+          <ResetIconSmall />
+          </Tooltip>
           </ResetContainer>
         )}
       </ComponentBase>

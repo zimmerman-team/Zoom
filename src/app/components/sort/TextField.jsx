@@ -41,10 +41,11 @@ const Container = props => {
         id="standard-full-width"
         fullWidth
         margin="none"
+        error
         label="Empty"
         InputLabelProps={{
           disableAnimation: true,
-          shrink: false
+          shrink: false,
         }}
         InputProps={{
           disableUnderline: true

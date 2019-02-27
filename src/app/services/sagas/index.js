@@ -111,6 +111,30 @@ export function* dataPaneToggleRequest(action) {
   yield put(generalActions.dataPaneToggleDone(action.open));
 }
 
+export function* countrySectorsRequest(action) {
+  try {
+    const response = yield call(
+      api.transactionsAggregationsRequest,
+      action.values
+    );
+    yield put(oipaActions.countrySectorsSuccess(response));
+  } catch (error) {
+    yield put(oipaActions.countrySectorsFailed(error));
+  }
+}
+
+export function* countryOrganisationsRequest(action) {
+  try {
+    const response = yield call(
+      api.transactionsAggregationsRequest,
+      action.values
+    );
+    yield put(oipaActions.countryOrganisationsSuccess(response));
+  } catch (error) {
+    yield put(oipaActions.countryOrganisationsFailed(error));
+  }
+}
+
 function* sagas() {
   yield [
     takeLatest('DATA_PANE_TOGGLE_REQUEST', dataPaneToggleRequest),
@@ -129,7 +153,9 @@ function* sagas() {
     takeLatest('FILE_SOURCE_REQUEST', fileSourceRequest),
     takeLatest('FILE_REQUEST', fileRequest),
     takeLatest('ACTIVITY_DATA_REQUEST', activityDataRequest),
-    takeLatest('COUNTRY_EXCERPT_REQUEST', countryExcerptRequest)
+    takeLatest('COUNTRY_EXCERPT_REQUEST', countryExcerptRequest),
+    takeLatest('COUNTRY_SECTORS_REQUEST', countrySectorsRequest),
+    takeLatest('COUNTRY_ORGANISATIONS_REQUEST', countryOrganisationsRequest)
   ];
 }
 

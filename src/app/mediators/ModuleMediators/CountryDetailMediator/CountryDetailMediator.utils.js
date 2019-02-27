@@ -239,6 +239,27 @@ export function formatLineChart2Data(indicatorData) {
   return lineChartData;
 }
 
+export function formatPieChartData(data, groupByType, valueType) {
+  let colorInd = -1;
+  const colorArray = [
+    'hsl(172, 70%, 50%)',
+    'hsl(91, 70%, 50%)',
+    'hsl(313, 70%, 50%)',
+    'hsl(221, 70%, 50%)',
+    'hsl(48, 70%, 50%)'
+  ];
+
+  return data.map(d => {
+    colorInd += 1;
+    return {
+      id: get(d, groupByType, ''),
+      value: d[valueType],
+      label: get(d, groupByType, ''),
+      color: colorArray[colorInd]
+    };
+  });
+}
+
 export function titleCase(str) {
   const splitStr = str.toLowerCase().split(' ');
   for (let i = 0; i < splitStr.length; i++) {

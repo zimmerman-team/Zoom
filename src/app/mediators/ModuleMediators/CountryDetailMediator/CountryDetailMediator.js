@@ -16,7 +16,8 @@ import {
   formatProjectData,
   formatWikiExcerpts,
   getProjectCountNCommitment,
-  formatLineChart2Data
+  formatLineChart2Data,
+  formatPieChartData
 } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
 
 /* actions */
@@ -114,13 +115,17 @@ const defaultProps = {
 class CountryDetailMediator extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      transParams: mock.transParams,
+      activityParams: mock.activityParams,
       wikiParams: mock.wikiParams,
+      transactionParams: mock.transactionParams,
       projectInfo: {},
       projectData: [],
       excerpts: ['', ''],
       barChartIndicators: mock.barChartIndicators,
+      countrySectors: [],
+      countryOrganisations: [],
       aidsEpIndicators: mock.lineChartInd.map(lci => lci.name),
       aidsLineChartData: [],
       countryName: '',
@@ -130,12 +135,22 @@ class CountryDetailMediator extends React.Component {
 
   componentDidMount() {
     // We get countries related activities here
-    const transParams = this.state.transParams;
-    transParams.recipient_country = this.props.match.params.iso2.toUpperCase();
+    const activityParams = this.state.activityParams;
+    activityParams.recipient_country = this.props.match.params.iso2.toUpperCase();
+    this.props.dispatch(oipaActions.countryActivitiesRequest(activityParams));
 
-    this.props.dispatch(oipaActions.countryActivitiesRequest(transParams));
+    // We get country sectors
+    const transactionParams = this.state.transactionParams;
+    transactionParams.recipient_country = this.props.match.params.iso2.toUpperCase();
+    this.props.dispatch(oipaActions.countrySectorsRequest(transactionParams));
 
-    this.setState({ transParams });
+    // We get country participating orgs
+    transactionParams.group_by = 'participating_organisation';
+    this.props.dispatch(
+      oipaActions.countryOrganisationsRequest(transactionParams)
+    );
+
+    this.setState({ activityParams });
     // We get countries related indicator data here
     this.refetch();
   }
@@ -200,6 +215,33 @@ class CountryDetailMediator extends React.Component {
         wikiParams
       });
     }
+
+    // We format the loaded country sectors here and save it in state
+    if (
+      !isEqual(this.props.countrySectors.data, prevProps.countrySectors.data)
+    ) {
+      const countrySectors = formatPieChartData(
+        get(this.props.countrySectors, 'data.results', []),
+        'sector.name',
+        'commitment'
+      );
+      this.setState({ countrySectors });
+    }
+
+    // We format the loaded country sectors here and save it in state
+    if (
+      !isEqual(
+        this.props.countryOrganisations.data,
+        prevProps.countryOrganisations.data
+      )
+    ) {
+      const countryOrganisations = formatPieChartData(
+        get(this.props.countryOrganisations, 'data.results', []),
+        'participating_organisation',
+        'commitment'
+      );
+      this.setState({ countryOrganisations });
+    }
   }
 
   refetch() {
@@ -220,6 +262,8 @@ class CountryDetailMediator extends React.Component {
         countryName={this.state.countryName}
         excerpts={this.state.excerpts}
         aidsEpIndicators={mock.lineChartInd}
+        countrySectors={this.state.countrySectors}
+        countryOrganisations={this.state.countryOrganisations}
       />
     );
   }
@@ -228,7 +272,9 @@ class CountryDetailMediator extends React.Component {
 const mapStateToProps = state => {
   return {
     excerpts: state.countryExcerpt,
-    countryActivities: state.countryActivities
+    countryActivities: state.countryActivities,
+    countrySectors: state.countrySectors,
+    countryOrganisations: state.countryOrganisations
   };
 };
 

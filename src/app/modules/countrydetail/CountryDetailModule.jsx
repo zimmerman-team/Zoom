@@ -105,7 +105,11 @@ class CountryDetailModule extends React.Component {
         <HumanRights />
 
         {/* Fragment 5: aidsfonds financial transactions */}
-        <AidsfondsTransactions background={theme.color.zoomGreyZero} />
+        <AidsfondsTransactions
+          background={theme.color.zoomGreyZero}
+          sectors={this.props.countrySectors}
+          organisations={this.props.countryOrganisations}
+        />
 
         {/* Fragment 5: Projects */}
         <Projects

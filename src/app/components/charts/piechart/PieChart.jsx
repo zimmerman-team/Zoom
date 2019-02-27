@@ -15,12 +15,12 @@ const propTypes = {
       color: PropTypes.string,
       id: PropTypes.string,
       label: PropTypes.string,
-      value: PropTypes.number,
-    }),
-  ),
+      value: PropTypes.number
+    })
+  )
 };
 const defaultProps = {
-  data: [],
+  data: []
 };
 
 const PieChart = props => {
@@ -32,7 +32,7 @@ const PieChart = props => {
           top: 40,
           right: 80,
           bottom: 80,
-          left: 80,
+          left: 80
         }}
         innerRadius={0.65}
         padAngle={0.7}
@@ -51,9 +51,23 @@ const PieChart = props => {
         radialLabelsLinkColor="inherit"
         slicesLabelsSkipAngle={10}
         slicesLabelsTextColor="#333333"
-        animate={true}
+        animate
         motionStiffness={90}
         motionDamping={15}
+        // enableRadialLabels={false}
+        sliceLabel={l => {
+          return '';
+          return l.label;
+        }}
+        tooltipFormat={l => {
+          return `EUR ${l.toLocaleString(
+            {},
+            {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2
+            }
+          )}`;
+        }}
         defs={[
           {
             id: 'dots',
@@ -62,7 +76,7 @@ const PieChart = props => {
             color: 'rgba(255, 255, 255, 0.3)',
             size: 4,
             padding: 1,
-            stagger: true,
+            stagger: true
           },
           {
             id: 'lines',
@@ -71,60 +85,9 @@ const PieChart = props => {
             color: 'rgba(255, 255, 255, 0.3)',
             rotation: -45,
             lineWidth: 6,
-            spacing: 10,
-          },
+            spacing: 10
+          }
         ]}
-        fill={[
-          {
-            match: {
-              id: 'ruby',
-            },
-            id: 'dots',
-          },
-          {
-            match: {
-              id: 'c',
-            },
-            id: 'dots',
-          },
-          {
-            match: {
-              id: 'go',
-            },
-            id: 'dots',
-          },
-          {
-            match: {
-              id: 'python',
-            },
-            id: 'dots',
-          },
-          {
-            match: {
-              id: 'scala',
-            },
-            id: 'lines',
-          },
-          {
-            match: {
-              id: 'lisp',
-            },
-            id: 'lines',
-          },
-          {
-            match: {
-              id: 'elixir',
-            },
-            id: 'lines',
-          },
-          {
-            match: {
-              id: 'javascript',
-            },
-            id: 'lines',
-          },
-        ]}
-        legends={[]}
       />
     </ComponentBase>
   );

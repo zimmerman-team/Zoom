@@ -35,8 +35,8 @@ const AidsfondsTransactions = props => {
       >
         <FragmentHeader />
         <FragmentVisualisation direction="row">
-          <PieChart data={pieChartMockData} />
-          <PieChart data={pieChartMockData} />
+          <PieChart data={props.sectors} />
+          <PieChart data={props.organisations} />
         </FragmentVisualisation>
       </ModuleFragment>
     </Element>

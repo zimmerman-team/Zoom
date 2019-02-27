@@ -27,7 +27,6 @@ import {
   YearContainer,
   ControlsContainer
 } from './GeoMap.style';
-import { HomeModule } from 'modules/home/HomeModule';
 
 const MAPBOX_TOKEN =
   'pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw';
@@ -81,8 +80,7 @@ export class GeoMap extends Component {
         maxZoom: 20
       },
       hoverMarkerInfo: null,
-      values: [12, 16],
-      fullScreen: false
+      values: [12, 16]
     };
 
     this._handleMapLoaded = this._handleMapLoaded.bind(this);
@@ -200,10 +198,6 @@ export class GeoMap extends Component {
   };
 
   _handleMapLoaded = event => {
-    console.log('map loaded, handle event');
-
-    console.log('props', this.props);
-
     if (this.props.location.pathname === '/focus') {
       this.setState({
         settings: {
@@ -224,9 +218,7 @@ export class GeoMap extends Component {
   };
 
   handleFullscreen() {
-    this.setState(prevState => {
-      return { fullScreen: !prevState.handleFullscreen };
-    });
+    /*todo: add logic that utilizes fullscreen util of react-map-gl itself instead of a thirdparty library*/
   }
 
   render() {

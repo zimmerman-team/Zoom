@@ -3,13 +3,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+/* consts */
+import paneTypes from '__consts__/PaneTypesConst';
+
 /* components */
 import GeoMap from 'components/GeoMap/GeoMap';
-import {
-  ModuleContainer,
-  ControlPanelContainer
-} from 'modules/home/HomeModule.styles';
-import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
+import { ModuleContainer } from 'modules/home/HomeModule.styles';
+import ExplorePanelMediator from 'mediators/ComponentMediators/PaneMediators/ExplorePanelMediator/ExplorePanelMediator';
+import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
+import NavPane from 'components/Panes/NavPane/NavPane';
 // import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
 const propTypes = {
@@ -56,10 +58,18 @@ export class HomeModule extends Component {
             longitude={0}
             zoom={2}
           />
-          {this.props.dataPaneOpen && (
-            <ControlPanelContainer>
-              <ExplorePanelMediator {...otherProps} />
-            </ControlPanelContainer>
+
+          {this.props.dataPaneOpen !== paneTypes.none && (
+            <DataPaneContainer>
+              {this.props.dataPaneOpen === paneTypes.pubPane && (
+                <ExplorePanelMediator {...otherProps} />
+              )}
+              {(this.props.dataPaneOpen === paneTypes.privPane ||
+                this.props.dataPaneOpen === paneTypes.createChart ||
+                this.props.dataPaneOpen === paneTypes.convertData) && (
+                <NavPane {...otherProps} />
+              )}
+            </DataPaneContainer>
           )}
         </ModuleContainer>
       </React.Fragment>

@@ -40,10 +40,15 @@ function fetchQuery(operation, variables) {
 }
 
 class App extends React.Component {
-  state = {
-    showSidebar: false,
-    checkingSession: true
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showSidebar: false,
+      authChanged: false,
+      checkingSession: true
+    };
+  }
 
   componentDidMount() {
     if (window.location.pathname.indexOf('/callback') !== -1) {
@@ -85,6 +90,7 @@ class App extends React.Component {
                       toggleSideBar={() =>
                         this.setState({ showSidebar: !this.state.showSidebar })
                       }
+                      auth0Client={auth0Client}
                     />
                     <SideBar
                       auth0Client={auth0Client}

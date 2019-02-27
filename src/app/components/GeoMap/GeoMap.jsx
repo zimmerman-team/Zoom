@@ -226,7 +226,7 @@ export class GeoMap extends Component {
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
 
-      <MapContainer>
+      <MapContainer data-cy="geo-map-container">
         <ControlsContainer>
           <MapControls
             onZoomIn={this.handleZoomIn}

@@ -83,3 +83,4 @@ yarn-error.log
 *.graphql.js
 
 **/__generated__/*
+.reg

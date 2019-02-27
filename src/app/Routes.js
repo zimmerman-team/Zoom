@@ -4,7 +4,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import PageLoader from 'modules/common/pageloader/PageLoader';
 // always active
 
-import DataExplorePanel from 'components/DataExplorePane/DataExplorePanel';
+import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
 // Modules regular import

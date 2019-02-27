@@ -8,20 +8,23 @@ import ErrorStep from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep';
 
 /* mutations */
 import FileErrorResultMutation from 'mediators/DataMapperMediators/CorrectErrorsMediator/mutations/FileErrorResultMutation';
+import FileValidationMutation from 'mediators/DataMapperMediators/mutations/FileValidation';
 
 /* utils */
 import get from 'lodash/get';
-import isEqual from 'lodash/isEqual';
+import findIndex from 'lodash/findIndex';
 import { formatErrorCells } from './CorrectErrorsMediator.util';
 
 const propTypes = {
   fileId: PropTypes.string,
   relay: PropTypes.shape({}),
   fileCorrection: PropTypes.shape({}),
+  stepsDisabled: PropTypes.bool,
   saveStepData: PropTypes.func
 };
 
 const defaultProps = {
+  stepsDisabled: false,
   fileId: '-1',
   relay: {},
   fileCorrection: {},
@@ -39,9 +42,14 @@ class CorrectErrorsMediator extends React.Component {
       pageSize: 10,
       columnHeaders: [],
       page: 0,
+      checkedRows: false,
+      rowsDeleted: false,
       rowCount: 100
     };
 
+    this.handleValidationCompleted = this.handleValidationCompleted.bind(this);
+    this.handleValidationError = this.handleValidationError.bind(this);
+    this.fileValidation = this.fileValidation.bind(this);
     this.handleCellsErrorsCompleted = this.handleCellsErrorsCompleted.bind(
       this
     );
@@ -53,26 +61,50 @@ class CorrectErrorsMediator extends React.Component {
     this.findReplaceValues = this.findReplaceValues.bind(this);
     this.resetFindReplace = this.resetFindReplace.bind(this);
     this.updateCell = this.updateCell.bind(this);
+    this.checkRows = this.checkRows.bind(this);
+    this.deleteRows = this.deleteRows.bind(this);
+    this.afterErrorTableUpdate = this.afterErrorTableUpdate.bind(this);
   }
 
   componentDidMount() {
     if (this.props.fileId !== '-1') this.refetch();
   }
 
-  handleCellsErrorsCompleted(response, error) {
+  handleValidationCompleted(response, error) {
+    if (response) this.getFileCellsErrors();
+    if (error) console.log('file validation error', error);
+  }
+
+  handleValidationError(error) {
+    console.log('error validating file: ', error);
+  }
+
+  fileValidation() {
+    FileValidationMutation.commit(
+      this.props.relay.environment,
+      this.props.fileId,
+      this.handleValidationCompleted,
+      this.handleValidationError
+    );
+  }
+
+  handleCellsErrorsCompleted(response) {
     if (response) {
       const command = JSON.parse(
         JSON.parse(response.fileErrorCorrection.command)
       );
-
-      if (command.update) {
+      if (command.delete) {
+        command.delete = false;
+        command.delete_data.row_keys = [];
+        this.setState({ correctCommand: command }, this.fileValidation);
+      } else if (command.update) {
         // so because when we update a cell
         // we don't get back the error data
         // we need to reset the update after it is done
         // and then call data again to get the updated
         // datas errors
         command.update = false;
-        this.setState({ correctCommand: command }, this.getFileCellsErrors);
+        this.setState({ correctCommand: command }, this.fileValidation);
       } else {
         const results = JSON.parse(
           JSON.parse(response.fileErrorCorrection.result)
@@ -111,7 +143,6 @@ class CorrectErrorsMediator extends React.Component {
           command.replace_pressed = false;
           command.find_value = command.replace_value;
         }
-
         this.setState(
           {
             errorTableData,
@@ -119,10 +150,21 @@ class CorrectErrorsMediator extends React.Component {
             correctCommand: command,
             rowCount: results.total_amount
           },
-          () => this.props.saveStepData(this.state.errorCells, 4)
+          this.afterErrorTableUpdate
         );
       }
     }
+  }
+
+  afterErrorTableUpdate() {
+    if (this.state.rowsDeleted) {
+      // we also reset the checkboxes
+      this.checkRows('all', false);
+      this.setState({ rowsDeleted: false });
+    }
+
+    if (!this.props.stepsDisabled)
+      this.props.saveStepData(this.state.errorCells, 4);
   }
 
   handleCellsErrorsError(error) {
@@ -238,10 +280,56 @@ class CorrectErrorsMediator extends React.Component {
     this.getFileCellsErrors(command);
   }
 
+  checkRows(index, checked) {
+    this.setState(prevState => {
+      const errorTableData = [...prevState.errorTableData];
+      let checkedRows = false;
+      if (index === 'all') {
+        // so if all is checked === true, it means that all rows are checked
+        // and viceversa unchecked so we can set the checked rows thingy here
+        checkedRows = checked;
+
+        errorTableData.map(row => {
+          row.checked = checked;
+          return row;
+        });
+      } else {
+        const actualInd = findIndex(errorTableData, ['index', index]);
+        errorTableData[actualInd].checked = !errorTableData[actualInd].checked;
+        checkedRows = findIndex(errorTableData, ['checked', true]) !== -1;
+      }
+      return { errorTableData, checkedRows };
+    });
+  }
+
+  deleteRows() {
+    const command = this.state.correctCommand;
+
+    const delIndex = [];
+
+    this.state.errorTableData.forEach(row => {
+      if (row.checked) {
+        delIndex.push(parseInt(row.index, 10));
+      }
+    });
+
+    if (delIndex.length > 0) {
+      command.delete = true;
+      command.delete_data.row_keys = delIndex;
+
+      this.setState({ checkedRows: false, rowsDeleted: true }, () =>
+        this.getFileCellsErrors(command)
+      );
+    }
+  }
+
   render() {
     return (
       <ErrorStep
         updateCell={this.updateCell}
+        checkedRows={this.state.checkedRows}
+        deleteRows={this.deleteRows}
+        checkRows={this.checkRows}
         forcePage={this.state.page}
         resetFindReplace={this.resetFindReplace}
         pageCount={this.state.rowCount / this.state.pageSize}

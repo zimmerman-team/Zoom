@@ -9,19 +9,19 @@ import connect from 'react-redux/es/connect/connect';
 import actions from 'services/actions';
 
 const propTypes = {
-  fileId: PropTypes.string, // Somehow needs to be passed through props
+  fileId: PropTypes.string // Somehow needs to be passed through props
 };
 
 const defaultProps = {
-  fileId: '',
+  fileId: ''
 };
 
 class ManualMappingMediator extends React.Component {
   componentWillMount() {
     this.props.dispatch(
       actions.manualMapDataRequest({
-        file_id: this.props.fileId,
-      }),
+        file_id: this.props.fileId
+      })
     );
   }
 
@@ -35,7 +35,7 @@ ManualMappingMediator.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
-    manualMapData: state.manualMapData,
+    manualMapData: state.manualMapData
   };
 };
 

@@ -102,7 +102,7 @@ class MetaDataMediator extends React.Component {
 
   componentDidMount() {
     // so we set the initial state of the step data
-    const data = { ...this.props.stepData };
+    const data = { ...this.props.data };
     data['0'] = step1InitialData;
     this.props.dispatch(actions.saveStepDataRequest(data));
 
@@ -118,19 +118,20 @@ class MetaDataMediator extends React.Component {
   }
 
   onChipAdd(value) {
-    const { tags } = this.props.data[0];
+    const { tags } = this.props.data['0'];
     tags.push(value);
     this.simpleChange(tags, 'tags');
   }
 
   onChipDelete(index) {
-    const { tags } = this.props.data[0];
+    const { tags } = this.props.data['0'];
     tags.splice(index, 1);
     this.simpleChange(tags, 'tags');
   }
 
   simpleChange(value, question) {
-    const dataz = this.props.stepData && this.props.stepData[0];
+    console.log('simple change');
+    const dataz = this.props.data && this.props.data['0'];
     if (dataz) {
       dataz[question] = value;
       this.props.dispatch(actions.saveStepDataRequest(dataz));
@@ -149,7 +150,7 @@ class MetaDataMediator extends React.Component {
       let val = value;
       // so if its other we gonna add the text as value for it
       if (value.toLowerCase() === 'other' && qText) {
-        val = this.props.data[0][qText];
+        val = this.props.data['0'][qText];
       }
       check.push({
         label: value,
@@ -239,10 +240,10 @@ class MetaDataMediator extends React.Component {
   }
 
   render() {
-    console.log('meta data step from redux', this.props.stepData);
+    console.log('meta data step from redux', this.props.data);
     return (
       <MetaData
-        data={this.props.data[0]}
+        data={this.props.data['0']}
         simpleChange={this.simpleChange}
         checkBoxChange={this.checkBoxChange}
         otherCheckBoxText={this.otherCheckBoxText}

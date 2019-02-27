@@ -29,7 +29,7 @@ function getOffsetTop(hoverMarkerInfo) {
 // or unit tests for it as a seperate component
 const markerInfo = hoverMarkerInfo => {
   if (hoverMarkerInfo) {
-    let countryName = hoverMarkerInfo.country;
+    let countryName = hoverMarkerInfo.name;
     countryName = countryName.charAt(0).toUpperCase() + countryName.slice(1);
 
     return (

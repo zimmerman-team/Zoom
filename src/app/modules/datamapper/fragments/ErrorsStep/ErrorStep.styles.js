@@ -62,7 +62,7 @@ export const ErrorTable = styled(ZoomTable)`
 export const TabContainer = styled.div`
   display: flex;
   width: fit-content;
-  margin: 0 auto 14px auto;
+  margin: 0 auto;
 `;
 
 export const TabText = styled.div`
@@ -79,4 +79,9 @@ export const TabDivider = styled(TabText)`
   &:hover {
     cursor: unset;
   }
+`;
+
+export const ButtonContainer = styled.div`
+  height: 30px;
+  margin: 5px;
 `;

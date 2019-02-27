@@ -52,6 +52,9 @@ export class HomeModule extends Component {
             indicatorData={indicators}
             selectedYears={this.props.yearPeriod}
             selectYear={this.props.selectYear}
+            latitude={15}
+            longitude={0}
+            zoom={2}
           />
           {this.props.dataPaneOpen && (
             <ControlPanelContainer>

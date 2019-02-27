@@ -51,8 +51,8 @@ class FocusModule extends Component {
             indicatorData={indicators}
             selectedYears={this.props.yearPeriod}
             selectYear={this.props.selectYear}
-            lat={52.1326}
-            long={5.2913}
+            latitude={52.1326}
+            longitude={5.2913}
             zoom={7}
           />
           {this.props.dataPaneOpen && (

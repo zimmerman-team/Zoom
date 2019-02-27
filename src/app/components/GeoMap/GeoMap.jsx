@@ -33,15 +33,19 @@ const MAPBOX_TOKEN =
   'pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw';
 
 const propTypes = {
-  lat: PropTypes.number,
-  long: PropTypes.number,
-  zoom: PropTypes.number
+  latitude: PropTypes.number,
+  longitude: PropTypes.number,
+  zoom: PropTypes.number,
+  indicatorData: PropTypes.array,
+  selectedYears: PropTypes.array,
+  selectYear: PropTypes.func
 };
 
 const defaultProps = {
-  lat: 52.1326,
-  long: 5.2913,
-  zoom: 7
+  // just show worldview when no lat long is specified
+  latitude: 15,
+  longitude: 0,
+  zoom: 2
 };
 
 export class GeoMap extends Component {
@@ -60,10 +64,9 @@ export class GeoMap extends Component {
       legends: [],
       hoverLayerInfo: null,
       viewport: {
-        latitude: this.props.lat,
-        longitude: this.props.long,
-        bearing: 0,
-        pitch: 0,
+        latitude: this.props.latitude,
+        longitude: this.props.longitude,
+
         zoom: this.props.zoom
       },
       settings: {
@@ -75,16 +78,13 @@ export class GeoMap extends Component {
         keyboard: true,
         doubleClickZoom: false,
         minZoom: this.props.zoom,
-        maxZoom: 20,
-        minPitch: 0,
-        maxPitch: 85
+        maxZoom: 20
       },
       hoverMarkerInfo: null,
       values: [12, 16],
       fullScreen: false
     };
 
-    this._mapRef = React.createRef();
     this._handleMapLoaded = this._handleMapLoaded.bind(this);
     this.setMarkerInfo = this.setMarkerInfo.bind(this);
     this.handleZoomIn = this.handleZoomIn.bind(this);
@@ -200,20 +200,17 @@ export class GeoMap extends Component {
   };
 
   _handleMapLoaded = event => {
-    console.log(event.target.getBounds());
-    const map = this._getMap();
-    // const map = event.target;
+    console.log('map loaded, handle event');
 
-    /*map.setMaxBounds = [
-      [3.31497114423, 50.803721015],
-      [7.09205325687, 53.5104033474]
-    ];
-*/
-    console.log('_handleMapLoaded', map);
-  };
+    console.log('props', this.props);
 
-  _getMap = () => {
-    return this._mapRef.current ? this._mapRef.current.getMap() : null;
+    if (this.props.location.pathname === '/focus') {
+      this.setState({
+        settings: {
+          dragPan: false
+        }
+      });
+    }
   };
 
   handleZoomIn = () => {
@@ -230,10 +227,6 @@ export class GeoMap extends Component {
     this.setState(prevState => {
       return { fullScreen: !prevState.handleFullscreen };
     });
-  }
-
-  componentDidMount() {
-    console.log(this._mapRef);
   }
 
   render() {
@@ -260,7 +253,6 @@ export class GeoMap extends Component {
         <MapGL
           {...viewport}
           {...settings}
-          ref={this._mapRef}
           scrollZoom={true}
           width="100%"
           height="100%"

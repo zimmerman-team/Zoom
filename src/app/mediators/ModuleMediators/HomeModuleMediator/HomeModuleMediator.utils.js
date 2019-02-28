@@ -77,13 +77,12 @@ export function formatCountryCenterData(indicators) {
           .coordinates;
         countryCenteredData.push({
           value: indicator.value,
-          name: indicator.indicatorName,
           geolocationIso2: indicator.geolocationIso2,
           maxValue,
           minValue,
           longitude: coord[0],
           latitude: coord[1],
-          country: indicator.geolocationTag
+          name: indicator.geolocationTag
         });
       } else
         countryCenteredData[existCountryIndex].value =
@@ -157,4 +156,32 @@ export function updatePercentiles(featureCollection, accessor) {
     f.properties.value = value;
     f.properties.percentile = scale(value);
   });
+}
+
+export function formatLongLatData(indicators) {
+  const longLatData = [];
+
+  indicators.forEach(indicator => {
+    if (indicator.geolocationTag.indexOf(',') !== -1) {
+      let long = indicator.geolocationTag.substring(
+        0,
+        indicator.geolocationTag.indexOf(',')
+      );
+      long = parseFloat(long);
+
+      let lat = indicator.geolocationTag.substring(
+        indicator.geolocationTag.indexOf(',') + 1
+      );
+      lat = parseFloat(lat);
+
+      longLatData.push({
+        longitude: long,
+        latitude: lat,
+        name: indicator.geolocationTag,
+        value: indicator.value
+      });
+    }
+  });
+
+  return longLatData;
 }

@@ -48,53 +48,55 @@ const propTypes = {
   dropDownChange: PropTypes.func,
   otherDropdownText: PropTypes.func,
   data: PropTypes.shape({
-    title: PropTypes.string,
-    desc: PropTypes.string,
-    tags: PropTypes.arrayOf(PropTypes.string),
-    dataSource: PropTypes.shape({
-      key: PropTypes.string,
-      label: PropTypes.string,
-      value: PropTypes.string
+    metaData: PropTypes.shape({
+      title: PropTypes.string,
+      desc: PropTypes.string,
+      tags: PropTypes.arrayOf(PropTypes.string),
+      dataSource: PropTypes.shape({
+        key: PropTypes.string,
+        label: PropTypes.string,
+        value: PropTypes.string
+      }),
+      shared: PropTypes.Boolean,
+      surveyData: PropTypes.Boolean,
+      q1: PropTypes.string,
+      q2: PropTypes.arrayOf(
+        PropTypes.shape({
+          label: PropTypes.string,
+          value: PropTypes.string
+        })
+      ),
+      q21: PropTypes.string,
+      q22: PropTypes.string,
+      q3: PropTypes.arrayOf(
+        PropTypes.shape({
+          label: PropTypes.string,
+          value: PropTypes.string
+        })
+      ),
+      q4: PropTypes.shape({
+        key: PropTypes.string,
+        label: PropTypes.string,
+        value: PropTypes.string
+      }),
+      q5: PropTypes.string,
+      q51: PropTypes.arrayOf(
+        PropTypes.shape({
+          label: PropTypes.string,
+          value: PropTypes.string
+        })
+      ),
+      sourceText: PropTypes.string,
+      q3Text: PropTypes.string,
+      q4Text: PropTypes.string,
+      q51Text: PropTypes.string,
+      fileSources: PropTypes.arrayOf(
+        PropTypes.shape({
+          label: PropTypes.string,
+          value: PropTypes.string
+        })
+      )
     }),
-    shared: PropTypes.Boolean,
-    surveyData: PropTypes.Boolean,
-    q1: PropTypes.string,
-    q2: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string,
-        value: PropTypes.string
-      })
-    ),
-    q21: PropTypes.string,
-    q22: PropTypes.string,
-    q3: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string,
-        value: PropTypes.string
-      })
-    ),
-    q4: PropTypes.shape({
-      key: PropTypes.string,
-      label: PropTypes.string,
-      value: PropTypes.string
-    }),
-    q5: PropTypes.string,
-    q51: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string,
-        value: PropTypes.string
-      })
-    ),
-    sourceText: PropTypes.string,
-    q3Text: PropTypes.string,
-    q4Text: PropTypes.string,
-    q51Text: PropTypes.string,
-    fileSources: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string,
-        value: PropTypes.string
-      })
-    ),
     environment: PropTypes.shape({})
   })
 };

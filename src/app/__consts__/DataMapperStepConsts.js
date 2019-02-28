@@ -31,5 +31,15 @@ export const step1InitialData = {
     requiredFields: ['title', 'desc', 'dataSource'],
     fileSources: []
   },
+  uploadData: {
+    url: '',
+    file: {},
+    fileId: '',
+    sourceId: '',
+    modelOptions: [],
+    mappingJson: {}
+  },
+  manMapData: [],
+  overviewData: [],
   environment: {}
 };

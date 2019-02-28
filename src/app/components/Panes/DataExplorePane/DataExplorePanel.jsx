@@ -158,9 +158,8 @@ class DataExplorePane extends React.Component {
                 <ZoomSelect
                   selectAll
                   multiple
-                  placeHolder={
-                    'Select region (' + this.props.regions.length + ')'
-                  }
+                  placeHolderText='Select region'
+                  placeHolderNumber={this.props.regions.length}
                   data={this.props.regions}
                   arraySelected={this.props.selectedRegionVal}
                   selectVal={this.props.selectRegion}
@@ -172,9 +171,8 @@ class DataExplorePane extends React.Component {
                   selectAll
                   reset={() => this.props.selectCountry('reset')}
                   multiple
-                  placeHolder={
-                    'Select country (' + this.props.countries.length + ')'
-                  }
+                  placeHolderText={'Select country'}
+                  placeHolderNumber={this.props.countries.length}
                   data={this.props.countries}
                   arraySelected={this.props.selectedCountryVal}
                   selectVal={this.props.selectCountry}
@@ -196,9 +194,8 @@ class DataExplorePane extends React.Component {
                 <ZoomSelect
                   categorise
                   reset={() => this.props.selectInd1({ value: undefined })}
-                  placeHolder={
-                    'Select indicator (' + this.props.indNames.length + ')'
-                  }
+                  placeHolderText='Select indicator'
+                  placeHolderNumber={this.props.indNames.length}
                   data={this.props.indNames}
                   valueSelected={this.props.selectedInd1}
                   selectVal={this.props.selectInd1}
@@ -208,7 +205,7 @@ class DataExplorePane extends React.Component {
                 <ZoomSelect
                   selectAll
                   categorise
-                  placeHolder="Select sub indicator"
+                  placeHolderText='Select sub indicator'
                   data={this.props.subIndicators1}
                   multiple
                   arraySelected={this.props.selectedSubInd1}
@@ -221,9 +218,8 @@ class DataExplorePane extends React.Component {
                 <ZoomSelect
                   categorise
                   reset={() => this.props.selectInd2({ value: undefined })}
-                  placeHolder={
-                    'Select indicator (' + this.props.indNames.length + ')'
-                  }
+                  placeHolderText='Select indicator'
+                  placeHolderNumber={this.props.indNames.length}
                   data={this.props.indNames}
                   valueSelected={this.props.selectedInd2}
                   selectVal={this.props.selectInd2}
@@ -233,7 +229,7 @@ class DataExplorePane extends React.Component {
                 <ZoomSelect
                   selectAll
                   categorise
-                  placeHolder="Select sub indicator"
+                  placeHolderText="Select sub indicator"
                   data={this.props.subIndicators2}
                   multiple
                   arraySelected={this.props.selectedSubInd2}

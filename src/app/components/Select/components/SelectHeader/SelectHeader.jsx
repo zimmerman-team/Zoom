@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import {
   ComponentBase,
   PointerContainer,
-  LabelContainer
+  LabelContainer,
+  Span
 } from 'components/Select/components/SelectHeader/SelectHeader.styles';
 
 import IconPointer from 'assets/icons/IconPointer';
@@ -30,7 +31,12 @@ const SelectHeader = props => (
     >
       <IconPointer />
     </PointerContainer>
-    <LabelContainer>{props.label}</LabelContainer>
+    <LabelContainer>{props.label}
+      {props.placeHolderNumber !== undefined ?
+        <Span> ({props.placeHolderNumber})</Span>
+        : ""
+      }
+    </LabelContainer>
   </ComponentBase>
 );
 

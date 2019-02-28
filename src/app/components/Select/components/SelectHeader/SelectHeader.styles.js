@@ -18,6 +18,10 @@ export const ComponentBase = styled.div`
   }
 `;
 
+export const Span = styled.span`
+  font-family: ${theme.font.zoomFontFamTwo};
+`;
+
 export const PointerContainer = styled.div`
   height: fit-content;
   margin: auto 24px auto 14px;

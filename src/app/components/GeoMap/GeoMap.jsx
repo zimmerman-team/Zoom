@@ -144,8 +144,6 @@ export class GeoMap extends Component {
     this.setState({
       hoverLayerInfo
     });
-
-    console.log({feature, features});
   };
 
   _showLayerInfo() {

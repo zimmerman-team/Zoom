@@ -47,7 +47,6 @@ describe('Home page geo map filters', function() {
   it('Plots Europe data about condom use', function() {
     cy.get('[data-cy="legendLayer-label"]').should('contain', 'condom use');
     // Fixme: this test should fail looking at the current state, it should only plot data from Europe.
-    //  How to check on this data?
   });
 
   it('Navigates to a second indicator "aids orphans" and selects it', function() {
@@ -58,7 +57,6 @@ describe('Home page geo map filters', function() {
   it('Plots a second Europe data about aids orphans', function() {
     cy.get('[data-cy="legendCircle-label"]').should('contain', 'aids orphans');
     // Fixme: this test should fail looking at the current state, it should only plot data from Europe.
-    // How to check on this data?
   });
 
   it('Resets values', function() {

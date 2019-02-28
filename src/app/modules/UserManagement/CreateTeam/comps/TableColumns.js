@@ -1,7 +1,7 @@
 /* base */
 import React from 'react';
 /* components */
-import { CheckBox } from 'grommet';
+//import { CheckBox } from 'grommet';
 import {
   SortByIcon,
   UsersTableCellValue,
@@ -9,6 +9,7 @@ import {
 } from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
 import theme from 'theme/Theme';
 import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
+import Checkbox from 'components/Checkbox/CheckBox';
 
 const sortByOptions = [
   { label: 'Name (asc)', value: 'name:1' },
@@ -30,12 +31,13 @@ export default function getColumns(
       property: 'id',
       header: (
         <UsersTableColHeader>
-          <CheckBox onChange={addRemoveAllSelectionsFunc} />
+          {/*<CheckBox onChange={addRemoveAllSelectionsFunc} />*/}
+          <Checkbox onChange={addRemoveAllSelectionsFunc} />
         </UsersTableColHeader>
       ),
       render: val => (
         <UsersTableCellValue>
-          <CheckBox
+          <Checkbox
             id={val.id}
             name={val.name}
             onChange={addRemoveSelectionFunc}

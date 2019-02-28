@@ -4,26 +4,30 @@ import styled from 'styled-components';
 import Checkbox from '@material-ui/core/Checkbox';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import IconBoxUnchecked from 'assets/icons/IconBoxUnchecked';
+import IconBoxChecked from 'assets/icons/IconBoxChecked';
+
 import NoSsr from '@material-ui/core/NoSsr';
 import theme from 'theme/Theme';
 
-/*TODO: add checked icon*/
 const IconUnchecked = (
   <SvgIcon>
-    <IconBoxUnchecked />
+    <IconBoxUnchecked/>
+  </SvgIcon>
+);
+
+const IconChecked = (
+  <SvgIcon>
+    <IconBoxChecked />
   </SvgIcon>
 );
 
 export default styled(props => (
   <NoSsr>
-    <Checkbox disableRipple icon={IconUnchecked} {...props} />
+    <Checkbox disableRipple icon={IconUnchecked} checkedIcon={IconChecked} {...props} />
   </NoSsr>
 ))`
   && {
     padding: 0;
     margin-right: 5px;
-    svg {
-      fill: ${theme.color.aidsFondsBlue};
-    }
   }
 `;

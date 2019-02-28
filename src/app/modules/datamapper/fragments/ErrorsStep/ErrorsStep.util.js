@@ -10,6 +10,7 @@ import {
 
 /* components */
 import CustomCheckBox from 'components/CustomCheckBox/CustomCheckBox';
+import Checkbox from 'components/Checkbox/CheckBox';
 
 // so yeah here the columns will need to be formatted according to the data
 export function formatColumns(tableData, checkRows, handleCellClick) {
@@ -22,15 +23,12 @@ export function formatColumns(tableData, checkRows, handleCellClick) {
       property: 'id',
       header: (
         <HeaderCheckBox key={0}>
-          <CustomCheckBox
-            key={0}
-            onChange={checked => checkRows('all', checked)}
-          />
+          <Checkbox key={0} onChange={checked => checkRows('all', checked)} />
         </HeaderCheckBox>
       ),
       render: val => (
         <CheckBox>
-          <CustomCheckBox
+          <Checkbox
             key={val.index}
             checked={val.checked}
             onChange={() => checkRows(val.index)}

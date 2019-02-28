@@ -8,30 +8,39 @@ import IconOnlyMinus from 'assets/icons/IconOnlyMinus';
 import IconOnlyFullScreen from 'assets/icons/IconOnlyFullScreen';
 
 /* styles */
-import { ComponentBase, ButtonContainer } from './MapControls.style';
+import {
+  ComponentBase,
+  ButtonContainer,
+  DisabledElement
+} from './MapControls.style';
 
 const propTypes = {
-  zoomIn: PropTypes.func,
-  zoomOut: PropTypes.func,
-  fullScreen: PropTypes.func,
+  onZoomIn: PropTypes.func,
+  onZoomOut: PropTypes.func,
+  onFullScreen: PropTypes.func
 };
 const defaultProps = {
-  zoomIn: null,
-  zoomOut: null,
-  fullScreen: null,
+  onZoomIn: null,
+  onZoomOut: null,
+  onFullScreen: null
 };
 
 const MapControls = props => (
   <ComponentBase>
-    <ButtonContainer onClick={props.zoomIn} data-cy="home-zoom-in-button">
+    <ButtonContainer onClick={props.onZoomIn} data-cy="home-zoom-out-button">
       <IconOnlyPlus />
     </ButtonContainer>
-    <ButtonContainer onClick={props.zoomOut} data-cy="home-zoom-out-button">
+    <ButtonContainer onClick={props.onZoomOut} data-cy="home-zoom-in-button">
       <IconOnlyMinus />
     </ButtonContainer>
-    <ButtonContainer onClick={props.fullScreen} data-cy="home-fullscreen-button">
-      <IconOnlyFullScreen />
-    </ButtonContainer>
+    <DisabledElement>
+      <ButtonContainer
+        onClick={props.onFullScreen}
+        data-cy="home-fullscreen-button"
+      >
+        <IconOnlyFullScreen />
+      </ButtonContainer>
+    </DisabledElement>
   </ComponentBase>
 );
 

@@ -2,6 +2,19 @@ import findIndex from 'lodash/findIndex';
 import { scaleQuantile } from 'd3-scale';
 import { range } from 'd3-array';
 
+// Updates layer percentiles depending on the value
+export function updatePercentiles(featureCollection, accessor) {
+  const { features } = featureCollection;
+  const scale = scaleQuantile()
+    .domain(features.map(accessor))
+    .range(range(9));
+  features.forEach(f => {
+    const value = accessor(f);
+    f.properties.value = value;
+    f.properties.percentile = scale(value);
+  });
+}
+
 export function formatCountryLayerData(indicators) {
   const countryLayers = {
     type: 'FeatureCollection',
@@ -10,7 +23,7 @@ export function formatCountryLayerData(indicators) {
 
   indicators.forEach(indicator => {
     const existLayerIndex = findIndex(countryLayers.features, feat => {
-      return indicator.geolocationIso2 === feat.properties.iso2;
+      return indicator.geolocationTag === feat.properties.name;
     });
 
     // so here we check if we already added a country to the countries layers
@@ -60,8 +73,8 @@ export function formatCountryCenterData(indicators) {
 
   indicators.forEach(indicator => {
     const existCountryIndex = findIndex(countryCenteredData, [
-      'geolocationIso2',
-      indicator.geolocationIso2
+      'name',
+      indicator.geolocationTag
     ]);
 
     if (indicator.geolocationCenterLongLat) {
@@ -77,13 +90,12 @@ export function formatCountryCenterData(indicators) {
           .coordinates;
         countryCenteredData.push({
           value: indicator.value,
-          name: indicator.indicatorName,
           geolocationIso2: indicator.geolocationIso2,
           maxValue,
           minValue,
           longitude: coord[0],
           latitude: coord[1],
-          country: indicator.geolocationTag
+          name: indicator.geolocationTag
         });
       } else
         countryCenteredData[existCountryIndex].value =
@@ -146,15 +158,39 @@ export function formatYearParam(val) {
   return yearArray;
 }
 
-// Updates layer percentiles depending on the value
-export function updatePercentiles(featureCollection, accessor) {
-  const { features } = featureCollection;
-  const scale = scaleQuantile()
-    .domain(features.map(accessor))
-    .range(range(9));
-  features.forEach(f => {
-    const value = accessor(f);
-    f.properties.value = value;
-    f.properties.percentile = scale(value);
+export function formatLongLatData(indicators) {
+  const longLatData = [];
+
+  indicators.forEach(indicator => {
+    if (indicator.geolocationTag.indexOf(',') !== -1) {
+      const existPointIndex = findIndex(longLatData, [
+        'name',
+        indicator.geolocationTag
+      ]);
+
+      if (existPointIndex === -1) {
+        let long = indicator.geolocationTag.substring(
+          0,
+          indicator.geolocationTag.indexOf(',')
+        );
+        long = parseFloat(long);
+
+        let lat = indicator.geolocationTag.substring(
+          indicator.geolocationTag.indexOf(',') + 1
+        );
+        lat = parseFloat(lat);
+
+        longLatData.push({
+          longitude: long,
+          latitude: lat,
+          name: indicator.geolocationTag,
+          value: indicator.value
+        });
+      } else {
+        longLatData[existPointIndex].value += indicator.value;
+      }
+    }
   });
+
+  return longLatData;
 }

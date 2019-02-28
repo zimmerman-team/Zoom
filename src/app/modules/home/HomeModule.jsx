@@ -1,35 +1,34 @@
 /* base */
 import React, { Component } from 'react';
-import styled from 'styled-components';
-import GeoMap from 'components/GeoMap/GeoMap';
-import { connect } from 'react-redux';
-// import AppBar from 'components/navigation/AppBar/AppBar';
-import { Box } from 'grommet';
-// import SideBar from 'components/navigation/SideBar/SideBar';
-import { ControlPanelContainer } from 'modules/home/HomeModule.styles';
-import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
 import PropTypes from 'prop-types';
-import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
+import { connect } from 'react-redux';
 
-const ModuleContainer = styled(Box)``;
+/* consts */
+import paneTypes from '__consts__/PaneTypesConst';
 
-const DataPaneContainer = styled.div``;
+/* components */
+import GeoMap from 'components/GeoMap/GeoMap';
+import { ModuleContainer } from 'modules/home/HomeModule.styles';
+import ExplorePanelMediator from 'mediators/ComponentMediators/PaneMediators/ExplorePanelMediator/ExplorePanelMediator';
+import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
+import NavPane from 'components/Panes/NavPane/NavPane';
+// import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
 const propTypes = {
-  indicators: PropTypes.arrayOf(PropTypes.shape),
+  indicators: PropTypes.arrayOf(PropTypes.shape)
 };
 
 const defaultProps = {
-  indicators: [],
+  indicators: []
 };
 
-class HomeModule extends Component {
+export class HomeModule extends Component {
   constructor(props) {
     super(props);
     this.state = {
       dialogOpen: true,
       sideBarOpen: false,
-      indicators: [],
+      indicators: []
     };
 
     this.onClose = this.onClose.bind(this);
@@ -51,16 +50,23 @@ class HomeModule extends Component {
       <React.Fragment>
         <ModuleContainer>
           {/*<BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />*/}
-
           <GeoMap
             indicatorData={indicators}
             selectedYears={this.props.yearPeriod}
             selectYear={this.props.selectYear}
           />
-          {this.props.dataPaneOpen && (
-            <ControlPanelContainer>
-              <ExplorePanelMediator {...otherProps} />
-            </ControlPanelContainer>
+
+          {this.props.dataPaneOpen !== paneTypes.none && (
+            <DataPaneContainer>
+              {this.props.dataPaneOpen === paneTypes.pubPane && (
+                <ExplorePanelMediator {...otherProps} />
+              )}
+              {(this.props.dataPaneOpen === paneTypes.privPane ||
+                this.props.dataPaneOpen === paneTypes.createChart ||
+                this.props.dataPaneOpen === paneTypes.convertData) && (
+                <NavPane {...otherProps} />
+              )}
+            </DataPaneContainer>
           )}
         </ModuleContainer>
       </React.Fragment>
@@ -72,7 +78,7 @@ HomeModule.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
-    dataPaneOpen: state.dataPaneOpen.open,
+    dataPaneOpen: state.dataPaneOpen.open
   };
 };
 

@@ -29,14 +29,14 @@ export default styled(props => (
     font-family: ${theme.font.zoomFontFamTwo};
     margin: 0;
 
-    /*  &:before {
+    &:before {
       left: 0;
       right: 0;
       bottom: 0;
       content: '\\00a0';
       position: absolute;
       transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+      border-bottom: 1px solid #9b9b9b;
       pointer-events: none;
     }
 
@@ -48,13 +48,45 @@ export default styled(props => (
       position: absolute;
       transform: scaleX(0);
       transition: transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-      border-bottom: 2px solid #303f9f;
+      border-bottom: 1px solid #303f9f;
       pointer-events: none;
-    }*/
+    }
 
-    input {
+    & [class*='MuiFormLabel-root'] {
+      color: ${theme.color.colHeadColor};
+      font-weight: 500;
+      font-size: 18px;
+      font-family: ${theme.font.zoomFontFamOne};
+    }
+
+    & [class*='MuiInputLabel-focused'] {
+      color: ${theme.color.aidsFondsBlue};
+    }
+
+    & [class*='MuiInputBase-focused'] {
+      border-bottom: 1px solid ${theme.color.aidsFondsBlue};
+    }
+
+    & [class*='MuiInputLabel-error'] {
+      color: ${theme.color.aidsFondsRed};
+    }
+
+    & [class*='MuiPrivateTextarea-root'] {
+      padding-top: 10px;
+    }
+
+    & input,
+    textarea {
       font-family: ${theme.font.zoomFontFamTwo};
       font-size: 14px;
+    }
+
+    & input {
+      padding-top: 14px;
+    }
+
+    & [class*='MuiInput-error'] {
+      border-bottom: 1px solid ${theme.color.aidsFondsRed};
     }
   }
 `;

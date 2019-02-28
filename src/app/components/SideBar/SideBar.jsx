@@ -55,6 +55,7 @@ class SideBar extends React.Component {
                   icon={<IconClose />}
                   onClick={this.props.toggleSideBar}
                   label="Close"
+                  data-cy="sidebar-close"
                 />
               </SidebarHeader>
 
@@ -98,6 +99,7 @@ class SideBar extends React.Component {
                     hoverIndicator={false}
                     type="button"
                     plain={true}
+                    data-cy="sidebar-datamapper"
                   />
 
                   {/*TODO: we need to clean this up, maybe go for desctructing the auth0Client object */}
@@ -123,6 +125,7 @@ class SideBar extends React.Component {
                     icon={<IconAbout />}
                     type="button"
                     plain={true}
+                    data-cy="sidebar-about"
                   />
                 </SidebarNavList>
               </SidebarNavListContainer>

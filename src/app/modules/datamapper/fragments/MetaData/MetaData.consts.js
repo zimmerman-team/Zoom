@@ -19,8 +19,8 @@ export const options2 = [
     value: 'No'
   },
   {
-    label: 'Dont know',
-    value: 'Dont know'
+    label: "Don't know",
+    value: "Don't know"
   }
 ];
 

@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import CountryInfo from './CountryInfo';
 // Components
 import { Box } from 'grommet';
-import BarChartHorizontal from 'components/charts/barcharts/horizontal/BarChartHorizontal';
+import HorizontalBarChart from 'components/charts/barcharts/horizontal/HorizontalBarChart';
 import { SimpleText } from 'components/sort/Misc';
 import {
   PageIntroInitial,
@@ -33,7 +33,7 @@ describe('<CountryInfo />', () => {
   it('renders one <SimpleText/> component', () => {
     expect(wrapper.find(SimpleText)).toHaveLength(1);
   });
-  it('renders one <BarChartHorizontal/> component', () => {
-    expect(wrapper.find(BarChartHorizontal)).toHaveLength(1);
+  it('renders one <HorizontalBarChart/> component', () => {
+    expect(wrapper.find(HorizontalBarChart)).toHaveLength(1);
   });
 });

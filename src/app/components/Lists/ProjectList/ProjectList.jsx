@@ -12,28 +12,36 @@ import {
   SectorListItem,
   Separator,
   TitleContainer,
-  Value,
+  Value
 } from 'components/Lists/ProjectList/ProjectList.styles';
 
 const propTypes = {
   projectData: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
-      budget: PropTypes.number,
+      budget: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       endDat: PropTypes.string,
       organisation: PropTypes.string,
       sectors: PropTypes.arrayOf(
         PropTypes.shape({
-          name: PropTypes.string,
-        }),
+          name: PropTypes.string
+        })
       ),
       startDate: PropTypes.string,
-      title: PropTypes.string,
-    }),
+      title: PropTypes.string
+    })
   ),
+  projectInfo: PropTypes.shape({
+    count: PropTypes.number,
+    commitment: PropTypes.string
+  })
 };
 const defaultProps = {
   projectData: [],
+  projectInfo: {
+    count: 0,
+    commitment: ''
+  }
 };
 
 const ProjectList = props => {
@@ -50,26 +58,24 @@ const ProjectList = props => {
             />
           </TitleContainer>
 
-          {/* date container */}
-          <PropertyContainer
-            width="100%"
-            direction="row"
-            justify="start"
-            align="center"
-          >
-            <Box direction="row">
-              <Label>Start date:</Label>
-              <Value>{project.startDate}</Value>
-            </Box>
-            <Separator>|</Separator>
-            <Box direction="row">
-              <Label>End date:</Label>
-              <Value>{project.endDate}</Value>
-            </Box>
-          </PropertyContainer>
-
           {/* mixed properties */}
           <Box>
+            <PropertyContainer
+              width="100%"
+              direction="row"
+              justify="start"
+              align="center"
+            >
+              <Box direction="row">
+                <Label>Start date:</Label>
+                <Value>{project.startDate}</Value>
+              </Box>
+              <Separator>|</Separator>
+              <Box direction="row">
+                <Label>End date:</Label>
+                <Value>{project.endDate}</Value>
+              </Box>
+            </PropertyContainer>
             <PropertyContainer direction="row">
               <Label>Reporting organisation:</Label>
               <Value>{project.organisation}</Value>

@@ -7,10 +7,17 @@ import auth0Client from 'auth/Auth';
 
 // Routes
 import Routes from './Routes';
-import AppBar from 'components/AppBar/AppBar';
-import SideBar from 'components/SideBar/SideBar';
 import { Grommet } from 'grommet';
 import { ZoomTheme } from 'styles/ZoomTheme';
+
+/* global app components */
+import AppBar from 'components/AppBar/AppBar';
+import SideBar from 'components/SideBar/SideBar';
+import {
+  ToastsContainer,
+  ToastsStore,
+  ToastsContainerPosition
+} from 'react-toasts';
 
 const modernEnvironment = new Environment({
   network: Network.create(fetchQuery),
@@ -33,10 +40,15 @@ function fetchQuery(operation, variables) {
 }
 
 class App extends React.Component {
-  state = {
-    showSidebar: false,
-    checkingSession: true
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showSidebar: false,
+      authChanged: false,
+      checkingSession: true
+    };
+  }
 
   componentDidMount() {
     if (window.location.pathname.indexOf('/callback') !== -1) {
@@ -60,6 +72,7 @@ class App extends React.Component {
               ...CountryDetailMediator_indicatorAggregations
               ...ExplorePanelMediator_dropDownData
               ...MetaDataMediator_dropDownData
+              ...CorrectErrorsMediator_fileCorrection
             }
           `}
           variables={{}}
@@ -68,10 +81,15 @@ class App extends React.Component {
               return (
                 <Router>
                   <React.Fragment>
+                    <ToastsContainer
+                      store={ToastsStore}
+                      position={ToastsContainerPosition.TOP_CENTER}
+                    />
                     <AppBar
                       toggleSideBar={() =>
                         this.setState({ showSidebar: !this.state.showSidebar })
                       }
+                      auth0Client={auth0Client}
                     />
                     <SideBar
                       auth0Client={auth0Client}
@@ -85,7 +103,7 @@ class App extends React.Component {
                 </Router>
               );
             } else {
-              return <div>Loading - 0</div>;
+              return <div>Loading</div>;
             }
           }}
         />

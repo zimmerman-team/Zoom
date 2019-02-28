@@ -9,14 +9,17 @@ import './Pagination.css';
 const propTypes = {
   pageCount: PropTypes.number,
   changePage: PropTypes.func,
+  forcePage: PropTypes.number
 };
 const defaultProps = {
   pageCount: 0,
   changePage: null,
+  forcePage: 0
 };
 
 const Pagination = props => (
   <ReactPaginate
+    forcePage={props.forcePage}
     previousLabel="previous"
     nextLabel="next"
     breakLabel="..."

@@ -2,13 +2,13 @@
 import React from 'react';
 import {
   DescriptionParagraph,
-  DescriptionParagraphBold,
+  DescriptionParagraphBold
 } from 'components/sort/Paragraphs';
 import {
   AboutTitle,
   ModuleContainer,
   RedLink,
-  Text,
+  Text
 } from 'modules/about/About.styles';
 import BarChartVertical from 'components/charts/barcharts/vertical/BarChartVertical';
 import { IATIDetailBarChartMockData } from '__mocks__/barChartVerticalMock';
@@ -19,14 +19,14 @@ const defaultProps = {};
 const About = props => {
   return (
     <ModuleContainer>
-      <AboutTitle>About zoom</AboutTitle>
-      <DescriptionParagraphBold>
+      <AboutTitle data-cy="about-heading">About zoom</AboutTitle>
+      <DescriptionParagraphBold data-cy="about-paragraph">
         The major aim of ZOOM is to develop and implement an open data platform
         enabling Aids Fonds to conduct data informed decision making and
         strategic dialogue. ZOOM will allow its users to bring together data
         from various sources for analysis and visualisation.
       </DescriptionParagraphBold>
-      <Text>
+      <Text data-cy="about-paragraph">
         The increased availability of data provides new opportunities to support
         sustainable development. Through combining and analysing different data
         sources new insights and knowledge could potentially be gained. In 2016,
@@ -42,7 +42,7 @@ const About = props => {
         disabledLegend
         keys={['Budget', 'Spent']}
       />
-      <Text>
+      <Text data-cy="about-paragraph">
         For this, Leiden University and Zimmerman & Zimmerman in close
         cooperation with Aidsfonds have developed and implementated ZOOM in
         order to support Aids Fonds and its partners in realising this ambition.
@@ -53,6 +53,7 @@ const About = props => {
       <DescriptionParagraph>Check the new website</DescriptionParagraph>
       <DescriptionParagraph>
         <RedLink
+          data-cy="about-link-to-web"
           target="_blank"
           rel="noopener noreferrer"
           href="https://aidsfonds.nl/"

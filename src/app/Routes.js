@@ -4,7 +4,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import PageLoader from 'modules/common/pageloader/PageLoader';
 // always active
 
-import DataExplorePanel from 'components/DataExplorePane/DataExplorePanel';
+import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
 // Modules regular import
@@ -112,7 +112,9 @@ const Routes = props => {
           <Route path="/about" render={() => <About />} />
           <Route
             path="/mapper"
-            render={() => <DataMapperModule dropDownData={props} />}
+            render={() => (
+              <DataMapperModule dropDownData={props} fileCorrection={props} />
+            )}
           />
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />

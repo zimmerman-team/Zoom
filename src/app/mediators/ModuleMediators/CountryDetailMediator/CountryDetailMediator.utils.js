@@ -55,15 +55,51 @@ export function formatProjectData(activities) {
         'reporting_organisation.narratives[0].text',
         'No reporting organisation title'
       ),
-      budget: get(
+      budget: `${get(
+        activity,
+        'aggregations.activity.budget_currency',
+        ''
+      )} ${get(
         activity,
         'aggregations.activity.budget_value',
         'Not Specified'
-      )
+      ).toLocaleString(
+        {},
+        {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2
+        }
+      )}`
     });
   });
 
   return projectData;
+}
+
+/*
+  Calculates the total count of projects retrieved
+  and total commitment of them
+*/
+export function getProjectCountNCommitment(activities) {
+  let commitment = 0;
+  const currency =
+    get(activities, '[0].aggregations.activity.commitment_currency', '') ===
+    null
+      ? get(activities, '[0].aggregations.activity.budget_currency', '')
+      : get(activities, '[0].aggregations.activity.commitment_currency', '');
+  activities.forEach(activity => {
+    commitment += get(activity, 'aggregations.activity.commitment_value', 0);
+  });
+  return {
+    count: activities.length,
+    commitment: `${currency} ${commitment.toLocaleString(
+      {},
+      {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      }
+    )}`
+  };
 }
 
 /*
@@ -94,34 +130,44 @@ export function formatBarChartInfoIndicators(
   indicatorNames,
   countryName
 ) {
+  let total = 0;
+  let results = [];
   const barChartData = [];
+
+  // console.log(countryData);
 
   indicatorNames.forEach((name, index) => {
     if (index < 3) {
       const countryDataPoints = filter(countryData, ['indicatorName', name]);
-      const globalDataPoints = filter(globalData, ['indicatorName', name]);
+      // const globalDataPoints = filter(globalData, ['indicatorName', name]);
 
       let countryIndValue = 0;
       countryDataPoints.forEach(point => {
         countryIndValue += point.value;
       });
+      total += countryIndValue;
 
-      let globalIndValue = 0;
-      globalDataPoints.forEach(point => {
-        globalIndValue += point.value;
-      });
+      // let globalIndValue = 0;
+      // globalDataPoints.forEach(point => {
+      //   globalIndValue += point.value;
+      // });
 
       barChartData.push({
         indicator: name,
         [countryName]: countryIndValue,
-        CountryColor: theme.color.chartColorTwo,
-        Global: globalIndValue,
-        GlobalColor: theme.color.chartColorThree
+        CountryColor: theme.color.chartColorTwo
+        // Global: globalIndValue,
+        // GlobalColor: theme.color.chartColorThree
       });
     }
   });
 
-  return barChartData;
+  results = sortBy(barChartData, [countryName]).map(bcd => ({
+    ...bcd,
+    percentage: total !== 0 ? (100 * bcd[countryName]) / total : 0
+  }));
+
+  return results.reverse();
 }
 
 // formats linechart data from indicators
@@ -181,6 +227,27 @@ export function formatLineChartData(indicatorData) {
     lineChartData.splice(maxInd, 1);
     lineChartData.unshift(bigLineitem);
   }
+
+  return lineChartData;
+}
+
+export function formatLineChart2Data(indicatorData) {
+  const lineChartData = [];
+
+  indicatorData.forEach(item => {
+    const chartItemInd = findIndex(lineChartData, ['year', item.date]);
+    if (chartItemInd > -1) {
+      lineChartData[chartItemInd] = {
+        ...lineChartData[chartItemInd],
+        [item.indicatorName]: item.value
+      };
+    } else {
+      lineChartData.push({
+        year: item.date,
+        [item.indicatorName]: item.value
+      });
+    }
+  });
 
   return lineChartData;
 }

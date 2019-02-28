@@ -84,10 +84,7 @@ class DataMapperModule extends React.Component {
       // are the error that we retrieve for this step
       // and the user should be able to progress only if they've fixed
       // all the found errors
-      return (
-        !this.state.stepsDisabled &&
-        (!this.state.stepData[3] || this.state.stepData[3].length > 0)
-      );
+      return !this.state.stepsDisabled && this.state.stepData[3];
 
     return false;
   }
@@ -150,10 +147,7 @@ class DataMapperModule extends React.Component {
         // are the error that we retrieve for this step
         // and the user should be able to progress only if they've fixed
         // all the found errors
-        if (
-          !this.state.stepsDisabled &&
-          (!stepData[3] || stepData[3].length > 0)
-        ) {
+        if (!this.state.stepsDisabled && stepData[3]) {
           ToastsStore.error(
             <SimpleErrorText>
               {' '}

@@ -44,6 +44,7 @@ class CorrectErrorsMediator extends React.Component {
       page: 0,
       checkedRows: false,
       rowsDeleted: false,
+      errorsExists: false,
       rowCount: 100
     };
 
@@ -90,9 +91,7 @@ class CorrectErrorsMediator extends React.Component {
 
   handleCellsErrorsCompleted(response) {
     if (response) {
-      const command = JSON.parse(
-        JSON.parse(response.fileErrorCorrection.command)
-      );
+      const command = { ...this.state.correctCommand };
       if (command.delete) {
         command.delete = false;
         command.delete_data.row_keys = [];
@@ -104,6 +103,15 @@ class CorrectErrorsMediator extends React.Component {
         // and then call data again to get the updated
         // datas errors
         command.update = false;
+        this.setState({ correctCommand: command }, this.fileValidation);
+      } else if (command.replace_pressed) {
+        // so if replace was activated we need to
+        // we need to re-toggle the replace value
+        // cause we don't want to replace stuff again
+        // and we need to set the find value as the newly replaced value
+        // as thats what we'll want to show the user, what they actually replaced
+        command.replace_pressed = false;
+        command.find_value = command.replace_value;
         this.setState({ correctCommand: command }, this.fileValidation);
       } else {
         const results = JSON.parse(
@@ -134,21 +142,14 @@ class CorrectErrorsMediator extends React.Component {
           this.setState({ columnHeaders });
         }
 
-        // so if replace was activated we need to
-        // we need to re-toggle the replace value
-        // cause we don't want to replace stuff again
-        // and we need to set the find value as the newly replaced value
-        // as thats what we'll want to show the user, what they actually replaced
-        if (command.replace_pressed) {
-          command.replace_pressed = false;
-          command.find_value = command.replace_value;
-        }
         this.setState(
           {
             errorTableData,
             errorCells,
             correctCommand: command,
-            rowCount: results.total_amount
+            rowCount: results.total_amount,
+            errorsExists:
+              Object.keys(results.error_data.error_messages).length > 0
           },
           this.afterErrorTableUpdate
         );
@@ -164,7 +165,7 @@ class CorrectErrorsMediator extends React.Component {
     }
 
     if (!this.props.stepsDisabled)
-      this.props.saveStepData(this.state.errorCells, 4);
+      this.props.saveStepData(this.state.errorsExists, 4);
   }
 
   handleCellsErrorsError(error) {

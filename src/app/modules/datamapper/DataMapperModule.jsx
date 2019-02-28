@@ -55,7 +55,6 @@ class DataMapperModule extends React.Component {
 
     this.nextStep = this.nextStep.bind(this);
     this.prevStep = this.prevStep.bind(this);
-    this.saveStepData = this.saveStepData.bind(this);
     this.saveEnvironment = this.saveEnvironment.bind(this);
     this.nextDisabled = this.nextDisabled.bind(this);
   }
@@ -212,10 +211,6 @@ class DataMapperModule extends React.Component {
     });
   }
 
-  saveStepData(data, step) {
-    console.log('saving temporarily', step, data);
-  }
-
   saveEnvironment(environment) {
     this.setState({ environment });
   }
@@ -309,7 +304,7 @@ class DataMapperModule extends React.Component {
   }
 
   render() {
-    console.log('props step data', this.props.stepData);
+    // console.log('props step data', this.props.stepData);
 
     let moduleDisabled = false;
 

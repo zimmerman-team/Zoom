@@ -4,7 +4,7 @@ import theme from 'theme/Theme';
 
 export const ComponentBase = styled.div`
   width: 320px;
-  padding-top: 20px;
+  //padding-top: 20px;
 `;
 
 export const FilterTitle = styled.span`

@@ -25,6 +25,10 @@ const FocusModuleMediator = lazy(() =>
   import('mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator')
 );
 
+const VisualizerModuleMediator = lazy(() =>
+  import('mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator')
+);
+
 const IatiDetailMediator = lazy(() =>
   import('mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator')
 );
@@ -69,6 +73,16 @@ const Routes = props => {
             path="/focus"
             render={() => (
               <FocusModuleMediator
+                indicatorAggregations={props}
+                dropDownData={props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/visualizer"
+            render={() => (
+              <VisualizerModuleMediator
                 indicatorAggregations={props}
                 dropDownData={props}
               />

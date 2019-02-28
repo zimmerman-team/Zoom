@@ -64,7 +64,6 @@ class ToolPanel extends React.Component {
             root: classes.tabsRoot
           }}
         >
-          {/*<TabVariant icon={<IconFilter />} />*/}
           <Tab icon={<IconFilter />} />
           <Tab icon={<IconContext />} />
           <Tab icon={<IconPreview />} />
@@ -73,12 +72,12 @@ class ToolPanel extends React.Component {
           <Tab icon={<IconVisibility />} />
         </Tabs>
 
-        {value === 0 && <TabContainer>Item One</TabContainer>}
-        {value === 1 && <TabContainer>Item Two</TabContainer>}
-        {value === 2 && <TabContainer>Item Three</TabContainer>}
-        {value === 3 && <TabContainer>Item Four</TabContainer>}
-        {value === 4 && <TabContainer>Item Five</TabContainer>}
-        {value === 5 && <TabContainer>Item Six</TabContainer>}
+        {/*{value === 0 && <TabContainer>Item One</TabContainer>}*/}
+        {/*{value === 1 && <TabContainer>Item Two</TabContainer>}*/}
+        {/*{value === 2 && <TabContainer>Item Three</TabContainer>}*/}
+        {/*{value === 3 && <TabContainer>Item Four</TabContainer>}*/}
+        {/*{value === 4 && <TabContainer>Item Five</TabContainer>}*/}
+        {/*{value === 5 && <TabContainer>Item Six</TabContainer>}*/}
       </React.Fragment>
     );
   }

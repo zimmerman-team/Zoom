@@ -14,7 +14,7 @@ import * as actions from 'services/actions/general';
 import findIndex from 'lodash/findIndex';
 
 /* consts */
-import { step1InitialData } from '__consts__/MetaDataStepConsts';
+import { step1InitialData } from '__consts__/DataMapperStepConsts';
 
 const propTypes = {
   dropDownData: PropTypes.shape({
@@ -93,6 +93,8 @@ class MetaDataMediator extends React.Component {
 
     this.state = {
       data: props.stepData.metaData
+        ? props.stepData.metaData
+        : step1InitialData.metaData
     };
 
     this.simpleChange = this.simpleChange.bind(this);
@@ -107,10 +109,10 @@ class MetaDataMediator extends React.Component {
   componentDidMount() {
     if (!this.props.stepData.metaData) {
       // so we set the initial state of the step data
-      const data = { ...this.props.stepData };
-      data.metaData = step1InitialData;
-      data.environment = this.props.relay.environment;
-      this.props.dispatch(actions.saveStepDataRequest(data));
+      const stepData = { ...this.props.stepData };
+      stepData.metaData = step1InitialData.metaData;
+      stepData.environment = this.props.relay.environment;
+      this.props.dispatch(actions.saveStepDataRequest(stepData));
     }
 
     const fileSources = this.props.dropDownData.allFileSources.edges.map(
@@ -121,7 +123,12 @@ class MetaDataMediator extends React.Component {
     this.simpleChange(fileSources, 'fileSources');
   }
 
-  componentWillUnmount() {}
+  // and we save the first steps data in redux
+  componentWillUnmount() {
+    const stepData = { ...this.props.stepData };
+    stepData.metaData = this.state.data;
+    this.props.dispatch(actions.saveStepDataRequest(stepData));
+  }
 
   onChipAdd(value) {
     const { tags } = this.state.data;
@@ -137,14 +144,14 @@ class MetaDataMediator extends React.Component {
 
   simpleChange(value, question) {
     this.setState((prevState, props) => {
-      const { data } = prevState;
+      const data = { ...prevState.data };
       data[question] = value;
 
       // here we will only save data into props
       // if its about one of the required fields
-      if (prevState.requiredFields.indexOf(question) !== -1) {
+      if (data.requiredFields.indexOf(question) !== -1) {
         const stepData = { ...props.stepData };
-        stepData.metaData = this.state.data;
+        stepData.metaData = data;
         props.dispatch(actions.saveStepDataRequest(stepData));
       }
 
@@ -256,6 +263,7 @@ class MetaDataMediator extends React.Component {
   render() {
     return (
       <MetaData
+        metaDataEmptyFields={this.props.metaDataEmptyFields}
         data={this.state.data}
         simpleChange={this.simpleChange}
         checkBoxChange={this.checkBoxChange}

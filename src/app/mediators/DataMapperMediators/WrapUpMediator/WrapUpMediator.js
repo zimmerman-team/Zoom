@@ -12,7 +12,7 @@ import MappingMutation from 'mediators/DataMapperMediators/WrapUpMediator/mutati
 
 /* consts */
 import { uploadInitialstate } from '__consts__/UploadMediatorConst';
-import { step1InitialData } from '__consts__/MetaDataStepConsts';
+import { step1InitialData } from '__consts__/DataMapperStepConsts';
 
 /* utils */
 import { formatMapJson } from 'mediators/DataMapperMediators/WrapUpMediator/WrapUpMediator.util';

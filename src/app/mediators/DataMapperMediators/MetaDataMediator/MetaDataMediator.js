@@ -29,7 +29,7 @@ const propTypes = {
     })
   }),
   saveStepData: PropTypes.func,
-  data: PropTypes.shape({
+  stepData: PropTypes.shape({
     title: PropTypes.string,
     desc: PropTypes.string,
     tags: PropTypes.arrayOf(PropTypes.string),
@@ -83,7 +83,7 @@ const propTypes = {
 const defaultProps = {
   dropDownData: {},
   saveStepData: undefined,
-  data: step1InitialData,
+  stepData: step1InitialData,
   environment: null
 };
 
@@ -92,7 +92,7 @@ class MetaDataMediator extends React.Component {
     super(props);
 
     this.state = {
-      data: props.data
+      data: props.stepData.metaData
     };
 
     this.simpleChange = this.simpleChange.bind(this);
@@ -105,9 +105,9 @@ class MetaDataMediator extends React.Component {
   }
 
   componentDidMount() {
-    if (!this.props.data.metaData) {
+    if (!this.props.stepData.metaData) {
       // so we set the initial state of the step data
-      const data = { ...this.props.data };
+      const data = { ...this.props.stepData };
       data.metaData = step1InitialData;
       data.environment = this.props.relay.environment;
       this.props.dispatch(actions.saveStepDataRequest(data));
@@ -136,9 +136,18 @@ class MetaDataMediator extends React.Component {
   }
 
   simpleChange(value, question) {
-    this.setState(prevState => {
+    this.setState((prevState, props) => {
       const { data } = prevState;
       data[question] = value;
+
+      // here we will only save data into props
+      // if its about one of the required fields
+      if (prevState.requiredFields.indexOf(question) !== -1) {
+        const stepData = { ...props.stepData };
+        stepData.metaData = this.state.data;
+        props.dispatch(actions.saveStepDataRequest(stepData));
+      }
+
       return { data };
     });
   }
@@ -265,7 +274,7 @@ MetaDataMediator.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
-    data: state.stepData.stepzData
+    stepData: state.stepData.stepzData
   };
 };
 

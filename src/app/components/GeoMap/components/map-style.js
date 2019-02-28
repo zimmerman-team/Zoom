@@ -4,7 +4,7 @@ import MAP_STYLE from 'components/GeoMap/data/map-style-basic-v8.json';
 const mapStyle = {
   ...MAP_STYLE,
   sources: { ...MAP_STYLE.sources },
-  layers: MAP_STYLE.layers.slice(),
+  layers: MAP_STYLE.layers.slice()
 };
 
 export const colorStops = [[0, '#FFFFFF'], [8, '#0900FF']];
@@ -18,10 +18,10 @@ export const dataLayer = fromJS({
   paint: {
     'fill-color': {
       property: 'percentile',
-      stops: colorStops,
+      stops: colorStops
     },
-    'fill-opacity': 0.68,
-  },
+    'fill-opacity': 0.68
+  }
 });
 
 // This is used for borders
@@ -31,8 +31,8 @@ export const borderStyle = {
   type: 'line',
   paint: {
     'line-width': 1.5,
-    'line-color': '#0080ef',
-  },
+    'line-color': '#0080ef'
+  }
 };
 
 export const defaultMapStyle = mapStyle;

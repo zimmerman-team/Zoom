@@ -8,6 +8,7 @@ import TextField from '@material-ui/core/TextField';
 export default styled(props => (
   <NoSsr>
     <TextField
+      data-cy="geo-map-search"
       placeholder="Search"
       InputProps={{
         disableUnderline: true,

@@ -6,7 +6,7 @@ const data = {
     fields:
       'sectors,title,id,activity_dates,reporting_organisation,aggregations',
     ordering: 'activity_budget_value',
-    reporting_organisation_identifier: 'NL-KVK-41207989',
+    reporting_organisation_identifier: 'NL-KVK-41207989'
   },
   wikiParams: {
     origin: '*',
@@ -18,7 +18,7 @@ const data = {
     explaintext: 1,
     exsectionformat: 'raw',
     formatversion: 2,
-    titles: 'Kenya',
+    titles: 'Kenya'
   },
   countryCode: 'ke',
   // So currently these are the default indicators
@@ -26,7 +26,7 @@ const data = {
   barChartIndicators: [
     'people living with hiv',
     'new hiv infections',
-    'aids-related deaths',
+    'aids-related deaths'
   ],
   // So currently for aids epidemics data we will use
   // this array of indicators
@@ -35,8 +35,8 @@ const data = {
     'new hiv infections',
     'aids-related deaths',
     'children living with hiv',
-    'coverage of people receiving art',
-  ],
+    'coverage of people receiving art'
+  ]
 };
 
 export default data;

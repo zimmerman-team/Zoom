@@ -190,7 +190,9 @@ class GeoMap extends Component {
     const { viewport, mapStyle, markerArray, legends, fullScreen } = this.state;
     return (
       <Fullscreen enabled={fullScreen}>
-        <MapContainer>
+        <MapContainer
+          data-cy="geo-map-container"
+        >
           <ControlsContainer>
             <MapControls
               zoomIn={this.zoomIn}

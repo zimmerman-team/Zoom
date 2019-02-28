@@ -7,7 +7,7 @@ import BarChartHorizontal from 'components/charts/barcharts/horizontal/BarChartH
 import { SimpleText } from 'components/sort/Misc';
 import {
   PageIntroInitial,
-  PageIntroSecondary,
+  PageIntroSecondary
 } from 'components/sort/Paragraphs';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { CountryName } from 'modules/countrydetail/fragments/CountryInfo/CountryInfo.styles';

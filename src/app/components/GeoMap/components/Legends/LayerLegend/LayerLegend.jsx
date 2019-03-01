@@ -5,7 +5,7 @@ import {
   LegendItem,
   LegendLabel,
   LegendNumberContainer,
-  LegendNumber,
+  LegendNumber
 } from 'components/GeoMap/components/Legends/Legend.styles';
 import { ColorGradient } from 'components/GeoMap/components/Legends/LayerLegend/LayerLegend.styles';
 
@@ -23,7 +23,7 @@ const layerLegend = (legendName, index, min, max) => {
       <LegendItem key={`legend-${index}`} data-cy="legendLayer-label">
         <LegendLabel>{legendName}</LegendLabel>
         <ColorGradient />
-        <LegendNumberContainer >
+        <LegendNumberContainer>
           <LegendNumber>{formatNumber(min)}</LegendNumber>
           <LegendNumber>{formatNumber(firstThird)}</LegendNumber>
           <LegendNumber>{formatNumber(secondThird)}</LegendNumber>

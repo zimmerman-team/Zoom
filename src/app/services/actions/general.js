@@ -14,3 +14,20 @@ export function dataPaneToggleDone(open) {
     open
   };
 }
+
+export const SAVE_STEP_DATA_REQUEST = 'SAVE_STEP_DATA_REQUEST';
+export const SAVE_STEP_DATA_DONE = 'SAVE_STEP_DATA_DONE';
+
+export function saveStepDataRequest(data) {
+  return {
+    type: SAVE_STEP_DATA_REQUEST,
+    data
+  };
+}
+
+export function saveStepDataDone(data) {
+  return {
+    type: SAVE_STEP_DATA_DONE,
+    data
+  };
+}

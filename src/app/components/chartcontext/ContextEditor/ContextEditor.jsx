@@ -14,10 +14,10 @@ import ContextHeader from 'components/chartcontext/common/ContextHeader';
 const ComponentBase = styled.div`
   width: 1024px;
   height: 798px;
-  //outline: 1px solid red;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: white;
 `;
 
 /*todo: create re-usable Box component*/

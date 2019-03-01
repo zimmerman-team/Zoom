@@ -12,6 +12,7 @@ import IconPreview from 'assets/icons/toolpanel/IconPreview';
 import IconDownload from 'assets/icons/toolpanel/IconDownload';
 import IconDuplicate from 'assets/icons/toolpanel/IconDuplicate';
 import IconVisibility from 'assets/icons/toolpanel/IconVisibility';
+import ContextEditor from 'components/chartcontext/ContextEditor/ContextEditor';
 
 const Path = '/visualizer/:code/';
 
@@ -26,7 +27,7 @@ export const data = {
     {
       label: 'context',
       path: Path + 'context',
-      component: ContextTab,
+      component: ContextEditor,
       icon: <IconContext />
     },
     {

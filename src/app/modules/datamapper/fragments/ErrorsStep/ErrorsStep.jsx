@@ -9,6 +9,7 @@ import Pagination from 'components/Pagination/Pagination';
 import ZoomButton from 'components/ZoomButton/ZoomButton';
 import SimpleEditDialog from 'components/Dialog/SimpleEditDialog/SimpleEditDialog';
 import Divider from 'components/Dividers/Divider';
+import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
 /* utils */
 import { formatColumns } from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep.util';
@@ -226,7 +227,12 @@ class ErrorStep extends React.Component {
 
   render() {
     return (
-      <ModuleContainer>
+      <ModuleContainer
+        style={
+          this.props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}
+        }
+      >
+        {this.props.loading && <ProgressIcon />}
         <SimpleEditDialog
           open={this.state.cellDialogOpen}
           handleClose={() => this.setState({ cellDialogOpen: false })}

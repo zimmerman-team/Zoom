@@ -46,6 +46,7 @@ class CorrectErrorsMediator extends React.Component {
       checkedRows: false,
       rowsDeleted: false,
       errorsExists: false,
+      loading: false,
       rowCount: 100
     };
 
@@ -149,6 +150,7 @@ class CorrectErrorsMediator extends React.Component {
             errorCells,
             correctCommand: command,
             rowCount: results.total_amount,
+            loading: false,
             errorsExists:
               Object.keys(results.error_data.error_messages).length > 0
           },
@@ -198,7 +200,7 @@ class CorrectErrorsMediator extends React.Component {
       command: JSON.stringify(JSON.stringify(command))
     };
 
-    this.setState({ correctCommand: command }, () =>
+    this.setState({ correctCommand: command, loading: true }, () =>
       FileErrorResultMutation.commit(
         this.props.relay.environment,
         input,
@@ -332,6 +334,7 @@ class CorrectErrorsMediator extends React.Component {
   render() {
     return (
       <ErrorStep
+        loading={this.state.loading}
         updateCell={this.updateCell}
         checkedRows={this.state.checkedRows}
         deleteRows={this.deleteRows}

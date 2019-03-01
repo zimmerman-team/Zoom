@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import ErrorStep from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep';
+import connect from 'react-redux/es/connect/connect';
 
 /* mutations */
 import FileErrorResultMutation from 'mediators/DataMapperMediators/CorrectErrorsMediator/mutations/FileErrorResultMutation';
@@ -14,21 +15,21 @@ import FileValidationMutation from 'mediators/DataMapperMediators/mutations/File
 import get from 'lodash/get';
 import findIndex from 'lodash/findIndex';
 import { formatErrorCells } from './CorrectErrorsMediator.util';
+import * as actions from 'services/actions';
+import * as generalActions from 'services/actions/general';
 
 const propTypes = {
   fileId: PropTypes.string,
   relay: PropTypes.shape({}),
   fileCorrection: PropTypes.shape({}),
-  stepsDisabled: PropTypes.bool,
-  saveStepData: PropTypes.func
+  stepsDisabled: PropTypes.bool
 };
 
 const defaultProps = {
   stepsDisabled: false,
   fileId: '-1',
   relay: {},
-  fileCorrection: {},
-  saveStepData: undefined
+  fileCorrection: {}
 };
 
 class CorrectErrorsMediator extends React.Component {
@@ -164,8 +165,12 @@ class CorrectErrorsMediator extends React.Component {
       this.setState({ rowsDeleted: false });
     }
 
-    if (!this.props.stepsDisabled)
-      this.props.saveStepData(this.state.errorsExists, 4);
+    // we save the shared data
+    if (!this.props.stepsDisabled) {
+      const stepData = { ...this.props.stepData };
+      stepData.errorData = this.state.errorsExists;
+      this.props.dispatch(generalActions.saveStepDataRequest(stepData));
+    }
   }
 
   handleCellsErrorsError(error) {
@@ -347,8 +352,15 @@ class CorrectErrorsMediator extends React.Component {
 CorrectErrorsMediator.propTypes = propTypes;
 CorrectErrorsMediator.defaultProps = defaultProps;
 
+const mapStateToProps = state => {
+  return {
+    fileId: state.stepData.stepzData.uploadData.fileId,
+    stepData: state.stepData.stepzData
+  };
+};
+
 export default createRefetchContainer(
-  CorrectErrorsMediator,
+  connect(mapStateToProps)(CorrectErrorsMediator),
   graphql`
     fragment CorrectErrorsMediator_fileCorrection on Query
       @argumentDefinitions(entryId: { type: "Float", defaultValue: -1 }) {

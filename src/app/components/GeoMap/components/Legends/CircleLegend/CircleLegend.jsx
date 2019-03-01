@@ -23,7 +23,9 @@ const circleLegend = (legendName, index, min, max) => {
   return (
     legendName && (
       <LegendItem key={`legend-${index}`}>
-        <CircleLegendLabel>{legendName}</CircleLegendLabel>
+        <CircleLegendLabel data-cy="legendCircle-label">
+          {legendName}
+        </CircleLegendLabel>
         <CircleLegendItem>
           <CircleNumber>
             <CircleMarkerIcon

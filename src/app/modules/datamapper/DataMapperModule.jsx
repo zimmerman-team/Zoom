@@ -39,7 +39,6 @@ class DataMapperModule extends React.Component {
 
     this.state = {
       step: 1,
-      environment: null,
       // these are the required fields that the users
       // needs to have in their data model and map it
       // if they don't select or dont have these fields
@@ -56,7 +55,6 @@ class DataMapperModule extends React.Component {
 
     this.nextStep = this.nextStep.bind(this);
     this.prevStep = this.prevStep.bind(this);
-    this.saveEnvironment = this.saveEnvironment.bind(this);
     this.nextDisabled = this.nextDisabled.bind(this);
   }
 
@@ -88,11 +86,7 @@ class DataMapperModule extends React.Component {
       // are the error that we retrieve for this step
       // and the user should be able to progress only if they've fixed
       // all the found errors
-      return (
-        !this.state.stepsDisabled &&
-        (!this.props.stepData.errorData ||
-          this.props.stepData.errorData.length > 0)
-      );
+      return !this.state.stepsDisabled && this.props.stepData.errorData;
 
     return false;
   }
@@ -152,10 +146,7 @@ class DataMapperModule extends React.Component {
         // are the error that we retrieve for this step
         // and the user should be able to progress only if they've fixed
         // all the found errors
-        if (
-          !prevState.stepsDisabled &&
-          (!stepData.errorData || stepData.errorData.length > 0)
-        ) {
+        if (!this.state.stepsDisabled && stepData.errorData) {
           ToastsStore.error(
             <SimpleErrorText>
               {' '}
@@ -210,10 +201,6 @@ class DataMapperModule extends React.Component {
     this.setState(prevState => {
       return { step: prevState.step - 1 };
     });
-  }
-
-  saveEnvironment(environment) {
-    this.setState({ environment });
   }
 
   renderStep() {

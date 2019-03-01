@@ -6,7 +6,8 @@ import {
   formatCountryLayerData,
   formatCountryParam,
   formatYearParam,
-  updatePercentiles
+  updatePercentiles,
+  formatLongLatData
 } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
 import HomeModule from 'modules/home/HomeModule';
 import PropTypes from 'prop-types';
@@ -136,18 +137,55 @@ class HomeModuleMediator extends Component {
       }
     );
 
-    const countryLayerData = formatCountryLayerData(
-      this.props.indicatorAggregations.indicators1
-    );
-    const countryCircleData = formatCountryCenterData(
-      this.props.indicatorAggregations.indicators2
-    );
+    let longLatData = [];
+    let countryLayerData = {};
 
-    updatePercentiles(countryLayerData, f => f.properties.value);
+    // so we check here if the retrieved data is long lat
+    // and then format it differently
+    // TODO: make this work differently, this is currently i quick and dirty fix
+    if (
+      this.props.indicatorAggregations.indicators1[0] &&
+      this.props.indicatorAggregations.indicators1[0].geolocationTag &&
+      this.props.indicatorAggregations.indicators1[0].geolocationTag.indexOf(
+        ','
+      ) !== -1 &&
+      /\d/.test(this.props.indicatorAggregations.indicators1[0].geolocationTag)
+    ) {
+      longLatData = formatLongLatData(
+        this.props.indicatorAggregations.indicators1
+      );
+    } else {
+      countryLayerData = formatCountryLayerData(
+        this.props.indicatorAggregations.indicators1
+      );
+    }
+
+    let countryCircleData = [];
+    // so we check here if the retrieved data is long lat
+    // and then format it differently
+    // TODO: make this work differently, this is currently i quick and dirty fix
+    if (
+      this.props.indicatorAggregations.indicators2[0] &&
+      this.props.indicatorAggregations.indicators2[0].geolocationTag &&
+      this.props.indicatorAggregations.indicators2[0].geolocationTag.indexOf(
+        ','
+      ) !== -1 &&
+      /\d/.test(this.props.indicatorAggregations.indicators2[0].geolocationTag)
+    ) {
+      longLatData = formatLongLatData(
+        this.props.indicatorAggregations.indicators2
+      );
+    } else {
+      countryCircleData = formatCountryCenterData(
+        this.props.indicatorAggregations.indicators2
+      );
+    }
 
     const indicators = [];
 
-    if (countryLayerData.features.length > 0) {
+    if (countryLayerData.features && countryLayerData.features.length > 0) {
+      updatePercentiles(countryLayerData, f => f.properties.value);
+
       indicators.push({
         type: 'layer',
         data: countryLayerData,
@@ -160,6 +198,14 @@ class HomeModuleMediator extends Component {
         type: 'circle',
         data: countryCircleData,
         legendName: ` ${this.state.selectedInd2} `
+      });
+    }
+
+    if (longLatData.length > 0) {
+      indicators.push({
+        type: 'location',
+        data: longLatData,
+        legendName: `POI`
       });
     }
 
@@ -333,6 +379,7 @@ class HomeModuleMediator extends Component {
   }
 
   render() {
+    console.log(this.state.indicators);
     return (
       <HomeModule
         indicators={this.state.indicators}

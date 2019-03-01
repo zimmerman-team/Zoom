@@ -198,6 +198,7 @@ export class GeoMap extends Component {
   };
 
   _handleMapLoaded = event => {
+    console.log(this.props);
     if (this.props.location.pathname === '/focus') {
       this.setState({
         settings: {

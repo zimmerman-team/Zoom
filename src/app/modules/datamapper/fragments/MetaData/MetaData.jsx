@@ -156,6 +156,7 @@ class MetaData extends React.Component {
         <FieldContainer>
           <TextField
             error={this.validateField('title')}
+            defaultValue={this.props.data.title}
             placeholder={undefined}
             label="Title data set*"
             InputLabelProps={{
@@ -169,6 +170,7 @@ class MetaData extends React.Component {
         <FieldContainer>
           <TextField
             multiline
+            defaultValue={this.props.data.desc}
             error={this.validateField('desc')}
             placeholder={undefined}
             label="Description*"
@@ -183,6 +185,7 @@ class MetaData extends React.Component {
         <FieldContainer>
           <ChipInput
             placeholder={undefined}
+            value={this.props.data.tags}
             label="Tags"
             InputLabelProps={{
               shrink: true
@@ -221,6 +224,7 @@ class MetaData extends React.Component {
             <TextField
               error={this.validateField('dataSource')}
               placeholder={undefined}
+              defaultValue={this.props.data.sourceText}
               label="Create new name for  data source"
               InputLabelProps={{
                 shrink: true
@@ -347,6 +351,7 @@ class MetaData extends React.Component {
           <TextField
             placeholder={undefined}
             label="If other, explain"
+            defaultValue={this.props.data.q3Text}
             InputLabelProps={{
               shrink: true
             }}
@@ -383,6 +388,7 @@ class MetaData extends React.Component {
               InputLabelProps={{
                 shrink: true
               }}
+              defaultValue={this.props.data.q4Text}
               onChange={e =>
                 this.props.otherDropdownText(
                   e.target.value,
@@ -423,6 +429,7 @@ class MetaData extends React.Component {
           <TextField
             placeholder={undefined}
             label="If other, explain"
+            defaultValue={this.props.data.q51Text}
             InputLabelProps={{
               shrink: true
             }}

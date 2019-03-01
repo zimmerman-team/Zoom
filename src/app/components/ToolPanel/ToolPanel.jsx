@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
+import styled from 'styled-components';
 import Paper from './common/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Tabs from './common/Tabs';
@@ -37,6 +38,10 @@ const styles = theme => ({
   }
 });
 
+const ComponentBase = styled.div`
+  align-self: flex-end;
+`;
+
 function TabContainer(props) {
   return <div>{props.children}</div>;
 }
@@ -59,23 +64,21 @@ class ToolPanel extends React.Component {
     const { classes } = this.props;
     const { value } = this.state;
     return (
-      <React.Fragment>
-        <Tabs
-          value={this.state.value}
-          onChange={this.handleChange}
-          classes={{
-            root: classes.tabsRoot
-          }}
-        >
-          {this.props.items.map(item => (
-            <Tab
-              key={shortid.generate()}
-              to={formPath(this.props.code, item.path)}
-              icon={item.icon}
-            />
-          ))}
-        </Tabs>
-      </React.Fragment>
+      <Tabs
+        value={this.state.value}
+        onChange={this.handleChange}
+        classes={{
+          root: classes.tabsRoot
+        }}
+      >
+        {this.props.items.map(item => (
+          <Tab
+            key={shortid.generate()}
+            to={formPath(this.props.code, item.path)}
+            icon={item.icon}
+          />
+        ))}
+      </Tabs>
     );
   }
 }

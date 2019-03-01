@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
 /* components */
 import GeoMap from 'components/GeoMap/GeoMap';
 import { ControlPanelContainer } from 'modules/visualizer/VisualizerModule.styles';
 import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
-import VizSidebar from 'modules/visualizer/sort/VizSidebar';
-import VizContainer from 'modules/visualizer/sort/VizContainer';
+import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';
+import VizContainer from 'modules/visualizer/sort/container/VizContainer';
 // import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
 const ModuleBase = styled.div`
@@ -19,14 +20,12 @@ const ModuleBase = styled.div`
 `;
 
 const propTypes = {
-  indicators: PropTypes.arrayOf(PropTypes.shape),
+  // indicators: PropTypes.arrayOf(PropTypes.shape),
   sideBarOpen: PropTypes.bool,
   moduleMode: PropTypes.string
 };
 
-const defaultProps = {
-  indicators: []
-};
+const defaultProps = {};
 
 class BuilderModule extends Component {
   constructor(props) {
@@ -50,14 +49,13 @@ class BuilderModule extends Component {
   };
 
   render() {
-    const { indicators, ...otherProps } = this.props;
-
-    console.log('vizprops', this.props);
     return (
-      <ModuleBase>
-        <VizContainer />
-        <VizSidebar {...otherProps} />
-      </ModuleBase>
+      <Router>
+        <ModuleBase>
+          <VizSidebar />
+          <VizContainer />
+        </ModuleBase>
+      </Router>
     );
   }
 }

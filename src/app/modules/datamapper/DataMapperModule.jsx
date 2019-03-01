@@ -78,8 +78,8 @@ class DataMapperModule extends React.Component {
 
     if (this.state.step === 2)
       return (
-        !this.props.stepData.uploadData ||
-        this.props.stepData.uploadData.manMapData.length === 0
+        !this.props.stepData.manMapData ||
+        this.props.stepData.manMapData.length === 0
       );
 
     if (this.state.step === 4)
@@ -130,16 +130,20 @@ class DataMapperModule extends React.Component {
           );
           props.dispatch(actions.saveStepDataRequest(stepData));
           return { metaDataEmptyFields };
+        } else {
+          return { metaDataEmptyFields, step: prevState.step + 1 };
         }
       } else if (prevState.step === 2) {
         if (!stepData.uploadData) {
           ToastsStore.error(
             <SimpleErrorText> Please upload a file </SimpleErrorText>
           );
-        } else if (stepData.uploadData.manMapData.length === 0) {
+        } else if (!stepData.manMapData || stepData.manMapData.length === 0) {
           ToastsStore.error(
             <SimpleErrorText> File Uploading please wait... </SimpleErrorText>
           );
+        } else {
+          return { step: prevState.step + 1 };
         }
       } else if (prevState.step === 4) {
         // So here we check if the fourth steps data has been saved
@@ -162,9 +166,7 @@ class DataMapperModule extends React.Component {
       }
       // restriction for the manual mapping step
       else if (prevState.step === 5) {
-        const manMapData = stepData[4]
-          ? stepData[4]
-          : stepData.uploadData.manMapData;
+        const { manMapData } = stepData;
 
         const emptyFields = checkEmptyFields(
           manMapData,
@@ -224,11 +226,7 @@ class DataMapperModule extends React.Component {
       case 2:
         return this.props.stepData.metaData && <UploadMediator />;
       case 3:
-        return (
-          this.state.stepData.uploadData && (
-            <OverviewStep data={this.state.stepData.uploadData.overviewData} />
-          )
-        );
+        return this.props.stepData.overviewData && <OverviewStep />;
       case 4:
         return (
           this.state.stepData.uploadData && (
@@ -242,7 +240,7 @@ class DataMapperModule extends React.Component {
         );
       case 5:
         return (
-          this.state.stepData.uploadData && (
+          this.state.stepData.manMapData && (
             <ManMappingStep
               saveStepData={this.saveStepData}
               modelOptions={this.state.stepData.uploadData.modelOptions}
@@ -287,8 +285,6 @@ class DataMapperModule extends React.Component {
   }
 
   render() {
-    // console.log('props step data', this.props.stepData);
-
     let moduleDisabled = false;
 
     if (this.state.step === 5 && this.state.mapStepDisabled) {

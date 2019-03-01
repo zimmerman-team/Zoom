@@ -78,7 +78,7 @@ const propTypes = {
 const defaultProps = {
   environment: {},
   dataSource: step1InitialData.metaData.dataSource,
-  stepData: uploadInitialstate
+  stepData: step1InitialData
 };
 
 // Note: even though survey data is is part of the files metada
@@ -94,7 +94,9 @@ class UploadMediator extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = props.stepData.uploadData;
+    this.state = props.stepData.uploadData
+      ? props.stepData.uploadData
+      : step1InitialData.uploadData;
 
     this.handleFileUpload = this.handleFileUpload.bind(this);
     this.handleSourceCompleted = this.handleSourceCompleted.bind(this);
@@ -116,6 +118,12 @@ class UploadMediator extends React.Component {
     ) {
       this.setState({ url: this.props.upload.data.url }, this.afterFileInput);
     }
+  }
+
+  componentWillUnmount() {
+    const stepData = { ...this.props.stepData };
+    stepData.uploadData = this.state;
+    this.props.dispatch(generalActions.saveStepDataRequest(stepData));
   }
 
   handleSourceCompleted(response) {
@@ -170,19 +178,6 @@ class UploadMediator extends React.Component {
       ? /[^.]+$/.exec(this.state.file.name)
       : [''];
 
-    // TODO: this commented out logic below will be added in the last step
-    // along with every other metadata field
-    // This is shared data set 'p' for private, 'o' for public
-    // const accessibility =
-    //   typeof prevStepData.shared === 'string' && prevStepData.shared === 'Yes'
-    //     ? 'o'
-    //     : 'p';
-    //
-    //
-    // const tags = prevStepData.tags.map(tag => {
-    //   return { name: tag };
-    // });
-
     // and here we just use some random data, just to be able to upload the file
     const variables = {
       title: 'ZZTemporary',
@@ -224,12 +219,6 @@ class UploadMediator extends React.Component {
     );
   }
 
-  saveData(key, data) {
-    const stepData = { ...this.props.stepData };
-    stepData[key] = data;
-    this.props.dispatch(generalActions.saveStepDataRequest(stepData));
-  }
-
   // NOTE: So this whole file validation logic which retrieves
   // data for the overview step needs to be here, cause it should change whenever a new file is uploaded
   // same will be with other steps that are dependant on the file
@@ -244,8 +233,10 @@ class UploadMediator extends React.Component {
         response.fileValidationResults.foundList
       );
 
-      this.saveData('overviewData', overviewData);
-      this.saveData('manMapData', manMapData);
+      const stepData = { ...this.props.stepData };
+      stepData.overviewData = overviewData;
+      stepData.manMapData = manMapData;
+      this.props.dispatch(generalActions.saveStepDataRequest(stepData));
     }
   }
 
@@ -268,15 +259,25 @@ class UploadMediator extends React.Component {
     // otherwise we always use an existing file source from the first filesource list
     // to just be able to upload the file for following steps
     // more explenation about this step is above the class name
-    // TODO: add the actual source in the final step
     if (this.props.stepData.metaData.fileSources.length <= 0)
       this.addDataSource(this.props.stepData.metaData.dataSource.value);
     // otherwise we just add the file to the first source
-    else
+    else {
       this.setState(
         { sourceId: this.props.stepData.metaData.fileSources[0].value },
         this.addMetaData
       );
+    }
+  }
+
+  // this is a workaround for the prop dispatches to work,
+  // cause if you try doing it before setState, setState does not initiate...
+  // dont know why...
+  afterFileUpload() {
+    const stepData = { ...this.props.stepData };
+    stepData.manMapData = [];
+    stepData.uploadData = this.state;
+    this.props.dispatch(generalActions.saveStepDataRequest(stepData));
   }
 
   handleFileUpload(e) {
@@ -298,7 +299,7 @@ class UploadMediator extends React.Component {
       this.props.dispatch(actions.uploadRequest(values));
       // we also reset the manMapData when a new file is uploaded
       // so that the loading icon would initiate
-      this.setState({ file }, () => this.saveData('manMapData', []));
+      this.setState({ file }, this.afterFileUpload);
     } else {
       ToastsStore.error(
         <SimpleErrorText>
@@ -311,7 +312,11 @@ class UploadMediator extends React.Component {
   render() {
     return (
       <UploadStep
-        loading={this.state.file.name && this.stepData.manMapData.length === 0}
+        loading={
+          this.state.file.name &&
+          (!this.props.stepData.manMapData ||
+            this.props.stepData.manMapData.length === 0)
+        }
         error={this.state.url === undefined}
         file={this.state.file}
         handleFileUpload={this.handleFileUpload}

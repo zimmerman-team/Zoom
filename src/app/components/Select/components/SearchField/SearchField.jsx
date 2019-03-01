@@ -10,7 +10,7 @@ export default styled(props => (
     <TextField
       placeholder="Search"
       InputProps={{
-        disableUnderline: true,
+        disableUnderline: true
       }}
       {...props}
     />

@@ -8,7 +8,7 @@ import {
   CircleNumber,
   CircleLegendLabel,
   CircleLegendItem,
-  CircleLegendNum,
+  CircleLegendNum
 } from 'components/GeoMap/components/Legends/CircleLegend/CircleLegend.styles';
 
 /* utils */
@@ -23,7 +23,9 @@ const circleLegend = (legendName, index, min, max) => {
   return (
     legendName && (
       <LegendItem key={`legend-${index}`}>
-        <CircleLegendLabel data-cy="legendCircle-label">{legendName}</CircleLegendLabel>
+        <CircleLegendLabel data-cy="legendCircle-label">
+          {legendName}
+        </CircleLegendLabel>
         <CircleLegendItem>
           <CircleNumber>
             <CircleMarkerIcon

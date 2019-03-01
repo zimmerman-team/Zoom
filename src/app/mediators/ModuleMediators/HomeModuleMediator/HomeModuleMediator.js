@@ -379,6 +379,7 @@ class HomeModuleMediator extends Component {
   }
 
   render() {
+    console.log(this.state.indicators);
     return (
       <HomeModule
         indicators={this.state.indicators}

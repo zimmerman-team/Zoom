@@ -11,7 +11,7 @@ export default styled(props => (
       data-cy="geo-map-search"
       placeholder="Search"
       InputProps={{
-        disableUnderline: true,
+        disableUnderline: true
       }}
       {...props}
     />

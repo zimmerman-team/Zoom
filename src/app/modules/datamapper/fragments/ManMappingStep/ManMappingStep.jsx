@@ -1,5 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import connect from 'react-redux/es/connect/connect';
+
+/* actions */
+import * as generalActions from 'services/actions/general';
 
 /* mock */
 import { uploadInitialstate } from '__consts__/UploadMediatorConst';
@@ -61,10 +65,6 @@ class ManMappingStep extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      disabledValues: []
-    };
-
     this.columns = [
       {
         property: 'fileType',
@@ -85,7 +85,7 @@ class ManMappingStep extends React.Component {
               <CellValue>{val.zoomModel}</CellValue>
             ) : (
               <ZoomSelect
-                disabledValues={this.state.disabledValues}
+                disabledValues={this.props.disabledValues}
                 disabled={val.emptyFieldRow}
                 search={false}
                 headerStyle={{ fontSize: 12, height: 'unset' }}
@@ -133,6 +133,7 @@ class ManMappingStep extends React.Component {
     this.changeDisabledVal = this.changeDisabledVal.bind(this);
     this.selectDataType = this.selectDataType.bind(this);
     this.generatePlaceholder = this.generatePlaceholder.bind(this);
+    this.saveData = this.saveData.bind(this);
   }
 
   componentDidMount() {
@@ -147,21 +148,22 @@ class ManMappingStep extends React.Component {
   }
 
   changeDisabledVal(value, prevVal) {
-    this.setState(prevState => {
-      const { disabledValues } = prevState;
-      const prevIndex = disabledValues.indexOf(prevVal);
+    const disabledValues = this.props.disabledValues
+      ? this.props.disabledValues
+      : [];
 
-      // so if a previous value is changed
-      // we remove the previous value and add the new one
-      if (prevIndex !== -1) {
-        disabledValues.splice(prevIndex, 1);
-      }
+    const prevIndex = disabledValues.indexOf(prevVal);
 
-      if (value !== 'filters' && value !== '-None-')
-        // and we push in the new value either way
-        disabledValues.push(value);
-      return { disabledValues };
-    });
+    // so if a previous value is changed
+    // we remove the previous value and add the new one
+    if (prevIndex !== -1) {
+      disabledValues.splice(prevIndex, 1);
+    }
+
+    if (value !== 'filters' && value !== '-None-')
+      // and we push in the new value either way
+      disabledValues.push(value);
+    return disabledValues;
   }
 
   generatePlaceholder(row) {
@@ -229,24 +231,36 @@ class ManMappingStep extends React.Component {
 
     // so we want some values to only be selected once
     // thust we will generate an array of disabled values using this
-    this.changeDisabledVal(zoomModel, prevModel);
+    const disabledValues = this.changeDisabledVal(zoomModel, prevModel);
 
     data[itemIndex].zoomModel = zoomModel;
-    this.props.saveStepData(data, 5);
+
+    // and we save the shared manMapData
+    const stepData = { ...this.props.stepData };
+    stepData.manMapData = data;
+    stepData.manMapDisabled = disabledValues;
+    this.props.dispatch(generalActions.saveStepDataRequest(stepData));
   }
 
   changeLabel(label, fileType) {
     const { data } = this.props;
     const itemIndex = findIndex(data, ['fileType', fileType]);
     data[itemIndex].label = label;
-    this.props.saveStepData(data, 5);
+    this.saveData(data);
   }
 
   lockInOut(fileType) {
     const { data } = this.props;
     const itemIndex = findIndex(data, ['fileType', fileType]);
     data[itemIndex].lockedIn = !data[itemIndex].lockedIn;
-    this.props.saveStepData(data, 5);
+    this.saveData(data);
+  }
+
+  saveData(data) {
+    // and we save the shared manMapData
+    const stepData = { ...this.props.stepData };
+    stepData.manMapData = data;
+    this.props.dispatch(generalActions.saveStepDataRequest(stepData));
   }
 
   render() {
@@ -277,4 +291,13 @@ class ManMappingStep extends React.Component {
 ManMappingStep.propTypes = propTypes;
 ManMappingStep.defaultProps = defaultProps;
 
-export default ManMappingStep;
+const mapStateToProps = state => {
+  return {
+    modelOptions: state.stepData.stepzData.uploadData.modelOptions,
+    data: state.stepData.stepzData.manMapData,
+    disabledValues: state.stepData.stepzData.manMapDisabled,
+    stepData: state.stepData.stepzData
+  };
+};
+
+export default connect(mapStateToProps)(ManMappingStep);

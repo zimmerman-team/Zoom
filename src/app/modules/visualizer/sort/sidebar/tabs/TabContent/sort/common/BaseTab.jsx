@@ -11,8 +11,8 @@ import theme from 'theme/Theme';
 
 const ComponentBase = styled.div`
   width: 320px;
-  height: 500px;
-  background-color: transparent;
+  height: calc(100vh - 40px);
+  background-color: white;
 `;
 
 const propTypes = {};

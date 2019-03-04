@@ -44,9 +44,9 @@ export const CountyInfo = styled.div`
 `;
 
 export const ControlsContainer = styled.div`
-  position: fixed;
-  top: 54px;
-  right: 26px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
   background-color: rgba(239, 239, 239, 0.72);
   z-index: 1;
 `;

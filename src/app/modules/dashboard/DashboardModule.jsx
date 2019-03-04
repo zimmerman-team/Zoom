@@ -10,7 +10,9 @@ import {
   HeaderGreeting,
   SearchBox,
   ViewContainer,
-  NoItems
+  NoItems,
+  Header,
+  Section
 } from 'modules/dashboard/DashboardModule.styles';
 import SvgIconUser from 'assets/icons/IconUser';
 import SvgIconSearch from 'assets/icons/IconSearch';
@@ -113,45 +115,55 @@ const DashboardModule = ({
   changeSearchKeyword
 }) => (
   <ModuleContainer>
-    {/*todo: evaluate the dom structure of this component*/}
-    {/*fixme: make re-usable header component and relocate fontsize to theme file*/}
-    <PageHeading>Zoom dashboard</PageHeading>
-    {/*todo: is this optimal? maybe make a re-usable component for this*/}
-    <HeaderIcon>
-      <SvgIconUser />
-    </HeaderIcon>
-    <HeaderGreeting>Welcome back {greetingName}</HeaderGreeting>
+    <Header>
+      {/* fixme: make re-usable header component and relocate fontsize to theme file */}
+      <PageHeading>Zoom dashboard</PageHeading>
+      {/* todo: is this optimal? maybe make a re-usable component for this */}
+      <HeaderIcon>
+        <SvgIconUser />
+      </HeaderIcon>
+      <HeaderGreeting>Welcome back {greetingName}</HeaderGreeting>
+    </Header>
 
-    {/*fixme: make re-usable component and use material-ui instead of grommet*/}
-    <SearchBox onChange={changeSearchKeyword} placeholder={<SvgIconSearch />} />
+    <Section>
+      {/* fixme: make re-usable component and use material-ui instead of grommet */}
+      <SearchBox
+        onChange={changeSearchKeyword}
+        placeholder={<SvgIconSearch />}
+      />
+    </Section>
 
-    <TabContainer
-      tabs={tabs}
-      tabCounts={{
-        charts: 0,
-        'data-sets': 0,
-        'focus-pages': 0,
-        users: users.length,
-        teams: teams.length,
-        trash: 0
-      }}
-      activeTab={activeTab}
-    />
+    <Section>
+      <TabContainer
+        tabs={tabs}
+        tabCounts={{
+          charts: 0,
+          'data-sets': 0,
+          'focus-pages': 0,
+          users: users.length,
+          teams: teams.length,
+          trash: 0
+        }}
+        activeTab={activeTab}
+      />
+    </Section>
 
-    <ViewContainer>
-      {/*todo: evaluate if we can handle this in a simpler way by using react router*/}
-      {getTabView(
-        users,
-        teams,
-        tabs,
-        activeTab,
-        isSortByOpen,
-        setIsSortByOpen,
-        setWrapperRef,
-        sort,
-        changeSortBy
-      )}
-    </ViewContainer>
+    <Section>
+      <ViewContainer>
+        {/* todo: evaluate if we can handle this in a simpler way by using react router */}
+        {getTabView(
+          users,
+          teams,
+          tabs,
+          activeTab,
+          isSortByOpen,
+          setIsSortByOpen,
+          setWrapperRef,
+          sort,
+          changeSortBy
+        )}
+      </ViewContainer>
+    </Section>
   </ModuleContainer>
 );
 

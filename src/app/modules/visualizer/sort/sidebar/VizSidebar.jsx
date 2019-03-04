@@ -29,33 +29,6 @@ const ComponentBase = styled.div`
   height: calc(100vh - 40px);
 `;
 
-const SidebarNavigator = styled.div`
-  //width: 320px;
-  //height: 50px;
-  //background-color: #a1a1a1;
-  align-self: flex-end;
-`;
-const SidebarContent = styled.div`
-  display: flex;
-  background-color: ${theme.color.aidsFondsWhite};
-`;
-
-const renderMergedProps = (component, ...rest) => {
-  const finalProps = Object.assign({}, ...rest);
-  return React.createElement(component, finalProps);
-};
-
-const PropsRoute = ({ component, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={routeProps => {
-        return renderMergedProps(component, routeProps, rest);
-      }}
-    />
-  );
-};
-
 const code = 'vizID';
 
 const propTypes = {
@@ -68,35 +41,18 @@ const defaultProps = {
 };
 
 const VizSidebar = props => {
-  // console.log('sidebar', props);
-  // const { ...otherProps } = props;
-
   return (
-    //<Router>
     <ComponentBase>
-      {/*<SidebarNavigator>
-       <ToolPanel />
-      </SidebarNavigator>
-
+      {/*
       <SidebarContent>
         <ContextEditor />
         <ExplorePanelMediator {...otherProps} />
       </SidebarContent>*/}
-      <ToolPanel code={code} items={props.data} />
-      {/*<TabNavigator code={code} navItems={props.data} />*/}
-      <TabContent>
-        {props.data.map(section => (
-          <PropsRoute
-            key={shortid.generate()}
-            path={formPath(code, section.path)}
-            component={section.component}
-            // history={this.props.history}
-            code={code}
-          />
-        ))}
-      </TabContent>
+      {/*<ToolPanel code={code} items={props.data} />*/}
+
+      <TabNavigator code={code} navItems={props.data} />
+      <TabContent code={code} data={props.data} />
     </ComponentBase>
-    // </Router>
   );
 };
 

@@ -12,7 +12,7 @@ import theme from 'theme/Theme';
 const ComponentBase = styled.div`
   width: 320px;
   height: 500px;
-  background-color: #a1a1a1;
+  background-color: transparent;
 `;
 
 const propTypes = {};

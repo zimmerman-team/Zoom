@@ -14,7 +14,7 @@ const propTypes = {};
 const defaultProps = {};
 
 const PreviewTab = props => {
-  return <BaseTab>preview</BaseTab>;
+  return <BaseTab />;
 };
 
 PreviewTab.propTypes = propTypes;

@@ -30,7 +30,6 @@ const Box = styled.div`
   width: 100%;
   background-color: #96dbfa;
   height: ${props => props.mode};
-  //transition: all 250ms ease-out;
 `;
 
 const PrevieTextContainer = styled.div`

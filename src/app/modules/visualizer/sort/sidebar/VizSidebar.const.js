@@ -33,7 +33,7 @@ export const data = {
     {
       label: 'preview',
       path: Path + 'preview',
-      component: PreviewTab,
+      component: undefined,
       icon: <IconPreview />
     },
     {

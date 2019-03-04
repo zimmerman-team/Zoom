@@ -15,7 +15,7 @@ export function updatePercentiles(featureCollection, accessor) {
   });
 }
 
-export function formatCountryLayerData(indicators) {
+export function formatCountryLayerData(indicators, indName) {
   const countryLayers = {
     type: 'FeatureCollection',
     features: []
@@ -38,9 +38,11 @@ export function formatCountryLayerData(indicators) {
         // which is i dunno a double string or sth :D
         geometry: JSON.parse(JSON.parse(indicator.geolocationPolygons)),
         properties: {
+          indName,
           name: indicator.geolocationTag,
           iso2: indicator.geolocationIso2,
-          value: indicator.value,
+          // we round it to two decimals
+          value: Math.ceil(indicator.value),
           percentile: 0
         }
       });
@@ -68,7 +70,7 @@ export function formatCountryLayerData(indicators) {
   return countryLayers;
 }
 
-export function formatCountryCenterData(indicators) {
+export function formatCountryCenterData(indicators, indName) {
   const countryCenteredData = [];
 
   indicators.forEach(indicator => {
@@ -89,7 +91,8 @@ export function formatCountryCenterData(indicators) {
         const coord = JSON.parse(JSON.parse(indicator.geolocationCenterLongLat))
           .coordinates;
         countryCenteredData.push({
-          value: indicator.value,
+          indName,
+          value: Math.ceil(indicator.value),
           geolocationIso2: indicator.geolocationIso2,
           maxValue,
           minValue,
@@ -158,7 +161,7 @@ export function formatYearParam(val) {
   return yearArray;
 }
 
-export function formatLongLatData(indicators) {
+export function formatLongLatData(indicators, indName) {
   const longLatData = [];
 
   indicators.forEach(indicator => {
@@ -181,10 +184,11 @@ export function formatLongLatData(indicators) {
         lat = parseFloat(lat);
 
         longLatData.push({
+          indName,
           longitude: long,
           latitude: lat,
           name: indicator.geolocationTag,
-          value: indicator.value
+          value: Math.ceil(indicator.value)
         });
       } else {
         longLatData[existPointIndex].value += indicator.value;

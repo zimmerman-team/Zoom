@@ -310,6 +310,7 @@ export default createRefetchContainer(
         indicatorName
         geolocationTag
         value
+        date
       }
       aidsEpidemic: datapointsAggregation(
         groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]

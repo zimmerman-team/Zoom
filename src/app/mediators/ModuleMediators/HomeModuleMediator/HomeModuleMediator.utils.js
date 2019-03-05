@@ -42,7 +42,7 @@ export function formatCountryLayerData(indicators, indName) {
           name: indicator.geolocationTag,
           iso2: indicator.geolocationIso2,
           // we round it to two decimals
-          value: Math.ceil(indicator.value),
+          value: Math.round(indicator.value),
           percentile: 0
         }
       });
@@ -53,18 +53,22 @@ export function formatCountryLayerData(indicators, indName) {
   });
 
   // And we add min and max values to be used for legends and what not
-  countryLayers.minValue = Math.min.apply(
-    Math,
-    countryLayers.features.map(feature => {
-      return feature.properties.value;
-    })
+  countryLayers.minValue = Math.round(
+    Math.min.apply(
+      Math,
+      countryLayers.features.map(feature => {
+        return feature.properties.value;
+      })
+    )
   );
 
-  countryLayers.maxValue = Math.max.apply(
-    Math,
-    countryLayers.features.map(feature => {
-      return feature.properties.value;
-    })
+  countryLayers.maxValue = Math.round(
+    Math.max.apply(
+      Math,
+      countryLayers.features.map(feature => {
+        return feature.properties.value;
+      })
+    )
   );
 
   return countryLayers;
@@ -92,7 +96,7 @@ export function formatCountryCenterData(indicators, indName) {
           .coordinates;
         countryCenteredData.push({
           indName,
-          value: Math.ceil(indicator.value),
+          value: Math.round(indicator.value),
           geolocationIso2: indicator.geolocationIso2,
           maxValue,
           minValue,
@@ -120,8 +124,8 @@ export function formatCountryCenterData(indicators, indName) {
   );
 
   countryCenteredData.forEach(indicator => {
-    indicator.maxValue = maxValue;
-    indicator.minValue = minValue;
+    indicator.maxValue = Math.round(maxValue);
+    indicator.minValue = Math.round(minValue);
   });
 
   return countryCenteredData;
@@ -188,7 +192,7 @@ export function formatLongLatData(indicators, indName) {
           longitude: long,
           latitude: lat,
           name: indicator.geolocationTag,
-          value: Math.ceil(indicator.value)
+          value: Math.round(indicator.value)
         });
       } else {
         longLatData[existPointIndex].value += indicator.value;

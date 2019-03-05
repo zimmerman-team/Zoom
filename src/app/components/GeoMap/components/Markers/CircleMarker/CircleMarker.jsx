@@ -39,7 +39,7 @@ const circleMarker = (indicator, index, setMarkerInfo) =>
           )
         }}
         onMouseEnter={() => setMarkerInfo(indicator)}
-        // onMouseLeave={() => setMarkerInfo(null)}
+        onMouseLeave={() => setMarkerInfo(null)}
       >
         <SvgCircleMarker
           height={getMeasure(

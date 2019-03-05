@@ -2,9 +2,12 @@ import React from 'react';
 import { getMeasure } from 'components/GeoMap/components/Markers/CircleMarker/CircleMarker';
 import {
   ToolTipContainer,
+  ToolTipTitle,
   ToolTipLabel,
+  ValueContainer,
   ToolTipText
 } from 'components/GeoMap/components/ToolTips/ToolTip.style';
+import { formatNumber } from 'utils/genericUtils';
 
 // So if the marker changes in size depending on its value we use
 // this function to get the offset top of the popup
@@ -40,12 +43,11 @@ const markerInfo = hoverMarkerInfo => {
         closeButton={false}
         offsetTop={getOffsetTop(hoverMarkerInfo)}
       >
-        <ToolTipLabel>{countryName}</ToolTipLabel>
-        <ToolTipText>
-          Kenya (/ˈkɛnjə/; locally [ˈkɛɲa] (About this sound listen)),
-          officially the Republic of Kenya (Swahili: Jamhuri ya Kenya), is a
-          country in Africa with …
-        </ToolTipText>
+        <ToolTipTitle>{countryName}</ToolTipTitle>
+        <ValueContainer>
+          <ToolTipLabel>{hoverMarkerInfo.indName}: </ToolTipLabel>
+          <ToolTipText>{formatNumber(hoverMarkerInfo.value)}</ToolTipText>
+        </ValueContainer>
       </ToolTipContainer>
     );
   }

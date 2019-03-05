@@ -152,11 +152,13 @@ class HomeModuleMediator extends Component {
       /\d/.test(this.props.indicatorAggregations.indicators1[0].geolocationTag)
     ) {
       longLatData = formatLongLatData(
-        this.props.indicatorAggregations.indicators1
+        this.props.indicatorAggregations.indicators1,
+        this.state.selectedInd1
       );
     } else {
       countryLayerData = formatCountryLayerData(
-        this.props.indicatorAggregations.indicators1
+        this.props.indicatorAggregations.indicators1,
+        this.state.selectedInd1
       );
     }
 
@@ -173,11 +175,13 @@ class HomeModuleMediator extends Component {
       /\d/.test(this.props.indicatorAggregations.indicators2[0].geolocationTag)
     ) {
       longLatData = formatLongLatData(
-        this.props.indicatorAggregations.indicators2
+        this.props.indicatorAggregations.indicators2,
+        this.state.selectedInd2
       );
     } else {
       countryCircleData = formatCountryCenterData(
-        this.props.indicatorAggregations.indicators2
+        this.props.indicatorAggregations.indicators2,
+        this.state.selectedInd2
       );
     }
 
@@ -379,7 +383,6 @@ class HomeModuleMediator extends Component {
   }
 
   render() {
-    console.log(this.state.indicators);
     return (
       <HomeModule
         indicators={this.state.indicators}

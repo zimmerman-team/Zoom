@@ -15,7 +15,7 @@ export function updatePercentiles(featureCollection, accessor) {
   });
 }
 
-export function formatCountryLayerData(indicators) {
+export function formatCountryLayerData(indicators, indName) {
   const countryLayers = {
     type: 'FeatureCollection',
     features: []
@@ -38,9 +38,11 @@ export function formatCountryLayerData(indicators) {
         // which is i dunno a double string or sth :D
         geometry: JSON.parse(JSON.parse(indicator.geolocationPolygons)),
         properties: {
+          indName,
           name: indicator.geolocationTag,
           iso2: indicator.geolocationIso2,
-          value: indicator.value,
+          // we round it to two decimals
+          value: Math.round(indicator.value),
           percentile: 0
         }
       });
@@ -51,24 +53,28 @@ export function formatCountryLayerData(indicators) {
   });
 
   // And we add min and max values to be used for legends and what not
-  countryLayers.minValue = Math.min.apply(
-    Math,
-    countryLayers.features.map(feature => {
-      return feature.properties.value;
-    })
+  countryLayers.minValue = Math.round(
+    Math.min.apply(
+      Math,
+      countryLayers.features.map(feature => {
+        return feature.properties.value;
+      })
+    )
   );
 
-  countryLayers.maxValue = Math.max.apply(
-    Math,
-    countryLayers.features.map(feature => {
-      return feature.properties.value;
-    })
+  countryLayers.maxValue = Math.round(
+    Math.max.apply(
+      Math,
+      countryLayers.features.map(feature => {
+        return feature.properties.value;
+      })
+    )
   );
 
   return countryLayers;
 }
 
-export function formatCountryCenterData(indicators) {
+export function formatCountryCenterData(indicators, indName) {
   const countryCenteredData = [];
 
   indicators.forEach(indicator => {
@@ -89,7 +95,8 @@ export function formatCountryCenterData(indicators) {
         const coord = JSON.parse(JSON.parse(indicator.geolocationCenterLongLat))
           .coordinates;
         countryCenteredData.push({
-          value: indicator.value,
+          indName,
+          value: Math.round(indicator.value),
           geolocationIso2: indicator.geolocationIso2,
           maxValue,
           minValue,
@@ -117,8 +124,8 @@ export function formatCountryCenterData(indicators) {
   );
 
   countryCenteredData.forEach(indicator => {
-    indicator.maxValue = maxValue;
-    indicator.minValue = minValue;
+    indicator.maxValue = Math.round(maxValue);
+    indicator.minValue = Math.round(minValue);
   });
 
   return countryCenteredData;
@@ -158,7 +165,7 @@ export function formatYearParam(val) {
   return yearArray;
 }
 
-export function formatLongLatData(indicators) {
+export function formatLongLatData(indicators, indName) {
   const longLatData = [];
 
   indicators.forEach(indicator => {
@@ -181,10 +188,11 @@ export function formatLongLatData(indicators) {
         lat = parseFloat(lat);
 
         longLatData.push({
+          indName,
           longitude: long,
           latitude: lat,
           name: indicator.geolocationTag,
-          value: indicator.value
+          value: Math.round(indicator.value)
         });
       } else {
         longLatData[existPointIndex].value += indicator.value;

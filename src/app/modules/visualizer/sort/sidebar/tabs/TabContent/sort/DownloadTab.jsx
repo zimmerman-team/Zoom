@@ -11,33 +11,57 @@ import IconDownload from 'assets/icons/sidebar/IconDownload';
  * @param {Object} customProperty - please describe component property
  */
 
+const ListContainer = styled.div`
+  padding: 15px;
+`;
+const ItemContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+  user-select: none;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.5;
+  }
+`;
+
+const ItemIcon = styled(IconDownload)`
+  margin-right: 10px;
+`;
+
 const DownloadItem = styled.div`
-  color: red;
+  color: ${theme.color.aidsFondsRed};
   font-family: ${theme.font.zoomFontFamTwo};
   font-size: 14px;
   font-weight: 700;
   line-height: 1;
 `;
 
-const ItemContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 25%;
-  outline: 1px solid black;
-`;
-
 const propTypes = {};
 const defaultProps = {};
 
-const DownloadTab = props => {
+/*todo: tidy up this component*/
+
+const DownloadTab = () => {
   return (
     <BaseTab>
-      <ItemContainer>
-        <IconDownload />
-        <DownloadItem>JSON</DownloadItem>
-      </ItemContainer>
-      <DownloadItem>CSV</DownloadItem>
-      <DownloadItem>XML</DownloadItem>
+      <ListContainer>
+        <ItemContainer>
+          <ItemIcon />
+          <DownloadItem>JSON</DownloadItem>
+        </ItemContainer>
+
+        <ItemContainer>
+          <ItemIcon />
+          <DownloadItem>CSV</DownloadItem>
+        </ItemContainer>
+
+        <ItemContainer>
+          <ItemIcon />
+          <DownloadItem>XML</DownloadItem>
+        </ItemContainer>
+      </ListContainer>
     </BaseTab>
   );
 };

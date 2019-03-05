@@ -20,7 +20,7 @@ export const ToolTipLabel = styled.div`
   font-family: ${theme.font.zoomFontFamTwo};
   font-size: 14px;
   line-height: 16px;
-  text-align: center;
+  text-align: left;
 `;
 
 export const ToolTipText = styled(ToolTipLabel)`

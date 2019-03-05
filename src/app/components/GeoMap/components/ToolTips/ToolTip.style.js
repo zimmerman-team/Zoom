@@ -4,7 +4,7 @@ import theme from 'theme/Theme';
 
 export const ToolTipContainer = styled(Popup)`
   z-index: 1;
-  width: 320px;
+  min-width: 320px;
   & .mapboxgl-popup-content {
     background-color: rgba(239, 239, 239, 0.67);
     padding: 16px 16px 30px 16px;

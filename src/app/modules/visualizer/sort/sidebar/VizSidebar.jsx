@@ -2,16 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
-import shortid from 'shortid';
-import { Route, BrowserRouter as Router } from 'react-router-dom';
-import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
-import ToolPanel from 'components/ToolPanel/ToolPanel';
-import ContextEditor from 'components/chartcontext/ContextEditor/ContextEditor';
+
 import TabNavigator from 'modules/visualizer/sort/sidebar/tabs/TabNavigator/TabNavigator';
 import TabContent from 'modules/visualizer/sort/sidebar/tabs/TabContent/TabContent';
 import data from 'modules/visualizer/sort/sidebar/VizSidebar.const';
-import { formPath } from 'modules/visualizer/VisualizerModule.utils';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -39,6 +33,8 @@ const propTypes = {
 const defaultProps = {
   data: data.sections
 };
+
+/*todo: implement show/hide based on material-ui drawer component*/
 
 const VizSidebar = props => {
   return (

@@ -2,9 +2,8 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const PORT = 4200;
 const cors = require('cors');
-const config = require('./database/DB');
+const config = require('./config/config');
 
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
   () => {
@@ -19,6 +18,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.listen(PORT, function() {
-  console.log('Server is running on Port: ', PORT);
+app.listen(config.EXP_PORT, function() {
+  console.log('Server is running on Port: ', config.EXP_PORT);
 });

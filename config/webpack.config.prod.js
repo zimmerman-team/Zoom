@@ -244,6 +244,11 @@ module.exports = {
       PnpWebpackPlugin.moduleLoader(module),
     ],
   },
+  serve: {
+    proxy: {
+      "/api": "http://localhost:4200"
+    }
+  },
   module: {
     strictExportPresence: true,
     rules: [

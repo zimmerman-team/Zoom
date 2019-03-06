@@ -11,14 +11,14 @@ import theme from 'theme/Theme';
  */
 
 const ComponentBase = styled(Button)`
-  width: 160px;
+  width: ${props => props.width + 'px'};
   height: 30px;
   border-radius: 15px;
   background-color: ${theme.color.aidsFondsRed};
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: ${props => props.fontSize + 'px'};
   font-family: ${theme.font.zoomFontFamTwo};
   text-transform: lowercase;
   color: ${theme.color.aidsFondsWhite};
@@ -26,12 +26,24 @@ const ComponentBase = styled(Button)`
   line-height: 1;
 `;
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  fontSize: PropTypes.number,
+  width: PropTypes.number
+};
+const defaultProps = {
+  fontSize: 16,
+  width: 160
+};
 
 const ZoomButton = props => {
   return (
-    <ComponentBase onClick={props.onClick} style={props.style} {...props}>
+    <ComponentBase
+      width={props.width}
+      fontSize={props.fontSize}
+      onClick={props.onClick}
+      style={props.style}
+      {...props}
+    >
       {props.children}
     </ComponentBase>
   );

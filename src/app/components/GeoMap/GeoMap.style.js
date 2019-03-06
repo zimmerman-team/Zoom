@@ -25,9 +25,10 @@ export const LegendContainer = styled.div`
 
 export const YearContainer = styled.div`
   position: absolute;
-  width: 98%;
-  bottom: 40px;
   z-index: 2;
+  width: calc(100% - 40px);
+  bottom: 40px;
+  left: 20px;
   //left: 1%;
 `;
 

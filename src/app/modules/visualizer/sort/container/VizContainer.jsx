@@ -29,7 +29,7 @@ const Box = styled.div`
   justify-content: center;
   width: 100%;
   background-color: #96dbfa;
-  height: ${props => props.mode};
+  height: ${props => props.height};
 `;
 
 const PrevieTextContainer = styled.div`
@@ -50,7 +50,7 @@ const VizContainer = props => {
       <PrevieTextContainer mode={preview ? 'flex' : 'none'}>
         <ContextPreview />
       </PrevieTextContainer>
-      <Box mode={preview ? '400px' : '100%'}>
+      <Box height={preview ? '400px' : '100%'}>
         <GeoMap
           indicatorData={props.indicators}
           selectedYears={props.yearPeriod}

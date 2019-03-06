@@ -164,7 +164,7 @@ class WrapUpMediator extends React.Component {
   }
 
   addDataSource(name) {
-    if (!this.props.wrapUpData && !this.props.wrapUpData.sourceId)
+    if (!this.props.wrapUpData.sourceId)
       AddSourceMutation.commit(
         this.props.environment,
         name,

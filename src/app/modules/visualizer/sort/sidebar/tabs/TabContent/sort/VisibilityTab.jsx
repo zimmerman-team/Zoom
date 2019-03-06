@@ -20,7 +20,7 @@ import Switch from '@material-ui/core/Switch';
 const propTypes = {};
 const defaultProps = {};
 
-const useStyles = makeStyles(materialTheme => ({
+const useStyles = makeStyles(() => ({
   iOSSwitchBase: {
     '&$iOSChecked': {
       color: 'white',
@@ -61,6 +61,29 @@ const useStyles = makeStyles(materialTheme => ({
   }
 }));
 
+const Box = styled.div`
+  padding: 15px;
+`;
+
+const ZoomFormLabel = styled(FormLabel)`
+  && {
+    font-family: ${themes.font.zoomFontFamOne};
+    //font-weight: 700;
+    font-size: 14px;
+    color: ${themes.color.aidsFondsBlue};
+  }
+`;
+
+const ControlLabel = styled(FormControlLabel)`
+  && {
+    span:nth-child(2) {
+      font-family: ${themes.font.zoomFontFamTwo};
+      font-weight: 300;
+      font-size: 14px;
+    }
+  }
+`;
+
 const ZoomSwitch = styled(Switch)`
   && {
     span:nth-child(1) {
@@ -81,11 +104,6 @@ const ZoomSwitch = styled(Switch)`
       width: 100px;
       opacity: 1;
       border: none;
-
-      //border-radius: 50%;
-      //margin-top: -10px;
-      //margin-left: 10px;
-      //border-radius: 25%;
     }
   }
 `;
@@ -106,47 +124,51 @@ function VisibilityTab() {
 
   return (
     <BaseTab>
-      <FormControl component="fieldset">
-        <FormLabel component="legend">Chart shared settings</FormLabel>
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={state.public}
-                onChange={handleChange('public')}
-                value="public"
-                classes={{
-                  switchBase: classes.iOSSwitchBase,
-                  bar: classes.iOSBar,
-                  icon: classes.iOSIcon,
-                  iconChecked: classes.iOSIconChecked,
-                  checked: classes.iOSChecked
-                }}
-                disableRipple
-              />
-            }
-            label="Publish to public Zoom library"
-          />
-          <FormControlLabel
-            control={
-              <Switch
-                checked={state.team}
-                onChange={handleChange('team')}
-                value="team"
-                classes={{
-                  switchBase: classes.iOSSwitchBase,
-                  bar: classes.iOSBar,
-                  icon: classes.iOSIcon,
-                  iconChecked: classes.iOSIconChecked,
-                  checked: classes.iOSChecked
-                }}
-                disableRipple
-              />
-            }
-            label="Published with my team"
-          />
-        </FormGroup>
-      </FormControl>
+      <Box>
+        <FormControl component="fieldset">
+          <ZoomFormLabel component="legend">
+            Chart shared settings
+          </ZoomFormLabel>
+          <FormGroup>
+            <ControlLabel
+              control={
+                <Switch
+                  checked={state.public}
+                  onChange={handleChange('public')}
+                  value="public"
+                  classes={{
+                    switchBase: classes.iOSSwitchBase,
+                    bar: classes.iOSBar,
+                    icon: classes.iOSIcon,
+                    iconChecked: classes.iOSIconChecked,
+                    checked: classes.iOSChecked
+                  }}
+                  disableRipple
+                />
+              }
+              label="Publish to public Zoom library"
+            />
+            <ControlLabel
+              control={
+                <Switch
+                  checked={state.team}
+                  onChange={handleChange('team')}
+                  value="team"
+                  classes={{
+                    switchBase: classes.iOSSwitchBase,
+                    bar: classes.iOSBar,
+                    icon: classes.iOSIcon,
+                    iconChecked: classes.iOSIconChecked,
+                    checked: classes.iOSChecked
+                  }}
+                  disableRipple
+                />
+              }
+              label="Published with my team"
+            />
+          </FormGroup>
+        </FormControl>
+      </Box>
     </BaseTab>
   );
 }

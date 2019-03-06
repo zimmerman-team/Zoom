@@ -1,7 +1,7 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import NavLink from 'react-router-dom/es/NavLink';
+import NavLink from 'react-router-dom/NavLink';
 import styled from 'styled-components';
 import shortid from 'shortid';
 import theme from 'theme/Theme';

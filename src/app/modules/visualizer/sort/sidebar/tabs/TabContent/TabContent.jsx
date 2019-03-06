@@ -33,6 +33,8 @@ const propTypes = {
 };
 const defaultProps = {};
 
+/*todo: implement dropshadow */
+
 const TabContent = props => {
   return (
     <React.Fragment>

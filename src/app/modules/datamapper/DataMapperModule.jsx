@@ -44,7 +44,7 @@ class DataMapperModule extends React.Component {
       // if they don't select or dont have these fields
       // the manual mapping will have to be adjusted
       // for the to be able to populate/fill them
-      mapReqFields: ['indicator', 'date', 'value', 'geolocation'],
+      mapReqFields: ['indicator', 'date', 'value'],
 
       manMapEmptyValue: false,
       manMapEmptyFields: false,

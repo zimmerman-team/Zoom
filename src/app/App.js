@@ -4,20 +4,21 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { graphql, QueryRenderer } from 'react-relay';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import auth0Client from 'auth/Auth';
-
-// Routes
-import Routes from './Routes';
 import { Grommet } from 'grommet';
-import { ZoomTheme } from 'styles/ZoomTheme';
-
-/* global app components */
-import AppBar from 'components/AppBar/AppBar';
-import SideBar from 'components/SideBar/SideBar';
 import {
   ToastsContainer,
   ToastsStore,
   ToastsContainerPosition
 } from 'react-toasts';
+
+// Routes
+import Routes from './Routes';
+
+import { ZoomTheme } from 'styles/ZoomTheme';
+
+/* global app components */
+import AppBar from 'components/AppBar/AppBar';
+import SideBar from 'components/SideBar/SideBar';
 
 const modernEnvironment = new Environment({
   network: Network.create(fetchQuery),

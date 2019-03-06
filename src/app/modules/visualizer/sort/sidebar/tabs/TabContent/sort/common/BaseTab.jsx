@@ -10,12 +10,19 @@ import theme from 'theme/Theme';
  */
 
 const ComponentBase = styled.div`
+  display: flex;
+  flex-direction: column;
+  //align-items: center;
+  //justify-content:;
+  //padding-top: ;
   width: 320px;
   height: calc(100vh - 40px);
   background-color: white;
 `;
 
-const propTypes = {};
+const propTypes = {
+  padding: PropTypes.bool
+};
 const defaultProps = {};
 
 const BaseTab = props => {

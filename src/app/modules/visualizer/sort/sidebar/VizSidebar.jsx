@@ -43,13 +43,6 @@ const defaultProps = {
 const VizSidebar = props => {
   return (
     <ComponentBase>
-      {/*
-      <SidebarContent>
-        <ContextEditor />
-        <ExplorePanelMediator {...otherProps} />
-      </SidebarContent>*/}
-      {/*<ToolPanel code={code} items={props.data} />*/}
-
       <TabNavigator code={code} navItems={props.data} />
       <TabContent code={code} data={props.data} />
     </ComponentBase>

@@ -4,6 +4,16 @@ import User from '../models/User';
 import { handleError } from './generalResponse';
 
 const UserApi = {
+  // so this one will be used for a user themselves to update
+  // their profile stuffs
+  getUser: function(authId, res) {
+    return User.find({ authId })
+      .then(acc => res(null, acc))
+      .catch(error => {
+        handleError(res, error);
+      });
+  },
+
   // updateUI: function (user, uiState, res) {
   //   return User
   //     .findOneAndUpdate({ _id: user._id }, { $set: { uiState: uiState } }, { new: true })
@@ -74,6 +84,8 @@ const UserApi = {
       userFound.save(function(error) {
         if (err) {
           handleError(res, error);
+        } else {
+          res(null, 'auth0 changes applied');
         }
       });
     });
@@ -94,6 +106,8 @@ const UserApi = {
         userFound.save(function(error) {
           if (err) {
             handleError(res, error);
+          } else {
+            res(null, 'user updated');
           }
         });
       });
@@ -120,7 +134,8 @@ const UserApi = {
   deleteUser: function(user, delId, res) {
     if (user.role === 'admin')
       User.deleteOne({ authId: delId }, error => {
-        handleError(res, error);
+        if (error) handleError(res, error);
+        else res(null, 'user deleted');
       });
     else
       handleError(res, {

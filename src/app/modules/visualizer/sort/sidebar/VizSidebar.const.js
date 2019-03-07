@@ -1,6 +1,4 @@
 import React from 'react';
-import ContextTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/ContextTab';
-import PreviewTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/PreviewTab';
 import DownloadTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/DownloadTab';
 import DuplicatorTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/DuplicatorTab';
 import VisibilityTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/VisibilityTab';

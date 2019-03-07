@@ -14,3 +14,4 @@ describe('<VizContainer />', () => {
     expect(wrapper.find(GeoMap)).toHaveLength(1);
   });
 });
+cd;

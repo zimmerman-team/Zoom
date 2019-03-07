@@ -1,4 +1,4 @@
-import { addDecorator, configure } from '@storybook/react';
+import { addParameters, addDecorator, configure } from '@storybook/react';
 import 'loki/configure-react';
 import { withOptions } from '@storybook/addon-options';
 import { withInfo } from '@storybook/addon-info';
@@ -10,6 +10,13 @@ import { themes } from '@storybook/components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { withSmartKnobs } from 'storybook-addon-smart-knobs';
 
+import yourTheme from './yourTheme';
+
+addParameters({
+  options: {
+    theme: yourTheme
+  }
+});
 const req = require.context('../src/app', true, /.story.js$/);
 
 function loadStories() {

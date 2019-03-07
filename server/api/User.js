@@ -4,6 +4,14 @@ import User from '../models/User';
 import { handleError } from './generalResponse';
 
 const UserApi = {
+  getUser: function(authId, res) {
+    return User.findOne({ authId })
+      .then(acc => res(null, acc))
+      .catch(error => {
+        handleError(res, error);
+      });
+  },
+
   // updateUI: function (user, uiState, res) {
   //   return User
   //     .findOneAndUpdate({ _id: user._id }, { $set: { uiState: uiState } }, { new: true })
@@ -72,9 +80,9 @@ const UserApi = {
       if (userFound.email !== user.email) userFound.email = user.email;
 
       userFound.save(function(error) {
-        if (err) {
-          handleError(res, error);
-        }
+        if (err) handleError(res, error);
+
+        return res(null, 'auth0 changes applied');
       });
     });
   },
@@ -92,9 +100,9 @@ const UserApi = {
           userFound.team = updateUser.team;
 
         userFound.save(function(error) {
-          if (err) {
-            handleError(res, error);
-          }
+          if (err) handleError(res, error);
+
+          return res(null, 'user updated');
         });
       });
     } else {
@@ -120,7 +128,9 @@ const UserApi = {
   deleteUser: function(user, delId, res) {
     if (user.role === 'admin')
       User.deleteOne({ authId: delId }, error => {
-        handleError(res, error);
+        if (error) handleError(res, error);
+
+        return res(null, 'user deleted');
       });
     else
       handleError(res, {

@@ -46,6 +46,10 @@ class CorrectErrorsMediator extends React.Component {
       checkedRows: false,
       rowsDeleted: false,
       errorsExists: false,
+      ignoredErrors:
+        props.stepData.errorData && props.stepData.errorData.ignoredErrors
+          ? props.stepData.errorData.ignoredErrors
+          : [],
       loading: false,
       rowCount: 100
     };
@@ -144,6 +148,23 @@ class CorrectErrorsMediator extends React.Component {
           this.setState({ columnHeaders });
         }
 
+        // so we form this errorsExists variable according
+        // to the errors message that we get from duct
+        // and according to the ignored error array
+        let errorsExists = false;
+
+        // So we turn into a string, for better performance n stuff
+        // cause this whole data is super weird, and we need to deal with it
+        // in a weird way
+        const errorMessages = JSON.stringify(results.error_data.error_messages);
+
+        this.state.ignoredErrors.forEach(columnName => {});
+
+        console.log(
+          'results.error_data.error_messages',
+          results.error_data.error_messages
+        );
+
         this.setState(
           {
             errorTableData,
@@ -170,7 +191,10 @@ class CorrectErrorsMediator extends React.Component {
     // we save the shared data
     if (!this.props.stepsDisabled) {
       const stepData = { ...this.props.stepData };
-      stepData.errorData = this.state.errorsExists;
+      stepData.errorData = {
+        ...stepData.errorData,
+        errorsExists: this.state.errorsExists
+      };
       this.props.dispatch(generalActions.saveStepDataRequest(stepData));
     }
   }
@@ -331,9 +355,33 @@ class CorrectErrorsMediator extends React.Component {
     }
   }
 
+  // basically will addin/remove the column names for errors to be ignored
+  // and will save these errors in the props ofcourse
+  ignoreErrors(checked, headerName) {
+    this.setState((prevState, props) => {
+      const { ignoreErrors } = prevState;
+      if (checked) ignoreErrors.push(headerName);
+      else {
+        const headerInd = ignoreErrors.indexOf(headerName);
+        ignoreErrors.splice(1, headerInd);
+      }
+
+      // and we save it in the props
+      const stepData = { ...props.stepData };
+      stepData.errorData = {
+        ...stepData.errorData,
+        ignoredErrors: this.state.ignoredErrors
+      };
+      props.dispatch(generalActions.saveStepDataRequest(stepData));
+
+      return { ignoreErrors };
+    });
+  }
+
   render() {
     return (
       <ErrorStep
+        ignoredErrors={this.state.ignoredErrors}
         loading={this.state.loading}
         updateCell={this.updateCell}
         checkedRows={this.state.checkedRows}

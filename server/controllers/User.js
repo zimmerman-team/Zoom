@@ -4,6 +4,10 @@ import User from '../models/User';
 import { handleError } from './generalResponse';
 
 const UserApi = {
+  check: function(req, res) {
+    res.send('check successfull' + 'request: ' + req);
+  },
+
   getUser: function(authId, res) {
     return User.findOne({ authId })
       .then(acc => res(null, acc))

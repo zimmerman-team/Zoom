@@ -6,7 +6,7 @@ import { MAX_CHARTS } from '../const/const';
 /* general */
 import { handleError } from './generalResponse';
 
-const ChartAPI = {
+const ChartController = {
   get: function(user, id, res) {
     Chart.findOneByUser(id, user)
       .then(viz => res(null, viz))
@@ -343,4 +343,4 @@ const ChartAPI = {
   // }
 };
 
-module.exports = ChartAPI;
+module.exports = ChartController;

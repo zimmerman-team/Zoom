@@ -3,21 +3,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
-import BaseTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/common/BaseTab';
 
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
  */
 
-const propTypes = {};
-const defaultProps = {};
+const ComponentBase = styled.div``;
 
-const ContextTab = props => {
-  return <BaseTab>context</BaseTab>;
+const propTypes = {
+  data: PropTypes.array
+};
+const defaultProps = {
+  data: []
 };
 
-ContextTab.propTypes = propTypes;
-ContextTab.defaultProps = defaultProps;
+const GeomapFragment = props => {
+  return <ComponentBase />;
+};
 
-export default ContextTab;
+GeomapFragment.propTypes = propTypes;
+GeomapFragment.defaultProps = defaultProps;
+
+export default GeomapFragment;

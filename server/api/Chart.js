@@ -1,24 +1,17 @@
-import mongoose from 'mongoose';
 import Chart from '../models/Chart';
 
 /* consts */
 import { MAX_CHARTS } from '../const/const';
 
-function handleError(res, error) {
-  console.error(error);
-  return res({
-    error: error.name,
-    message: error.message
-  });
-}
+/* general */
+import { handleError } from './generalResponse';
 
 const ChartAPI = {
   get: function(user, id, res) {
     Chart.findOneByUser(id, user)
       .then(viz => res(null, viz))
       .catch(error => {
-        console.error(error.stack);
-        res(error);
+        handleError(res, error);
       });
   },
 
@@ -26,8 +19,7 @@ const ChartAPI = {
     Chart.findOnePublic(id)
       .then(viz => res(null, viz))
       .catch(error => {
-        console.error(error.stack);
-        res(error);
+        handleError(res, error);
       });
   },
 
@@ -60,8 +52,7 @@ const ChartAPI = {
         res(null, response);
       })
       .catch(error => {
-        console.log(error.stack);
-        res(error);
+        handleError(res, error);
       });
   },
 
@@ -97,8 +88,7 @@ const ChartAPI = {
     return Chart.updateByUser(vizId, viz, user)
       .then(viz => res(null, viz))
       .catch(error => {
-        console.error(error.stack);
-        res(error);
+        handleError(res, error);
       });
   },
 
@@ -110,8 +100,7 @@ const ChartAPI = {
     return Chart.deleteByUser(vizId, user)
       .then(viz => res(null, viz))
       .catch(error => {
-        console.error(error.stack);
-        res(error);
+        handleError(res, error);
       });
   },
 
@@ -126,8 +115,7 @@ const ChartAPI = {
     })
       .then(viz => res(null))
       .catch(error => {
-        console.error(error.stack);
-        res(error);
+        handleError(res, error);
       });
   },
 
@@ -146,8 +134,7 @@ const ChartAPI = {
         .then(viz => viz.saveAndPopulate())
         .then(viz => res(null, viz))
         .catch(error => {
-          console.error(error.stack);
-          res(error);
+          handleError(res, error);
         })
     );
   }

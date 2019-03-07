@@ -5,14 +5,19 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const config = require('./config/config');
 
-mongoose.connect(config.DB, { useNewUrlParser: true }).then(
-  () => {
-    console.log('Database is connected');
-  },
-  err => {
-    console.log('Can not connect to the database' + err);
-  }
-);
+mongoose
+  .connect(config.DB, {
+    useNewUrlParser: true,
+    autoIndex: app.get('env') === 'development'
+  })
+  .then(
+    () => {
+      console.log('Database is connected');
+    },
+    err => {
+      console.log('Can not connect to the database' + err);
+    }
+  );
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));

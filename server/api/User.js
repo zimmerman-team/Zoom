@@ -4,10 +4,8 @@ import User from '../models/User';
 import { handleError } from './generalResponse';
 
 const UserApi = {
-  // so this one will be used for a user themselves to update
-  // their profile stuffs
   getUser: function(authId, res) {
-    return User.find({ authId })
+    return User.findOne({ authId })
       .then(acc => res(null, acc))
       .catch(error => {
         handleError(res, error);
@@ -82,11 +80,9 @@ const UserApi = {
       if (userFound.email !== user.email) userFound.email = user.email;
 
       userFound.save(function(error) {
-        if (err) {
-          handleError(res, error);
-        } else {
-          res(null, 'auth0 changes applied');
-        }
+        if (err) handleError(res, error);
+
+        return res(null, 'auth0 changes applied');
       });
     });
   },
@@ -104,11 +100,9 @@ const UserApi = {
           userFound.team = updateUser.team;
 
         userFound.save(function(error) {
-          if (err) {
-            handleError(res, error);
-          } else {
-            res(null, 'user updated');
-          }
+          if (err) handleError(res, error);
+
+          return res(null, 'user updated');
         });
       });
     } else {
@@ -135,7 +129,8 @@ const UserApi = {
     if (user.role === 'admin')
       User.deleteOne({ authId: delId }, error => {
         if (error) handleError(res, error);
-        else res(null, 'user deleted');
+
+        return res(null, 'user deleted');
       });
     else
       handleError(res, {

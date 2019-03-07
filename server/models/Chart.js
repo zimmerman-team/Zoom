@@ -1,22 +1,26 @@
-const mongoose = require('mongoose');
-mongoose.Promise = global.Promise; // use ES6 promises
+import mongoose, { Schema } from 'mongoose';
 
-const { Schema } = mongoose;
+mongoose.Promise = global.Promise; // use ES6 promises
 
 const ChartSchema = new Schema(
   {
     /* meta data of chart */
-    name: { type: String, default: 'Untitled' },
+    name: { type: String, default: 'Untitled', min: 1, max: 1000 },
     author: { type: 'ObjectId', ref: 'User' },
 
     description: Schema.Types.Mixed,
-    descriptionPlainText: { type: String, default: '' },
+    descriptionPlainText: { type: String, default: '', min: 1, max: 10000 },
 
     // so the type of chart
-    type: String,
+    type: { type: String, required: true },
 
     /* indicators/ sub-indicators of chart */
-    items: [{ indicator: String, sub_indicators: [String] }],
+    items: [
+      {
+        indicator: { type: String, required: true },
+        sub_indicators: { type: [String], required: true }
+      }
+    ],
 
     /* so this one is used for trash */
     archived: { type: Boolean, default: false },

@@ -20,6 +20,7 @@ const DatasetApi = {
       .catch(error => {
         handleError(res, error);
       });
+    7;
   },
 
   // so this updates the team related to the dataset
@@ -28,9 +29,7 @@ const DatasetApi = {
     return Dataset.findOneAndUpdate(
       { author, datasetId },
       {
-        $set: {
-          team
-        }
+        $set: { team }
       },
       { new: true }
     )
@@ -46,9 +45,7 @@ const DatasetApi = {
     return Dataset.findOneAndUpdate(
       { author, datasetId },
       {
-        $set: {
-          public: pub
-        }
+        $set: { public: pub }
       },
       { new: true }
     )

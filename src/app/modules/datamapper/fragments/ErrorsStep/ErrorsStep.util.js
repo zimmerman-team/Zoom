@@ -5,6 +5,9 @@ import {
   CheckBox,
   ErrorCell,
   ErrorColHeader,
+  IgnorHeaderLabel,
+  HeaderName,
+  IgnoreHeaderCheckBox,
   HeaderCheckBox
 } from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
 
@@ -53,7 +56,16 @@ export function formatColumns(tableData, checkRows, handleCellClick) {
         columns.push({
           property: key,
           header: (
-            <ErrorColHeader key={`header-${index}`}>{key}</ErrorColHeader>
+            <ErrorColHeader key={`header-${index}`}>
+              <HeaderName>{key}</HeaderName>
+              <IgnoreHeaderCheckBox key={`ignore-header-checkbox-${index}`}>
+                <CustomCheckBox
+                  key={`checkbox-${index}`}
+                  onChange={checked => console.log('ignore', checked)}
+                />
+                <IgnorHeaderLabel>Ignore errors</IgnorHeaderLabel>
+              </IgnoreHeaderCheckBox>
+            </ErrorColHeader>
           ),
           render: val => (
             <ErrorCell

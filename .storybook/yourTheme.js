@@ -4,6 +4,9 @@ export default create({
   // Is this a 'light' or 'dark' theme?
   base: 'light',
 
+  brandTitle: 'ZOOM V2',
+  brandUrl: 'https://storybook.js.org',
+
   // Color palette
   colorPrimary: 'red', // primary color
   colorSecondary: 'blue', // secondary color

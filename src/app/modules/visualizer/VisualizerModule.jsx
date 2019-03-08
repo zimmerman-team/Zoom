@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 /* components */
 import GeoMap from 'components/GeoMap/GeoMap';
-import { ControlPanelContainer } from 'modules/visualizer/VisualizerModule.styles';
+import { ControlPanelContainer } from 'modules/visualizer/VisualizerModule.style';
 import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
 import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';
 import VizContainer from 'modules/visualizer/sort/container/VizContainer';
@@ -21,11 +21,14 @@ const ModuleBase = styled.div`
 
 const propTypes = {
   // indicators: PropTypes.arrayOf(PropTypes.shape),
+  loggedIn: PropTypes.bool,
   sideBarOpen: PropTypes.bool,
   moduleMode: PropTypes.string
 };
 
-const defaultProps = {};
+const defaultProps = {
+  loggedIn: true
+};
 
 class BuilderModule extends Component {
   constructor(props) {

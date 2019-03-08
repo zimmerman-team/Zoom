@@ -7,8 +7,9 @@ import { withBackgrounds } from '@storybook/addon-backgrounds';
 import { configureViewport } from '@storybook/addon-viewport';
 import { withState } from '@dump247/storybook-state';
 import { themes } from '@storybook/components';
-import { withKnobs } from '@storybook/addon-knobs';
-import { withSmartKnobs } from 'storybook-addon-smart-knobs';
+// import { withKnobs } from '@storybook/addon-knobs';
+// import { withSmartKnobs } from 'storybook-addon-smart-knobs';
+const { withPropsTable } = require('storybook-addon-react-docgen');
 
 import yourTheme from './yourTheme';
 
@@ -17,6 +18,7 @@ addParameters({
     theme: yourTheme
   }
 });
+
 const req = require.context('../src/app', true, /.story.js$/);
 
 function loadStories() {
@@ -27,30 +29,18 @@ setConsoleOptions({
   panelExclude: []
 });
 
-addDecorator((storyFn, context) => withConsole()(storyFn)(context));
+// addDecorator((storyFn, context) => withConsole()(storyFn)(context));
 
-// addDecorator(withInfo);
-// addDecorator(withKnobs);
-// addDecorator(withSmartKnobs);
-// Option defaults:
 addDecorator(
-  withOptions({
-    name: 'ZOOM V2',
-    // theme: themes.dark,
-    url: 'https://zoom-v2-dev.nyuki.io/',
-    goFullScreen: false,
-    showStoriesPanel: true,
-    showAddonPanel: true,
-    showSearchBox: false,
-    addonPanelInRight: false,
-    sortStoriesByKind: false,
-    hierarchySeparator: /\//,
-    hierarchyRootSeparator: /\|/,
-    sidebarAnimations: false,
-    selectedAddonPanel: undefined,
-    enableShortcuts: false
+  withInfo({
+    inline: false,
+    header: true
   })
 );
+
+addDecorator(withPropsTable);
+// addDecorator(withKnobs);
+// addDecorator(withSmartKnobs);
 
 // config.js
 

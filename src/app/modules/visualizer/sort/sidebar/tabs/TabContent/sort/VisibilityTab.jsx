@@ -11,12 +11,15 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { makeStyles } from '@material-ui/styles';
 import Switch from '@material-ui/core/Switch';
 
-/**
- * todo: Please write a short component description of what this component does
- * @param {Object} customProperty - please describe component property
- */
+/** Button component description */
 
-const propTypes = {};
+const propTypes = {
+  /** Button component description */
+  publicVisibility: PropTypes.bool,
+
+  /** Button component description */
+  teamVisibility: PropTypes.bool
+};
 const defaultProps = {};
 
 const useStyles = makeStyles(() => ({

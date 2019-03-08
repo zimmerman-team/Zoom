@@ -44,7 +44,7 @@ export const IgnoreHeaderCheckBox = styled(HeaderCheckBox)`
   font-weight: 500;
   display: flex;
   margin: 5px auto 0 5px;
-  line-height: 22px;
+  line-height: 24px;
 `;
 
 export const HeaderName = styled.div`

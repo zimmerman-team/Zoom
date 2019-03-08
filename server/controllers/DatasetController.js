@@ -1,5 +1,5 @@
 /* general */
-const handleError = require('./generalResponse');
+const general = require('./generalResponse');
 
 const Dataset = require('../models/Dataset');
 
@@ -9,7 +9,7 @@ const DatasetApi = {
     return Dataset.findOne({ author, datasetId })
       .then(set => res(null, set))
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
   },
 
@@ -18,7 +18,7 @@ const DatasetApi = {
     return Dataset.find({ author })
       .then(set => res(null, set))
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
     7;
   },
@@ -35,7 +35,7 @@ const DatasetApi = {
     )
       .then(set => res(null, set))
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
   },
 
@@ -51,7 +51,7 @@ const DatasetApi = {
     )
       .then(set => res(null, set))
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
   },
 
@@ -70,10 +70,10 @@ const DatasetApi = {
       )
         .then(set => res(null, set))
         .catch(error => {
-          handleError(res, error);
+          general.handleError(res, error);
         });
 
-    handleError(res, {
+    general.handleError(res, {
       name: 'no permission',
       error: 'unauthorized'
     });
@@ -82,10 +82,10 @@ const DatasetApi = {
   deleteDataset: function(author, datasetId, res) {
     if (author.role === 'admin')
       Dataset.deleteOne({ author, datasetId }, error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
     else
-      handleError(res, {
+      general.handleError(res, {
         name: 'no permission',
         error: 'unauthorized'
       });

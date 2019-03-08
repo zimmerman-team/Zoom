@@ -1,13 +1,15 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+const User = require('../models/User');
+
 mongoose.Promise = global.Promise; // use ES6 promises
 
 const ChartSchema = new Schema(
   {
     /* meta data of chart */
     name: { type: String, default: 'Untitled', min: 1, max: 1000 },
-    author: { type: 'ObjectId', ref: 'User' },
+    author: { type: Schema.Types.ObjectId, ref: User },
 
     description: Schema.Types.Mixed,
     descriptionPlainText: { type: String, default: '', min: 1, max: 10000 },
@@ -51,10 +53,10 @@ const ChartSchema = new Schema(
   }
 );
 
-const notFound = function(viz, id) {
-  if (!viz) return Promise.reject(new Error(`Chart with id ${id} not found`));
-  else return Promise.resolve(viz);
-};
+// const notFound = function(viz, id) {
+//   if (!viz) return Promise.reject(new Error(`Chart with id ${id} not found`));
+//   else return Promise.resolve(viz);
+// };
 
 ChartSchema.statics.findAndPopulate = function(query, cb) {
   return this.find(query).populate(
@@ -92,7 +94,7 @@ ChartSchema.statics.findByUser = function(query, user, cb) {
 };
 
 ChartSchema.statics.findOneByUser = function(id, user, cb) {
-  let query = {
+  const query = {
     _id: id,
     author: user._id
   };

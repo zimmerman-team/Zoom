@@ -37,7 +37,11 @@ export class HomeModule extends Component {
   }
 
   componentDidMount() {
-    axios.get('/api/check').then(res => console.log(res.data));
+    axios
+      .get('/api/getChart', {
+        params: { chartId: '5c82809d8950c35c7402207f', authId: 156 }
+      })
+      .then(res => console.log(res.data));
   }
 
   onClose = () => {

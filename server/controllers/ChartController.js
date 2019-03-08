@@ -2,50 +2,91 @@
 const config = require('../config/config');
 
 /* general */
-const handleError = require('./generalResponse');
+const general = require('./generalResponse');
 
 const Chart = require('../models/Chart');
 const User = require('../models/User');
 
 const ChartController = {
-  check: function(req, res) {
-    res.json({ message: 'Im in the controller!' });
-  },
-
+  // use this only if you have an empty database
+  // and need a chart in it
   seedChart: function seedEvents(req, res) {
     // oke so first we seed a random user
-    User.create(
-      {
-        username: 'seed',
-        email: 'seed',
-        authId: 156,
-        role: 'seed',
-        avatar: 'seed',
-        firstName: 'seed',
-        lastName: 'seed',
-        team: 'seed'
-      },
-      { new: true }
-    )
-      .then(acc => res(null, acc))
-      .catch(error => {
-        handleError(res, error);
-      });
+    const author = new User({
+      username: 'bob',
+      email: 'bob@mailinator.com',
+      authId: 156,
+      role: 'admin',
+      avatar: 'bob',
+      firstName: 'bob',
+      lastName: 'bob',
+      team: 'bob'
+    });
+
+    author.save();
+
+    // and then we seed the actual chart
+    const chart = new Chart({
+      /* meta data of chart */
+      name: 'Bobs chart',
+      author,
+
+      description: 'Bobs description',
+      descriptionPlainText: 'Bobs descriptionPlainText',
+
+      // so the type of chart
+      type: 'Bob',
+
+      /* indicators/ sub-indicators of chart */
+      items: [
+        {
+          indicator: 'Bobs indicator',
+          sub_indicators: ['Bobs sub_indicators']
+        }
+      ],
+
+      dateRange: ['1990'],
+
+      // with what team is this chart associated
+      team: 'Bobs team'
+    });
+
+    chart.save();
+
+    res.json(chart);
   },
 
-  get: function(user, id, res) {
-    Chart.findOneByUser(id, user)
-      .then(viz => res(null, viz))
-      .catch(error => {
-        handleError(res, error);
-      });
+  // DELETE ME
+  testGetChart: function(req, res) {
+    const { id } = req.query;
+    User.find((err, data) => {
+      if (err) return res.json({ success: false, error: err });
+      return res.json({ success: true, data: data });
+    });
+  },
+
+  get: function(req, res) {
+    const { chartId, authId } = req.query;
+
+    User.findOne({ authId }).exec((error, user) => {
+      Chart.findOneByUser(chartId, user)
+        .then(viz => {
+          console.log('viz', viz);
+          res(null, viz);
+        })
+        .catch(error => {
+          general.handleError(res, error);
+        });
+    });
+
+    res.json({ success: false, error: 'Chart of user not found' });
   },
 
   getPublic: function(user, id, res) {
     Chart.findOnePublic(id)
       .then(viz => res(null, viz))
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
   },
 
@@ -78,7 +119,7 @@ const ChartController = {
         res(null, response);
       })
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
   },
 
@@ -101,7 +142,7 @@ const ChartController = {
       .then(viz => viz.saveAndPopulate())
       // response
       .then(viz => res(null, viz)) // TODO: wrap socket.io to promises server-side - 2016-02-11
-      .catch(handleError.bind(null, res));
+      .catch(general.handleError.bind(null, res));
   },
 
   update: function(user, vizId, viz, res) {
@@ -114,7 +155,7 @@ const ChartController = {
     return Chart.updateByUser(vizId, viz, user)
       .then(viz => res(null, viz))
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
   },
 
@@ -126,7 +167,7 @@ const ChartController = {
     return Chart.deleteByUser(vizId, user)
       .then(viz => res(null, viz))
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
   },
 
@@ -141,7 +182,7 @@ const ChartController = {
     })
       .then(viz => res(null))
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
   },
 
@@ -160,7 +201,7 @@ const ChartController = {
         .then(viz => viz.saveAndPopulate())
         .then(viz => res(null, viz))
         .catch(error => {
-          handleError(res, error);
+          general.handleError(res, error);
         })
     );
   }
@@ -347,7 +388,7 @@ const ChartController = {
   //       return viz.saveAndPopulate();
   //     })
   //     .then(viz => res(null, viz))
-  //     .catch(handleError.bind(null, res));
+  //     .catch(general.handleError.bind(null, res));
   // },
 
   /*
@@ -356,7 +397,7 @@ const ChartController = {
 
   // adminToggleHide: function(user, vizId, res) {
   //   if (!user.canPlayRoleOf('admin')) {
-  //     return handleError(res, new Error('Unauthorized'));
+  //     return general.handleError(res, new Error('Unauthorized'));
   //   }
   //
   //   return Chart.findOne({ _id: vizId })
@@ -365,7 +406,7 @@ const ChartController = {
   //       return viz.saveAndPopulate();
   //     })
   //     .then(viz => res(null, viz))
-  //     .catch(handleError.bind(null, res));
+  //     .catch(general.handleError.bind(null, res));
   // }
 };
 

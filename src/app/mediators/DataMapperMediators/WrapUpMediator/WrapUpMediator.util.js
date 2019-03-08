@@ -129,5 +129,7 @@ export function formatMapJson(mappingJson, mapData, fileId) {
   // and we add the meta_data id here
   mapJson.metadata_id = fileId;
 
+  console.log('mapJson', mapJson);
+
   return mapJson;
 }

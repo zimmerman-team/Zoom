@@ -46,6 +46,10 @@ class CorrectErrorsMediator extends React.Component {
       checkedRows: false,
       rowsDeleted: false,
       errorsExists: false,
+      ignoredErrors:
+        props.stepData.errorData && props.stepData.errorData.ignoredErrors
+          ? props.stepData.errorData.ignoredErrors
+          : [],
       loading: false,
       rowCount: 100
     };
@@ -67,6 +71,8 @@ class CorrectErrorsMediator extends React.Component {
     this.checkRows = this.checkRows.bind(this);
     this.deleteRows = this.deleteRows.bind(this);
     this.afterErrorTableUpdate = this.afterErrorTableUpdate.bind(this);
+    this.ignoreErrors = this.ignoreErrors.bind(this);
+    this.checkIfErrors = this.checkIfErrors.bind(this);
   }
 
   componentDidMount() {
@@ -144,6 +150,11 @@ class CorrectErrorsMediator extends React.Component {
           this.setState({ columnHeaders });
         }
 
+        const errorsExists = this.checkIfErrors(
+          errorCells,
+          this.state.ignoredErrors
+        );
+
         this.setState(
           {
             errorTableData,
@@ -151,13 +162,31 @@ class CorrectErrorsMediator extends React.Component {
             correctCommand: command,
             rowCount: results.total_amount,
             loading: false,
-            errorsExists:
-              Object.keys(results.error_data.error_messages).length > 0
+            errorsExists
           },
           this.afterErrorTableUpdate
         );
       }
     }
+  }
+
+  checkIfErrors(errorCells, ignoredErrors) {
+    // so we form this errorsExists variable according
+    // to the errors message that we get from duct
+    // and according to the ignored error array
+    let errorsExists = false;
+
+    for (let i = 0; i < errorCells.length; i++) {
+      // so if we find a key with a column name
+      // that isn't in the ignoredErrors array,
+      // we set errorsExists to true and break out of loop
+      if (ignoredErrors.indexOf(errorCells[i].col) === -1) {
+        errorsExists = true;
+        break;
+      }
+    }
+
+    return errorsExists;
   }
 
   afterErrorTableUpdate() {
@@ -170,7 +199,10 @@ class CorrectErrorsMediator extends React.Component {
     // we save the shared data
     if (!this.props.stepsDisabled) {
       const stepData = { ...this.props.stepData };
-      stepData.errorData = this.state.errorsExists;
+      stepData.errorData = {
+        ...stepData.errorData,
+        errorsExists: this.state.errorsExists
+      };
       this.props.dispatch(generalActions.saveStepDataRequest(stepData));
     }
   }
@@ -331,9 +363,39 @@ class CorrectErrorsMediator extends React.Component {
     }
   }
 
+  // basically will addin/remove the column names for errors to be ignored
+  // and will save these errors in the props ofcourse
+  ignoreErrors(headerName) {
+    this.setState((prevState, props) => {
+      const ignoredErrors = [...prevState.ignoredErrors];
+      const headerInd = ignoredErrors.indexOf(headerName);
+
+      if (headerInd === -1) ignoredErrors.push(headerName);
+      else ignoredErrors.splice(headerInd, 1);
+
+      // and we save it in the props
+      const stepData = { ...props.stepData };
+      const errorsExists = this.checkIfErrors(
+        this.state.errorCells,
+        ignoredErrors
+      );
+
+      stepData.errorData = {
+        errorsExists,
+        ignoredErrors: ignoredErrors
+      };
+
+      props.dispatch(generalActions.saveStepDataRequest(stepData));
+
+      return { ignoredErrors, errorsExists };
+    });
+  }
+
   render() {
     return (
       <ErrorStep
+        ignoreErrors={this.ignoreErrors}
+        ignoredErrors={this.state.ignoredErrors}
         loading={this.state.loading}
         updateCell={this.updateCell}
         checkedRows={this.state.checkedRows}

@@ -1,12 +1,38 @@
-import Chart from '../models/Chart';
-
 /* consts */
-import { MAX_CHARTS } from '../const/const';
+const config = require('../config/config');
 
 /* general */
-import { handleError } from './generalResponse';
+const handleError = require('./generalResponse');
+
+const Chart = require('../models/Chart');
+const User = require('../models/User');
 
 const ChartController = {
+  check: function(req, res) {
+    res.json({ message: 'Im in the controller!' });
+  },
+
+  seedChart: function seedEvents(req, res) {
+    // oke so first we seed a random user
+    User.create(
+      {
+        username: 'seed',
+        email: 'seed',
+        authId: 156,
+        role: 'seed',
+        avatar: 'seed',
+        firstName: 'seed',
+        lastName: 'seed',
+        team: 'seed'
+      },
+      { new: true }
+    )
+      .then(acc => res(null, acc))
+      .catch(error => {
+        handleError(res, error);
+      });
+  },
+
   get: function(user, id, res) {
     Chart.findOneByUser(id, user)
       .then(viz => res(null, viz))
@@ -66,7 +92,7 @@ const ChartController = {
 
     Chart.countForUser(user)
       .then(count => {
-        if (count > MAX_CHARTS) {
+        if (count > config.MAX_CHARTS) {
           throw new Error(`Maximum number of Charts reached`);
         }
       })
@@ -284,7 +310,7 @@ const ChartController = {
   // fork: function(user, vizId, res) {
   //   Chart.countForUser(user)
   //     .then(count => {
-  //       if (count >= MAX_CHARTS) {
+  //       if (count >= config.MAX_CHARTS) {
   //         throw new Error(`Maximum number of Charts reached`);
   //       }
   //     })

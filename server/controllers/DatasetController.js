@@ -1,7 +1,7 @@
-import Dataset from '../models/Dataset';
-
 /* general */
-import { handleError } from './generalResponse';
+const handleError = require('./generalResponse');
+
+const Dataset = require('../models/Dataset');
 
 const DatasetApi = {
   // gets data set, if its the owners data set

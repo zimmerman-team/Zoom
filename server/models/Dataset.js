@@ -1,4 +1,5 @@
-import mongoose, { Schema } from 'mongoose';
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const DatasetSchema = new Schema({
   // so this will be the datasets id that we get
@@ -10,6 +11,4 @@ const DatasetSchema = new Schema({
   public: { type: Boolean, default: false }
 });
 
-export const Dataset = mongoose.model(' Dataset', DatasetSchema);
-
-export default Dataset;
+module.exports = mongoose.model(' Dataset', DatasetSchema);

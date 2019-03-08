@@ -1,13 +1,9 @@
-import User from '../models/User';
-
 /* general */
-import { handleError } from './generalResponse';
+const handleError = require('./generalResponse');
+
+const User = require('../models/User');
 
 const UserApi = {
-  check: function(req, res) {
-    res.send('check successfull' + 'request: ' + req);
-  },
-
   getUser: function(authId, res) {
     return User.findOne({ authId })
       .then(acc => res(null, acc))

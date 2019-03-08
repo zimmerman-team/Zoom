@@ -1,4 +1,5 @@
-import mongoose, { Schema } from 'mongoose';
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 mongoose.Promise = global.Promise; // use ES6 promises
 
@@ -227,7 +228,4 @@ ChartSchema.methods.saveAndPopulate = function() {
 //   return this;
 // };
 
-export const Chart = mongoose.model(' Chart', ChartSchema);
-
-export default Chart;
-// export const mongoose.model('Visualization', ChartSchema)
+module.exports = mongoose.model(' Chart', ChartSchema);

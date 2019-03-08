@@ -40,6 +40,7 @@ class CorrectErrorsMediator extends React.Component {
       correctCommand: {},
       errorTableData: [],
       errorCells: [],
+      errorMessages: {},
       pageSize: 10,
       columnHeaders: [],
       page: 0,
@@ -151,7 +152,7 @@ class CorrectErrorsMediator extends React.Component {
         }
 
         const errorsExists = this.checkIfErrors(
-          errorCells,
+          results.error_data.error_messages,
           this.state.ignoredErrors
         );
 
@@ -159,6 +160,7 @@ class CorrectErrorsMediator extends React.Component {
           {
             errorTableData,
             errorCells,
+            errorMessages: results.error_data.error_messages,
             correctCommand: command,
             rowCount: results.total_amount,
             loading: false,
@@ -170,19 +172,27 @@ class CorrectErrorsMediator extends React.Component {
     }
   }
 
-  checkIfErrors(errorCells, ignoredErrors) {
+  checkIfErrors(errorMessages, ignoredErrors) {
     // so we form this errorsExists variable according
     // to the errors message that we get from duct
     // and according to the ignored error array
     let errorsExists = false;
 
-    for (let i = 0; i < errorCells.length; i++) {
-      // so if we find a key with a column name
-      // that isn't in the ignoredErrors array,
-      // we set errorsExists to true and break out of loop
-      if (ignoredErrors.indexOf(errorCells[i].col) === -1) {
-        errorsExists = true;
-        break;
+    for (let key in errorMessages) {
+      if (errorMessages.hasOwnProperty(key)) {
+        // so here we get the column name
+        // from the key in a weird way
+        // cause the data we retrieve is super
+        // weird
+        const colName = key.substring(key.indexOf('|') + 1);
+
+        // so if we find a key with a column name
+        // that isn't in the ignoredErrors array,
+        // we set errorsExists to true and break out of loop
+        if (ignoredErrors.indexOf(colName) === -1) {
+          errorsExists = true;
+          break;
+        }
       }
     }
 
@@ -376,7 +386,7 @@ class CorrectErrorsMediator extends React.Component {
       // and we save it in the props
       const stepData = { ...props.stepData };
       const errorsExists = this.checkIfErrors(
-        this.state.errorCells,
+        this.state.errorMessages,
         ignoredErrors
       );
 

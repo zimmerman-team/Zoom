@@ -116,6 +116,13 @@ module.exports = {
     devtoolModuleFilenameTemplate: info =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
+  devServer: {
+    port: 3000,
+    open: true,
+    proxy: {
+      "/api": "http://localhost:4200"
+    }
+  },
   optimization: {
     // Automatically split vendor and commons
     // https://twitter.com/wSokra/status/969633336732905474

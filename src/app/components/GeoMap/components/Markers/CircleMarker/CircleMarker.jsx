@@ -30,13 +30,13 @@ const circleMarker = (indicator, index, setMarkerInfo) =>
           bottom: positionAdjustment(
             indicator.value,
             indicator.maxValue,
-            indicator.minValue,
+            indicator.minValue
           ),
           right: positionAdjustment(
             indicator.value,
             indicator.maxValue,
-            indicator.minValue,
-          ),
+            indicator.minValue
+          )
         }}
         onMouseEnter={() => setMarkerInfo(indicator)}
         onMouseLeave={() => setMarkerInfo(null)}
@@ -45,12 +45,12 @@ const circleMarker = (indicator, index, setMarkerInfo) =>
           height={getMeasure(
             indicator.value,
             indicator.maxValue,
-            indicator.minValue,
+            indicator.minValue
           )}
           width={getMeasure(
             indicator.value,
             indicator.maxValue,
-            indicator.minValue,
+            indicator.minValue
           )}
         />
       </CircleContainer>

@@ -4,7 +4,7 @@ import { Box } from 'grommet';
 export const ControlPanelContainer = styled.div`
   position: fixed;
   right: 0;
-  top: 0;
+  top: 40px;
   z-index: 9;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,7 @@ export const ControlPanelContainer = styled.div`
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
     0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
   padding-top: 20px;
-  height: 100%;
+  height: calc(100vh - 40px);
 `;
 
 export const PanelDuo = styled.div`

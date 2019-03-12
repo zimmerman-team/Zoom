@@ -31,7 +31,7 @@ const ChartSchema = new Schema(
 
     // isDuplicate: { type: Boolean, default: false },
 
-    public: { type: Boolean, default: false },
+    _public: { type: Boolean, default: false },
     hiddenFromFeed: { type: Boolean, default: false },
 
     dateRange: [String],
@@ -57,6 +57,13 @@ const ChartSchema = new Schema(
 //   if (!viz) return Promise.reject(new Error(`Chart with id ${id} not found`));
 //   else return Promise.resolve(viz);
 // };
+
+ChartSchema.statics.findAndPopulate = function(query, cb) {
+  return this.find(query).populate(
+    'author',
+    '_id firstName lastName avatar username'
+  );
+};
 
 ChartSchema.statics.findAndPopulate = function(query, cb) {
   return this.find(query).populate(

@@ -20,7 +20,7 @@ const ChartController = {
       avatar: 'bob',
       firstName: 'bob',
       lastName: 'bob',
-      team: 'bob'
+      team: 'Bobs team'
     });
 
     author.save();
@@ -56,71 +56,77 @@ const ChartController = {
     res.json(chart);
   },
 
-  // DELETE ME
-  testGetChart: function(req, res) {
-    const { id } = req.query;
-    User.find((err, data) => {
-      if (err) return res.json({ success: false, error: err });
-      return res.json({ success: true, data: data });
-    });
-  },
-
   get: function(req, res) {
     const { chartId, authId } = req.query;
 
-    User.findOne({ authId }).exec((error, user) => {
-      Chart.findOneByUser(chartId, user)
-        .then(viz => {
-          console.log('viz', viz);
-          res(null, viz);
-        })
-        .catch(error => {
-          general.handleError(res, error);
+    User.findOne({ authId }).exec((userError, author) => {
+      if (userError) general.handleError(res, userError);
+      else
+        Chart.findOne({ _id: chartId, author }, 'name', (chartError, chart) => {
+          if (chartError) general.handleError(res, chartError);
+          res.json(chart);
         });
     });
-
-    res.json({ success: false, error: 'Chart of user not found' });
   },
 
-  getPublic: function(user, id, res) {
-    Chart.findOnePublic(id)
-      .then(viz => res(null, viz))
-      .catch(error => {
-        general.handleError(res, error);
-      });
+  // this basically validates the user and gets all public charts
+  getPublic: function(req, res) {
+    const { authId } = req.query;
+    User.findOne({ authId }).exec(userError => {
+      if (userError) general.handleError(res, userError);
+      else
+        Chart.findOne({ _public: true }, 'name', (chartError, chart) => {
+          if (chartError) general.handleError(res, chartError);
+          res.json(chart);
+        });
+    });
   },
 
-  getAll: function(user, res) {
-    Chart.findByUser({}, user, res);
+  // this basically validates the user and gets all public charts
+  getOnePublic: function(req, res) {
+    const { chartId, authId } = req.query;
+    User.findOne({ authId }).exec(userError => {
+      if (userError) general.handleError(res, userError);
+      else
+        Chart.findOne(
+          { _id: chartId, _public: true },
+          'name',
+          (chartError, chart) => {
+            if (chartError) general.handleError(res, chartError);
+            res.json(chart);
+          }
+        );
+    });
   },
 
-  getTeamFeedCharts: function(user, page = 1, res) {
-    const pageSize = 6;
-    let offset = 0;
-    if (page > 1) {
-      offset = pageSize * (page - 1);
-    }
-    const query = {
-      archived: false,
-      public: true,
-      hiddenFromFeed: false,
-      team: user.team
-    };
-    let totalCount;
-    Chart.count(query).then(result => (totalCount = result));
+  getAll: function(req, res) {
+    const { authId } = req.query;
 
-    return Chart.find(query)
-      .sort({ last_updated: -1 })
-      .limit(pageSize)
-      .skip(offset)
-      .populate('author', '_id firstName lastName avatar username')
-      .then(instanceList => {
-        const response = { instanceList, totalCount };
-        res(null, response);
-      })
-      .catch(error => {
-        general.handleError(res, error);
-      });
+    User.findOne({ authId }).exec((userError, author) => {
+      if (userError) general.handleError(res, userError);
+      else
+        Chart.find({ author }, 'name', (chartError, chart) => {
+          if (chartError) general.handleError(res, chartError);
+          res.json(chart);
+        });
+    });
+  },
+
+  getTeamFeedCharts: function(req, res) {
+    const { authId } = req.query;
+
+    User.findOne({ authId }).exec((userError, author) => {
+      if (userError) general.handleError(res, userError);
+      else
+        Chart.find(
+          { author, team: author.team },
+          'name',
+          (chartError, chart) => {
+            if (chartError) general.handleError(res, chartError);
+            res.json(chart);
+          }
+        );
+    });
   },
 
   create: function(user, data, res) {

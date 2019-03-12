@@ -148,7 +148,7 @@ class SideBar extends React.Component {
                 </SidebarNavList>
               </SidebarNavListContainer>
 
-              {/*<LoginForm auth0Client={this.props.auth0Client} />*/}
+              <LoginForm auth0Client={this.props.auth0Client} />
             </Box>
           </SideBarLayer>
         )}

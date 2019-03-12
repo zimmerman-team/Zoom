@@ -7,7 +7,7 @@ import { Route, BrowserRouter as Router } from 'react-router-dom';
 /* components */
 import GeoMap from 'components/GeoMap/GeoMap';
 import { ControlPanelContainer } from 'modules/visualizer/VisualizerModule.style';
-import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
+// import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
 import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';
 import VizContainer from 'modules/visualizer/sort/container/VizContainer';
 // import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';

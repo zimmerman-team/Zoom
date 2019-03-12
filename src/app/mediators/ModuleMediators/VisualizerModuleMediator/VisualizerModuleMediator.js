@@ -343,7 +343,7 @@ FocusModuleMediator.defaultProps = defaultProps;
 export default createRefetchContainer(
   FocusModuleMediator,
   graphql`
-    fragment FocusModuleMediator_indicatorAggregations on Query
+    fragment VisualizerModuleMediator_indicatorAggregations on Query
       @argumentDefinitions(
         datePeriod: { type: "[String]", defaultValue: ["null"] }
         indicator1: { type: "[String]", defaultValue: ["null"] }
@@ -415,7 +415,7 @@ export default createRefetchContainer(
     }
   `,
   graphql`
-    query FocusModuleMediatorRefetchQuery(
+    query VisualizerModuleMediatorRefetchQuery(
       $datePeriod: [String]!
       $indicator1: [String]!
       $indicator2: [String]!
@@ -425,7 +425,7 @@ export default createRefetchContainer(
       $singleInd1: String!
       $singleInd2: String!
     ) {
-      ...FocusModuleMediator_indicatorAggregations
+      ...VisualizerModuleMediator_indicatorAggregations
         @arguments(
           datePeriod: $datePeriod
           indicator1: $indicator1

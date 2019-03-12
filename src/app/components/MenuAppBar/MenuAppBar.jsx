@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import styled from 'styled-components';
 import { makeStyles } from '@material-ui/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -12,8 +12,11 @@ import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+// import Menu from '@material-ui/core/Menu';
+import { Menu } from 'grommet-icons';
 import TempDrawer from 'components/TempDrawer/TempDrawer';
+import { Box, Button, Image } from 'grommet';
+import theme from 'theme/Theme';
 
 const useStyles = makeStyles({
   root: {
@@ -28,6 +31,30 @@ const useStyles = makeStyles({
   }
 });
 
+const ZoomAppBar = styled(AppBar)`
+  && {
+    margin: 0;
+    background-color: ${theme.color.aidsFondsWhite};
+
+    div:first-child {
+      padding: 0;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+`;
+
+const ZoomIconButton = styled(IconButton)``;
+
+const AidsFondLogo = styled(Image)`
+  height: 25px;
+  user-select: none;
+  justify-self: start;
+  margin-left: 15px;
+`;
+
+// const Box = styled.div``;
+
 const propTypes = {
   open: PropTypes.bool,
   toggleSideBar: PropTypes.func,
@@ -39,7 +66,7 @@ const defaultProps = {
 
 function MenuAppBar(props) {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(false);
+  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -69,21 +96,28 @@ function MenuAppBar(props) {
           label={auth ? 'Logout' : 'Login'}
         />
       </FormGroup>*/}
-      <AppBar position="static">
+      <ZoomAppBar position="static">
         <Toolbar variant="dense">
-          <IconButton
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="Menu"
-            onClick={props.handleDrawerOpen}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" color="inherit" className={classes.grow}>
-            ZOOM
-          </Typography>
+          <Box>
+            <IconButton
+              disableRipple
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="Menu"
+              onClick={props.handleDrawerOpen}
+            >
+              <Menu color={theme.color.aidsFondsRed} />
+            </IconButton>
+            <AidsFondLogo
+              a11yTitle="Aidsfonds logo"
+              fit="contain"
+              alignSelf="center"
+              src="https://aidsfonds.nl/Assets/images/aidsfonds_logo_red.png"
+            />
+          </Box>
+
           {auth && (
-            <div>
+            <Box>
               <IconButton
                 aria-owns={open ? 'menu-appbar' : undefined}
                 aria-haspopup="true"
@@ -109,10 +143,10 @@ function MenuAppBar(props) {
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>*/}
-            </div>
+            </Box>
           )}
         </Toolbar>
-      </AppBar>
+      </ZoomAppBar>
     </React.Fragment>
   );
 }

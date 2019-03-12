@@ -13,12 +13,13 @@ import { ZoomTheme } from 'styles/ZoomTheme';
 
 /* global app components */
 import AppBar from 'components/AppBar/AppBar';
-import SideBar from 'components/SideBar/SideBar';
+
 import {
   ToastsContainer,
   ToastsStore,
   ToastsContainerPosition
 } from 'react-toasts';
+import TempDrawer from 'components/TempDrawer/TempDrawer';
 
 const modernEnvironment = new Environment({
   network: Network.create(fetchQuery),
@@ -45,7 +46,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      showSidebar: false,
+      showSidebar: true,
       authChanged: false,
       checkingSession: true
     };
@@ -92,7 +93,15 @@ class App extends React.Component {
                       }
                       auth0Client={auth0Client}
                     />
-                    <SideBar
+                    {/* <SideBar
+                      auth0Client={auth0Client}
+                      open={this.state.showSidebar}
+                      toggleSideBar={() =>
+                        this.setState({ showSidebar: !this.state.showSidebar })
+                      }
+                    />*/}
+
+                    <TempDrawer
                       auth0Client={auth0Client}
                       open={this.state.showSidebar}
                       toggleSideBar={() =>

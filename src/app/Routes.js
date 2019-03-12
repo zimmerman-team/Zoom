@@ -8,6 +8,8 @@ import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel'
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
 import PublicChartLibraryModule from './modules/publicChartLibrary/PublicChartLibraryModule';
+import PublicChartViewModule from './modules/publicChartView/PublicChartViewModule';
+// import PublicChartViewModule from './modules/publicChartView/PublicChartViewModule';
 // Modules regular import
 /*import HomeModule from 'modules/home/HomeModule';
 import IatiDetail from 'modules/IATI_Detail/IatiDetail';
@@ -149,6 +151,10 @@ const Routes = props => {
           <Route
             path="/public/chart"
             render={() => <PublicChartLibraryModule />}
+          />
+          <Route
+            path="/public/chartz/view"
+            render={() => <PublicChartViewModule />}
           />
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />

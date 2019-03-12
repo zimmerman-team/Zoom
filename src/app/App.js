@@ -46,7 +46,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      showSidebar: true,
+      showSidebar: false,
       authChanged: false,
       checkingSession: true
     };
@@ -83,6 +83,7 @@ class App extends React.Component {
               return (
                 <Router>
                   <React.Fragment>
+                    {/* todo: replace toasts with material-ui snackbar https://material-ui.com/demos/snackbars/ */}
                     <ToastsContainer
                       store={ToastsStore}
                       position={ToastsContainerPosition.TOP_CENTER}
@@ -93,14 +94,6 @@ class App extends React.Component {
                       }
                       auth0Client={auth0Client}
                     />
-                    {/* <SideBar
-                      auth0Client={auth0Client}
-                      open={this.state.showSidebar}
-                      toggleSideBar={() =>
-                        this.setState({ showSidebar: !this.state.showSidebar })
-                      }
-                    />*/}
-
                     <TempDrawer
                       auth0Client={auth0Client}
                       open={this.state.showSidebar}

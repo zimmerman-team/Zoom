@@ -1,59 +1,132 @@
-import Chart from '../models/Chart';
-
 /* consts */
-import { MAX_CHARTS } from '../const/const';
+const config = require('../config/config');
 
 /* general */
-import { handleError } from './generalResponse';
+const general = require('./generalResponse');
 
-const ChartAPI = {
-  get: function(user, id, res) {
-    Chart.findOneByUser(id, user)
-      .then(viz => res(null, viz))
-      .catch(error => {
-        handleError(res, error);
-      });
+const Chart = require('../models/Chart');
+const User = require('../models/User');
+
+const ChartController = {
+  // use this only if you have an empty database
+  // and need a chart in it
+  seedChart: function seedEvents(req, res) {
+    // oke so first we seed a random user
+    const author = new User({
+      username: 'bob',
+      email: 'bob@mailinator.com',
+      authId: 156,
+      role: 'admin',
+      avatar: 'bob',
+      firstName: 'bob',
+      lastName: 'bob',
+      team: 'Bobs team'
+    });
+
+    author.save();
+
+    // and then we seed the actual chart
+    const chart = new Chart({
+      /* meta data of chart */
+      name: 'Bobs chart',
+      author,
+
+      description: 'Bobs description',
+      descriptionPlainText: 'Bobs descriptionPlainText',
+
+      // so the type of chart
+      type: 'Bob',
+
+      /* indicators/ sub-indicators of chart */
+      items: [
+        {
+          indicator: 'Bobs indicator',
+          sub_indicators: ['Bobs sub_indicators']
+        }
+      ],
+
+      dateRange: ['1990'],
+
+      // with what team is this chart associated
+      team: 'Bobs team'
+    });
+
+    chart.save();
+
+    res.json(chart);
   },
 
-  getPublic: function(user, id, res) {
-    Chart.findOnePublic(id)
-      .then(viz => res(null, viz))
-      .catch(error => {
-        handleError(res, error);
-      });
+  get: function(req, res) {
+    const { chartId, authId } = req.query;
+
+    User.findOne({ authId }).exec((userError, author) => {
+      if (userError) general.handleError(res, userError);
+      else
+        Chart.findOne({ _id: chartId, author }, 'name', (chartError, chart) => {
+          if (chartError) general.handleError(res, chartError);
+          res.json(chart);
+        });
+    });
   },
 
-  getAll: function(user, res) {
-    Chart.findByUser({}, user, res);
+  // this basically validates the user and gets all public charts
+  getPublic: function(req, res) {
+    const { authId } = req.query;
+    User.findOne({ authId }).exec(userError => {
+      if (userError) general.handleError(res, userError);
+      else
+        Chart.findOne({ _public: true }, 'name', (chartError, chart) => {
+          if (chartError) general.handleError(res, chartError);
+          res.json(chart);
+        });
+    });
   },
 
-  getTeamFeedCharts: function(user, page = 1, res) {
-    const pageSize = 6;
-    let offset = 0;
-    if (page > 1) {
-      offset = pageSize * (page - 1);
-    }
-    const query = {
-      archived: false,
-      public: true,
-      hiddenFromFeed: false,
-      team: user.team
-    };
-    let totalCount;
-    Chart.count(query).then(result => (totalCount = result));
+  // this basically validates the user and gets all public charts
+  getOnePublic: function(req, res) {
+    const { chartId, authId } = req.query;
+    User.findOne({ authId }).exec(userError => {
+      if (userError) general.handleError(res, userError);
+      else
+        Chart.findOne(
+          { _id: chartId, _public: true },
+          'name',
+          (chartError, chart) => {
+            if (chartError) general.handleError(res, chartError);
+            res.json(chart);
+          }
+        );
+    });
+  },
 
-    return Chart.find(query)
-      .sort({ last_updated: -1 })
-      .limit(pageSize)
-      .skip(offset)
-      .populate('author', '_id firstName lastName avatar username')
-      .then(instanceList => {
-        const response = { instanceList, totalCount };
-        res(null, response);
-      })
-      .catch(error => {
-        handleError(res, error);
-      });
+  getAll: function(req, res) {
+    const { authId } = req.query;
+
+    User.findOne({ authId }).exec((userError, author) => {
+      if (userError) general.handleError(res, userError);
+      else
+        Chart.find({ author }, 'name', (chartError, chart) => {
+          if (chartError) general.handleError(res, chartError);
+          res.json(chart);
+        });
+    });
+  },
+
+  getTeamFeedCharts: function(req, res) {
+    const { authId } = req.query;
+
+    User.findOne({ authId }).exec((userError, author) => {
+      if (userError) general.handleError(res, userError);
+      else
+        Chart.find(
+          { author, team: author.team },
+          'name',
+          (chartError, chart) => {
+            if (chartError) general.handleError(res, chartError);
+            res.json(chart);
+          }
+        );
+    });
   },
 
   create: function(user, data, res) {
@@ -66,7 +139,7 @@ const ChartAPI = {
 
     Chart.countForUser(user)
       .then(count => {
-        if (count > MAX_CHARTS) {
+        if (count > config.MAX_CHARTS) {
           throw new Error(`Maximum number of Charts reached`);
         }
       })
@@ -75,7 +148,7 @@ const ChartAPI = {
       .then(viz => viz.saveAndPopulate())
       // response
       .then(viz => res(null, viz)) // TODO: wrap socket.io to promises server-side - 2016-02-11
-      .catch(handleError.bind(null, res));
+      .catch(general.handleError.bind(null, res));
   },
 
   update: function(user, vizId, viz, res) {
@@ -88,7 +161,7 @@ const ChartAPI = {
     return Chart.updateByUser(vizId, viz, user)
       .then(viz => res(null, viz))
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
   },
 
@@ -100,7 +173,7 @@ const ChartAPI = {
     return Chart.deleteByUser(vizId, user)
       .then(viz => res(null, viz))
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
   },
 
@@ -115,7 +188,7 @@ const ChartAPI = {
     })
       .then(viz => res(null))
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
   },
 
@@ -134,7 +207,7 @@ const ChartAPI = {
         .then(viz => viz.saveAndPopulate())
         .then(viz => res(null, viz))
         .catch(error => {
-          handleError(res, error);
+          general.handleError(res, error);
         })
     );
   }
@@ -284,7 +357,7 @@ const ChartAPI = {
   // fork: function(user, vizId, res) {
   //   Chart.countForUser(user)
   //     .then(count => {
-  //       if (count >= MAX_CHARTS) {
+  //       if (count >= config.MAX_CHARTS) {
   //         throw new Error(`Maximum number of Charts reached`);
   //       }
   //     })
@@ -321,7 +394,7 @@ const ChartAPI = {
   //       return viz.saveAndPopulate();
   //     })
   //     .then(viz => res(null, viz))
-  //     .catch(handleError.bind(null, res));
+  //     .catch(general.handleError.bind(null, res));
   // },
 
   /*
@@ -330,7 +403,7 @@ const ChartAPI = {
 
   // adminToggleHide: function(user, vizId, res) {
   //   if (!user.canPlayRoleOf('admin')) {
-  //     return handleError(res, new Error('Unauthorized'));
+  //     return general.handleError(res, new Error('Unauthorized'));
   //   }
   //
   //   return Chart.findOne({ _id: vizId })
@@ -339,8 +412,8 @@ const ChartAPI = {
   //       return viz.saveAndPopulate();
   //     })
   //     .then(viz => res(null, viz))
-  //     .catch(handleError.bind(null, res));
+  //     .catch(general.handleError.bind(null, res));
   // }
 };
 
-module.exports = ChartAPI;
+module.exports = ChartController;

@@ -1,14 +1,14 @@
-import User from '../models/User';
-
 /* general */
-import { handleError } from './generalResponse';
+const general = require('./generalResponse');
+
+const User = require('../models/User');
 
 const UserApi = {
   getUser: function(authId, res) {
     return User.findOne({ authId })
       .then(acc => res(null, acc))
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
   },
 
@@ -38,7 +38,7 @@ const UserApi = {
     )
       .then(acc => res(null, acc))
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
   },
 
@@ -64,7 +64,7 @@ const UserApi = {
     )
       .then(acc => res(null, acc))
       .catch(error => {
-        handleError(res, error);
+        general.handleError(res, error);
       });
   },
 
@@ -73,14 +73,14 @@ const UserApi = {
   // so basically if those fields have been changed
   updateUser: function(user, res) {
     User.findOne({ authId: user.authId }, function(err, userFound) {
-      if (err) return handleError(err);
+      if (err) return general.handleError(err);
 
       if (userFound.username !== user.username)
         userFound.username = user.username;
       if (userFound.email !== user.email) userFound.email = user.email;
 
       userFound.save(function(error) {
-        if (err) handleError(res, error);
+        if (err) general.handleError(res, error);
 
         return res(null, 'auth0 changes applied');
       });
@@ -92,7 +92,7 @@ const UserApi = {
   updateUserByAdmin: function(user, updateUser, res) {
     if (user.role === 'admin') {
       User.findOne({ authId: updateUser.authId }, function(err, userFound) {
-        if (err) return handleError(err);
+        if (err) return general.handleError(err);
 
         if (updateUser.role && userFound.role !== updateUser.role)
           userFound.role = updateUser.role;
@@ -100,13 +100,13 @@ const UserApi = {
           userFound.team = updateUser.team;
 
         userFound.save(function(error) {
-          if (err) handleError(res, error);
+          if (err) general.handleError(res, error);
 
           return res(null, 'user updated');
         });
       });
     } else {
-      handleError(res, {
+      general.handleError(res, {
         name: 'no permission',
         error: 'unauthorized'
       });
@@ -128,12 +128,12 @@ const UserApi = {
   deleteUser: function(user, delId, res) {
     if (user.role === 'admin')
       User.deleteOne({ authId: delId }, error => {
-        if (error) handleError(res, error);
+        if (error) general.handleError(res, error);
 
         return res(null, 'user deleted');
       });
     else
-      handleError(res, {
+      general.handleError(res, {
         name: 'no permission',
         error: 'unauthorized'
       });

@@ -10,6 +10,7 @@ import {
   ViewContainer,
   Box
 } from 'modules/dashboard/DashboardModule.styles';
+
 import Searchbox from 'modules/dashboard/fragments/Searchbox/Searchbox';
 import GridListOptionsPane from '../dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
 import Pagination from '../../components/Pagination/Pagination';
@@ -28,6 +29,7 @@ const defaultProps = {
 const PublicChartLibraryModule = props => {
   return (
     <ModuleContainer>
+      {/*todo: change to sectionHeading*/}
       <PageHeading>Zoom chart library</PageHeading>
       <Searchbox inputChange={props.changeSearchKeyword} />
       <Box>

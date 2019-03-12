@@ -33,3 +33,11 @@ export const SectionHeading = styled(BaseHeading)`
   text-align: center;
   font-family: ${theme.font.zoomFontFamOne};
 `;
+
+export const SubHeading = styled(BaseHeading)`
+  font-size: 11px;
+  text-align: center;
+  font-family: ${theme.font.zoomFontFamTwo};
+  line-height: 1;
+  margin: 0;
+`;

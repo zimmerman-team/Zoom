@@ -1,6 +1,11 @@
 import update from 'immutability-helper';
 import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
+import * as nodeActions from 'services/actions/nodeBackend';
+import { ALL_USER_CHARTS_INITIAL } from 'services/actions/nodeBackend';
+import { ALL_USER_CHARTS_REQUEST } from 'services/actions/nodeBackend';
+import { ALL_USER_CHARTS_SUCCESS } from 'services/actions/nodeBackend';
+import { ALL_USER_CHARTS_FAILED } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -10,8 +15,8 @@ const initial = {
   error: {
     status: null,
     statusText: null,
-    result: null,
-  },
+    result: null
+  }
 };
 
 function updateInitial(state) {
@@ -23,8 +28,8 @@ function updateInitial(state) {
     error: {
       status: { $set: null },
       statusText: { $set: null },
-      result: { $set: null },
-    },
+      result: { $set: null }
+    }
   });
 }
 
@@ -37,8 +42,8 @@ function updateRequest(state, action) {
     error: {
       status: { $set: null },
       statusText: { $set: null },
-      result: { $set: null },
-    },
+      result: { $set: null }
+    }
   });
 }
 
@@ -51,8 +56,8 @@ function updateSuccess(state, action) {
     error: {
       status: { $set: null },
       statusText: { $set: null },
-      result: { $set: {} },
-    },
+      result: { $set: {} }
+    }
   });
 }
 
@@ -65,8 +70,8 @@ function updateFailed(state, action) {
     error: {
       status: { $set: action.error.status },
       statusText: { $set: action.error.statusText },
-      result: { $set: action.error.result },
-    },
+      result: { $set: action.error.result }
+    }
   });
 }
 
@@ -220,7 +225,23 @@ function countryExcerpt(state = initial, action) {
   }
 }
 
+function allUserCharts(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.ALL_USER_CHARTS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.ALL_USER_CHARTS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.ALL_USER_CHARTS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.ALL_USER_CHARTS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  allUserCharts,
   upload,
   validate,
   columns,
@@ -230,7 +251,7 @@ const reducers = {
   manualMapData,
   countryExcerpt,
   countryActivities,
-  activityData,
+  activityData
 };
 
 export default reducers;

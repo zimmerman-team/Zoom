@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import theme from 'theme/Theme';
 
 const ComponentBase = styled.div`
+  display: ${console.log(props => props.display)};
+  
   &:hover > * {
     cursor: pointer;
     color: ${theme.color.aidsFondsBlue};
@@ -25,10 +27,14 @@ margin-left: 3px;
 const propTypes = {
     icon: PropTypes.node.isRequired,
     label: PropTypes.string,
+    display: PropTypes.string
 };
 const defaultProps = {
-    label: ''
+    label: '',
+    display: 'block'
 };
+
+
 
 const GridListOption = props => {
   function handleClick(){
@@ -41,6 +47,7 @@ const GridListOption = props => {
     }}>
         {props.icon}
         <IconLabel>{props.label}</IconLabel>
+      {console.log(props.display)}
     </ComponentBase>);
 };
 GridListOption.propTypes = propTypes;

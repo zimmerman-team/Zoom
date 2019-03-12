@@ -1,13 +1,19 @@
 /* base */
 import React from 'react';
+import * as PropTypes from 'prop-types';
 
 /* components...*/
 import GridItemText from './common/GridItemText';
 import GridItemToolbar from './common/GridItemToolbar';
 import {ComponentBase, GridItemHeading, Box} from './GridItem.styles';
 
-const propTypes = {};
-const defaultProps = {};
+
+const propTypes = {
+  disableToolbar: PropTypes.bool
+};
+const defaultProps = {
+  disableToolbar: false
+};
 
 const GridItem = props => {
   const [isSelected, setIsSelected] = React.useState(false);
@@ -30,7 +36,7 @@ const GridItem = props => {
         <GridItemText label="Type of chart" value="Line chart" />
         <GridItemText label="Data sources" value="UN AIDS" />
       </Box>
-      {isSelected ? <GridItemToolbar /> : null}
+      {isSelected && !props.disableToolbar ? <GridItemToolbar /> : null}
     </ComponentBase>
   );
 };

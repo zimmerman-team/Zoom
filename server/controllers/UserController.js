@@ -5,6 +5,8 @@ const User = require('../models/User');
 
 const UserApi = {
   getUser: function(authId, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     return User.findOne({ authId })
       .then(acc => res(null, acc))
       .catch(error => {
@@ -25,6 +27,8 @@ const UserApi = {
   // so this one will be used for a user themselves to update
   // their profile stuffs
   updateProfile: function(user, newProfile, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     return User.findOneAndUpdate(
       { authId: user.authId },
       {
@@ -49,6 +53,8 @@ const UserApi = {
   // as its hard to differentiate using this backend
   // and auth0 for user management n stuff
   addNewUser: function(user, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     return User.create(
       {
         username: user.username,
@@ -72,6 +78,8 @@ const UserApi = {
   // like email or username which comes strictly from auth0
   // so basically if those fields have been changed
   updateUser: function(user, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     User.findOne({ authId: user.authId }, function(err, userFound) {
       if (err) return general.handleError(err);
 
@@ -90,6 +98,8 @@ const UserApi = {
   // updateUser by Admin, basically used to update role
   // and team
   updateUserByAdmin: function(user, updateUser, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     if (user.role === 'admin') {
       User.findOne({ authId: updateUser.authId }, function(err, userFound) {
         if (err) return general.handleError(err);
@@ -126,6 +136,8 @@ const UserApi = {
   // },
 
   deleteUser: function(user, delId, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     if (user.role === 'admin')
       User.deleteOne({ authId: delId }, error => {
         if (error) general.handleError(res, error);

@@ -34,7 +34,7 @@ export const data = [
     icon: <IconCharts />
   },
   {
-    label: 'Kenya Focus',
+    label: 'KEN Focus',
     path: pathPrefix + 'focus/kenya',
     icon: <IconCharts />
   },

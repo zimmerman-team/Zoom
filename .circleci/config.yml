@@ -45,6 +45,23 @@ jobs:
               echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
             fi
             source $BASH_ENV
+      - run:
+          name: Set REACT_APP_GRAPHQL_HOST and REACT_APP_BACKEND_HOST env var
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_STAGING"' >> $BASH_ENV
+              echo 'export REACT_APP_BACKEND_HOST="$DUCT_STAGING"' >> $BASH_ENV
+            elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_TEST"' >> $BASH_ENV
+              echo 'export REACT_APP_BACKEND_HOST="$DUCT_TEST"' >> $BASH_ENV
+            elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
+              echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_DEV"' >> $BASH_ENV
+              echo 'export REACT_APP_BACKEND_HOST="$DUCT_DEV"' >> $BASH_ENV
+            else
+              echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_DEV"' >> $BASH_ENV
+              echo 'export REACT_APP_BACKEND_HOST="$DUCT_DEV"' >> $BASH_ENV
+            fi
+            source $BASH_ENV
       - run: yarn build
       - run:
           name: Add target host to known_hosts files

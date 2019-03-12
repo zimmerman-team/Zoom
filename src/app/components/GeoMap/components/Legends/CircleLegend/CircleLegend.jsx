@@ -8,7 +8,7 @@ import {
   CircleNumber,
   CircleLegendLabel,
   CircleLegendItem,
-  CircleLegendNum,
+  CircleLegendNum
 } from 'components/GeoMap/components/Legends/CircleLegend/CircleLegend.styles';
 
 /* utils */

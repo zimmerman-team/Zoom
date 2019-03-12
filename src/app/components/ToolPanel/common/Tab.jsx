@@ -18,12 +18,12 @@ const MaterialStyle = () => ({
     opacity: 1,
     '&:hover': {
       backgroundColor: theme.color.aidsFondsBlue,
-      opacity: 1,
-    },
+      opacity: 1
+    }
   },
   selected: {
-    backgroundColor: theme.color.aidsFondsBlue,
-  },
+    backgroundColor: theme.color.aidsFondsBlue
+  }
 });
 
 const Component = styled(Tab)`
@@ -48,7 +48,7 @@ const Container = props => {
         disableRipple
         classes={{
           root: MaterialStyle.root,
-          selected: MaterialStyle.selected,
+          selected: MaterialStyle.selected
         }}
         {...props}
       />

@@ -1,12 +1,12 @@
 import React from 'react';
 
 const SvgIconSearch = props => (
-  <svg width={20} height={20} {...props}>
+  <svg width={18} height={18} {...props}>
     <path
-      fill="none"
-      stroke="#9b9b9b"
-      strokeWidth={2}
-      d="M13.8 13.8L18 18l-4.2-4.2zM10.5 15a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9z"
+      fill="#000"
+      fill-rule="evenodd"
+      d="M12.5 11h-.8l-.3-.3c1-1.1 1.6-2.6 1.6-4.2C13 2.9 10.1 0 6.5 0S0 2.9 0 6.5 2.9 13 6.5 13c1.6 0 3.1-.6 4.2-1.6l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0C4 11 2 9 2 6.5S4 2 6.5 2 11 4 11 6.5 9 11 6.5 11z"
+      opacity=".53999996"
     />
   </svg>
 );

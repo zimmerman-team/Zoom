@@ -5,6 +5,9 @@ import {
   CheckBox,
   ErrorCell,
   ErrorColHeader,
+  IgnorHeaderLabel,
+  HeaderName,
+  IgnoreHeaderCheckBox,
   HeaderCheckBox
 } from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
 
@@ -12,7 +15,13 @@ import {
 import CustomCheckBox from 'components/CustomCheckBox/CustomCheckBox';
 
 // so yeah here the columns will need to be formatted according to the data
-export function formatColumns(tableData, checkRows, handleCellClick) {
+export function formatColumns(
+  tableData,
+  checkRows,
+  handleCellClick,
+  ignoreErrors,
+  ignoredErrors
+) {
   const columns = [];
 
   if (tableData.length > 0) {
@@ -52,9 +61,22 @@ export function formatColumns(tableData, checkRows, handleCellClick) {
       if (key !== 'line no.' && key !== 'checked')
         columns.push({
           property: key,
-          header: (
-            <ErrorColHeader key={`header-${index}`}>{key}</ErrorColHeader>
-          ),
+          header:
+            key === 'index' ? (
+              <ErrorColHeader key={`header-${index}`}>{key}</ErrorColHeader>
+            ) : (
+              <ErrorColHeader key={`header-${index}`}>
+                <HeaderName>{key}</HeaderName>
+                <IgnoreHeaderCheckBox key={`ignore-header-checkbox-${index}`}>
+                  <CustomCheckBox
+                    key={`checkbox-${index}`}
+                    checked={ignoredErrors.indexOf(key) !== -1}
+                    onChange={() => ignoreErrors(key)}
+                  />
+                  <IgnorHeaderLabel>Ignore errors</IgnorHeaderLabel>
+                </IgnoreHeaderCheckBox>
+              </ErrorColHeader>
+            ),
           render: val => (
             <ErrorCell
               onClick={

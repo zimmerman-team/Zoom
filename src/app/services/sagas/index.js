@@ -111,8 +111,13 @@ export function* dataPaneToggleRequest(action) {
   yield put(generalActions.dataPaneToggleDone(action.open));
 }
 
+export function* saveStepDataRequest(action) {
+  yield put(generalActions.saveStepDataDone(action.data));
+}
+
 function* sagas() {
   yield [
+    takeLatest('SAVE_STEP_DATA_REQUEST', saveStepDataRequest),
     takeLatest('DATA_PANE_TOGGLE_REQUEST', dataPaneToggleRequest),
     takeLatest('COUNTRY_ACTIVITIES_REQUEST', countryActivitiesRequest),
     takeLatest('UPLOAD_REQUEST', uploadRequest),

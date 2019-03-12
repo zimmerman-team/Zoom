@@ -1,57 +1,66 @@
-describe('Home page E2E test', function() {
+describe('Home page map controls', function() {
   it('Visit Home page ', function() {
     cy.visit('/');
   });
 
-  it('Goes into fullscreen ', function() {
+  it('Goes in and out of fullscreen', function() {
     cy.get('[data-cy="home-fullscreen-button"]').click();
-  });
-
-  it('Goes out of fullscreen ', function() {
     cy.get('body').type('{esc}');
   });
 
-  it('Zooms in 3 times ', function() {
+  it('Zooms in and out 3 times', function() {
     for (let i = 0; i < 3; i += 1) {
       cy.get('[data-cy="home-zoom-in-button"]').click();
     }
-  });
-
-  it('Zooms out 3 times ', function() {
     for (let i = 0; i < 3; i += 1) {
       cy.get('[data-cy="home-zoom-out-button"]').click();
     }
   });
 
-  it('Opens sidebar ', function() {
+  it('The year selector makes changes to the time period slider', function() {});
+});
+
+describe('Home page geo map filters', function() {
+  // Contain is used in the next tests because third party library's created the DOM elements
+  it('Navigates through geo map filters', function() {
     cy.get('[data-cy="geomap-filter-button"]').click();
-  });
-
-  // Contain is used in the next tests because third party library's created the elements
-  it('Opens geo location ', function() {
     cy.contains('Geo location').click();
-  });
-
-  it('Opens select region', function() {
     cy.contains('Select region').click();
+    cy.contains('Deselect all').click();
   });
 
-  it('Types eu in searchbar ', function() {
+  it('Types eu in searchbar and selects Europe it', function() {
     cy.get('[data-cy="geo-map-search"]')
       .children()
       .children()
       .type('eu');
-  });
-
-  it('Selects Europe from the dropdown ', function() {
     cy.contains('europe').click();
-  });
-
-  it('Resets values ', function() {
-    cy.get('[data-cy="data-explorer-panel-reset"]').click();
-  });
-
-  it('Clicks on the map ', function() {
     cy.get('[data-cy="geo-map-container"]').click();
+  });
+
+  it('Navigates to indicator "condom use" and selects it', function() {
+    cy.contains('Indicators').click();
+    cy.contains('Select indicator').click();
+    cy.contains('condom use').click();
+  });
+
+  it('Plots Europe data about condom use', function() {
+    cy.get('[data-cy="legendLayer-label"]').should('contain', 'condom use');
+    // Fixme: this test should fail looking at the current state, it should only plot data from Europe.
+  });
+
+  it('Navigates to a second indicator "aids orphans" and selects it', function() {
+    cy.contains('Select indicator').click();
+    cy.contains('aids orphans').click();
+  });
+
+  it('Plots a second Europe data about aids orphans', function() {
+    cy.get('[data-cy="legendCircle-label"]').should('contain', 'aids orphans');
+    // Fixme: this test should fail looking at the current state, it should only plot data from Europe.
+  });
+
+  it('Resets values', function() {
+    cy.get('[data-cy="geo-map-container"]').click();
+    cy.get('[data-cy="data-explorer-panel-reset"]').click();
   });
 });

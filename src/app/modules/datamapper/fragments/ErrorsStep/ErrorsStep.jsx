@@ -9,6 +9,7 @@ import Pagination from 'components/Pagination/Pagination';
 import ZoomButton from 'components/ZoomButton/ZoomButton';
 import SimpleEditDialog from 'components/Dialog/SimpleEditDialog/SimpleEditDialog';
 import Divider from 'components/Dividers/Divider';
+import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
 /* utils */
 import { formatColumns } from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep.util';
@@ -23,7 +24,6 @@ import {
   TabContainer,
   TabText,
   ButtonContainer,
-  AboveTableOptions,
   TabDivider
 } from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
 
@@ -66,6 +66,8 @@ const propTypes = {
   deleteRows: PropTypes.func,
   checkedRows: PropTypes.bool,
   updateCell: PropTypes.func,
+  ignoreErrors: PropTypes.func,
+  ignoredErrors: PropTypes.arrayOf(PropTypes.string),
   forcePage: PropTypes.number
 };
 
@@ -82,6 +84,8 @@ const defaultProps = {
   deleteRows: undefined,
   checkedRows: false,
   updateCell: undefined,
+  ignoreErrors: undefined,
+  ignoredErrors: [],
   forcePage: 0
 };
 
@@ -110,14 +114,19 @@ class ErrorStep extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!isEqual(this.props.data, prevProps.data)) {
+    if (
+      !isEqual(this.props.data, prevProps.data) ||
+      !isEqual(this.props.ignoredErrors, prevProps.ignoredErrors)
+    ) {
       this.setState(
         {
           data: this.props.data,
           columns: formatColumns(
             this.props.data,
             this.props.checkRows,
-            this.handleCellClick
+            this.handleCellClick,
+            this.props.ignoreErrors,
+            this.props.ignoredErrors
           )
         },
         this.changeColors
@@ -151,10 +160,14 @@ class ErrorStep extends React.Component {
 
   colorErrors() {
     this.props.errorCells.forEach(cell => {
-      const colInd = findIndex(this.state.columns, ['property', cell.col]) + 1;
-      document.querySelector(
-        `tbody tr:nth-child(${cell.row}) td:nth-child(${colInd})`
-      ).style.backgroundColor = theme.color.errorCellColor;
+      // and we don't color the ignored columns
+      if (this.props.ignoredErrors.indexOf(cell.col) === -1) {
+        const colInd =
+          findIndex(this.state.columns, ['property', cell.col]) + 1;
+        document.querySelector(
+          `tbody tr:nth-child(${cell.row}) td:nth-child(${colInd})`
+        ).style.backgroundColor = theme.color.errorCellColor;
+      }
     });
   }
 
@@ -226,7 +239,12 @@ class ErrorStep extends React.Component {
 
   render() {
     return (
-      <ModuleContainer>
+      <ModuleContainer
+        style={
+          this.props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}
+        }
+      >
+        {this.props.loading && <ProgressIcon />}
         <SimpleEditDialog
           open={this.state.cellDialogOpen}
           handleClose={() => this.setState({ cellDialogOpen: false })}

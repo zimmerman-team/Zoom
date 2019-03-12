@@ -141,10 +141,11 @@ export function formatBarChartInfoIndicators(
       const countryDataPoints = filter(countryData, ['indicatorName', name]);
       // const globalDataPoints = filter(globalData, ['indicatorName', name]);
 
-      let countryIndValue = 0;
-      countryDataPoints.forEach(point => {
-        countryIndValue += point.value;
-      });
+      let countryIndValue = sortBy(countryDataPoints, ['date']).reverse()[0]
+        .value;
+      // countryDataPoints.forEach(point => {
+      //   countryIndValue += point.value;
+      // });
       total += countryIndValue;
 
       // let globalIndValue = 0;

@@ -1,36 +1,59 @@
-import theme from 'theme/Theme';
-import { Link } from 'react-router-dom';
+/* base */
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
-export const SidebarNavListContainer = styled.div`
-  background-color: ${theme.color.zoomGreyZero};
-  padding: 20px;
-`;
+/* material ui */
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import theme from 'theme/Theme';
 
-export const SidebarNavList = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const SidebarNavListItem = styled(Link)`
-  border: none;
+export const CloseButton = styled.button`
+  padding: 0;
   color: ${theme.color.aidsFondsRed};
-  border-radius: initial;
   font-family: ${theme.font.zoomFontFamTwo};
-  display: flex;
-  padding-left: 0;
-  padding-right: 0;
   font-size: 14px;
-  line-height: 1;
-  margin-bottom: 16px;
-  transition: opacity 200ms ease-out;
+`;
 
-  &:last-child {
-    margin-bottom: 0;
-    opacity: 0.5;
-  }
+export const LoginBox = styled.div`
+  width: 320px;
+`;
 
-  &:hover {
-    opacity: 0.5;
+export const SidebarNavList = styled(List)`
+  && {
+    width: 320px;
+    background-color: ${theme.color.zoomGreyZero};
+    padding: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
+`;
+
+export const SidebarNavListItem = styled(ListItem)`
+  && {
+    display: flex;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    line-height: 1;
+  }
+`;
+
+export const SidebarClosButton = styled(SidebarNavListItem)`
+  height: 40px;
+`;
+
+export const ZoomListItemText = styled(ListItemText)`
+  && {
+    padding: 0;
+    span {
+      color: ${theme.color.aidsFondsRed};
+      font-family: ${theme.font.zoomFontFamTwo};
+      font-size: 14px;
+    }
+  }
+`;
+
+export const ZoomLink = styled(Link)`
+  display: flex;
+  text-decoration: none;
 `;

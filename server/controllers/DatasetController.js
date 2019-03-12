@@ -6,6 +6,8 @@ const Dataset = require('../models/Dataset');
 const DatasetApi = {
   // gets data set, if its the owners data set
   getDataset: function(author, datasetId, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     return Dataset.findOne({ author, datasetId })
       .then(set => res(null, set))
       .catch(error => {
@@ -15,6 +17,8 @@ const DatasetApi = {
 
   // gets all datasets of the owner
   getOwnerDatasets: function(author, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     return Dataset.find({ author })
       .then(set => res(null, set))
       .catch(error => {
@@ -26,6 +30,8 @@ const DatasetApi = {
   // so this updates the team related to the dataset
   // currently only the owner can do this
   updateTeam: function(author, datasetId, team, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     return Dataset.findOneAndUpdate(
       { author, datasetId },
       {
@@ -42,6 +48,8 @@ const DatasetApi = {
   // so this updates the public of the dataset
   // currently only the owner can do this
   updatePublic: function(author, datasetId, pub, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     return Dataset.findOneAndUpdate(
       { author, datasetId },
       {
@@ -57,6 +65,8 @@ const DatasetApi = {
 
   // so this adds the dataset
   addNewDataset: function(author, dataset, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     if (author.role === 'admin')
       return Dataset.create(
         {
@@ -80,6 +90,8 @@ const DatasetApi = {
   },
 
   deleteDataset: function(author, datasetId, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     if (author.role === 'admin')
       Dataset.deleteOne({ author, datasetId }, error => {
         general.handleError(res, error);

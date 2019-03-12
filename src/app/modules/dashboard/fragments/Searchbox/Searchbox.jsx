@@ -27,7 +27,7 @@ const StyledTextField = styled(TextField)`
   && {
     padding: 0;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 0;
 
     fieldset {
       border-radius: 0;

@@ -7,6 +7,7 @@ import PageLoader from 'modules/common/pageloader/PageLoader';
 import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
+import PublicChartLibraryModule from './modules/publicChartLibrary/PublicChartLibraryModule';
 // Modules regular import
 /*import HomeModule from 'modules/home/HomeModule';
 import IatiDetail from 'modules/IATI_Detail/IatiDetail';
@@ -144,6 +145,10 @@ const Routes = props => {
             render={() => (
               <DataMapperModule dropDownData={props} fileCorrection={props} />
             )}
+          />
+          <Route
+            path="/public/chart"
+            render={() => <PublicChartLibraryModule />}
           />
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />

@@ -14,13 +14,19 @@ margin-top: 17px;
 margin-bottom: 17px;
 `;
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  displayAddChart: PropTypes.string
+};
+
+const defaultProps = {
+  displayAddChart: 'block'
+};
+
 
 const GridListOptionsPane = props => {
   return (
     <ComponentBase>
-      <GridListOption icon={<SvgIconAdd/>} label="add chart"  />
+      <GridListOption icon={<SvgIconAdd/>} label="add chart" display={props.displayAddChart}/>
       <GridListOption icon={<SvgIconSort/>} />
     </ComponentBase>);
 };

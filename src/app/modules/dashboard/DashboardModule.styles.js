@@ -27,6 +27,7 @@ export const Section = styled.section`
 
 export const PageHeading = styled(_PageHeading)`
   font-size: ${Theme.fontSize.pageHeadingSmall};
+  font-family: ${Theme.font.zoomFontFamOne};
   margin-bottom: 15px;
 `;
 export const header = styled.header`

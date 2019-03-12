@@ -1,6 +1,7 @@
 import 'isomorphic-fetch';
 import assign from 'lodash/assign';
 import querystring from 'querystring';
+import axios from 'axios';
 
 function handleResponse(response) {
   return response.json().then(result => {
@@ -89,4 +90,21 @@ export function activityRequest(values) {
 
 export function wikipediaExcerptRequest(values) {
   return handleRequest(wikiURL('/w/api.php'), formatJSON(values), 'get');
+}
+
+// NODE BACKEND CALL TYPES
+export function nodeBackendGetRequest(request) {
+  return axios.get(`/api/${request.endpoint}`, {
+    params: request.values
+  });
+}
+
+export function nodeBackendPostRequest(request) {
+  return axios.post(`/api/${request.endpoint}`, request.values);
+}
+
+export function nodeBackendDeleteRequest(request) {
+  return axios.delete(`/api/${request.endpoint}`, {
+    params: request.values
+  });
 }

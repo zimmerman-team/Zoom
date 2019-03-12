@@ -6,19 +6,21 @@ import PropTypes from 'prop-types';
 import {
   ModuleContainer,
   PageHeading,
-  HeaderIcon,
-  HeaderGreeting,
   SearchBox,
   ViewContainer,
   NoItems,
   Header,
-  Section
+  Section,
+  Box
 } from 'modules/dashboard/DashboardModule.styles';
-import SvgIconUser from 'assets/icons/IconUser';
-import SvgIconSearch from 'assets/icons/IconSearch';
+import Searchbox from './fragments/Searchbox/Searchbox';
 import TabContainer from './fragments/TabContainer/TabContainer';
 import UsersTabView from './fragments/UsersTabView/UsersTabView';
 import TeamsTabView from './fragments/TeamsTabView/TeamsTabView';
+import DashboardHeader from 'modules/dashboard/fragments/DashboardHeader/DashboardHeader';
+import GridListOptionsPane from './fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
+import GridItem from './fragments/GridList/components/GridItem/GridItem';
+
 
 const propTypes = {
   tabs: PropTypes.arrayOf(
@@ -73,7 +75,6 @@ const getTabView = (
       return <NoItems>No items in {tabs[2].label}</NoItems>;
     case tabs[3].key:
       return (
-        // todo: UsersTabView and TeamsTabView are very similar in code, maybe it's possible to create a more generic component?
         <UsersTabView
           sort={sort}
           users={users}
@@ -115,55 +116,52 @@ const DashboardModule = ({
   changeSearchKeyword
 }) => (
   <ModuleContainer>
-    <Header>
-      {/* fixme: make re-usable header component and relocate fontsize to theme file */}
-      <PageHeading>Zoom dashboard</PageHeading>
-      {/* todo: is this optimal? maybe make a re-usable component for this */}
-      <HeaderIcon>
-        <SvgIconUser />
-      </HeaderIcon>
-      <HeaderGreeting>Welcome back {greetingName}</HeaderGreeting>
-    </Header>
+    <DashboardHeader title="Zoom dashboard" userName={greetingName} />
+    <Searchbox inputChange={changeSearchKeyword} />
 
-    <Section>
-      {/* fixme: make re-usable component and use material-ui instead of grommet */}
-      <SearchBox
-        onChange={changeSearchKeyword}
-        placeholder={<SvgIconSearch />}
-      />
-    </Section>
-
-    <Section>
-      <TabContainer
-        tabs={tabs}
-        tabCounts={{
-          charts: 0,
-          'data-sets': 0,
-          'focus-pages': 0,
-          users: users.length,
-          teams: teams.length,
-          trash: 0
-        }}
-        activeTab={activeTab}
-      />
-    </Section>
-
-    <Section>
-      <ViewContainer>
-        {/* todo: evaluate if we can handle this in a simpler way by using react router */}
-        {getTabView(
-          users,
-          teams,
-          tabs,
-          activeTab,
-          isSortByOpen,
-          setIsSortByOpen,
-          setWrapperRef,
-          sort,
-          changeSortBy
-        )}
-      </ViewContainer>
-    </Section>
+    <Box>
+      <section>
+        <TabContainer
+          tabs={tabs}
+          tabCounts={{
+            charts: 0,
+            'data-sets': 0,
+            'focus-pages': 0,
+            users: users.length,
+            teams: teams.length,
+            trash: 0
+          }}
+          activeTab={activeTab}
+        />
+      </section>
+      <GridListOptionsPane/>
+      <section>
+        <ViewContainer>
+          {/*todo: evaluate if we can handle this in a simpler way by using react router*/}
+          {/*{getTabView(*/}
+            {/*users,*/}
+            {/*teams,*/}
+            {/*tabs,*/}
+            {/*activeTab,*/}
+            {/*isSortByOpen,*/}
+            {/*setIsSortByOpen,*/}
+            {/*setWrapperRef,*/}
+            {/*sort,*/}
+            {/*changeSortBy*/}
+          {/*)}*/}
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
+        </ViewContainer>
+      </section>
+    </Box>
   </ModuleContainer>
 );
 

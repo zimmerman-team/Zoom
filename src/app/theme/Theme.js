@@ -1,5 +1,9 @@
 export default {
-  fontSize: {},
+  fontSize: {
+    pageHeadingBig: '48px',
+    pageHeadingSmall: '32px'
+  },
+
   color: {
     aidsFondsBlue: '#0000ff',
     aidsFondsRed: '#ff0100',

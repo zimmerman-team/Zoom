@@ -6,11 +6,6 @@ import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import auth0Client from 'auth/Auth';
 import Analytics from 'react-router-ga';
 
-// Routes
-import Routes from './Routes';
-import { Grommet } from 'grommet';
-import { ZoomTheme } from 'styles/ZoomTheme';
-
 /* global app components */
 import AppBar from 'components/AppBar/AppBar';
 import SideBar from 'components/SideBar/SideBar';
@@ -19,6 +14,11 @@ import {
   ToastsStore,
   ToastsContainerPosition
 } from 'react-toasts';
+
+// Routes
+import { Grommet } from 'grommet';
+import { ZoomTheme } from 'styles/ZoomTheme';
+import Routes from './Routes';
 
 const modernEnvironment = new Environment({
   network: Network.create(fetchQuery),

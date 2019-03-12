@@ -67,6 +67,9 @@ module.exports = {
   // A map from regular expressions to module names that allow to stub out resources with a single module
   moduleNameMapper: {
     '^components[/](.+)': '<rootDir>/src/app/components/$1',
+    '^theme[/](.+)': '<rootDir>/src/app/theme/$1',
+    '^assets[/](.+)': '<rootDir>/src/app/assets/$1',
+    '^__consts__[/](.+)': '<rootDir>/src/app/__consts__/$1',
     '^__mocks__[/](.+)': '<rootDir>/src/app/__mocks__/$1',
     '^modules[/](.+)': '<rootDir>/src/app/modules/$1',
     '\\.(svg)$': '<rootDir>src/app/__mocks__/svgMock.js',

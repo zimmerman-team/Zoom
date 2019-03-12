@@ -10,8 +10,8 @@ const initial = {
   error: {
     status: null,
     statusText: null,
-    result: null,
-  },
+    result: null
+  }
 };
 
 function updateInitial(state) {
@@ -23,8 +23,8 @@ function updateInitial(state) {
     error: {
       status: { $set: null },
       statusText: { $set: null },
-      result: { $set: null },
-    },
+      result: { $set: null }
+    }
   });
 }
 
@@ -37,8 +37,8 @@ function updateRequest(state, action) {
     error: {
       status: { $set: null },
       statusText: { $set: null },
-      result: { $set: null },
-    },
+      result: { $set: null }
+    }
   });
 }
 
@@ -51,8 +51,8 @@ function updateSuccess(state, action) {
     error: {
       status: { $set: null },
       statusText: { $set: null },
-      result: { $set: {} },
-    },
+      result: { $set: {} }
+    }
   });
 }
 
@@ -65,8 +65,8 @@ function updateFailed(state, action) {
     error: {
       status: { $set: action.error.status },
       statusText: { $set: action.error.statusText },
-      result: { $set: action.error.result },
-    },
+      result: { $set: action.error.result }
+    }
   });
 }
 
@@ -230,7 +230,7 @@ const reducers = {
   manualMapData,
   countryExcerpt,
   countryActivities,
-  activityData,
+  activityData
 };
 
 export default reducers;

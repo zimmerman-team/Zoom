@@ -101,14 +101,17 @@ const ChartController = {
 
   getAll: function(req, res) {
     const { authId } = req.query;
-
     User.findOne({ authId }).exec((userError, author) => {
-      if (userError) general.handleError(res, userError);
-      else
+      if (userError) {
+        general.handleError(res, userError);
+      } else if (!author) {
+        general.handleError(res, 'User not found', 404);
+      } else {
         Chart.find({ author }, 'name', (chartError, chart) => {
           if (chartError) general.handleError(res, chartError);
           res.json(chart);
         });
+      }
     });
   },
 
@@ -130,6 +133,8 @@ const ChartController = {
   },
 
   create: function(user, data, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     /*
      * Creates a new Chart, and generates the resulting data by querying OIPA
      */
@@ -152,6 +157,8 @@ const ChartController = {
   },
 
   update: function(user, vizId, viz, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     /*
      * Update a new Chart, without updating results
      */
@@ -166,6 +173,8 @@ const ChartController = {
   },
 
   delete: function(user, vizId, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     /*
      * Permanently delete a Chart
      */
@@ -178,6 +187,8 @@ const ChartController = {
   },
 
   emptyTrash: function(user, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     /*
      * Delete all archived visualisations
      */
@@ -193,6 +204,8 @@ const ChartController = {
   },
 
   updateAndRefresh: function(user, vizId, viz, res) {
+    // TODO: should be adjusted without the promises, or maybe with promises if
+    // TODO: it works and makes sense
     /*
      * Update a new Chart, updating results
      */

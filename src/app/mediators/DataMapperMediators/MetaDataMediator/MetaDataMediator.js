@@ -5,13 +5,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MetaData from 'modules/datamapper/fragments/MetaData/MetaData';
 import { createFragmentContainer, graphql } from 'react-relay';
+import { connect } from 'react-redux';
+
+/* actions */
+import * as actions from 'services/actions/general';
 
 /* utils */
 import findIndex from 'lodash/findIndex';
-import isEqual from 'lodash/isEqual';
 
 /* consts */
-import { step1InitialData } from '__consts__/MetaDataStepConsts';
+import { step1InitialData } from '__consts__/DataMapperStepConsts';
 
 const propTypes = {
   dropDownData: PropTypes.shape({
@@ -26,7 +29,7 @@ const propTypes = {
     })
   }),
   saveStepData: PropTypes.func,
-  data: PropTypes.shape({
+  stepData: PropTypes.shape({
     title: PropTypes.string,
     desc: PropTypes.string,
     tags: PropTypes.arrayOf(PropTypes.string),
@@ -80,7 +83,7 @@ const propTypes = {
 const defaultProps = {
   dropDownData: {},
   saveStepData: undefined,
-  data: step1InitialData,
+  stepData: step1InitialData,
   environment: null
 };
 
@@ -89,7 +92,9 @@ class MetaDataMediator extends React.Component {
     super(props);
 
     this.state = {
-      data: props.data
+      data: props.stepData.metaData
+        ? props.stepData.metaData
+        : step1InitialData.metaData
     };
 
     this.simpleChange = this.simpleChange.bind(this);
@@ -102,15 +107,27 @@ class MetaDataMediator extends React.Component {
   }
 
   componentDidMount() {
+    if (!this.props.stepData.metaData) {
+      // so we set the initial state of the step data
+      const stepData = { ...this.props.stepData };
+      stepData.metaData = step1InitialData.metaData;
+      stepData.environment = this.props.relay.environment;
+      this.props.dispatch(actions.saveStepDataRequest(stepData));
+    }
+
     const fileSources = this.props.dropDownData.allFileSources.edges.map(
       node => {
         return { label: node.node.name, value: node.node.entryId };
       }
     );
     this.simpleChange(fileSources, 'fileSources');
+  }
 
-    if (!this.props.environment)
-      this.props.saveEnvironment(this.props.relay.environment);
+  // and we save the first steps data in redux
+  componentWillUnmount() {
+    const stepData = { ...this.props.stepData };
+    stepData.metaData = this.state.data;
+    this.props.dispatch(actions.saveStepDataRequest(stepData));
   }
 
   onChipAdd(value) {
@@ -126,14 +143,20 @@ class MetaDataMediator extends React.Component {
   }
 
   simpleChange(value, question) {
-    this.setState(
-      prevState => {
-        const { data } = prevState;
-        data[question] = value;
-        return { data };
-      },
-      () => this.props.saveStepData(this.state.data, 1)
-    );
+    this.setState((prevState, props) => {
+      const data = { ...prevState.data };
+      data[question] = value;
+
+      // here we will only save data into props
+      // if its about one of the required fields
+      if (data.requiredFields.indexOf(question) !== -1) {
+        const stepData = { ...props.stepData };
+        stepData.metaData = data;
+        props.dispatch(actions.saveStepDataRequest(stepData));
+      }
+
+      return { data };
+    });
   }
 
   // so for check box change we tweek the changing a little
@@ -240,6 +263,7 @@ class MetaDataMediator extends React.Component {
   render() {
     return (
       <MetaData
+        metaDataEmptyFields={this.props.metaDataEmptyFields}
         data={this.state.data}
         simpleChange={this.simpleChange}
         checkBoxChange={this.checkBoxChange}
@@ -256,8 +280,14 @@ class MetaDataMediator extends React.Component {
 MetaDataMediator.propTypes = propTypes;
 MetaDataMediator.defaultProps = defaultProps;
 
+const mapStateToProps = state => {
+  return {
+    stepData: state.stepData.stepzData
+  };
+};
+
 export default createFragmentContainer(
-  MetaDataMediator,
+  connect(mapStateToProps)(MetaDataMediator),
   graphql`
     fragment MetaDataMediator_dropDownData on Query {
       allFileSources {

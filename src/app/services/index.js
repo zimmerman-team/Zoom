@@ -1,6 +1,7 @@
 import 'isomorphic-fetch';
 import assign from 'lodash/assign';
 import querystring from 'querystring';
+import axios from 'axios';
 
 function handleResponse(response) {
   return response.json().then(result => {
@@ -10,7 +11,7 @@ function handleResponse(response) {
     const error = {
       status: response.status,
       statusText: response.statusText,
-      result,
+      result
     };
     throw error;
   });
@@ -18,7 +19,7 @@ function handleResponse(response) {
 
 function handleRequest(url, values = null, method = 'post') {
   const request = {
-    method: method !== 'upload' ? method : 'post',
+    method: method !== 'upload' ? method : 'post'
   };
   if (values) {
     if (method === 'post') {
@@ -37,28 +38,28 @@ export function uploadRequest(values) {
   return handleRequest(
     `${process.env.REACT_APP_BACKEND_HOST}/api/metadata/upload/`,
     values,
-    'upload',
+    'upload'
   );
 }
 
 export function validateRequest(values) {
   return handleRequest(
     `${process.env.REACT_APP_BACKEND_HOST}/api/validate/`,
-    values,
+    values
   );
 }
 
 export function errorCorrectionRequest(values) {
   return handleRequest(
     `${process.env.REACT_APP_BACKEND_HOST}/api/error-correction/`,
-    values,
+    values
   );
 }
 
 export function manualMapDataRequest(values) {
   return handleRequest(
     `${process.env.REACT_APP_BACKEND_HOST}/api/manual-mapping/get_data/`,
-    values,
+    values
   );
 }
 
@@ -83,10 +84,27 @@ export function activityRequest(values) {
   return handleRequest(
     oipaURL(`/api/activities/${values.activityID}`),
     formatJSON({ fields: values.fields }),
-    'get',
+    'get'
   );
 }
 
 export function wikipediaExcerptRequest(values) {
   return handleRequest(wikiURL('/w/api.php'), formatJSON(values), 'get');
+}
+
+// NODE BACKEND CALL TYPES
+export function nodeBackendGetRequest(request) {
+  return axios.get(`/api/${request.endpoint}`, {
+    params: request.values
+  });
+}
+
+export function nodeBackendPostRequest(request) {
+  return axios.post(`/api/${request.endpoint}`, request.values);
+}
+
+export function nodeBackendDeleteRequest(request) {
+  return axios.delete(`/api/${request.endpoint}`, {
+    params: request.values
+  });
 }

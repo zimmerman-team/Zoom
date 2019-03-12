@@ -20,7 +20,7 @@ const layerLegend = (legendName, index, min, max) => {
 
   return (
     legendName && (
-      <LegendItem key={`legend-${index}`}>
+      <LegendItem key={`legend-${index}`} data-cy="legendLayer-label">
         <LegendLabel>{legendName}</LegendLabel>
         <ColorGradient />
         <LegendNumberContainer>

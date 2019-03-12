@@ -54,10 +54,10 @@ export function formatMapJson(mappingJson, mapData, fileId) {
       // we check if there's longitude or
       // latitude selected and we save, we need to check for this
       // differently because its saved differently from the other mappings
-      mapJson.point_based_info.coord.lon = item.fileType;
+      mapJson.extra_information.point_based_info.coord.lon = item.fileType;
       mapJson.mapping_dict.geolocation.push(item.fileType);
     } else if (item.zoomModel === 'Latitude') {
-      mapJson.point_based_info.coord.lat = item.fileType;
+      mapJson.extra_information.point_based_info.coord.lat = item.fileType;
       mapJson.mapping_dict.geolocation.push(item.fileType);
     } else if (item.zoomModel !== '-None-') {
       // okay so here we'll skip the data models for value
@@ -128,6 +128,8 @@ export function formatMapJson(mappingJson, mapData, fileId) {
 
   // and we add the meta_data id here
   mapJson.metadata_id = fileId;
+
+  console.log('mapJson', mapJson);
 
   return mapJson;
 }

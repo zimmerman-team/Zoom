@@ -5,7 +5,8 @@ import * as actions from 'services/actions/general';
 import paneTypes from '__consts__/PaneTypesConst';
 
 const initial = {
-  open: paneTypes.none
+  open: paneTypes.none,
+  stepzData: {}
 };
 
 function dataPaneOpen(state = initial, action) {
@@ -19,7 +20,19 @@ function dataPaneOpen(state = initial, action) {
   }
 }
 
+function stepData(state = initial, action) {
+  switch (action.type) {
+    case actions.SAVE_STEP_DATA_REQUEST:
+      return update(state, { stepzData: { $set: {} } });
+    case actions.SAVE_STEP_DATA_DONE:
+      return update(state, { stepzData: { $set: action.data } });
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  stepData,
   dataPaneOpen
 };
 

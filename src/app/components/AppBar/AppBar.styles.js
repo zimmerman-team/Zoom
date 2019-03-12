@@ -22,7 +22,6 @@ export const AidsFondLogo = styled(Image)`
 export const MenuButton = styled(Button)`
   padding: 0;
   margin-right: 25px;
-
   height: 24px;
 `;
 

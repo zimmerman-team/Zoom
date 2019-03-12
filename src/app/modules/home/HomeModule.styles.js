@@ -13,4 +13,7 @@ export const DropDownContainer = styled.div`
   margin-right: 5px;
 `;
 
-export const ModuleContainer = styled(Box)``;
+export const ModuleContainer = styled(Box)`
+  width: 100vw;
+  height: calc(100vh - 40px);
+`;

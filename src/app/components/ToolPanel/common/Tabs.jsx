@@ -28,6 +28,7 @@ export default styled(props => (
     padding: 0;
     margin: 0;
     transition: none;
+    align-self: flex-end;
     //align-self: flex-end;
   }
 `;

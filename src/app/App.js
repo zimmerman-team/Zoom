@@ -13,12 +13,13 @@ import { ZoomTheme } from 'styles/ZoomTheme';
 
 /* global app components */
 import AppBar from 'components/AppBar/AppBar';
-import SideBar from 'components/SideBar/SideBar';
+
 import {
   ToastsContainer,
   ToastsStore,
   ToastsContainerPosition
 } from 'react-toasts';
+import TempDrawer from 'components/TempDrawer/TempDrawer';
 
 const modernEnvironment = new Environment({
   network: Network.create(fetchQuery),
@@ -82,6 +83,7 @@ class App extends React.Component {
               return (
                 <Router>
                   <React.Fragment>
+                    {/* todo: replace toasts with material-ui snackbar https://material-ui.com/demos/snackbars/ */}
                     <ToastsContainer
                       store={ToastsStore}
                       position={ToastsContainerPosition.TOP_CENTER}
@@ -92,7 +94,7 @@ class App extends React.Component {
                       }
                       auth0Client={auth0Client}
                     />
-                    <SideBar
+                    <TempDrawer
                       auth0Client={auth0Client}
                       open={this.state.showSidebar}
                       toggleSideBar={() =>

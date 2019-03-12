@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 export const MapContainer = styled.div`
-  height: calc(100vh - 40px);
+  height: 100%;
+  position: relative;
 `;
 
 export const NavContainer = styled.div`
@@ -23,11 +24,12 @@ export const LegendContainer = styled.div`
 `;
 
 export const YearContainer = styled.div`
-  position: fixed;
-  width: 98%;
-  bottom: 12px;
+  position: absolute;
   z-index: 2;
-  left: 1%;
+  width: calc(100% - 40px);
+  bottom: 40px;
+  left: 20px;
+  //left: 1%;
 `;
 
 export const NavControlContainer = styled.div`
@@ -43,9 +45,9 @@ export const CountyInfo = styled.div`
 `;
 
 export const ControlsContainer = styled.div`
-  position: fixed;
-  top: 54px;
-  right: 26px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
   background-color: rgba(239, 239, 239, 0.72);
   z-index: 1;
 `;

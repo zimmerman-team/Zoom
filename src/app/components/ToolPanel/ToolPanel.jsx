@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import shortid from 'shortid';
+import styled from 'styled-components';
 import Paper from './common/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Tabs from './common/Tabs';
@@ -17,6 +19,7 @@ import IconDuplicate from 'assets/icons/toolpanel/IconDuplicate';
 import IconVisibility from 'assets/icons/toolpanel/IconVisibility';
 
 import Tab from './common/Tab';
+import { formPath } from 'modules/visualizer/VisualizerModule.utils';
 
 /*TODO: refactor styling*/
 
@@ -35,12 +38,17 @@ const styles = theme => ({
   }
 });
 
+const ComponentBase = styled.div`
+  align-self: flex-end;
+`;
+
 function TabContainer(props) {
   return <div>{props.children}</div>;
 }
 
 TabContainer.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  items: PropTypes.array
 };
 
 class ToolPanel extends React.Component {
@@ -56,36 +64,28 @@ class ToolPanel extends React.Component {
     const { classes } = this.props;
     const { value } = this.state;
     return (
-      <React.Fragment>
-        <Tabs
-          value={this.state.value}
-          onChange={this.handleChange}
-          classes={{
-            root: classes.tabsRoot
-          }}
-        >
-          {/*<TabVariant icon={<IconFilter />} />*/}
-          <Tab icon={<IconFilter />} />
-          <Tab icon={<IconContext />} />
-          <Tab icon={<IconPreview />} />
-          <Tab icon={<IconDownload />} />
-          <Tab icon={<IconDuplicate />} />
-          <Tab icon={<IconVisibility />} />
-        </Tabs>
-
-        {value === 0 && <TabContainer>Item One</TabContainer>}
-        {value === 1 && <TabContainer>Item Two</TabContainer>}
-        {value === 2 && <TabContainer>Item Three</TabContainer>}
-        {value === 3 && <TabContainer>Item Four</TabContainer>}
-        {value === 4 && <TabContainer>Item Five</TabContainer>}
-        {value === 5 && <TabContainer>Item Six</TabContainer>}
-      </React.Fragment>
+      <Tabs
+        value={this.state.value}
+        onChange={this.handleChange}
+        classes={{
+          root: classes.tabsRoot
+        }}
+      >
+        {this.props.items.map(item => (
+          <Tab
+            key={shortid.generate()}
+            to={formPath(this.props.code, item.path)}
+            icon={item.icon}
+          />
+        ))}
+      </Tabs>
     );
   }
 }
 
 ToolPanel.propTypes = {
-  classes: PropTypes.object
+  classes: PropTypes.object,
+  code: PropTypes.string
 };
 
 export default withStyles(styles)(ToolPanel);

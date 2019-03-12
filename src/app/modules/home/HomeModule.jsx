@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import axios from 'axios';
 
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
@@ -34,14 +33,6 @@ export class HomeModule extends Component {
 
     this.onClose = this.onClose.bind(this);
     this.toggleSideBar = this.toggleSideBar.bind(this);
-  }
-
-  componentDidMount() {
-    axios
-      .get('/api/getChart', {
-        params: { chartId: '5c8761e1c3066e26dc5eeca7', authId: 156 }
-      })
-      .then(res => console.log(res.data));
   }
 
   onClose = () => {

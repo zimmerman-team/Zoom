@@ -240,7 +240,23 @@ function allUserCharts(state = initial, action) {
   }
 }
 
+function user(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_USER_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_USER_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_USER_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_USER_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  user,
   allUserCharts,
   upload,
   validate,

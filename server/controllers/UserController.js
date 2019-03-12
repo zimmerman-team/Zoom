@@ -4,14 +4,15 @@ const general = require('./generalResponse');
 const User = require('../models/User');
 
 const UserApi = {
-  getUser: function(authId, res) {
-    // TODO: should be adjusted without the promises, or maybe with promises if
-    // TODO: it works and makes sense
+  getUser: function(req, res) {
+    const { authId } = req.query;
+
     return User.findOne({ authId })
-      .then(acc => res(null, acc))
-      .catch(error => {
-        general.handleError(res, error);
-      });
+      .then(acc => {
+        if (!acc) general.handleError(res, 'User not found', 404);
+        else res.json(acc);
+      })
+      .catch(error => general.handleError(res, error));
   },
 
   // updateUI: function (user, uiState, res) {
@@ -77,20 +78,20 @@ const UserApi = {
   // so this will be used to update some of the user fields
   // like email or username which comes strictly from auth0
   // so basically if those fields have been changed
-  updateUser: function(user, res) {
-    // TODO: should be adjusted without the promises, or maybe with promises if
-    // TODO: it works and makes sense
-    User.findOne({ authId: user.authId }, function(err, userFound) {
-      if (err) return general.handleError(err);
+  updateUser: (req, res) => {
+    const user = req.data;
+
+    User.findOne({ authId: user.authId }, (err, userFound) => {
+      if (err) general.handleError(res, err);
 
       if (userFound.username !== user.username)
         userFound.username = user.username;
       if (userFound.email !== user.email) userFound.email = user.email;
 
-      userFound.save(function(error) {
+      userFound.save(error => {
         if (err) general.handleError(res, error);
 
-        return res(null, 'auth0 changes applied');
+        res.send('auth0 changes applied');
       });
     });
   },

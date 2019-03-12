@@ -4,6 +4,7 @@ import * as mutationActions from 'services/actions/mutation';
 import * as api from 'services/index';
 import * as oipaActions from 'services/actions/oipa';
 import * as generalActions from 'services/actions/general';
+import * as nodeActions from 'services/actions/nodeBackend';
 
 export function* uploadRequest(action) {
   try {
@@ -115,8 +116,26 @@ export function* saveStepDataRequest(action) {
   yield put(generalActions.saveStepDataDone(action.data));
 }
 
+export function* allUserChartsRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getAllCharts',
+      values: action.values
+    });
+    yield put(nodeActions.allUserChartsSuccess(response));
+  } catch (error) {
+    yield put(
+      nodeActions.allUserChartsFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('ALL_USER_CHARTS_REQUEST', allUserChartsRequest),
     takeLatest('SAVE_STEP_DATA_REQUEST', saveStepDataRequest),
     takeLatest('DATA_PANE_TOGGLE_REQUEST', dataPaneToggleRequest),
     takeLatest('COUNTRY_ACTIVITIES_REQUEST', countryActivitiesRequest),

@@ -15,7 +15,7 @@ const ChartController = {
     const author = new User({
       username: 'bob',
       email: 'bob@mailinator.com',
-      authId: 156,
+      authId: '156',
       role: 'admin',
       avatar: 'bob',
       firstName: 'bob',

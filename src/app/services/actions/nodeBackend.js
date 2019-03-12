@@ -29,3 +29,67 @@ export function allUserChartsFailed(error) {
     error
   };
 }
+
+export const GET_USER_INITIAL = 'GET_USER_INITIAL';
+export const GET_USER_REQUEST = 'GET_USER_REQUEST';
+export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
+export const GET_USER_FAILED = 'GET_USER_FAILED';
+
+export function getUserInitial() {
+  return {
+    type: GET_USER_INITIAL
+  };
+}
+
+export function getUserRequest(values) {
+  return {
+    type: GET_USER_REQUEST,
+    values
+  };
+}
+
+export function getUserSuccess(data) {
+  return {
+    type: GET_USER_SUCCESS,
+    data
+  };
+}
+
+export function getUserFailed(error) {
+  return {
+    type: GET_USER_FAILED,
+    error
+  };
+}
+
+export const ADD_USER_INITIAL = 'ADD_USER_INITIAL';
+export const ADD_USER_REQUEST = 'ADD_USER_REQUEST';
+export const ADD_USER_SUCCESS = 'ADD_USER_SUCCESS';
+export const ADD_USER_FAILED = 'ADD_USER_FAILED';
+
+export function addUserInitial() {
+  return {
+    type: ADD_USER_INITIAL
+  };
+}
+
+export function addUserRequest(values) {
+  return {
+    type: ADD_USER_REQUEST,
+    values
+  };
+}
+
+export function addUserSuccess(data) {
+  return {
+    type: ADD_USER_SUCCESS,
+    data
+  };
+}
+
+export function addUserFailed(error) {
+  return {
+    type: ADD_USER_FAILED,
+    error
+  };
+}

@@ -42,7 +42,7 @@ class Auth {
           return reject(err);
         }
         this.setSession(authResult);
-        resolve();
+        resolve(authResult);
       });
     });
   }
@@ -56,7 +56,7 @@ class Auth {
     localStorage.setItem('auth_id_token', authResult.idToken);
     localStorage.setItem('auth_expires_at', this.expiresAt);
     this.getUserRole();
-    // this.getUserGroup();
+    this.getUserGroup();
   }
 
   signOut() {
@@ -86,8 +86,10 @@ class Auth {
     return new Promise((resolve, reject) => {
       this.auth0.checkSession({}, (err, authResult) => {
         // if (err) return reject(err);
-        if (!err) this.setSession(authResult);
-        resolve();
+        if (!err) {
+          this.setSession(authResult);
+          resolve(authResult);
+        }
       });
     });
   }
@@ -115,78 +117,85 @@ class Auth {
 
   getUserGroup(that = null) {
     if (this.profile) {
-      axios
-        .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
-          client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
-          client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-          audience: 'urn:auth0-authz-api',
-          grant_type: 'client_credentials'
-        })
-        .then(response => {
-          axios
-            .get(
-              `${process.env.REACT_APP_AE_API_URL}/users/${
-                this.profile.sub
-              }/groups`,
-              {
-                headers: {
-                  Authorization: `${response.data.token_type} ${
-                    response.data.access_token
-                  }`
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+            client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+            client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+            audience: 'urn:auth0-authz-api',
+            grant_type: 'client_credentials'
+          })
+          .then(response => {
+            axios
+              .get(
+                `${process.env.REACT_APP_AE_API_URL}/users/${
+                  this.profile.sub
+                }/groups`,
+                {
+                  headers: {
+                    Authorization: `${response.data.token_type} ${
+                      response.data.access_token
+                    }`
+                  }
                 }
-              }
-            )
-            .then(response2 => {
-              localStorage.setItem('userGroup', response2.data[0].name);
-              if (that) {
-                that.setState({
-                  group: response2.data[0].name
-                });
-              }
-            })
-            .catch(error => {
-              console.error(error);
-            });
-        })
-        .catch(error => {
-          console.error(error);
-        });
+              )
+              .then(response2 => {
+                localStorage.setItem('userGroup', response2.data[0].name);
+                if (that) {
+                  that.setState({
+                    group: response2.data[0].name
+                  });
+                }
+
+                resolve(response2.data[0].name);
+              })
+              .catch(error => {
+                reject(error);
+              });
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     }
   }
 
   getUserRole() {
     if (this.profile) {
-      axios
-        .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
-          client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
-          client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-          audience: 'urn:auth0-authz-api',
-          grant_type: 'client_credentials'
-        })
-        .then(response => {
-          axios
-            .get(
-              `${process.env.REACT_APP_AE_API_URL}/users/${
-                this.profile.sub
-              }/roles`,
-              {
-                headers: {
-                  Authorization: `${response.data.token_type} ${
-                    response.data.access_token
-                  }`
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+            client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+            client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+            audience: 'urn:auth0-authz-api',
+            grant_type: 'client_credentials'
+          })
+          .then(response => {
+            axios
+              .get(
+                `${process.env.REACT_APP_AE_API_URL}/users/${
+                  this.profile.sub
+                }/roles`,
+                {
+                  headers: {
+                    Authorization: `${response.data.token_type} ${
+                      response.data.access_token
+                    }`
+                  }
                 }
-              }
-            )
-            .then(response2 => {
-              localStorage.setItem('userRole', response2.data[0].name);
-            })
-            .catch(error => {
-              console.error(error);
-            });
-        })
-        .catch(error => {
-          console.error(error);
-        });
+              )
+              .then(response2 => {
+                localStorage.setItem('userRole', response2.data[0].name);
+                resolve(response2.data[0].name);
+              })
+              .catch(error => {
+                reject(error);
+              });
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     }
   }
 

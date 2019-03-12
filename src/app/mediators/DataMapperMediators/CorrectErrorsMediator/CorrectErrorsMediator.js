@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import ErrorStep from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep';
+import connect from 'react-redux/es/connect/connect';
 
 /* mutations */
 import FileErrorResultMutation from 'mediators/DataMapperMediators/CorrectErrorsMediator/mutations/FileErrorResultMutation';
@@ -14,21 +15,21 @@ import FileValidationMutation from 'mediators/DataMapperMediators/mutations/File
 import get from 'lodash/get';
 import findIndex from 'lodash/findIndex';
 import { formatErrorCells } from './CorrectErrorsMediator.util';
+import * as actions from 'services/actions';
+import * as generalActions from 'services/actions/general';
 
 const propTypes = {
   fileId: PropTypes.string,
   relay: PropTypes.shape({}),
   fileCorrection: PropTypes.shape({}),
-  stepsDisabled: PropTypes.bool,
-  saveStepData: PropTypes.func
+  stepsDisabled: PropTypes.bool
 };
 
 const defaultProps = {
   stepsDisabled: false,
   fileId: '-1',
   relay: {},
-  fileCorrection: {},
-  saveStepData: undefined
+  fileCorrection: {}
 };
 
 class CorrectErrorsMediator extends React.Component {
@@ -39,11 +40,18 @@ class CorrectErrorsMediator extends React.Component {
       correctCommand: {},
       errorTableData: [],
       errorCells: [],
+      errorMessages: {},
       pageSize: 10,
       columnHeaders: [],
       page: 0,
       checkedRows: false,
       rowsDeleted: false,
+      errorsExists: false,
+      ignoredErrors:
+        props.stepData.errorData && props.stepData.errorData.ignoredErrors
+          ? props.stepData.errorData.ignoredErrors
+          : [],
+      loading: false,
       rowCount: 100
     };
 
@@ -64,6 +72,8 @@ class CorrectErrorsMediator extends React.Component {
     this.checkRows = this.checkRows.bind(this);
     this.deleteRows = this.deleteRows.bind(this);
     this.afterErrorTableUpdate = this.afterErrorTableUpdate.bind(this);
+    this.ignoreErrors = this.ignoreErrors.bind(this);
+    this.checkIfErrors = this.checkIfErrors.bind(this);
   }
 
   componentDidMount() {
@@ -90,9 +100,7 @@ class CorrectErrorsMediator extends React.Component {
 
   handleCellsErrorsCompleted(response) {
     if (response) {
-      const command = JSON.parse(
-        JSON.parse(response.fileErrorCorrection.command)
-      );
+      const command = { ...this.state.correctCommand };
       if (command.delete) {
         command.delete = false;
         command.delete_data.row_keys = [];
@@ -104,6 +112,15 @@ class CorrectErrorsMediator extends React.Component {
         // and then call data again to get the updated
         // datas errors
         command.update = false;
+        this.setState({ correctCommand: command }, this.fileValidation);
+      } else if (command.replace_pressed) {
+        // so if replace was activated we need to
+        // we need to re-toggle the replace value
+        // cause we don't want to replace stuff again
+        // and we need to set the find value as the newly replaced value
+        // as thats what we'll want to show the user, what they actually replaced
+        command.replace_pressed = false;
+        command.find_value = command.replace_value;
         this.setState({ correctCommand: command }, this.fileValidation);
       } else {
         const results = JSON.parse(
@@ -134,26 +151,52 @@ class CorrectErrorsMediator extends React.Component {
           this.setState({ columnHeaders });
         }
 
-        // so if replace was activated we need to
-        // we need to re-toggle the replace value
-        // cause we don't want to replace stuff again
-        // and we need to set the find value as the newly replaced value
-        // as thats what we'll want to show the user, what they actually replaced
-        if (command.replace_pressed) {
-          command.replace_pressed = false;
-          command.find_value = command.replace_value;
-        }
+        const errorsExists = this.checkIfErrors(
+          results.error_data.error_messages,
+          this.state.ignoredErrors
+        );
+
         this.setState(
           {
             errorTableData,
             errorCells,
+            errorMessages: results.error_data.error_messages,
             correctCommand: command,
-            rowCount: results.total_amount
+            rowCount: results.total_amount,
+            loading: false,
+            errorsExists
           },
           this.afterErrorTableUpdate
         );
       }
     }
+  }
+
+  checkIfErrors(errorMessages, ignoredErrors) {
+    // so we form this errorsExists variable according
+    // to the errors message that we get from duct
+    // and according to the ignored error array
+    let errorsExists = false;
+
+    for (let key in errorMessages) {
+      if (errorMessages.hasOwnProperty(key)) {
+        // so here we get the column name
+        // from the key in a weird way
+        // cause the data we retrieve is super
+        // weird
+        const colName = key.substring(key.indexOf('|') + 1);
+
+        // so if we find a key with a column name
+        // that isn't in the ignoredErrors array,
+        // we set errorsExists to true and break out of loop
+        if (ignoredErrors.indexOf(colName) === -1) {
+          errorsExists = true;
+          break;
+        }
+      }
+    }
+
+    return errorsExists;
   }
 
   afterErrorTableUpdate() {
@@ -163,8 +206,15 @@ class CorrectErrorsMediator extends React.Component {
       this.setState({ rowsDeleted: false });
     }
 
-    if (!this.props.stepsDisabled)
-      this.props.saveStepData(this.state.errorCells, 4);
+    // we save the shared data
+    if (!this.props.stepsDisabled) {
+      const stepData = { ...this.props.stepData };
+      stepData.errorData = {
+        ...stepData.errorData,
+        errorsExists: this.state.errorsExists
+      };
+      this.props.dispatch(generalActions.saveStepDataRequest(stepData));
+    }
   }
 
   handleCellsErrorsError(error) {
@@ -192,7 +242,7 @@ class CorrectErrorsMediator extends React.Component {
       command: JSON.stringify(JSON.stringify(command))
     };
 
-    this.setState({ correctCommand: command }, () =>
+    this.setState({ correctCommand: command, loading: true }, () =>
       FileErrorResultMutation.commit(
         this.props.relay.environment,
         input,
@@ -323,9 +373,40 @@ class CorrectErrorsMediator extends React.Component {
     }
   }
 
+  // basically will addin/remove the column names for errors to be ignored
+  // and will save these errors in the props ofcourse
+  ignoreErrors(headerName) {
+    this.setState((prevState, props) => {
+      const ignoredErrors = [...prevState.ignoredErrors];
+      const headerInd = ignoredErrors.indexOf(headerName);
+
+      if (headerInd === -1) ignoredErrors.push(headerName);
+      else ignoredErrors.splice(headerInd, 1);
+
+      // and we save it in the props
+      const stepData = { ...props.stepData };
+      const errorsExists = this.checkIfErrors(
+        this.state.errorMessages,
+        ignoredErrors
+      );
+
+      stepData.errorData = {
+        errorsExists,
+        ignoredErrors: ignoredErrors
+      };
+
+      props.dispatch(generalActions.saveStepDataRequest(stepData));
+
+      return { ignoredErrors, errorsExists };
+    });
+  }
+
   render() {
     return (
       <ErrorStep
+        ignoreErrors={this.ignoreErrors}
+        ignoredErrors={this.state.ignoredErrors}
+        loading={this.state.loading}
         updateCell={this.updateCell}
         checkedRows={this.state.checkedRows}
         deleteRows={this.deleteRows}
@@ -346,8 +427,15 @@ class CorrectErrorsMediator extends React.Component {
 CorrectErrorsMediator.propTypes = propTypes;
 CorrectErrorsMediator.defaultProps = defaultProps;
 
+const mapStateToProps = state => {
+  return {
+    fileId: state.stepData.stepzData.uploadData.fileId,
+    stepData: state.stepData.stepzData
+  };
+};
+
 export default createRefetchContainer(
-  CorrectErrorsMediator,
+  connect(mapStateToProps)(CorrectErrorsMediator),
   graphql`
     fragment CorrectErrorsMediator_fileCorrection on Query
       @argumentDefinitions(entryId: { type: "Float", defaultValue: -1 }) {

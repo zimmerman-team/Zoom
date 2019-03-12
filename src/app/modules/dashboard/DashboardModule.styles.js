@@ -11,6 +11,17 @@ export const ModuleContainer = styled.div`
   align-items: center;
 `;
 
+export const Header = styled.section`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
+
+export const Section = styled.section`
+  width: 100%;
+`;
+
 export const PageHeading = styled(_PageHeading)`
   font-size: 32px;
   margin-bottom: 15px;

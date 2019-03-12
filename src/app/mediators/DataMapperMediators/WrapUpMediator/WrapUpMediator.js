@@ -1,5 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import connect from 'react-redux/es/connect/connect';
+
+/* actions */
+import * as generalActions from 'services/actions/general';
 
 /* components */
 import WrapUpStep from 'modules/datamapper/fragments/WrapUpStep/WrapUpStep';
@@ -12,7 +16,7 @@ import MappingMutation from 'mediators/DataMapperMediators/WrapUpMediator/mutati
 
 /* consts */
 import { uploadInitialstate } from '__consts__/UploadMediatorConst';
-import { step1InitialData } from '__consts__/MetaDataStepConsts';
+import { step1InitialData } from '__consts__/DataMapperStepConsts';
 
 /* utils */
 import { formatMapJson } from 'mediators/DataMapperMediators/WrapUpMediator/WrapUpMediator.util';
@@ -104,7 +108,7 @@ const defaultProps = {
   disableSteps: undefined
 };
 
-export default class WrapUpMediator extends React.Component {
+class WrapUpMediator extends React.Component {
   constructor(props) {
     super(props);
 
@@ -129,6 +133,7 @@ export default class WrapUpMediator extends React.Component {
     this.addMapping = this.addMapping.bind(this);
     this.afterSurvey = this.afterSurvey.bind(this);
     this.afterSource = this.afterSource.bind(this);
+    this.saveData = this.saveData.bind(this);
   }
 
   componentDidMount() {
@@ -159,7 +164,7 @@ export default class WrapUpMediator extends React.Component {
   }
 
   addDataSource(name) {
-    if (!this.props.wrapUpData && !this.props.wrapUpData.sourceId)
+    if (!this.props.wrapUpData.sourceId)
       AddSourceMutation.commit(
         this.props.environment,
         name,
@@ -174,16 +179,18 @@ export default class WrapUpMediator extends React.Component {
     }
   }
 
+  saveData() {
+    const stepData = { ...this.props.stepData };
+    stepData.wrapUpData = {
+      sourceId: this.state.sourceId,
+      surveyId: this.state.surveyId
+    };
+    this.props.dispatch(generalActions.saveStepDataRequest(stepData));
+  }
+
   afterSource() {
     this.addMetaData();
-
-    this.props.saveStepData(
-      {
-        sourceId: this.state.sourceId,
-        surveyId: this.state.surveyId
-      },
-      6
-    );
+    this.saveData();
   }
 
   handleSurveyCompleted(response, error) {
@@ -203,13 +210,7 @@ export default class WrapUpMediator extends React.Component {
       this.addDataSource(this.props.metaData.dataSource.value);
     else this.addMetaData();
 
-    this.props.saveStepData(
-      {
-        sourceId: this.state.sourceId,
-        surveyId: this.state.surveyId
-      },
-      6
-    );
+    this.saveData();
   }
 
   handleSurveyError(error) {
@@ -397,5 +398,21 @@ export default class WrapUpMediator extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    metaData: state.stepData.stepzData.metaData,
+    wrapUpData: state.stepData.stepzData.wrapUpData,
+    environment: state.stepData.stepzData.environment,
+    file: state.stepData.stepzData.uploadData.file,
+    fileId: state.stepData.stepzData.uploadData.fileId,
+    fileUrl: state.stepData.stepzData.uploadData.url,
+    mappingJson: state.stepData.stepzData.uploadData.mappingJson,
+    mappingData: state.stepData.stepzData.manMapData,
+    stepData: state.stepData.stepzData
+  };
+};
+
 WrapUpMediator.propTypes = propTypes;
 WrapUpMediator.defaultProps = defaultProps;
+
+export default connect(mapStateToProps)(WrapUpMediator);

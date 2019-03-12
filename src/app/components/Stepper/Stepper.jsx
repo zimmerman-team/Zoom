@@ -27,19 +27,19 @@ import { steps } from './Stepper.const';
 const propTypes = {
   data: PropTypes.object,
   onlyButtons: PropTypes.bool,
-  nextDisabled: PropTypes.func
+  nextDisabled: PropTypes.bool
 };
 const defaultProps = {
   data: undefined,
   onlyButtons: false,
-  nextDisabled: undefined
+  nextDisabled: true
 };
 
 class Stepperz extends React.Component {
   render() {
     const { classes } = this.props;
 
-    const nextDisabled = this.props.nextDisabled() || this.props.step === 6;
+    const nextDisabled = this.props.nextDisabled || this.props.step === 6;
     const prevEnabled = this.props.step !== 1;
 
     const connector = (

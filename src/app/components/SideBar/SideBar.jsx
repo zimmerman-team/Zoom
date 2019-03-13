@@ -96,7 +96,26 @@ class SideBar extends React.Component {
                     path={'/mapper'}
                     icon={<IconCharts />}
                     onClick={this.props.toggleSideBar}
-                    hoverIndicator={false}
+                    type="button"
+                    plain={true}
+                    data-cy="sidebar-datamapper"
+                  />
+
+                  <SidebarNavListItem
+                    label="Focus page NL"
+                    path={'/focus'}
+                    icon={<IconCharts />}
+                    onClick={this.props.toggleSideBar}
+                    type="button"
+                    plain={true}
+                    data-cy="sidebar-datamapper"
+                  />
+
+                  <SidebarNavListItem
+                    label="Visualizer"
+                    path={'/visualizer/vizID/edit'}
+                    icon={<IconCharts />}
+                    onClick={this.props.toggleSideBar}
                     type="button"
                     plain={true}
                     data-cy="sidebar-datamapper"
@@ -118,7 +137,6 @@ class SideBar extends React.Component {
                       ))}
 
                   <SidebarNavListItem
-                    active={false}
                     label="About ZOOM"
                     path="/about"
                     onClick={this.props.toggleSideBar}

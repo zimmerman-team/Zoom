@@ -1,10 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 // import { Provider } from 'react-redux';
 import { BrowserRouter as Router, withRouter } from 'react-router-dom';
 import { graphql, QueryRenderer } from 'react-relay';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import auth0Client from 'auth/Auth';
 import Analytics from 'react-router-ga';
+
+/* actions */
+import * as nodeActions from 'services/actions/nodeBackend';
 
 /* utils */
 import isEqual from 'lodash/isEqual';
@@ -16,14 +20,14 @@ import { ZoomTheme } from 'styles/ZoomTheme';
 
 /* global app components */
 import AppBar from 'components/AppBar/AppBar';
-import SideBar from 'components/SideBar/SideBar';
+
 import {
   ToastsContainer,
   ToastsStore,
   ToastsContainerPosition
 } from 'react-toasts';
-import * as nodeActions from 'services/actions/nodeBackend';
-import { connect } from 'react-redux';
+
+import TempDrawer from 'components/TempDrawer/TempDrawer';
 
 const modernEnvironment = new Environment({
   network: Network.create(fetchQuery),
@@ -136,6 +140,7 @@ class App extends React.Component {
               return (
                 <Router>
                   <React.Fragment>
+                    {/* todo: replace toasts with material-ui snackbar https://material-ui.com/demos/snackbars/ */}
                     <ToastsContainer
                       store={ToastsStore}
                       position={ToastsContainerPosition.TOP_CENTER}
@@ -146,7 +151,7 @@ class App extends React.Component {
                       }
                       auth0Client={auth0Client}
                     />
-                    <SideBar
+                    <TempDrawer
                       auth0Client={auth0Client}
                       open={this.state.showSidebar}
                       toggleSideBar={() =>

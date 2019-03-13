@@ -9,23 +9,32 @@ import {ComponentBase, GridItemHeading, Box} from './GridItem.styles';
 
 
 const propTypes = {
-  disableToolbar: PropTypes.bool
+  withOptions: PropTypes.bool
 };
 const defaultProps = {
-  disableToolbar: false
+  withOptions: true
 };
 
 const GridItem = props => {
-  const [isSelected, setIsSelected] = React.useState(false);
+  const [isHovered, setIsHovered] = React.useState(false);
 
-  function handleMouserEnter() {
-    setIsSelected(!isSelected);
+  function handleMouseEnter() {
+    setIsHovered(!isHovered);
+  }
+
+  function handleClick() {
+    if(!props.withOptions){
+      //route to specific place
+
+    }
   }
 
   return (
     <ComponentBase
-      onMouseEnter={handleMouserEnter}
-      onMouseLeave={handleMouserEnter}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseEnter}
+      onClick={handleClick}
+      withOptions={props.withOptions}
     >
       <Box>
         <GridItemHeading>People Living with HIV</GridItemHeading>
@@ -36,7 +45,7 @@ const GridItem = props => {
         <GridItemText label="Type of chart" value="Line chart" />
         <GridItemText label="Data sources" value="UN AIDS" />
       </Box>
-      {isSelected && !props.disableToolbar ? <GridItemToolbar /> : null}
+      {props.withOptions && isHovered ? <GridItemToolbar/> : null}
     </ComponentBase>
   );
 };

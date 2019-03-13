@@ -12,6 +12,11 @@ export const ComponentBase = styled.div`
   padding: 15px;
   background-color: ${Theme.color.zoomGreyZero};
   box-shadow: 0 2px 4px 2px rgba(157, 157, 157, 0.5);
+  &:hover {
+    cursor: ${props => !props.withOptions && 'pointer'};
+    //todo: this color is not defined in design
+    background-color: ${props => !props.withOptions && Theme.color.zoomGreyTwo};
+  }
 `;
 
 export const GridItemHeading = styled.div`

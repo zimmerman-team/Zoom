@@ -26,25 +26,17 @@ const propTypes = {
 const defaultProps = {
   changeSearchKeyword: null,
 };
+
+//todo: is there a better name for this?
 const PublicChartLibraryModule = props => {
   return (
     <ModuleContainer>
-      {/*todo: change to sectionHeading*/}
       <PageHeading>Zoom chart library</PageHeading>
       <Searchbox inputChange={props.changeSearchKeyword} />
       <Box>
-        {/*todo: make displayAddChart work......*/}
-      <GridListOptionsPane displayAddChart="none"/>
+      <GridListOptionsPane visibilityAddChart='hidden'/>
       <ViewContainer>
-        <GridItem disableToolbar/>
-        <GridItem disableToolbar/>
-        <GridItem disableToolbar/>
-        <GridItem disableToolbar/>
-        <GridItem disableToolbar/>
-        <GridItem disableToolbar/>
-        <GridItem disableToolbar/>
-        <GridItem disableToolbar/>
-        <GridItem disableToolbar/>
+        <GridItem withOptions={false}/>
       </ViewContainer>
       </Box>
       <Pagination/>

@@ -1,40 +1,19 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import theme from 'theme/Theme';
 
-const ComponentBase = styled.div`
-  display: ${console.log(props => props.display)};
-  
-  &:hover > * {
-    cursor: pointer;
-    color: ${theme.color.aidsFondsBlue};
-  }
-
-  &:hover path {
-    fill: ${theme.color.aidsFondsBlue} !important;
-  }
-`;
-
-const IconLabel = styled.label`
-color: ${theme.color.aidsFondsRed};
-font-family: ${theme.font.zoomFontFamOne};
-font-size: 19px;
-margin-left: 3px;
-`;
+/* componenets */
+import {ComponentBase, IconLabel} from './GridListOption.styles';
 
 const propTypes = {
     icon: PropTypes.node.isRequired,
     label: PropTypes.string,
-    display: PropTypes.string
+    visibility: PropTypes.string,
 };
 const defaultProps = {
     label: '',
-    display: 'block'
+    visibility: 'visible',
 };
-
-
 
 const GridListOption = props => {
   function handleClick(){
@@ -42,12 +21,11 @@ const GridListOption = props => {
   }
 
   return (
-    <ComponentBase onClick={() => {
+    <ComponentBase visibility={props.visibility} onClick={() => {
       handleClick();
     }}>
         {props.icon}
         <IconLabel>{props.label}</IconLabel>
-      {console.log(props.display)}
     </ComponentBase>);
 };
 GridListOption.propTypes = propTypes;

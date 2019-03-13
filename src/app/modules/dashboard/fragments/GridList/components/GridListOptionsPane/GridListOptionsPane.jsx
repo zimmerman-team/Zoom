@@ -15,18 +15,18 @@ margin-bottom: 17px;
 `;
 
 const propTypes = {
-  displayAddChart: PropTypes.string
+  visibilityAddChart: PropTypes.string,
 };
 
 const defaultProps = {
-  displayAddChart: 'block'
+  visibilityAddChart: 'visible'
 };
 
 
 const GridListOptionsPane = props => {
   return (
     <ComponentBase>
-      <GridListOption icon={<SvgIconAdd/>} label="add chart" display={props.displayAddChart}/>
+      <GridListOption icon={<SvgIconAdd/>} label="add chart" visibility={props.visibilityAddChart}/>
       <GridListOption icon={<SvgIconSort/>} />
     </ComponentBase>);
 };

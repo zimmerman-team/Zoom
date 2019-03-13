@@ -104,18 +104,6 @@ export class AppBar extends React.Component {
           </PaneButton>
         );
         break;
-        //todo: yooo change the pathname bruh
-        //todo: where goes back to?
-      case this.props.location.pathname === '/public/chartz/view':
-        paneButton = (<PaneButton
-          data-cy="geomap-filter-button"
-          onClick={() =>
-            this.props.dispatch(actions.dataPaneToggleRequest(paneType))
-          }
-        >
-          {paneIcon}
-          <PaneButtonText>{buttonLabel}</PaneButtonText>
-        </PaneButton>);
       default:
         break;
     }

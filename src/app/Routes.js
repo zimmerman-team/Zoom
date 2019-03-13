@@ -8,7 +8,7 @@ import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel'
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
 import PublicChartLibraryModule from './modules/publicChartLibrary/PublicChartLibraryModule';
-import PublicChartViewModule from './modules/publicChartView/PublicChartViewModule';
+import DashboardModule from './modules/dashboard/DashboardModule';
 // import PublicChartViewModule from './modules/publicChartView/PublicChartViewModule';
 // Modules regular import
 /*import HomeModule from 'modules/home/HomeModule';
@@ -148,15 +148,18 @@ const Routes = props => {
               <DataMapperModule dropDownData={props} fileCorrection={props} />
             )}
           />
-          /
           <Route
-            path="/public/chart"
+            path="/public/chart-library"
             render={() => <PublicChartLibraryModule />}
           />
+
           <Route
-            path="/public/chartz/view"
-            render={() => <PublicChartViewModule />}
+            exact
+            path="/public/chart-library/:id/:charttype"
+            // todo: render to appropriate chart page
+            render={() => <Redirect to="/home" />}
           />
+
           <Route exact path="/component" render={() => <DataExplorePanel />} />
           <Route exact path="/step" render={() => <ManMappingStep />} />
         </Switch>

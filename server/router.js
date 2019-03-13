@@ -43,7 +43,7 @@ router.post('/updateProfile', UserController.updateProfile);
 
 router.post('/addNewUser', UserController.addNewUser);
 
-router.put('/updateUser', UserController.updateUser);
+router.post('/updateUser', UserController.updateUser);
 
 router.post('/updateUserByAdmin', UserController.updateUserByAdmin);
 

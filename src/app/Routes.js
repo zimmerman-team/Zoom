@@ -148,6 +148,7 @@ const Routes = props => {
               <DataMapperModule dropDownData={props} fileCorrection={props} />
             )}
           />
+          /
           <Route
             path="/public/chart"
             render={() => <PublicChartLibraryModule />}
@@ -156,7 +157,6 @@ const Routes = props => {
             path="/public/chartz/view"
             render={() => <PublicChartViewModule />}
           />
-
           <Route exact path="/component" render={() => <DataExplorePanel />} />
           <Route exact path="/step" render={() => <ManMappingStep />} />
         </Switch>

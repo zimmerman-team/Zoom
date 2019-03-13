@@ -65,7 +65,6 @@ export class GeoMap extends Component {
       viewport: {
         latitude: this.props.latitude,
         longitude: this.props.longitude,
-
         zoom: this.props.zoom
       },
       settings: {

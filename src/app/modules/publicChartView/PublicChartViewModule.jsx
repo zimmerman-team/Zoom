@@ -6,6 +6,7 @@ import { SectionHeading as _SectionHeading, SubHeading as _SubHeading} from 'com
 import { PageIntroInitial as _PageIntroInitial, BaseParagraph as _BaseParagraph} from 'components/sort/Paragraphs';
 import Theme from 'theme/Theme';
 import { GeoMap } from '../../components/GeoMap/GeoMap';
+import {withRouter} from 'react-router-dom';
 
 
 /**
@@ -42,6 +43,11 @@ color: ${Theme.color.zoomBlack};
 margin-top: 20px;
 `;
 
+const MapContainer = styled.div`
+width: 100%;
+height: 350px; 
+`;
+
 const propTypes = {
   data: PropTypes.array,
 };
@@ -49,12 +55,24 @@ const defaultProps = {
   data: [],
 };
 const PublicChartViewModule = props => {
+
   return (
     <ComponentBase>
       <SectionHeading>Untitled chart 01</SectionHeading>
       <SubHeading>By Jane Doe | Published on January 12th 2019</SubHeading>
       <PageIntroInitial>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. </PageIntroInitial>
-      {/*<GeoMap/>*/}
+     <MapContainer>
+      <GeoMap
+        // indicatorData={indicators}
+        // selectedYears={this.props.yearPeriod}
+        // selectYear={this.props.selectYear}
+        latitude={15}
+        longitude={0}
+        zoom={2}
+        location={props.location.pathname}
+      />
+     </MapContainer>
+      {console.log(props)}
       <BaseParagraph>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Maecenas faucibus mollis interdum. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
         Sed posuere consectetur est at lobortis. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. Nulla vitae elit libero, a pharetra augue.
 
@@ -65,4 +83,4 @@ const PublicChartViewModule = props => {
 };
 PublicChartViewModule.propTypes = propTypes;
 PublicChartViewModule.defaultProps = defaultProps;
-export default PublicChartViewModule;
+export default withRouter(PublicChartViewModule);

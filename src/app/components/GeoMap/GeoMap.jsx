@@ -37,14 +37,15 @@ const propTypes = {
   zoom: PropTypes.number,
   indicatorData: PropTypes.array,
   selectedYears: PropTypes.array,
-  selectYear: PropTypes.func
+  selectYear: PropTypes.func,
+  theme: PropTypes.obj
 };
 
 const defaultProps = {
   // just show worldview when no lat long is specified
   latitude: 15,
   longitude: 0,
-  zoom: 2
+  zoom: 2,
 };
 
 export class GeoMap extends Component {
@@ -205,6 +206,7 @@ export class GeoMap extends Component {
         }
       });
     }
+
   };
 
   handleZoomIn = () => {

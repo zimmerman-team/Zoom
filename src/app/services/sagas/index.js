@@ -169,7 +169,7 @@ export function* addUserRequest(action) {
 
 export function* updateUserRequest(action) {
   try {
-    const response = yield call(api.nodeBackendPostRequest, {
+    const response = yield call(api.nodeBackendPutRequest, {
       endpoint: 'updateUser',
       values: action.values
     });

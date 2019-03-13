@@ -99,6 +99,10 @@ export function nodeBackendGetRequest(request) {
   });
 }
 
+export function nodeBackendPutRequest(request) {
+  return axios.put(`/api/${request.endpoint}`, request.values);
+}
+
 export function nodeBackendPostRequest(request) {
   return axios.post(`/api/${request.endpoint}`, request.values);
 }

@@ -71,6 +71,10 @@ function wikiURL(url) {
   return process.env.REACT_APP_WIKIPEDIA_API_HOST.concat(url);
 }
 
+function zoomURL(url) {
+  return process.env.REACT_APP_EXPRESS_BACKEND_BASE_URL.concat(url);
+}
+
 function formatJSON(values) {
   values.format = 'json';
   return values;
@@ -97,10 +101,6 @@ export function nodeBackendGetRequest(request) {
   return axios.get(`/api/${request.endpoint}`, {
     params: request.values
   });
-}
-
-export function nodeBackendPutRequest(request) {
-  return axios.put(`/api/${request.endpoint}`, request.values);
 }
 
 export function nodeBackendPostRequest(request) {

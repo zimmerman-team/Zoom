@@ -20,6 +20,15 @@ const CountryDetailMediator = lazy(() =>
 const HomeModuleMediator = lazy(() =>
   import('mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator')
 );
+
+const FocusModuleMediator = lazy(() =>
+  import('mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator')
+);
+
+const VisualizerModuleMediator = lazy(() =>
+  import('mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator')
+);
+
 const IatiDetailMediator = lazy(() =>
   import('mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator')
 );
@@ -54,6 +63,26 @@ const Routes = props => {
             path="/home"
             render={() => (
               <HomeModuleMediator
+                indicatorAggregations={props}
+                dropDownData={props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/focus"
+            render={() => (
+              <FocusModuleMediator
+                indicatorAggregations={props}
+                dropDownData={props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/visualizer/:code/:tab"
+            render={() => (
+              <VisualizerModuleMediator
                 indicatorAggregations={props}
                 dropDownData={props}
               />

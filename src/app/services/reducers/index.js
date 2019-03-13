@@ -2,10 +2,6 @@ import update from 'immutability-helper';
 import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
 import * as nodeActions from 'services/actions/nodeBackend';
-import { ALL_USER_CHARTS_INITIAL } from 'services/actions/nodeBackend';
-import { ALL_USER_CHARTS_REQUEST } from 'services/actions/nodeBackend';
-import { ALL_USER_CHARTS_SUCCESS } from 'services/actions/nodeBackend';
-import { ALL_USER_CHARTS_FAILED } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -255,7 +251,55 @@ function user(state = initial, action) {
   }
 }
 
+function userAdded(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.ADD_USER_INITIAL:
+      return updateInitial(state);
+    case nodeActions.ADD_USER_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.ADD_USER_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.ADD_USER_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function userUpdated(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.UPDATE_USER_INITIAL:
+      return updateInitial(state);
+    case nodeActions.UPDATE_USER_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.UPDATE_USER_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.UPDATE_USER_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function usersTeam(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.UPDATE_USERS_TEAM_INITIAL:
+      return updateInitial(state);
+    case nodeActions.UPDATE_USERS_TEAM__REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.UPDATE_USERS_TEAM_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.UPDATE_USERS_TEAM_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  usersTeam,
+  userUpdated,
+  userAdded,
   user,
   allUserCharts,
   upload,

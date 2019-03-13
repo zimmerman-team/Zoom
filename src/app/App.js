@@ -73,12 +73,46 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    // so this basically either adds a new user that has
+    // signed in or updates their username and email
+
     if (!isEqual(this.props.user, prevProps.user)) {
-      if (this.props.user.data) console.log('update user');
-      else if (this.props.user.status === 404)
+      if (this.props.user.data) {
+        const profile = auth0Client.getProfile();
+        // so we update the user
+        this.props.dispatch(
+          nodeActions.updateUserRequest({
+            username: profile.nickname,
+            email: profile.name,
+            authId: profile.sub
+          })
+        );
+      } else if (this.props.user.error.status === 404) {
         // so if a user was not found in our zoom backend after signing in ^
         // we add it as a new user
-        console.log('add new user');
+
+        // but first we get them user roles and groups, cause they need to be retrieved
+        // in a very weird way
+        auth0Client.getUserRole().then(role => {
+          auth0Client.getUserGroup().then(group => {
+            const profile = auth0Client.getProfile();
+
+            // and we finally make the call to add the user
+            this.props.dispatch(
+              nodeActions.addUserRequest({
+                username: profile.nickname,
+                email: profile.name,
+                authId: profile.sub,
+                role,
+                avatar: profile.picture,
+                firstName: '',
+                lastName: '',
+                team: group
+              })
+            );
+          });
+        });
+      }
     }
   }
 
@@ -137,6 +171,8 @@ class App extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    userUpdated: state.userUpdated,
+    userAdded: state.userAdded,
     user: state.user
   };
 };

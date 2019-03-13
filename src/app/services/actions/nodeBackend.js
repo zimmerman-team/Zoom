@@ -93,3 +93,68 @@ export function addUserFailed(error) {
     error
   };
 }
+
+export const UPDATE_USER_INITIAL = 'UPDATE_USER_INITIAL';
+export const UPDATE_USER_REQUEST = 'UPDATE_USER_REQUEST';
+export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
+export const UPDATE_USER_FAILED = 'UPDATE_USER_FAILED';
+
+export function updateUserInitial() {
+  return {
+    type: UPDATE_USER_INITIAL
+  };
+}
+
+export function updateUserRequest(values) {
+  return {
+    type: UPDATE_USER_REQUEST,
+    values
+  };
+}
+
+export function updateUserSuccess(data) {
+  return {
+    type: UPDATE_USER_SUCCESS,
+    data
+  };
+}
+
+export function updateUserFailed(error) {
+  return {
+    type: UPDATE_USER_FAILED,
+    error
+  };
+}
+
+// should be used with updating an array of users
+export const UPDATE_USERS_TEAM_INITIAL = 'UPDATE_USERS_TEAM_INITIAL';
+export const UPDATE_USERS_TEAM__REQUEST = 'UPDATE_USERS_TEAM__REQUEST';
+export const UPDATE_USERS_TEAM_SUCCESS = 'UPDATE_USERS_TEAM_SUCCESS';
+export const UPDATE_USERS_TEAM_FAILED = 'UPDATE_USERS_TEAM_FAILED';
+
+export function updateUsersTeamInitial() {
+  return {
+    type: UPDATE_USERS_TEAM_INITIAL
+  };
+}
+
+export function updateUsersTeamRequest(values) {
+  return {
+    type: UPDATE_USERS_TEAM__REQUEST,
+    values
+  };
+}
+
+export function updateUsersTeamSuccess(data) {
+  return {
+    type: UPDATE_USERS_TEAM_SUCCESS,
+    data
+  };
+}
+
+export function updateUsersTeamFailed(error) {
+  return {
+    type: UPDATE_USERS_TEAM_FAILED,
+    error
+  };
+}

@@ -18,7 +18,7 @@ class AddUserMediator extends React.Component {
       userRole: { label: '', value: '', _id: '' },
       organisation: { label: '', value: '', _id: '' },
       userGroups: [],
-      userRoles: [],
+      userRoles: []
     };
 
     this.submitForm = this.submitForm.bind(this);
@@ -36,31 +36,31 @@ class AddUserMediator extends React.Component {
 
   changeFirstName(e) {
     this.setState({
-      firstName: e.target.value,
+      firstName: e.target.value
     });
   }
 
   changeLastName(e) {
     this.setState({
-      lastName: e.target.value,
+      lastName: e.target.value
     });
   }
 
   changeEmail(e) {
     this.setState({
-      email: e.target.value,
+      email: e.target.value
     });
   }
 
   changeUserRole(e) {
     this.setState({
-      userRole: e.option,
+      userRole: e.option
     });
   }
 
   changeOrganisation(e) {
     this.setState({
-      organisation: e.option,
+      organisation: e.option
     });
   }
 
@@ -72,7 +72,7 @@ class AddUserMediator extends React.Component {
       this.state.email,
       this.state.organisation._id,
       this.state.userRole._id,
-      this,
+      this
     );
   }
 

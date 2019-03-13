@@ -470,102 +470,108 @@ class Auth {
   }
 
   addMultipleUsersToGroup(group_id, users, headers, parent) {
-    axios
-      .patch(
-        `${process.env.REACT_APP_AE_API_URL}/groups/${group_id}/members`,
-        users,
-        { headers }
-      )
-      .then(res2 => {
-        if (res2.status === 204) {
-          parent.setState({
-            success: true,
-            secondaryInfoMessage: null
-          });
-        } else {
+    return new Promise(resolve => {
+      axios
+        .patch(
+          `${process.env.REACT_APP_AE_API_URL}/groups/${group_id}/members`,
+          users,
+          { headers }
+        )
+        .then(res2 => {
+          if (res2.status === 204) {
+            parent.setState({
+              success: true,
+              secondaryInfoMessage: null
+            });
+
+            resolve();
+          } else {
+            parent.setState({
+              success: false,
+              secondaryInfoMessage: res2.data.statusText
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
           parent.setState({
             success: false,
-            secondaryInfoMessage: res2.data.statusText
+            secondaryInfoMessage: error.response.data.message
           });
-        }
-      })
-      .catch(error => {
-        console.log(error);
-        parent.setState({
-          success: false,
-          secondaryInfoMessage: error.response.data.message
         });
-      });
+    });
   }
 
   addGroup(name, users, parent) {
-    let today = new Date();
-    let dd = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate();
-    let mm =
-      today.getMonth() + 1 < 10
-        ? `0${today.getMonth() + 1}`
-        : today.getMonth() + 1; //January is 0
-    let yyyy = today.getFullYear();
-    today = `${dd}/${mm}/${yyyy}`;
-    axios
-      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
-        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
-        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-        audience: 'urn:auth0-authz-api',
-        grant_type: 'client_credentials'
-      })
-      .then(res1 => {
-        axios
-          .post(
-            `${process.env.REACT_APP_AE_API_URL}/groups`,
-            { name, description: `${today},${this.profile.name}` },
-            {
-              headers: {
-                Authorization: `${res1.data.token_type} ${
-                  res1.data.access_token
-                }`
-              }
-            }
-          )
-          .then(res2 => {
-            if (res2.status === 200 || res2.status === 204) {
-              parent.setState({
-                success: true,
-                errorMessage: null,
-                name: '',
-                users: []
-              });
-              this.addMultipleUsersToGroup(
-                res2.data._id,
-                users,
-                {
+    return new Promise(resolve => {
+      let today = new Date();
+      let dd = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate();
+      let mm =
+        today.getMonth() + 1 < 10
+          ? `0${today.getMonth() + 1}`
+          : today.getMonth() + 1; //January is 0
+      let yyyy = today.getFullYear();
+      today = `${dd}/${mm}/${yyyy}`;
+      axios
+        .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+          client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+          client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+          audience: 'urn:auth0-authz-api',
+          grant_type: 'client_credentials'
+        })
+        .then(res1 => {
+          axios
+            .post(
+              `${process.env.REACT_APP_AE_API_URL}/groups`,
+              { name, description: `${today},${this.profile.name}` },
+              {
+                headers: {
                   Authorization: `${res1.data.token_type} ${
                     res1.data.access_token
                   }`
-                },
-                parent
-              );
-            } else {
+                }
+              }
+            )
+            .then(res2 => {
+              if (res2.status === 200 || res2.status === 204) {
+                parent.setState({
+                  success: true,
+                  errorMessage: null,
+                  name: '',
+                  users: []
+                });
+                this.addMultipleUsersToGroup(
+                  res2.data._id,
+                  users,
+                  {
+                    Authorization: `${res1.data.token_type} ${
+                      res1.data.access_token
+                    }`
+                  },
+                  parent
+                ).then(() => resolve());
+              } else {
+                parent.setState({
+                  success: false,
+                  errorMessage: res2.data.statusText
+                });
+              }
+            })
+            .catch(error => {
+              console.log(error);
               parent.setState({
                 success: false,
-                errorMessage: res2.data.statusText
+                errorMessage: error.response.data.message
               });
-            }
-          })
-          .catch(error => {
-            console.log(error);
-            parent.setState({
-              success: false,
-              errorMessage: error.response.data.message
             });
+        })
+        .catch(error => {
+          parent.setState({
+            success: false,
+            errorMessage: error.response.data.message
           });
-      })
-      .catch(error => {
-        parent.setState({
-          success: false,
-          errorMessage: error.response.data.message
         });
-      });
+    });
   }
 }
 

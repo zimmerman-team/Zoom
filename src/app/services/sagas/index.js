@@ -167,8 +167,44 @@ export function* addUserRequest(action) {
   }
 }
 
+export function* updateUserRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'updateUser',
+      values: action.values
+    });
+    yield put(nodeActions.updateUserSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.updateUserFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* updateUsersTeamRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'updateUsersTeam',
+      values: action.values
+    });
+    yield put(nodeActions.updateUsersTeamSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.updateUsersTeamFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('UPDATE_USERS_TEAM__REQUEST', updateUsersTeamRequest),
+    takeLatest('UPDATE_USER_REQUEST', updateUserRequest),
     takeLatest('ADD_USER_REQUEST', addUserRequest),
     takeLatest('GET_USER_REQUEST', getUserRequest),
     takeLatest('ALL_USER_CHARTS_REQUEST', allUserChartsRequest),

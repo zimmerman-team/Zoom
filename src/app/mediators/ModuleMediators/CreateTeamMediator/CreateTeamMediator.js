@@ -1,10 +1,15 @@
 /* base */
 import React from 'react';
 import filter from 'lodash/filter';
+import { connect } from 'react-redux';
+
+/* actions */
+import * as nodeActions from 'services/actions/nodeBackend';
 
 /* components */
 import CreateTeamModule from 'modules/UserManagement/CreateTeam/CreateTeamModule';
 import { formatUsersData } from './CreateTeamMediator.utils';
+import { updateUsersTeamRequest } from 'services/sagas';
 
 class CreateTeamMediator extends React.Component {
   constructor(props) {
@@ -21,7 +26,7 @@ class CreateTeamMediator extends React.Component {
       sort: 'name:1',
       page: 0,
       totalPages: 0,
-      isSortByOpen: false,
+      isSortByOpen: false
     };
 
     this.setUsers = this.setUsers.bind(this);
@@ -54,14 +59,14 @@ class CreateTeamMediator extends React.Component {
       this.state.sort,
       this.state.searchKeyword !== ''
         ? ` AND name:${this.state.searchKeyword}*`
-        : '',
+        : ''
     );
   }
 
   setUsers(data) {
     this.setState({
       allUsers: formatUsersData(data),
-      totalPages: Math.ceil(data.total / 10),
+      totalPages: Math.ceil(data.total / 10)
     });
   }
 
@@ -77,46 +82,46 @@ class CreateTeamMediator extends React.Component {
 
   changeName(e) {
     this.setState({
-      name: e.target.value,
+      name: e.target.value
     });
   }
 
   changePage(e) {
     this.setState(
       {
-        page: e.selected,
+        page: e.selected
       },
       () => {
         this.getAllUsers();
-      },
+      }
     );
   }
 
   changeSearchKeyword(e) {
     this.setState(
       {
-        searchKeyword: e.target.value,
+        searchKeyword: e.target.value
       },
       () => {
         this.getAllUsers();
-      },
+      }
     );
   }
 
   changeSortBy(e) {
     this.setState(
       {
-        sort: e.target.id,
+        sort: e.target.id
       },
       () => {
         this.getAllUsers();
-      },
+      }
     );
   }
 
   changeIsSortByOpen() {
     this.setState(prevState => ({
-      isSortByOpen: !prevState.isSortByOpen,
+      isSortByOpen: !prevState.isSortByOpen
     }));
   }
 
@@ -141,8 +146,27 @@ class CreateTeamMediator extends React.Component {
   }
 
   submitForm(e) {
+    const team = this.state.name;
+    const users = this.state.users;
+
     e.preventDefault();
-    this.props.auth0Client.addGroup(this.state.name, this.state.users, this);
+    this.props.auth0Client
+      .addGroup(this.state.name, this.state.users, this)
+      .then(() => {
+        // and after everything has been succesfully done on auth0
+        // we save the new user roles in zoombackend
+        this.props.dispatch(
+          nodeActions.updateUsersTeamRequest({
+            user: {
+              authId: this.props.auth0Client.getProfile().sub
+            },
+            team,
+            updateUsers: users.map(authId => {
+              return { authId };
+            })
+          })
+        );
+      });
   }
 
   render() {
@@ -171,4 +195,10 @@ class CreateTeamMediator extends React.Component {
   }
 }
 
-export default CreateTeamMediator;
+const mapStateToProps = state => {
+  return {
+    usersTeam: state.usersTeam
+  };
+};
+
+export default connect(mapStateToProps)(CreateTeamMediator);

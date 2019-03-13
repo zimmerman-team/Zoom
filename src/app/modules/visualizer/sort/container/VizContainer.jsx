@@ -20,7 +20,7 @@ const propTypes = {
   type: PropTypes.string
 };
 const defaultProps = {
-  type: 'barchart'
+  type: 'geomap'
 };
 
 const VizContainer = props => {

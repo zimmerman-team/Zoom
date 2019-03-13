@@ -9,7 +9,7 @@ import {
   ModuleContainer,
   ControlPanelContainer
 } from 'modules/focus/FocuseModule.styles';
-import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
+// import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
 // import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
 const propTypes = {
@@ -57,7 +57,7 @@ class FocusModule extends Component {
           />
           {this.props.dataPaneOpen && (
             <ControlPanelContainer>
-              <ExplorePanelMediator {...otherProps} />
+              {/*<ExplorePanelMediator {...otherProps} />*/}
             </ControlPanelContainer>
           )}
         </ModuleContainer>

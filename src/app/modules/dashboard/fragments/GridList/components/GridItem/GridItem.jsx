@@ -1,6 +1,8 @@
 /* base */
 import React from 'react';
 import * as PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 
 /* components...*/
 import GridItemText from './common/GridItemText';
@@ -9,6 +11,7 @@ import {ComponentBase, GridItemHeading, Box} from './GridItem.styles';
 
 
 const propTypes = {
+
   withOptions: PropTypes.bool
 };
 const defaultProps = {
@@ -22,10 +25,10 @@ const GridItem = props => {
     setIsHovered(!isHovered);
   }
 
-  function handleClick() {
-    if(!props.withOptions){
-      //route to specific place
-
+  function handleClick(id, chartType) {
+    if(!props.withOptions) {
+      console.log('click!');
+      return `public/chart-library/${id}/${chartType}`;
     }
   }
 
@@ -33,8 +36,9 @@ const GridItem = props => {
     <ComponentBase
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseEnter}
-      onClick={handleClick}
+      onClick={() => handleClick(1, 1)}
       withOptions={props.withOptions}
+      to={handleClick}
     >
       <Box>
         <GridItemHeading>People Living with HIV</GridItemHeading>

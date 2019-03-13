@@ -1,8 +1,19 @@
 import styled from 'styled-components';
 import Theme from 'theme/Theme';
+import { Link } from 'react-router-dom';
 
-export const ComponentBase = styled.div`
-  //todo: dynamisch aan de hand van grid maken..
+export const ComponentBase = styled(Link)`
+  //CSS router Link reset
+  text-decoration: none;
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
+    text-decoration: none;
+    color: ${Theme.color.zoomBlack};
+  }
+
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -12,10 +23,9 @@ export const ComponentBase = styled.div`
   padding: 15px;
   background-color: ${Theme.color.zoomGreyZero};
   box-shadow: 0 2px 4px 2px rgba(157, 157, 157, 0.5);
+
   &:hover {
     cursor: ${props => !props.withOptions && 'pointer'};
-    //todo: this color is not defined in design
-    background-color: ${props => !props.withOptions && Theme.color.zoomGreyTwo};
   }
 `;
 

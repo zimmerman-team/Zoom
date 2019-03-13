@@ -27,7 +27,6 @@ const defaultProps = {
   changeSearchKeyword: null,
 };
 
-//todo: is there a better name for this?
 const PublicChartLibraryModule = props => {
   return (
     <ModuleContainer>
@@ -36,6 +35,14 @@ const PublicChartLibraryModule = props => {
       <Box>
       <GridListOptionsPane visibilityAddChart='hidden'/>
       <ViewContainer>
+        <GridItem withOptions={false}/>
+        <GridItem withOptions={false}/>
+        <GridItem withOptions={false}/>
+        <GridItem withOptions={false}/>
+        <GridItem withOptions={false}/>
+        <GridItem withOptions={false}/>
+        <GridItem withOptions={false}/>
+        <GridItem withOptions={false}/>
         <GridItem withOptions={false}/>
       </ViewContainer>
       </Box>

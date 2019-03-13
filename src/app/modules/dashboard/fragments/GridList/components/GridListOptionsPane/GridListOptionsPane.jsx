@@ -22,7 +22,6 @@ const defaultProps = {
   visibilityAddChart: 'visible'
 };
 
-
 const GridListOptionsPane = props => {
   return (
     <ComponentBase>

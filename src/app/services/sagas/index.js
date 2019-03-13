@@ -122,7 +122,7 @@ export function* allUserChartsRequest(action) {
       endpoint: 'getAllCharts',
       values: action.values
     });
-    yield put(nodeActions.allUserChartsSuccess(response));
+    yield put(nodeActions.allUserChartsSuccess(response.data));
   } catch (error) {
     yield put(
       nodeActions.allUserChartsFailed({
@@ -133,8 +133,80 @@ export function* allUserChartsRequest(action) {
   }
 }
 
+export function* getUserRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getUser',
+      values: action.values
+    });
+    yield put(nodeActions.getUserSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.getUserFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* addUserRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'addNewUser',
+      values: action.values
+    });
+    yield put(nodeActions.addUserSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.addUserFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* updateUserRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'updateUser',
+      values: action.values
+    });
+    yield put(nodeActions.updateUserSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.updateUserFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* updateUsersTeamRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'updateUsersTeam',
+      values: action.values
+    });
+    yield put(nodeActions.updateUsersTeamSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.updateUsersTeamFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('UPDATE_USERS_TEAM__REQUEST', updateUsersTeamRequest),
+    takeLatest('UPDATE_USER_REQUEST', updateUserRequest),
+    takeLatest('ADD_USER_REQUEST', addUserRequest),
+    takeLatest('GET_USER_REQUEST', getUserRequest),
     takeLatest('ALL_USER_CHARTS_REQUEST', allUserChartsRequest),
     takeLatest('SAVE_STEP_DATA_REQUEST', saveStepDataRequest),
     takeLatest('DATA_PANE_TOGGLE_REQUEST', dataPaneToggleRequest),

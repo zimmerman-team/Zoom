@@ -156,8 +156,7 @@ const Routes = props => {
           <Route
             exact
             path="/public/chart-library/:id/:charttype"
-            // todo: render to appropriate chart page
-            render={() => <Redirect to="/home" />}
+            // todo: render to appropriate chart pages
           />
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />

@@ -266,6 +266,7 @@ class DataMapperModule extends React.Component {
           this.props.stepData.metaData &&
           this.props.stepData.uploadData && (
             <WrapUpMediator
+              auth0Client={this.props.auth0Client}
               disableSteps={() => this.setState({ stepsDisabled: true })}
               disableMapStep={value =>
                 this.setState({ mapStepDisabled: value })

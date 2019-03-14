@@ -2,6 +2,7 @@
 const general = require('./generalResponse');
 
 const Dataset = require('../models/Dataset');
+const User = require('../models/User');
 
 const DatasetApi = {
   // gets data set, if its the owners data set
@@ -24,7 +25,6 @@ const DatasetApi = {
       .catch(error => {
         general.handleError(res, error);
       });
-    7;
   },
 
   // so this updates the team related to the dataset
@@ -64,28 +64,31 @@ const DatasetApi = {
   },
 
   // so this adds the dataset
-  addNewDataset: function(author, dataset, res) {
-    // TODO: should be adjusted without the promises, or maybe with promises if
-    // TODO: it works and makes sense
-    if (author.role === 'admin')
-      return Dataset.create(
-        {
-          datasetId: dataset.datasetId,
-          author,
-          name: dataset.name,
-          team: dataset.team,
-          public: dataset.public
-        },
-        { new: true }
-      )
-        .then(set => res(null, set))
-        .catch(error => {
-          general.handleError(res, error);
-        });
+  addNewDataset: (req, res) => {
+    const data = req.body;
 
-    general.handleError(res, {
-      name: 'no permission',
-      error: 'unauthorized'
+    User.findOne({ authId: data.authId }, (error, acc) => {
+      if (error) general.handleError(res, error);
+      else if (!acc) general.handleError(res, 'User not found', 404);
+      else {
+        if (acc.role === 'Administrator') {
+          const dataset = new Dataset({
+            datasetId: data.datasetId,
+            author: acc,
+            name: data.name,
+            team: data.team,
+            public: data.public
+          });
+
+          dataset.save(err => {
+            if (err) general.handleError(res, err);
+
+            res.json({ message: 'dataset saved' });
+          });
+        } else {
+          general.handleError(res, 'Unauthorized');
+        }
+      }
     });
   },
 

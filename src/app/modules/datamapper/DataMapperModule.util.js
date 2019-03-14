@@ -8,13 +8,14 @@ export function checkEmptyFields(manMapData, mapReqFields) {
     //  as in zoom data model of the data
     //  then we push it in as an empty field
 
-    // we need some extra checking logic cause there can be two value selections
+    // we need some extra checking logic cause there can be three value selections
     // but at least one is required
     // and we'll check if one of these fields have been selected
     if (field === 'value') {
       if (
         !find(manMapData, ['zoomModel', 'Number Value']) &&
-        !find(manMapData, ['zoomModel', 'Percentage Value'])
+        !find(manMapData, ['zoomModel', 'Percentage Value']) &&
+        !find(manMapData, ['zoomModel', 'Mixed Value'])
       ) {
         emptyFields.push(field);
       }

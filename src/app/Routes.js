@@ -144,9 +144,18 @@ const Routes = props => {
           <Route path="/about" render={() => <About />} />
           <Route
             path="/mapper"
-            render={() => (
-              <DataMapperModule dropDownData={props} fileCorrection={props} />
-            )}
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <DataMapperModule
+                  dropDownData={props}
+                  fileCorrection={props}
+                  auth0Client={props.auth0Client}
+                />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
           />
           <Route
             path="/public/chart-library"

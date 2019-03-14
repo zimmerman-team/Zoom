@@ -44,11 +44,13 @@ class DataMapperModule extends React.Component {
       // if they don't select or dont have these fields
       // the manual mapping will have to be adjusted
       // for the to be able to populate/fill them
-      mapReqFields: ['indicator', 'date', 'value'],
+      mapReqFields: ['indicator', 'date', 'value', 'geolocation'],
 
       manMapEmptyValue: false,
       manMapEmptyFields: false,
+      manMapEmptyFormat: false,
       mapStepDisabled: false,
+
       metaDataEmptyFields: [],
       stepsDisabled: false
     };
@@ -173,6 +175,15 @@ class DataMapperModule extends React.Component {
           prevState.mapReqFields
         );
 
+        // here we add in the logic to check if the value format needs to be in the
+        // users file and if its selected or not
+        let manMapEmptyFormat = false;
+        if (
+          find(manMapData, ['zoomModel', 'Mixed Value']) &&
+          !find(manMapData, ['zoomModel', 'value_format'])
+        )
+          manMapEmptyFormat = true;
+
         if (
           emptyFields.length > 0 ||
           find(manMapData, item => {
@@ -193,10 +204,17 @@ class DataMapperModule extends React.Component {
 
           props.dispatch(actions.saveStepDataRequest(stepData));
 
-          return { manMapEmptyValue: emptyValue, manMapEmptyFields };
+          return {
+            manMapEmptyValue: emptyValue,
+            manMapEmptyFields,
+            manMapEmptyFormat
+          };
+        } else if (manMapEmptyFormat) {
+          return { manMapEmptyFormat };
         } else
           return {
             step: prevState.step + 1,
+            manMapEmptyFormat,
             manMapEmptyFields: false,
             manMapEmptyValue: false
           };
@@ -236,6 +254,7 @@ class DataMapperModule extends React.Component {
         return (
           this.props.stepData.manMapData && (
             <ManMappingStep
+              emptyFormat={this.state.manMapEmptyFormat}
               emptyValue={this.state.manMapEmptyValue}
               manMapEmptyFields={this.state.manMapEmptyFields}
               mapReqFields={this.state.mapReqFields}
@@ -247,6 +266,7 @@ class DataMapperModule extends React.Component {
           this.props.stepData.metaData &&
           this.props.stepData.uploadData && (
             <WrapUpMediator
+              auth0Client={this.props.auth0Client}
               disableSteps={() => this.setState({ stepsDisabled: true })}
               disableMapStep={value =>
                 this.setState({ mapStepDisabled: value })

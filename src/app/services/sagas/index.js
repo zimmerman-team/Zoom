@@ -201,8 +201,26 @@ export function* updateUsersTeamRequest(action) {
   }
 }
 
+export function* addNewDatasetRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'addNewDataset',
+      values: action.values
+    });
+    yield put(nodeActions.addNewDatasetSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.addNewDatasetFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('ADD_NEW_DATASET_REQUEST', addNewDatasetRequest),
     takeLatest('UPDATE_USERS_TEAM__REQUEST', updateUsersTeamRequest),
     takeLatest('UPDATE_USER_REQUEST', updateUserRequest),
     takeLatest('ADD_USER_REQUEST', addUserRequest),

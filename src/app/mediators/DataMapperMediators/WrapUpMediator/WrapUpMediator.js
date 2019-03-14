@@ -4,6 +4,7 @@ import connect from 'react-redux/es/connect/connect';
 
 /* actions */
 import * as generalActions from 'services/actions/general';
+import * as nodeActions from 'services/actions/nodeBackend';
 
 /* components */
 import WrapUpStep from 'modules/datamapper/fragments/WrapUpStep/WrapUpStep';
@@ -181,6 +182,7 @@ class WrapUpMediator extends React.Component {
 
   saveData() {
     const stepData = { ...this.props.stepData };
+
     stepData.wrapUpData = {
       sourceId: this.state.sourceId,
       surveyId: this.state.surveyId
@@ -352,7 +354,24 @@ class WrapUpMediator extends React.Component {
     }
     if (response && !error) {
       this.props.disableMapStep(true);
-      // console.log('MAPPING FINISHED', response);
+
+      // and after everything is done mapping we can actually
+      // save the dataset into our zoom backend
+      const profile = this.props.auth0Client.getProfile();
+
+      this.props.dispatch(
+        nodeActions.addNewDatasetRequest({
+          user: {
+            authId: profile.sub
+          },
+          dataset: {
+            datasetId: this.props.fileId,
+            name: this.props.metaData.title,
+            team: 'none',
+            public: this.props.metaData.shared === 'Yes'
+          }
+        })
+      );
     }
 
     this.setState({ loading: false, mappingErrors });
@@ -389,6 +408,7 @@ class WrapUpMediator extends React.Component {
   }
 
   render() {
+    console.log('datasetAdded', this.props.datasetAdded);
     return (
       <WrapUpStep
         loading={this.state.loading}
@@ -400,6 +420,7 @@ class WrapUpMediator extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    datasetAdded: state.datasetAdded,
     metaData: state.stepData.stepzData.metaData,
     wrapUpData: state.stepData.stepzData.wrapUpData,
     environment: state.stepData.stepzData.environment,

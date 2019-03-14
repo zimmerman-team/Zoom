@@ -361,15 +361,11 @@ class WrapUpMediator extends React.Component {
 
       this.props.dispatch(
         nodeActions.addNewDatasetRequest({
-          user: {
-            authId: profile.sub
-          },
-          dataset: {
-            datasetId: this.props.fileId,
-            name: this.props.metaData.title,
-            team: 'none',
-            public: this.props.metaData.shared === 'Yes'
-          }
+          authId: profile.sub,
+          datasetId: this.props.fileId,
+          name: this.props.metaData.title,
+          team: 'none',
+          public: this.props.metaData.shared === 'Yes'
         })
       );
     }

@@ -230,7 +230,8 @@ class UploadMediator extends React.Component {
       );
 
       const manMapData = formatManData(
-        response.fileValidationResults.foundList
+        response.fileValidationResults.foundList,
+        this.state.modelOptions
       );
 
       const stepData = { ...this.props.stepData };

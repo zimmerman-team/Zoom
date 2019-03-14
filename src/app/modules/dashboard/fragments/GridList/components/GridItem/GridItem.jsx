@@ -8,7 +8,12 @@ import map from 'lodash/map';
 /* components...*/
 import GridItemText from './common/GridItemText';
 import GridItemToolbar from './common/GridItemToolbar';
-import { ComponentBase, GridItemHeading, Box } from './GridItem.styles';
+import {
+  ComponentBase,
+  GridItemHeading,
+  Box,
+  GridItemInfoContainer
+} from './GridItem.styles';
 
 const propTypes = {
   id: PropTypes.number,
@@ -49,9 +54,11 @@ const GridItem = props => {
     >
       <Box>
         <GridItemHeading>{props.title}</GridItemHeading>
-        {map(props.values, (val, key) => (
-          <GridItemText label={key} value={val} />
-        ))}
+        <GridItemInfoContainer>
+          {map(props.values, (val, key) => (
+            <GridItemText label={key} value={val} />
+          ))}
+        </GridItemInfoContainer>
       </Box>
       {props.withOptions && isHovered ? <GridItemToolbar /> : null}
       {/*<GridItemToolbar />*/}

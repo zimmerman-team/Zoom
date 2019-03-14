@@ -296,7 +296,23 @@ function usersTeam(state = initial, action) {
   }
 }
 
+function datasetAdded(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.ADD_NEW_DATASET_INITIAL:
+      return updateInitial(state);
+    case nodeActions.ADD_NEW_DATASET_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.ADD_NEW_DATASET_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.ADD_NEW_DATASET_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  datasetAdded,
   usersTeam,
   userUpdated,
   userAdded,

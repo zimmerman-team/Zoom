@@ -158,3 +158,35 @@ export function updateUsersTeamFailed(error) {
     error
   };
 }
+
+export const ADD_NEW_DATASET_INITIAL = 'ADD_NEW_DATASET_INITIAL';
+export const ADD_NEW_DATASET_REQUEST = 'ADD_NEW_DATASET_REQUEST';
+export const ADD_NEW_DATASET_SUCCESS = 'ADD_NEW_DATASET_SUCCESS';
+export const ADD_NEW_DATASET_FAILED = 'ADD_NEW_DATASET_FAILED';
+
+export function addNewDatasetInitial() {
+  return {
+    type: ADD_NEW_DATASET_INITIAL
+  };
+}
+
+export function addNewDatasetRequest(values) {
+  return {
+    type: ADD_NEW_DATASET_REQUEST,
+    values
+  };
+}
+
+export function addNewDatasetSuccess(data) {
+  return {
+    type: ADD_NEW_DATASET_SUCCESS,
+    data
+  };
+}
+
+export function addNewDatasetFailed(error) {
+  return {
+    type: ADD_NEW_DATASET_FAILED,
+    error
+  };
+}

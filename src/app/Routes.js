@@ -7,7 +7,7 @@ import PageLoader from 'modules/common/pageloader/PageLoader';
 import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
-import PublicChartLibraryModule from './modules/publicChartLibrary/PublicChartLibraryModule';
+import PublicChartLibraryModule from './modules/PublicChartLibrary/PublicChartLibraryModule';
 import DashboardModule from './modules/dashboard/DashboardModule';
 // import PublicChartViewModule from './modules/publicChartView/PublicChartViewModule';
 // Modules regular import
@@ -144,9 +144,18 @@ const Routes = props => {
           <Route path="/about" render={() => <About />} />
           <Route
             path="/mapper"
-            render={() => (
-              <DataMapperModule dropDownData={props} fileCorrection={props} />
-            )}
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <DataMapperModule
+                  dropDownData={props}
+                  fileCorrection={props}
+                  auth0Client={props.auth0Client}
+                />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
           />
           <Route
             path="/public/chart-library"

@@ -24,6 +24,7 @@ class DashboardMediator extends React.Component {
       isSortByOpen: false
     };
 
+    /* todo: do we really need to do all the binding? see if functions can be converted to arrow functions */
     this.setUsers = this.setUsers.bind(this);
     this.reloadData = this.reloadData.bind(this);
     this.changeSortBy = this.changeSortBy.bind(this);
@@ -35,6 +36,8 @@ class DashboardMediator extends React.Component {
 
   componentDidMount() {
     this.reloadData();
+
+    /* todo: not sure if this is the best way to handle this, see if it can be refactored */
     document.addEventListener('mousedown', this.handleClickOutside);
   }
 

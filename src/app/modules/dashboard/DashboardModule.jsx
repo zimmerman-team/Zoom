@@ -113,6 +113,7 @@ const DashboardModule = ({
   <ModuleContainer>
     <DashboardHeader userName={greetingName} />
 
+    {/*todo: get rid of the Section, make reusable component of it which is instantiated in the separate fragments*/}
     <Section>
       {/* fixme: make re-usable component and use material-ui instead of grommet */}
       <SearchBox

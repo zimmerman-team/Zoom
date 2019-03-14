@@ -37,8 +37,7 @@ const propTypes = {
   zoom: PropTypes.number,
   indicatorData: PropTypes.array,
   selectedYears: PropTypes.array,
-  selectYear: PropTypes.func,
-  theme: PropTypes.obj
+  selectYear: PropTypes.func
 };
 
 const defaultProps = {
@@ -66,6 +65,7 @@ export class GeoMap extends Component {
       viewport: {
         latitude: this.props.latitude,
         longitude: this.props.longitude,
+
         zoom: this.props.zoom
       },
       settings: {

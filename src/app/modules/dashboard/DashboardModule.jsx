@@ -112,47 +112,34 @@ const DashboardModule = ({
 }) => (
   <ModuleContainer>
     <DashboardHeader userName={greetingName} />
+    <SearchBox onChange={changeSearchKeyword} placeholder={<SvgIconSearch />} />
 
-    {/*todo: get rid of the Section, make reusable component of it which is instantiated in the separate fragments*/}
-    <Section>
-      {/* fixme: make re-usable component and use material-ui instead of grommet */}
-      <SearchBox
-        onChange={changeSearchKeyword}
-        placeholder={<SvgIconSearch />}
-      />
-    </Section>
-
-    <Section>
-      <TabContainer
-        tabs={tabs}
-        tabCounts={{
-          charts: 0,
-          'data-sets': 0,
-          'focus-pages': 0,
-          users: users.length,
-          teams: teams.length,
-          trash: 0
-        }}
-        activeTab={activeTab}
-      />
-    </Section>
-
-    <Section>
-      <ViewContainer>
-        {/* todo: evaluate if we can handle this in a simpler way by using react router */}
-        {getTabView(
-          users,
-          teams,
-          tabs,
-          activeTab,
-          isSortByOpen,
-          setIsSortByOpen,
-          setWrapperRef,
-          sort,
-          changeSortBy
-        )}
-      </ViewContainer>
-    </Section>
+    <TabContainer
+      tabs={tabs}
+      tabCounts={{
+        charts: 0,
+        'data-sets': 0,
+        'focus-pages': 0,
+        users: users.length,
+        teams: teams.length,
+        trash: 0
+      }}
+      activeTab={activeTab}
+    />
+    <ViewContainer>
+      {/* todo: evaluate if we can handle this in a simpler way by using react router */}
+      {getTabView(
+        users,
+        teams,
+        tabs,
+        activeTab,
+        isSortByOpen,
+        setIsSortByOpen,
+        setWrapperRef,
+        sort,
+        changeSortBy
+      )}
+    </ViewContainer>
   </ModuleContainer>
 );
 

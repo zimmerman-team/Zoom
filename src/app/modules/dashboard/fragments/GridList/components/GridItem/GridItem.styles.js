@@ -14,6 +14,7 @@ export const ComponentBase = styled(NavLink)`
     color: ${Theme.color.zoomBlack};
   }
 
+  min-height: 145px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

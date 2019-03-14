@@ -45,7 +45,7 @@ const defaultProps = {
   // just show worldview when no lat long is specified
   latitude: 15,
   longitude: 0,
-  zoom: 2,
+  zoom: 2
 };
 
 export class GeoMap extends Component {
@@ -206,7 +206,6 @@ export class GeoMap extends Component {
         }
       });
     }
-
   };
 
   handleZoomIn = () => {

@@ -7,24 +7,64 @@ import styled from 'styled-components';
 import {
   ModuleContainer,
   PageHeading as _PageHeading,
-  ViewContainer,
-  Box
+  ViewContainer
 } from 'modules/dashboard/DashboardModule.styles';
 
 import Searchbox from 'modules/dashboard/fragments/Searchbox/Searchbox';
 import GridListOptionsPane from '../dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
 import Pagination from '../../components/Pagination/Pagination';
-import GridItem from '../dashboard/fragments/GridList/components/GridItem/GridItem';
+import GridList from '../dashboard/fragments/GridList/GridList';
 
 const PageHeading = styled(_PageHeading)`
-  margin-bottom: 28px; ;
+  margin-bottom: 28px;
 `;
 
+const Box = styled.div`
+  width: 100%;
+`;
+
+//Mock
+const items = [
+  {
+    title: 'People with HIV',
+    info: {
+      Author: 'Jane Doe',
+      'Publication date': '01-01-2019',
+      Updated: 'n/a',
+      Shared: 'Team Jane Doe, Public',
+      'Type-of-chart': 'Line chart',
+      'Data Sources': 'UN AIDS'
+    }
+  },
+  {
+    title: 'People with HIV',
+    info: {
+      Author: 'Jane Doe',
+      'Publication date': '01-01-2019',
+      Updated: 'n/a',
+      Shared: 'Team Jane Doe, Public',
+      'Type-of-chart': 'Line chart',
+      'Data Sources': 'UN AIDS'
+    }
+  },
+  {
+    title: 'People with HIV',
+    info: {
+      Author: 'Jane Doe',
+      'Publication date': '01-01-2019',
+      Updated: 'n/a',
+      Shared: 'Team Jane Doe, Public',
+      'Type-of-chart': 'Line chart',
+      'Data Sources': 'UN AIDS'
+    }
+  }
+];
+
 const propTypes = {
-  changeSearchKeyword: PropTypes.func,
+  changeSearchKeyword: PropTypes.func
 };
 const defaultProps = {
-  changeSearchKeyword: null,
+  changeSearchKeyword: null
 };
 
 const PublicChartLibraryModule = props => {
@@ -33,22 +73,14 @@ const PublicChartLibraryModule = props => {
       <PageHeading>Zoom chart library</PageHeading>
       <Searchbox inputChange={props.changeSearchKeyword} />
       <Box>
-      <GridListOptionsPane visibilityAddChart='hidden'/>
-      <ViewContainer>
-        <GridItem withOptions={false}/>
-        <GridItem withOptions={false}/>
-        <GridItem withOptions={false}/>
-        <GridItem withOptions={false}/>
-        <GridItem withOptions={false}/>
-        <GridItem withOptions={false}/>
-        <GridItem withOptions={false}/>
-        <GridItem withOptions={false}/>
-        <GridItem withOptions={false}/>
-      </ViewContainer>
+        <GridListOptionsPane visibilityAddChart="hidden" />
+        <ViewContainer>
+          <GridList withOptions={false} items={items} />
+        </ViewContainer>
       </Box>
-      <Pagination/>
+      <Pagination />
     </ModuleContainer>
-    );
+  );
 };
 PublicChartLibraryModule.propTypes = propTypes;
 PublicChartLibraryModule.defaultProps = defaultProps;

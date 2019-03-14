@@ -6,11 +6,6 @@ import theme from 'theme/Theme';
 import { PageHeading } from 'modules/dashboard/DashboardModule.styles';
 import UserGreeting from 'modules/dashboard/fragments/DashboardHeader/component/UserGreeting/UserGreeting';
 
-/**
- * todo: Please write a short component description of what this component does
- * @param {Object} customProperty - please describe component property
- */
-
 const ComponentBase = styled.header`
   display: flex;
   flex-direction: column;

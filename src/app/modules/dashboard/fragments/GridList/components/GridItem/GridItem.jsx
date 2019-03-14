@@ -2,24 +2,29 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 
+/* utils */
+import map from 'lodash/map';
+
 /* components...*/
 import GridItemText from './common/GridItemText';
 import GridItemToolbar from './common/GridItemToolbar';
-import {ComponentBase, GridItemHeading, Box} from './GridItem.styles';
-
+import { ComponentBase, GridItemHeading, Box } from './GridItem.styles';
 
 const propTypes = {
-  data: PropTypes.array,
   id: PropTypes.number,
+  title: PropTypes.string,
+  values: PropTypes.arrayOf(
+    PropTypes.shape({ label: PropTypes.string, value: PropTypes.string })
+  ),
   chartType: PropTypes.number,
-  withOptions: PropTypes.bool,
+  withOptions: PropTypes.bool
 };
 
 const defaultProps = {
-  data: PropTypes.array,
   id: 1,
+  title: PropTypes.string,
   chartType: 1,
-  withOptions: true,
+  withOptions: true
 };
 
 const GridItem = props => {
@@ -30,7 +35,7 @@ const GridItem = props => {
     setIsHovered(!isHovered);
   }
 
-  function handleClick(e){
+  function handleClick(e) {
     props.withOptions ? e.preventDefault() : '';
   }
 
@@ -43,15 +48,12 @@ const GridItem = props => {
       to={path}
     >
       <Box>
-        <GridItemHeading>People Living with HIV</GridItemHeading>
-        <GridItemText label="Author" value="Jane Doe" />
-        <GridItemText label="Publication date" value="01-01-2019" />
-        <GridItemText label="Updated" value="n/a" />
-        <GridItemText label="Shared" value="Team Jane Doe, Public" />
-        <GridItemText label="Type of chart" value="Line chart" />
-        <GridItemText label="Data sources" value="UN AIDS" />
+        <GridItemHeading>{props.title}</GridItemHeading>
+        {map(props.values, (val, key) => (
+          <GridItemText label={key} value={val} />
+        ))}
       </Box>
-      {props.withOptions && isHovered ? <GridItemToolbar/> : null}
+      {props.withOptions && isHovered ? <GridItemToolbar /> : null}
     </ComponentBase>
   );
 };

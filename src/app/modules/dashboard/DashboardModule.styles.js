@@ -9,9 +9,8 @@ export const ModuleContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  width: 1024px;
   margin: 0 auto;
-  max-width: 1024px;
 `;
 
 export const Header = styled.section`
@@ -26,12 +25,18 @@ export const Section = styled.section`
 `;
 
 export const PageHeading = styled(_PageHeading)`
-  font-size: ${Theme.fontSize.pageHeadingSmall};
-  font-family: ${Theme.font.zoomFontFamOne};
+  font-size: 32px;
   margin-bottom: 15px;
 `;
-export const header = styled.header`
-  align-items: center;
+
+export const HeaderIcon = styled.div``;
+
+export const HeaderGreeting = styled.div`
+  margin: 5px 0;
+  font-size: 14px;
+  font-weight: 300;
+  color: ${Theme.color.aidsFondsRed};
+  font-family: ${Theme.font.zoomFontFamTwo};
 `;
 
 export const SearchBox = styled(TextInput)`
@@ -50,10 +55,9 @@ export const SearchBox = styled(TextInput)`
 
 export const ViewContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-direction: column;
   width: 100%;
+  padding-top: 10px;
 `;
 
 export const NoItems = styled.div`
@@ -65,8 +69,4 @@ export const NoItems = styled.div`
   align-self: center;
   color: ${Theme.color.zoomBlack};
   font-family: ${Theme.font.zoomFontFamOne};
-`;
-
-export const Box = styled.div`
-  width: 100%;
 `;

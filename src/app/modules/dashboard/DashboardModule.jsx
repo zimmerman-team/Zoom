@@ -5,22 +5,16 @@ import PropTypes from 'prop-types';
 /* components */
 import {
   ModuleContainer,
-  PageHeading,
-  SearchBox,
   ViewContainer,
+  SearchBox,
   NoItems,
-  Header,
-  Section,
-  Box
+  Section
 } from 'modules/dashboard/DashboardModule.styles';
-import Searchbox from './fragments/Searchbox/Searchbox';
+import SvgIconSearch from 'assets/icons/IconSearch';
 import TabContainer from './fragments/TabContainer/TabContainer';
 import UsersTabView from './fragments/UsersTabView/UsersTabView';
 import TeamsTabView from './fragments/TeamsTabView/TeamsTabView';
-import DashboardHeader from 'modules/dashboard/fragments/DashboardHeader/DashboardHeader';
-import GridListOptionsPane from './fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
-import GridItem from './fragments/GridList/components/GridItem/GridItem';
-
+import DashboardHeader from './fragments/DashboardHeader/DashboardHeader';
 
 const propTypes = {
   tabs: PropTypes.arrayOf(
@@ -75,6 +69,7 @@ const getTabView = (
       return <NoItems>No items in {tabs[2].label}</NoItems>;
     case tabs[3].key:
       return (
+        // todo: UsersTabView and TeamsTabView are very similar in code, maybe it's possible to create a more generic component?
         <UsersTabView
           sort={sort}
           users={users}
@@ -116,52 +111,47 @@ const DashboardModule = ({
   changeSearchKeyword
 }) => (
   <ModuleContainer>
-    <DashboardHeader title="Zoom dashboard" userName={greetingName} />
-    <Searchbox inputChange={changeSearchKeyword} />
+    <DashboardHeader userName={greetingName} />
 
-    <Box>
-      <section>
-        <TabContainer
-          tabs={tabs}
-          tabCounts={{
-            charts: 0,
-            'data-sets': 0,
-            'focus-pages': 0,
-            users: users.length,
-            teams: teams.length,
-            trash: 0
-          }}
-          activeTab={activeTab}
-        />
-      </section>
-      <GridListOptionsPane/>
-      <section>
-        <ViewContainer>
-          {/*todo: evaluate if we can handle this in a simpler way by using react router*/}
-          {/*{getTabView(*/}
-            {/*users,*/}
-            {/*teams,*/}
-            {/*tabs,*/}
-            {/*activeTab,*/}
-            {/*isSortByOpen,*/}
-            {/*setIsSortByOpen,*/}
-            {/*setWrapperRef,*/}
-            {/*sort,*/}
-            {/*changeSortBy*/}
-          {/*)}*/}
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-        </ViewContainer>
-      </section>
-    </Box>
+    <Section>
+      {/* fixme: make re-usable component and use material-ui instead of grommet */}
+      <SearchBox
+        onChange={changeSearchKeyword}
+        placeholder={<SvgIconSearch />}
+      />
+    </Section>
+
+    <Section>
+      <TabContainer
+        tabs={tabs}
+        tabCounts={{
+          charts: 0,
+          'data-sets': 0,
+          'focus-pages': 0,
+          users: users.length,
+          teams: teams.length,
+          trash: 0
+        }}
+        activeTab={activeTab}
+      />
+    </Section>
+
+    <Section>
+      <ViewContainer>
+        {/* todo: evaluate if we can handle this in a simpler way by using react router */}
+        {getTabView(
+          users,
+          teams,
+          tabs,
+          activeTab,
+          isSortByOpen,
+          setIsSortByOpen,
+          setWrapperRef,
+          sort,
+          changeSortBy
+        )}
+      </ViewContainer>
+    </Section>
   </ModuleContainer>
 );
 

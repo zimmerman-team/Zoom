@@ -121,7 +121,6 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.props.userUpdated);
     return (
       <Grommet theme={ZoomTheme}>
         <QueryRenderer

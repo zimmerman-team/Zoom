@@ -1,6 +1,12 @@
 import findIndex from 'lodash/findIndex';
 import find from 'lodash/find';
 
+export const arrayOfValues = [
+  'Number Value',
+  'Percentage Value',
+  'Mixed Value'
+];
+
 //  Note this whole types and summary data is formed in a very very weird way
 // so there's lots seemingly weird stuff happening in this function
 export function formatOverviewData(sumString, typesString) {
@@ -99,22 +105,18 @@ export function formatModelOptions(dataModelHeading) {
     value: 'Latitude'
   });
 
-  // We also push in a field for number value
-  modelOptions.push({
-    label: 'Number Value',
-    value: 'Number Value'
-  });
-
-  // We also push in a field for number value
-  modelOptions.push({
-    label: 'Percentage Value',
-    value: 'Percentage Value'
+  // and because we have a bunch of different types of values
+  arrayOfValues.forEach(valName => {
+    modelOptions.push({
+      label: valName,
+      value: valName
+    });
   });
 
   Object.keys(dataModelHeading.mapping_dict).map(key => {
     // so since we already pushed in the only available value selections
     // with types/formats we don't need the default value and value_format
-    if (key !== 'value' && key !== 'value_format') {
+    if (key !== 'value') {
       // and now we push in the rest
       modelOptions.push({
         label: key,
@@ -126,7 +128,7 @@ export function formatModelOptions(dataModelHeading) {
   return modelOptions;
 }
 
-export function formatManData(typesString) {
+export function formatManData(typesString, modelOptions) {
   const manMapData = [];
 
   // so yeah the types we retrieve from the overview step contains the actual column headers
@@ -138,7 +140,10 @@ export function formatManData(typesString) {
     manMapData.push({
       lockedIn: false,
       fileType: types[typeKey][0],
-      zoomModel: '-None-',
+      // so if a file type exists as a model, it should be selected by default
+      zoomModel: find(modelOptions, ['value', types[typeKey][0]])
+        ? types[typeKey][0]
+        : '-None-',
       label: undefined,
       emptyFieldRow: false
     });

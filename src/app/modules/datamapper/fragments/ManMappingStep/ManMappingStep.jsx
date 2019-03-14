@@ -10,6 +10,7 @@ import { uploadInitialstate } from '__consts__/UploadMediatorConst';
 
 /* utils */
 import findIndex from 'lodash/findIndex';
+import filter from 'lodash/filter';
 import keys from 'lodash/keys';
 import pickBy from 'lodash/pickBy';
 
@@ -51,6 +52,7 @@ const propTypes = {
   ),
   emptyValue: PropTypes.bool,
   manMapEmptyFields: PropTypes.bool,
+  emptyFormat: PropTypes.bool,
   mapReqFields: PropTypes.arrayOf(PropTypes.string)
 };
 const defaultProps = {
@@ -58,6 +60,7 @@ const defaultProps = {
   modelOptions: uploadInitialstate.modelOptions,
   emptyValue: false,
   manMapEmptyFields: false,
+  emptyFormat: false,
   mapReqFields: []
 };
 
@@ -137,9 +140,24 @@ class ManMappingStep extends React.Component {
   }
 
   componentDidMount() {
+    const data = this.props.data;
+
+    if (!this.props.disabledValues) {
+      // we ofcourse do this only initially
+      // so when the component mounts we check the data for any by default selected
+      // zoom models and disable them
+      const selectedModels = filter(data, item => {
+        return item.zoomModel !== '-None-';
+      });
+
+      selectedModels.forEach(model => {
+        this.selectDataType(model.zoomModel, model.fileType, '-None-');
+      });
+    }
+
     // so this is only needed for the coloring to activate
     this.setState({
-      data: this.props.data
+      data
     });
   }
 
@@ -152,6 +170,7 @@ class ManMappingStep extends React.Component {
       ? this.props.disabledValues
       : [];
 
+    // we disable the selected value
     const prevIndex = disabledValues.indexOf(prevVal);
 
     // so if a previous value is changed
@@ -163,6 +182,35 @@ class ManMappingStep extends React.Component {
     if (value !== 'filters' && value !== '-None-')
       // and we push in the new value either way
       disabledValues.push(value);
+
+    // logic to disable/enable relative values
+    if (value === 'Number Value' || value === 'Percentage Value') {
+      if (disabledValues.indexOf('Mixed Value') === -1)
+        disabledValues.push('Mixed Value');
+    } else if (prevVal === 'Number Value' || prevVal === 'Percentage Value') {
+      // so if neither number nor percantage value is selected
+      // in any other row, we can enable mixed value selection
+      if (
+        disabledValues.indexOf('Number Value') === -1 &&
+        disabledValues.indexOf('Percentage Value') === -1
+      ) {
+        const mixedInd = disabledValues.indexOf('Mixed Value');
+        if (mixedInd !== -1) disabledValues.splice(mixedInd, 1);
+      }
+    } else if (value === 'Mixed Value') {
+      if (disabledValues.indexOf('Number Value') === -1)
+        disabledValues.push('Number Value');
+
+      if (disabledValues.indexOf('Percentage Value') === -1)
+        disabledValues.push('Percentage Value');
+    } else if (prevVal === 'Mixed Value') {
+      const numbInd = disabledValues.indexOf('Number Value');
+      if (numbInd !== -1) disabledValues.splice(numbInd, 1);
+
+      const percInd = disabledValues.indexOf('Percentage Value');
+      if (percInd !== -1) disabledValues.splice(percInd, 1);
+    }
+
     return disabledValues;
   }
 
@@ -268,6 +316,11 @@ class ManMappingStep extends React.Component {
       <ModuleContainer>
         <ManMapTitle>Manual mapping</ManMapTitle>
         <Box>
+          <ErrorLabel>
+            {this.props.emptyFormat
+              ? "*You have 'Mixed Value' selected as one of your files columns, you need to also select a 'value_format' column from your files columns"
+              : ' '}
+          </ErrorLabel>
           <ErrorLabel>
             {this.props.emptyValue
               ? '*Please select at least one value for one of your columns, your csv file\n' +

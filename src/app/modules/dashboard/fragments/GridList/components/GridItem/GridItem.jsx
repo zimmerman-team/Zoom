@@ -1,8 +1,6 @@
 /* base */
 import React from 'react';
 import * as PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
 
 /* components...*/
 import GridItemText from './common/GridItemText';
@@ -11,34 +9,38 @@ import {ComponentBase, GridItemHeading, Box} from './GridItem.styles';
 
 
 const propTypes = {
-
-  withOptions: PropTypes.bool
+  data: PropTypes.array,
+  id: PropTypes.number,
+  chartType: PropTypes.number,
+  withOptions: PropTypes.bool,
 };
+
 const defaultProps = {
-  withOptions: true
+  data: PropTypes.array,
+  id: 1,
+  chartType: 1,
+  withOptions: true,
 };
 
 const GridItem = props => {
   const [isHovered, setIsHovered] = React.useState(false);
+  const path = `/public/chart-library/${props.id}/${props.chartType}`;
 
   function handleMouseEnter() {
     setIsHovered(!isHovered);
   }
 
-  function handleClick(id, chartType) {
-    if(!props.withOptions) {
-      console.log('click!');
-      return `public/chart-library/${id}/${chartType}`;
-    }
+  function handleClick(e){
+    props.withOptions ? e.preventDefault() : '';
   }
 
   return (
     <ComponentBase
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseEnter}
-      onClick={() => handleClick(1, 1)}
+      onClick={handleClick}
       withOptions={props.withOptions}
-      to={handleClick}
+      to={path}
     >
       <Box>
         <GridItemHeading>People Living with HIV</GridItemHeading>

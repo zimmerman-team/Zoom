@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import Theme from 'theme/Theme';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
-export const ComponentBase = styled(Link)`
+export const ComponentBase = styled(NavLink)`
   //CSS router Link reset
   text-decoration: none;
   &:focus,
@@ -25,7 +25,7 @@ export const ComponentBase = styled(Link)`
   box-shadow: 0 2px 4px 2px rgba(157, 157, 157, 0.5);
 
   &:hover {
-    cursor: ${props => !props.withOptions && 'pointer'};
+    cursor: ${props => (!props.withOptions ? 'pointer' : 'default')};
   }
 `;
 

@@ -1,4 +1,6 @@
 import filter from 'lodash/filter';
+import find from 'lodash/find';
+import { arrayOfValues } from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
 
 // so this will basically format the json for mapping
 // according to the retrieved mapping json
@@ -77,33 +79,44 @@ export function formatMapJson(mappingJson, mapData, fileId) {
   // so here we'll process the value selections
   // first we'll find the amount of values selected(max can be two)
   const zoomValues = filter(mapData, item => {
-    return item.zoomModel.toLowerCase().indexOf('value') !== -1;
+    return arrayOfValues.indexOf(item.zoomModel) !== -1;
   });
 
   zoomValues.forEach(item => {
-    // so ye here we push in the selected values column
-    mapJson.mapping_dict.value.push(item.fileType);
+    if (item.zoomModel === 'Mixed Values') {
+      mapJson.mapping_dict.value.push(item.fileType);
 
-    // and here we indicate what type of format it is
-    mapJson.extra_information.empty_entries.empty_value_format[item.fileType] =
-      item.zoomModel.toLowerCase().indexOf('number') !== -1
-        ? 'Number'
-        : 'Percentage';
+      const valueFormat = find(mapData, ['zoomModel', 'value_format']);
 
-    // and now there's some extra logic if there's more than one value selected
-    if (zoomValues.length > 1) {
-      // yeah and this is done according to the mapping instructions in DUCT wiki
-      mapJson.extra_information.multi_mapped.column_heading[item.fileType] =
-        'filters';
-      mapJson.extra_information.multi_mapped.column_values[item.fileType] =
-        'value';
+      if (valueFormat)
+        mapJson.mapping_dict.value_format.push(valueFormat.fileType);
+    } else {
+      // so ye here we push in the selected values column
+      mapJson.mapping_dict.value.push(item.fileType);
 
-      // and also theses columns need to be added to filters as well
-      // according to the instructions
-      mapJson.mapping_dict.filters.push(item.fileType);
+      // and here we indicate what type of format it is
+      mapJson.extra_information.empty_entries.empty_value_format[
+        item.fileType
+      ] =
+        item.zoomModel.toLowerCase().indexOf('number') !== -1
+          ? 'Number'
+          : 'Percentage';
 
-      // Note filter headings for these values will be added below with all other
-      //  filters
+      // and now there's some extra logic if there's more than one value selected
+      if (zoomValues.length > 1) {
+        // yeah and this is done according to the mapping instructions in DUCT wiki
+        mapJson.extra_information.multi_mapped.column_heading[item.fileType] =
+          'filters';
+        mapJson.extra_information.multi_mapped.column_values[item.fileType] =
+          'value';
+
+        // and also theses columns need to be added to filters as well
+        // according to the instructions
+        mapJson.mapping_dict.filters.push(item.fileType);
+
+        // Note filter headings for these values will be added below with all other
+        //  filters
+      }
     }
   });
 
@@ -128,8 +141,6 @@ export function formatMapJson(mappingJson, mapData, fileId) {
 
   // and we add the meta_data id here
   mapJson.metadata_id = fileId;
-
-  console.log('mapJson', mapJson);
 
   return mapJson;
 }

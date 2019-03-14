@@ -12,7 +12,7 @@ import { ModuleContainer } from 'modules/home/HomeModule.styles';
 import ExplorePanelMediator from 'mediators/ComponentMediators/PaneMediators/ExplorePanelMediator/ExplorePanelMediator';
 import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
 import NavPane from 'components/Panes/NavPane/NavPane';
-// import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
+import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
 const propTypes = {
   indicators: PropTypes.arrayOf(PropTypes.shape)
@@ -49,7 +49,7 @@ export class HomeModule extends Component {
     return (
       <React.Fragment>
         <ModuleContainer>
-          {/*<BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />*/}
+          <BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />
           <GeoMap
             indicatorData={indicators}
             selectedYears={this.props.yearPeriod}

@@ -130,7 +130,7 @@ export class AppBar extends React.Component {
             a11yTitle="Aidsfonds logo"
             fit="contain"
             alignSelf="center"
-            src="https://aidsfonds.nl/Assets/images/aidsfonds_logo_red.png"
+            src="https://zoom.aidsfonds.nl/static/b459aca02fec5b684d4a8fb3fe7b44a6.svg"
           />
         </Box>
 

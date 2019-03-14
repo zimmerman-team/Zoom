@@ -7,10 +7,10 @@ import {
   formatCountryParam,
   formatYearParam,
   updatePercentiles
-} from 'mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator.utils';
+} from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 
 import PropTypes from 'prop-types';
-import { initialState } from 'mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator.consts';
+import { initialState } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.consts';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
 
 const propTypes = {
@@ -86,7 +86,7 @@ const now = new Date();
 const currentYear = now.getFullYear();
 const yearBefore = currentYear - 15;
 
-class FocusModuleMediator extends Component {
+class VisualizerModuleMediator extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -337,11 +337,11 @@ class FocusModuleMediator extends Component {
   }
 }
 
-FocusModuleMediator.propTypes = propTypes;
-FocusModuleMediator.defaultProps = defaultProps;
+VisualizerModuleMediator.propTypes = propTypes;
+VisualizerModuleMediator.defaultProps = defaultProps;
 
 export default createRefetchContainer(
-  FocusModuleMediator,
+  VisualizerModuleMediator,
   graphql`
     fragment VisualizerModuleMediator_indicatorAggregations on Query
       @argumentDefinitions(

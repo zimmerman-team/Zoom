@@ -66,20 +66,20 @@ const DatasetApi = {
 
   // so this adds the dataset
   addNewDataset: (req, res) => {
-    const { user, dataset } = req.body;
+    const data = req.body;
 
-    return User.findOne({ authId: user.authId })
+    return User.findOne({ authId: data.authId })
       .then(acc => {
         if (!acc) general.handleError(res, 'User not found', 404);
         else {
           if (acc.role === 'Administrator') {
             return Dataset.create(
               {
-                datasetId: dataset.datasetId,
+                datasetId: data.datasetId,
                 author: acc,
-                name: dataset.name,
-                team: dataset.team,
-                public: dataset.public
+                name: data.name,
+                team: data.team,
+                public: data.public
               },
               { new: true }
             )

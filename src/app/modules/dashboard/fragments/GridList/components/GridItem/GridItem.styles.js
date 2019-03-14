@@ -19,7 +19,6 @@ export const ComponentBase = styled(NavLink)`
   justify-content: space-between;
   margin-bottom: 39px;
   width: 285px;
-  height: 168px;
   padding: 15px;
   background-color: ${Theme.color.zoomGreyZero};
   box-shadow: 0 2px 4px 2px rgba(157, 157, 157, 0.5);
@@ -32,8 +31,16 @@ export const ComponentBase = styled(NavLink)`
 export const GridItemHeading = styled.div`
   font-family: ${Theme.font.zoomFontFamTwo};
   font-size: 18px;
+  line-height: 1;
   color: ${Theme.color.aidsFondsRed};
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 `;
 
-export const Box = styled.div``;
+export const Box = styled.div`
+  height: 100%;
+`;
+
+export const GridItemInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;

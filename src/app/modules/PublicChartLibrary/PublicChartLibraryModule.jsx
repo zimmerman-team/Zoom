@@ -14,7 +14,7 @@ import Searchbox from 'modules/dashboard/fragments/Searchbox/Searchbox';
 import GridListOptionsPane from '../dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
 import Pagination from '../../components/Pagination/Pagination';
 import GridList from '../dashboard/fragments/GridList/GridList';
-
+import data from './PublicChartLibraryModule.const';
 const PageHeading = styled(_PageHeading)`
   margin-bottom: 28px;
 `;
@@ -22,43 +22,6 @@ const PageHeading = styled(_PageHeading)`
 const Box = styled.div`
   width: 100%;
 `;
-
-//Mock
-const items = [
-  {
-    title: 'People with HIV',
-    info: {
-      Author: 'Jane Doe',
-      'Publication date': '01-01-2019',
-      Updated: 'n/a',
-      Shared: 'Team Jane Doe, Public',
-      'Type-of-chart': 'Line chart',
-      'Data Sources': 'UN AIDS'
-    }
-  },
-  {
-    title: 'People with HIV',
-    info: {
-      Author: 'Jane Doe',
-      'Publication date': '01-01-2019',
-      Updated: 'n/a',
-      Shared: 'Team Jane Doe, Public',
-      'Type-of-chart': 'Line chart',
-      'Data Sources': 'UN AIDS'
-    }
-  },
-  {
-    title: 'People with HIV',
-    info: {
-      Author: 'Jane Doe',
-      'Publication date': '01-01-2019',
-      Updated: 'n/a',
-      Shared: 'Team Jane Doe, Public',
-      'Type-of-chart': 'Line chart',
-      'Data Sources': 'UN AIDS'
-    }
-  }
-];
 
 const propTypes = {
   changeSearchKeyword: PropTypes.func
@@ -75,7 +38,7 @@ const PublicChartLibraryModule = props => {
       <Box>
         <GridListOptionsPane visibilityAddChart="hidden" />
         <ViewContainer>
-          <GridList withOptions={false} items={items} />
+          <GridList withOptions={false} items={data} />
         </ViewContainer>
       </Box>
       <Pagination />

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Theme from 'theme/Theme';
 
-const TabIconButton = styled.a`
+const TabIconButton = styled.div`
   margin-bottom: 10px;
 
   &:hover {
@@ -18,7 +18,7 @@ const TabIconButton = styled.a`
 
 const propTypes = {
   icon: PropTypes.node,
-  indexTab: PropTypes.Number
+  indexTab: PropTypes.string
 };
 
 const defaultProps = {};

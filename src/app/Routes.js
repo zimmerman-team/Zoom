@@ -7,7 +7,7 @@ import PageLoader from 'modules/common/pageloader/PageLoader';
 import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
-import PublicChartLibraryModule from './modules/PublicChartLibrary/PublicChartLibraryModule';
+import PublicChartLibraryModule from './modules/publicChartLibrary/PublicChartLibraryModule';
 import DashboardModule from './modules/dashboard/DashboardModule';
 // import PublicChartViewModule from './modules/publicChartView/PublicChartViewModule';
 // Modules regular import

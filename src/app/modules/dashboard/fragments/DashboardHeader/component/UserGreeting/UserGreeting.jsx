@@ -27,12 +27,13 @@ const HeaderGreeting = styled.div`
 `;
 
 const propTypes = {
-  message: '',
-  user: '',
-  userPicture: ''
+  message: PropTypes.string,
+  user: PropTypes.string,
+  userPicture: PropTypes.node
 };
 const defaultProps = {
   message: 'Welcome back',
+  user: 'user_a',
   userPicture: <SvgIconUser />
 };
 const UserGreeting = props => {

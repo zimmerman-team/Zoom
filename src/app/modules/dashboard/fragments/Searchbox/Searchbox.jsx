@@ -12,14 +12,6 @@ const styles = () => ({
     display: 'flex',
     flexWrap: 'wrap',
     height: '50px'
-  },
-
-  input: {
-    height: '50px'
-  },
-
-  MuiInputAdornment: {
-    height: 'initial'
   }
 });
 

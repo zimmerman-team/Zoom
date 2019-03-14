@@ -1,6 +1,7 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import shortid from 'shortid';
 
 /* components */
 import { Container } from './GridList.styles';
@@ -10,6 +11,7 @@ const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({})),
   withOptions: PropTypes.bool
 };
+
 const defaultProps = {
   items: [],
   withOptions: true
@@ -20,7 +22,7 @@ const GridList = ({ items, withOptions }) => (
     {items.map(item => (
       <GridItem
         withOptions={withOptions}
-        key={item.id}
+        key={shortid.generate()}
         title={item.title}
         values={item.info}
       />

@@ -1,5 +1,6 @@
 /* base */
 import React from 'react';
+import shortId from 'shortid';
 import * as PropTypes from 'prop-types';
 
 /* utils */
@@ -18,18 +19,17 @@ import {
 const propTypes = {
   id: PropTypes.number,
   title: PropTypes.string,
-  values: PropTypes.arrayOf(
-    PropTypes.shape({ label: PropTypes.string, value: PropTypes.string })
-  ),
+  values: PropTypes.object,
   chartType: PropTypes.number,
-  withOptions: PropTypes.bool
+  withoptions: PropTypes.bool
 };
 
 const defaultProps = {
   id: 1,
   title: PropTypes.string,
+  values: {},
   chartType: 1,
-  withOptions: true
+  withoptions: true
 };
 
 const GridItem = props => {
@@ -41,7 +41,7 @@ const GridItem = props => {
   }
 
   function handleClick(e) {
-    props.withOptions ? e.preventDefault() : '';
+    props.withoptions ? e.preventDefault() : '';
   }
 
   return (
@@ -49,19 +49,18 @@ const GridItem = props => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseEnter}
       onClick={handleClick}
-      withOptions={props.withOptions}
+      withoptions={props.withoptions}
       to={path}
     >
       <Box>
         <GridItemHeading>{props.title}</GridItemHeading>
         <GridItemInfoContainer>
           {map(props.values, (val, key) => (
-            <GridItemText label={key} value={val} />
+            <GridItemText key={shortId.generate()} label={key} value={val} />
           ))}
         </GridItemInfoContainer>
       </Box>
-      {props.withOptions && isHovered ? <GridItemToolbar /> : null}
-      {/*<GridItemToolbar />*/}
+      {props.withoptions && isHovered ? <GridItemToolbar /> : null}
     </ComponentBase>
   );
 };

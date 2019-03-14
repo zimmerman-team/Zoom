@@ -28,7 +28,7 @@ const GridItemTextValue = styled.div`
 
 const propTypes = {
   label: PropTypes.string,
-  value: PropTypes.string
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 const defaultProps = {
   label: 'Label:',

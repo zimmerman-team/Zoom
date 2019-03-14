@@ -94,17 +94,26 @@ export function wikipediaExcerptRequest(values) {
 
 // NODE BACKEND CALL TYPES
 export function nodeBackendGetRequest(request) {
-  return axios.get(`/api/${request.endpoint}`, {
-    params: request.values
-  });
+  return axios.get(
+    `${process.env.REACT_APP_EXPRESS_BACKEND_BASE_URL}/api/${request.endpoint}`,
+    {
+      params: request.values
+    }
+  );
 }
 
 export function nodeBackendPostRequest(request) {
-  return axios.post(`/api/${request.endpoint}`, request.values);
+  return axios.post(
+    `${process.env.REACT_APP_EXPRESS_BACKEND_BASE_URL}/api/${request.endpoint}`,
+    request.values
+  );
 }
 
 export function nodeBackendDeleteRequest(request) {
-  return axios.delete(`/api/${request.endpoint}`, {
-    params: request.values
-  });
+  return axios.delete(
+    `${process.env.REACT_APP_EXPRESS_BACKEND_BASE_URL}/api/${request.endpoint}`,
+    {
+      params: request.values
+    }
+  );
 }

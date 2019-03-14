@@ -25,7 +25,6 @@ const DatasetApi = {
       .catch(error => {
         general.handleError(res, error);
       });
-    7;
   },
 
   // so this updates the team related to the dataset
@@ -68,30 +67,29 @@ const DatasetApi = {
   addNewDataset: (req, res) => {
     const data = req.body;
 
-    return User.findOne({ authId: data.authId })
-      .then(acc => {
-        if (!acc) general.handleError(res, 'User not found', 404);
-        else {
-          if (acc.role === 'Administrator') {
-            return Dataset.create(
-              {
-                datasetId: data.datasetId,
-                author: acc,
-                name: data.name,
-                team: data.team,
-                public: data.public
-              },
-              { new: true }
-            )
-              .then(set => res.json(set))
-              .catch(error => {
-                general.handleError(res, error);
-              });
-          }
-          return general.handleError(res, 'Unauthorized');
+    User.findOne({ authId: data.authId }, (error, acc) => {
+      if (error) general.handleError(res, error);
+      else if (!acc) general.handleError(res, 'User not found', 404);
+      else {
+        if (acc.role === 'Administrator') {
+          const dataset = new Dataset({
+            datasetId: data.datasetId,
+            author: acc,
+            name: data.name,
+            team: data.team,
+            public: data.public
+          });
+
+          dataset.save(err => {
+            if (err) general.handleError(res, err);
+
+            res.json({ message: 'dataset saved' });
+          });
+        } else {
+          general.handleError(res, 'Unauthorized');
         }
-      })
-      .catch(error => general.handleError(res, error));
+      }
+    });
   },
 
   deleteDataset: function(author, datasetId, res) {

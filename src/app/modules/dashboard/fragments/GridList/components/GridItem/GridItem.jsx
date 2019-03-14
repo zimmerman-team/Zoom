@@ -54,6 +54,7 @@ const GridItem = props => {
         ))}
       </Box>
       {props.withOptions && isHovered ? <GridItemToolbar /> : null}
+      {/*<GridItemToolbar />*/}
     </ComponentBase>
   );
 };

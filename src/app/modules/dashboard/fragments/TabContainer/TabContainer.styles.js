@@ -7,12 +7,11 @@ export const Container = styled.div`
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid ${Theme.color.zoomGreyZero};
-  padding-bottom: 10px;
 `;
 
-export const TabItems = styled.div`
+export const CenterTabs = styled.div`
   display: flex;
-  margin: 0 auto;
+  margin-left: auto;
 `;
 
 export const Tab = styled.div`
@@ -23,26 +22,33 @@ export const Tab = styled.div`
   padding-right: ${props => props.theme.paddingRight};
 `;
 
-export const TabText = styled.div`
+export const TabBadge = styled.div`
+  width: 18px;
+  height: 18px;
   display: flex;
-  flex-direction: column;
+  font-size: 12px;
+  font-weight: 700;
+  margin-right: 5px;
+  border-radius: 50%;
   align-items: center;
   justify-content: center;
+  color: ${Theme.color.aidsFondsWhite};
+  font-family: ${Theme.font.zoomFontFamOne};
+  background-color: ${Theme.color.aidsFondsRed};
+`;
+
+export const TabText = styled(Link)`
   font-size: 14px;
   cursor: pointer;
   font-weight: 700;
   text-decoration: none;
   padding: 6px 2px 0 2px;
-
-  color: ${props => props.textTheme.color};
-  opacity: ${props => props.textTheme.opacity};
+  color: ${props => props.theme.color};
   font-family: ${Theme.font.zoomFontFamOne};
-  //border-bottom: ${props => props.theme.border};
-  border-bottom: 2px solid transparent;
+  border-bottom: ${props => props.theme.border};
 
   &:hover {
-    opacity: 100;  
-    color: ${Theme.color.aidsFondsBlue};
+    color: ${Theme.color.zoomBlack};
     border-bottom: ${Theme.border.dashboardTab};
   }
 `;

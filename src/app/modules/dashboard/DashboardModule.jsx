@@ -11,10 +11,10 @@ import {
   Section
 } from 'modules/dashboard/DashboardModule.styles';
 import SvgIconSearch from 'assets/icons/IconSearch';
-import TabContainer from './fragments/TabContainer/TabContainer';
 import UsersTabView from './fragments/UsersTabView/UsersTabView';
 import TeamsTabView from './fragments/TeamsTabView/TeamsTabView';
 import DashboardHeader from './fragments/DashboardHeader/DashboardHeader';
+import DashboardContent from 'modules/dashboard/fragments/DashboardContent/DashboardContent';
 
 const propTypes = {
   tabs: PropTypes.arrayOf(
@@ -114,32 +114,34 @@ const DashboardModule = ({
     <DashboardHeader userName={greetingName} />
     <SearchBox onChange={changeSearchKeyword} placeholder={<SvgIconSearch />} />
 
-    <TabContainer
-      tabs={tabs}
-      tabCounts={{
-        charts: 0,
-        'data-sets': 0,
-        'focus-pages': 0,
-        users: users.length,
-        teams: teams.length,
-        trash: 0
-      }}
-      activeTab={activeTab}
-    />
-    <ViewContainer>
-      {/* todo: evaluate if we can handle this in a simpler way by using react router */}
-      {getTabView(
-        users,
-        teams,
-        tabs,
-        activeTab,
-        isSortByOpen,
-        setIsSortByOpen,
-        setWrapperRef,
-        sort,
-        changeSortBy
-      )}
-    </ViewContainer>
+    <DashboardContent data={users} />
+
+    {/*<TabContainer
+        tabs={tabs}
+        tabCounts={{
+          charts: 0,
+          'data-sets': 0,
+          'focus-pages': 0,
+          users: users.length,
+          teams: teams.length,
+          trash: 0
+        }}
+        activeTab={activeTab}
+      />
+      <ViewContainer>
+         todo: evaluate if we can handle this in a simpler way by using react router
+        {getTabView(
+          users,
+          teams,
+          tabs,
+          activeTab,
+          isSortByOpen,
+          setIsSortByOpen,
+          setWrapperRef,
+          sort,
+          changeSortBy
+        )}
+      </ViewContainer>*/}
   </ModuleContainer>
 );
 

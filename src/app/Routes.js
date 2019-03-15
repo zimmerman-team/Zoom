@@ -7,7 +7,7 @@ import PageLoader from 'modules/common/pageloader/PageLoader';
 import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
-import PublicChartLibraryModule from './modules/publicChartLibrary/PublicChartLibraryModule';
+import PublicChartLibraryModule from './modules/PublicChartLibrary/PublicChartLibraryModule';
 import DashboardModule from './modules/dashboard/DashboardModule';
 // import PublicChartViewModule from './modules/publicChartView/PublicChartViewModule';
 // Modules regular import
@@ -107,22 +107,22 @@ const Routes = props => {
             path="/add-user"
             render={() =>
               props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
-                <AddUserMediator auth0Client={props.auth0Client} />
-              ) : (
-                <Redirect to="/" />
-              )
+                props.auth0Client.isAdministrator() ? (
+                  <AddUserMediator auth0Client={props.auth0Client} />
+                ) : (
+                  <Redirect to="/" />
+                )
             }
           />
           <Route
             path="/create-team"
             render={() =>
               props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
-                <CreateTeamMediator auth0Client={props.auth0Client} />
-              ) : (
-                <Redirect to="/" />
-              )
+                props.auth0Client.isAdministrator() ? (
+                  <CreateTeamMediator auth0Client={props.auth0Client} />
+                ) : (
+                  <Redirect to="/" />
+                )
             }
           />
           <Route
@@ -134,11 +134,11 @@ const Routes = props => {
             path="/dashboard/:tab"
             render={() =>
               props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
-                <DashboardMediator auth0Client={props.auth0Client} />
-              ) : (
-                <Redirect to="/" />
-              )
+                props.auth0Client.isAdministrator() ? (
+                  <DashboardMediator auth0Client={props.auth0Client} />
+                ) : (
+                  <Redirect to="/" />
+                )
             }
           />
           <Route path="/about" render={() => <About />} />
@@ -146,15 +146,15 @@ const Routes = props => {
             path="/mapper"
             render={() =>
               props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
-                <DataMapperModule
-                  dropDownData={props}
-                  fileCorrection={props}
-                  auth0Client={props.auth0Client}
-                />
-              ) : (
-                <Redirect to="/" />
-              )
+                props.auth0Client.isAdministrator() ? (
+                  <DataMapperModule
+                    dropDownData={props}
+                    fileCorrection={props}
+                    auth0Client={props.auth0Client}
+                  />
+                ) : (
+                  <Redirect to="/" />
+                )
             }
           />
           <Route
@@ -165,7 +165,7 @@ const Routes = props => {
           <Route
             exact
             path="/public/chart-library/:id/:charttype"
-            // todo: render to appropriate chart pages
+          // todo: render to appropriate chart pages
           />
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />

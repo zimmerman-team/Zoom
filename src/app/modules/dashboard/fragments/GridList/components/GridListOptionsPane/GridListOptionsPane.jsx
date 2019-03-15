@@ -12,6 +12,7 @@ const ComponentBase = styled.div`
   justify-content: space-between;
   margin-top: 17px;
   margin-bottom: 17px;
+  width: 100%;
 `;
 
 const propTypes = {

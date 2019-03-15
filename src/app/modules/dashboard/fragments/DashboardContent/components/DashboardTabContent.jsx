@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
-import DashboardTabNavigator from 'modules/dashboard/fragments/DashboardContent/components/DashboardTabNavigator';
-import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
+import { createBrowserHistory } from 'history';
+
 import GridList from 'modules/dashboard/fragments/GridList/GridList';
 import GridListOptionsPane from 'modules/dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
 
@@ -36,23 +36,38 @@ const Message = styled.div`
 
 const propTypes = {
   data: PropTypes.array,
-  tabContentName: PropTypes.string
+  tabContentName: PropTypes.string,
+  users: PropTypes.array,
+  teams: PropTypes.array
 };
 const defaultProps = {
   data: [],
+  users: [],
+  teams: [],
   tabContentName: 'Charts'
 };
 
 const DashboardTabContent = props => {
+  const history = createBrowserHistory();
+  const currentURL = history.location.pathname;
+
+  let targetData = [];
+
+  if (currentURL.includes('users')) {
+    targetData = props.users;
+  } else if (currentURL.includes('teams')) {
+    targetData = props.teams;
+  }
+
   return (
     <ComponentBase>
-      {props.data.length === 0 && (
+      {targetData.length === 0 && (
         <Message>No item in {props.tabContentName}</Message>
       )}
 
       <GridListOptionsPane />
 
-      {props.data.length > 0 && <GridList items={props.data} />}
+      {targetData.length > 0 && <GridList items={targetData} />}
     </ComponentBase>
   );
 };

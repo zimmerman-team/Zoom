@@ -114,7 +114,7 @@ const DashboardModule = ({
     <DashboardHeader userName={greetingName} />
     <SearchBox onChange={changeSearchKeyword} placeholder={<SvgIconSearch />} />
 
-    <DashboardContent data={users} />
+    <DashboardContent users={users} teams={teams} />
 
     {/*<TabContainer
         tabs={tabs}

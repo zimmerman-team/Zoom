@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
 
 // import { FragmentBase } from './DashboardTabContent.style';
 import DashboardTabNavigator from 'modules/dashboard/fragments/DashboardContent/components/DashboardTabNavigator';
@@ -25,7 +26,9 @@ const propTypes = {
   loggedIn: PropTypes.bool,
   visible: PropTypes.bool,
   /** contains data for generation of tab nav items and providing the tab content with the proper components */
-  data: PropTypes.array
+  data: PropTypes.array,
+  users: PropTypes.array,
+  teams: PropTypes.array
 };
 
 const defaultProps = {
@@ -37,15 +40,15 @@ const defaultProps = {
 /*todo: implement show/hide based on material-ui drawer component*/
 
 const DashboardContent = props => {
-  // console.log(props.data);
   return (
-    /** component base container */
-    <FragmentBase>
-      {/** tab navigator */}
-      <DashboardTabNavigator />
-      {/** tab content */}
-      <DashboardTabContent data={props.data} />
-    </FragmentBase>
+    <Router>
+      <FragmentBase>
+        {/** tab navigator */}
+        <DashboardTabNavigator />
+        {/** tab content */}
+        <DashboardTabContent users={props.users} teams={props.teams} />
+      </FragmentBase>
+    </Router>
   );
 };
 

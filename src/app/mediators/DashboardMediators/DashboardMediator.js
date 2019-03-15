@@ -113,14 +113,14 @@ class DashboardMediator extends React.Component {
   render() {
     return (
       <DashboardModule
-        tabs={tabs}
+        // tabs={tabs}
         sort={this.state.sort}
         users={this.state.users}
         changeSortBy={this.changeSortBy}
         setWrapperRef={this.setWrapperRef}
         setIsSortByOpen={this.setIsSortByOpen}
         isSortByOpen={this.state.isSortByOpen}
-        activeTab={this.props.match.params.tab}
+        // activeTab={this.props.match.params.tab}
         searchKeyword={this.state.searchKeyword}
         changeSearchKeyword={this.changeSearchKeyword}
         teams={formatTeamsTabData(

@@ -9,19 +9,19 @@ import GridItem from './components/GridItem/GridItem';
 
 const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({})),
-  withOptions: PropTypes.bool
+  withoptions: PropTypes.bool
 };
 
 const defaultProps = {
   items: [],
-  withOptions: true
+  withoptions: true
 };
 
-const GridList = ({ items, withOptions }) => (
+const GridList = ({ items, withoptions }) => (
   <Container cellHeight={153} cols={3}>
     {items.map(item => (
       <GridItem
-        withOptions={withOptions}
+        withoptions={withoptions}
         key={shortid.generate()}
         title={item.title}
         values={item.info}

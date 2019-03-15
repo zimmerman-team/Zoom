@@ -49,53 +49,53 @@ const defaultProps = {
   teams: []
 };
 
-const getTabView = (
-  users,
-  teams,
-  tabs,
-  tab,
-  isSortByOpen,
-  setIsSortByOpen,
-  setWrapperRef,
-  sort,
-  changeSortBy
-) => {
-  switch (tab) {
-    case tabs[0].key:
-      return <NoItems>No items in {tabs[0].label}</NoItems>;
-    case tabs[1].key:
-      return <NoItems>No items in {tabs[1].label}</NoItems>;
-    case tabs[2].key:
-      return <NoItems>No items in {tabs[2].label}</NoItems>;
-    case tabs[3].key:
-      return (
-        // todo: UsersTabView and TeamsTabView are very similar in code, maybe it's possible to create a more generic component?
-        <UsersTabView
-          sort={sort}
-          users={users}
-          changeSortBy={changeSortBy}
-          isSortByOpen={isSortByOpen}
-          setWrapperRef={setWrapperRef}
-          setIsSortByOpen={setIsSortByOpen}
-        />
-      );
-    case tabs[4].key:
-      return (
-        <TeamsTabView
-          sort={sort}
-          teams={teams}
-          changeSortBy={changeSortBy}
-          isSortByOpen={isSortByOpen}
-          setWrapperRef={setWrapperRef}
-          setIsSortByOpen={setIsSortByOpen}
-        />
-      );
-    case tabs[5].key:
-      return <NoItems>No items in {tabs[5].label}</NoItems>;
-    default:
-      return <NoItems>No items</NoItems>;
-  }
-};
+// const getTabView = (
+//   users,
+//   teams,
+//   tabs,
+//   tab,
+//   isSortByOpen,
+//   setIsSortByOpen,
+//   setWrapperRef,
+//   sort,
+//   changeSortBy
+// ) => {
+//   switch (tab) {
+//     case tabs[0].key:
+//       return <NoItems>No items in {tabs[0].label}</NoItems>;
+//     case tabs[1].key:
+//       return <NoItems>No items in {tabs[1].label}</NoItems>;
+//     case tabs[2].key:
+//       return <NoItems>No items in {tabs[2].label}</NoItems>;
+//     case tabs[3].key:
+//       return (
+//         // todo: UsersTabView and TeamsTabView are very similar in code, maybe it's possible to create a more generic component?
+//         <UsersTabView
+//           sort={sort}
+//           users={users}
+//           changeSortBy={changeSortBy}
+//           isSortByOpen={isSortByOpen}
+//           setWrapperRef={setWrapperRef}
+//           setIsSortByOpen={setIsSortByOpen}
+//         />
+//       );
+//     case tabs[4].key:
+//       return (
+//         <TeamsTabView
+//           sort={sort}
+//           teams={teams}
+//           changeSortBy={changeSortBy}
+//           isSortByOpen={isSortByOpen}
+//           setWrapperRef={setWrapperRef}
+//           setIsSortByOpen={setIsSortByOpen}
+//         />
+//       );
+//     case tabs[5].key:
+//       return <NoItems>No items in {tabs[5].label}</NoItems>;
+//     default:
+//       return <NoItems>No items</NoItems>;
+//   }
+// };
 
 const DashboardModule = ({
   tabs,

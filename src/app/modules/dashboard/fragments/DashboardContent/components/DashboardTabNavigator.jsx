@@ -18,6 +18,7 @@ const ComponentBase = styled.div`
   justify-content: center;
   flex-direction: row;
   position: relative;
+  margin-top: 30px;
 `;
 
 const Box = styled.div`
@@ -31,6 +32,7 @@ const Box = styled.div`
   &:last-child {
     position: absolute;
     right: 0;
+    opacity: 0.57;
   }
 `;
 

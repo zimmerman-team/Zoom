@@ -18,21 +18,15 @@ const FragmentBase = styled.div`
   //outline: 1px solid crimson;
 `;
 
-/**
- * The VizSidebar acts as a container component for the tab navigator and tab content
- */
-
 const propTypes = {
   loggedIn: PropTypes.bool,
   visible: PropTypes.bool,
   /** contains data for generation of tab nav items and providing the tab content with the proper components */
-  data: PropTypes.array,
   users: PropTypes.array,
   teams: PropTypes.array
 };
 
 const defaultProps = {
-  data: [],
   visible: true,
   loggedIn: true
 };

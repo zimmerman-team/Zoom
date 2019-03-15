@@ -8,11 +8,6 @@ import { createBrowserHistory } from 'history';
 import GridList from 'modules/dashboard/fragments/GridList/GridList';
 import GridListOptionsPane from 'modules/dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
 
-/**
- * todo: Please write a short component description of what this component does
- * @param {Object} customProperty - please describe component property
- */
-
 const ComponentBase = styled.div`
   display: flex;
   width: 100%;
@@ -34,6 +29,8 @@ const Message = styled.div`
   font-family: ${theme.font.zoomFontFamOne};
 `;
 
+const Box = styled.div``;
+
 const propTypes = {
   data: PropTypes.array,
   tabContentName: PropTypes.string,
@@ -52,11 +49,30 @@ const DashboardTabContent = props => {
   const currentURL = history.location.pathname;
 
   let targetData = [];
+  let leftOptionLabel = '';
+  let sortIsVisible = true;
 
+  //todo: switch will be more readable
+  //todo: check on exact path instead of includes: too vulnerable
   if (currentURL.includes('users')) {
     targetData = props.users;
+    leftOptionLabel = 'add users';
   } else if (currentURL.includes('teams')) {
     targetData = props.teams;
+    leftOptionLabel = 'create users';
+  } else if (currentURL.includes('focus-pages')) {
+    targetData = '';
+    leftOptionLabel = 'add focus page';
+  } else if (currentURL.includes('data-sets')) {
+    targetData = '';
+    leftOptionLabel = 'map data set';
+  } else if (currentURL.includes('charts')) {
+    targetData = '';
+    leftOptionLabel = 'add chart';
+  } else if (currentURL.includes('trash')) {
+    targetData = '';
+    leftOptionLabel = 'remove indefinite';
+    sortIsVisible = false;
   }
 
   return (
@@ -65,9 +81,15 @@ const DashboardTabContent = props => {
         <Message>No item in {props.tabContentName}</Message>
       )}
 
-      <GridListOptionsPane />
-
-      {targetData.length > 0 && <GridList items={targetData} />}
+      {targetData.length > 0 && (
+        <Box>
+          <GridListOptionsPane
+            leftOptionLabel={leftOptionLabel}
+            sortIsVisible={sortIsVisible}
+          />
+          <GridList items={targetData} />
+        </Box>
+      )}
     </ComponentBase>
   );
 };

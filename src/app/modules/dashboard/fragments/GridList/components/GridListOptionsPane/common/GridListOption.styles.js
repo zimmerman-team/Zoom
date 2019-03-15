@@ -20,3 +20,5 @@ export const IconLabel = styled.label`
   font-size: 19px;
   margin-left: 3px;
 `;
+
+export const AddButton = styled.div``;

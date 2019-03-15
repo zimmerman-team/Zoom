@@ -16,19 +16,24 @@ const ComponentBase = styled.div`
 `;
 
 const propTypes = {
-  visibilityAddChart: PropTypes.string
+  visibilityAddChart: PropTypes.string,
+  leftOptionLabel: PropTypes.string,
+  isRemoveButton: PropTypes.bool
 };
 
 const defaultProps = {
-  visibilityAddChart: 'visible'
+  visibilityAddChart: 'visible',
+  leftOptionLabel: '',
+  isRemoveButton: false
 };
 
 const GridListOptionsPane = props => {
   return (
     <ComponentBase>
       <GridListOption
+        isRemoveButton={props.isRemoveButton}
         icon={<SvgIconAdd />}
-        label="add chart"
+        label={props.leftOptionLabel}
         visibility={props.visibilityAddChart}
       />
       <GridListOption icon={<SvgIconSort />} />

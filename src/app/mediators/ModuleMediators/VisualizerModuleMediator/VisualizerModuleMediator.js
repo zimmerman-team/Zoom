@@ -137,18 +137,59 @@ class VisualizerModuleMediator extends Component {
       }
     );
 
-    const countryLayerData = formatCountryLayerData(
-      this.props.indicatorAggregations.indicators1
-    );
-    const countryCircleData = formatCountryCenterData(
-      this.props.indicatorAggregations.indicators2
-    );
+    let longLatData = [];
+    let countryLayerData = {};
 
-    updatePercentiles(countryLayerData, f => f.properties.value);
+    // so we check here if the retrieved data is long lat
+    // and then format it differently
+    // TODO: make this work differently, this is currently i quick and dirty fix
+    if (
+      this.props.indicatorAggregations.indicators1[0] &&
+      this.props.indicatorAggregations.indicators1[0].geolocationTag &&
+      this.props.indicatorAggregations.indicators1[0].geolocationTag.indexOf(
+        ','
+      ) !== -1 &&
+      /\d/.test(this.props.indicatorAggregations.indicators1[0].geolocationTag)
+    ) {
+      longLatData = formatLongLatData(
+        this.props.indicatorAggregations.indicators1,
+        this.state.selectedInd1
+      );
+    } else {
+      countryLayerData = formatCountryLayerData(
+        this.props.indicatorAggregations.indicators1,
+        this.state.selectedInd1
+      );
+    }
+
+    let countryCircleData = [];
+    // so we check here if the retrieved data is long lat
+    // and then format it differently
+    // TODO: make this work differently, this is currently i quick and dirty fix
+    if (
+      this.props.indicatorAggregations.indicators2[0] &&
+      this.props.indicatorAggregations.indicators2[0].geolocationTag &&
+      this.props.indicatorAggregations.indicators2[0].geolocationTag.indexOf(
+        ','
+      ) !== -1 &&
+      /\d/.test(this.props.indicatorAggregations.indicators2[0].geolocationTag)
+    ) {
+      longLatData = formatLongLatData(
+        this.props.indicatorAggregations.indicators2,
+        this.state.selectedInd2
+      );
+    } else {
+      countryCircleData = formatCountryCenterData(
+        this.props.indicatorAggregations.indicators2,
+        this.state.selectedInd2
+      );
+    }
 
     const indicators = [];
 
-    if (countryLayerData.features.length > 0) {
+    if (countryLayerData.features && countryLayerData.features.length > 0) {
+      updatePercentiles(countryLayerData, f => f.properties.value);
+
       indicators.push({
         type: 'layer',
         data: countryLayerData,
@@ -161,6 +202,14 @@ class VisualizerModuleMediator extends Component {
         type: 'circle',
         data: countryCircleData,
         legendName: ` ${this.state.selectedInd2} `
+      });
+    }
+
+    if (longLatData.length > 0) {
+      indicators.push({
+        type: 'location',
+        data: longLatData,
+        legendName: `POI`
       });
     }
 
@@ -203,6 +252,7 @@ class VisualizerModuleMediator extends Component {
     this.setState(
       {
         selectedInd1: val.value,
+        subIndicators1: [],
         selectedSubInd1: []
       },
       this.refetch
@@ -215,34 +265,57 @@ class VisualizerModuleMediator extends Component {
     this.setState(
       {
         selectedInd2: val.value,
+        subIndicators2: [],
         selectedSubInd2: []
       },
       this.refetch
     );
   }
 
-  selectSubInd1(item) {
-    const selectedSubInd1 = [...this.state.selectedSubInd1];
-    const subIndicatorIndex = selectedSubInd1.indexOf(item.value);
+  selectSubInd1(item, array = false) {
+    let selectedSubInd1 = [];
 
-    if (subIndicatorIndex === -1)
-      // so if it doesn't exist we add it
-      selectedSubInd1.push(item.value);
-    // if it does exist we remove it
-    else selectedSubInd1.splice(subIndicatorIndex, 1);
+    // so we set up this logic for select/deselect all logic
+    // if all is selected all of the options will be passed in
+    if (item !== 'reset') {
+      if (array) {
+        item.forEach(it => {
+          selectedSubInd1.push(it.value);
+        });
+      } else {
+        selectedSubInd1 = [...this.state.selectedSubInd1];
+        const subIndicatorIndex = selectedSubInd1.indexOf(item.value);
+        if (subIndicatorIndex === -1)
+          // so if it doesn't exist we add it
+          selectedSubInd1.push(item.value);
+        // if it does exist we remove it
+        else selectedSubInd1.splice(subIndicatorIndex, 1);
+      }
+    }
 
     this.setState({ selectedSubInd1 }, this.refetch);
   }
 
-  selectSubInd2(item) {
-    const selectedSubInd2 = [...this.state.selectedSubInd2];
-    const subIndicatorIndex = selectedSubInd2.indexOf(item.value);
+  selectSubInd2(item, array = false) {
+    let selectedSubInd2 = [];
 
-    if (subIndicatorIndex === -1)
-      // so if it doesn't exist we add it
-      selectedSubInd2.push(item.value);
-    // if it does exist we remove it
-    else selectedSubInd2.splice(subIndicatorIndex, 1);
+    // so we set up this logic for select/deselect all logic
+    // if all is selected all of the options will be passed in
+    if (item !== 'reset') {
+      if (array) {
+        item.forEach(it => {
+          selectedSubInd2.push(it.value);
+        });
+      } else {
+        selectedSubInd2 = [...this.state.selectedSubInd2];
+        const subIndicatorIndex = selectedSubInd2.indexOf(item.value);
+        if (subIndicatorIndex === -1)
+          // so if it doesn't exist we add it
+          selectedSubInd2.push(item.value);
+        // if it does exist we remove it
+        else selectedSubInd2.splice(subIndicatorIndex, 1);
+      }
+    }
 
     this.setState({ selectedSubInd2 }, this.refetch);
   }

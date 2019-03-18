@@ -49,7 +49,7 @@ const DashboardTabContent = props => {
   let leftOptionLabel = '';
   let sortIsVisible = true;
   let tabContentName = true;
-  let isRemoveButton = false;
+  let isRemoveOption = false;
 
   //todo: switch will be more readable
   //todo: check on exact path instead of includes: too vulnerable
@@ -77,16 +77,25 @@ const DashboardTabContent = props => {
     targetData = '';
     tabContentName = 'Trash';
     sortIsVisible = false;
-    isRemoveButton = true;
+    isRemoveOption = true;
   }
 
   return (
     <ComponentBase>
-      {isRemoveButton && (
+      {isRemoveOption && (
         <GridListOptionsPane
           leftOptionLabel={leftOptionLabel}
           sortIsVisible={sortIsVisible}
-          isRemoveButton={isRemoveButton}
+          isRemoveOption={isRemoveOption}
+          users={props.users}
+          teams={props.teams}
+          isSortByOpen={props.isSortByOpen}
+          changeSortBy={props.changeSortBy}
+          setWrapperRef={props.setWrapperRef}
+          setIsSortByOpen={props.setIsSortByOpen}
+          activeTab={props.activeTab}
+          sort={props.sort}
+          tabs={props.tabs}
         />
       )}
 
@@ -99,7 +108,16 @@ const DashboardTabContent = props => {
           <GridListOptionsPane
             leftOptionLabel={leftOptionLabel}
             sortIsVisible={sortIsVisible}
-            isRemoveButton={isRemoveButton}
+            isRemoveOption={isRemoveOption}
+            users={props.users}
+            teams={props.teams}
+            isSortByOpen={props.isSortByOpen}
+            changeSortBy={props.changeSortBy}
+            setWrapperRef={props.setWrapperRef}
+            setIsSortByOpen={props.setIsSortByOpen}
+            activeTab={props.activeTab}
+            sort={props.sort}
+            tabs={props.tabs}
           />
           <GridList items={targetData} />
         </Box>

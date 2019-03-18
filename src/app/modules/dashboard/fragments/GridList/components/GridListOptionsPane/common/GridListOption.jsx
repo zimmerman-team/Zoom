@@ -9,6 +9,7 @@ import {
   IconLabel,
   RemoveButton
 } from './GridListOption.styles';
+import SortbyDialog from '../../../../../../../components/Dialog/SortbyDialog/SortbyDialog';
 
 const sortByOptions = [
   { label: 'Name (asc)', value: 'name:1' },
@@ -19,12 +20,12 @@ const propTypes = {
   icon: PropTypes.node.isRequired,
   label: PropTypes.string,
   visibility: PropTypes.string,
-  isRemoveButton: PropTypes.bool
+  isRemoveOption: PropTypes.bool
 };
 const defaultProps = {
   label: '',
   visibility: 'visible',
-  isRemoveButton: false
+  isRemoveOption: false
 };
 
 function handleClick() {}
@@ -32,23 +33,25 @@ function handleClick() {}
 const GridListOption = props => {
   return (
     <ComponentBase visibility={props.visibility} onClick={() => handleClick}>
-      {props.isRemoveButton ? (
+      {props.isRemoveOption ? (
         <RemoveButton>remove indefinite</RemoveButton>
       ) : (
         <React.Fragment>
-          <IconButton>
+          <IconButton onClick={props.setIsSortByOpen}>
             {props.icon}
             <IconLabel>{props.label}</IconLabel>
           </IconButton>
 
-          {/*<SortbyDialog*/}
-          {/*open={setIsOpen(!setIsOpen)}*/}
-          {/*options={sortByOptions}*/}
-          {/*selectedOptionValue={sort}*/}
-          {/*onOptionClick={handleOptionClick}*/}
-          {/*setWrapperRef={setWrapperRef}*/}
-          {/*closeDialog={setIsOpen(!setIsOpen)}*/}
-          {/*/>*/}
+          <SortbyDialog
+            open={props.isSortByOpen}
+            options={sortByOptions}
+            // users={props.users}
+            // teams={props.teams}
+            selectedOptionValue={props.sort}
+            onOptionClick={props.changeSortBy}
+            setWrapperRef={props.setWrapperRef}
+            closeDialog={props.setIsSortByOpen}
+          />
         </React.Fragment>
       )}
     </ComponentBase>

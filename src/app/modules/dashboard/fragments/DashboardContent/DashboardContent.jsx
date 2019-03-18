@@ -38,9 +38,19 @@ const DashboardContent = props => {
     <Router>
       <FragmentBase>
         {/** tab navigator */}
-        <DashboardTabNavigator />
+        <DashboardTabNavigator navItems={props.navItems} />
         {/** tab content */}
-        <DashboardTabContent users={props.users} teams={props.teams} />
+        <DashboardTabContent
+          users={props.users}
+          teams={props.teams}
+          isSortByOpen={props.isSortByOpen}
+          changeSortBy={props.changeSortBy}
+          setWrapperRef={props.setWrapperRef}
+          setIsSortByOpen={props.setIsSortByOpen}
+          activeTab={props.activeTab}
+          sort={props.sort}
+          tabs={props.tabs}
+        />
       </FragmentBase>
     </Router>
   );

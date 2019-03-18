@@ -14,16 +14,13 @@ const ComponentBase = styled.div`
   max-width: 1024px;
   justify-content: center;
 
-  min-height: 250px;
   flex-direction: column;
 `;
 
 const Message = styled.div`
-  display: flex;
-  font-size: 32px;
+  padding-top: 70px;
   text-align: center;
-  align-self: center;
-  justify-self: center;
+  font-size: 32px;
   line-height: 1;
   color: ${theme.color.zoomBlack};
   font-family: ${theme.font.zoomFontFamOne};
@@ -51,34 +48,50 @@ const DashboardTabContent = props => {
   let targetData = [];
   let leftOptionLabel = '';
   let sortIsVisible = true;
+  let tabContentName = true;
+  let isRemoveButton = false;
 
   //todo: switch will be more readable
   //todo: check on exact path instead of includes: too vulnerable
   if (currentURL.includes('users')) {
     targetData = props.users;
     leftOptionLabel = 'add users';
+    tabContentName = 'Users';
   } else if (currentURL.includes('teams')) {
     targetData = props.teams;
     leftOptionLabel = 'create users';
+    tabContentName = 'Teams';
   } else if (currentURL.includes('focus-pages')) {
     targetData = '';
     leftOptionLabel = 'add focus page';
+    tabContentName = 'Focus page';
   } else if (currentURL.includes('data-sets')) {
     targetData = '';
     leftOptionLabel = 'map data set';
+    tabContentName = 'Data sets';
   } else if (currentURL.includes('charts')) {
     targetData = '';
     leftOptionLabel = 'add chart';
+    tabContentName = 'Charts';
   } else if (currentURL.includes('trash')) {
     targetData = '';
-    leftOptionLabel = 'remove indefinite';
+    tabContentName = 'Trash';
     sortIsVisible = false;
+    isRemoveButton = true;
   }
 
   return (
     <ComponentBase>
+      {isRemoveButton && (
+        <GridListOptionsPane
+          leftOptionLabel={leftOptionLabel}
+          sortIsVisible={sortIsVisible}
+          isRemoveButton={isRemoveButton}
+        />
+      )}
+
       {targetData.length === 0 && (
-        <Message>No item in {props.tabContentName}</Message>
+        <Message>No item in {tabContentName}</Message>
       )}
 
       {targetData.length > 0 && (
@@ -86,6 +99,7 @@ const DashboardTabContent = props => {
           <GridListOptionsPane
             leftOptionLabel={leftOptionLabel}
             sortIsVisible={sortIsVisible}
+            isRemoveButton={isRemoveButton}
           />
           <GridList items={targetData} />
         </Box>

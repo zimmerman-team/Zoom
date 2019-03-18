@@ -5,16 +5,11 @@ import PropTypes from 'prop-types';
 /* components */
 import {
   ModuleContainer,
-  ViewContainer,
-  SearchBox,
-  NoItems,
-  Section
+  SearchBox
 } from 'modules/dashboard/DashboardModule.styles';
 import SvgIconSearch from 'assets/icons/IconSearch';
-import UsersTabView from './fragments/UsersTabView/UsersTabView';
-import TeamsTabView from './fragments/TeamsTabView/TeamsTabView';
-import DashboardHeader from './fragments/DashboardHeader/DashboardHeader';
 import DashboardContent from 'modules/dashboard/fragments/DashboardContent/DashboardContent';
+import DashboardHeader from './fragments/DashboardHeader/DashboardHeader';
 
 const propTypes = {
   tabs: PropTypes.arrayOf(

@@ -5,12 +5,7 @@ import styled from 'styled-components';
 import shortid from 'shortid';
 import theme from 'theme/Theme';
 import DashboardTabNavItem from 'modules/dashboard/fragments/DashboardContent/components/components/DashboardTabNavItem';
-import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
-
-/**
- * todo: Please write a short component description of what this component does
- * @param {Object} customProperty - please describe component property
- */
+//import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
 
 const ComponentBase = styled.div`
   display: flex;
@@ -41,7 +36,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  navItems: data
+  navItems: []
 };
 
 const DashboardTabNavigator = props => {
@@ -53,11 +48,12 @@ const DashboardTabNavigator = props => {
             path={item.path}
             key={shortid.generate()}
             label={item.label}
+            count={item.count}
           />
         ))}
       </Box>
       <Box>
-        <DashboardTabNavItem path="/dashboard/trash" label="Trash" />
+        <DashboardTabNavItem path="/dashboard/trash" label="Trash" count="0" />
       </Box>
     </ComponentBase>
   );

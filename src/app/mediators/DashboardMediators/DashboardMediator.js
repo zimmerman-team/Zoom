@@ -1,5 +1,6 @@
 /* base */
 import React from 'react';
+import { matchPath } from 'react-router';
 import { withRouter } from 'react-router-dom';
 
 /* utils */
@@ -11,6 +12,7 @@ import { formatUsersTabData, formatTeamsTabData } from 'utils/dashboardUtils';
 
 /* consts */
 import tabs from '__consts__/DashboardTabsConsts';
+import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
 
 class DashboardMediator extends React.Component {
   constructor(props) {
@@ -23,7 +25,6 @@ class DashboardMediator extends React.Component {
       searchKeyword: '',
       isSortByOpen: false
     };
-
     /* todo: do we really need to do all the binding? see if functions can be converted to arrow functions */
     this.setUsers = this.setUsers.bind(this);
     this.reloadData = this.reloadData.bind(this);
@@ -36,7 +37,6 @@ class DashboardMediator extends React.Component {
 
   componentDidMount() {
     this.reloadData();
-
     /* todo: not sure if this is the best way to handle this, see if it can be refactored */
     document.addEventListener('mousedown', this.handleClickOutside);
   }
@@ -101,13 +101,18 @@ class DashboardMediator extends React.Component {
   }
 
   reloadData(typeOfChange) {
-    if (typeOfChange === 'sort' && this.props.match.params.tab === 'users') {
+    if (typeOfChange === 'sort' && matchPath('dashboard/users')) {
       this.getAllUsers();
     }
     if (typeOfChange !== 'sort') {
       this.getAllUsers();
       this.props.auth0Client.getUserGroups(this, 'teams');
     }
+
+    console.log(this.props.match.params.tab);
+    console.log(this.props.location.pathname);
+    // console.log(matchPath('dashboard/users'));
+    console.log('yo neither of these guys got called');
   }
 
   render() {
@@ -128,6 +133,7 @@ class DashboardMediator extends React.Component {
           this.state.sort,
           this.state.searchKeyword
         )}
+        navItems={data(this.state.users, this.state.teams)}
         greetingName={get(this.props.auth0Client.getProfile(), 'nickname', '')}
       />
     );

@@ -103,13 +103,24 @@ const DashboardModule = ({
   changeSortBy,
   setWrapperRef,
   setIsSortByOpen,
-  changeSearchKeyword
+  changeSearchKeyword,
+  navItems
 }) => (
   <ModuleContainer>
     <DashboardHeader userName={greetingName} />
     <SearchBox onChange={changeSearchKeyword} placeholder={<SvgIconSearch />} />
 
-    <DashboardContent users={users} teams={teams} />
+    <DashboardContent
+      users={users}
+      teams={teams}
+      isSortByOpen={isSortByOpen}
+      changeSortBy={changeSortBy}
+      setWrapperRef={setWrapperRef}
+      setIsSortByOpen={setIsSortByOpen}
+      activeTab={activeTab}
+      sort={sort}
+      navItems={navItems}
+    />
 
     {/*<TabContainer
         tabs={tabs}

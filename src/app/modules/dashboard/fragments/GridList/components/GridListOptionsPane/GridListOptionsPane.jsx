@@ -18,25 +18,34 @@ const ComponentBase = styled.div`
 const propTypes = {
   visibilityLeftButton: PropTypes.string,
   leftOptionLabel: PropTypes.string,
-  isRemoveButton: PropTypes.bool
+  isRemoveOption: PropTypes.bool
 };
 
 const defaultProps = {
   visibilityLeftButton: 'visible',
   leftOptionLabel: '',
-  isRemoveButton: false
+  isRemoveOption: false
 };
 
 const GridListOptionsPane = props => {
   return (
     <ComponentBase>
       <GridListOption
-        isRemoveButton={props.isRemoveButton}
+        isRemoveOption={props.isRemoveOption}
         icon={<SvgIconAdd />}
         label={props.leftOptionLabel}
         visibility={props.visibilityLeftButton}
       />
-      <GridListOption icon={<SvgIconSort />} />
+      <GridListOption
+        icon={<SvgIconSort />}
+        isSortByOpen={props.isSortByOpen}
+        changeSortBy={props.changeSortBy}
+        setWrapperRef={props.setWrapperRef}
+        setIsSortByOpen={props.setIsSortByOpen}
+        activeTab={props.activeTab}
+        sort={props.sort}
+        tabs={props.tabs}
+      />
     </ComponentBase>
   );
 };

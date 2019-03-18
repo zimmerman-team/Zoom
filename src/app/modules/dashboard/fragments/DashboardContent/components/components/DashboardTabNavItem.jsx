@@ -12,8 +12,6 @@ import theme from 'theme/Theme';
  */
 
 const ComponentBase = styled(NavLink)`
-  //height: 40px;
-  //width: calc(100% / 5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,20 +48,17 @@ const ComponentBase = styled(NavLink)`
     left: -15px;
     top: -13px;
   }
-  
-  
-
 `;
 
 const propTypes = {
   label: PropTypes.string,
   path: PropTypes.string,
-  tabCounts: PropTypes.number
+  count: PropTypes.number
 };
 const defaultProps = {
   label: 'empty',
   path: '/empty',
-  tabCounts: 0
+  count: 0
 };
 
 const DashboardTabNavItem = props => {
@@ -77,7 +72,7 @@ const DashboardTabNavItem = props => {
         const tab = props.path.substr(props.path.lastIndexOf('/'));
         return selectedTab === tab;
       }}
-      count={props.tabCounts}
+      count={props.count}
     >
       {props.label}
     </ComponentBase>

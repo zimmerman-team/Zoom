@@ -1,11 +1,19 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import theme from 'theme/Theme';
 
 /* componenets */
-import { ComponentBase, IconLabel } from './GridListOption.styles';
+import {
+  ComponentBase,
+  IconButton,
+  IconLabel,
+  RemoveButton
+} from './GridListOption.styles';
+
+const sortByOptions = [
+  { label: 'Name (asc)', value: 'name:1' },
+  { label: 'Name (desc)', value: 'name:-1' }
+];
 
 const propTypes = {
   icon: PropTypes.node.isRequired,
@@ -15,26 +23,34 @@ const propTypes = {
 };
 const defaultProps = {
   label: '',
-  visibility: 'visible'
+  visibility: 'visible',
+  isRemoveButton: false
 };
 
-const RemoveButton = styled.div`
-  width: 160px;
-  height: 30px;
-  border-radius: 15px;
-  background-color: ${theme.color.aidsFondsRed};
-`;
+function handleClick() {}
 
 const GridListOption = props => {
-  function handleClick() {
-    console.log('Click!');
-  }
-
   return (
     <ComponentBase visibility={props.visibility} onClick={() => handleClick}>
-      {props.icon}
-      <IconLabel>{props.label}</IconLabel>
-      <RemoveButton>remove indefinite</RemoveButton>
+      {props.isRemoveButton ? (
+        <RemoveButton>remove indefinite</RemoveButton>
+      ) : (
+        <React.Fragment>
+          <IconButton>
+            {props.icon}
+            <IconLabel>{props.label}</IconLabel>
+          </IconButton>
+
+          {/*<SortbyDialog*/}
+          {/*open={setIsOpen(!setIsOpen)}*/}
+          {/*options={sortByOptions}*/}
+          {/*selectedOptionValue={sort}*/}
+          {/*onOptionClick={handleOptionClick}*/}
+          {/*setWrapperRef={setWrapperRef}*/}
+          {/*closeDialog={setIsOpen(!setIsOpen)}*/}
+          {/*/>*/}
+        </React.Fragment>
+      )}
     </ComponentBase>
   );
 };

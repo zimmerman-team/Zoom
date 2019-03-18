@@ -39,6 +39,7 @@ const Box = styled.div`
 const propTypes = {
   navItems: PropTypes.array
 };
+
 const defaultProps = {
   navItems: data
 };

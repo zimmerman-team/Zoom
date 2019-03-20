@@ -230,7 +230,6 @@ class ZoomSelect extends React.Component {
             })
           }
         />
-        {console.log(this.props.placeHolderText, this.props.placeHolderNumber)}
         {this.state.open && (
           <DropDownContainer>
             {this.state.options.length > 0 ? (

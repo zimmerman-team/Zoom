@@ -13,17 +13,22 @@ import theme from 'theme/Theme';
 
 const propTypes = {
   saveDesc: PropTypes.func,
+  defaultVal: PropTypes.string,
   placeholder: PropTypes.string
 };
 const defaultProps = {
   saveDesc: undefined,
+  defaultVal: '',
   data: []
 };
 
 class TextEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { editorHtml: '', theme: 'snow' };
+    this.state = {
+      editorHtml: props.defaultVal ? props.defaultVal : '',
+      theme: 'snow'
+    };
     this.handleChange = this.handleChange.bind(this);
   }
 

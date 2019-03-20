@@ -1,9 +1,11 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import ReactHtmlParser from 'react-html-parser';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 import ContextHeader from 'components/chartcontext/common/ContextHeader';
+import 'react-quill/dist/quill.snow.css'; // ES
 
 /**
  * todo: Please write a short component description of what this component does
@@ -27,23 +29,23 @@ const Details = styled.span`
 `;
 
 const ContextBody = styled.p`
-  font-size: 14px;
-  color: black;
   max-width: 550px;
-  font-family: ${theme.font.zoomFontFamOne};
+  margin: 0;
 `;
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  desc: PropTypes.string
+};
+const defaultProps = {
+  desc: ''
+};
 
 const ContextPreview = props => {
   return (
     <ComponentBase>
-      <ContextHeader />
+      <ContextHeader noBottom />
       <ContextBody>
-        Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
-        Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-        Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+        <div className="ql-editor">{ReactHtmlParser(props.desc)}</div>
       </ContextBody>
     </ComponentBase>
   );

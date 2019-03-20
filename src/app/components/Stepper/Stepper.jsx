@@ -17,12 +17,15 @@ import {
   ButtonContainer,
   Stepz,
   StepzLabel,
+  StepLabelClass,
   StyledStepper,
   materialStyles
 } from './Stepper.style';
 
 /* consts */
 import { steps } from './Stepper.const';
+import StepLabel from '@material-ui/core/StepLabel';
+import Step from '@material-ui/core/Step';
 
 const propTypes = {
   data: PropTypes.object,
@@ -64,9 +67,25 @@ class Stepperz extends React.Component {
             connector={connector}
           >
             {steps.map(step => (
-              <Stepz key={step.label}>
-                <StepzLabel>{step.label}</StepzLabel>
-              </Stepz>
+              <Step key={step.label}>
+                <StepLabel
+                  classes={{
+                    label: classes.stepLabel,
+                    active: classes.stepLabelActive,
+                    completed: classes.stepLabelActive
+                  }}
+                  StepIconProps={{
+                    classes: {
+                      root: classes.stepIcon,
+                      active: classes.stepIconActive,
+                      completed: classes.stepIconCompleted,
+                      text: classes.stepIconText
+                    }
+                  }}
+                >
+                  {step.label}
+                </StepLabel>
+              </Step>
             ))}
           </StyledStepper>
         )}

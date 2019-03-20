@@ -44,7 +44,7 @@ const defaultProps = {
 };
 const ContextHeader = props => {
   return (
-    <ComponentBase>
+    <ComponentBase style={{ paddingBottom: props.noBottom ? '0' : '' }}>
       <Title>{props.title}</Title>
       {/*TODO: interpret iso date with luxon*/}
       <Details>Lorem ipsum dolor simet | Published on 1999</Details>

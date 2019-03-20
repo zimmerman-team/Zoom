@@ -101,18 +101,13 @@ class DashboardMediator extends React.Component {
   }
 
   reloadData(typeOfChange) {
-    if (typeOfChange === 'sort' && matchPath('dashboard/users')) {
+    if (typeOfChange === 'sort' && this.props.match.params.tab === 'users') {
       this.getAllUsers();
     }
     if (typeOfChange !== 'sort') {
       this.getAllUsers();
       this.props.auth0Client.getUserGroups(this, 'teams');
     }
-
-    console.log(this.props.match.params.tab);
-    console.log(this.props.location.pathname);
-    // console.log(matchPath('dashboard/users'));
-    console.log('yo neither of these guys got called');
   }
 
   render() {

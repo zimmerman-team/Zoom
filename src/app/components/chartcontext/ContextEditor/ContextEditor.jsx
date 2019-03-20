@@ -35,22 +35,40 @@ const ContextFooter = styled.section``;
 const propTypes = {};
 const defaultProps = {};
 
-const ContextEditor = props => {
-  return (
-    <ComponentBase>
-      <ContextHeader />
-      <ContextBody>
-        <TextEditor
-          saveDesc={desc =>
-            props.dispatch(actions.storeChartDataRequest({ desc }))
-          }
-        />
-      </ContextBody>
-    </ComponentBase>
-  );
-};
+class ContextEditor extends React.Component {
+  shouldComponentUpdate() {
+    // NOTE: Right now we use this, so that the component wouldn't update everytime the
+    // chartData prop changes(for performance and cause this update messes up the text editor)
+    // so yeah, right now this component is not needed to update at all
+    // if you need this component to rerender, pls add in some logic with state/prop changes
+    // and return true, upon those changes
+    return false;
+  }
+
+  render() {
+    return (
+      <ComponentBase>
+        <ContextHeader />
+        <ContextBody>
+          <TextEditor
+            saveDesc={desc =>
+              this.props.dispatch(actions.storeChartDataRequest({ desc }))
+            }
+            defaultVal={this.props.chartData.desc}
+          />
+        </ContextBody>
+      </ComponentBase>
+    );
+  }
+}
 
 ContextEditor.propTypes = propTypes;
 ContextEditor.defaultProps = defaultProps;
 
-export default connect(null)(ContextEditor);
+const mapStateToProps = state => {
+  return {
+    chartData: state.chartData.chartData
+  };
+};
+
+export default connect(mapStateToProps)(ContextEditor);

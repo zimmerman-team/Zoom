@@ -1,16 +1,17 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import connect from 'react-redux/es/connect/connect';
+import { withRouter } from 'react-router';
 
 import theme from 'theme/Theme';
 import GeoMap from 'components/GeoMap/GeoMap';
-import { createBrowserHistory } from 'history';
 import ContextPreview from 'components/chartcontext/ContextPreview/ContextPreview';
 import BarchartFragment from 'modules/visualizer/sort/container/fragments/BarchartFragment';
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment';
 import { PrevieTextContainer, ComponentBase, Box } from './VizContainer.style';
-import connect from 'react-redux/es/connect/connect';
+
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
@@ -25,13 +26,12 @@ const defaultProps = {
 };
 
 const VizContainer = props => {
-  const history = createBrowserHistory();
-  const preview = history.location.pathname.includes('preview');
+  const preview = props.location.pathname.includes('preview');
 
   return (
     <ComponentBase mode={preview ? 'initial' : 'center'}>
       <PrevieTextContainer mode={preview ? 'flex' : 'none'}>
-        <ContextPreview />
+        <ContextPreview desc={props.chartData.desc} />
       </PrevieTextContainer>
 
       {props.type === 'linechart' && (
@@ -71,4 +71,4 @@ const mapStateToProps = state => {
 VizContainer.propTypes = propTypes;
 VizContainer.defaultProps = defaultProps;
 
-export default connect(mapStateToProps)(VizContainer);
+export default connect(mapStateToProps)(withRouter(VizContainer));

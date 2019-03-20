@@ -1,0 +1,33 @@
+const Path = '/dashboard/';
+
+export function data(users, teams, charts, dataSets, focusPages) {
+  return [
+    {
+      label: 'Charts',
+      path: Path + 'charts',
+      count: 0
+    },
+    {
+      label: 'Data sets',
+      path: Path + 'data-sets',
+      count: 0
+    },
+    {
+      label: 'Focus pages',
+      path: Path + 'focus-pages',
+      count: 0
+    },
+    {
+      label: 'Users',
+      path: Path + 'users',
+      count: users.length
+    },
+    {
+      label: 'Teams',
+      path: Path + 'teams',
+      count: teams.length
+    }
+  ];
+}
+
+export default data;

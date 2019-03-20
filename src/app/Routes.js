@@ -7,6 +7,7 @@ import PageLoader from 'modules/common/pageloader/PageLoader';
 import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
+import ProfileSettingsModule from './modules/profilesettings/ProfileSettingsModule';
 // Modules regular import
 /*import HomeModule from 'modules/home/HomeModule';
 import IatiDetail from 'modules/IATI_Detail/IatiDetail';
@@ -153,6 +154,13 @@ const Routes = props => {
                 <Redirect to="/" />
               )
             }
+          />
+
+          {/*todo: remove on PR*/}
+          <Route
+            exact
+            path="/profile-settings"
+            render={() => <ProfileSettingsModule />}
           />
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />

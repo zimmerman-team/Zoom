@@ -110,13 +110,14 @@ const DashboardModule = ({
     <DashboardHeader userName={greetingName} />
     <SearchBox onChange={changeSearchKeyword} placeholder={<SvgIconSearch />} />
 
+    {/*todo: sorting logic must be refactored/fixed*/}
     <DashboardContent
       users={users}
       teams={teams}
       isSortByOpen={isSortByOpen}
       changeSortBy={changeSortBy}
       setWrapperRef={setWrapperRef}
-      setIsSortByOpen={setIsSortByOpen}
+      setIsSortByOpen={setIsSort}
       activeTab={activeTab}
       sort={sort}
       navItems={navItems}

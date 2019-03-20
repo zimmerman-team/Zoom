@@ -36,7 +36,8 @@ const propTypes = {
       label: PropTypes.string
     })
   ),
-  placeHolder: PropTypes.string,
+  placeHolderText: PropTypes.string,
+  placeHolderNumber: PropTypes.string,
   reset: PropTypes.func,
   categorise: PropTypes.bool,
   search: PropTypes.bool,
@@ -44,9 +45,11 @@ const propTypes = {
   disabledValues: PropTypes.arrayOf(PropTypes.string),
   dropDownWidth: PropTypes.number
 };
+
 const defaultProps = {
   categorise: false,
-  placeHolder: 'Has no indicators',
+  placeHolderText: 'Has no indicators',
+  placeHolderNumber: '',
   reset: undefined,
   search: true,
   selectAll: false,
@@ -222,8 +225,9 @@ class ZoomSelect extends React.Component {
           label={
             this.props.valueSelected
               ? this.props.valueSelected
-              : this.props.placeHolder
+              : this.props.placeHolderText
           }
+          placeHolderNumber={this.props.placeHolderNumber}
           onClick={() =>
             this.setState(prevState => {
               return { open: !prevState.open };

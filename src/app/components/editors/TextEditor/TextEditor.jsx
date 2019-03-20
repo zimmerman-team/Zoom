@@ -12,9 +12,11 @@ import theme from 'theme/Theme';
  */
 
 const propTypes = {
+  saveDesc: PropTypes.func,
   placeholder: PropTypes.string
 };
 const defaultProps = {
+  saveDesc: undefined,
   data: []
 };
 
@@ -26,6 +28,7 @@ class TextEditor extends React.Component {
   }
 
   handleChange(html) {
+    this.props.saveDesc(html);
     this.setState({ editorHtml: html });
   }
 

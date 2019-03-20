@@ -45,8 +45,6 @@ const GridListOption = props => {
           <SortbyDialog
             open={props.isSortByOpen}
             options={sortByOptions}
-            // users={props.users}
-            // teams={props.teams}
             selectedOptionValue={props.sort}
             onOptionClick={props.changeSortBy}
             setWrapperRef={props.setWrapperRef}

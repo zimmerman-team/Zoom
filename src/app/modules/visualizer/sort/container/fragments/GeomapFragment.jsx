@@ -2,6 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { matchPath } from 'react-router';
+
+import GeoMap from 'components/GeoMap/GeoMap';
 import theme from 'theme/Theme';
 
 /**
@@ -9,17 +12,25 @@ import theme from 'theme/Theme';
  * @param {Object} customProperty - please describe component property
  */
 
-const ComponentBase = styled.div``;
+const ComponentBase = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: #96dbfa;
+  height: ${props => props.height};
+`;
 
-const propTypes = {
-  data: PropTypes.array
-};
-const defaultProps = {
-  data: []
-};
+const propTypes = {};
+const defaultProps = {};
 
 const GeomapFragment = props => {
-  return <ComponentBase />;
+  return (
+    <ComponentBase height={props.mode ? '400px' : '100%'}>
+      <GeoMap />
+    </ComponentBase>
+  );
 };
 
 GeomapFragment.propTypes = propTypes;

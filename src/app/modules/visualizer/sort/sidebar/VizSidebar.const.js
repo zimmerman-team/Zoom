@@ -12,7 +12,7 @@ import IconDuplicate from 'assets/icons/toolpanel/IconDuplicate';
 import IconVisibility from 'assets/icons/toolpanel/IconVisibility';
 import ContextEditor from 'components/chartcontext/ContextEditor/ContextEditor';
 
-const Path = '/visualizer/:code/';
+const Path = '/visualizer/geomap/vizID/';
 
 export const data = {
   sections: [

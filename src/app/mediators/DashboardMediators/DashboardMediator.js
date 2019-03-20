@@ -15,37 +15,25 @@ import tabs from '__consts__/DashboardTabsConsts';
 import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
 
 class DashboardMediator extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    users: [],
+    teams: [],
+    sort: 'name:1',
+    searchKeyword: '',
+    isSortByOpen: false
+  };
 
-    this.state = {
-      users: [],
-      teams: [],
-      sort: 'name:1',
-      searchKeyword: '',
-      isSortByOpen: false
-    };
-    /* todo: do we really need to do all the binding? see if functions can be converted to arrow functions */
-    this.setUsers = this.setUsers.bind(this);
-    this.reloadData = this.reloadData.bind(this);
-    this.changeSortBy = this.changeSortBy.bind(this);
-    this.setWrapperRef = this.setWrapperRef.bind(this);
-    this.setIsSortByOpen = this.setIsSortByOpen.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
-    this.changeSearchKeyword = this.changeSearchKeyword.bind(this);
-  }
-
-  componentDidMount() {
+  componentDidMount = () => {
     this.reloadData();
     /* todo: not sure if this is the best way to handle this, see if it can be refactored */
     document.addEventListener('mousedown', this.handleClickOutside);
-  }
+  };
 
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
   }
 
-  getAllUsers() {
+  getAllUsers = () => {
     this.props.auth0Client.getAllUsers(
       this.setUsers,
       this.state.page,
@@ -54,25 +42,25 @@ class DashboardMediator extends React.Component {
         ? ` AND name:${this.state.searchKeyword}*`
         : ''
     );
-  }
+  };
 
-  setUsers(data) {
+  setUsers = data => {
     this.setState({
       users: formatUsersTabData(data)
     });
-  }
+  };
 
-  setWrapperRef(node) {
+  setWrapperRef = node => {
     this.wrapperRef = node;
-  }
+  };
 
-  setIsSortByOpen() {
+  setIsSortByOpen = () => {
     this.setState(prevState => ({
       isSortByOpen: !prevState.isSortByOpen
     }));
-  }
+  };
 
-  changeSortBy(e) {
+  changeSortBy = e => {
     this.setState(
       {
         sort: e.target.id
@@ -81,15 +69,15 @@ class DashboardMediator extends React.Component {
         this.reloadData('sort');
       }
     );
-  }
+  };
 
-  handleClickOutside(event) {
+  handleClickOutside = event => {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.setState({ isSortByOpen: false });
     }
-  }
+  };
 
-  changeSearchKeyword(e) {
+  changeSearchKeyword = e => {
     this.setState(
       {
         searchKeyword: e.target.value
@@ -98,9 +86,9 @@ class DashboardMediator extends React.Component {
         this.reloadData();
       }
     );
-  }
+  };
 
-  reloadData(typeOfChange) {
+  reloadData = typeOfChange => {
     if (typeOfChange === 'sort' && this.props.match.params.tab === 'users') {
       this.getAllUsers();
     }
@@ -108,7 +96,7 @@ class DashboardMediator extends React.Component {
       this.getAllUsers();
       this.props.auth0Client.getUserGroups(this, 'teams');
     }
-  }
+  };
 
   render() {
     return (

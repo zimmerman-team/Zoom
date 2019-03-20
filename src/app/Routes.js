@@ -83,7 +83,7 @@ const Routes = props => {
           />
           <Route
             exact
-            path="/visualizer/:code/:tab"
+            path="/visualizer/:chart/:code/:tab"
             render={() => (
               <VisualizerModuleMediator
                 indicatorAggregations={props}

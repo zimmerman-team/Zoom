@@ -28,7 +28,7 @@ const Details = styled.span`
   font-family: ${theme.font.zoomFontFamTwo};
 `;
 
-const ContextBody = styled.p`
+const ContextBody = styled.div`
   max-width: 550px;
   margin: 0;
 `;

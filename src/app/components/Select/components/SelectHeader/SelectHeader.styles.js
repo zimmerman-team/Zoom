@@ -26,3 +26,7 @@ export const PointerContainer = styled.div`
 export const LabelContainer = styled.div`
   margin: auto 0;
 `;
+
+export const Span = styled.span`
+  font-family: ${theme.font.zoomFontFamTwo};
+`;

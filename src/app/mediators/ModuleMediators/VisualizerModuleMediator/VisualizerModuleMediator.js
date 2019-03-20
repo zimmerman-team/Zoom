@@ -8,9 +8,15 @@ import {
   updatePercentiles
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 import PropTypes from 'prop-types';
-import { initialState } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.consts';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
 import { formatLongLatData } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
+import { connect } from 'react-redux';
+
+/* consts */
+import initialState from '__consts__/InitialChartDataConst';
+
+/* actions */
+import * as actions from 'services/actions/general';
 
 const propTypes = {
   indicatorAggregations: PropTypes.shape({
@@ -83,13 +89,13 @@ class VisualizerModuleMediator extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ...initialState
+      indicators: []
     };
 
     this.refetch = this.refetch.bind(this);
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (
       !isEqual(
         this.props.indicatorAggregations,
@@ -99,13 +105,25 @@ class VisualizerModuleMediator extends Component {
       this.updateIndicators();
     }
 
-    // so we refetch the subindicators, if one of the indicators has been changed
-    if (
-      this.state.selectedInd1 !== prevState.selectedInd1 ||
-      this.state.selectedInd2 !== prevState.selectedInd2
-    ) {
-      this.refetch();
-    }
+    // so we refetch data when chartData changes
+    if (!isEqual(this.props.chartData, prevProps.chartData)) this.refetch();
+  }
+
+  componentWillUnmount() {
+    // AAAND when this component unmounts we reset the chart and pane variables in redux
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        ...initialState
+      })
+    );
+
+    this.props.dispatch(
+      actions.storePaneDataRequest({
+        subIndicators1: [],
+        subIndicators2: []
+      })
+    );
   }
 
   updateIndicators() {
@@ -137,12 +155,12 @@ class VisualizerModuleMediator extends Component {
     ) {
       longLatData = formatLongLatData(
         this.props.indicatorAggregations.indicators1,
-        this.state.selectedInd1
+        this.props.chartData.selectedInd1
       );
     } else {
       countryLayerData = formatCountryLayerData(
         this.props.indicatorAggregations.indicators1,
-        this.state.selectedInd1
+        this.props.chartData.selectedInd1
       );
     }
 
@@ -160,12 +178,12 @@ class VisualizerModuleMediator extends Component {
     ) {
       longLatData = formatLongLatData(
         this.props.indicatorAggregations.indicators2,
-        this.state.selectedInd2
+        this.props.chartData.selectedInd2
       );
     } else {
       countryCircleData = formatCountryCenterData(
         this.props.indicatorAggregations.indicators2,
-        this.state.selectedInd2
+        this.props.chartData.selectedInd2
       );
     }
 
@@ -177,7 +195,7 @@ class VisualizerModuleMediator extends Component {
       indicators.push({
         type: 'layer',
         data: countryLayerData,
-        legendName: ` ${this.state.selectedInd1} `
+        legendName: ` ${this.props.chartData.selectedInd1} `
       });
     }
 
@@ -185,7 +203,7 @@ class VisualizerModuleMediator extends Component {
       indicators.push({
         type: 'circle',
         data: countryCircleData,
-        legendName: ` ${this.state.selectedInd2} `
+        legendName: ` ${this.props.chartData.selectedInd2} `
       });
     }
 
@@ -197,17 +215,25 @@ class VisualizerModuleMediator extends Component {
       });
     }
 
-    this.setState({ indicators, subIndicators1, subIndicators2 });
+    // and we save the subindicator selection for the datapane
+    this.props.dispatch(
+      actions.storePaneDataRequest({
+        subIndicators1,
+        subIndicators2
+      })
+    );
+
+    this.setState({ indicators });
   }
 
   refetch(
-    ind1 = this.state.selectedInd1,
-    ind2 = this.state.selectedInd2,
-    datePeriod = this.state.yearPeriod,
-    subInd1 = this.state.selectedSubInd1,
-    subInd2 = this.state.selectedSubInd2,
-    countriesCodes = this.state.selectedCountryVal,
-    regionCountriesCodes = this.state.selectedRegionVal
+    ind1 = this.props.chartData.selectedInd1,
+    ind2 = this.props.chartData.selectedInd2,
+    datePeriod = this.props.chartData.yearPeriod,
+    subInd1 = this.props.chartData.selectedSubInd1,
+    subInd2 = this.props.chartData.selectedSubInd2,
+    countriesCodes = this.props.chartData.selectedCountryVal,
+    regionCountriesCodes = this.props.chartData.selectedRegionVal
   ) {
     // We forming the param for countries from the selected countries of a region
     // and single selected countries
@@ -235,26 +261,6 @@ class VisualizerModuleMediator extends Component {
       <VisualizerModule
         indicators={this.state.indicators}
         dropDownData={this.props.dropDownData}
-
-        // selectInd1={this.selectInd1}
-        // selectInd2={this.selectInd2}
-        // selectYear={this.selectYear}
-        // selectSubInd1={this.selectSubInd1}
-        // selectSubInd2={this.selectSubInd2}
-        // selectedInd1={this.state.selectedInd1}
-        // selectedInd2={this.state.selectedInd2}
-        // selectedSubInd1={this.state.selectedSubInd1}
-        // selectedSubInd2={this.state.selectedSubInd2}
-
-        // subIndicators1={this.state.subIndicators1}
-        // subIndicators2={this.state.subIndicators2}
-
-        // selectCountry={this.selectCountry}
-        // selectedCountryVal={this.state.selectedCountryVal}
-        // selectedRegionVal={this.state.selectedRegionVal}
-        // selectRegion={this.selectRegion}
-        // resetAll={this.resetAll}
-        // yearPeriod={this.state.yearPeriod}
       />
     );
   }
@@ -263,8 +269,14 @@ class VisualizerModuleMediator extends Component {
 VisualizerModuleMediator.propTypes = propTypes;
 VisualizerModuleMediator.defaultProps = defaultProps;
 
+const mapStateToProps = state => {
+  return {
+    chartData: state.chartData.chartData
+  };
+};
+
 export default createRefetchContainer(
-  VisualizerModuleMediator,
+  connect(mapStateToProps)(VisualizerModuleMediator),
   graphql`
     fragment VisualizerModuleMediator_indicatorAggregations on Query
       @argumentDefinitions(

@@ -2,7 +2,20 @@ import findIndex from 'lodash/findIndex';
 import { scaleQuantile } from 'd3-scale';
 import { range } from 'd3-array';
 
-export function formatCountryLayerData(indicators) {
+// Updates layer percentiles depending on the value
+export function updatePercentiles(featureCollection, accessor) {
+  const { features } = featureCollection;
+  const scale = scaleQuantile()
+    .domain(features.map(accessor))
+    .range(range(9));
+  features.forEach(f => {
+    const value = accessor(f);
+    f.properties.value = value;
+    f.properties.percentile = scale(value);
+  });
+}
+
+export function formatCountryLayerData(indicators, indName) {
   const countryLayers = {
     type: 'FeatureCollection',
     features: []
@@ -10,7 +23,7 @@ export function formatCountryLayerData(indicators) {
 
   indicators.forEach(indicator => {
     const existLayerIndex = findIndex(countryLayers.features, feat => {
-      return indicator.geolocationIso2 === feat.properties.iso2;
+      return indicator.geolocationTag === feat.properties.name;
     });
 
     // so here we check if we already added a country to the countries layers
@@ -25,9 +38,11 @@ export function formatCountryLayerData(indicators) {
         // which is i dunno a double string or sth :D
         geometry: JSON.parse(JSON.parse(indicator.geolocationPolygons)),
         properties: {
+          indName,
           name: indicator.geolocationTag,
           iso2: indicator.geolocationIso2,
-          value: indicator.value,
+          // we round it to two decimals
+          value: Math.round(indicator.value),
           percentile: 0
         }
       });
@@ -38,30 +53,34 @@ export function formatCountryLayerData(indicators) {
   });
 
   // And we add min and max values to be used for legends and what not
-  countryLayers.minValue = Math.min.apply(
-    Math,
-    countryLayers.features.map(feature => {
-      return feature.properties.value;
-    })
+  countryLayers.minValue = Math.round(
+    Math.min.apply(
+      Math,
+      countryLayers.features.map(feature => {
+        return feature.properties.value;
+      })
+    )
   );
 
-  countryLayers.maxValue = Math.max.apply(
-    Math,
-    countryLayers.features.map(feature => {
-      return feature.properties.value;
-    })
+  countryLayers.maxValue = Math.round(
+    Math.max.apply(
+      Math,
+      countryLayers.features.map(feature => {
+        return feature.properties.value;
+      })
+    )
   );
 
   return countryLayers;
 }
 
-export function formatCountryCenterData(indicators) {
+export function formatCountryCenterData(indicators, indName) {
   const countryCenteredData = [];
 
   indicators.forEach(indicator => {
     const existCountryIndex = findIndex(countryCenteredData, [
-      'geolocationIso2',
-      indicator.geolocationIso2
+      'name',
+      indicator.geolocationTag
     ]);
 
     if (indicator.geolocationCenterLongLat) {
@@ -76,14 +95,14 @@ export function formatCountryCenterData(indicators) {
         const coord = JSON.parse(JSON.parse(indicator.geolocationCenterLongLat))
           .coordinates;
         countryCenteredData.push({
-          value: indicator.value,
-          name: indicator.indicatorName,
+          indName,
+          value: Math.round(indicator.value),
           geolocationIso2: indicator.geolocationIso2,
           maxValue,
           minValue,
           longitude: coord[0],
           latitude: coord[1],
-          country: indicator.geolocationTag
+          name: indicator.geolocationTag
         });
       } else
         countryCenteredData[existCountryIndex].value =
@@ -105,8 +124,8 @@ export function formatCountryCenterData(indicators) {
   );
 
   countryCenteredData.forEach(indicator => {
-    indicator.maxValue = maxValue;
-    indicator.minValue = minValue;
+    indicator.maxValue = Math.round(maxValue);
+    indicator.minValue = Math.round(minValue);
   });
 
   return countryCenteredData;
@@ -131,15 +150,40 @@ export function formatCountryParam(countryCodes, regionCountryCodes) {
   return jointCountries;
 }
 
-// Updates layer percentiles depending on the value
-export function updatePercentiles(featureCollection, accessor) {
-  const { features } = featureCollection;
-  const scale = scaleQuantile()
-    .domain(features.map(accessor))
-    .range(range(9));
-  features.forEach(f => {
-    const value = accessor(f);
-    f.properties.value = value;
-    f.properties.percentile = scale(value);
+export function formatLongLatData(indicators, indName) {
+  const longLatData = [];
+
+  indicators.forEach(indicator => {
+    if (indicator.geolocationTag.indexOf(',') !== -1) {
+      const existPointIndex = findIndex(longLatData, [
+        'name',
+        indicator.geolocationTag
+      ]);
+
+      if (existPointIndex === -1) {
+        let long = indicator.geolocationTag.substring(
+          0,
+          indicator.geolocationTag.indexOf(',')
+        );
+        long = parseFloat(long);
+
+        let lat = indicator.geolocationTag.substring(
+          indicator.geolocationTag.indexOf(',') + 1
+        );
+        lat = parseFloat(lat);
+
+        longLatData.push({
+          indName,
+          longitude: long,
+          latitude: lat,
+          name: indicator.geolocationTag,
+          value: Math.round(indicator.value)
+        });
+      } else {
+        longLatData[existPointIndex].value += indicator.value;
+      }
+    }
   });
+
+  return longLatData;
 }

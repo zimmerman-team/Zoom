@@ -156,6 +156,7 @@ class DataExplorePane extends React.Component {
             <FilterContainer>
               <DropDownCont>
                 <ZoomSelect
+                  initialSelect={this.props.initialSelect}
                   selectAll
                   multiple
                   placeHolder={
@@ -169,6 +170,7 @@ class DataExplorePane extends React.Component {
               </DropDownCont>
               <DropDownCont>
                 <ZoomSelect
+                  initialSelect={this.props.initialSelect}
                   selectAll
                   reset={() => this.props.selectCountry('reset')}
                   multiple
@@ -206,6 +208,7 @@ class DataExplorePane extends React.Component {
               </DropDownCont>
               <DropDownCont>
                 <ZoomSelect
+                  initialSelect={this.props.initialSelect}
                   selectAll
                   categorise
                   placeHolder="Select sub indicator"
@@ -231,6 +234,7 @@ class DataExplorePane extends React.Component {
               </DropDownCont>
               <DropDownCont>
                 <ZoomSelect
+                  initialSelect={this.props.initialSelect}
                   selectAll
                   categorise
                   placeHolder="Select sub indicator"

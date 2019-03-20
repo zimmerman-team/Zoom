@@ -11,9 +11,10 @@ import * as actions from 'services/actions/general';
 import sortBy from 'lodash/sortBy';
 import { formatYearParam } from 'utils/genericUtils';
 import connect from 'react-redux/es/connect/connect';
+import isEqual from 'lodash/isEqual';
 
 /* consts */
-import initialState from './VizPaneMediator.const';
+import initialState from '__consts__/InitialChartDataConst';
 
 const propTypes = {
   dropDownData: PropTypes.shape({
@@ -43,21 +44,13 @@ const defaultProps = {
   dropDownData: {}
 };
 
-// As discussed with Siem default year period selected should be
-// current year and 15 years before
-const now = new Date();
-const currentYear = now.getFullYear();
-const yearBefore = currentYear - 15;
-
 class VizPaneMediator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      yearPeriod: formatYearParam([yearBefore, currentYear]),
       allIndNames: [],
       allCountries: [],
-      allRegions: [],
-      ...initialState
+      allRegions: []
     };
 
     this.selectInd1 = this.selectInd1.bind(this);
@@ -178,7 +171,7 @@ class VizPaneMediator extends React.Component {
           selectedSubInd2.push(it.value);
         });
       } else {
-        selectedSubInd2 = [...this.state.selectedSubInd2];
+        selectedSubInd2 = [...this.props.chartData.selectedSubInd2];
         const subIndicatorIndex = selectedSubInd2.indexOf(item.value);
         if (subIndicatorIndex === -1)
           // so if it doesn't exist we add it
@@ -216,7 +209,7 @@ class VizPaneMediator extends React.Component {
           selectedCountryVal.push(it.value);
         });
       } else {
-        selectedCountryVal = [...this.state.selectedCountryVal];
+        selectedCountryVal = [...this.props.chartData.selectedCountryVal];
         const countryIndex = selectedCountryVal.indexOf(item.value);
         if (countryIndex === -1)
           // so if it doesn't exist we add it
@@ -244,7 +237,7 @@ class VizPaneMediator extends React.Component {
           selectedRegionVal.push(it.value);
         });
       } else {
-        selectedRegionVal = [...this.state.selectedRegionVal];
+        selectedRegionVal = [...this.props.chartData.selectedRegionVal];
         const regionIndex = selectedRegionVal.indexOf(item.value);
 
         if (regionIndex === -1)
@@ -268,6 +261,16 @@ class VizPaneMediator extends React.Component {
         ...initialState
       })
     );
+
+    // and we also reset some values for the sub-indicator
+    // dropdown as sub-indicators should change
+    // whenever an indicator is changed
+    this.props.dispatch(
+      actions.storePaneDataRequest({
+        subIndicators1: [],
+        subIndicators2: []
+      })
+    );
   }
 
   render() {
@@ -276,7 +279,8 @@ class VizPaneMediator extends React.Component {
         indNames={this.state.allIndNames}
         countries={this.state.allCountries}
         regions={this.state.allRegions}
-        yearPeriod={this.state.yearPeriod}
+        yearPeriod={this.props.chartData.yearPeriod}
+        initialSelect={isEqual(this.props.chartData, initialState)}
         selectInd1={this.selectInd1}
         selectInd2={this.selectInd2}
         selectYear={this.selectYear}

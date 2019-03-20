@@ -3,11 +3,15 @@ import * as actions from 'services/actions/general';
 
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
+import initialState from '__consts__/InitialChartDataConst';
 
 const initial = {
   open: paneTypes.none,
-  chartData: {},
-  paneData: {},
+  chartData: { ...initialState },
+  paneData: {
+    subIndicators1: [],
+    subIndicators2: []
+  },
   stepzData: {}
 };
 

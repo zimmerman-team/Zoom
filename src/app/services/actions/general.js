@@ -31,3 +31,21 @@ export function saveStepDataDone(data) {
     data
   };
 }
+
+// basically used to store the currently editable chart in redux
+export const STORE_CHART_DATA_REQUEST = 'STORE_CHART_DATA_REQUEST';
+export const STORE_CHART_DATA_DONE = 'STORE_CHART_DATA_DONE';
+
+export function storeChartDataRequest(data) {
+  return {
+    type: STORE_CHART_DATA_REQUEST,
+    data
+  };
+}
+
+export function storeChartDataDone(data) {
+  return {
+    type: STORE_CHART_DATA_DONE,
+    data
+  };
+}

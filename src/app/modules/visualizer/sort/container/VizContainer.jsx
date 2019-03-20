@@ -10,6 +10,7 @@ import BarchartFragment from 'modules/visualizer/sort/container/fragments/Barcha
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment';
 import { PrevieTextContainer, ComponentBase, Box } from './VizContainer.style';
+import connect from 'react-redux/es/connect/connect';
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
@@ -61,7 +62,13 @@ const VizContainer = props => {
   );
 };
 
+const mapStateToProps = state => {
+  return {
+    chartData: state.chartData.chartData
+  };
+};
+
 VizContainer.propTypes = propTypes;
 VizContainer.defaultProps = defaultProps;
 
-export default VizContainer;
+export default connect(mapStateToProps)(VizContainer);

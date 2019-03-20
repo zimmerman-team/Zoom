@@ -7,6 +7,9 @@ import PageLoader from 'modules/common/pageloader/PageLoader';
 import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
+import PublicChartLibraryModule from './modules/PublicChartLibrary/PublicChartLibraryModule';
+import DashboardModule from './modules/dashboard/DashboardModule';
+// import PublicChartViewModule from './modules/publicChartView/PublicChartViewModule';
 // Modules regular import
 /*import HomeModule from 'modules/home/HomeModule';
 import IatiDetail from 'modules/IATI_Detail/IatiDetail';
@@ -153,6 +156,16 @@ const Routes = props => {
                 <Redirect to="/" />
               )
             }
+          />
+          <Route
+            path="/public/chart-library"
+            render={() => <PublicChartLibraryModule />}
+          />
+
+          <Route
+            exact
+            path="/public/chart-library/:id/:charttype"
+            // todo: render to appropriate chart pages
           />
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />

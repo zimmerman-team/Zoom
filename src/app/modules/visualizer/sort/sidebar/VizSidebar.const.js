@@ -11,6 +11,7 @@ import IconDownload from 'assets/icons/toolpanel/IconDownload';
 import IconDuplicate from 'assets/icons/toolpanel/IconDuplicate';
 import IconVisibility from 'assets/icons/toolpanel/IconVisibility';
 import ContextEditor from 'components/chartcontext/ContextEditor/ContextEditor';
+import VizPaneMediator from 'mediators/ComponentMediators/PaneMediators/VisPaneMediator/VizPaneMediator';
 
 const Path = '/visualizer/:code/';
 
@@ -19,7 +20,8 @@ export const data = {
     {
       label: 'edit',
       path: Path + 'edit',
-      component: EditorTab,
+      // component: EditorTab,
+      component: VizPaneMediator,
       icon: <IconFilter />
     },
     {

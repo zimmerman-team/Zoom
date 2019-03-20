@@ -42,6 +42,7 @@ const TabContent = props => {
         section =>
           section.component && (
             <PropsRoute
+              dropDownData={props.dropDownData}
               key={shortid.generate()}
               path={formPath(props.code, section.path)}
               component={section.component}

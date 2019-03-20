@@ -1,5 +1,6 @@
 /* base */
 import React from 'react';
+import { matchPath } from 'react-router';
 import { withRouter } from 'react-router-dom';
 
 /* utils */
@@ -11,38 +12,28 @@ import { formatUsersTabData, formatTeamsTabData } from 'utils/dashboardUtils';
 
 /* consts */
 import tabs from '__consts__/DashboardTabsConsts';
+import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
 
 class DashboardMediator extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    users: [],
+    teams: [],
+    sort: 'name:1',
+    searchKeyword: '',
+    isSortByOpen: false
+  };
 
-    this.state = {
-      users: [],
-      teams: [],
-      sort: 'name:1',
-      searchKeyword: '',
-      isSortByOpen: false
-    };
-
-    this.setUsers = this.setUsers.bind(this);
-    this.reloadData = this.reloadData.bind(this);
-    this.changeSortBy = this.changeSortBy.bind(this);
-    this.setWrapperRef = this.setWrapperRef.bind(this);
-    this.setIsSortByOpen = this.setIsSortByOpen.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
-    this.changeSearchKeyword = this.changeSearchKeyword.bind(this);
-  }
-
-  componentDidMount() {
+  componentDidMount = () => {
     this.reloadData();
+    /* todo: not sure if this is the best way to handle this, see if it can be refactored */
     document.addEventListener('mousedown', this.handleClickOutside);
-  }
+  };
 
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
   }
 
-  getAllUsers() {
+  getAllUsers = () => {
     this.props.auth0Client.getAllUsers(
       this.setUsers,
       this.state.page,
@@ -51,25 +42,25 @@ class DashboardMediator extends React.Component {
         ? ` AND name:${this.state.searchKeyword}*`
         : ''
     );
-  }
+  };
 
-  setUsers(data) {
+  setUsers = data => {
     this.setState({
       users: formatUsersTabData(data)
     });
-  }
+  };
 
-  setWrapperRef(node) {
+  setWrapperRef = node => {
     this.wrapperRef = node;
-  }
+  };
 
-  setIsSortByOpen() {
+  setIsSortByOpen = () => {
     this.setState(prevState => ({
       isSortByOpen: !prevState.isSortByOpen
     }));
-  }
+  };
 
-  changeSortBy(e) {
+  changeSortBy = e => {
     this.setState(
       {
         sort: e.target.id
@@ -78,15 +69,15 @@ class DashboardMediator extends React.Component {
         this.reloadData('sort');
       }
     );
-  }
+  };
 
-  handleClickOutside(event) {
+  handleClickOutside = event => {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.setState({ isSortByOpen: false });
     }
-  }
+  };
 
-  changeSearchKeyword(e) {
+  changeSearchKeyword = e => {
     this.setState(
       {
         searchKeyword: e.target.value
@@ -95,9 +86,9 @@ class DashboardMediator extends React.Component {
         this.reloadData();
       }
     );
-  }
+  };
 
-  reloadData(typeOfChange) {
+  reloadData = typeOfChange => {
     if (typeOfChange === 'sort' && this.props.match.params.tab === 'users') {
       this.getAllUsers();
     }
@@ -105,19 +96,19 @@ class DashboardMediator extends React.Component {
       this.getAllUsers();
       this.props.auth0Client.getUserGroups(this, 'teams');
     }
-  }
+  };
 
   render() {
     return (
       <DashboardModule
-        tabs={tabs}
+        // tabs={tabs}
         sort={this.state.sort}
         users={this.state.users}
         changeSortBy={this.changeSortBy}
         setWrapperRef={this.setWrapperRef}
         setIsSortByOpen={this.setIsSortByOpen}
         isSortByOpen={this.state.isSortByOpen}
-        activeTab={this.props.match.params.tab}
+        // activeTab={this.props.match.params.tab}
         searchKeyword={this.state.searchKeyword}
         changeSearchKeyword={this.changeSearchKeyword}
         teams={formatTeamsTabData(
@@ -125,6 +116,7 @@ class DashboardMediator extends React.Component {
           this.state.sort,
           this.state.searchKeyword
         )}
+        navItems={data(this.state.users, this.state.teams)}
         greetingName={get(this.props.auth0Client.getProfile(), 'nickname', '')}
       />
     );

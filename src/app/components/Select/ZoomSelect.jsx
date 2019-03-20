@@ -91,7 +91,7 @@ class ZoomSelect extends React.Component {
         //  we uncheck it
         this.setState({ allSelected: false });
     }
-  
+
     if (!isEqual(this.props.data, prevProps.data) && this.props.data) {
       if (this.props.data.length > 0) {
         // this is where we'll add extra 'categorization' items

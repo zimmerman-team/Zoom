@@ -52,8 +52,8 @@ const ComponentBase = styled(NavLink)`
 
 const propTypes = {
   label: PropTypes.string,
-  path: PropTypes.string,
-  count: PropTypes.number
+  path: PropTypes.string
+  // count: PropTypes.string
 };
 const defaultProps = {
   label: 'empty',

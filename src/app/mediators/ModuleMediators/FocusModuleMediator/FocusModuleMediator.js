@@ -5,10 +5,9 @@ import {
   formatCountryCenterData,
   formatCountryLayerData,
   formatCountryParam,
-  formatYearParam,
   updatePercentiles
 } from 'mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator.utils';
-
+import { formatYearParam } from 'utils/genericUtils';
 import PropTypes from 'prop-types';
 import { initialState } from 'mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator.consts';
 import FocusModule from 'modules/focus/FocusModule';
@@ -330,7 +329,6 @@ class FocusModuleMediator extends Component {
         selectedRegionVal={this.state.selectedRegionVal}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
-        defaultYear={this.state.defaultYear}
         yearPeriod={this.state.yearPeriod}
       />
     );

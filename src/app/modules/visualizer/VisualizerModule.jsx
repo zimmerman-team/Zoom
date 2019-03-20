@@ -55,7 +55,7 @@ class BuilderModule extends Component {
     return (
       <Router>
         <ModuleBase>
-          <VizSidebar />
+          <VizSidebar dropDownData={this.props.dropDownData} />
           <VizContainer />
         </ModuleBase>
       </Router>

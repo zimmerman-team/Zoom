@@ -49,3 +49,22 @@ export function storeChartDataDone(data) {
     data
   };
 }
+
+// basically used to store the currently used panes data in redux
+// (mainly the selections for dropdowns n stuff)
+export const STORE_PANE_DATA_REQUEST = 'STORE_PANE_DATA_REQUEST';
+export const STORE_PANE_DATA_DONE = 'STORE_PANE_DATA_DONE';
+
+export function storePaneDataRequest(data) {
+  return {
+    type: STORE_PANE_DATA_REQUEST,
+    data
+  };
+}
+
+export function storePaneDataDone(data) {
+  return {
+    type: STORE_PANE_DATA_DONE,
+    data
+  };
+}

@@ -5,10 +5,10 @@ import {
   formatCountryCenterData,
   formatCountryLayerData,
   formatCountryParam,
-  formatYearParam,
   updatePercentiles,
   formatLongLatData
 } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
+import { formatYearParam } from 'utils/genericUtils';
 import HomeModule from 'modules/home/HomeModule';
 import PropTypes from 'prop-types';
 import { initialState } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.consts';
@@ -403,7 +403,6 @@ class HomeModuleMediator extends Component {
         selectedRegionVal={this.state.selectedRegionVal}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
-        defaultYear={this.state.defaultYear}
         yearPeriod={this.state.yearPeriod}
       />
     );

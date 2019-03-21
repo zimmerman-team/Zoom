@@ -35,6 +35,12 @@ const markerInfo = hoverMarkerInfo => {
     let countryName = hoverMarkerInfo.name;
     countryName = countryName.charAt(0).toUpperCase() + countryName.slice(1);
 
+    let nrFormat = ' ';
+
+    if (hoverMarkerInfo.format === 'percentage') nrFormat = ' %';
+    else if (hoverMarkerInfo.format !== 'number' && hoverMarkerInfo.format)
+      nrFormat = ' '.concat(hoverMarkerInfo.format);
+
     return (
       <ToolTipContainer
         tipSize={5}
@@ -46,7 +52,10 @@ const markerInfo = hoverMarkerInfo => {
         <ToolTipTitle>{countryName}</ToolTipTitle>
         <ValueContainer>
           <ToolTipLabel>{hoverMarkerInfo.indName}: </ToolTipLabel>
-          <ToolTipText>{formatNumber(hoverMarkerInfo.value)}</ToolTipText>
+          <ToolTipText>
+            {formatNumber(hoverMarkerInfo.value)}
+            {nrFormat}
+          </ToolTipText>
         </ValueContainer>
       </ToolTipContainer>
     );

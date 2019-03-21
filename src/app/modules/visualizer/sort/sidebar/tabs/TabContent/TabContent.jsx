@@ -42,7 +42,7 @@ const TabContent = props => {
         section =>
           section.component && (
             <PropsRoute
-              key={shortid.generate()}
+              key={section.path}
               path={formPath(props.code, section.path)}
               component={section.component}
               code={props.code}

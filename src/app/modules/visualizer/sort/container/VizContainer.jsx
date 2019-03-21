@@ -1,5 +1,5 @@
 /* base */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 import { Route, withRouter } from 'react-router';
@@ -35,50 +35,56 @@ const PropsRoute = ({ component, ...rest }) => {
 };
 
 const propTypes = {
-  mode: PropTypes.string,
-  type: PropTypes.string
+  type: PropTypes.string,
+  mode: PropTypes.bool
 };
 const defaultProps = {
-  type: 'geomap'
+  type: 'geomap',
+  mode: location.pathname.includes('preview')
 };
 
-const VizContainer = props => {
-  let preview;
+class VizContainer extends React.Component {
+  state = {
+    preview: this.props.mode
+  };
 
-  props.history.listen((location, action) => {
-    preview = location.pathname.includes('preview');
-    console.log('action', action);
-    console.log('pre', preview);
-  });
+  componentDidMount() {
+    this.props.history.listen((location, action) => {
+      const mode = location.pathname.includes('preview');
+      this.setState({ preview: mode });
+    });
+  }
 
-  return (
-    <ComponentBase mode={preview ? 'initial' : 'center'}>
-      <PreviewTextContainer mode={preview ? 'flex' : 'none'}>
-        <ContextPreview desc={props.chartData.desc} />
-      </PreviewTextContainer>
+  render() {
+    return (
+      <ComponentBase mode={this.state.preview ? 'initial' : 'center'}>
+        <PreviewTextContainer mode={this.state.preview ? 'flex' : 'none'}>
+          <ContextPreview desc={this.props.chartData.desc} />
+        </PreviewTextContainer>
 
-      <React.Fragment>
-        <PropsRoute
-          path="/visualizer/geomap/:code/:tab"
-          component={GeomapFragment}
-          mode={preview}
-        />
+        <React.Fragment>
+          <PropsRoute
+            path="/visualizer/geomap/:code/:tab"
+            component={GeomapFragment}
+            mode={this.state.preview}
+          />
 
-        <PropsRoute
-          path="/visualizer/linechart/:code/:tab"
-          component={LinechartFragment}
-          mode={preview}
-        />
+          <PropsRoute
+            path="/visualizer/linechart/:code/:tab"
+            component={LinechartFragment}
+            mode={this.state.preview}
+          />
 
-        <PropsRoute
-          path="/visualizer/barchart/:code/:tab"
-          component={BarchartFragment}
-          mode={preview}
-        />
-      </React.Fragment>
-    </ComponentBase>
-  );
-};
+          <PropsRoute
+            path="/visualizer/barchart/:code/:tab"
+            component={BarchartFragment}
+            mode={this.state.preview}
+          />
+        </React.Fragment>
+      </ComponentBase>
+    );
+  }
+}
 
 const mapStateToProps = state => {
   return {

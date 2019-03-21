@@ -50,8 +50,9 @@ const VizContainer = props => {
         <Box height={preview ? '400px' : '100%'}>
           <GeoMap
             indicatorData={props.indicators}
-            selectedYears={props.yearPeriod}
-            selectYear={props.selectYear}
+            // selectedYears={props.yearPeriod}
+            // selectYear={props.selectYear}
+            disableYear
             latitude={52.1326}
             longitude={5.2913}
             zoom={7}

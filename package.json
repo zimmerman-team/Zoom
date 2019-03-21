@@ -77,7 +77,7 @@
     "loki:test": "loki test",
     "loki:aprove": "loki approve",
     "lint:css": "stylelint './src/**/*.jsx'",
-    "start": "nodemon server/server & node scripts/start.js",
+    "start": "node server/server & node scripts/start.js",
     "start-server": "node server/server",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",

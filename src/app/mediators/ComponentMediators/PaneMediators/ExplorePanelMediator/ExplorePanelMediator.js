@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 /* helpers */
 import sortBy from 'lodash/sortBy';
-import findIndex from 'lodash/findIndex';
+// import findIndex from 'lodash/findIndex';
 
 const propTypes = {
   dropDownData: PropTypes.shape({
@@ -46,9 +46,9 @@ class ExplorePanelMediator extends React.Component {
     };
   }
 
-  onlyUnique(value, index, self) {
-    return findIndex(self, ['label', value.label]) === index;
-  }
+  // onlyUnique(value, index, self) {
+  //   return findIndex(self, ['label', value.label]) === index;
+  // }
 
   componentDidMount() {
     let allIndNames = this.props.dropDownData.allIndicators.edges.map(
@@ -60,7 +60,7 @@ class ExplorePanelMediator extends React.Component {
     // We make the array only from unique indicators
     // cause we receive several indicators with the same names
     // most likely because of data points stuff
-    allIndNames = allIndNames.filter(this.onlyUnique);
+    // allIndNames = allIndNames.filter(this.onlyUnique);
 
     allIndNames = sortBy(allIndNames, ['label']);
 

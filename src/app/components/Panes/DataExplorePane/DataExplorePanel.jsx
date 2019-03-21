@@ -122,7 +122,7 @@ class DataExplorePane extends React.Component {
     let active = false;
     let icon = '';
     switch (label) {
-      case 'DataSource':
+      case 'Datasource':
         // checks if indicators is active
         if (this.state.activeIndex.indexOf(0) !== -1) {
           active = true;
@@ -166,7 +166,7 @@ class DataExplorePane extends React.Component {
             this.setState({ activeIndex: newActiveIndex })
           }
         >
-          <AccordionSection header={this.renderHeader('DataSource')}>
+          <AccordionSection header={this.renderHeader('Datasource')}>
             <FilterContainer>
               <DropDownCont>
                 <ZoomSelect

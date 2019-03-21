@@ -48,7 +48,7 @@ export function formatCountryLayerData(indicators, indName) {
       });
     } else {
       const changeFeat = countryLayers.features[existLayerIndex];
-      changeFeat.properties.value += indicator.value;
+      changeFeat.properties.value += Math.round(indicator.value);
     }
   });
 
@@ -106,7 +106,8 @@ export function formatCountryCenterData(indicators, indName) {
         });
       } else
         countryCenteredData[existCountryIndex].value =
-          countryCenteredData[existCountryIndex].value + indicator.value;
+          countryCenteredData[existCountryIndex].value +
+          Math.round(indicator.value);
     }
   });
 
@@ -180,7 +181,7 @@ export function formatLongLatData(indicators, indName) {
           value: Math.round(indicator.value)
         });
       } else {
-        longLatData[existPointIndex].value += indicator.value;
+        longLatData[existPointIndex].value += Math.round(indicator.value);
       }
     }
   });

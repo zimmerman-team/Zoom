@@ -42,12 +42,15 @@ const propTypes = {
   categorise: PropTypes.bool,
   search: PropTypes.bool,
   selectAll: PropTypes.bool,
+  defaultAll: PropTypes.bool,
   disabledValues: PropTypes.arrayOf(PropTypes.string),
   dropDownWidth: PropTypes.number
 };
 
 const defaultProps = {
   categorise: false,
+  defaultAll: true,
+  placeHolder: 'Has no indicators',
   placeHolderText: 'Has no indicators',
   placeHolderNumber: '',
   reset: undefined,
@@ -75,24 +78,24 @@ class ZoomSelect extends React.Component {
     this.renderDropDownItem = this.renderDropDownItem.bind(this);
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.allCheck = this.allCheck.bind(this);
   }
 
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClickOutside);
+
+    // so we need the checkbox to be by default selected if the component mounts
+    // with stuff already selected
+    if (this.props.arraySelected) {
+      this.allCheck();
+    }
   }
 
   componentDidUpdate(prevProps) {
     // so here we set up the logic for all checkbox to be updated
     // depending on the select option array
     if (!isEqual(this.props.arraySelected, prevProps.arraySelected)) {
-      // so if an option is selected and 'selected all' is not checked
-      // we check it, as it is the functionality shown in the VD
-      if (this.props.arraySelected.length > 0 && !this.state.allSelected)
-        this.setState({ allSelected: true });
-      else if (this.props.arraySelected.length === 0 && this.state.allSelected)
-        //  and if the selected array becomes 0 and the all selected was checked
-        //  we uncheck it
-        this.setState({ allSelected: false });
+      this.allCheck();
     }
 
     if (!isEqual(this.props.data, prevProps.data) && this.props.data) {
@@ -138,7 +141,11 @@ class ZoomSelect extends React.Component {
         this.setState({ initialSelect: true });
       }
 
-      if (this.props.selectAll && this.state.initialSelect) {
+      if (
+        this.props.selectAll &&
+        this.state.initialSelect &&
+        this.props.defaultAll
+      ) {
         this.props.selectVal(this.props.data, true);
         this.setState({ initialSelect: false });
       }
@@ -183,6 +190,17 @@ class ZoomSelect extends React.Component {
   handleItemClick(item) {
     if (!this.props.multiple) this.setState({ open: false });
     this.props.selectVal(item);
+  }
+
+  allCheck() {
+    // so if an option is selected and 'selected all' is not checked
+    // we check it, as it is the functionality shown in the VD
+    if (this.props.arraySelected.length > 0)
+      this.setState({ allSelected: true });
+    else if (this.props.arraySelected.length === 0)
+      //  and if the selected array becomes 0 and the all selected was checked
+      //  we uncheck it
+      this.setState({ allSelected: false });
   }
 
   renderDropDownItem(item, index) {

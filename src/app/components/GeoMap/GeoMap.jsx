@@ -37,10 +37,12 @@ const propTypes = {
   zoom: PropTypes.number,
   indicatorData: PropTypes.array,
   selectedYears: PropTypes.array,
+  disableYear: PropTypes.bool,
   selectYear: PropTypes.func
 };
 
 const defaultProps = {
+  disableYear: false,
   // just show worldview when no lat long is specified
   latitude: 15,
   longitude: 0,
@@ -235,7 +237,13 @@ export class GeoMap extends Component {
           />
         </ControlsContainer>
 
-        <YearContainer>
+        <YearContainer
+          style={
+            this.props.disableYear
+              ? { pointerEvents: 'none', opacity: '0.4' }
+              : {}
+          }
+        >
           <CustomYearSelector
             selectedYears={this.props.selectedYears}
             selectYear={this.props.selectYear}

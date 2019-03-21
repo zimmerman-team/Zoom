@@ -30,9 +30,6 @@ const defaultProps = {
 };
 
 const AidsEpidemic = props => {
-  // console.log('ind', props.indicators);
-  console.log('data', props.aidsLineChartData);
-
   return (
     <Element name="Aids epidemic">
       <ModuleFragment

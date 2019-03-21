@@ -6,11 +6,11 @@ import {
   formatCountryCenterData,
   formatCountryLayerData,
   formatCountryParam,
+  formatLongLatData,
   updatePercentiles
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 import PropTypes from 'prop-types';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
-import { formatLongLatData } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
 import { connect } from 'react-redux';
 
 /* consts */

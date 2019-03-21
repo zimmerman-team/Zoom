@@ -15,6 +15,12 @@ export const data = [
     env: 'production'
   },
   {
+    label: 'Home',
+    path: `${pathPrefix}home`,
+    icon: <IconHome />,
+    env: 'development'
+  },
+  {
     label: 'Country Detail',
     path: `${pathPrefix}country/ke`,
     icon: <IconCharts />,
@@ -34,13 +40,13 @@ export const data = [
   },
   {
     label: 'NL Focus',
-    path: `${pathPrefix}focus/nl`,
+    path: `${pathPrefix}focus/NL`,
     icon: <IconCharts />,
     env: 'development'
   },
   {
     label: 'KEN Focus',
-    path: `${pathPrefix}focus/kenya`,
+    path: `${pathPrefix}focus/KE`,
     icon: <IconCharts />,
     env: 'development'
   },
@@ -73,5 +79,11 @@ export const data = [
     path: `${pathPrefix}about`,
     icon: <IconAbout />,
     env: 'production'
+  },
+  {
+    label: 'About ZOOM',
+    path: `${pathPrefix}about`,
+    icon: <IconAbout />,
+    env: 'development'
   }
 ];

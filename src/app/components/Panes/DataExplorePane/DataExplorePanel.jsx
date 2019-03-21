@@ -2,6 +2,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { withStyles } from '@material-ui/core/styles';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 /* icons */
 import IconRedIndicators from 'assets/icons/IconRedIndicators';
 import IconRedLocation from 'assets/icons/IconRedLocation';
@@ -118,7 +125,7 @@ class DataExplorePane extends React.Component {
     activeIndex: []
   };
 
-  renderHeader(label) {
+  renderHeader = label => {
     let active = false;
     let icon = '';
     switch (label) {
@@ -153,12 +160,33 @@ class DataExplorePane extends React.Component {
     }
 
     return <AccordionSelection icon={icon} label={label} active={active} />;
-  }
+  };
 
   render() {
     // console.log('this.props.indNames', this.props.indNames);
     return (
       <ComponentBase>
+        <ExpansionPanel defaultExpanded>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            {this.renderHeader('DataSource')}
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <FilterContainer>
+              <DropDownCont>
+                <ZoomSelect
+                  defaultAll={this.props.locationSelected}
+                  selectAll
+                  // reset={() => this.props.selectDataSource('reset')}
+                  multiple
+                  placeHolderText={'Select datasource'}
+                  data={this.props.allFileSources}
+                  arraySelected={this.props.selectedSources}
+                  selectVal={this.props.selectDataSource}
+                />
+              </DropDownCont>
+            </FilterContainer>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
         <PanelAccordion
           animate
           multiple

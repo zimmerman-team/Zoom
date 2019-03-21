@@ -41,11 +41,13 @@ const propTypes = {
   categorise: PropTypes.bool,
   search: PropTypes.bool,
   selectAll: PropTypes.bool,
+  defaultAll: PropTypes.bool,
   disabledValues: PropTypes.arrayOf(PropTypes.string),
   dropDownWidth: PropTypes.number
 };
 const defaultProps = {
   categorise: false,
+  defaultAll: true,
   placeHolder: 'Has no indicators',
   reset: undefined,
   search: true,
@@ -65,7 +67,7 @@ class ZoomSelect extends React.Component {
       // so we'll basically use this variable
       // to select all choices by default when data with
       // select all functionality comes in
-      initialSelect: props.initialSelect ? props.initialSelect : true,
+      initialSelect: true,
       searchWord: ''
     };
 
@@ -86,7 +88,6 @@ class ZoomSelect extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('initialSelect', this.state.initialSelect);
     // so here we set up the logic for all checkbox to be updated
     // depending on the select option array
     if (!isEqual(this.props.arraySelected, prevProps.arraySelected)) {
@@ -136,7 +137,12 @@ class ZoomSelect extends React.Component {
         this.setState({ initialSelect: true });
       }
 
-      if (this.props.selectAll && this.state.initialSelect) {
+      if (
+        this.props.selectAll &&
+        this.state.initialSelect &&
+        this.props.defaultAll
+      ) {
+        console.log('ALL GETS SELECTED BY DEFAULT', this.props.defaultAll);
         this.props.selectVal(this.props.data, true);
         this.setState({ initialSelect: false });
       }

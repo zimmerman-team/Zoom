@@ -142,7 +142,6 @@ class ZoomSelect extends React.Component {
         this.state.initialSelect &&
         this.props.defaultAll
       ) {
-        console.log('ALL GETS SELECTED BY DEFAULT', this.props.defaultAll);
         this.props.selectVal(this.props.data, true);
         this.setState({ initialSelect: false });
       }

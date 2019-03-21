@@ -134,6 +134,7 @@ class App extends React.Component {
               ...ExplorePanelMediator_dropDownData
               ...MetaDataMediator_dropDownData
               ...CorrectErrorsMediator_fileCorrection
+              ...FocusModuleMediator_indicatorAggregations
             }
           `}
           variables={{}}

@@ -1,42 +1,31 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
-/* utils */
-import map from 'lodash/map';
+import shortid from 'shortid';
 
 /* components */
-import {
-  Container,
-  GridListItem,
-  GridListItemTitle,
-  GridListItemRow,
-  GridListItemRowLabel,
-  GridListItemRowValue
-} from './GridList.styles';
+import { Container } from './GridList.styles';
+import GridItem from './components/GridItem/GridItem';
 
 const propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({}))
-};
-const defaultProps = {
-  items: []
+  items: PropTypes.arrayOf(PropTypes.shape({})),
+  withoptions: PropTypes.bool
 };
 
-const GridList = ({ items }) => (
-  <Container cellHeight={153} cols={3} spacing={40}>
+const defaultProps = {
+  items: [],
+  withoptions: true
+};
+
+const GridList = ({ items, withoptions }) => (
+  <Container cellHeight={153} cols={3}>
     {items.map(item => (
-      // todo: evaluate if ListItems should be own component
-      <GridListItem key={item.id}>
-        <div>
-          <GridListItemTitle>{item.title}</GridListItemTitle>
-          {map(item.info, (val, key) => (
-            <GridListItemRow key={key}>
-              <GridListItemRowLabel>{key}:</GridListItemRowLabel>
-              <GridListItemRowValue>{val}</GridListItemRowValue>
-            </GridListItemRow>
-          ))}
-        </div>
-      </GridListItem>
+      <GridItem
+        withoptions={withoptions}
+        key={shortid.generate()}
+        title={item.title}
+        values={item.info}
+      />
     ))}
   </Container>
 );

@@ -13,6 +13,7 @@ import {
 
 /* components */
 import CustomCheckBox from 'components/CustomCheckBox/CustomCheckBox';
+import Checkbox from 'components/Checkbox/CheckBox';
 
 // so yeah here the columns will need to be formatted according to the data
 export function formatColumns(
@@ -31,15 +32,12 @@ export function formatColumns(
       property: 'id',
       header: (
         <HeaderCheckBox key={0}>
-          <CustomCheckBox
-            key={0}
-            onChange={checked => checkRows('all', checked)}
-          />
+          <Checkbox key={0} onChange={checked => checkRows('all', checked)} />
         </HeaderCheckBox>
       ),
       render: val => (
         <CheckBox>
-          <CustomCheckBox
+          <Checkbox
             key={val.index}
             checked={val.checked}
             onChange={() => checkRows(val.index)}
@@ -68,7 +66,7 @@ export function formatColumns(
               <ErrorColHeader key={`header-${index}`}>
                 <HeaderName>{key}</HeaderName>
                 <IgnoreHeaderCheckBox key={`ignore-header-checkbox-${index}`}>
-                  <CustomCheckBox
+                  <Checkbox
                     key={`checkbox-${index}`}
                     checked={ignoredErrors.indexOf(key) !== -1}
                     onChange={() => ignoreErrors(key)}

@@ -157,12 +157,9 @@ class MetaData extends React.Component {
           <TextField
             error={this.validateField('title')}
             defaultValue={this.props.data.title}
-            placeholder={undefined}
-            label="Title data set*"
-            InputLabelProps={{
-              shrink: true
-            }}
+            label="Title data set"
             onChange={e => this.props.simpleChange(e.target.value, 'title')}
+            required
           />
         </FieldContainer>
 
@@ -172,24 +169,17 @@ class MetaData extends React.Component {
             multiline
             defaultValue={this.props.data.desc}
             error={this.validateField('desc')}
-            placeholder={undefined}
-            label="Description*"
-            InputLabelProps={{
-              shrink: true
-            }}
+            label="Description"
             onChange={e => this.props.simpleChange(e.target.value, 'desc')}
+            required
           />
         </FieldContainer>
 
         {/*////////////////////////////////////////////////////////////////////*/}
         <FieldContainer>
           <ChipInput
-            placeholder={undefined}
             value={this.props.data.tags}
             label="Tags"
-            InputLabelProps={{
-              shrink: true
-            }}
             onAdd={chip => this.props.onChipAdd(chip)}
             onDelete={(chip, index) => this.props.onChipDelete(index)}
           />
@@ -223,12 +213,8 @@ class MetaData extends React.Component {
           <DataSourceTextCont>
             <TextField
               error={this.validateField('dataSource')}
-              placeholder={undefined}
               defaultValue={this.props.data.sourceText}
-              label="Create new name for  data source"
-              InputLabelProps={{
-                shrink: true
-              }}
+              label="Create new name for data source"
               onChange={e =>
                 this.props.otherDropdownText(
                   e.target.value,
@@ -349,12 +335,8 @@ class MetaData extends React.Component {
             onChange={value => this.props.checkBoxChange(value, 'q3', 'q3Text')}
           />
           <TextField
-            placeholder={undefined}
             label="If other, explain"
             defaultValue={this.props.data.q3Text}
-            InputLabelProps={{
-              shrink: true
-            }}
             onChange={e =>
               this.props.otherCheckBoxText(e.target.value, 'q3', 'q3Text')
             }
@@ -383,12 +365,9 @@ class MetaData extends React.Component {
           <OrLabel> or </OrLabel>
           <DataSourceTextCont>
             <TextField
-              placeholder={undefined}
               label="Enter a number"
-              InputLabelProps={{
-                shrink: true
-              }}
               defaultValue={this.props.data.q4Text}
+              //
               onChange={e =>
                 this.props.otherDropdownText(
                   e.target.value,
@@ -427,12 +406,8 @@ class MetaData extends React.Component {
             }
           />
           <TextField
-            placeholder={undefined}
             label="If other, explain"
             defaultValue={this.props.data.q51Text}
-            InputLabelProps={{
-              shrink: true
-            }}
             onChange={e =>
               this.props.otherCheckBoxText(e.target.value, 'q51', 'q51Text')
             }

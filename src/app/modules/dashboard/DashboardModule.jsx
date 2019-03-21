@@ -5,20 +5,11 @@ import PropTypes from 'prop-types';
 /* components */
 import {
   ModuleContainer,
-  PageHeading,
-  HeaderIcon,
-  HeaderGreeting,
-  SearchBox,
-  ViewContainer,
-  NoItems,
-  Header,
-  Section
+  SearchBox
 } from 'modules/dashboard/DashboardModule.styles';
-import SvgIconUser from 'assets/icons/IconUser';
 import SvgIconSearch from 'assets/icons/IconSearch';
-import TabContainer from './fragments/TabContainer/TabContainer';
-import UsersTabView from './fragments/UsersTabView/UsersTabView';
-import TeamsTabView from './fragments/TeamsTabView/TeamsTabView';
+import DashboardContent from 'modules/dashboard/fragments/DashboardContent/DashboardContent';
+import DashboardHeader from './fragments/DashboardHeader/DashboardHeader';
 
 const propTypes = {
   tabs: PropTypes.arrayOf(
@@ -53,53 +44,53 @@ const defaultProps = {
   teams: []
 };
 
-const getTabView = (
-  users,
-  teams,
-  tabs,
-  tab,
-  isSortByOpen,
-  setIsSortByOpen,
-  setWrapperRef,
-  sort,
-  changeSortBy
-) => {
-  switch (tab) {
-    case tabs[0].key:
-      return <NoItems>No items in {tabs[0].label}</NoItems>;
-    case tabs[1].key:
-      return <NoItems>No items in {tabs[1].label}</NoItems>;
-    case tabs[2].key:
-      return <NoItems>No items in {tabs[2].label}</NoItems>;
-    case tabs[3].key:
-      return (
-        // todo: UsersTabView and TeamsTabView are very similar in code, maybe it's possible to create a more generic component?
-        <UsersTabView
-          sort={sort}
-          users={users}
-          changeSortBy={changeSortBy}
-          isSortByOpen={isSortByOpen}
-          setWrapperRef={setWrapperRef}
-          setIsSortByOpen={setIsSortByOpen}
-        />
-      );
-    case tabs[4].key:
-      return (
-        <TeamsTabView
-          sort={sort}
-          teams={teams}
-          changeSortBy={changeSortBy}
-          isSortByOpen={isSortByOpen}
-          setWrapperRef={setWrapperRef}
-          setIsSortByOpen={setIsSortByOpen}
-        />
-      );
-    case tabs[5].key:
-      return <NoItems>No items in {tabs[5].label}</NoItems>;
-    default:
-      return <NoItems>No items</NoItems>;
-  }
-};
+// const getTabView = (
+//   users,
+//   teams,
+//   tabs,
+//   tab,
+//   isSortByOpen,
+//   setIsSortByOpen,
+//   setWrapperRef,
+//   sort,
+//   changeSortBy
+// ) => {
+//   switch (tab) {
+//     case tabs[0].key:
+//       return <NoItems>No items in {tabs[0].label}</NoItems>;
+//     case tabs[1].key:
+//       return <NoItems>No items in {tabs[1].label}</NoItems>;
+//     case tabs[2].key:
+//       return <NoItems>No items in {tabs[2].label}</NoItems>;
+//     case tabs[3].key:
+//       return (
+//         // todo: UsersTabView and TeamsTabView are very similar in code, maybe it's possible to create a more generic component?
+//         <UsersTabView
+//           sort={sort}
+//           users={users}
+//           changeSortBy={changeSortBy}
+//           isSortByOpen={isSortByOpen}
+//           setWrapperRef={setWrapperRef}
+//           setIsSortByOpen={setIsSortByOpen}
+//         />
+//       );
+//     case tabs[4].key:
+//       return (
+//         <TeamsTabView
+//           sort={sort}
+//           teams={teams}
+//           changeSortBy={changeSortBy}
+//           isSortByOpen={isSortByOpen}
+//           setWrapperRef={setWrapperRef}
+//           setIsSortByOpen={setIsSortByOpen}
+//         />
+//       );
+//     case tabs[5].key:
+//       return <NoItems>No items in {tabs[5].label}</NoItems>;
+//     default:
+//       return <NoItems>No items</NoItems>;
+//   }
+// };
 
 const DashboardModule = ({
   tabs,
@@ -112,29 +103,27 @@ const DashboardModule = ({
   changeSortBy,
   setWrapperRef,
   setIsSortByOpen,
-  changeSearchKeyword
+  changeSearchKeyword,
+  navItems
 }) => (
   <ModuleContainer>
-    <Header>
-      {/* fixme: make re-usable header component and relocate fontsize to theme file */}
-      <PageHeading>Zoom dashboard</PageHeading>
-      {/* todo: is this optimal? maybe make a re-usable component for this */}
-      <HeaderIcon>
-        <SvgIconUser />
-      </HeaderIcon>
-      <HeaderGreeting>Welcome back {greetingName}</HeaderGreeting>
-    </Header>
+    <DashboardHeader userName={greetingName} />
+    <SearchBox onChange={changeSearchKeyword} placeholder={<SvgIconSearch />} />
 
-    <Section>
-      {/* fixme: make re-usable component and use material-ui instead of grommet */}
-      <SearchBox
-        onChange={changeSearchKeyword}
-        placeholder={<SvgIconSearch />}
-      />
-    </Section>
+    {/*todo: sorting logic must be refactored/fixed*/}
+    <DashboardContent
+      users={users}
+      teams={teams}
+      isSortByOpen={isSortByOpen}
+      changeSortBy={changeSortBy}
+      setWrapperRef={setWrapperRef}
+      setIsSortByOpen={setIsSortByOpen}
+      activeTab={activeTab}
+      sort={sort}
+      navItems={navItems}
+    />
 
-    <Section>
-      <TabContainer
+    {/*<TabContainer
         tabs={tabs}
         tabCounts={{
           charts: 0,
@@ -146,11 +135,8 @@ const DashboardModule = ({
         }}
         activeTab={activeTab}
       />
-    </Section>
-
-    <Section>
       <ViewContainer>
-        {/* todo: evaluate if we can handle this in a simpler way by using react router */}
+         todo: evaluate if we can handle this in a simpler way by using react router
         {getTabView(
           users,
           teams,
@@ -162,8 +148,7 @@ const DashboardModule = ({
           sort,
           changeSortBy
         )}
-      </ViewContainer>
-    </Section>
+      </ViewContainer>*/}
   </ModuleContainer>
 );
 

@@ -122,23 +122,30 @@ class DataExplorePane extends React.Component {
     let active = false;
     let icon = '';
     switch (label) {
+      case 'DataSource':
+        // checks if indicators is active
+        if (this.state.activeIndex.indexOf(0) !== -1) {
+          active = true;
+          icon = <IconBlueIndicators />;
+        } else icon = <IconRedIndicators />;
+        break;
       case 'Geo location':
         // checks if geolocations is active
-        if (this.state.activeIndex.indexOf(0) !== -1) {
+        if (this.state.activeIndex.indexOf(1) !== -1) {
           active = true;
           icon = <IconBlueLocation />;
         } else icon = <IconRedLocation />;
         break;
       case 'Time period':
         // checks if time period is active
-        if (this.state.activeIndex.indexOf(1) !== -1) {
+        if (this.state.activeIndex.indexOf(2) !== -1) {
           active = true;
           icon = <IconBluePeriod />;
         } else icon = <IconRedPeriod />;
         break;
       case 'Indicators':
         // checks if indicators is active
-        if (this.state.activeIndex.indexOf(2) !== -1) {
+        if (this.state.activeIndex.indexOf(3) !== -1) {
           active = true;
           icon = <IconBlueIndicators />;
         } else icon = <IconRedIndicators />;
@@ -149,6 +156,7 @@ class DataExplorePane extends React.Component {
   }
 
   render() {
+    // console.log('this.props.indNames', this.props.indNames);
     return (
       <ComponentBase>
         <PanelAccordion
@@ -158,6 +166,22 @@ class DataExplorePane extends React.Component {
             this.setState({ activeIndex: newActiveIndex })
           }
         >
+          <AccordionSection header={this.renderHeader('DataSource')}>
+            <FilterContainer>
+              <DropDownCont>
+                <ZoomSelect
+                  defaultAll={this.props.locationSelected}
+                  selectAll
+                  // reset={() => this.props.selectDataSource('reset')}
+                  multiple
+                  placeHolderText={'Select datasource'}
+                  data={this.props.allFileSources}
+                  arraySelected={this.props.selectedSources}
+                  selectVal={this.props.selectDataSource}
+                />
+              </DropDownCont>
+            </FilterContainer>
+          </AccordionSection>
           <AccordionSection header={this.renderHeader('Geo location')}>
             <FilterContainer>
               <DropDownCont>

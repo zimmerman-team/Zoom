@@ -83,11 +83,17 @@ const propTypes = {
   selectedSubInd2: PropTypes.arrayOf(PropTypes.string),
   selectSubInd1: PropTypes.func,
   selectSubInd2: PropTypes.func,
+  subInd1AllSelected: PropTypes.bool,
+  subInd2AllSelected: PropTypes.bool,
+  locationSelected: PropTypes.bool,
   resetAll: PropTypes.func
 };
 const defaultProps = {
   selectedInd2: undefined,
   selectedInd1: undefined,
+  locationSelected: true,
+  subInd1AllSelected: true,
+  subInd2AllSelected: true,
   selectYear: undefined,
   indNames: [],
   countries: [],
@@ -156,6 +162,7 @@ class DataExplorePane extends React.Component {
             <FilterContainer>
               <DropDownCont>
                 <ZoomSelect
+                  defaultAll={this.props.locationSelected}
                   selectAll
                   multiple
                   placeHolderText="Select region"
@@ -168,6 +175,7 @@ class DataExplorePane extends React.Component {
               </DropDownCont>
               <DropDownCont>
                 <ZoomSelect
+                  defaultAll={this.props.locationSelected}
                   selectAll
                   reset={() => this.props.selectCountry('reset')}
                   multiple
@@ -203,6 +211,7 @@ class DataExplorePane extends React.Component {
               </DropDownCont>
               <DropDownCont>
                 <ZoomSelect
+                  defaultAll={this.props.subInd1AllSelected}
                   selectAll
                   categorise
                   placeHolderText="Select sub indicator"
@@ -227,6 +236,7 @@ class DataExplorePane extends React.Component {
               </DropDownCont>
               <DropDownCont>
                 <ZoomSelect
+                  defaultAll={this.props.subInd2AllSelected}
                   selectAll
                   categorise
                   placeHolderText="Select sub indicator"

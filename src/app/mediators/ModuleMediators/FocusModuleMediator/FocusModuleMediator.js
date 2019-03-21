@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
 import isEqual from 'lodash/isEqual';
+import sortBy from 'lodash/sortBy';
 import {
   formatCountryCenterData,
   formatCountryLayerData,
   formatCountryParam,
-  formatYearParam,
   updatePercentiles
 } from 'mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator.utils';
-
+import { formatYearParam } from 'utils/genericUtils';
 import PropTypes from 'prop-types';
 import { initialState } from 'mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator.consts';
 import FocusModule from 'modules/focus/FocusModule';
@@ -125,17 +125,23 @@ class FocusModuleMediator extends Component {
   }
 
   updateIndicators() {
-    const subIndicators1 = this.props.indicatorAggregations.subIndicators1.edges.map(
+    let subIndicators1 = this.props.indicatorAggregations.subIndicators1.edges.map(
       indicator => {
         return { label: indicator.node.name, value: indicator.node.name };
       }
     );
 
-    const subIndicators2 = this.props.indicatorAggregations.subIndicators2.edges.map(
+    // and we sort them
+    subIndicators1 = sortBy(subIndicators1, ['label']);
+
+    let subIndicators2 = this.props.indicatorAggregations.subIndicators2.edges.map(
       indicator => {
         return { label: indicator.node.name, value: indicator.node.name };
       }
     );
+
+    // and we sort them
+    subIndicators2 = sortBy(subIndicators2, ['label']);
 
     const countryLayerData = formatCountryLayerData(
       this.props.indicatorAggregations.indicators1
@@ -330,7 +336,6 @@ class FocusModuleMediator extends Component {
         selectedRegionVal={this.state.selectedRegionVal}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
-        defaultYear={this.state.defaultYear}
         yearPeriod={this.state.yearPeriod}
       />
     );

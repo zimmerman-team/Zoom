@@ -3,10 +3,15 @@ import * as actions from 'services/actions/general';
 
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
+import initialState from '__consts__/InitialChartDataConst';
 
 const initial = {
   open: paneTypes.none,
-  chartData: {},
+  chartData: { ...initialState },
+  paneData: {
+    subIndicators1: [],
+    subIndicators2: []
+  },
   stepzData: {}
 };
 
@@ -37,15 +42,29 @@ function stepData(state = initial, action) {
 function chartData(state = initial, action) {
   switch (action.type) {
     case actions.STORE_CHART_DATA_REQUEST:
-      return update(state, { chartData: { $set: {} } });
+      return update(state, { chartData: { $set: { ...state.chartData } } });
     case actions.STORE_CHART_DATA_DONE:
-      return update(state, { chartData: { $set: action.data } });
+      return update(state, {
+        chartData: { $set: { ...state.chartData, ...action.data } }
+      });
+    default:
+      return state;
+  }
+}
+
+function paneData(state = initial, action) {
+  switch (action.type) {
+    case actions.STORE_PANE_DATA_REQUEST:
+      return update(state, { paneData: { $set: {} } });
+    case actions.STORE_PANE_DATA_DONE:
+      return update(state, { paneData: { $set: action.data } });
     default:
       return state;
   }
 }
 
 const reducers = {
+  paneData,
   chartData,
   stepData,
   dataPaneOpen

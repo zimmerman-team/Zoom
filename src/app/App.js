@@ -127,6 +127,7 @@ class App extends React.Component {
           environment={modernEnvironment}
           query={graphql`
             query AppQuery {
+              ...VizPaneMediator_dropDownData
               ...HomeModuleMediator_indicatorAggregations
               ...VisualizerModuleMediator_indicatorAggregations
               ...CountryDetailMediator_indicatorAggregations

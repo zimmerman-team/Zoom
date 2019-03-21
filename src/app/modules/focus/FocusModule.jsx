@@ -43,10 +43,11 @@ class FocusModule extends Component {
 
   render() {
     const { indicators, ...otherProps } = this.props;
+
+    console.log('focus', this.props);
     return (
       <React.Fragment>
         <ModuleContainer>
-          {/*<BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />*/}
           <GeoMap
             indicatorData={indicators}
             selectedYears={this.props.yearPeriod}

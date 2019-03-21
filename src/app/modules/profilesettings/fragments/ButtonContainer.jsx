@@ -13,21 +13,27 @@ const ComponentBase = styled.div`
 `;
 
 const propTypes = {
-  data: PropTypes.array
+  disableSave: PropTypes.bool
 };
 const defaultProps = {
-  data: []
+  disableSave: true
 };
 
 const ButtonContainer = props => {
   return (
     <ComponentBase>
-      <ZoomButton width="160" fontSize="14">
+      <ZoomButton
+        color={
+          props.disableSave ? theme.color.zoomGreySix : theme.color.aidsFondsRed
+        }
+        width={160}
+        fontSize={14}
+      >
         save changes
       </ZoomButton>
       <ZoomButton
-        width="160"
-        fontSize="14"
+        width={160}
+        fontSize={14}
         style={{ backgroundColor: '#ff8080' }}
       >
         remove profile

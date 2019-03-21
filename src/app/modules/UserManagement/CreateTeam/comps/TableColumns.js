@@ -1,7 +1,7 @@
 /* base */
 import React from 'react';
 /* components */
-import { CheckBox } from 'grommet';
+import Checkbox from 'components/Checkbox/CheckBox';
 import {
   SortByIcon,
   UsersTableCellValue,
@@ -30,12 +30,12 @@ export default function getColumns(
       property: 'id',
       header: (
         <UsersTableColHeader>
-          <CheckBox onChange={addRemoveAllSelectionsFunc} />
+          <Checkbox onChange={addRemoveAllSelectionsFunc} />
         </UsersTableColHeader>
       ),
       render: val => (
         <UsersTableCellValue>
-          <CheckBox
+          <Checkbox
             id={val.id}
             name={val.name}
             onChange={addRemoveSelectionFunc}

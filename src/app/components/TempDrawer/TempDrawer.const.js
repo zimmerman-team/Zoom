@@ -10,42 +10,57 @@ const pathPrefix = '/';
 export const data = [
   {
     label: 'Home',
-    path: pathPrefix + 'home',
+    path: `${pathPrefix}home`,
     icon: <IconHome />
   },
   {
     label: 'Country Detail',
-    path: pathPrefix + 'country/ke',
+    path: `${pathPrefix}country/ke`,
     icon: <IconCharts />
   },
   {
     label: 'IATI Detail',
-    path: pathPrefix + 'iati',
+    path: `${pathPrefix}iati`,
     icon: <IconCharts />
   },
   {
     label: 'Datamapper',
-    path: pathPrefix + 'mapper',
+    path: `${pathPrefix}mapper`,
     icon: <IconCharts />
   },
   {
     label: 'NL Focus',
-    path: pathPrefix + 'focus/nl',
+    path: `${pathPrefix}focus/nl`,
     icon: <IconCharts />
   },
   {
     label: 'KEN Focus',
-    path: pathPrefix + 'focus/kenya',
+    path: `${pathPrefix}focus/kenya`,
     icon: <IconCharts />
   },
   {
     label: 'Visualizer',
-    path: pathPrefix + 'visualizer/vizID/edit',
+    path: `${pathPrefix}visualizer/vizID/edit`,
+    icon: <IconCharts />
+  },
+  {
+    label: 'Dashboard public',
+    path: `${pathPrefix}public/chart-library`,
+    icon: <IconCharts />
+  },
+  {
+    label: 'Dashboard',
+    path: `${pathPrefix}dashboard`,
+    icon: <IconCharts />
+  },
+  {
+    label: 'Dashboard users ',
+    path: `${pathPrefix}dashboard/users`,
     icon: <IconCharts />
   },
   {
     label: 'About ZOOM',
-    path: pathPrefix + 'about',
+    path: `${pathPrefix}about`,
     icon: <IconAbout />
   }
 ];

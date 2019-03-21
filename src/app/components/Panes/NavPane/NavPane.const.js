@@ -19,17 +19,17 @@ export const startItems = [
 export const createChartItems = [
   {
     label: 'Geo Map Chart',
-    navTo: '/create/geo'
+    navTo: '/visualizer/geomap/vizID/edit'
   },
   {
     label: 'Country Focus Page Kenya',
-    navTo: '/create/focus/kenya'
+    navTo: '/focus/KE'
   },
   {
     label: 'Country Focus Page Netherlands',
-    navTo: '/create/focus/NL'
-  },
-  {
+    navTo: '/focus/NL'
+  }
+  /*{
     label: 'Line chart',
     navTo: '/create/linechart'
   },
@@ -40,7 +40,7 @@ export const createChartItems = [
   {
     label: 'Table',
     navTo: '/create/table'
-  }
+  }*/
 ];
 
 export const convertDataItems = [

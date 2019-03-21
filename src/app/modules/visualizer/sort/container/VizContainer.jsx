@@ -64,18 +64,21 @@ class VizContainer extends React.Component {
 
         <React.Fragment>
           <PropsRoute
+            indicatorData={this.props.indicators}
             path="/visualizer/geomap/:code/:tab"
             component={GeomapFragment}
             mode={this.state.preview}
           />
 
           <PropsRoute
+            indicatorData={this.props.indicators}
             path="/visualizer/linechart/:code/:tab"
             component={LinechartFragment}
             mode={this.state.preview}
           />
 
           <PropsRoute
+            indicatorData={this.props.indicators}
             path="/visualizer/barchart/:code/:tab"
             component={BarchartFragment}
             mode={this.state.preview}

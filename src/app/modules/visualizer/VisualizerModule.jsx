@@ -10,6 +10,7 @@ import { ControlPanelContainer } from 'modules/visualizer/VisualizerModule.style
 // import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
 import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';
 import VizContainer from 'modules/visualizer/sort/container/VizContainer';
+
 // import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
 const ModuleBase = styled.div`
@@ -23,10 +24,14 @@ const propTypes = {
   // indicators: PropTypes.arrayOf(PropTypes.shape),
   loggedIn: PropTypes.bool,
   sideBarOpen: PropTypes.bool,
+  dropDownData: PropTypes.shape({}),
+  indicators: PropTypes.arrayOf(PropTypes.shape({})),
   moduleMode: PropTypes.string
 };
 
 const defaultProps = {
+  indicators: [],
+  dropDownData: {},
   loggedIn: true
 };
 
@@ -55,8 +60,8 @@ class BuilderModule extends Component {
     return (
       <Router>
         <ModuleBase>
-          <VizSidebar />
-          <VizContainer />
+          <VizSidebar dropDownData={this.props.dropDownData} />
+          <VizContainer indicators={this.props.indicators} />
         </ModuleBase>
       </Router>
     );

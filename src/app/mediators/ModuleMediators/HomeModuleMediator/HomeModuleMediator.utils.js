@@ -43,12 +43,13 @@ export function formatCountryLayerData(indicators, indName) {
           iso2: indicator.geolocationIso2,
           // we round it to two decimals
           value: Math.round(indicator.value),
+          format: indicator.valueFormatType,
           percentile: 0
         }
       });
     } else {
       const changeFeat = countryLayers.features[existLayerIndex];
-      changeFeat.properties.value += indicator.value;
+      changeFeat.properties.value += Math.round(indicator.value);
     }
   });
 
@@ -102,11 +103,13 @@ export function formatCountryCenterData(indicators, indName) {
           minValue,
           longitude: coord[0],
           latitude: coord[1],
+          format: indicator.valueFormatType,
           name: indicator.geolocationTag
         });
       } else
         countryCenteredData[existCountryIndex].value =
-          countryCenteredData[existCountryIndex].value + indicator.value;
+          countryCenteredData[existCountryIndex].value +
+          Math.round(indicator.value);
     }
   });
 
@@ -150,21 +153,6 @@ export function formatCountryParam(countryCodes, regionCountryCodes) {
   return jointCountries;
 }
 
-// Basically takes in a start year and an
-// end year as an array and makes a string array of year between them
-// including them both as well
-export function formatYearParam(val) {
-  // So here we will need to make an array of each year between the first
-  // and last year received
-  const yearArray = [];
-  let currentYear = val[0];
-  while (currentYear < val[1] + 1) {
-    yearArray.push(currentYear.toString());
-    currentYear += 1;
-  }
-  return yearArray;
-}
-
 export function formatLongLatData(indicators, indName) {
   const longLatData = [];
 
@@ -192,10 +180,11 @@ export function formatLongLatData(indicators, indName) {
           longitude: long,
           latitude: lat,
           name: indicator.geolocationTag,
+          format: indicator.valueFormatType,
           value: Math.round(indicator.value)
         });
       } else {
-        longLatData[existPointIndex].value += indicator.value;
+        longLatData[existPointIndex].value += Math.round(indicator.value);
       }
     }
   });

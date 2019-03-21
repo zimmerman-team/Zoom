@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
 import isEqual from 'lodash/isEqual';
+import sortBy from 'lodash/sortBy';
 import {
   formatCountryCenterData,
   formatCountryLayerData,
   formatCountryParam,
-  formatYearParam,
   updatePercentiles,
   formatLongLatData
 } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
+import { formatYearParam } from 'utils/genericUtils';
 import HomeModule from 'modules/home/HomeModule';
 import PropTypes from 'prop-types';
 import { initialState } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.consts';
@@ -125,17 +126,23 @@ class HomeModuleMediator extends Component {
   }
 
   updateIndicators() {
-    const subIndicators1 = this.props.indicatorAggregations.subIndicators1.edges.map(
+    let subIndicators1 = this.props.indicatorAggregations.subIndicators1.edges.map(
       indicator => {
         return { label: indicator.node.name, value: indicator.node.name };
       }
     );
 
-    const subIndicators2 = this.props.indicatorAggregations.subIndicators2.edges.map(
+    // and we sort them
+    subIndicators1 = sortBy(subIndicators1, ['label']);
+
+    let subIndicators2 = this.props.indicatorAggregations.subIndicators2.edges.map(
       indicator => {
         return { label: indicator.node.name, value: indicator.node.name };
       }
     );
+
+    // and we sort them
+    subIndicators2 = sortBy(subIndicators2, ['label']);
 
     let longLatData = [];
     let countryLayerData = {};
@@ -403,7 +410,6 @@ class HomeModuleMediator extends Component {
         selectedRegionVal={this.state.selectedRegionVal}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
-        defaultYear={this.state.defaultYear}
         yearPeriod={this.state.yearPeriod}
       />
     );
@@ -434,6 +440,7 @@ export default createRefetchContainer(
           "date"
           "geolocationIso2"
           "geolocationPolygons"
+          "valueFormatType"
         ]
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
@@ -446,6 +453,7 @@ export default createRefetchContainer(
         geolocationIso2
         geolocationTag
         geolocationPolygons
+        valueFormatType
         date
         value
       }
@@ -456,6 +464,7 @@ export default createRefetchContainer(
           "date"
           "geolocationIso2"
           "geolocationCenterLongLat"
+          "valueFormatType"
         ]
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
@@ -468,6 +477,7 @@ export default createRefetchContainer(
         geolocationIso2
         geolocationTag
         geolocationCenterLongLat
+        valueFormatType
         date
         value
       }

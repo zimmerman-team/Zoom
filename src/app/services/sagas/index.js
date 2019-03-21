@@ -120,6 +120,10 @@ export function* storeChartDataRequest(action) {
   yield put(generalActions.storeChartDataDone(action.data));
 }
 
+export function* storePaneDataRequest(action) {
+  yield put(generalActions.storePaneDataDone(action.data));
+}
+
 export function* allUserChartsRequest(action) {
   try {
     const response = yield call(api.nodeBackendGetRequest, {
@@ -224,6 +228,7 @@ export function* addNewDatasetRequest(action) {
 
 function* sagas() {
   yield [
+    takeLatest('STORE_PANE_DATA_REQUEST', storePaneDataRequest),
     takeLatest('STORE_CHART_DATA_REQUEST', storeChartDataRequest),
     takeLatest('ADD_NEW_DATASET_REQUEST', addNewDatasetRequest),
     takeLatest('UPDATE_USERS_TEAM__REQUEST', updateUsersTeamRequest),

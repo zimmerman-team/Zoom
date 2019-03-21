@@ -74,7 +74,7 @@ const Routes = props => {
           />
           <Route
             exact
-            path="/focus"
+            path="/focus/:iso2"
             render={() => (
               <FocusModuleMediator
                 indicatorAggregations={props}
@@ -84,7 +84,7 @@ const Routes = props => {
           />
           <Route
             exact
-            path="/visualizer/:code/:tab"
+            path="/visualizer/:chart/:code/:tab"
             render={() => (
               <VisualizerModuleMediator
                 indicatorAggregations={props}

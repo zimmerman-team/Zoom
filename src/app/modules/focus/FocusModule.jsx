@@ -1,5 +1,5 @@
 /* base */
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -19,7 +19,7 @@ const defaultProps = {
   indicators: []
 };
 
-class FocusModule extends Component {
+class FocusModule extends React.Component {
   state = {
     sideBarOpen: true,
     indicators: [],
@@ -41,10 +41,8 @@ class FocusModule extends Component {
     const isKE = location.pathname.includes('KE');
 
     if (isNL) {
-      console.log('is nderland');
       this.setState({ latitude: 52.1326, longitude: 5.2913, zoom: 7 });
     } else if (isKE) {
-      console.log('is kenya');
       this.setState({ latitude: 0.0236, longitude: 37.9062, zoom: 6 });
     }
   };

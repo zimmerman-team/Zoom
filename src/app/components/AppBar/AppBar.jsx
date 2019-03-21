@@ -139,8 +139,6 @@ export class AppBar extends React.Component {
         </Box>
 
         {this.state.paneButton}
-
-        <Box direction="row">{/*<div>button</div>*/}</Box>
       </ComponentBase>
     );
   }

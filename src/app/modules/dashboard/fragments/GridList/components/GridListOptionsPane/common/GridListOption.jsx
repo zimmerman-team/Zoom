@@ -20,19 +20,25 @@ const propTypes = {
   icon: PropTypes.node.isRequired,
   label: PropTypes.string,
   visibility: PropTypes.string,
-  isRemoveOption: PropTypes.bool
+  isRemoveOption: PropTypes.bool,
+  targetUrl: PropTypes.string
 };
 const defaultProps = {
   label: '',
   visibility: 'visible',
-  isRemoveOption: false
+  isRemoveOption: false,
+  targetUrl: '/'
 };
 
 function handleClick() {}
 
 const GridListOption = props => {
   return (
-    <ComponentBase visibility={props.visibility} onClick={() => handleClick}>
+    <ComponentBase
+      visibility={props.visibility}
+      onClick={() => handleClick}
+      to={props.targetUrl}
+    >
       {props.isRemoveOption ? (
         <RemoveButton>remove indefinite</RemoveButton>
       ) : (

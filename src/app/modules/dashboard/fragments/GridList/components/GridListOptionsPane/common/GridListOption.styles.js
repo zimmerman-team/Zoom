@@ -1,8 +1,10 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 
-export const ComponentBase = styled.div`
+export const ComponentBase = styled(Link)`
   visibility: ${props => props.visibility};
+  text-decoration: none;
 `;
 
 export const IconLabel = styled.label`

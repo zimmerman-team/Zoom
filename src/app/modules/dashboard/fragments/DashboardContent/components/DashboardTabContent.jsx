@@ -46,6 +46,7 @@ const DashboardTabContent = props => {
   const currentURL = history.location.pathname;
 
   let targetData = [];
+  let targetUrl = '';
   let leftOptionLabel = '';
   let sortIsVisible = true;
   let tabContentName = true;
@@ -55,10 +56,12 @@ const DashboardTabContent = props => {
   //todo: check on exact path instead of includes: too vulnerable
   if (currentURL.includes('users')) {
     targetData = props.users;
+    targetUrl = '/add-user';
     leftOptionLabel = 'add users';
     tabContentName = 'Users';
   } else if (currentURL.includes('teams')) {
     targetData = props.teams;
+    targetUrl = '/create-team';
     leftOptionLabel = 'create users';
     tabContentName = 'Teams';
   } else if (currentURL.includes('focus-pages')) {
@@ -118,6 +121,7 @@ const DashboardTabContent = props => {
             activeTab={props.activeTab}
             sort={props.sort}
             tabs={props.tabs}
+            targetUrl={targetUrl}
           />
           <GridList items={targetData} />
         </Box>

@@ -35,6 +35,7 @@ const GridListOptionsPane = props => {
         icon={<SvgIconAdd />}
         label={props.leftOptionLabel}
         visibility={props.visibilityLeftButton}
+        targetUrl={props.targetUrl}
       />
       <GridListOption
         icon={<SvgIconSort />}

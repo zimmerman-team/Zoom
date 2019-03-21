@@ -8,6 +8,8 @@ import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel'
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
 import PublicChartLibraryModule from './modules/PublicChartLibrary/PublicChartLibraryModule';
+import AddUserModule from './modules/UserManagement/AddUser/AddUserModule';
+import CreateTeam from './modules/UserManagement/CreateTeam/CreateTeamModule';
 
 // Modules lazy load
 const CountryDetailMediator = lazy(() =>
@@ -161,6 +163,8 @@ const Routes = props => {
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />
           <Route exact path="/step" render={() => <ManMappingStep />} />
+          <Route path="/create-team" render={() => <CreateTeam />} />
+          <Route path="/add-user" render={() => <AddUserModule />} />
         </Switch>
       </Suspense>
     </React.Fragment>

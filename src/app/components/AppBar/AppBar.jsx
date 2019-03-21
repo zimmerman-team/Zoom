@@ -91,6 +91,10 @@ export class AppBar extends React.Component {
 
     switch (true) {
       case this.props.location.pathname === '/home' ||
+        this.props.location.pathname === '/focus/NL' ||
+        this.props.location.pathname === '/focus/nl' ||
+        this.props.location.pathname === '/focus/KE' ||
+        this.props.location.pathname === '/focus/ke' ||
         this.props.location.pathname === '/callback':
         paneButton = (
           <PaneButton

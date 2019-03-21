@@ -264,6 +264,8 @@ export class GeoMap extends Component {
           mapboxApiAccessToken={MAPBOX_TOKEN}
           /*todo: refactor zooming functionality to facilitate both zooming by using the zoom controls and zooming by scrolling*/
           ref={map => (this.mapRef = map)}
+          attributionControl
+          reuseMaps
         >
           {/*So this is the layer tooltip, and we seperate it from the
               martker tooltip, cause its functionality as a tooltip is a bit different

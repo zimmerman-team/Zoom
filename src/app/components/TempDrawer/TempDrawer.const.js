@@ -40,7 +40,7 @@ export const data = [
   },
   {
     label: 'Visualizer',
-    path: `${pathPrefix}visualizer/vizID/edit`,
+    path: `${pathPrefix}visualizer/geomap/vizID/edit`,
     icon: <IconCharts />
   },
   {

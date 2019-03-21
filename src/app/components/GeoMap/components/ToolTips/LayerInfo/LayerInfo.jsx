@@ -15,6 +15,15 @@ const layerInfo = hoverLayerInfo => {
     let countryName = hoverLayerInfo.properties.name;
     countryName = countryName.charAt(0).toUpperCase() + countryName.slice(1);
 
+    let nrFormat = ' ';
+
+    if (hoverLayerInfo.properties.format === 'percentage') nrFormat = ' %';
+    else if (
+      hoverLayerInfo.properties.format !== 'number' &&
+      hoverLayerInfo.properties.format
+    )
+      nrFormat = ' '.concat(hoverLayerInfo.properties.format);
+
     return (
       <ToolTipContainer
         anchor="bottom"
@@ -28,6 +37,7 @@ const layerInfo = hoverLayerInfo => {
           <ToolTipLabel>{hoverLayerInfo.properties.indName}: </ToolTipLabel>
           <ToolTipText>
             {formatNumber(hoverLayerInfo.properties.value)}
+            {nrFormat}
           </ToolTipText>
         </ValueContainer>
       </ToolTipContainer>

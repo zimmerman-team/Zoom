@@ -14,6 +14,7 @@ import ResetIconSmall from 'assets/icons/ResetIconSmall';
 
 /* utils */
 import isEqual from 'lodash/isEqual';
+import findIndex from 'lodash/findIndex';
 
 /* styles */
 import {
@@ -189,7 +190,7 @@ class ZoomSelect extends React.Component {
 
   handleItemClick(item) {
     if (!this.props.multiple) this.setState({ open: false });
-    this.props.selectVal(item);
+    this.props.selectVal(item, false);
   }
 
   allCheck() {
@@ -223,7 +224,15 @@ class ZoomSelect extends React.Component {
       >
         {this.props.multiple && (
           <DropDownCheckbox
-            checked={this.props.arraySelected.indexOf(item.value) !== -1}
+            checked={
+              findIndex(this.props.arraySelected, arrItemn => {
+                if (item.value instanceof Array) {
+                  return isEqual(item.value, arrItemn);
+                }
+
+                return item.value === arrItemn;
+              }) !== -1
+            }
           />
         )}
         <DropDownLabel>{item.label}</DropDownLabel>

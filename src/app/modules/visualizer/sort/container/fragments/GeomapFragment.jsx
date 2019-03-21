@@ -26,9 +26,11 @@ const propTypes = {};
 const defaultProps = {};
 
 const GeomapFragment = props => {
+  const { mode, ...otherProps } = props;
+
   return (
-    <ComponentBase height={props.mode ? '400px' : '100%'}>
-      <GeoMap />
+    <ComponentBase height={mode ? '400px' : '100%'}>
+      <GeoMap {...otherProps} />
     </ComponentBase>
   );
 };

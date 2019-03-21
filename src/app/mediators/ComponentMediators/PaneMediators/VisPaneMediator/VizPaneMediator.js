@@ -280,7 +280,17 @@ class VizPaneMediator extends React.Component {
         countries={this.state.allCountries}
         regions={this.state.allRegions}
         yearPeriod={this.props.chartData.yearPeriod}
-        initialSelect={isEqual(this.props.chartData, initialState)}
+        // okay so we use this variable to change the
+        // to disable the geolocation dropdowns being defaultly selected
+        locationSelected={isEqual(this.props.chartData, initialState)}
+        subInd1AllSelected={isEqual(
+          this.props.chartData.selectedSubInd1,
+          initialState.selectedSubInd1
+        )}
+        subInd2AllSelected={isEqual(
+          this.props.chartData.selectedSubInd2,
+          initialState.selectedSubInd2
+        )}
         selectInd1={this.selectInd1}
         selectInd2={this.selectInd2}
         selectYear={this.selectYear}

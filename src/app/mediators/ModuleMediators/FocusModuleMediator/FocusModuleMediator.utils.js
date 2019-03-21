@@ -43,6 +43,7 @@ export function formatCountryLayerData(indicators, indName) {
           iso2: indicator.geolocationIso2,
           // we round it to two decimals
           value: Math.round(indicator.value),
+          format: indicator.valueFormatType,
           percentile: 0
         }
       });
@@ -102,6 +103,7 @@ export function formatCountryCenterData(indicators, indName) {
           minValue,
           longitude: coord[0],
           latitude: coord[1],
+          format: indicator.valueFormatType,
           name: indicator.geolocationTag
         });
       } else
@@ -178,6 +180,7 @@ export function formatLongLatData(indicators, indName) {
           longitude: long,
           latitude: lat,
           name: indicator.geolocationTag,
+          format: indicator.valueFormatType,
           value: Math.round(indicator.value)
         });
       } else {

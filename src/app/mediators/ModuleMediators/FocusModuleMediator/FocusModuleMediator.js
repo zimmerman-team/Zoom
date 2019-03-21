@@ -366,6 +366,7 @@ export default createRefetchContainer(
           "date"
           "geolocationIso2"
           "geolocationPolygons"
+          "valueFormatType"
         ]
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
@@ -378,6 +379,7 @@ export default createRefetchContainer(
         geolocationIso2
         geolocationTag
         geolocationPolygons
+        valueFormatType
         date
         value
       }
@@ -388,6 +390,7 @@ export default createRefetchContainer(
           "date"
           "geolocationIso2"
           "geolocationCenterLongLat"
+          "valueFormatType"
         ]
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
@@ -400,6 +403,7 @@ export default createRefetchContainer(
         geolocationIso2
         geolocationTag
         geolocationCenterLongLat
+        valueFormatType
         date
         value
       }

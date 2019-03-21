@@ -28,7 +28,7 @@ const TabNavigator = props => {
     <ComponentBase>
       {props.navItems.map(item => (
         <TabNavigatorItem
-          key={shortid.generate()}
+          key={item.path}
           code={props.code}
           path={item.path}
           icon={item.icon}

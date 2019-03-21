@@ -19,6 +19,6 @@ export const Box = styled.div`
   height: ${props => props.height};
 `;
 
-export const PrevieTextContainer = styled.div`
+export const PreviewTextContainer = styled.div`
   display: ${props => props.mode};
 `;

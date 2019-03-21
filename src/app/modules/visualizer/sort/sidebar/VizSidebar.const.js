@@ -12,7 +12,7 @@ import IconVisibility from 'assets/icons/toolpanel/IconVisibility';
 import ContextEditor from 'components/chartcontext/ContextEditor/ContextEditor';
 import VizPaneMediator from 'mediators/ComponentMediators/PaneMediators/VisPaneMediator/VizPaneMediator';
 
-const Path = '/visualizer/:code/';
+const Path = '/visualizer/geomap/vizID/';
 
 export const data = {
   sections: [

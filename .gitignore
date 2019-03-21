@@ -68,6 +68,8 @@ typings/
 
 .cache
 
+build/
+
 yarn.lock
 yarn-error.log
 .fusion

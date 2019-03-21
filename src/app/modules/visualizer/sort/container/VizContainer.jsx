@@ -1,11 +1,11 @@
 /* base */
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 import { Route, withRouter } from 'react-router';
 
 import theme from 'theme/Theme';
-
+import GeoMap from 'components/GeoMap/GeoMap';
 import ContextPreview from 'components/chartcontext/ContextPreview/ContextPreview';
 import BarchartFragment from 'modules/visualizer/sort/container/fragments/BarchartFragment';
 import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFragment';

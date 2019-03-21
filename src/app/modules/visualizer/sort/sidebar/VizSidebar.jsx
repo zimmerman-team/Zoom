@@ -38,7 +38,11 @@ const VizSidebar = props => {
       {props.loggedIn && <TabNavigator code={code} navItems={props.data} />}
 
       {/** tab content */}
-      <TabContent code={code} data={props.data} />
+      <TabContent
+        code={code}
+        data={props.data}
+        dropDownData={props.dropDownData}
+      />
     </ComponentBase>
   );
 };

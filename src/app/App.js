@@ -50,17 +50,13 @@ function fetchQuery(operation, variables) {
 }
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    showSidebar: false,
+    authChanged: false,
+    checkingSession: true
+  };
 
-    this.state = {
-      showSidebar: false,
-      authChanged: false,
-      checkingSession: true
-    };
-  }
-
-  componentDidMount() {
+  componentDidMount = () => {
     if (window.location.pathname.indexOf('/callback') !== -1) {
       this.setState({ checkingSession: false });
       return;
@@ -74,9 +70,9 @@ class App extends React.Component {
       });
     } catch (err) {}
     this.setState({ checkingSession: false });
-  }
+  };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate = prevProps => {
     // so this basically either adds a new user that has
     // signed in or updates their username and email
 
@@ -118,9 +114,9 @@ class App extends React.Component {
         });
       }
     }
-  }
+  };
 
-  render() {
+  render = () => {
     return (
       <Grommet theme={ZoomTheme}>
         <QueryRenderer
@@ -134,6 +130,7 @@ class App extends React.Component {
               ...ExplorePanelMediator_dropDownData
               ...MetaDataMediator_dropDownData
               ...CorrectErrorsMediator_fileCorrection
+              ...FocusModuleMediator_indicatorAggregations
             }
           `}
           variables={{}}
@@ -173,7 +170,7 @@ class App extends React.Component {
         />
       </Grommet>
     );
-  }
+  };
 }
 
 const mapStateToProps = state => {

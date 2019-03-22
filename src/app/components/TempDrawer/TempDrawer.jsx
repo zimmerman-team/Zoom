@@ -22,11 +22,13 @@ import {
 const propTypes = {
   open: PropTypes.bool,
   toggleSideBar: PropTypes.func,
-  items: PropTypes.array
+  items: PropTypes.array,
+  env: PropTypes.string
 };
 const defaultProps = {
   open: undefined,
-  items: data
+  items: data,
+  env: process.env.NODE_ENV
 };
 
 class TempDrawer extends React.Component {
@@ -37,19 +39,22 @@ class TempDrawer extends React.Component {
   render() {
     const sideList = (
       <React.Fragment>
-        {data.map(item => (
-          <SidebarNavListItem
-            button
-            key={item.label}
-            data-cy={'sidebar-' + item.label}
-            disableRipple
-          >
-            <ZoomLink to={item.path}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ZoomListItemText primary={item.label} />
-            </ZoomLink>
-          </SidebarNavListItem>
-        ))}
+        {data.map(
+          item =>
+            process.env.NODE_ENV === item.env && (
+              <SidebarNavListItem
+                button
+                key={item.label}
+                data-cy={'sidebar-' + item.label}
+                disableRipple
+              >
+                <ZoomLink to={item.path}>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ZoomListItemText primary={item.label} />
+                </ZoomLink>
+              </SidebarNavListItem>
+            )
+        )}
       </React.Fragment>
     );
 

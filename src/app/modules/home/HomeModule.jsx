@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Cookies from 'universal-cookie';
 
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
@@ -23,17 +24,12 @@ const defaultProps = {
 };
 
 export class HomeModule extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dialogOpen: true,
-      sideBarOpen: false,
-      indicators: []
-    };
-
-    this.onClose = this.onClose.bind(this);
-    this.toggleSideBar = this.toggleSideBar.bind(this);
-  }
+  state = {
+    dialogOpen: true,
+    sideBarOpen: false,
+    indicators: [],
+    dialogShown: 'false'
+  };
 
   onClose = () => {
     this.setState({ dialogOpen: false });
@@ -43,13 +39,25 @@ export class HomeModule extends Component {
     this.setState({ sideBarOpen: true });
   };
 
-  render() {
+  componentDidMount = () => {
+    /* todo: the cookie logic is pretty rudimentary, suffices for now but should be optimised */
+    const cookies = new Cookies();
+    this.setState({ dialogShown: cookies.get('homeDialogShown') || 'false' });
+    let d = new Date();
+    d.setTime(d.getTime() + 1440 * 60 * 1000);
+    cookies.set('homeDialogShown', 'true', { path: '/', expires: d });
+  };
+
+  render = () => {
     const { indicators, ...otherProps } = this.props;
 
     return (
       <React.Fragment>
         <ModuleContainer>
-          <BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />
+          {this.state.dialogShown === 'false' && (
+            <BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />
+          )}
+
           <GeoMap
             indicatorData={indicators}
             selectedYears={this.props.yearPeriod}
@@ -74,7 +82,7 @@ export class HomeModule extends Component {
         </ModuleContainer>
       </React.Fragment>
     );
-  }
+  };
 }
 HomeModule.propTypes = propTypes;
 HomeModule.defaultProps = defaultProps;

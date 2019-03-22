@@ -141,25 +141,27 @@ export function formatBarChartInfoIndicators(
       const countryDataPoints = filter(countryData, ['indicatorName', name]);
       // const globalDataPoints = filter(globalData, ['indicatorName', name]);
 
-      let countryIndValue = sortBy(countryDataPoints, ['date']).reverse()[0]
-        .value;
-      // countryDataPoints.forEach(point => {
-      //   countryIndValue += point.value;
-      // });
-      total += countryIndValue;
+      if (countryDataPoints.length > 0) {
+        let countryIndValue = sortBy(countryDataPoints, ['date']).reverse()[0]
+          .value;
+        // countryDataPoints.forEach(point => {
+        //   countryIndValue += point.value;
+        // });
+        total += countryIndValue;
 
-      // let globalIndValue = 0;
-      // globalDataPoints.forEach(point => {
-      //   globalIndValue += point.value;
-      // });
+        // let globalIndValue = 0;
+        // globalDataPoints.forEach(point => {
+        //   globalIndValue += point.value;
+        // });
 
-      barChartData.push({
-        indicator: name,
-        [countryName]: countryIndValue,
-        CountryColor: theme.color.chartColorTwo
-        // Global: globalIndValue,
-        // GlobalColor: theme.color.chartColorThree
-      });
+        barChartData.push({
+          indicator: name,
+          [countryName]: countryIndValue,
+          CountryColor: theme.color.chartColorTwo
+          // Global: globalIndValue,
+          // GlobalColor: theme.color.chartColorThree
+        });
+      }
     }
   });
 

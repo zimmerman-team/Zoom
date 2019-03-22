@@ -11,56 +11,79 @@ export const data = [
   {
     label: 'Home',
     path: `${pathPrefix}home`,
-    icon: <IconHome />
+    icon: <IconHome />,
+    env: 'production'
+  },
+  {
+    label: 'Home',
+    path: `${pathPrefix}home`,
+    icon: <IconHome />,
+    env: 'development'
   },
   {
     label: 'Country Detail',
     path: `${pathPrefix}country/ke`,
-    icon: <IconCharts />
+    icon: <IconCharts />,
+    env: 'development'
   },
   {
     label: 'IATI Detail',
     path: `${pathPrefix}iati`,
-    icon: <IconCharts />
+    icon: <IconCharts />,
+    env: 'development'
   },
   {
     label: 'Datamapper',
     path: `${pathPrefix}mapper`,
-    icon: <IconCharts />
+    icon: <IconCharts />,
+    env: 'development'
   },
   {
     label: 'NL Focus',
-    path: `${pathPrefix}focus/nl`,
-    icon: <IconCharts />
+    path: `${pathPrefix}focus/NL`,
+    icon: <IconCharts />,
+    env: 'development'
   },
   {
     label: 'KEN Focus',
-    path: `${pathPrefix}focus/kenya`,
-    icon: <IconCharts />
+    path: `${pathPrefix}focus/KE`,
+    icon: <IconCharts />,
+    env: 'development'
   },
   {
     label: 'Visualizer',
     path: `${pathPrefix}visualizer/geomap/vizID/edit`,
-    icon: <IconCharts />
+    icon: <IconCharts />,
+    env: 'development'
   },
   {
     label: 'Dashboard public',
     path: `${pathPrefix}public/chart-library`,
-    icon: <IconCharts />
+    icon: <IconCharts />,
+    env: 'development'
   },
   {
     label: 'Dashboard',
     path: `${pathPrefix}dashboard`,
-    icon: <IconCharts />
+    icon: <IconCharts />,
+    env: 'development'
   },
   {
     label: 'Dashboard users ',
     path: `${pathPrefix}dashboard/users`,
-    icon: <IconCharts />
+    icon: <IconCharts />,
+    env: 'development'
   },
   {
     label: 'About ZOOM',
     path: `${pathPrefix}about`,
-    icon: <IconAbout />
+    icon: <IconAbout />,
+    env: 'production'
+  },
+  {
+    label: 'About ZOOM',
+    path: `${pathPrefix}about`,
+    icon: <IconAbout />,
+    env: 'development'
   }
 ];

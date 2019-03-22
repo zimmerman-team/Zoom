@@ -10,6 +10,7 @@ import DataMapperModule from 'modules/datamapper/DataMapperModule';
 import PublicChartLibraryModule from './modules/PublicChartLibrary/PublicChartLibraryModule';
 import ProfileSettingsModule from './modules/profilesettings/ProfileSettingsModule';
 
+
 // Modules lazy load
 const CountryDetailMediator = lazy(() =>
   import('mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator')

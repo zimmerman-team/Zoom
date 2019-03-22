@@ -8,6 +8,7 @@ import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel'
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
 import PublicChartLibraryModule from './modules/PublicChartLibrary/PublicChartLibraryModule';
+import ProfileSettingsModule from './modules/profilesettings/ProfileSettingsModule';
 
 // Modules lazy load
 const CountryDetailMediator = lazy(() =>
@@ -157,6 +158,13 @@ const Routes = props => {
             exact
             path="/public/chart-library/:id/:charttype"
             // todo: render to appropriate chart pages
+          />
+
+          {/*todo: remove on PR*/}
+          <Route
+            exact
+            path="/profile-settings"
+            render={() => <ProfileSettingsModule />}
           />
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />

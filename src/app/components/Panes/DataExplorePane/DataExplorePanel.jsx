@@ -168,12 +168,13 @@ class DataExplorePane extends React.Component {
     // console.log('this.props.indNames', this.props.indNames);
     return (
       <ComponentBase>
-        {/*<ExpansionPanel*/}
-        {/*selectDataSource={this.props.selectDataSource}*/}
-        {/*allFileSources={this.props.allFileSources}*/}
-        {/*locationSelected={this.props.locationSelected}*/}
-        {/*selectedSources={this.props.selectedSources}*/}
-        {/*/>*/}
+        <ExpansionPanel
+          selectDataSource={this.props.selectDataSource}
+          allFileSources={this.props.allFileSources}
+          locationSelected={this.props.locationSelected}
+          selectedSources={this.props.selectedSources}
+          renderHeader={() => this.renderHeader('DataSource')}
+        />
         <PanelAccordion
           animate
           multiple

@@ -11,36 +11,56 @@ import _ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import _ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { DropDownCont, FilterContainer } from '../../DataExplorerPane.style';
-import ZoomSelect from '../../DataExplorePanel';
+import _ZoomSelect from '../../../../Select/ZoomSelect';
+import { Paper as _Paper } from '@material-ui/core';
 
-const ComponentBase = styled.div``;
-
-// const ExpansionPanel = styled(_ExpansionPanel)``;
+const ExpansionzPanel = styled(_ExpansionPanel)`
+  & [role='button'] {
+    padding-left: 0;
+    height: 40px;
+  }
+`;
 const ExpansionPanelSummary = styled(_ExpansionPanelSummary)``;
-const ExpansionPanelDetails = styled(_ExpansionPanelDetails)``;
-const ExpandMoreIcon = styled(_ExpandMoreIcon)``;
+const ExpansionPanelDetails = styled(_ExpansionPanelDetails)`
+  && {
+    width: 100%;
+    padding: 0;
+
+    > div {
+      width: 100%;
+    }
+  }
+`;
+const ExpandMoreIcon = styled(_ExpandMoreIcon)`
+  padding: 8px;
+`;
+
+const ZoomSelect = styled(_ZoomSelect)`
+  width: 100%;
+`;
 
 const propTypes = {
   locationSelected: PropTypes.bool,
-  allFileSources: PropTypes.object,
-  selectedSources: PropTypes.object,
-  selectDataSource: PropTypes.object
+  allFileSources: PropTypes.array,
+  selectedSources: PropTypes.array,
+  selectDataSource: PropTypes.func,
+  renderHeader: PropTypes.object
 };
 
 const defaultProps = {
   locationSelected: true,
   allFileSources: {},
   selectDataSource: {},
-  selectedSources: {}
+  selectedSources: {},
+  renderHeader: {}
 };
 
 const ExpansionPanel = props => {
   return (
-    <ComponentBase>
-      <ExpansionPanel>
+    <React.Fragment>
+      <ExpansionzPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          {/*{this.renderHeader('DataSource')}*/}
-          DataSource
+          {props.renderHeader('DataSource')}
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <FilterContainer>
@@ -58,8 +78,8 @@ const ExpansionPanel = props => {
             </DropDownCont>
           </FilterContainer>
         </ExpansionPanelDetails>
-      </ExpansionPanel>
-    </ComponentBase>
+      </ExpansionzPanel>
+    </React.Fragment>
   );
 };
 ExpansionPanel.propTypes = propTypes;

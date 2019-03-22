@@ -24,7 +24,7 @@ const propTypes = {
   open: PropTypes.bool,
   title: PropTypes.string,
   message: PropTypes.string,
-  onClose: PropTypes.func,
+  onClose: PropTypes.func
 };
 const defaultProps = {
   open: true,
@@ -32,12 +32,12 @@ const defaultProps = {
   message: 'Start exploring the map by selecting indicators',
   buttonText: 'start exploring',
   buttonEnabled: true,
-  onClose: undefined,
+  onClose: undefined
 };
 
 class BaseDialog extends Component {
   state = {
-    open: this.props.open,
+    open: this.props.open
   };
 
   onClose = () => {

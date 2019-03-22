@@ -3,11 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+// import _ExpansionPanel from '@material-ui/core/ExpansionPanel';
+// import _ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+// import _ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+// import Typography from '@material-ui/core/Typography';
+// import _ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 /* icons */
 import IconRedIndicators from 'assets/icons/IconRedIndicators';
@@ -34,6 +34,8 @@ import {
 } from './DataExplorerPane.style';
 import SimpleToolTip from '../../ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
+import styled from 'styled-components';
+import ExpansionPanel from './components/ExpansionPanel/ExpansionPanel';
 
 const propTypes = {
   selectedInd2: PropTypes.string,
@@ -166,27 +168,12 @@ class DataExplorePane extends React.Component {
     // console.log('this.props.indNames', this.props.indNames);
     return (
       <ComponentBase>
-        <ExpansionPanel defaultExpanded>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            {this.renderHeader('DataSource')}
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <FilterContainer>
-              <DropDownCont>
-                <ZoomSelect
-                  defaultAll={this.props.locationSelected}
-                  selectAll
-                  // reset={() => this.props.selectDataSource('reset')}
-                  multiple
-                  placeHolderText={'Select datasource'}
-                  data={this.props.allFileSources}
-                  arraySelected={this.props.selectedSources}
-                  selectVal={this.props.selectDataSource}
-                />
-              </DropDownCont>
-            </FilterContainer>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+        {/*<ExpansionPanel*/}
+        {/*selectDataSource={this.props.selectDataSource}*/}
+        {/*allFileSources={this.props.allFileSources}*/}
+        {/*locationSelected={this.props.locationSelected}*/}
+        {/*selectedSources={this.props.selectedSources}*/}
+        {/*/>*/}
         <PanelAccordion
           animate
           multiple

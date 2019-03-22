@@ -163,8 +163,6 @@ const Routes = props => {
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />
           <Route exact path="/step" render={() => <ManMappingStep />} />
-          <Route path="/create-team" render={() => <CreateTeam />} />
-          <Route path="/add-user" render={() => <AddUserModule />} />
         </Switch>
       </Suspense>
     </React.Fragment>

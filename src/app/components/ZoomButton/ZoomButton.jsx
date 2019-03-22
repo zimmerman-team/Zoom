@@ -14,7 +14,7 @@ const ComponentBase = styled(Button)`
   width: ${props => props.width + 'px'};
   height: 30px;
   border-radius: 15px;
-  background-color: ${theme.color.aidsFondsRed};
+  background-color: ${props => props.backgroundColor};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,11 +28,13 @@ const ComponentBase = styled(Button)`
 
 const propTypes = {
   fontSize: PropTypes.number,
-  width: PropTypes.number
+  width: PropTypes.number,
+  color: PropTypes.string
 };
 const defaultProps = {
   fontSize: 16,
-  width: 160
+  width: 160,
+  color: theme.color.aidsFondsWhite
 };
 
 const ZoomButton = props => {
@@ -42,6 +44,7 @@ const ZoomButton = props => {
       fontSize={props.fontSize}
       onClick={props.onClick}
       style={props.style}
+      backgroundColor={props.color}
       {...props}
     >
       {props.children}

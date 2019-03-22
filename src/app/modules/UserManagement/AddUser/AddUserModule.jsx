@@ -7,7 +7,7 @@ import {
   DropDown,
   DropDownLabel,
   Message,
-  SubmitButton,
+  SubmitButton
 } from 'modules/UserManagement/AddUser/AddUserModule.styles';
 
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
@@ -32,26 +32,26 @@ const propTypes = {
   submitForm: PropTypes.func,
   roleSelected: PropTypes.shape({
     label: PropTypes.string,
-    value: PropTypes.string,
+    value: PropTypes.string
   }),
   orgSelected: PropTypes.shape({
     label: PropTypes.string,
-    value: PropTypes.string,
+    value: PropTypes.string
   }),
   changeUserRole: PropTypes.func,
   changeOrganisation: PropTypes.func,
   orgOptions: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
-      value: PropTypes.string,
-    }),
+      value: PropTypes.string
+    })
   ),
   roleOptions: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
-      value: PropTypes.string,
-    }),
-  ),
+      value: PropTypes.string
+    })
+  )
 };
 const defaultProps = {
   email: '',
@@ -69,7 +69,7 @@ const defaultProps = {
   orgSelected: { label: '', value: '', _id: '' },
   changeOrganisation: null,
   roleOptions: userManagementMockData.roleOptions,
-  orgOptions: userManagementMockData.orgOptions,
+  orgOptions: userManagementMockData.orgOptions
 };
 
 const AddUserModule = props => {

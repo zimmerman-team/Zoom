@@ -34,7 +34,7 @@ const propTypes = {
 const defaultProps = {
   fontSize: 16,
   width: 160,
-  color: theme.color.aidsFondsWhite
+  color: theme.color.aidsFondsRed
 };
 
 const ZoomButton = props => {

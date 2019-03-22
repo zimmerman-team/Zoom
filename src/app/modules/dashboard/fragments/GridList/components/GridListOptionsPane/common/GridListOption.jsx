@@ -59,9 +59,8 @@ const GridListOption = props => {
               </IconButton>
             </OptionLink>
           )}
-
           {/*todo: this is suuuuper hacky, did this quickly for testing purposes, will refactor this asap*/}
-          {props.label != 'create users' && (
+          {props.label === 'create users' && (
             <OptionLink href="/create-team">
               <IconButton onClick={props.setIsSortByOpen}>
                 {props.icon}
@@ -70,14 +69,12 @@ const GridListOption = props => {
             </OptionLink>
           )}
 
-          {/*todo: this is suuuuper hacky, did this quickly for testing purposes, will refactor this asap*/}
-          {props.label != 'add users' && (
+          {/* {props.label != 'add users' && (
             <IconButton onClick={props.setIsSortByOpen}>
               {props.icon}
               <IconLabel>{props.label}</IconLabel>
             </IconButton>
-          )}
-
+          )}*/}
           <SortbyDialog
             open={props.isSortByOpen}
             options={sortByOptions}

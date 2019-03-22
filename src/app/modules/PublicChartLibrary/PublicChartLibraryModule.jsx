@@ -38,7 +38,7 @@ const PublicChartLibraryModule = props => {
       <PageHeading>Zoom chart library</PageHeading>
       <Searchbox inputChange={props.changeSearchKeyword} />
       <Box>
-        <GridListOptionsPane visibilityAddChart="hidden" />
+        <GridListOptionsPane visibilityLeftButton="hidden" />
         <ViewContainer>
           <GridList withoptions={false} items={data} />
         </ViewContainer>

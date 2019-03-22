@@ -2,11 +2,6 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 
-export const ComponentBase = styled(Link)`
-  visibility: ${props => props.visibility};
-  text-decoration: none;
-`;
-
 export const IconLabel = styled.label`
   color: ${theme.color.aidsFondsRed};
   font-family: ${theme.font.zoomFontFamOne};
@@ -15,6 +10,7 @@ export const IconLabel = styled.label`
 `;
 
 export const IconButton = styled.div`
+  visibility: ${props => props.visibility};
   &:hover > * {
     cursor: pointer;
     color: ${theme.color.aidsFondsBlue};

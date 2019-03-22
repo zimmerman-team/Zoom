@@ -48,6 +48,7 @@ class NavPane extends React.Component {
             onClick={() =>
               this.props.dispatch(actions.dataPaneToggleRequest(item.navTo))
             }
+            data-cy="nav-pane-item"
           >
             <ItemIcon>
               <SvgIconPointer />
@@ -64,7 +65,7 @@ class NavPane extends React.Component {
 
     return data.map(item => {
       return (
-        <NavPaneItem to={item.navTo} key={item.label}>
+        <NavPaneItem to={item.navTo} key={item.label} data-cy="nav-pane-item">
           <ItemIcon>
             <SvgIconPointer />
           </ItemIcon>

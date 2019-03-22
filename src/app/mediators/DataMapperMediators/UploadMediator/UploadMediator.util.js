@@ -1,9 +1,15 @@
 import findIndex from 'lodash/findIndex';
 import find from 'lodash/find';
 
+export const arrayOfValues = [
+  'Number Value',
+  'Percentage Value',
+  'Mixed Value'
+];
+
 //  Note this whole types and summary data is formed in a very very weird way
 // so there's lots seemingly weird stuff happening in this function
-export function formatOverviewData(sumString, typesString, cellsString = '') {
+export function formatOverviewData(sumString, typesString) {
   const properNames = {
     count: 'Count of values',
     unique: 'Number of unique values',
@@ -41,19 +47,6 @@ export function formatOverviewData(sumString, typesString, cellsString = '') {
     const summary = [];
 
     summKeys.forEach((summKey, keyIndex) => {
-      // // so we need to do this adjustment
-      // // to the proper name of frequency count
-      // // of the most frequent value, because it needs
-      // // to look something like this 'Netherlands count'
-      // // where in this case 'Netherlands' would be the most
-      // // frequent value in an Area column
-      // let freqName = properNames.freq;
-      // if(key === 'freq'){
-      //   // and its okay to play with indexes here, because 'freq'
-      //   // will always be the
-      //   freqName = freqName
-      // }
-
       summary.push({
         label: properNames[summKey],
         value: summValues[keyIndex]
@@ -66,8 +59,8 @@ export function formatOverviewData(sumString, typesString, cellsString = '') {
       // so type[1] in the types array the actual
       // string array we'd see in the data types column
       dataTypes: types[typeKey][1],
-      // currently 0 until graphql is adjusted accordingly
-      blankCells: 0,
+      // so type[2] in the types array is actually the blank cell number of a column
+      blankCells: types[typeKey][2],
       summary
     });
   });
@@ -99,25 +92,43 @@ export function formatModelOptions(dataModelHeading) {
     label: '-None-',
     value: '-None-'
   });
-  // So we push in the 'filter_headings' just like this
-  // cause the data formed is super weird...
+
+  // We push in the Longitude, for the Longitude column selection
   modelOptions.push({
-    label: 'filter_headings',
-    value: 'filter_headings'
+    label: 'Longitude',
+    value: 'Longitude'
+  });
+
+  // We push in the Latitude, for the Latitude column selection
+  modelOptions.push({
+    label: 'Latitude',
+    value: 'Latitude'
+  });
+
+  // and because we have a bunch of different types of values
+  arrayOfValues.forEach(valName => {
+    modelOptions.push({
+      label: valName,
+      value: valName
+    });
   });
 
   Object.keys(dataModelHeading.mapping_dict).map(key => {
-    // and now we push in the rest
-    modelOptions.push({
-      label: key,
-      value: key
-    });
+    // so since we already pushed in the only available value selections
+    // with types/formats we don't need the default value and value_format
+    if (key !== 'value') {
+      // and now we push in the rest
+      modelOptions.push({
+        label: key,
+        value: key
+      });
+    }
   });
 
   return modelOptions;
 }
 
-export function formatManData(typesString) {
+export function formatManData(typesString, modelOptions) {
   const manMapData = [];
 
   // so yeah the types we retrieve from the overview step contains the actual column headers
@@ -129,8 +140,12 @@ export function formatManData(typesString) {
     manMapData.push({
       lockedIn: false,
       fileType: types[typeKey][0],
-      zoomModel: '-None-',
-      label: undefined
+      // so if a file type exists as a model, it should be selected by default
+      zoomModel: find(modelOptions, ['value', types[typeKey][0]])
+        ? types[typeKey][0]
+        : '-None-',
+      label: undefined,
+      emptyFieldRow: false
     });
   });
 

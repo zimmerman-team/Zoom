@@ -8,6 +8,7 @@ import CellValue from 'components/ZoomTable/CellValue';
 import theme from 'theme/Theme';
 
 export const ModuleContainer = styled(Box)`
+  width: 100%;
   background-color: ${theme.color.aidsFondsWhite};
   padding: 0 1% 40px 1%;
 `;
@@ -22,22 +23,47 @@ export const HeaderCheckBox = styled.div`
 `;
 
 export const CheckBox = styled(HeaderCheckBox)`
-  margin: 7px auto 0 auto;
+  margin: 6px auto 6px auto;
 `;
 
 export const ErrorCell = styled(CellValue)`
-  padding-top: 6px;
-  padding-left: 20px;
+  // padding-left: 20px;
   padding-right: 8px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const ErrorColHeader = styled(ColumnHeader)`
-  padding-left: 20px;
+  // padding-left: 20px;
+`;
+
+export const IgnoreHeaderCheckBox = styled(HeaderCheckBox)`
+  color: black;
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  margin: 5px auto 0 5px;
+  line-height: 24px;
+`;
+
+export const HeaderName = styled.div`
+  border-bottom: 2px solid ${theme.color.zoomGreyNine};
+`;
+
+export const IgnorHeaderLabel = styled(ColumnHeader)`
+  margin-left: 5px;
+  width: max-content;
+  font-size: 10px;
 `;
 
 export const ErrorTable = styled(ZoomTable)`
   & tbody {
+    & th {
+      vertical-align: middle;
+    }
     & td {
+      vertical-align: middle !important;
       &:first-child {
         width: 52px;
         height: 44px;
@@ -55,7 +81,7 @@ export const ErrorTable = styled(ZoomTable)`
 export const TabContainer = styled.div`
   display: flex;
   width: fit-content;
-  margin: 0 auto 14px auto;
+  margin: 0 auto;
 `;
 
 export const TabText = styled.div`
@@ -72,4 +98,9 @@ export const TabDivider = styled(TabText)`
   &:hover {
     cursor: unset;
   }
+`;
+
+export const ButtonContainer = styled.div`
+  height: 30px;
+  margin: 5px;
 `;

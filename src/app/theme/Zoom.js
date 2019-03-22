@@ -7,7 +7,7 @@ const isObject = item =>
 
 const deepFreeze = obj => {
   Object.keys(obj).forEach(
-    key => key && isObject(obj[key]) && Object.freeze(obj[key]),
+    key => key && isObject(obj[key]) && Object.freeze(obj[key])
   );
   return Object.freeze(obj);
 };
@@ -20,12 +20,12 @@ const statusColors = {
   warning: '#FFD144',
   ok: '#01a982',
   unknown: '#CCCCCC',
-  disabled: '#CCCCCC',
+  disabled: '#CCCCCC'
 };
 
 const colors = {
   brand: theme.color.aidsFondsRed,
-  focus: accentColors[0],
+  focus: accentColors[0]
 };
 
 const colorArray = (array, prefix) =>
@@ -67,22 +67,22 @@ export const zoom = deepFreeze({
           url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Bold.svg#svgFontName') format('svg'); 
           font-weight: 700;
         }
-      `,
-    },
+      `
+    }
   },
   text: {
     extend: css`
       color: #9b9b9b;
       font-size: 14px;
       font-weight: 500;
-    `,
+    `
   },
   radioButton: {
     gap: 'xsmall',
     size: '16px',
     border: {
       color: '#b4bfc9',
-      width: '1px',
+      width: '1px'
     },
     extend: css`
       color: ${theme.color.zoomBlack};
@@ -92,17 +92,17 @@ export const zoom = deepFreeze({
 
     hover: {
       border: {
-        color: 'dark-3',
-      },
+        color: 'dark-3'
+      }
     },
     check: {
       radius: '100%',
       color: {
-        light: theme.color.zoomBlack,
-      },
+        light: theme.color.zoomBlack
+      }
     },
     icon: {
-      size: '10px',
-    },
-  },
+      size: '10px'
+    }
+  }
 });

@@ -6,7 +6,7 @@ import { ForgetPassword } from 'components/SideBar/comps/ForgetPassword/ForgetPa
 import {
   ForgotPassLink,
   TextField,
-  FormButton,
+  FormButton
 } from 'components/SideBar/comps/LoginForm/LoginForm.styles';
 
 const wrapper1 = shallow(<ForgetPassword view="login" />);

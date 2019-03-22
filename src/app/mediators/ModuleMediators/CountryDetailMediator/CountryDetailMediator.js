@@ -12,9 +12,11 @@ import isEqual from 'lodash/isEqual';
 import {
   titleCase,
   formatBarChartInfoIndicators,
-  formatLineChartData,
+  // formatLineChartData,
   formatProjectData,
   formatWikiExcerpts,
+  getProjectCountNCommitment,
+  formatLineChart2Data
 } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
 
 /* actions */
@@ -36,7 +38,7 @@ const propTypes = {
       exsectionformat: PropTypes.string,
       formatversion: PropTypes.number,
       titles: PropTypes.string,
-      format: PropTypes.string,
+      format: PropTypes.string
     }),
     request: PropTypes.bool,
     success: PropTypes.bool,
@@ -48,23 +50,23 @@ const propTypes = {
             pageid: PropTypes.number,
             ns: PropTypes.number,
             title: PropTypes.string,
-            extract: PropTypes.string,
-          }),
-        ),
-      }),
+            extract: PropTypes.string
+          })
+        )
+      })
     }),
     error: PropTypes.shape({
       status: PropTypes.string,
       statusText: PropTypes.string,
-      result: PropTypes.object,
-    }),
+      result: PropTypes.object
+    })
   }),
   countryActivities: PropTypes.shape({
     values: PropTypes.shape({
       recipient_country: PropTypes.string,
       page: PropTypes.number,
       page_size: PropTypes.number,
-      fields: PropTypes.string,
+      fields: PropTypes.string
     }),
     request: PropTypes.bool,
     success: PropTypes.bool,
@@ -72,41 +74,41 @@ const propTypes = {
       count: PropTypes.number,
       next: PropTypes.string,
       previous: PropTypes.string,
-      results: PropTypes.array,
+      results: PropTypes.array
     }),
     error: PropTypes.shape({
       status: PropTypes.string,
       statusText: PropTypes.string,
-      result: PropTypes.object,
-    }),
+      result: PropTypes.object
+    })
   }),
   indicatorAggregations: PropTypes.shape({
     country: PropTypes.arrayOf(
       PropTypes.shape({
         indicatorName: PropTypes.string,
         geolocationTag: PropTypes.string,
-        value: PropTypes.number,
-      }),
+        value: PropTypes.number
+      })
     ),
     global: PropTypes.arrayOf(
       PropTypes.shape({
         indicatorName: PropTypes.string,
-        value: PropTypes.number,
-      }),
+        value: PropTypes.number
+      })
     ),
     aidsEpidemic: PropTypes.arrayOf(
       PropTypes.shape({
         indicatorName: PropTypes.string,
         date: PropTypes.string,
-        value: PropTypes.number,
-      }),
-    ),
-  }),
+        value: PropTypes.number
+      })
+    )
+  })
 };
 const defaultProps = {
   excerpts: {},
   countryActivities: {},
-  indicatorAggregations: {},
+  indicatorAggregations: {}
 };
 
 class CountryDetailMediator extends React.Component {
@@ -115,17 +117,27 @@ class CountryDetailMediator extends React.Component {
     this.state = {
       transParams: mock.transParams,
       wikiParams: mock.wikiParams,
+      projectInfo: {},
       projectData: [],
       excerpts: ['', ''],
       barChartIndicators: mock.barChartIndicators,
-      aidsEpIndicators: mock.aidsEpIndicators,
+      aidsEpIndicators: mock.lineChartInd.map(lci => lci.name),
       aidsLineChartData: [],
       countryName: '',
       infoBarData: [],
+      projectSort: mock.transParams.ordering,
+      isSortByOpen: false,
+      projectsLoading: false
     };
+
+    this.changeSortBy = this.changeSortBy.bind(this);
+    this.setWrapperRef = this.setWrapperRef.bind(this);
+    this.setIsSortByOpen = this.setIsSortByOpen.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
   }
 
   componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
     // We get countries related activities here
     const transParams = this.state.transParams;
     transParams.recipient_country = this.props.match.params.iso2.toUpperCase();
@@ -142,13 +154,20 @@ class CountryDetailMediator extends React.Component {
     if (
       !isEqual(
         this.props.countryActivities.data,
-        prevProps.countryActivities.data,
+        prevProps.countryActivities.data
       )
     ) {
       const projectData = formatProjectData(
-        get(this.props.countryActivities, 'data.results', []),
+        get(this.props.countryActivities, 'data.results', [])
       );
-      this.setState({ projectData });
+      const projectInfo = getProjectCountNCommitment(
+        get(this.props.countryActivities, 'data.results', [])
+      );
+      this.setState({
+        projectData,
+        projectInfo,
+        projectsLoading: this.props.countryActivities.request
+      });
     }
 
     if (!isEqual(this.props.excerpts.data, prevProps.excerpts.data)) {
@@ -160,7 +179,7 @@ class CountryDetailMediator extends React.Component {
     if (
       !isEqual(
         this.props.indicatorAggregations,
-        prevProps.indicatorAggregations,
+        prevProps.indicatorAggregations
       )
     ) {
       // Save the countries name that we retrieved
@@ -168,14 +187,14 @@ class CountryDetailMediator extends React.Component {
       const countryName = get(
         this.props.indicatorAggregations,
         'country[0].geolocationTag',
-        'CountryNotFound',
+        'CountryNotFound'
       );
       // Here we format the bar chart indicator data
       const infoBarData = formatBarChartInfoIndicators(
         this.props.indicatorAggregations.country,
         this.props.indicatorAggregations.global,
         this.state.barChartIndicators,
-        countryName,
+        countryName
       );
 
       // We dispatch wiki api here, cause this is the place where we get the country name
@@ -183,35 +202,80 @@ class CountryDetailMediator extends React.Component {
       wikiParams.titles = titleCase(countryName);
       this.props.dispatch(actions.countryExcerptRequest(this.state.wikiParams));
 
-      const aidsLineChartData = formatLineChartData(
-        this.props.indicatorAggregations.aidsEpidemic,
+      const aidsLineChartData = formatLineChart2Data(
+        this.props.indicatorAggregations.aidsEpidemic
       );
 
       this.setState({
         infoBarData,
         countryName,
         aidsLineChartData,
-        wikiParams,
+        wikiParams
       });
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  setIsSortByOpen() {
+    this.setState(prevState => ({
+      isSortByOpen: !prevState.isSortByOpen
+    }));
+  }
+
+  setWrapperRef(node) {
+    this.wrapperRef = node;
   }
 
   refetch() {
     this.props.relay.refetch({
       countryCode: [this.props.match.params.iso2.toLowerCase()],
       barChartIndicators: this.state.barChartIndicators,
-      aidsEpIndicators: this.state.aidsEpIndicators,
+      aidsEpIndicators: this.state.aidsEpIndicators
     });
+  }
+
+  changeSortBy(e) {
+    const value = e.target.id;
+    this.setState(
+      {
+        projectSort: value
+      },
+      () => {
+        this.props.dispatch(
+          oipaActions.countryActivitiesRequest({
+            ...this.state.transParams,
+            ordering: value
+          })
+        );
+      }
+    );
+  }
+
+  handleClickOutside(event) {
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+      this.setState({ isSortByOpen: false });
+    }
   }
 
   render() {
     return (
       <CountryDetailModule
         projectData={this.state.projectData}
+        projectInfo={this.state.projectInfo}
         infoBarData={this.state.infoBarData}
         aidsLineChartData={this.state.aidsLineChartData}
         countryName={this.state.countryName}
         excerpts={this.state.excerpts}
+        aidsEpIndicators={mock.lineChartInd}
+        projectSort={this.state.projectSort}
+        changeSortBy={this.changeSortBy}
+        setWrapperRef={this.setWrapperRef}
+        setIsSortByOpen={this.setIsSortByOpen}
+        isSortByOpen={this.state.isSortByOpen}
+        projectsLoading={this.state.projectsLoading}
       />
     );
   }
@@ -220,7 +284,7 @@ class CountryDetailMediator extends React.Component {
 const mapStateToProps = state => {
   return {
     excerpts: state.countryExcerpt,
-    countryActivities: state.countryActivities,
+    countryActivities: state.countryActivities
   };
 };
 
@@ -246,15 +310,7 @@ export default createRefetchContainer(
         indicatorName
         geolocationTag
         value
-      }
-      global: datapointsAggregation(
-        groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
-        orderBy: ["indicatorName"]
-        aggregation: ["Sum(value)"]
-        indicatorName_In: $barChartIndicators
-      ) {
-        indicatorName
-        value
+        date
       }
       aidsEpidemic: datapointsAggregation(
         groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
@@ -282,5 +338,5 @@ export default createRefetchContainer(
           aidsEpIndicators: $aidsEpIndicators
         )
     }
-  `,
+  `
 );

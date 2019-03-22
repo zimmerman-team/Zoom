@@ -7,34 +7,41 @@ import theme from 'theme/Theme';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-/* Components */
+/* consts */
+import paneTypes from '__consts__/PaneTypesConst';
+
+/* utils */
+import isEqual from 'lodash/isEqual';
+
+/* components */
 import {
   AidsFondLogo,
   MenuButton,
   ComponentBase,
   PaneButton,
-  PaneButtonText,
+  PaneButtonText
 } from 'components/AppBar/AppBar.styles';
 
 /* icons */
 import SvgIconPlus from 'assets/icons/IconPlus';
 import SvgIconCloseSmall from 'assets/icons/IconCloseSmaller';
+import SvgIconBack from 'assets/icons/IconBack';
 
 /* actions */
 import * as actions from 'services/actions/general';
 
 const propTypes = {
-  toggleSideBar: PropTypes.func,
+  toggleSideBar: PropTypes.func
 };
 const defaultProps = {
   // toggleSideBar: undefined,
 };
 
-class AppBar extends React.Component {
+export class AppBar extends React.Component {
   state = {
     auth: true,
     anchorEl: null,
-    paneButton: null,
+    paneButton: null
   };
 
   componentDidMount() {
@@ -52,19 +59,53 @@ class AppBar extends React.Component {
 
   loadPaneButton() {
     let paneButton = '';
-    switch (this.props.location.pathname) {
-      case '/home':
+    let buttonLabel = '';
+    let paneType = 'none';
+
+    if (this.props.auth0Client.isAuthenticated()) {
+      paneType =
+        this.props.dataPaneOpen === paneTypes.none
+          ? paneTypes.privPane
+          : paneTypes.none;
+      buttonLabel = paneType !== paneTypes.none ? 'Create' : 'Close';
+    } else {
+      paneType =
+        this.props.dataPaneOpen === paneTypes.none
+          ? paneTypes.pubPane
+          : paneTypes.none;
+      buttonLabel = paneType !== paneTypes.none ? 'Geo map filters' : 'Hide';
+    }
+
+    let paneIcon =
+      paneType !== paneTypes.none ? <SvgIconPlus /> : <SvgIconCloseSmall />;
+
+    // so this be some extra confusing logic for navpane
+    if (
+      this.props.dataPaneOpen === paneTypes.createChart ||
+      this.props.dataPaneOpen === paneTypes.convertData
+    ) {
+      paneType = paneTypes.privPane;
+      buttonLabel = 'back';
+      paneIcon = <SvgIconBack />;
+    }
+
+    switch (true) {
+      case this.props.location.pathname === '/home' ||
+        this.props.location.pathname === '/focus/NL' ||
+        this.props.location.pathname === '/focus/nl' ||
+        this.props.location.pathname === '/focus/KE' ||
+        this.props.location.pathname === '/focus/ke' ||
+        this.props.location.pathname === '/callback':
         paneButton = (
           <PaneButton
+            data-cy="geomap-filter-button"
             onClick={() =>
-              this.props.dispatch(
-                actions.dataPaneToggleRequest(!this.props.dataPaneOpen),
-              )
+              this.props.dispatch(actions.dataPaneToggleRequest(paneType))
             }
           >
-            {!this.props.dataPaneOpen ? <SvgIconPlus /> : <SvgIconCloseSmall />}
-            <PaneButtonText>
-              {!this.props.dataPaneOpen ? 'Geo map filters' : 'Close & save '}
+            {paneIcon}
+            <PaneButtonText data-cy="appbar-right-button">
+              {buttonLabel}
             </PaneButtonText>
           </PaneButton>
         );
@@ -95,13 +136,11 @@ class AppBar extends React.Component {
             a11yTitle="Aidsfonds logo"
             fit="contain"
             alignSelf="center"
-            src="https://aidsfonds.nl/Assets/images/aidsfonds_logo_red.png"
+            src="https://zoom.aidsfonds.nl/static/b459aca02fec5b684d4a8fb3fe7b44a6.svg"
           />
         </Box>
 
         {this.state.paneButton}
-
-        <Box direction="row">{/*<div>button</div>*/}</Box>
       </ComponentBase>
     );
   }
@@ -112,7 +151,7 @@ AppBar.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
-    dataPaneOpen: state.dataPaneOpen.open,
+    dataPaneOpen: state.dataPaneOpen.open
   };
 };
 

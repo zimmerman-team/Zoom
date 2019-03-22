@@ -101,3 +101,14 @@ export const InfoLabel = styled.div`
   width: 88%;
   margin: 8px auto 0 auto;
 `;
+
+export const EmptyOptions = styled(DropDownItem)`
+  color: ${theme.color.zoomGreyThree};
+  font-size: 14px;
+  font-family: ${theme.font.zoomFontFamTwo};
+
+  &:hover {
+    cursor: unset;
+    background-color: unset;
+  }
+`;

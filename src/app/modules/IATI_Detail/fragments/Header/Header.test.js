@@ -9,7 +9,7 @@ import {
   DetailList,
   DetailListItem,
   ItemInfo,
-  ItemLabel,
+  ItemLabel
 } from 'modules/IATI_Detail/fragments/Header/Header.styles';
 
 const wrapper = shallow(<Header data={iatiDetailMockData} />);

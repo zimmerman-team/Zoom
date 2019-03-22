@@ -4,12 +4,12 @@ import auth0 from 'auth0-js';
 class Auth {
   constructor() {
     this.auth0 = new auth0.WebAuth({
-      domain: 'zimmermanzimmerman.eu.auth0.com',
-      audience: 'https://zimmermanzimmerman.eu.auth0.com/userinfo',
+      domain: process.env.REACT_APP_AUTH_CUSTOM_DOMAIN,
+      audience: `${process.env.REACT_APP_AUTH_DOMAIN}/userinfo`,
       clientID: process.env.REACT_APP_CLIENT_ID,
       redirectUri: `${process.env.REACT_APP_PROJECT_URL}/callback`,
       responseType: 'token id_token',
-      scope: 'openid profile',
+      scope: 'openid profile'
     });
 
     this.addUser = this.addUser.bind(this);
@@ -28,9 +28,9 @@ class Auth {
       {
         realm: 'Username-Password-Authentication',
         email: username,
-        password,
+        password
       },
-      err => reduxAction(err),
+      err => reduxAction(err)
     );
   }
 
@@ -42,7 +42,7 @@ class Auth {
           return reject(err);
         }
         this.setSession(authResult);
-        resolve();
+        resolve(authResult);
       });
     });
   }
@@ -56,7 +56,7 @@ class Auth {
     localStorage.setItem('auth_id_token', authResult.idToken);
     localStorage.setItem('auth_expires_at', this.expiresAt);
     this.getUserRole();
-    // this.getUserGroup();
+    this.getUserGroup();
   }
 
   signOut() {
@@ -68,7 +68,7 @@ class Auth {
     localStorage.removeItem('userGroup');
     this.auth0.logout({
       returnTo: process.env.REACT_APP_PROJECT_URL,
-      clientID: process.env.REACT_APP_CLIENT_ID,
+      clientID: process.env.REACT_APP_CLIENT_ID
     });
   }
 
@@ -86,8 +86,10 @@ class Auth {
     return new Promise((resolve, reject) => {
       this.auth0.checkSession({}, (err, authResult) => {
         // if (err) return reject(err);
-        if (!err) this.setSession(authResult);
-        resolve();
+        if (!err) {
+          this.setSession(authResult);
+          resolve(authResult);
+        }
       });
     });
   }
@@ -96,12 +98,12 @@ class Auth {
     this.auth0.changePassword(
       {
         email,
-        connection: 'Username-Password-Authentication',
+        connection: 'Username-Password-Authentication'
       },
       err => {
         // console.log(err);
         reduxAction && reduxAction();
-      },
+      }
     );
   }
 
@@ -115,102 +117,111 @@ class Auth {
 
   getUserGroup(that = null) {
     if (this.profile) {
-      axios
-        .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
-          client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
-          client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-          audience: 'urn:auth0-authz-api',
-          grant_type: 'client_credentials',
-        })
-        .then(response => {
-          axios
-            .get(
-              `${process.env.REACT_APP_AE_API_URL}/users/${
-                this.profile.sub
-              }/groups`,
-              {
-                headers: {
-                  Authorization: `${response.data.token_type} ${
-                    response.data.access_token
-                  }`,
-                },
-              },
-            )
-            .then(response2 => {
-              localStorage.setItem('userGroup', response2.data[0].name);
-              if (that) {
-                that.setState({
-                  group: response2.data[0].name,
-                });
-              }
-            })
-            .catch(error => {
-              console.error(error);
-            });
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+            client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+            client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+            audience: 'urn:auth0-authz-api',
+            grant_type: 'client_credentials'
+          })
+          .then(response => {
+            axios
+              .get(
+                `${process.env.REACT_APP_AE_API_URL}/users/${
+                  this.profile.sub
+                }/groups`,
+                {
+                  headers: {
+                    Authorization: `${response.data.token_type} ${
+                      response.data.access_token
+                    }`
+                  }
+                }
+              )
+              .then(response2 => {
+                localStorage.setItem('userGroup', response2.data[0].name);
+                if (that) {
+                  that.setState({
+                    group: response2.data[0].name
+                  });
+                }
+
+                resolve(response2.data[0].name);
+              })
+              .catch(error => {
+                reject(error);
+              });
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     }
   }
 
   getUserRole() {
     if (this.profile) {
-      axios
-        .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
-          client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
-          client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-          audience: 'urn:auth0-authz-api',
-          grant_type: 'client_credentials',
-        })
-        .then(response => {
-          axios
-            .get(
-              `${process.env.REACT_APP_AE_API_URL}/users/${
-                this.profile.sub
-              }/roles`,
-              {
-                headers: {
-                  Authorization: `${response.data.token_type} ${
-                    response.data.access_token
-                  }`,
-                },
-              },
-            )
-            .then(response2 => {
-              localStorage.setItem('userRole', response2.data[0].name);
-            })
-            .catch(error => {
-              console.error(error);
-            });
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+            client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+            client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+            audience: 'urn:auth0-authz-api',
+            grant_type: 'client_credentials'
+          })
+          .then(response => {
+            axios
+              .get(
+                `${process.env.REACT_APP_AE_API_URL}/users/${
+                  this.profile.sub
+                }/roles`,
+                {
+                  headers: {
+                    Authorization: `${response.data.token_type} ${
+                      response.data.access_token
+                    }`
+                  }
+                }
+              )
+              .then(response2 => {
+                localStorage.setItem('userRole', response2.data[0].name);
+                resolve(response2.data[0].name);
+              })
+              .catch(error => {
+                reject(error);
+              });
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     }
   }
 
   /* User management actions */
 
-  getAllUsers(stateAction = null, page, sort, search) {
+  getAllUsers(stateAction = null, page = 0, sort, search) {
     axios
-      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
         client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
         client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-        audience: 'https://zimmermanzimmerman.eu.auth0.com/api/v2/',
-        grant_type: 'client_credentials',
+        audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
+        grant_type: 'client_credentials'
       })
       .then(response => {
         axios
           .get(
-            `https://zimmermanzimmerman.eu.auth0.com/api/v2/users?include_totals=true&per_page=10&page=${page}&sort=${sort}&q=identities.connection:"Username-Password-Authentication"${search}&search_engine=v3`,
+            `${
+              process.env.REACT_APP_AUTH_DOMAIN
+            }/api/v2/users?include_totals=true&per_page=10&page=${page}&sort=${sort}&q=identities.connection:"Username-Password-Authentication"${search}&search_engine=v3`,
             {
               headers: {
                 Authorization: `${response.data.token_type} ${
                   response.data.access_token
-                }`,
-              },
-            },
+                }`
+              }
+            }
           )
           .then(response2 => {
             if (stateAction) {
@@ -226,13 +237,13 @@ class Auth {
       });
   }
 
-  getUserGroups(that = null) {
+  getUserGroups(that = null, stateVar = 'userGroups') {
     axios
-      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
         client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
         client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
         audience: 'urn:auth0-authz-api',
-        grant_type: 'client_credentials',
+        grant_type: 'client_credentials'
       })
       .then(response => {
         axios
@@ -240,20 +251,20 @@ class Auth {
             headers: {
               Authorization: `${response.data.token_type} ${
                 response.data.access_token
-              }`,
-            },
+              }`
+            }
           })
           .then(response2 => {
             // console.log(response2);
             if (that) {
               that.setState({
-                userGroups: response2.data.groups.map(g => {
+                [stateVar]: response2.data.groups.map(g => {
                   return {
                     ...g,
                     label: g.name,
-                    value: g._id,
+                    value: g._id
                   };
-                }),
+                })
               });
             }
           })
@@ -268,11 +279,11 @@ class Auth {
 
   getUserRoles(that = null) {
     axios
-      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
         client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
         client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
         audience: 'urn:auth0-authz-api',
-        grant_type: 'client_credentials',
+        grant_type: 'client_credentials'
       })
       .then(response => {
         axios
@@ -280,8 +291,8 @@ class Auth {
             headers: {
               Authorization: `${response.data.token_type} ${
                 response.data.access_token
-              }`,
-            },
+              }`
+            }
           })
           .then(response2 => {
             // console.log(response2);
@@ -291,9 +302,9 @@ class Auth {
                   return {
                     ...g,
                     label: g.name,
-                    value: g._id,
+                    value: g._id
                   };
-                }),
+                })
               });
             }
           })
@@ -308,11 +319,11 @@ class Auth {
 
   addUserToGroup(user_id, group_id, parent) {
     axios
-      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
         client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
         client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
         audience: 'urn:auth0-authz-api',
-        grant_type: 'client_credentials',
+        grant_type: 'client_credentials'
       })
       .then(response => {
         axios
@@ -323,9 +334,9 @@ class Auth {
               headers: {
                 Authorization: `${response.data.token_type} ${
                   response.data.access_token
-                }`,
-              },
-            },
+                }`
+              }
+            }
           )
           .then(response2 => {
             // console.log(response2);
@@ -334,7 +345,7 @@ class Auth {
             console.error(error);
             parent.setState({
               secondaryInfoMessage:
-                'Something went wrong with assigning role or organisation. Please try again later.',
+                'Something went wrong with assigning role or organisation. Please try again later.'
             });
           });
       })
@@ -342,18 +353,18 @@ class Auth {
         console.error(error);
         parent.setState({
           secondaryInfoMessage:
-            'Something went wrong with assigning role or organisation. Please try again later.',
+            'Something went wrong with assigning role or organisation. Please try again later.'
         });
       });
   }
 
   assignRoleToUser(user_id, role_id) {
     axios
-      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
         client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
         client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
         audience: 'urn:auth0-authz-api',
-        grant_type: 'client_credentials',
+        grant_type: 'client_credentials'
       })
       .then(response => {
         axios
@@ -364,9 +375,9 @@ class Auth {
               headers: {
                 Authorization: `${response.data.token_type} ${
                   response.data.access_token
-                }`,
-              },
-            },
+                }`
+              }
+            }
           )
           .then(response2 => {
             // console.log(response2);
@@ -375,7 +386,7 @@ class Auth {
             console.error(error);
             parent.setState({
               secondaryInfoMessage:
-                'Something went wrong with assigning role or organisation. Please try again later.',
+                'Something went wrong with assigning role or organisation. Please try again later.'
             });
           });
       })
@@ -383,7 +394,7 @@ class Auth {
         console.error(error);
         parent.setState({
           secondaryInfoMessage:
-            'Something went wrong with assigning role or organisation. Please try again later.',
+            'Something went wrong with assigning role or organisation. Please try again later.'
         });
       });
   }
@@ -391,16 +402,16 @@ class Auth {
   addUser(name, surname, email, group_id, role_id, parent) {
     const _this = this;
     axios
-      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
         client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
         client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-        audience: 'https://zimmermanzimmerman.eu.auth0.com/api/v2/',
-        grant_type: 'client_credentials',
+        audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
+        grant_type: 'client_credentials'
       })
       .then(res1 => {
         axios
           .post(
-            'https://zimmermanzimmerman.eu.auth0.com/api/v2/users',
+            `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/users`,
             {
               email,
               blocked: false,
@@ -411,15 +422,15 @@ class Auth {
               family_name: surname,
               name: `${name} ${surname}`,
               nickname: name,
-              connection: 'Username-Password-Authentication',
+              connection: 'Username-Password-Authentication'
             },
             {
               headers: {
                 Authorization: `${res1.data.token_type} ${
                   res1.data.access_token
-                }`,
-              },
-            },
+                }`
+              }
+            }
           )
           .then(res2 => {
             if (res2.status === 201) {
@@ -431,14 +442,14 @@ class Auth {
                 firstName: '',
                 lastName: '',
                 userRole: { label: '', value: '', _id: '' },
-                organisation: { label: '', value: '', _id: '' },
+                organisation: { label: '', value: '', _id: '' }
               });
               this.addUserToGroup(res2.data.user_id, group_id, parent);
               this.assignRoleToUser(res2.data.user_id, role_id, parent);
             } else {
               parent.setState({
                 success: false,
-                errorMessage: res2.data.statusText,
+                errorMessage: res2.data.statusText
               });
             }
           })
@@ -446,107 +457,121 @@ class Auth {
             console.log(error);
             parent.setState({
               success: false,
-              errorMessage: error.response.data.message,
+              errorMessage: error.response.data.message
             });
           });
       })
       .catch(error => {
         parent.setState({
           success: false,
-          errorMessage: error.response.data.message,
+          errorMessage: error.response.data.message
         });
       });
   }
 
   addMultipleUsersToGroup(group_id, users, headers, parent) {
-    axios
-      .patch(
-        `${process.env.REACT_APP_AE_API_URL}/groups/${group_id}/members`,
-        users,
-        { headers },
-      )
-      .then(res2 => {
-        if (res2.status === 204) {
-          parent.setState({
-            success: true,
-            secondaryInfoMessage: null,
-          });
-        } else {
+    return new Promise(resolve => {
+      axios
+        .patch(
+          `${process.env.REACT_APP_AE_API_URL}/groups/${group_id}/members`,
+          users,
+          { headers }
+        )
+        .then(res2 => {
+          if (res2.status === 204) {
+            parent.setState({
+              success: true,
+              secondaryInfoMessage: null
+            });
+
+            resolve();
+          } else {
+            parent.setState({
+              success: false,
+              secondaryInfoMessage: res2.data.statusText
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
           parent.setState({
             success: false,
-            secondaryInfoMessage: res2.data.statusText,
+            secondaryInfoMessage: error.response.data.message
           });
-        }
-      })
-      .catch(error => {
-        console.log(error);
-        parent.setState({
-          success: false,
-          secondaryInfoMessage: error.response.data.message,
         });
-      });
+    });
   }
 
   addGroup(name, users, parent) {
-    axios
-      .post('https://zimmermanzimmerman.eu.auth0.com/oauth/token', {
-        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
-        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-        audience: 'urn:auth0-authz-api',
-        grant_type: 'client_credentials',
-      })
-      .then(res1 => {
-        axios
-          .post(
-            `${process.env.REACT_APP_AE_API_URL}/groups`,
-            { name, description: name },
-            {
-              headers: {
-                Authorization: `${res1.data.token_type} ${
-                  res1.data.access_token
-                }`,
-              },
-            },
-          )
-          .then(res2 => {
-            if (res2.status === 200 || res2.status === 204) {
-              parent.setState({
-                success: true,
-                errorMessage: null,
-                name: '',
-                users: [],
-              });
-              this.addMultipleUsersToGroup(
-                res2.data._id,
-                users,
-                {
+    return new Promise(resolve => {
+      let today = new Date();
+      let dd = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate();
+      let mm =
+        today.getMonth() + 1 < 10
+          ? `0${today.getMonth() + 1}`
+          : today.getMonth() + 1; //January is 0
+      let yyyy = today.getFullYear();
+      today = `${dd}/${mm}/${yyyy}`;
+      axios
+        .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+          client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+          client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+          audience: 'urn:auth0-authz-api',
+          grant_type: 'client_credentials'
+        })
+        .then(res1 => {
+          axios
+            .post(
+              `${process.env.REACT_APP_AE_API_URL}/groups`,
+              { name, description: `${today},${this.profile.name}` },
+              {
+                headers: {
                   Authorization: `${res1.data.token_type} ${
                     res1.data.access_token
-                  }`,
-                },
-                parent,
-              );
-            } else {
+                  }`
+                }
+              }
+            )
+            .then(res2 => {
+              if (res2.status === 200 || res2.status === 204) {
+                parent.setState({
+                  success: true,
+                  errorMessage: null,
+                  name: '',
+                  users: []
+                });
+                this.addMultipleUsersToGroup(
+                  res2.data._id,
+                  users,
+                  {
+                    Authorization: `${res1.data.token_type} ${
+                      res1.data.access_token
+                    }`
+                  },
+                  parent
+                ).then(() => resolve());
+              } else {
+                parent.setState({
+                  success: false,
+                  errorMessage: res2.data.statusText
+                });
+              }
+            })
+            .catch(error => {
+              console.log(error);
               parent.setState({
                 success: false,
-                errorMessage: res2.data.statusText,
+                errorMessage: error.response.data.message
               });
-            }
-          })
-          .catch(error => {
-            console.log(error);
-            parent.setState({
-              success: false,
-              errorMessage: error.response.data.message,
             });
+        })
+        .catch(error => {
+          parent.setState({
+            success: false,
+            errorMessage: error.response.data.message
           });
-      })
-      .catch(error => {
-        parent.setState({
-          success: false,
-          errorMessage: error.response.data.message,
         });
-      });
+    });
   }
 }
 

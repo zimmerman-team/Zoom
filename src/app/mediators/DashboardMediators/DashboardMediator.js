@@ -1,5 +1,6 @@
 /* base */
 import React from 'react';
+import { matchPath } from 'react-router';
 import { withRouter } from 'react-router-dom';
 
 /* utils */
@@ -7,12 +8,115 @@ import get from 'lodash/get';
 
 /* components */
 import DashboardModule from 'modules/dashboard/DashboardModule';
+import { formatUsersTabData, formatTeamsTabData } from 'utils/dashboardUtils';
+
+/* consts */
+import tabs from '__consts__/DashboardTabsConsts';
+import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
 
 class DashboardMediator extends React.Component {
+  state = {
+    users: [],
+    teams: [],
+    sort: 'name:1',
+    searchKeyword: '',
+    isSortByOpen: false
+  };
+
+  componentDidMount = () => {
+    this.reloadData();
+    /* todo: not sure if this is the best way to handle this, see if it can be refactored */
+    document.addEventListener('mousedown', this.handleClickOutside);
+  };
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  getAllUsers = () => {
+    this.props.auth0Client.getAllUsers(
+      this.setUsers,
+      this.state.page,
+      this.state.sort,
+      this.state.searchKeyword !== ''
+        ? ` AND name:${this.state.searchKeyword}*`
+        : ''
+    );
+  };
+
+  setUsers = data => {
+    this.setState({
+      users: formatUsersTabData(data)
+    });
+  };
+
+  setWrapperRef = node => {
+    this.wrapperRef = node;
+  };
+
+  setIsSortByOpen = () => {
+    this.setState(prevState => ({
+      isSortByOpen: !prevState.isSortByOpen
+    }));
+  };
+
+  changeSortBy = e => {
+    this.setState(
+      {
+        sort: e.target.id
+      },
+      () => {
+        this.reloadData('sort');
+      }
+    );
+  };
+
+  handleClickOutside = event => {
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+      this.setState({ isSortByOpen: false });
+    }
+  };
+
+  changeSearchKeyword = e => {
+    this.setState(
+      {
+        searchKeyword: e.target.value
+      },
+      () => {
+        this.reloadData();
+      }
+    );
+  };
+
+  reloadData = typeOfChange => {
+    if (typeOfChange === 'sort' && this.props.match.params.tab === 'users') {
+      this.getAllUsers();
+    }
+    if (typeOfChange !== 'sort') {
+      this.getAllUsers();
+      this.props.auth0Client.getUserGroups(this, 'teams');
+    }
+  };
+
   render() {
     return (
       <DashboardModule
-        activeTab={this.props.match.params.tab}
+        // tabs={tabs}
+        sort={this.state.sort}
+        users={this.state.users}
+        changeSortBy={this.changeSortBy}
+        setWrapperRef={this.setWrapperRef}
+        setIsSortByOpen={this.setIsSortByOpen}
+        isSortByOpen={this.state.isSortByOpen}
+        // activeTab={this.props.match.params.tab}
+        searchKeyword={this.state.searchKeyword}
+        changeSearchKeyword={this.changeSearchKeyword}
+        teams={formatTeamsTabData(
+          this.state.teams,
+          this.state.sort,
+          this.state.searchKeyword
+        )}
+        navItems={data(this.state.users, this.state.teams)}
         greetingName={get(this.props.auth0Client.getProfile(), 'nickname', '')}
       />
     );

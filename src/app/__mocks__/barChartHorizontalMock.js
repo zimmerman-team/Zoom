@@ -1,52 +1,38 @@
 import theme from 'theme/Theme';
-export const barChartMockData = [
+export default [
   {
-    country: '2012',
+    indicator: '2012',
     Kenya: 0,
-    KenyaColor: theme.color.chartColorTwo,
-    Global: 0,
-    GlobalColor: theme.color.chartColorThree,
+    KenyaColor: theme.color.chartColorTwo
   },
   {
-    country: '2013',
+    indicator: '2013',
     Kenya: 0,
-    KenyaColor: theme.color.chartColorTwo,
-    Global: 0,
-    GlobalColor: theme.color.chartColorThree,
+    KenyaColor: theme.color.chartColorTwo
   },
   {
-    country: '2014',
+    indicator: '2014',
     Kenya: 0,
-    KenyaColor: theme.color.chartColorTwo,
-    Global: 0,
-    GlobalColor: theme.color.chartColorThree,
+    KenyaColor: theme.color.chartColorTwo
   },
   {
-    country: '2015',
+    indicator: '2015',
     Kenya: 0,
-    KenyaColor: theme.color.chartColorTwo,
-    Global: 0,
-    GlobalColor: theme.color.chartColorThree,
+    KenyaColor: theme.color.chartColorTwo
   },
   {
-    country: '2016',
+    indicator: '2016',
     Kenya: 17,
-    KenyaColor: theme.color.chartColorTwo,
-    Global: 130,
-    GlobalColor: theme.color.chartColorThree,
+    KenyaColor: theme.color.chartColorTwo
   },
   {
-    country: '2017',
+    indicator: '2017',
     Kenya: 125,
-    KenyaColor: theme.color.chartColorTwo,
-    Global: 163,
-    GlobalColor: theme.color.chartColorThree,
+    KenyaColor: theme.color.chartColorTwo
   },
   {
-    country: '2018',
+    indicator: '2018',
     Kenya: 135,
-    KenyaColor: theme.color.chartColorTwo,
-    Global: 131,
-    GlobalColor: theme.color.chartColorThree,
-  },
+    KenyaColor: theme.color.chartColorTwo
+  }
 ];

@@ -24,9 +24,9 @@ export default function formatActivityData(data) {
               return d.type.code === '1';
             }),
             'iso_date',
-            null,
-          ),
-        ),
+            null
+          )
+        )
       },
       {
         id: 2,
@@ -37,9 +37,9 @@ export default function formatActivityData(data) {
               return d.type.code === '2';
             }),
             'iso_date',
-            null,
-          ),
-        ),
+            null
+          )
+        )
       },
       {
         id: 3,
@@ -50,9 +50,9 @@ export default function formatActivityData(data) {
               return d.type.code === '3';
             }),
             'iso_date',
-            null,
-          ),
-        ),
+            null
+          )
+        )
       },
       {
         id: 4,
@@ -63,20 +63,20 @@ export default function formatActivityData(data) {
               return d.type.code === '4';
             }),
             'iso_date',
-            null,
-          ),
-        ),
-      },
+            null
+          )
+        )
+      }
     ],
     title: get(data.title, 'narratives[0].text', '-'),
     detail: [
       {
         label: 'Last project update:',
-        info: convertISOToDate(get(data, 'last_updated_datetime', null)),
+        info: convertISOToDate(get(data, 'last_updated_datetime', null))
       },
       {
         label: 'Status:',
-        info: get(data, 'activity_status.name', '-'),
+        info: get(data, 'activity_status.name', '-')
       },
       {
         label: 'Beneficiary country:',
@@ -94,20 +94,20 @@ export default function formatActivityData(data) {
             ? get(data, 'recipient_countries', []).map(country => {
                 return country.country.name;
               })
-            : undefined,
+            : undefined
       },
       {
         label: 'Data source:',
-        info: 'IATI Registry',
+        info: 'IATI Registry'
       },
       {
         label: 'Reported by:',
-        info: 'Aidsfonds',
+        info: 'Aidsfonds'
       },
       {
         label: 'IATI identifier:',
-        info: get(data, 'iati_identifier', '-'),
-      },
+        info: get(data, 'iati_identifier', '-')
+      }
     ],
     budgets: data.budgets.map(b => {
       return {
@@ -115,7 +115,7 @@ export default function formatActivityData(data) {
         Budget: b.value.value,
         BudgetColor: theme.color.chartColorTwo,
         Spent: data.aggregations.activity_children.expenditure_value,
-        SpentColor: theme.color.chartColorThree,
+        SpentColor: theme.color.chartColorThree
       };
     }),
     totalBudget: sumBy(data.budgets, 'value.value'),
@@ -126,9 +126,9 @@ export default function formatActivityData(data) {
         return {
           name: sector.sector.name,
           color: '#F7F8FA',
-          loc: sector.percentage,
+          loc: sector.percentage
         };
-      }),
-    },
+      })
+    }
   };
 }

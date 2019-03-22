@@ -2,9 +2,12 @@ import React from 'react';
 import { getMeasure } from 'components/GeoMap/components/Markers/CircleMarker/CircleMarker';
 import {
   ToolTipContainer,
+  ToolTipTitle,
   ToolTipLabel,
-  ToolTipText,
+  ValueContainer,
+  ToolTipText
 } from 'components/GeoMap/components/ToolTips/ToolTip.style';
+import { formatNumber } from 'utils/genericUtils';
 
 // So if the marker changes in size depending on its value we use
 // this function to get the offset top of the popup
@@ -18,7 +21,7 @@ function getOffsetTop(hoverMarkerInfo) {
     const percentage = getMeasure(
       hoverMarkerInfo.value,
       hoverMarkerInfo.maxValue,
-      hoverMarkerInfo.minValue,
+      hoverMarkerInfo.minValue
     );
     offset = -percentage / 2;
   }
@@ -29,8 +32,14 @@ function getOffsetTop(hoverMarkerInfo) {
 // or unit tests for it as a seperate component
 const markerInfo = hoverMarkerInfo => {
   if (hoverMarkerInfo) {
-    let countryName = hoverMarkerInfo.country;
+    let countryName = hoverMarkerInfo.name;
     countryName = countryName.charAt(0).toUpperCase() + countryName.slice(1);
+
+    let nrFormat = ' ';
+
+    if (hoverMarkerInfo.format === 'percentage') nrFormat = ' %';
+    else if (hoverMarkerInfo.format !== 'number' && hoverMarkerInfo.format)
+      nrFormat = ' '.concat(hoverMarkerInfo.format);
 
     return (
       <ToolTipContainer
@@ -40,12 +49,14 @@ const markerInfo = hoverMarkerInfo => {
         closeButton={false}
         offsetTop={getOffsetTop(hoverMarkerInfo)}
       >
-        <ToolTipLabel>{countryName}</ToolTipLabel>
-        <ToolTipText>
-          Kenya (/ˈkɛnjə/; locally [ˈkɛɲa] (About this sound listen)),
-          officially the Republic of Kenya (Swahili: Jamhuri ya Kenya), is a
-          country in Africa with …
-        </ToolTipText>
+        <ToolTipTitle>{countryName}</ToolTipTitle>
+        <ValueContainer>
+          <ToolTipLabel>{hoverMarkerInfo.indName}: </ToolTipLabel>
+          <ToolTipText>
+            {formatNumber(hoverMarkerInfo.value)}
+            {nrFormat}
+          </ToolTipText>
+        </ValueContainer>
       </ToolTipContainer>
     );
   }

@@ -2,6 +2,7 @@
   list-style-type: none;
   display: flex;
   margin: 12px auto;
+  padding: 0;
 }
 
 .page, .active-page, .nextPage, .prevPage{

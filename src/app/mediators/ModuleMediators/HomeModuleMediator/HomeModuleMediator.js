@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
 import isEqual from 'lodash/isEqual';
+import sortBy from 'lodash/sortBy';
 import {
   formatCountryCenterData,
   formatCountryLayerData,
   formatCountryParam,
-  formatYearParam,
   updatePercentiles,
+  formatLongLatData
 } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
+import { formatYearParam } from 'utils/genericUtils';
 import HomeModule from 'modules/home/HomeModule';
 import PropTypes from 'prop-types';
 import { initialState } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.consts';
@@ -20,8 +22,8 @@ const propTypes = {
         geolocationIso2: PropTypes.string,
         geolocationTag: PropTypes.string,
         date: PropTypes.string,
-        value: PropTypes.number,
-      }),
+        value: PropTypes.number
+      })
     ),
     indicators2: PropTypes.arrayOf(
       PropTypes.shape({
@@ -29,54 +31,54 @@ const propTypes = {
         geolocationIso2: PropTypes.string,
         geolocationTag: PropTypes.string,
         date: PropTypes.string,
-        value: PropTypes.number,
-      }),
+        value: PropTypes.number
+      })
     ),
     subIndicators1: PropTypes.shape({
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
-            name: PropTypes.string,
-          }),
-        }),
-      ),
+            name: PropTypes.string
+          })
+        })
+      )
     }),
     subIndicators2: PropTypes.shape({
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
-            name: PropTypes.string,
-          }),
-        }),
-      ),
-    }),
+            name: PropTypes.string
+          })
+        })
+      )
+    })
   }),
   dropDownData: PropTypes.shape({
     allIndicators: PropTypes.shape({
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
-            name: PropTypes.string,
-          }),
-        }),
-      ),
+            name: PropTypes.string
+          })
+        })
+      )
     }),
     allCountries: PropTypes.shape({
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
             name: PropTypes.string,
-            iso2: PropTypes.string,
-          }),
-        }),
-      ),
-    }),
-  }),
+            iso2: PropTypes.string
+          })
+        })
+      )
+    })
+  })
 };
 
 const defaultProps = {
   dropDownData: {},
-  indicatorAggregations: {},
+  indicatorAggregations: {}
 };
 
 // As discussed with Siem default year period selected should be
@@ -90,7 +92,7 @@ class HomeModuleMediator extends Component {
     super(props);
     this.state = {
       yearPeriod: formatYearParam([yearBefore, currentYear]),
-      ...initialState,
+      ...initialState
     };
 
     this.selectInd1 = this.selectInd1.bind(this);
@@ -108,7 +110,7 @@ class HomeModuleMediator extends Component {
     if (
       !isEqual(
         this.props.indicatorAggregations,
-        prevProps.indicatorAggregations,
+        prevProps.indicatorAggregations
       )
     ) {
       this.updateIndicators();
@@ -124,34 +126,81 @@ class HomeModuleMediator extends Component {
   }
 
   updateIndicators() {
-    const subIndicators1 = this.props.indicatorAggregations.subIndicators1.edges.map(
+    let subIndicators1 = this.props.indicatorAggregations.subIndicators1.edges.map(
       indicator => {
         return { label: indicator.node.name, value: indicator.node.name };
-      },
+      }
     );
 
-    const subIndicators2 = this.props.indicatorAggregations.subIndicators2.edges.map(
+    // and we sort them
+    subIndicators1 = sortBy(subIndicators1, ['label']);
+
+    let subIndicators2 = this.props.indicatorAggregations.subIndicators2.edges.map(
       indicator => {
         return { label: indicator.node.name, value: indicator.node.name };
-      },
+      }
     );
 
-    const countryLayerData = formatCountryLayerData(
-      this.props.indicatorAggregations.indicators1,
-    );
-    const countryCircleData = formatCountryCenterData(
-      this.props.indicatorAggregations.indicators2,
-    );
+    // and we sort them
+    subIndicators2 = sortBy(subIndicators2, ['label']);
 
-    updatePercentiles(countryLayerData, f => f.properties.value);
+    let longLatData = [];
+    let countryLayerData = {};
+
+    // so we check here if the retrieved data is long lat
+    // and then format it differently
+    // TODO: make this work differently, this is currently i quick and dirty fix
+    if (
+      this.props.indicatorAggregations.indicators1[0] &&
+      this.props.indicatorAggregations.indicators1[0].geolocationTag &&
+      this.props.indicatorAggregations.indicators1[0].geolocationTag.indexOf(
+        ','
+      ) !== -1 &&
+      /\d/.test(this.props.indicatorAggregations.indicators1[0].geolocationTag)
+    ) {
+      longLatData = formatLongLatData(
+        this.props.indicatorAggregations.indicators1,
+        this.state.selectedInd1
+      );
+    } else {
+      countryLayerData = formatCountryLayerData(
+        this.props.indicatorAggregations.indicators1,
+        this.state.selectedInd1
+      );
+    }
+
+    let countryCircleData = [];
+    // so we check here if the retrieved data is long lat
+    // and then format it differently
+    // TODO: make this work differently, this is currently i quick and dirty fix
+    if (
+      this.props.indicatorAggregations.indicators2[0] &&
+      this.props.indicatorAggregations.indicators2[0].geolocationTag &&
+      this.props.indicatorAggregations.indicators2[0].geolocationTag.indexOf(
+        ','
+      ) !== -1 &&
+      /\d/.test(this.props.indicatorAggregations.indicators2[0].geolocationTag)
+    ) {
+      longLatData = formatLongLatData(
+        this.props.indicatorAggregations.indicators2,
+        this.state.selectedInd2
+      );
+    } else {
+      countryCircleData = formatCountryCenterData(
+        this.props.indicatorAggregations.indicators2,
+        this.state.selectedInd2
+      );
+    }
 
     const indicators = [];
 
-    if (countryLayerData.features.length > 0) {
+    if (countryLayerData.features && countryLayerData.features.length > 0) {
+      updatePercentiles(countryLayerData, f => f.properties.value);
+
       indicators.push({
         type: 'layer',
         data: countryLayerData,
-        legendName: ` ${this.state.selectedInd1} `,
+        legendName: ` ${this.state.selectedInd1} `
       });
     }
 
@@ -159,7 +208,15 @@ class HomeModuleMediator extends Component {
       indicators.push({
         type: 'circle',
         data: countryCircleData,
-        legendName: ` ${this.state.selectedInd2} `,
+        legendName: ` ${this.state.selectedInd2} `
+      });
+    }
+
+    if (longLatData.length > 0) {
+      indicators.push({
+        type: 'location',
+        data: longLatData,
+        legendName: `POI`
       });
     }
 
@@ -173,13 +230,13 @@ class HomeModuleMediator extends Component {
     subInd1 = this.state.selectedSubInd1,
     subInd2 = this.state.selectedSubInd2,
     countriesCodes = this.state.selectedCountryVal,
-    regionCountriesCodes = this.state.selectedRegionVal,
+    regionCountriesCodes = this.state.selectedRegionVal
   ) {
     // We forming the param for countries from the selected countries of a region
     // and single selected countries
     const countriesISO2 = formatCountryParam(
       countriesCodes,
-      regionCountriesCodes,
+      regionCountriesCodes
     );
 
     const refetchVars = {
@@ -190,7 +247,7 @@ class HomeModuleMediator extends Component {
       singleInd2: ind2 ? ind2 : 'null',
       datePeriod,
       subInd1: subInd1.length > 0 ? subInd1 : ['undefined'],
-      subInd2: subInd2.length > 0 ? subInd2 : ['undefined'],
+      subInd2: subInd2.length > 0 ? subInd2 : ['undefined']
     };
 
     this.props.relay.refetch(refetchVars);
@@ -202,9 +259,10 @@ class HomeModuleMediator extends Component {
     this.setState(
       {
         selectedInd1: val.value,
-        selectedSubInd1: [],
+        subIndicators1: [],
+        selectedSubInd1: []
       },
-      this.refetch,
+      this.refetch
     );
   }
 
@@ -214,34 +272,57 @@ class HomeModuleMediator extends Component {
     this.setState(
       {
         selectedInd2: val.value,
-        selectedSubInd2: [],
+        subIndicators2: [],
+        selectedSubInd2: []
       },
-      this.refetch,
+      this.refetch
     );
   }
 
-  selectSubInd1(item) {
-    const selectedSubInd1 = [...this.state.selectedSubInd1];
-    const subIndicatorIndex = selectedSubInd1.indexOf(item.value);
+  selectSubInd1(item, array = false) {
+    let selectedSubInd1 = [];
 
-    if (subIndicatorIndex === -1)
-      // so if it doesn't exist we add it
-      selectedSubInd1.push(item.value);
-    // if it does exist we remove it
-    else selectedSubInd1.splice(subIndicatorIndex, 1);
+    // so we set up this logic for select/deselect all logic
+    // if all is selected all of the options will be passed in
+    if (item !== 'reset') {
+      if (array) {
+        item.forEach(it => {
+          selectedSubInd1.push(it.value);
+        });
+      } else {
+        selectedSubInd1 = [...this.state.selectedSubInd1];
+        const subIndicatorIndex = selectedSubInd1.indexOf(item.value);
+        if (subIndicatorIndex === -1)
+          // so if it doesn't exist we add it
+          selectedSubInd1.push(item.value);
+        // if it does exist we remove it
+        else selectedSubInd1.splice(subIndicatorIndex, 1);
+      }
+    }
 
     this.setState({ selectedSubInd1 }, this.refetch);
   }
 
-  selectSubInd2(item) {
-    const selectedSubInd2 = [...this.state.selectedSubInd2];
-    const subIndicatorIndex = selectedSubInd2.indexOf(item.value);
+  selectSubInd2(item, array = false) {
+    let selectedSubInd2 = [];
 
-    if (subIndicatorIndex === -1)
-      // so if it doesn't exist we add it
-      selectedSubInd2.push(item.value);
-    // if it does exist we remove it
-    else selectedSubInd2.splice(subIndicatorIndex, 1);
+    // so we set up this logic for select/deselect all logic
+    // if all is selected all of the options will be passed in
+    if (item !== 'reset') {
+      if (array) {
+        item.forEach(it => {
+          selectedSubInd2.push(it.value);
+        });
+      } else {
+        selectedSubInd2 = [...this.state.selectedSubInd2];
+        const subIndicatorIndex = selectedSubInd2.indexOf(item.value);
+        if (subIndicatorIndex === -1)
+          // so if it doesn't exist we add it
+          selectedSubInd2.push(item.value);
+        // if it does exist we remove it
+        else selectedSubInd2.splice(subIndicatorIndex, 1);
+      }
+    }
 
     this.setState({ selectedSubInd2 }, this.refetch);
   }
@@ -302,9 +383,9 @@ class HomeModuleMediator extends Component {
   resetAll() {
     this.setState(
       {
-        ...initialState,
+        ...initialState
       },
-      this.refetch,
+      this.refetch
     );
   }
 
@@ -329,7 +410,6 @@ class HomeModuleMediator extends Component {
         selectedRegionVal={this.state.selectedRegionVal}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
-        defaultYear={this.state.defaultYear}
         yearPeriod={this.state.yearPeriod}
       />
     );
@@ -360,6 +440,7 @@ export default createRefetchContainer(
           "date"
           "geolocationIso2"
           "geolocationPolygons"
+          "valueFormatType"
         ]
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
@@ -372,6 +453,7 @@ export default createRefetchContainer(
         geolocationIso2
         geolocationTag
         geolocationPolygons
+        valueFormatType
         date
         value
       }
@@ -382,6 +464,7 @@ export default createRefetchContainer(
           "date"
           "geolocationIso2"
           "geolocationCenterLongLat"
+          "valueFormatType"
         ]
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
@@ -394,6 +477,7 @@ export default createRefetchContainer(
         geolocationIso2
         geolocationTag
         geolocationCenterLongLat
+        valueFormatType
         date
         value
       }
@@ -436,5 +520,5 @@ export default createRefetchContainer(
           subInd2: $subInd2
         )
     }
-  `,
+  `
 );

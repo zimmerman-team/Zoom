@@ -6,7 +6,7 @@ import { Select, Box, RangeInput, Tabs, Tab, Text } from 'grommet';
 
 // import RichtTabTitle from './comps/RichtTabTitle';
 import { CircleInformation } from 'grommet-icons';
-import DataExplorePane from 'components/DataExplorePane/DataExplorePanel';
+import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePanel';
 
 const ComponentBase = styled.div`
   outline: 1px solid darkseagreen;
@@ -26,10 +26,10 @@ const ToolFragment = styled.div`
 `;
 const FragmentTitle = styled.span``;
 const propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.array
 };
 const defaultProps = {
-  data: [],
+  data: []
 };
 
 const RichTabTitle = ({ icon, label }) => (

@@ -1,0 +1,74 @@
+/* base */
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { Route, BrowserRouter as Router, withRouter } from 'react-router-dom';
+import { formPath } from 'modules/visualizer/VisualizerModule.utils';
+import shortid from 'shortid';
+
+/**
+ * todo: Please write a short component description of what this component does
+ * @param {Object} customProperty - please describe component property
+ */
+
+const renderMergedProps = (component, ...rest) => {
+  const finalProps = Object.assign({}, ...rest);
+  return React.createElement(component, finalProps);
+};
+
+const PropsRoute = ({ component, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={routeProps => {
+        return renderMergedProps(component, routeProps, rest);
+      }}
+    />
+  );
+};
+
+const propTypes = {
+  data: PropTypes.array,
+  code: PropTypes.string
+};
+const defaultProps = {};
+
+/*todo: implement dropshadow */
+
+class TabContent extends React.Component {
+  // oke so we need to control rerendering of this component
+  // because when it rerenders, all of these items that have been loaded
+  // via these routes get remounted, and we don't want components remounting
+  // so the only time they can remount is when the url changes
+  // (which is actually when they change, hence remounts)
+  // the mounted components should rerender themselves depending on the props
+  // but they shouldn't be remounted!!!, which happeens when this get rendered
+  shouldComponentUpdate(nextProps) {
+    return this.props.location.pathname !== nextProps.location.pathname;
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        {this.props.data.map(
+          section =>
+            section.component && (
+              <PropsRoute
+                selectAll={this.props.selectAll}
+                dropDownData={this.props.dropDownData}
+                key={shortid.generate()}
+                path={formPath(this.props.code, section.path)}
+                component={section.component}
+                code={this.props.code}
+              />
+            )
+        )}
+      </React.Fragment>
+    );
+  }
+}
+
+TabContent.propTypes = propTypes;
+TabContent.defaultProps = defaultProps;
+
+export default withRouter(TabContent);

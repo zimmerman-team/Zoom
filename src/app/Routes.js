@@ -8,14 +8,7 @@ import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel'
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
 import PublicChartLibraryModule from './modules/PublicChartLibrary/PublicChartLibraryModule';
-import DashboardModule from './modules/dashboard/DashboardModule';
-// import PublicChartViewModule from './modules/publicChartView/PublicChartViewModule';
 import ProfileSettingsModule from './modules/profilesettings/ProfileSettingsModule';
-// Modules regular import
-/*import HomeModule from 'modules/home/HomeModule';
-import IatiDetail from 'modules/IATI_Detail/IatiDetail';
-import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';*/
-// import HomeModuleMediator from 'mediators/ModuleMediators/HomeModuleMediator';
 
 // Modules lazy load
 const CountryDetailMediator = lazy(() =>
@@ -56,8 +49,6 @@ const ManMappingStep = lazy(() =>
 const Routes = props => {
   return (
     <React.Fragment>
-      {/*<Route path="/:path" render={() => <AppBar />} />*/}
-      {/*<Route path="/:path" render={() => <SideBar />} />*/}
       <Suspense fallback={<PageLoader />}>
         <Switch>
           <Route exact path="/callback" component={LoginCallback} />

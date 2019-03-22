@@ -11,25 +11,25 @@ const propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string,
-      label: PropTypes.string,
-    }),
+      label: PropTypes.string
+    })
   ),
   closeDialog: PropTypes.func,
   setWrapperRef: PropTypes.func,
   onOptionClick: PropTypes.func,
-  selectedOptionValue: PropTypes.string,
+  selectedOptionValue: PropTypes.string
 };
 const defaultProps = {
   open: false,
   options: [
     { label: 'Option a', value: 'a' },
     { label: 'Option b', value: 'b' },
-    { label: 'Option c', value: 'c' },
+    { label: 'Option c', value: 'c' }
   ],
   closeDialog: null,
   setWrapperRef: null,
   onOptionClick: null,
-  selectedOptionValue: '',
+  selectedOptionValue: ''
 };
 
 const SortbyDialog = ({
@@ -38,12 +38,12 @@ const SortbyDialog = ({
   closeDialog,
   setWrapperRef,
   onOptionClick,
-  selectedOptionValue,
+  selectedOptionValue
 }) => {
   return (
     <React.Fragment>
       {open && (
-        <ComponentBase onClickOutside={closeDialog} ref={setWrapperRef}>
+        <ComponentBase onClick={closeDialog} ref={setWrapperRef}>
           {options.map(o => {
             const selected = selectedOptionValue === o.value;
             return (
@@ -54,7 +54,7 @@ const SortbyDialog = ({
                 theme={{
                   background: selected
                     ? theme.color.zoomGreyZero
-                    : theme.color.aidsFondsWhite,
+                    : theme.color.aidsFondsWhite
                 }}
               >
                 {o.label}

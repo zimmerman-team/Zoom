@@ -1,40 +1,35 @@
 /* base */
 import React, { Component } from 'react';
-import styled from 'styled-components';
-import GeoMap from 'components/GeoMap/GeoMap';
-import { connect } from 'react-redux';
-// import AppBar from 'components/navigation/AppBar/AppBar';
-import { Box } from 'grommet';
-// import SideBar from 'components/navigation/SideBar/SideBar';
-import { ControlPanelContainer } from 'modules/home/HomeModule.styles';
-import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Cookies from 'universal-cookie';
+
+/* consts */
+import paneTypes from '__consts__/PaneTypesConst';
+
+/* components */
+import GeoMap from 'components/GeoMap/GeoMap';
+import { ModuleContainer } from 'modules/home/HomeModule.styles';
+import ExplorePanelMediator from 'mediators/ComponentMediators/PaneMediators/ExplorePanelMediator/ExplorePanelMediator';
+import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
+import NavPane from 'components/Panes/NavPane/NavPane';
 import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
-const ModuleContainer = styled(Box)``;
-
-const DataPaneContainer = styled.div``;
-
 const propTypes = {
-  indicators: PropTypes.arrayOf(PropTypes.shape),
+  indicators: PropTypes.arrayOf(PropTypes.shape)
 };
 
 const defaultProps = {
-  indicators: [],
+  indicators: []
 };
 
-class HomeModule extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dialogOpen: true,
-      sideBarOpen: false,
-      indicators: [],
-    };
-
-    this.onClose = this.onClose.bind(this);
-    this.toggleSideBar = this.toggleSideBar.bind(this);
-  }
+export class HomeModule extends Component {
+  state = {
+    dialogOpen: true,
+    sideBarOpen: false,
+    indicators: [],
+    dialogShown: 'false'
+  };
 
   onClose = () => {
     this.setState({ dialogOpen: false });
@@ -44,35 +39,57 @@ class HomeModule extends Component {
     this.setState({ sideBarOpen: true });
   };
 
-  render() {
+  componentDidMount = () => {
+    /* todo: the cookie logic is pretty rudimentary, suffices for now but should be optimised */
+    const cookies = new Cookies();
+    this.setState({ dialogShown: cookies.get('homeDialogShown') || 'false' });
+    let d = new Date();
+    d.setTime(d.getTime() + 1440 * 60 * 1000);
+    cookies.set('homeDialogShown', 'true', { path: '/', expires: d });
+  };
+
+  render = () => {
     const { indicators, ...otherProps } = this.props;
 
     return (
       <React.Fragment>
         <ModuleContainer>
-          {/*<BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />*/}
+          {this.state.dialogShown === 'false' && (
+            <BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />
+          )}
 
           <GeoMap
             indicatorData={indicators}
             selectedYears={this.props.yearPeriod}
             selectYear={this.props.selectYear}
+            latitude={15}
+            longitude={0}
+            zoom={2}
           />
-          {this.props.dataPaneOpen && (
-            <ControlPanelContainer>
-              <ExplorePanelMediator {...otherProps} />
-            </ControlPanelContainer>
+
+          {this.props.dataPaneOpen !== paneTypes.none && (
+            <DataPaneContainer>
+              {this.props.dataPaneOpen === paneTypes.pubPane && (
+                <ExplorePanelMediator {...otherProps} />
+              )}
+              {(this.props.dataPaneOpen === paneTypes.privPane ||
+                this.props.dataPaneOpen === paneTypes.createChart ||
+                this.props.dataPaneOpen === paneTypes.convertData) && (
+                <NavPane {...otherProps} />
+              )}
+            </DataPaneContainer>
           )}
         </ModuleContainer>
       </React.Fragment>
     );
-  }
+  };
 }
 HomeModule.propTypes = propTypes;
 HomeModule.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
-    dataPaneOpen: state.dataPaneOpen.open,
+    dataPaneOpen: state.dataPaneOpen.open
   };
 };
 

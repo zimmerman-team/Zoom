@@ -19,6 +19,7 @@ export const Tab = styled.div`
   flex-direction: row;
   padding: 5px 20px 0 20px;
   margin-left: ${props => props.theme.marginLeft};
+  padding-right: ${props => props.theme.paddingRight};
 `;
 
 export const TabBadge = styled.div`

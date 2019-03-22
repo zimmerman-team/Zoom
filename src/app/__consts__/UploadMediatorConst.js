@@ -6,4 +6,5 @@ export const uploadInitialstate = {
   overviewData: [],
   modelOptions: [],
   manMapData: [],
+  mappingJson: {}
 };

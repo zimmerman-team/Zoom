@@ -59,9 +59,7 @@ module.exports = {
   // globals: {},
 
   // An array of directory names to be searched recursively up from the requiring module's location
-  // moduleDirectories: [
-  //   "node_modules"
-  // ],
+  moduleDirectories: ['node_modules', 'src', 'app'],
 
   // An array of file extensions your modules use
   moduleFileExtensions: ['js', 'json', 'jsx'],
@@ -69,10 +67,13 @@ module.exports = {
   // A map from regular expressions to module names that allow to stub out resources with a single module
   moduleNameMapper: {
     '^components[/](.+)': '<rootDir>/src/app/components/$1',
+    '^theme[/](.+)': '<rootDir>/src/app/theme/$1',
+    '^assets[/](.+)': '<rootDir>/src/app/assets/$1',
+    '^__consts__[/](.+)': '<rootDir>/src/app/__consts__/$1',
     '^__mocks__[/](.+)': '<rootDir>/src/app/__mocks__/$1',
     '^modules[/](.+)': '<rootDir>/src/app/modules/$1',
     '\\.(svg)$': '<rootDir>src/app/__mocks__/svgMock.js',
-    '^.+\\.(css|less)$': 'identity-obj-proxy',
+    '^.+\\.(css|less)$': 'identity-obj-proxy'
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -138,7 +139,11 @@ module.exports = {
   testMatch: ['**/__tests__/**/*.js?(x)', '**/?(*.)+(spec|test).js?(x)'],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  testPathIgnorePatterns: ['\\\\node_modules\\\\'],
+  testPathIgnorePatterns: [
+    '\\\\node_modules\\\\',
+    '<rootDir>/scripts/',
+    '<rootDir>/cypress/'
+  ],
 
   // The regexp pattern Jest uses to detect test files
   // testRegex: "",
@@ -173,5 +178,5 @@ module.exports = {
   // Whether to use watchman for file crawling
   // watchman: true,
 
-  setupTestFrameworkScriptFile: './rtl.setup.js',
+  setupTestFrameworkScriptFile: './rtl.setup.js'
 };

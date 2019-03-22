@@ -3,8 +3,10 @@ import { Box } from 'grommet';
 import ColumnHeader from 'components/ZoomTable/ColumnHeader';
 import theme from 'theme/Theme';
 import CellValue from 'components/ZoomTable/CellValue';
+import ZoomTable from 'components/ZoomTable/ZoomTable';
 
 export const ModuleContainer = styled(Box)`
+  width: 100%;
   background-color: ${theme.color.aidsFondsWhite};
   padding: 0px 1% 95px 1%;
 `;
@@ -24,4 +26,12 @@ export const Cell = styled.div`
 
 export const ColHeader = styled(ColumnHeader)`
   padding-left: 20px;
+`;
+
+export const OverviewTable = styled(ZoomTable)`
+  & tbody {
+    & th {
+      vertical-align: top;
+    }
+  }
 `;

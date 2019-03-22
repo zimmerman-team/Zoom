@@ -1,36 +1,39 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import connect from 'react-redux/es/connect/connect';
 
 /* components */
 import { Box } from 'grommet';
 
 /* consts */
-import { uploadInitialstate } from '__consts__/UploadMediatorConst';
-import { columns } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.const';
+import { step1InitialData } from '__consts__/DataMapperStepConsts';
+import Const from 'modules/datamapper/fragments/OverviewStep/OverviewStep.const';
 
 /* styles */
-import { ModuleContainer } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
+import {
+  ModuleContainer,
+  OverviewTable
+} from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
 import { SectionHeading } from 'components/sort/Headings';
-import ZoomTable from 'components/ZoomTable/ZoomTable';
 
 const propTypes = {
-  data: PropTypes.arrayOf(
+  stepData: PropTypes.arrayOf(
     PropTypes.shape({
       fileColumn: PropTypes.string,
       summary: PropTypes.arrayOf(
         PropTypes.shape({
           label: PropTypes.string,
-          value: PropTypes.any, // cause it can be number or string
-        }),
+          value: PropTypes.any // cause it can be number or string
+        })
       ),
       dataTypes: PropTypes.arrayOf(PropTypes.string),
-      blankCells: PropTypes.number,
-    }),
-  ),
+      blankCells: PropTypes.number
+    })
+  )
 };
 const defaultProps = {
-  data: uploadInitialstate.overviewData,
+  stepData: step1InitialData.overviewData
 };
 
 const OverviewStep = props => {
@@ -38,7 +41,10 @@ const OverviewStep = props => {
     <ModuleContainer>
       <SectionHeading>Overview</SectionHeading>
       <Box>
-        <ZoomTable columns={columns} data={props.data} />
+        <OverviewTable
+          columns={Const.columns}
+          data={props.stepData.overviewData}
+        />
       </Box>
     </ModuleContainer>
   );
@@ -47,4 +53,10 @@ const OverviewStep = props => {
 OverviewStep.propTypes = propTypes;
 OverviewStep.defaultProps = defaultProps;
 
-export default OverviewStep;
+const mapStateToProps = state => {
+  return {
+    stepData: state.stepData.stepzData
+  };
+};
+
+export default connect(mapStateToProps)(OverviewStep);

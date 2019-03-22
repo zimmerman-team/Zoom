@@ -1,62 +1,56 @@
-/* base */
 import React from 'react';
-import styled from 'styled-components';
-
-import SvgIcon from '@material-ui/core/SvgIcon';
-import IconRadioUnchecked from 'assets/icons/IconRadioUnchecked';
-import TextField from '@material-ui/core/TextField';
 import NoSsr from '@material-ui/core/NoSsr';
+import TextField from '@material-ui/core/TextField';
+import styled from 'styled-components';
 import theme from 'theme/Theme';
 
-export default styled(props => (
-  <NoSsr>
-    <TextField
-      id="standard-full-width"
-      placeholder="Placeholder"
-      fullWidth
-      margin="none"
-      InputProps={{
-        disableUnderline: true,
-      }}
-      InputLabelProps={{
-        disableAnimation: true,
-      }}
-      {...props}
-    />
-  </NoSsr>
-))`
+const Component = styled(TextField)`
   && {
-    font-size: 14px;
-    color: black;
-    font-family: ${theme.font.zoomFontFamTwo};
-    margin: 0;
-
-    /*  &:before {
-      left: 0;
-      right: 0;
-      bottom: 0;
-      content: '\\00a0';
-      position: absolute;
-      transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.42);
-      pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    label {
+      position: relative;
+      margin-bottom: 10px;
+      color: ${theme.color.colHeadColor};
+      font-family: ${theme.font.zoomFontFamOne};
+      font-size: 14px;
+      line-height: 1;
     }
-
-    &:after {
-      left: 0;
-      right: 0;
-      bottom: 0;
-      content: '';
-      position: absolute;
-      transform: scaleX(0);
-      transition: transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-      border-bottom: 2px solid #303f9f;
-      pointer-events: none;
-    }*/
-
+    textarea,
     input {
+      color: ${theme.color.zoomBlack};
       font-family: ${theme.font.zoomFontFamTwo};
       font-size: 14px;
+      line-height: 1;
+      border-bottom: 1px solid ${theme.color.colHeadColor};
+      padding-bottom: 5px;
+      &:focus {
+        border-bottom: 1px solid ${theme.color.aidsFondsBlue};
+      }
     }
   }
 `;
+
+const Container = props => {
+  return (
+    <NoSsr>
+      <Component
+        id="standard-full-width"
+        fullWidth
+        margin="none"
+        error
+        label="Empty"
+        InputLabelProps={{
+          disableAnimation: true,
+          shrink: false
+        }}
+        InputProps={{
+          disableUnderline: true
+        }}
+        {...props}
+      />
+    </NoSsr>
+  );
+};
+
+export default Container;

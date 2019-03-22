@@ -25,10 +25,19 @@ export const PageHeading = styled(BaseHeading)`
   font-family: ${theme.font.zoomFontFamTwo};
   font-size: ${headSizeOne};
   font-weight: 700;
+  line-height: 1;
 `;
 
 export const SectionHeading = styled(BaseHeading)`
   font-size: 32px;
   text-align: center;
   font-family: ${theme.font.zoomFontFamOne};
+`;
+
+export const SubHeading = styled(BaseHeading)`
+  font-size: 11px;
+  text-align: center;
+  font-family: ${theme.font.zoomFontFamTwo};
+  line-height: 1;
+  margin: 0;
 `;

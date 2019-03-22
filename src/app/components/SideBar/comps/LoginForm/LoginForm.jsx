@@ -20,24 +20,26 @@ import {
   InfoText,
   Link,
   ErrorMessage,
-  ErrorText,
+  ErrorText
 } from './LoginForm.styles';
 import ForgetPassword from '../ForgetPassword/ForgetPassword';
 
 const propTypes = {
+  updateComponents: PropTypes.func,
   loginStatusMessage: PropTypes.shape({
     original: PropTypes.shape({
       error: PropTypes.string,
-      error_description: PropTypes.string,
+      error_description: PropTypes.string
     }),
     code: PropTypes.string,
     description: PropTypes.string,
     error: PropTypes.string,
-    error_description: PropTypes.string,
-  }),
+    error_description: PropTypes.string
+  })
 };
 const defaultProps = {
-  loginStatusMessage: null,
+  updateComponents: undefined,
+  loginStatusMessage: null
 };
 
 export class LoginForm extends React.Component {
@@ -48,7 +50,7 @@ export class LoginForm extends React.Component {
       username: '',
       password: '',
       error: null,
-      view: 'login',
+      view: 'login'
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -68,8 +70,8 @@ export class LoginForm extends React.Component {
     this.props.dispatch(
       syncActions.setForgotPasswordEmailSent({
         value: false,
-        email: '',
-      }),
+        email: ''
+      })
     );
   }
 
@@ -86,7 +88,7 @@ export class LoginForm extends React.Component {
     this.props.auth0Client.signIn(
       this.state.username,
       this.state.password,
-      this.setStatusMessage,
+      this.setStatusMessage
     );
   }
 
@@ -97,14 +99,14 @@ export class LoginForm extends React.Component {
   changeView() {
     this.setState(prevState => ({
       error: null,
-      view: prevState.view === 'login' ? 'forget_password' : 'login',
+      view: prevState.view === 'login' ? 'forget_password' : 'login'
     }));
   }
 
   render() {
     const textFieldTheme = {
       borderStyle: this.state.error ? 'solid' : 'none',
-      borderColor: this.state.error ? theme.color.aidsFondsRed : 'none',
+      borderColor: this.state.error ? theme.color.aidsFondsRed : 'none'
     };
     let headerText = this.props.auth0Client.isAuthenticated()
       ? `Welcome ${get(this.props.auth0Client.getProfile(), 'nickname', '')}`
@@ -123,7 +125,10 @@ export class LoginForm extends React.Component {
         </LoginHeader>
 
         {this.props.auth0Client.isAuthenticated() ? (
-          <FormButton onClick={this.props.auth0Client.signOut}>
+          <FormButton
+            onClick={this.props.auth0Client.signOut}
+            data-cy="sidebar-logout-button"
+          >
             Sign out
           </FormButton>
         ) : (
@@ -134,12 +139,14 @@ export class LoginForm extends React.Component {
                   placeholder="Email or Username"
                   onChange={this.onUsernameChange}
                   theme={textFieldTheme}
+                  data-cy="sidebar-login-email-input"
                 />
                 <TextField
                   placeholder="Password"
                   type="password"
                   onChange={this.onPasswordChange}
                   theme={textFieldTheme}
+                  data-cy="sidebar-pass-email-input"
                 />
 
                 <FormButton
@@ -148,6 +155,7 @@ export class LoginForm extends React.Component {
                   disabled={
                     this.state.username === '' || this.state.password === ''
                   }
+                  data-cy="sidebar-login-button"
                 >
                   Sign in
                 </FormButton>
@@ -196,7 +204,7 @@ export class LoginForm extends React.Component {
 const mapStateToProps = state => {
   return {
     loginStatusMessage: state.loginStatusMessage.data,
-    forgotPasswordEmailSent: state.forgotPasswordEmailSent.data,
+    forgotPasswordEmailSent: state.forgotPasswordEmailSent.data
   };
 };
 

@@ -1,18 +1,18 @@
 /* base */
 import React from 'react';
 /* components */
-import { CheckBox } from 'grommet';
+import Checkbox from 'components/Checkbox/CheckBox';
 import {
   SortByIcon,
   UsersTableCellValue,
-  UsersTableColHeader,
+  UsersTableColHeader
 } from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
 import theme from 'theme/Theme';
 import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
 
 const sortByOptions = [
   { label: 'Name (asc)', value: 'name:1' },
-  { label: 'Name (desc)', value: 'name:-1' },
+  { label: 'Name (desc)', value: 'name:-1' }
 ];
 
 export default function getColumns(
@@ -23,26 +23,26 @@ export default function getColumns(
   changeIsSortByOpen,
   setWrapperRef,
   onSortOptionClick,
-  selectedSortBy,
+  selectedSortBy
 ) {
   return [
     {
       property: 'id',
       header: (
         <UsersTableColHeader>
-          <CheckBox onChange={addRemoveAllSelectionsFunc} />
+          <Checkbox onChange={addRemoveAllSelectionsFunc} />
         </UsersTableColHeader>
       ),
       render: val => (
         <UsersTableCellValue>
-          <CheckBox
+          <Checkbox
             id={val.id}
             name={val.name}
             onChange={addRemoveSelectionFunc}
             checked={selectedValues.indexOf(val.id) !== -1}
           />
         </UsersTableCellValue>
-      ),
+      )
     },
     {
       property: 'name',
@@ -53,14 +53,14 @@ export default function getColumns(
         </UsersTableCellValue>
       ),
       search: false,
-      sortable: false,
+      sortable: false
     },
     {
       property: 'role',
       header: <UsersTableColHeader>Role</UsersTableColHeader>,
       render: val => <UsersTableCellValue>{val.role}</UsersTableCellValue>,
       search: false,
-      sortable: false,
+      sortable: false
     },
     {
       property: 'sort',
@@ -77,7 +77,7 @@ export default function getColumns(
           />
         </UsersTableColHeader>
       ),
-      render: () => <UsersTableCellValue />,
-    },
+      render: () => <UsersTableCellValue />
+    }
   ];
 }

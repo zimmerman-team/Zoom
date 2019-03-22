@@ -6,7 +6,7 @@ import About from './About';
 import { ModuleContainer, AboutTitle, Text, RedLink } from './About.styles';
 import {
   DescriptionParagraph,
-  DescriptionParagraphBold,
+  DescriptionParagraphBold
 } from 'components/sort/Paragraphs';
 import BarChartVertical from 'components/charts/barcharts/vertical/BarChartVertical';
 

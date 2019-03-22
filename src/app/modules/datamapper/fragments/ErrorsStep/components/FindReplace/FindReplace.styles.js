@@ -4,7 +4,7 @@ import theme from 'theme/Theme';
 import ZoomButton from 'components/ZoomButton/ZoomButton';
 
 export const ComponentBase = styled.div`
-  position: fixed;
+  position: absolute;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   border-radius: 0;
   background-color: ${theme.color.aidsFondsWhite};
@@ -39,7 +39,6 @@ export const InputLabel = styled.label`
 `;
 
 export const FindReplaceButton = styled(ZoomButton)`
-  width: 98px;
   height: 30px;
   font-size: 14px;
   font-family: ${theme.font.zoomFontFamOne};
@@ -47,3 +46,18 @@ export const FindReplaceButton = styled(ZoomButton)`
   margin-top: auto;
   margin-left: 28px;
 `;
+
+export const ButtonLabel = styled.div`
+  font-size: 14px;
+  font-family: ${theme.font.zoomFontFamOne};
+  text-transform: capitalize;
+`;
+
+export const ButtonContainer = styled.div`
+  margin-top: auto;
+  margin-left: 28px;
+`;
+
+export const buttonStyle = {
+  width: 98
+};

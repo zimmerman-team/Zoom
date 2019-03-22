@@ -8,8 +8,8 @@ const locationMarker = (indicator, index, setMarkerInfo) =>
   indicator && (
     <Marker
       key={`marker-${index}`}
-      latitude={parseFloat(indicator['Lat location'])}
-      longitude={parseFloat(indicator['Long location'])}
+      latitude={parseFloat(indicator.latitude)}
+      longitude={parseFloat(indicator.longitude)}
     >
       <LocationMarkerIcon
         size={20}

@@ -7,7 +7,7 @@ import {
   SideBarLayer,
   SidebarNavList,
   SidebarNavListContainer,
-  SidebarNavListItem,
+  SidebarNavListItem
 } from 'components/SideBar/SideBar.styles';
 import { Box } from 'grommet';
 import LoginForm from './comps/LoginForm/LoginForm';
@@ -32,7 +32,7 @@ describe('<SideBar />', () => {
     expect(wrapper.find(SidebarNavList)).toHaveLength(1);
   });
   it('renders four <SidebarNavListItem/> component', () => {
-    expect(wrapper.find(SidebarNavListItem)).toHaveLength(4);
+    expect(wrapper.find(SidebarNavListItem)).toHaveLength(5);
   });
   it('renders one <LoginForm/> component', () => {
     expect(wrapper.find(LoginForm)).toHaveLength(1);

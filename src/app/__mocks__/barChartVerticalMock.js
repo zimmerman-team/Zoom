@@ -6,44 +6,38 @@ export const IATIDetailBarChartMockData = [
     Budget: 17,
     BudgetColor: theme.color.chartColorTwo,
     Spent: 169,
-    SpentColor: theme.color.chartColorThree,
+    SpentColor: theme.color.chartColorThree
   },
   {
     year: '2013',
     Budget: 125,
     BudgetColor: theme.color.chartColorTwo,
     Spent: 163,
-    SpentColor: theme.color.chartColorThree,
+    SpentColor: theme.color.chartColorThree
   },
   {
     year: '2014',
     Budget: 135,
     BudgetColor: theme.color.chartColorTwo,
     Spent: 131,
-    SpentColor: theme.color.chartColorThree,
-  },
+    SpentColor: theme.color.chartColorThree
+  }
 ];
 
 export const barChartMockData = [
   {
     indicator: 'AI',
-    Kenya: 17,
-    CountryColor: theme.color.chartColorTwo,
-    Global: 169,
-    GlobalColor: theme.color.chartColorThree,
+    Kenya: 18,
+    CountryColor: theme.color.chartColorTwo
   },
   {
     indicator: 'AL',
     Kenya: 125,
-    CountryColor: theme.color.chartColorTwo,
-    Global: 163,
-    GlobalColor: theme.color.chartColorThree,
+    CountryColor: theme.color.chartColorTwo
   },
   {
     indicator: 'AM',
     Kenya: 135,
-    CountryColor: theme.color.chartColorTwo,
-    Global: 131,
-    GlobalColor: theme.color.chartColorThree,
-  },
+    CountryColor: theme.color.chartColorTwo
+  }
 ];

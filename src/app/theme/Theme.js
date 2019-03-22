@@ -1,9 +1,14 @@
 export default {
-  fontSize: {},
+  fontSize: {
+    pageHeadingBig: '48px',
+    pageHeadingSmall: '32px'
+  },
+
   color: {
     aidsFondsBlue: '#0000ff',
     aidsFondsRed: '#ff0100',
     aidsFondsWhite: '#ffffff',
+    aidsFondsWhiteOpacity: 'rgba(255, 255, 255, 0.74)',
     toolTipColor: '#414141',
     chartColorOne: '#f2c987',
     chartColorTwo: '#091799',
@@ -18,22 +23,27 @@ export default {
     zoomGreySix: '#cecece',
     zoomGreySeven: '#cfcfcf',
     zoomGreyEight: '#d8d8d8',
+    zoomGreyNine: '#dcdcdc',
+    zoomGreyTen: '#959595',
     zoomBlack: '#000000',
     colHeadColor: '#9b9b9b',
     errorCellColor: '#ff807f',
     smallTextBlack: '#4a4a4a',
+    switchGreen: '#8ed59b'
   },
   space: {},
   height: {},
   font: {
     zoomFontFamOne: 'FFMarkProAF-Bold',
-    zoomFontFamTwo: 'FFMarkProAF-Book',
+    zoomFontFamTwo: 'FFMarkProAF-Book'
   },
   weight: {},
-  shadow: {},
+  shadow: {
+    standard: '0 2px 4px rgba(0, 0, 0, 0.5)'
+  },
   borderRadius: {},
   icon: {},
   border: {
-    dashboardTab: '2px solid #0000ff',
-  },
+    dashboardTab: '2px solid #0000ff'
+  }
 };

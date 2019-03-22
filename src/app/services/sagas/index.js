@@ -4,6 +4,7 @@ import * as mutationActions from 'services/actions/mutation';
 import * as api from 'services/index';
 import * as oipaActions from 'services/actions/oipa';
 import * as generalActions from 'services/actions/general';
+import * as nodeActions from 'services/actions/nodeBackend';
 
 export function* uploadRequest(action) {
   try {
@@ -111,8 +112,131 @@ export function* dataPaneToggleRequest(action) {
   yield put(generalActions.dataPaneToggleDone(action.open));
 }
 
+export function* saveStepDataRequest(action) {
+  yield put(generalActions.saveStepDataDone(action.data));
+}
+
+export function* storeChartDataRequest(action) {
+  yield put(generalActions.storeChartDataDone(action.data));
+}
+
+export function* storePaneDataRequest(action) {
+  yield put(generalActions.storePaneDataDone(action.data));
+}
+
+export function* allUserChartsRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getAllCharts',
+      values: action.values
+    });
+    yield put(nodeActions.allUserChartsSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.allUserChartsFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* getUserRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getUser',
+      values: action.values
+    });
+    yield put(nodeActions.getUserSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.getUserFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* addUserRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'addNewUser',
+      values: action.values
+    });
+    yield put(nodeActions.addUserSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.addUserFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* updateUserRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'updateUser',
+      values: action.values
+    });
+    yield put(nodeActions.updateUserSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.updateUserFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* updateUsersTeamRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'updateUsersTeam',
+      values: action.values
+    });
+    yield put(nodeActions.updateUsersTeamSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.updateUsersTeamFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* addNewDatasetRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'addNewDataset',
+      values: action.values
+    });
+    yield put(nodeActions.addNewDatasetSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.addNewDatasetFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('STORE_PANE_DATA_REQUEST', storePaneDataRequest),
+    takeLatest('STORE_CHART_DATA_REQUEST', storeChartDataRequest),
+    takeLatest('ADD_NEW_DATASET_REQUEST', addNewDatasetRequest),
+    takeLatest('UPDATE_USERS_TEAM__REQUEST', updateUsersTeamRequest),
+    takeLatest('UPDATE_USER_REQUEST', updateUserRequest),
+    takeLatest('ADD_USER_REQUEST', addUserRequest),
+    takeLatest('GET_USER_REQUEST', getUserRequest),
+    takeLatest('ALL_USER_CHARTS_REQUEST', allUserChartsRequest),
+    takeLatest('SAVE_STEP_DATA_REQUEST', saveStepDataRequest),
     takeLatest('DATA_PANE_TOGGLE_REQUEST', dataPaneToggleRequest),
     takeLatest('COUNTRY_ACTIVITIES_REQUEST', countryActivitiesRequest),
     takeLatest('UPLOAD_REQUEST', uploadRequest),

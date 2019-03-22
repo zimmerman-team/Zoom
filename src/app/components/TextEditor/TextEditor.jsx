@@ -17,10 +17,10 @@ const ComponentBase = styled.div`
 `;
 
 const propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.array
 };
 const defaultProps = {
-  data: [],
+  data: []
 };
 
 class TextEditor extends React.Component {

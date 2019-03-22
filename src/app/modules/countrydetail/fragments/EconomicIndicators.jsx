@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
-import LineChart from 'components/charts/linechart/LineChart';
+import LineChart from 'components/charts/nivo_linechart/LineChart';
 import { lineChartMockData } from '__mocks__/lineChartMock';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';
@@ -11,10 +11,10 @@ import { Element } from 'react-scroll/modules';
 const ComponentBase = styled.div``;
 
 const propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.object
 };
 const defaultProps = {
-  data: undefined,
+  data: undefined
 };
 
 const EconomicIndicators = props => {

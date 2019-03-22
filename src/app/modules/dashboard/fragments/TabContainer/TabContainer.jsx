@@ -9,16 +9,16 @@ import {
   CenterTabs,
   Tab,
   TabBadge,
-  TabText,
+  TabText
 } from './TabContainer.styles';
 
 const activeTheme = {
   border: Theme.border.dashboardTab,
-  color: Theme.color.zoomBlack,
+  color: Theme.color.zoomBlack
 };
 
 const theme = {
-  color: Theme.color.aidsFondsRed,
+  color: Theme.color.aidsFondsRed
 };
 
 const propTypes = {
@@ -26,22 +26,25 @@ const propTypes = {
     PropTypes.shape({
       key: PropTypes.string,
       label: PropTypes.string,
-      route: PropTypes.string,
-    }),
+      route: PropTypes.string
+    })
   ),
   tabCounts: PropTypes.shape({}),
-  activeTab: PropTypes.string,
+  activeTab: PropTypes.string
 };
 const defaultProps = {
   tabs: [],
   tabCounts: {},
-  activeTab: '',
+  activeTab: ''
 };
 
 const TabContainer = ({ tabs, tabCounts, activeTab }) => (
+  /*todo: see if it makes sense to make a re-usable component for component containers*/
   <Container>
+    {/*todo: rename centertabs to something more descriptive*/}
     <CenterTabs>
       {tabs.slice(0, tabs.length - 1).map(tab => (
+        /*todo: make re-usable tab component */
         <Tab key={tab.key}>
           <TabBadge>{tabCounts[tab.key]}</TabBadge>
           <TabText
@@ -53,8 +56,12 @@ const TabContainer = ({ tabs, tabCounts, activeTab }) => (
         </Tab>
       ))}
     </CenterTabs>
-    <Tab theme={{ marginLeft: 'auto' }}>
+
+    {/*todo: lets minimize the use of inline styling*/}
+    <Tab theme={{ marginLeft: 'auto', paddingRight: 0 }}>
+      {/*todo: make reusable component */}
       <TabBadge>{tabCounts[tabs[tabs.length - 1].key]}</TabBadge>
+      {/*todo: make reusable component */}
       <TabText
         to={tabs[tabs.length - 1].route}
         theme={activeTab === tabs[tabs.length - 1].key ? activeTheme : theme}

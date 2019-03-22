@@ -9,7 +9,6 @@ import { routerMiddleware } from 'react-router-redux';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import createHistory from 'history/createBrowserHistory';
 import createSagaMiddleware from 'redux-saga';
-import { CookiesProvider } from 'react-cookie';
 
 import reducers from 'services/reducers';
 import mutationReducers from 'services/reducers/mutation';
@@ -35,11 +34,9 @@ const store = createStore(
 sagaMiddleware.run(sagas);
 
 ReactDOM.render(
-  <CookiesProvider>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </CookiesProvider>,
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById('root')
 );
 
@@ -48,4 +45,4 @@ ReactDOM.render(
 // Learn more about service workers: http://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-console.log('ZOOM V1.2');
+console.log('ZOOM V1.2.3');

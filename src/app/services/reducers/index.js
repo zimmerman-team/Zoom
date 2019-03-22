@@ -1,6 +1,7 @@
 import update from 'immutability-helper';
 import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
+import * as nodeActions from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -10,8 +11,8 @@ const initial = {
   error: {
     status: null,
     statusText: null,
-    result: null,
-  },
+    result: null
+  }
 };
 
 function updateInitial(state) {
@@ -23,8 +24,8 @@ function updateInitial(state) {
     error: {
       status: { $set: null },
       statusText: { $set: null },
-      result: { $set: null },
-    },
+      result: { $set: null }
+    }
   });
 }
 
@@ -37,8 +38,8 @@ function updateRequest(state, action) {
     error: {
       status: { $set: null },
       statusText: { $set: null },
-      result: { $set: null },
-    },
+      result: { $set: null }
+    }
   });
 }
 
@@ -51,8 +52,8 @@ function updateSuccess(state, action) {
     error: {
       status: { $set: null },
       statusText: { $set: null },
-      result: { $set: {} },
-    },
+      result: { $set: {} }
+    }
   });
 }
 
@@ -65,8 +66,8 @@ function updateFailed(state, action) {
     error: {
       status: { $set: action.error.status },
       statusText: { $set: action.error.statusText },
-      result: { $set: action.error.result },
-    },
+      result: { $set: action.error.result }
+    }
   });
 }
 
@@ -220,7 +221,103 @@ function countryExcerpt(state = initial, action) {
   }
 }
 
+function allUserCharts(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.ALL_USER_CHARTS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.ALL_USER_CHARTS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.ALL_USER_CHARTS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.ALL_USER_CHARTS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function user(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_USER_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_USER_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_USER_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_USER_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function userAdded(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.ADD_USER_INITIAL:
+      return updateInitial(state);
+    case nodeActions.ADD_USER_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.ADD_USER_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.ADD_USER_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function userUpdated(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.UPDATE_USER_INITIAL:
+      return updateInitial(state);
+    case nodeActions.UPDATE_USER_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.UPDATE_USER_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.UPDATE_USER_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function usersTeam(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.UPDATE_USERS_TEAM_INITIAL:
+      return updateInitial(state);
+    case nodeActions.UPDATE_USERS_TEAM__REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.UPDATE_USERS_TEAM_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.UPDATE_USERS_TEAM_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function datasetAdded(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.ADD_NEW_DATASET_INITIAL:
+      return updateInitial(state);
+    case nodeActions.ADD_NEW_DATASET_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.ADD_NEW_DATASET_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.ADD_NEW_DATASET_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  datasetAdded,
+  usersTeam,
+  userUpdated,
+  userAdded,
+  user,
+  allUserCharts,
   upload,
   validate,
   columns,
@@ -230,7 +327,7 @@ const reducers = {
   manualMapData,
   countryExcerpt,
   countryActivities,
-  activityData,
+  activityData
 };
 
 export default reducers;

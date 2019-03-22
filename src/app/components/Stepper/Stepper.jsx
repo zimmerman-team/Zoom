@@ -1,118 +1,124 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+
+/* components */
 import { Box } from 'grommet';
-import styled from 'styled-components';
+import StepConnector from '@material-ui/core/StepConnector';
+import { withStyles } from '@material-ui/core/styles';
 import ZoomButton from 'components/ZoomButton/ZoomButton';
+
+/* styles */
 import theme from 'theme/Theme';
-import StepItem from 'components/Stepper/StepItem';
+import {
+  ComponentBase,
+  stepButStyle,
+  ButtonLabel,
+  ButtonContainer,
+  Stepz,
+  StepzLabel,
+  StepLabelClass,
+  StyledStepper,
+  materialStyles
+} from './Stepper.style';
 
-const ComponentBase = styled.div`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  max-width: 1024px;
-  flex-direction: column;
-`;
-
-/*TODO: discuss object structure*/
-/*TODO: document component*/
-const steps = [
-  {
-    id: 1,
-    label: 'Meta Data',
-    isActive: true,
-    isDone: true,
-    isFirst: true,
-  },
-  {
-    id: 2,
-    label: 'Upload CSV Data',
-    isActive: true,
-  },
-  {
-    id: 3,
-    label: 'Overview',
-  },
-  {
-    id: 4,
-    label: 'Correct errors',
-  },
-  {
-    id: 5,
-    label: 'Manual mapping',
-  },
-  {
-    id: 6,
-    label: 'Done',
-    isLast: true,
-  },
-];
+/* consts */
+import { steps } from './Stepper.const';
+import StepLabel from '@material-ui/core/StepLabel';
+import Step from '@material-ui/core/Step';
 
 const propTypes = {
   data: PropTypes.object,
   onlyButtons: PropTypes.bool,
+  nextDisabled: PropTypes.bool
 };
 const defaultProps = {
   data: undefined,
   onlyButtons: false,
+  nextDisabled: true
 };
 
-class Stepper extends React.Component {
+class Stepperz extends React.Component {
   render() {
-    const nextEnabled = this.props.step !== 6;
+    const { classes } = this.props;
+
+    const nextDisabled = this.props.nextDisabled || this.props.step === 6;
     const prevEnabled = this.props.step !== 1;
+
+    const connector = (
+      <StepConnector
+        classes={{
+          active: classes.connectorActive,
+          completed: classes.connectorCompleted,
+          disabled: classes.connectorDisabled,
+          line: classes.connectorLine
+        }}
+      />
+    );
+
+    const activeStep = this.props.step - 1;
 
     return (
       <ComponentBase>
         {!this.props.onlyButtons && (
-          <Box direction="row" width="100%">
-            {/*TODO: implement conditional logic that sets state accordingly to control the stepper and the content that is linked to specific steps*/}
+          <StyledStepper
+            alternativeLabel
+            activeStep={activeStep}
+            connector={connector}
+          >
             {steps.map(step => (
-              /*TODO: set "isFirst" and "isLast" depending on if object is first or last in the array of objects */
-              <StepItem
-                key={step.id}
-                stepNumber={step.id}
-                isActive={this.props.step === step.id}
-                isDone={step.id < this.props.step}
-                stepLabel={step.label}
-                isFirst={step.isFirst}
-                isLast={step.isLast}
-              />
+              <Step key={step.label}>
+                <StepLabel
+                  classes={{
+                    label: classes.stepLabel,
+                    active: classes.stepLabelActive,
+                    completed: classes.stepLabelActive
+                  }}
+                  StepIconProps={{
+                    classes: {
+                      root: classes.stepIcon,
+                      active: classes.stepIconActive,
+                      completed: classes.stepIconCompleted,
+                      text: classes.stepIconText
+                    }
+                  }}
+                >
+                  {step.label}
+                </StepLabel>
+              </Step>
             ))}
-          </Box>
+          </StyledStepper>
         )}
-
-        {/*TODO: refactor "ZoomButton" to be a proper component*/}
-        {/*TODO: add click event handlers*/}
         <Box direction="row">
-          <Box margin="small">
+          <ButtonContainer margin="small">
             <ZoomButton
               style={{
                 backgroundColor: !prevEnabled ? theme.color.zoomGreySix : '',
+                ...stepButStyle
               }}
               onClick={prevEnabled ? this.props.prevStep : undefined}
             >
-              back
+              <ButtonLabel>back</ButtonLabel>
             </ZoomButton>
-          </Box>
-          <Box margin="small">
+          </ButtonContainer>
+          <ButtonContainer margin="small">
             <ZoomButton
               style={{
-                backgroundColor: !nextEnabled ? theme.color.zoomGreySix : '',
+                backgroundColor: nextDisabled ? theme.color.zoomGreySix : '',
+                ...stepButStyle
               }}
-              onClick={nextEnabled ? this.props.nextStep : undefined}
+              onClick={this.props.step !== 6 ? this.props.nextStep : undefined}
             >
-              next
+              <ButtonLabel>next</ButtonLabel>
             </ZoomButton>
-          </Box>
+          </ButtonContainer>
         </Box>
       </ComponentBase>
     );
   }
 }
 
-Stepper.propTypes = propTypes;
-Stepper.defaultProps = defaultProps;
+Stepperz.propTypes = propTypes;
+Stepperz.defaultProps = defaultProps;
 
-export default Stepper;
+export default withStyles(materialStyles)(Stepperz);

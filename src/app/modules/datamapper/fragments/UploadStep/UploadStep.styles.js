@@ -38,4 +38,7 @@ export const BrowseLink = styled(UploadText)`
   cursor: pointer;
 `;
 
-export const UploadedContainer = styled(Box)``;
+export const UploadedContainer = styled(Box)`
+  text-align: center;
+  margin-top: 10px;
+`;

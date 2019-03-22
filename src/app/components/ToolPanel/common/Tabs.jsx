@@ -16,9 +16,9 @@ export default styled(props => (
           transition: 'none',
           width: '49px',
           '&$tabSelected': {
-            color: '#000',
-          },
-        },
+            color: '#000'
+          }
+        }
       }}
       {...props}
     />
@@ -28,5 +28,7 @@ export default styled(props => (
     padding: 0;
     margin: 0;
     transition: none;
+    align-self: flex-end;
+    //align-self: flex-end;
   }
 `;

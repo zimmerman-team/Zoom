@@ -13,7 +13,7 @@ import {
   SideBarLayer,
   SidebarNavList,
   SidebarNavListContainer,
-  SidebarNavListItem,
+  SidebarNavListItem
 } from 'components/SideBar/SideBar.styles';
 import LoginForm from 'components/SideBar/comps/LoginForm/LoginForm';
 
@@ -21,15 +21,15 @@ import LoginForm from 'components/SideBar/comps/LoginForm/LoginForm';
 const propTypes = {
   // auth0Client: PropTypes.object,
   open: PropTypes.bool,
-  toggleSideBar: PropTypes.func,
+  toggleSideBar: PropTypes.func
 };
 const defaultProps = {
-  open: undefined,
+  open: undefined
 };
 
 class SideBar extends React.Component {
   state = {
-    open: this.props.open,
+    open: this.props.open
   };
 
   render() {
@@ -55,6 +55,7 @@ class SideBar extends React.Component {
                   icon={<IconClose />}
                   onClick={this.props.toggleSideBar}
                   label="Close"
+                  data-cy="sidebar-close"
                 />
               </SidebarHeader>
 
@@ -95,9 +96,29 @@ class SideBar extends React.Component {
                     path={'/mapper'}
                     icon={<IconCharts />}
                     onClick={this.props.toggleSideBar}
-                    hoverIndicator={false}
                     type="button"
                     plain={true}
+                    data-cy="sidebar-datamapper"
+                  />
+
+                  <SidebarNavListItem
+                    label="Focus page NL"
+                    path={'/focus'}
+                    icon={<IconCharts />}
+                    onClick={this.props.toggleSideBar}
+                    type="button"
+                    plain={true}
+                    data-cy="sidebar-datamapper"
+                  />
+
+                  <SidebarNavListItem
+                    label="Visualizer"
+                    path={'/visualizer/vizID/edit'}
+                    icon={<IconCharts />}
+                    onClick={this.props.toggleSideBar}
+                    type="button"
+                    plain={true}
+                    data-cy="sidebar-datamapper"
                   />
 
                   {/*TODO: we need to clean this up, maybe go for desctructing the auth0Client object */}
@@ -105,24 +126,24 @@ class SideBar extends React.Component {
                     (this.props.auth0Client.isAuthenticated() &&
                       this.props.auth0Client.isAdministrator() && (
                         <SidebarNavListItem
-                          label="Add user"
-                          path="/add-user"
+                          label="Dashboard"
+                          path="/dashboard"
                           onClick={this.props.toggleSideBar}
                           icon={<IconCharts />}
                           type="button"
                           plain={true}
-                          data-cy="sidebar-add-user"
+                          data-cy="sidebar-dashboard"
                         />
                       ))}
 
                   <SidebarNavListItem
-                    active={false}
                     label="About ZOOM"
                     path="/about"
                     onClick={this.props.toggleSideBar}
                     icon={<IconAbout />}
                     type="button"
                     plain={true}
+                    data-cy="sidebar-about"
                   />
                 </SidebarNavList>
               </SidebarNavListContainer>

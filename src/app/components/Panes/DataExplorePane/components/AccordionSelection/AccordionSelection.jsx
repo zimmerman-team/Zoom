@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import {
   FilterLabel,
   ComponentBase,
@@ -7,6 +9,14 @@ import {
 } from 'components/Panes/DataExplorePane/components/AccordionSelection/AccordionSelection.styles';
 import IconPointer from 'assets/icons/IconPointer';
 import theme from 'theme/Theme';
+import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePanel';
+
+const propTypes = {
+  active: PropTypes.bool
+};
+
+const defaultProps = {};
+
 const AccordionSelection = props => {
   const compStyle = props.active
     ? {
@@ -34,5 +44,8 @@ const AccordionSelection = props => {
     </ComponentBase>
   );
 };
+
+AccordionSelection.propTypes = propTypes;
+AccordionSelection.defaultProps = defaultProps;
 
 export default AccordionSelection;

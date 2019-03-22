@@ -104,7 +104,9 @@ export class AppBar extends React.Component {
             }
           >
             {paneIcon}
-            <PaneButtonText>{buttonLabel}</PaneButtonText>
+            <PaneButtonText data-cy="appbar-right-button">
+              {buttonLabel}
+            </PaneButtonText>
           </PaneButton>
         );
         break;

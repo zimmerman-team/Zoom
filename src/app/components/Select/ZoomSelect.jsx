@@ -139,7 +139,7 @@ class ZoomSelect extends React.Component {
           this.setState({ options: this.props.data });
         }
       } else {
-        this.setState({ initialSelect: true });
+        this.setState({ options: [], initialSelect: true });
       }
 
       if (

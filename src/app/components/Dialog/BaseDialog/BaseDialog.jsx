@@ -72,6 +72,7 @@ class BaseDialog extends Component {
                   label={this.props.buttonText}
                   focusIndicator={false}
                   onClick={this.onClose}
+                  data-cy="dialog-overlay"
                 />
               )}
             </Box>

@@ -16,18 +16,20 @@ const ComponentBase = styled.header`
 
 const propTypes = {
   userName: PropTypes.string,
-  title: PropTypes.string
+  title: PropTypes.string,
+  message: PropTypes.string
 };
 const defaultProps = {
   userName: 'empty',
-  title: 'empty'
+  title: 'empty',
+  message: 'no message to display'
 };
 
 const DashboardHeader = props => {
   return (
     <ComponentBase>
-      <PageHeading>Zoom dashboard</PageHeading>
-      <UserGreeting message="Welcome back" user={props.userName} />
+      <PageHeading>{props.title}</PageHeading>
+      <UserGreeting message={props.message} user={props.userName} />
     </ComponentBase>
   );
 };

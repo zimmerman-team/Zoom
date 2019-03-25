@@ -107,7 +107,11 @@ const DashboardModule = ({
   navItems
 }) => (
   <ModuleContainer>
-    <DashboardHeader userName={greetingName} />
+    <DashboardHeader
+      userName={greetingName}
+      title="Zoom dashboard"
+      message="Welcome back"
+    />
     <SearchBox onChange={changeSearchKeyword} placeholder={<SvgIconSearch />} />
 
     {/*todo: sorting logic must be refactored/fixed*/}

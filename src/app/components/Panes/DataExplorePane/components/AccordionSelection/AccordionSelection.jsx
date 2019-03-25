@@ -23,7 +23,10 @@ const AccordionSelection = props => {
         backgroundColor: theme.color.zoomGreyZero,
         borderBottom: `1px solid ${theme.color.zoomGreyFour}`
       }
-    : { backgroundColor: theme.color.aidsFondsWhite };
+    : {
+        backgroundColor: theme.color.aidsFondsWhite,
+        borderBottom: `2px solid ${theme.color.zoomGreyFour}`
+      };
   return (
     <ComponentBase style={compStyle}>
       <IconContainer>{props.icon}</IconContainer>

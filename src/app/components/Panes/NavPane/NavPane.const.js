@@ -28,8 +28,8 @@ export const createChartItems = [
   {
     label: 'Country Focus Page Netherlands',
     navTo: '/focus/NL'
-  }
-  /*{
+  } /*,
+  {
     label: 'Line chart',
     navTo: '/create/linechart'
   },
@@ -46,6 +46,6 @@ export const createChartItems = [
 export const convertDataItems = [
   {
     label: 'Convert data',
-    navTo: '#'
+    navTo: '/mapper'
   }
 ];

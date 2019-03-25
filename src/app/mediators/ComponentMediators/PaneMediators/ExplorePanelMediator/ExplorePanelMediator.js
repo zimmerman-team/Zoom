@@ -4,6 +4,9 @@ import { createRefetchContainer, graphql } from 'react-relay';
 import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePanel';
 import PropTypes from 'prop-types';
 
+/* consts */
+import initialState from '__consts__/InitialChartDataConst';
+
 /* helpers */
 import sortBy from 'lodash/sortBy';
 import isEqual from 'lodash/isEqual';
@@ -40,17 +43,25 @@ const defaultProps = {
 class ExplorePanelMediator extends React.Component {
   constructor(props) {
     super(props);
+
+    const yearRange = ''
+      .concat(initialState.yearPeriod[0])
+      .concat(',')
+      .concat(initialState.yearPeriod[initialState.yearPeriod.length - 1]);
+
     this.state = {
       allIndNames: [],
       allCountries: [],
       allFileSources: [],
       selectedSources: [],
+      yearRange,
       allRegions: []
     };
 
     this.refetch = this.refetch.bind(this);
     this.selectDataSource = this.selectDataSource.bind(this);
     this.resetIndicators = this.resetIndicators.bind(this);
+    this.selectYearRange = this.selectYearRange.bind(this);
   }
 
   // onlyUnique(value, index, self) {
@@ -152,7 +163,18 @@ class ExplorePanelMediator extends React.Component {
     this.setState({ selectedSources, allIndNames }, this.refetch);
   }
 
-  refetch(selectedSources = this.state.selectedSources) {
+  selectYearRange(value) {
+    const yearRange = ''
+      .concat(value[0])
+      .concat(',')
+      .concat(value[1]);
+    this.setState({ yearRange }, this.refetch);
+  }
+
+  refetch(
+    selectedSources = this.state.selectedSources,
+    year_Range = this.state.yearRange
+  ) {
     let fileSource_Name_In = '';
 
     selectedSources.forEach(source => {
@@ -163,15 +185,32 @@ class ExplorePanelMediator extends React.Component {
       fileSource_Name_In.length === 0 ? 'null' : fileSource_Name_In;
 
     const refetchVars = {
-      fileSource_Name_In
+      fileSource_Name_In:
+        '2019samples2,26,Aidsfonds,CBS,Country Detail Indicators,FAO FILTER,MortyTestSource,New Data Source,Test,New Data Source,',
+      year_Range: '2003,2016'
     };
 
-    this.props.relay.refetch(refetchVars, null, () => this.resetIndicators(), {
-      force: true
-    });
+    console.log('refetchVars', refetchVars);
+
+    this.props.relay.refetch(
+      value => {
+        console.log('REFETCH VARIABLES value', value);
+        return {
+          fileSource_Name_In:
+            '26,Aidsfonds,CBS,Country Detail Indicators,FAO FILTER,MortyTestSource,New Data Source,Test,Test-1,',
+          year_Range: '2003,2016'
+        };
+      },
+      null,
+      () => this.resetIndicators(),
+      {
+        force: true
+      }
+    );
   }
 
   resetIndicators() {
+    console.log('RESET INDICATORS CALLED, #CALLBACK');
     // and we also deselect the indicators
     this.props.selectInd1({ value: undefined });
     this.props.selectInd2({ value: undefined });
@@ -179,6 +218,11 @@ class ExplorePanelMediator extends React.Component {
 
   render() {
     const { dropDownData, ...otherProps } = this.props;
+
+    console.log(
+      'this.props.dropDownData.exploreIndicators.edges',
+      this.props.dropDownData.exploreIndicators.edges
+    );
 
     return (
       <DataExplorePane
@@ -188,6 +232,8 @@ class ExplorePanelMediator extends React.Component {
         allFileSources={this.state.allFileSources}
         selectDataSource={this.selectDataSource}
         selectedSources={this.state.selectedSources}
+        selectYearRange={this.selectYearRange}
+        yearRange={this.state.yearRange}
         {...otherProps}
       />
     );
@@ -203,6 +249,7 @@ export default createRefetchContainer(
     fragment ExplorePanelMediator_dropDownData on Query
       @argumentDefinitions(
         fileSource_Name_In: { type: "String", defaultValue: "null" }
+        year_Range: { type: "String", defaultValue: "0,0" }
       ) {
       allCountries {
         edges {
@@ -221,6 +268,7 @@ export default createRefetchContainer(
       }
       exploreIndicators: allIndicators(
         fileSource_Name_In: $fileSource_Name_In
+        year_Range: $year_Range
       ) {
         edges {
           node {
@@ -241,9 +289,13 @@ export default createRefetchContainer(
     }
   `,
   graphql`
-    query ExplorePanelMediatorQuery($fileSource_Name_In: String!) {
+    query ExplorePanelMediatorQuery(
+      $fileSource_Name_In: String!
+      $year_Range: String!
+    ) {
       exploreIndicators: allIndicators(
         fileSource_Name_In: $fileSource_Name_In
+        year_Range: $year_Range
       ) {
         edges {
           node {

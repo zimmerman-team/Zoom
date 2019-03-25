@@ -442,7 +442,7 @@ export default createRefetchContainer(
           }
         }
       }
-      exploreIndicators: allIndicators(
+      visualizerIndicators: allIndicators(
         fileSource_Name_In: $fileSource_Name_In
       ) {
         edges {
@@ -465,7 +465,7 @@ export default createRefetchContainer(
   `,
   graphql`
     query VizPaneMediatorQuery($fileSource_Name_In: String!) {
-      exploreIndicators: allIndicators(
+      visualizerIndicators: allIndicators(
         fileSource_Name_In: $fileSource_Name_In
       ) {
         edges {

@@ -37,20 +37,27 @@ const defaultProps = {
 };
 
 const ExpansionPanel = props => {
+  const [expanded, setExpanded] = React.useState(true);
+
+  function handleChange() {
+    setExpanded(!expanded);
+  }
+
   return (
     <ComponentBase>
       <Box>
-        <ExpansionzPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            {props.renderHeader('DataSource')}
+        <ExpansionzPanel expanded={expanded} onChange={handleChange}>
+          <ExpansionPanelSummary>
+            {props.renderHeader('Datasource')}
           </ExpansionPanelSummary>
+          {/*todo: A expensionPanel should take multiple expansionPanelDetails*/}
           <ExpansionPanelDetails>
             <FilterContainer>
               <DropDownCont>
                 <ZoomSelect
                   defaultAll={props.locationSelected}
                   selectAll={props.selectAll}
-                  // reset={() => this.props.selectDataSource('reset')}
+                  reset={() => props.selectDataSource('reset')}
                   multiple={props.multiple}
                   placeHolderText={props.placeHolderText}
                   placeHolderNumber={props.placeHolderNumber}

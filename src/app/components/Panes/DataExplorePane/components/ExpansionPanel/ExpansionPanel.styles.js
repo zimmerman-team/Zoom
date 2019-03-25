@@ -3,7 +3,6 @@ import _ExpansionPanel from '@material-ui/core/ExpansionPanel/ExpansionPanel';
 import styled from 'styled-components';
 import _ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary';
 import _ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails/ExpansionPanelDetails';
-import _ExpandMoreIcon from '@material-ui/core/SvgIcon/SvgIcon';
 import _ZoomSelect from '../../../../Select/ZoomSelect';
 
 export const ExpansionzPanel = withStyles({
@@ -22,6 +21,7 @@ export const ExpansionzPanel = withStyles({
 export const ExpansionPanelSummary = styled(_ExpansionPanelSummary)`
   & > div {
     margin: 0;
+    background-color: #6c6c6c;
   }
 `;
 
@@ -41,10 +41,6 @@ export const ExpansionPanelDetails = styled(_ExpansionPanelDetails)`
       width: 100%;
     }
   }
-`;
-
-export const ExpandMoreIcon = styled(_ExpandMoreIcon)`
-  padding: 8px;
 `;
 
 export const ZoomSelect = styled(_ZoomSelect)`

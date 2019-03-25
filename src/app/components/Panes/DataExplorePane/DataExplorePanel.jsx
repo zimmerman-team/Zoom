@@ -2,13 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { withStyles } from '@material-ui/core/styles';
-// import _ExpansionPanel from '@material-ui/core/ExpansionPanel';
-// import _ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-// import _ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-// import Typography from '@material-ui/core/Typography';
-// import _ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
 /* icons */
 import IconRedIndicators from 'assets/icons/IconRedIndicators';
 import IconRedLocation from 'assets/icons/IconRedLocation';
@@ -34,9 +27,7 @@ import {
 } from './DataExplorerPane.style';
 import SimpleToolTip from '../../ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
-import styled from 'styled-components';
 import ExpansionPanel from './components/ExpansionPanel/ExpansionPanel';
-import { ExpansionPanelDetails } from './components/ExpansionPanel/ExpansionPanel.styles';
 
 const propTypes = {
   selectedInd2: PropTypes.string,
@@ -98,8 +89,21 @@ const propTypes = {
   locationSelected: PropTypes.bool,
   resetAll: PropTypes.func,
 
-  details: PropTypes.arrayOf()
+  details: PropTypes.arrayOf(
+    PropTypes.shape({
+      defaultAll: PropTypes.bool,
+      selectAll: PropTypes.bool,
+      reset: PropTypes.func,
+      multiple: PropTypes.bool,
+      placeHolderText: PropTypes.string,
+      placeHolderNumber: PropTypes.string,
+      data: PropTypes.object,
+      arraySelected: PropTypes.object,
+      selectVal: PropTypes.object
+    })
+  )
 };
+
 const defaultProps = {
   selectedInd2: undefined,
   selectedInd1: undefined,
@@ -167,159 +171,145 @@ class DataExplorePane extends React.Component {
     return <AccordionSelection icon={icon} label={label} active={active} />;
   };
   render() {
-    // console.log('this.props.indNames', this.props.indNames);
     return (
       <ComponentBase>
-        {/*<PanelAccordion*/}
-        {/*animate*/}
-        {/*multiple*/}
-        {/*onActive={newActiveIndex =>*/}
-        {/*this.setState({ activeIndex: newActiveIndex })*/}
-        {/*}*/}
-        {/*>*/}
-        <ExpansionPanel
-          selectDataSource={this.props.selectDataSource}
-          allFileSources={this.props.allFileSources}
-          locationSelected={this.props.locationSelected}
-          selectedSources={this.props.selectedSources}
-          renderHeader={() => this.renderHeader('Datasource')}
-          details={this.props.details}
-          defaultAll={this.props.locationSelected}
-          selectAll
-          reset={() => this.props.selectDataSource('reset')}
+        <PanelAccordion
+          animate
           multiple
-          placeHolderText={'Select datasource'}
-          placeHolderNumber={this.props.allFileSources.length}
-          data={this.props.allFileSources}
-          arraySelected={this.props.selectedSources}
-          selectVal={this.props.selectDataSource}
-        />
-        <ExpansionPanel
-          selectDataSource={this.props.selectDataSource}
-          allFileSources={this.props.allFileSources}
-          locationSelected={this.props.locationSelected}
-          selectedSources={this.props.selectedSources}
-          renderHeader={() => this.renderHeader('Geo location')}
-          defaultAll={this.props.locationSelected}
-          selectAll
-          multiple
-          placeHolderText="Select region"
-          placeHolderNumber={this.props.regions.length}
-          data={this.props.regions}
-          arraySelected={this.props.selectedRegionVal}
-          selectVal={this.props.selectRegion}
-          reset={() => this.props.selectRegion('reset')}
-        />
+          onActive={newActiveIndex =>
+            this.setState({ activeIndex: newActiveIndex })
+          }
+        >
+          {/*TODO: ExpansionPanel should take MULTIPLE zoomselects*/}
+          {/*TODO: Get rid of that freaking accordion selection and renderHeader function*/}
+          {/*TODO: Pass icon to expansionpanel Expanened ? make it blue */}
+          {/*TODO: Expanded ? make text blue / bg gray */}
+          {/*TODO: Make PR, dry tears and move on to next ticket*/}
 
-        {/*<AccordionSection header={this.renderHeader('Datasource')}>*/}
-        {/*<FilterContainer>*/}
-        {/*<DropDownCont>*/}
-        {/*<ZoomSelect*/}
-        {/*defaultAll={this.props.locationSelected}*/}
-        {/*selectAll*/}
-        {/*// reset={() => this.props.selectDataSource('reset')}*/}
-        {/*multiple*/}
-        {/*placeHolderText={'Select datasource'}*/}
-        {/*placeHolderNumber={this.props.allFileSources.length}*/}
-        {/*data={this.props.allFileSources}*/}
-        {/*arraySelected={this.props.selectedSources}*/}
-        {/*selectVal={this.props.selectDataSource}*/}
-        {/*/>*/}
-        {/*</DropDownCont>*/}
-        {/*</FilterContainer>*/}
-        {/*</AccordionSection>*/}
-
-        <AccordionSection header={this.renderHeader('Geo location')}>
-          <FilterContainer>
-            <DropDownCont>
-              <ZoomSelect
-                defaultAll={this.props.locationSelected}
-                selectAll
-                multiple
-                placeHolderText="Select region"
-                placeHolderNumber={this.props.regions.length}
-                data={this.props.regions}
-                arraySelected={this.props.selectedRegionVal}
-                selectVal={this.props.selectRegion}
-                reset={() => this.props.selectRegion('reset')}
-              />
-            </DropDownCont>
-            <DropDownCont>
-              <ZoomSelect
-                defaultAll={this.props.locationSelected}
-                selectAll
-                reset={() => this.props.selectCountry('reset')}
-                multiple
-                placeHolderText={'Select country'}
-                placeHolderNumber={this.props.countries.length}
-                data={this.props.countries}
-                arraySelected={this.props.selectedCountryVal}
-                selectVal={this.props.selectCountry}
-              />
-            </DropDownCont>
-          </FilterContainer>
-        </AccordionSection>
-        {/*<AccordionSection header={this.renderHeader('Time period')}>*/}
-        {/*<FilterContainer>*/}
-        {/*<YearSelector*/}
-        {/*selectYear={this.props.selectYear}*/}
-        {/*selectedYears={this.props.yearPeriod}*/}
-        {/*/>*/}
-        {/*</FilterContainer>*/}
-        {/*</AccordionSection>*/}
-        {/*<AccordionSection header={this.renderHeader('Indicators')}>*/}
-        {/*<FilterContainer>*/}
-        {/*<DropDownCont>*/}
-        {/*<ZoomSelect*/}
-        {/*categorise*/}
-        {/*reset={() => this.props.selectInd1({ value: undefined })}*/}
-        {/*placeHolderText="Select indicator"*/}
-        {/*placeHolderNumber={this.props.indNames.length}*/}
-        {/*data={this.props.indNames}*/}
-        {/*valueSelected={this.props.selectedInd1}*/}
-        {/*selectVal={this.props.selectInd1}*/}
-        {/*/>*/}
-        {/*</DropDownCont>*/}
-        {/*<DropDownCont>*/}
-        {/*<ZoomSelect*/}
-        {/*defaultAll={this.props.subInd1AllSelected}*/}
-        {/*selectAll*/}
-        {/*categorise*/}
-        {/*placeHolderText="Select sub indicator"*/}
-        {/*data={this.props.subIndicators1}*/}
-        {/*multiple*/}
-        {/*arraySelected={this.props.selectedSubInd1}*/}
-        {/*selectVal={this.props.selectSubInd1}*/}
-        {/*/>*/}
-        {/*</DropDownCont>*/}
-        {/*</FilterContainer>*/}
-        {/*<FilterContainer>*/}
-        {/*<DropDownCont>*/}
-        {/*<ZoomSelect*/}
-        {/*categorise*/}
-        {/*reset={() => this.props.selectInd2({ value: undefined })}*/}
-        {/*placeHolderText="Select indicator"*/}
-        {/*placeHolderNumber={this.props.indNames.length}*/}
-        {/*data={this.props.indNames}*/}
-        {/*valueSelected={this.props.selectedInd2}*/}
-        {/*selectVal={this.props.selectInd2}*/}
-        {/*/>*/}
-        {/*</DropDownCont>*/}
-        {/*<DropDownCont>*/}
-        {/*<ZoomSelect*/}
-        {/*defaultAll={this.props.subInd2AllSelected}*/}
-        {/*selectAll*/}
-        {/*categorise*/}
-        {/*placeHolderText="Select sub indicator"*/}
-        {/*data={this.props.subIndicators2}*/}
-        {/*multiple*/}
-        {/*arraySelected={this.props.selectedSubInd2}*/}
-        {/*selectVal={this.props.selectSubInd2}*/}
-        {/*/>*/}
-        {/*</DropDownCont>*/}
-        {/*</FilterContainer>*/}
-        {/*</AccordionSection>*/}
-        {/*</PanelAccordion>*/}
+          <ExpansionPanel
+            selectDataSource={this.props.selectDataSource}
+            allFileSources={this.props.allFileSources}
+            locationSelected={this.props.locationSelected}
+            selectedSources={this.props.selectedSources}
+            renderHeader={() => this.renderHeader('Datasource')}
+            defaultAll={this.props.locationSelected}
+            selectAll
+            reset={() => this.props.selectDataSource('reset')}
+            multiple
+            placeHolderText={'Select datasource'}
+            placeHolderNumber={this.props.allFileSources.length}
+            data={this.props.allFileSources}
+            arraySelected={this.props.selectedSources}
+            selectVal={this.props.selectDataSource}
+          />
+          {/*<AccordionSection header={this.renderHeader('Datasource')}>*/}
+          {/*<FilterContainer>*/}
+          {/*<DropDownCont>*/}
+          {/*<ZoomSelect*/}
+          {/*defaultAll={this.props.locationSelected}*/}
+          {/*selectAll*/}
+          {/*// reset={() => this.props.selectDataSource('reset')}*/}
+          {/*multiple*/}
+          {/*placeHolderText={'Select datasource'}*/}
+          {/*placeHolderNumber={this.props.allFileSources.length}*/}
+          {/*data={this.props.allFileSources}*/}
+          {/*arraySelected={this.props.selectedSources}*/}
+          {/*selectVal={this.props.selectDataSource}*/}
+          {/*/>*/}
+          {/*</DropDownCont>*/}
+          {/*</FilterContainer>*/}
+          {/*</AccordionSection>*/}
+          {/*<AccordionSection header={this.renderHeader('Geo location')}>*/}
+          {/*<FilterContainer>*/}
+          {/*<DropDownCont>*/}
+          {/*<ZoomSelect*/}
+          {/*defaultAll={this.props.locationSelected}*/}
+          {/*selectAll*/}
+          {/*multiple*/}
+          {/*placeHolderText="Select region"*/}
+          {/*placeHolderNumber={this.props.regions.length}*/}
+          {/*data={this.props.regions}*/}
+          {/*arraySelected={this.props.selectedRegionVal}*/}
+          {/*selectVal={this.props.selectRegion}*/}
+          {/*reset={() => this.props.selectRegion('reset')}*/}
+          {/*/>*/}
+          {/*</DropDownCont>*/}
+          {/*<DropDownCont>*/}
+          {/*<ZoomSelect*/}
+          {/*defaultAll={this.props.locationSelected}*/}
+          {/*selectAll*/}
+          {/*reset={() => this.props.selectCountry('reset')}*/}
+          {/*multiple*/}
+          {/*placeHolderText={'Select country'}*/}
+          {/*placeHolderNumber={this.props.countries.length}*/}
+          {/*data={this.props.countries}*/}
+          {/*arraySelected={this.props.selectedCountryVal}*/}
+          {/*selectVal={this.props.selectCountry}*/}
+          {/*/>*/}
+          {/*</DropDownCont>*/}
+          {/*</FilterContainer>*/}
+          {/*</AccordionSection>*/}
+          {/*<AccordionSection header={this.renderHeader('Time period')}>*/}
+          {/*<FilterContainer>*/}
+          {/*<YearSelector*/}
+          {/*selectYear={this.props.selectYear}*/}
+          {/*selectedYears={this.props.yearPeriod}*/}
+          {/*/>*/}
+          {/*</FilterContainer>*/}
+          {/*</AccordionSection>*/}
+          {/*<AccordionSection header={this.renderHeader('Indicators')}>*/}
+          {/*<FilterContainer>*/}
+          {/*<DropDownCont>*/}
+          {/*<ZoomSelect*/}
+          {/*categorise*/}
+          {/*reset={() => this.props.selectInd1({ value: undefined })}*/}
+          {/*placeHolderText="Select indicator"*/}
+          {/*placeHolderNumber={this.props.indNames.length}*/}
+          {/*data={this.props.indNames}*/}
+          {/*valueSelected={this.props.selectedInd1}*/}
+          {/*selectVal={this.props.selectInd1}*/}
+          {/*/>*/}
+          {/*</DropDownCont>*/}
+          {/*<DropDownCont>*/}
+          {/*<ZoomSelect*/}
+          {/*defaultAll={this.props.subInd1AllSelected}*/}
+          {/*selectAll*/}
+          {/*categorise*/}
+          {/*placeHolderText="Select sub indicator"*/}
+          {/*data={this.props.subIndicators1}*/}
+          {/*multiple*/}
+          {/*arraySelected={this.props.selectedSubInd1}*/}
+          {/*selectVal={this.props.selectSubInd1}*/}
+          {/*/>*/}
+          {/*</DropDownCont>*/}
+          {/*</FilterContainer>*/}
+          {/*<FilterContainer>*/}
+          {/*<DropDownCont>*/}
+          {/*<ZoomSelect*/}
+          {/*categorise*/}
+          {/*reset={() => this.props.selectInd2({ value: undefined })}*/}
+          {/*placeHolderText="Select indicator"*/}
+          {/*placeHolderNumber={this.props.indNames.length}*/}
+          {/*data={this.props.indNames}*/}
+          {/*valueSelected={this.props.selectedInd2}*/}
+          {/*selectVal={this.props.selectInd2}*/}
+          {/*/>*/}
+          {/*</DropDownCont>*/}
+          {/*<DropDownCont>*/}
+          {/*<ZoomSelect*/}
+          {/*defaultAll={this.props.subInd2AllSelected}*/}
+          {/*selectAll*/}
+          {/*categorise*/}
+          {/*placeHolderText="Select sub indicator"*/}
+          {/*data={this.props.subIndicators2}*/}
+          {/*multiple*/}
+          {/*arraySelected={this.props.selectedSubInd2}*/}
+          {/*selectVal={this.props.selectSubInd2}*/}
+          {/*/>*/}
+          {/*</DropDownCont>*/}
+          {/*</FilterContainer>*/}
+          {/*</AccordionSection>*/}
+        </PanelAccordion>
         <ResetContainer
           data-cy="data-explorer-panel-reset"
           onClick={() => this.props.resetAll()}

@@ -25,7 +25,7 @@ export const ComponentBase = styled(NavLink)`
   box-shadow: 0 2px 4px 2px rgba(157, 157, 157, 0.5);
 
   &:hover {
-    cursor: ${props => props.options};
+    cursor: pointer;
   }
 `;
 

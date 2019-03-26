@@ -6,24 +6,15 @@ import PropTypes from 'prop-types';
 import IconRedIndicators from 'assets/icons/IconRedIndicators';
 import IconRedLocation from 'assets/icons/IconRedLocation';
 import IconRedPeriod from 'assets/icons/IconRedPeriod';
-import IconBlueIndicators from 'assets/icons/IconBlueIndicators';
-import IconBlueLocation from 'assets/icons/IconBlueLocation';
-import IconBluePeriod from 'assets/icons/IconBluePeriod';
 
 /* components */
-import ZoomSelect from '../../Select/ZoomSelect';
-import AccordionSelection from './components/AccordionSelection/AccordionSelection';
-import YearSelector from '../../YearSelector/YearSelector';
 import ResetIcon from 'assets/icons/IconReset';
 
 /* styles */
 import {
   ComponentBase,
   ResetContainer,
-  FilterContainer,
-  PanelAccordion,
-  AccordionSection,
-  DropDownCont
+  PanelAccordion
 } from './DataExplorerPane.style';
 import SimpleToolTip from '../../ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
@@ -119,43 +110,12 @@ class DataExplorePane extends React.Component {
   state = {
     activeIndex: []
   };
-
-  // renderHeader = label => {
-  //   let active = false;
-  //   let icon = '';
-  //   switch (label) {
-  //     case 'Datasource':
-  //       // checks if indicators is active
-  //       if (this.state.activeIndex.indexOf(0) !== -1) {
-  //         active = true;
-  //         icon = <IconBlueIndicators />;
-  //       } else icon = <IconRedIndicators />;
-  //       break;
-  //     case 'Geo location':
-  //       // checks if geolocations is active
-  //       if (this.state.activeIndex.indexOf(1) !== -1) {
-  //         active = true;
-  //         icon = <IconBlueLocation />;
-  //       } else icon = <IconRedLocation />;
-  //       break;
-  //     case 'Time period':
-  //       // checks if time period is active
-  //       if (this.state.activeIndex.indexOf(2) !== -1) {
-  //         active = true;
-  //         icon = <IconBluePeriod />;
-  //       } else icon = <IconRedPeriod />;
-  //       break;
-  //     case 'Indicators':
-  //       // checks if indicators is active
-  //       if (this.state.activeIndex.indexOf(3) !== -1) {
-  //         active = true;
-  //         icon = <IconBlueIndicators />;
-  //       } else icon = <IconRedIndicators />;
-  //       break;
-  //   }
-  //
-  //   return <AccordionSelection icon={icon} label={label} active={active} />;
-  //};
+  //TODO TODO TODO TODO
+  //todo: add comments
+  //todo: Remove all warnings
+  //todo: See if there is a way to fit paneldetails in a const file? Else: add comment
+  //todo: Cleanup default props and proptypes
+  //todo: Make components of summary and details.
   render() {
     return (
       <ComponentBase>
@@ -167,24 +127,55 @@ class DataExplorePane extends React.Component {
             this.setState({ activeIndex: newActiveIndex })
           }
         >
-          {/*TODO: ExpansionPanel should take MULTIPLE zoomselects/yearselectors*/}
-          {/*done: Get rid of that freaking accordion selection and renderHeader function*/}
-          {/*done: Pass icon to expansionpanel Expanened ? make it blue */}
-          {/*done: Expanded ? make text blue / bg gray */}
-          {/*TODO: Make PR, dry tears and move on to next ticket*/}
-
           <ExpansionPanel
-            isSelect
-            multiple
-            selectAll
+            isDropDownSelect
             icon={<IconRedIndicators />}
             label="Datasource"
-            placeHolderText={'Select datasource'}
-            selectDataSource={this.props.selectDataSource}
-            allFileSources={this.props.allFileSources}
-            locationSelected={this.props.locationSelected}
-            selectedSources={this.props.selectedSources}
-            reset={() => this.props.selectDataSource('reset')}
+            panelDetails={[
+              {
+                multiple: true,
+                selectAll: true,
+                placeHolderText: 'Select datasource',
+                placeHolderNumber: this.props.allFileSources.length,
+                selectDataSource: this.props.selectDataSource,
+                allFileSources: this.props.allFileSources,
+                locationSelected: this.props.locationSelected,
+                selectedSources: this.props.selectedSources,
+                reset: () => this.props.selectDataSource('reset')
+              }
+            ]}
+          />
+
+          <ExpansionPanel
+            isDropDownSelect
+            multiple
+            selectAll
+            icon={<IconRedLocation />}
+            label="Geo location"
+            panelDetails={[
+              {
+                multiple: true,
+                selectAll: true,
+                placeHolderText: 'Select region',
+                placeHolderNumber: this.props.regions.length,
+                selectDataSource: this.props.selectRegion,
+                allFileSources: this.props.regions,
+                locationSelected: this.props.locationSelected,
+                selectedSources: this.props.selectedRegionVal,
+                reset: () => this.props.selectRegion('reset')
+              },
+              {
+                multiple: true,
+                selectAll: true,
+                placeHolderText: 'Select country',
+                placeHolderNumber: this.props.countries.length,
+                selectDataSource: this.props.selectCountry,
+                allFileSources: this.props.countries,
+                locationSelected: this.props.locationSelected,
+                selectedSources: this.props.selectedCountryVal,
+                reset: () => this.props.selectCountry('reset')
+              }
+            ]}
           />
 
           <ExpansionPanel
@@ -196,139 +187,51 @@ class DataExplorePane extends React.Component {
           />
 
           <ExpansionPanel
-            isSelect
-            multiple
-            selectAll
-            icon={<IconRedLocation />}
-            label="Geo location"
-            placeHolderText={'Select region'}
-            selectDataSource={this.props.selectRegion}
-            allFileSources={this.props.regions}
-            locationSelected={this.props.locationSelected}
-            selectedSources={this.props.selectedRegionVal}
-            reset={() => this.props.selectRegion('reset')}
-          />
-
-          <ExpansionPanel
-            isSelect
+            isDropDownSelect
             categorise
             icon={<IconRedIndicators />}
             label="Indicators"
-            placeHolderText={'Select indicator'}
-            selectDataSource={this.props.selectInd1}
-            allFileSources={this.props.indNames}
-            locationSelected={this.props.locationSelected}
-            selectedSources={this.props.selectedInd1}
-            reset={() => this.props.selectInd1({ value: undefined })}
+            panelDetails={[
+              {
+                categorise: true,
+                placeHolderText: 'Select indicator',
+                placeHolderNumber: this.props.indNames.length,
+                selectDataSource: this.props.selectInd1,
+                allFileSources: this.props.indNames,
+                selectedSources: this.props.selectedInd1,
+                reset: () => this.props.selectInd1('reset')
+              },
+              {
+                categorise: true,
+                multiple: true,
+                selectAll: true,
+                placeHolderText: 'Select sub indicator',
+                selectDataSource: this.props.selectSubInd1,
+                allFileSources: this.props.subIndicators1,
+                selectedSources: this.props.selectedSubInd1,
+                reset: undefined
+              },
+              {
+                categorise: true,
+                placeHolderText: 'Select indicator',
+                placeHolderNumber: this.props.indNames.length,
+                selectDataSource: this.props.selectInd2,
+                allFileSources: this.props.indNames,
+                selectedSources: this.props.selectedInd2,
+                reset: () => this.props.selectInd2('reset')
+              },
+              {
+                categorise: true,
+                multiple: true,
+                selectAll: true,
+                placeHolderText: 'Select sub indicator',
+                selectDataSource: this.props.selectSubInd2,
+                allFileSources: this.props.subIndicators2,
+                selectedSources: this.props.selectedSubInd2,
+                reset: undefined
+              }
+            ]}
           />
-
-          {/*<AccordionSection header={this.renderHeader('Datasource')}>*/}
-          {/*<FilterContainer>*/}
-          {/*<DropDownCont>*/}
-          {/*<ZoomSelect*/}
-          {/*defaultAll={this.props.locationSelected}*/}
-          {/*selectAll*/}
-          {/*// reset={() => this.props.selectDataSource('reset')}*/}
-          {/*multiple*/}
-          {/*placeHolderText={'Select datasource'}*/}
-          {/*placeHolderNumber={this.props.allFileSources.length}*/}
-          {/*data={this.props.allFileSources}*/}
-          {/*arraySelected={this.props.selectedSources}*/}
-          {/*selectVal={this.props.selectDataSource}*/}
-          {/*/>*/}
-          {/*</DropDownCont>*/}
-          {/*</FilterContainer>*/}
-          {/*</AccordionSection>*/}
-          {/*<AccordionSection header={this.renderHeader('Geo location')}>*/}
-          {/*<FilterContainer>*/}
-          {/*<DropDownCont>*/}
-          {/*<ZoomSelect*/}
-          {/*defaultAll={this.props.locationSelected}*/}
-          {/*selectAll*/}
-          {/*multiple*/}
-          {/*placeHolderText="Select region"*/}
-          {/*placeHolderNumber={this.props.regions.length}*/}
-          {/*data={this.props.regions}*/}
-          {/*arraySelected={this.props.selectedRegionVal}*/}
-          {/*selectVal={this.props.selectRegion}*/}
-          {/*reset={() => this.props.selectRegion('reset')}*/}
-          {/*/>*/}
-          {/*</DropDownCont>*/}
-          {/*<DropDownCont>*/}
-          {/*<ZoomSelect*/}
-          {/*defaultAll={this.props.locationSelected}*/}
-          {/*selectAll*/}
-          {/*reset={() => this.props.selectCountry('reset')}*/}
-          {/*multiple*/}
-          {/*placeHolderText={'Select country'}*/}
-          {/*placeHolderNumber={this.props.countries.length}*/}
-          {/*data={this.props.countries}*/}
-          {/*arraySelected={this.props.selectedCountryVal}*/}
-          {/*selectVal={this.props.selectCountry}*/}
-          {/*/>*/}
-          {/*</DropDownCont>*/}
-          {/*</FilterContainer>*/}
-          {/*</AccordionSection>*/}
-          {/*<AccordionSection header={this.renderHeader('Time period')}>*/}
-          {/*<FilterContainer>*/}
-          {/*<YearSelector*/}
-          {/*selectYear={this.props.selectYear}*/}
-          {/*selectedYears={this.props.yearPeriod}*/}
-          {/*/>*/}
-          {/*</FilterContainer>*/}
-          {/*</AccordionSection>*/}
-          {/*<AccordionSection header={this.renderHeader('Indicators')}>*/}
-          {/*<FilterContainer>*/}
-          {/*<DropDownCont>*/}
-          {/*<ZoomSelect*/}
-          {/*categorise*/}
-          {/*reset={() => this.props.selectInd1({ value: undefined })}*/}
-          {/*placeHolderText="Select indicator"*/}
-          {/*placeHolderNumber={this.props.indNames.length}*/}
-          {/*data={this.props.indNames}*/}
-          {/*valueSelected={this.props.selectedInd1}*/}
-          {/*selectVal={this.props.selectInd1}*/}
-          {/*/>*/}
-          {/*</DropDownCont>*/}
-          {/*<DropDownCont>*/}
-          {/*<ZoomSelect*/}
-          {/*defaultAll={this.props.subInd1AllSelected}*/}
-          {/*selectAll*/}
-          {/*categorise*/}
-          {/*placeHolderText="Select sub indicator"*/}
-          {/*data={this.props.subIndicators1}*/}
-          {/*multiple*/}
-          {/*arraySelected={this.props.selectedSubInd1}*/}
-          {/*selectVal={this.props.selectSubInd1}*/}
-          {/*/>*/}
-          {/*</DropDownCont>*/}
-          {/*</FilterContainer>*/}
-          {/*<FilterContainer>*/}
-          {/*<DropDownCont>*/}
-          {/*<ZoomSelect*/}
-          {/*categorise*/}
-          {/*reset={() => this.props.selectInd2({ value: undefined })}*/}
-          {/*placeHolderText="Select indicator"*/}
-          {/*placeHolderNumber={this.props.indNames.length}*/}
-          {/*data={this.props.indNames}*/}
-          {/*valueSelected={this.props.selectedInd2}*/}
-          {/*selectVal={this.props.selectInd2}*/}
-          {/*/>*/}
-          {/*</DropDownCont>*/}
-          {/*<DropDownCont>*/}
-          {/*<ZoomSelect*/}
-          {/*defaultAll={this.props.subInd2AllSelected}*/}
-          {/*selectAll*/}
-          {/*categorise*/}
-          {/*placeHolderText="Select sub indicator"*/}
-          {/*data={this.props.subIndicators2}*/}
-          {/*multiple*/}
-          {/*arraySelected={this.props.selectedSubInd2}*/}
-          {/*selectVal={this.props.selectSubInd2}*/}
-          {/*/>*/}
-          {/*</DropDownCont>*/}
-          {/*</FilterContainer>*/}
-          {/*</AccordionSection>*/}
         </PanelAccordion>
         <ResetContainer
           data-cy="data-explorer-panel-reset"

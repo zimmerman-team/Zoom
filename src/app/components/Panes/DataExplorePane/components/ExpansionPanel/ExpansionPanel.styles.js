@@ -1,13 +1,13 @@
 import theme from 'theme/Theme';
 import { withStyles } from '@material-ui/core';
-import _ExpansionPanel from '@material-ui/core/ExpansionPanel/ExpansionPanel';
 import styled from 'styled-components';
+import _ExpansionPanel from '@material-ui/core/ExpansionPanel/ExpansionPanel';
 import _ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary';
 import _ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails/ExpansionPanelDetails';
 import _ZoomSelect from '../../../../Select/ZoomSelect';
 
 export const ComponentBase = styled.div`
-  border-bottom: 2px solid ${theme.color.zoomGreyFour};
+  border-bottom: 1px solid ${theme.color.zoomGreyEleven};
   && [role='button'] {
     min-height: 40px;
     max-height: 40px;

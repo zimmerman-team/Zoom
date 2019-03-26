@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import theme from 'theme/Theme';
 
 /* components */
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {
   ComponentBase,
   ExpansionzPanel,
@@ -18,20 +19,43 @@ import { DropDownCont } from '../../DataExplorerPane.style';
 import YearSelector from '../../../../YearSelector/YearSelector';
 
 const propTypes = {
-  locationSelected: PropTypes.bool,
-  allFileSources: PropTypes.array,
-  selectedSources: PropTypes.array,
-  selectDataSource: PropTypes.func,
-
   //TODO: refactor to oneof()
   //TODO: see if there is a way to make certain proptypes required when oneofthese
-  isSelect: PropTypes.bool,
+
   isYearSelect: PropTypes.bool,
 
-  categorise: PropTypes.bool
+  isDropdownSelect: PropTypes.bool,
+  panelDetails: PropTypes.arrayOf(
+    PropTypes.shape({
+      categorise: PropTypes.bool,
+      locationSelected: PropTypes.bool,
+      allFileSources: PropTypes.array,
+      selectedSources: PropTypes.array,
+      selectDataSource: PropTypes.func,
+      multiple: PropTypes.bool,
+      selectAll: PropTypes.bool,
+      defaultAll: PropTypes.array,
+      reset: PropTypes.func
+    })
+  )
 };
 
 const defaultProps = {
+  panelDetails: [
+    {
+      multiple: false,
+      selectAll: false,
+      categorise: false,
+      locationSelected: false,
+      allFileSources: [1, 2],
+      selectedSources: [1, 2],
+      selectDataSource: [1, 2],
+      defaultAll: [1, 2],
+      placeHolderNumber: undefined,
+      reset: undefined
+    }
+  ],
+
   locationSelected: true,
   allFileSources: {},
   selectDataSource: {},
@@ -66,37 +90,38 @@ const ExpansionPanel = props => {
     <ComponentBase>
       <Box>
         <ExpansionzPanel expanded={expanded} onChange={handleChange}>
-          <ExpansionPanelSummary style={headerStyle}>
+          <ExpansionPanelSummary
+            style={headerStyle}
+            expandIcon={<ExpandMoreIcon />}
+          >
             <IconContainer styles={headerStyle}>{props.icon}</IconContainer>
             {props.label}
           </ExpansionPanelSummary>
-          {/*TODO: A expensionPanel should take multiple expansionPanelDetails*/}
-          {/*done: A expensionPanel should take zoomselects and yearselecteros, hell why not any component?*/}
-          {/*done: Dropdowncont is specific to Zoomselect */}
           <ExpansionPanelDetails>
-            {props.isSelect ? (
-              <DropDownCont>
-                <ZoomSelect
-                  categorise={props.categorise}
-                  multiple={props.multiple}
-                  selectAll={props.selectAll}
-                  defaultAll={props.locationSelected}
-                  reset={() => props.selectDataSource('reset')}
-                  placeHolderText={props.placeHolderText}
-                  placeHolderNumber={props.allFileSources.length}
-                  data={props.allFileSources}
-                  arraySelected={props.selectedSources}
-                  selectVal={props.selectDataSource}
-                />
-              </DropDownCont>
-            ) : null}
+            {props.isDropDownSelect &&
+              props.panelDetails.map(detail => (
+                <DropDownCont>
+                  <ZoomSelect
+                    categorise={detail.categorise}
+                    multiple={detail.multiple}
+                    selectAll={detail.selectAll}
+                    defaultAll={detail.locationSelected}
+                    reset={detail.reset}
+                    placeHolderText={detail.placeHolderText}
+                    placeHolderNumber={detail.placeHolderNumber}
+                    data={detail.allFileSources}
+                    arraySelected={detail.selectedSources}
+                    selectVal={detail.selectDataSource}
+                  />
+                </DropDownCont>
+              ))}
 
-            {props.isYearSelect ? (
+            {props.isYearSelect && (
               <YearSelector
                 selectYear={props.selectYear}
                 selectedYears={props.selectedYears}
               />
-            ) : null}
+            )}
           </ExpansionPanelDetails>
         </ExpansionzPanel>
       </Box>

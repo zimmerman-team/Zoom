@@ -20,7 +20,8 @@ export const ExplorerHeader = styled.div`
 
 export const FilterContainer = styled(Box)`
   background-color: ${theme.color.zoomGreyZero};
-  padding: 12px 0;
+  padding-bottom: 6px;
+  padding-top: 6px;
 `;
 
 export const PanelAccordion = styled(Accordion)`

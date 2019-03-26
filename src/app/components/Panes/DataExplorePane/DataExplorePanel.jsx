@@ -87,21 +87,7 @@ const propTypes = {
   subInd1AllSelected: PropTypes.bool,
   subInd2AllSelected: PropTypes.bool,
   locationSelected: PropTypes.bool,
-  resetAll: PropTypes.func,
-
-  details: PropTypes.arrayOf(
-    PropTypes.shape({
-      defaultAll: PropTypes.bool,
-      selectAll: PropTypes.bool,
-      reset: PropTypes.func,
-      multiple: PropTypes.bool,
-      placeHolderText: PropTypes.string,
-      placeHolderNumber: PropTypes.string,
-      data: PropTypes.object,
-      arraySelected: PropTypes.object,
-      selectVal: PropTypes.object
-    })
-  )
+  resetAll: PropTypes.func
 };
 
 const defaultProps = {
@@ -134,45 +120,46 @@ class DataExplorePane extends React.Component {
     activeIndex: []
   };
 
-  renderHeader = label => {
-    let active = false;
-    let icon = '';
-    switch (label) {
-      case 'Datasource':
-        // checks if indicators is active
-        if (this.state.activeIndex.indexOf(0) !== -1) {
-          active = true;
-          icon = <IconBlueIndicators />;
-        } else icon = <IconRedIndicators />;
-        break;
-      case 'Geo location':
-        // checks if geolocations is active
-        if (this.state.activeIndex.indexOf(1) !== -1) {
-          active = true;
-          icon = <IconBlueLocation />;
-        } else icon = <IconRedLocation />;
-        break;
-      case 'Time period':
-        // checks if time period is active
-        if (this.state.activeIndex.indexOf(2) !== -1) {
-          active = true;
-          icon = <IconBluePeriod />;
-        } else icon = <IconRedPeriod />;
-        break;
-      case 'Indicators':
-        // checks if indicators is active
-        if (this.state.activeIndex.indexOf(3) !== -1) {
-          active = true;
-          icon = <IconBlueIndicators />;
-        } else icon = <IconRedIndicators />;
-        break;
-    }
-
-    return <AccordionSelection icon={icon} label={label} active={active} />;
-  };
+  // renderHeader = label => {
+  //   let active = false;
+  //   let icon = '';
+  //   switch (label) {
+  //     case 'Datasource':
+  //       // checks if indicators is active
+  //       if (this.state.activeIndex.indexOf(0) !== -1) {
+  //         active = true;
+  //         icon = <IconBlueIndicators />;
+  //       } else icon = <IconRedIndicators />;
+  //       break;
+  //     case 'Geo location':
+  //       // checks if geolocations is active
+  //       if (this.state.activeIndex.indexOf(1) !== -1) {
+  //         active = true;
+  //         icon = <IconBlueLocation />;
+  //       } else icon = <IconRedLocation />;
+  //       break;
+  //     case 'Time period':
+  //       // checks if time period is active
+  //       if (this.state.activeIndex.indexOf(2) !== -1) {
+  //         active = true;
+  //         icon = <IconBluePeriod />;
+  //       } else icon = <IconRedPeriod />;
+  //       break;
+  //     case 'Indicators':
+  //       // checks if indicators is active
+  //       if (this.state.activeIndex.indexOf(3) !== -1) {
+  //         active = true;
+  //         icon = <IconBlueIndicators />;
+  //       } else icon = <IconRedIndicators />;
+  //       break;
+  //   }
+  //
+  //   return <AccordionSelection icon={icon} label={label} active={active} />;
+  //};
   render() {
     return (
       <ComponentBase>
+        {/*TODO: Check what it does and if its nessecary*/}
         <PanelAccordion
           animate
           multiple
@@ -180,28 +167,61 @@ class DataExplorePane extends React.Component {
             this.setState({ activeIndex: newActiveIndex })
           }
         >
-          {/*TODO: ExpansionPanel should take MULTIPLE zoomselects*/}
-          {/*TODO: Get rid of that freaking accordion selection and renderHeader function*/}
-          {/*TODO: Pass icon to expansionpanel Expanened ? make it blue */}
-          {/*TODO: Expanded ? make text blue / bg gray */}
+          {/*TODO: ExpansionPanel should take MULTIPLE zoomselects/yearselectors*/}
+          {/*done: Get rid of that freaking accordion selection and renderHeader function*/}
+          {/*done: Pass icon to expansionpanel Expanened ? make it blue */}
+          {/*done: Expanded ? make text blue / bg gray */}
           {/*TODO: Make PR, dry tears and move on to next ticket*/}
 
           <ExpansionPanel
+            isSelect
+            multiple
+            selectAll
+            icon={<IconRedIndicators />}
+            label="Datasource"
+            placeHolderText={'Select datasource'}
             selectDataSource={this.props.selectDataSource}
             allFileSources={this.props.allFileSources}
             locationSelected={this.props.locationSelected}
             selectedSources={this.props.selectedSources}
-            renderHeader={() => this.renderHeader('Datasource')}
-            defaultAll={this.props.locationSelected}
-            selectAll
             reset={() => this.props.selectDataSource('reset')}
-            multiple
-            placeHolderText={'Select datasource'}
-            placeHolderNumber={this.props.allFileSources.length}
-            data={this.props.allFileSources}
-            arraySelected={this.props.selectedSources}
-            selectVal={this.props.selectDataSource}
           />
+
+          <ExpansionPanel
+            icon={<IconRedPeriod />}
+            label="Time Period"
+            isYearSelect
+            selectYear={this.props.selectYear}
+            selectedYears={this.props.yearPeriod}
+          />
+
+          <ExpansionPanel
+            isSelect
+            multiple
+            selectAll
+            icon={<IconRedLocation />}
+            label="Geo location"
+            placeHolderText={'Select region'}
+            selectDataSource={this.props.selectRegion}
+            allFileSources={this.props.regions}
+            locationSelected={this.props.locationSelected}
+            selectedSources={this.props.selectedRegionVal}
+            reset={() => this.props.selectRegion('reset')}
+          />
+
+          <ExpansionPanel
+            isSelect
+            categorise
+            icon={<IconRedIndicators />}
+            label="Indicators"
+            placeHolderText={'Select indicator'}
+            selectDataSource={this.props.selectInd1}
+            allFileSources={this.props.indNames}
+            locationSelected={this.props.locationSelected}
+            selectedSources={this.props.selectedInd1}
+            reset={() => this.props.selectInd1({ value: undefined })}
+          />
+
           {/*<AccordionSection header={this.renderHeader('Datasource')}>*/}
           {/*<FilterContainer>*/}
           {/*<DropDownCont>*/}

@@ -38,7 +38,7 @@ const propTypes = {
     })
   ),
   placeHolderText: PropTypes.string,
-  placeHolderNumber: PropTypes.string,
+  placeHolderNumber: PropTypes.number,
   reset: PropTypes.func,
   categorise: PropTypes.bool,
   search: PropTypes.bool,

@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import theme from 'theme/Theme';
 
 /* components */
 import {
@@ -9,23 +10,25 @@ import {
   ExpansionzPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
-  ExpandMoreIcon,
-  ZoomSelect
+  IconContainer,
+  ZoomSelect,
+  Box
 } from './ExpansionPanel.styles';
-import { DropDownCont, FilterContainer } from '../../DataExplorerPane.style';
-
-//todo: Check if styling the 'root' component can be accomplished with styled-components
-
-const Box = styled.div``;
+import { DropDownCont } from '../../DataExplorerPane.style';
+import YearSelector from '../../../../YearSelector/YearSelector';
 
 const propTypes = {
   locationSelected: PropTypes.bool,
   allFileSources: PropTypes.array,
   selectedSources: PropTypes.array,
   selectDataSource: PropTypes.func,
-  renderHeader: PropTypes.object,
 
-  details: PropTypes.array
+  //TODO: refactor to oneof()
+  //TODO: see if there is a way to make certain proptypes required when oneofthese
+  isSelect: PropTypes.bool,
+  isYearSelect: PropTypes.bool,
+
+  categorise: PropTypes.bool
 };
 
 const defaultProps = {
@@ -33,7 +36,11 @@ const defaultProps = {
   allFileSources: {},
   selectDataSource: {},
   selectedSources: {},
-  renderHeader: {}
+
+  isSelect: false,
+  isYearSelect: false,
+
+  categorise: false
 };
 
 const ExpansionPanel = props => {
@@ -43,30 +50,53 @@ const ExpansionPanel = props => {
     setExpanded(!expanded);
   }
 
+  //TODO: Styles related put in appropriate file sahbi
+  const headerStyle = expanded
+    ? {
+        backgroundColor: theme.color.zoomGreyZero,
+        color: theme.color.aidsFondsBlue,
+        borderBottom: `1px solid ${theme.color.zoomGreyFour}`
+      }
+    : {
+        backgroundColor: theme.color.aidsFondsWhite,
+        color: theme.color.aidsFondsRed
+      };
+
   return (
     <ComponentBase>
       <Box>
         <ExpansionzPanel expanded={expanded} onChange={handleChange}>
-          <ExpansionPanelSummary>
-            {props.renderHeader('Datasource')}
+          <ExpansionPanelSummary style={headerStyle}>
+            <IconContainer styles={headerStyle}>{props.icon}</IconContainer>
+            {props.label}
           </ExpansionPanelSummary>
-          {/*todo: A expensionPanel should take multiple expansionPanelDetails*/}
+          {/*TODO: A expensionPanel should take multiple expansionPanelDetails*/}
+          {/*done: A expensionPanel should take zoomselects and yearselecteros, hell why not any component?*/}
+          {/*done: Dropdowncont is specific to Zoomselect */}
           <ExpansionPanelDetails>
-            <FilterContainer>
+            {props.isSelect ? (
               <DropDownCont>
                 <ZoomSelect
-                  defaultAll={props.locationSelected}
-                  selectAll={props.selectAll}
-                  reset={() => props.selectDataSource('reset')}
+                  categorise={props.categorise}
                   multiple={props.multiple}
+                  selectAll={props.selectAll}
+                  defaultAll={props.locationSelected}
+                  reset={() => props.selectDataSource('reset')}
                   placeHolderText={props.placeHolderText}
-                  placeHolderNumber={props.placeHolderNumber}
+                  placeHolderNumber={props.allFileSources.length}
                   data={props.allFileSources}
                   arraySelected={props.selectedSources}
                   selectVal={props.selectDataSource}
                 />
               </DropDownCont>
-            </FilterContainer>
+            ) : null}
+
+            {props.isYearSelect ? (
+              <YearSelector
+                selectYear={props.selectYear}
+                selectedYears={props.selectedYears}
+              />
+            ) : null}
           </ExpansionPanelDetails>
         </ExpansionzPanel>
       </Box>

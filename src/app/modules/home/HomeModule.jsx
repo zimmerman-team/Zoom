@@ -51,6 +51,11 @@ export class HomeModule extends Component {
   render = () => {
     const { indicators, ...otherProps } = this.props;
 
+    const paneContVis =
+      this.props.dataPaneOpen === paneTypes.none ? 'none' : 'unset';
+    const explorePaneVis =
+      this.props.dataPaneOpen === paneTypes.pubPane ? 'unset' : 'none';
+
     return (
       <React.Fragment>
         <ModuleContainer>
@@ -60,25 +65,21 @@ export class HomeModule extends Component {
 
           <GeoMap
             indicatorData={indicators}
-            selectedYears={this.props.yearPeriod}
+            selectedYear={this.props.selectedYear}
             selectYear={this.props.selectYear}
             latitude={15}
             longitude={0}
             zoom={2}
           />
 
-          {this.props.dataPaneOpen !== paneTypes.none && (
-            <DataPaneContainer>
-              {this.props.dataPaneOpen === paneTypes.pubPane && (
-                <ExplorePanelMediator {...otherProps} />
-              )}
-              {(this.props.dataPaneOpen === paneTypes.privPane ||
-                this.props.dataPaneOpen === paneTypes.createChart ||
-                this.props.dataPaneOpen === paneTypes.convertData) && (
-                <NavPane {...otherProps} />
-              )}
-            </DataPaneContainer>
-          )}
+          <DataPaneContainer display={paneContVis}>
+            <ExplorePanelMediator display={explorePaneVis} {...otherProps} />
+            {(this.props.dataPaneOpen === paneTypes.privPane ||
+              this.props.dataPaneOpen === paneTypes.createChart ||
+              this.props.dataPaneOpen === paneTypes.convertData) && (
+              <NavPane {...otherProps} />
+            )}
+          </DataPaneContainer>
         </ModuleContainer>
       </React.Fragment>
     );

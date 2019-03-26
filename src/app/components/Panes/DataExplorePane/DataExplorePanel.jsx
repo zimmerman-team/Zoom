@@ -158,7 +158,7 @@ class DataExplorePane extends React.Component {
   render() {
     // console.log('this.props.indNames', this.props.indNames);
     return (
-      <ComponentBase>
+      <ComponentBase style={{ display: this.props.display }}>
         <PanelAccordion
           animate
           multiple

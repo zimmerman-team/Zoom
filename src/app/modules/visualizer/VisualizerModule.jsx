@@ -10,6 +10,7 @@ import { ControlPanelContainer } from 'modules/visualizer/VisualizerModule.style
 // import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
 import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';
 import VizContainer from 'modules/visualizer/sort/container/VizContainer';
+import VisualizerModule from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator';
 
 // import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
@@ -61,7 +62,11 @@ class BuilderModule extends Component {
       <Router>
         <ModuleBase>
           <VizSidebar dropDownData={this.props.dropDownData} />
-          <VizContainer indicators={this.props.indicators} />
+          <VizContainer
+            indicators={this.props.indicators}
+            selectYear={this.props.selectYear}
+            selectedYear={this.props.selectedYear}
+          />
         </ModuleBase>
       </Router>
     );

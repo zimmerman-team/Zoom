@@ -1,6 +1,7 @@
 /* base */
 import React from 'react';
-import { createRefetchContainer, graphql } from 'react-relay';
+import { createFragmentContainer, graphql } from 'react-relay';
+import { fetchQuery } from 'relay-runtime';
 import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePanel';
 import PropTypes from 'prop-types';
 
@@ -40,6 +41,24 @@ const defaultProps = {
   dropDownData: {}
 };
 
+const indicatorQuery = graphql`
+  query ExplorePanelMediatorQuery(
+    $year_Range: String!
+    $fileSource_Name_In: String!
+  ) {
+    allIndicators(
+      year_Range: $year_Range
+      fileSource_Name_In: $fileSource_Name_In
+    ) {
+      edges {
+        node {
+          name
+        }
+      }
+    }
+  }
+`;
+
 class ExplorePanelMediator extends React.Component {
   constructor(props) {
     super(props);
@@ -63,10 +82,6 @@ class ExplorePanelMediator extends React.Component {
     this.resetIndicators = this.resetIndicators.bind(this);
     this.selectYearRange = this.selectYearRange.bind(this);
   }
-
-  // onlyUnique(value, index, self) {
-  //   return findIndex(self, ['label', value.label]) === index;
-  // }
 
   componentDidMount() {
     let allCountries = this.props.dropDownData.allCountries.edges.map(
@@ -101,37 +116,6 @@ class ExplorePanelMediator extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (
-      !isEqual(
-        this.props.dropDownData.exploreIndicators.edges,
-        prevProps.dropDownData.exploreIndicators.edges
-      )
-    ) {
-      if (
-        !(
-          this.state.selectedSources.length > 0 &&
-          this.props.dropDownData.exploreIndicators.edges.length === 0
-        )
-      ) {
-        let allIndNames = this.props.dropDownData.exploreIndicators.edges.map(
-          indicator => {
-            return { label: indicator.node.name, value: indicator.node.name };
-          }
-        );
-
-        // We make the array only from unique indicators
-        // cause we receive several indicators with the same names
-        // most likely because of data points stuff
-        // allIndNames = allIndNames.filter(this.onlyUnique);
-
-        allIndNames = sortBy(allIndNames, ['label']);
-
-        this.setState({ allIndNames });
-      }
-    }
-  }
-
   selectDataSource(item, array = false) {
     let selectedSources = [];
     let allIndNames = [...this.state.allIndNames];
@@ -154,12 +138,6 @@ class ExplorePanelMediator extends React.Component {
       }
     }
 
-    if (
-      this.props.dropDownData.exploreIndicators.edges.length === 0 &&
-      selectedSources.length === 0
-    )
-      allIndNames = [];
-
     this.setState({ selectedSources, allIndNames }, this.refetch);
   }
 
@@ -169,6 +147,16 @@ class ExplorePanelMediator extends React.Component {
       .concat(',')
       .concat(value[1]);
     this.setState({ yearRange }, this.refetch);
+
+    const prevStartYear = this.state.yearRange.substring(
+      0,
+      this.state.yearRange.indexOf(',')
+    );
+
+    if (prevStartYear !== value[0].toString()) {
+      // this is the year selection for the geomaps/homepage timeline
+      this.props.selectYear(value[0].toString());
+    }
   }
 
   refetch(
@@ -185,32 +173,24 @@ class ExplorePanelMediator extends React.Component {
       fileSource_Name_In.length === 0 ? 'null' : fileSource_Name_In;
 
     const refetchVars = {
-      fileSource_Name_In:
-        '2019samples2,26,Aidsfonds,CBS,Country Detail Indicators,FAO FILTER,MortyTestSource,New Data Source,Test,New Data Source,',
-      year_Range: '2003,2016'
+      year_Range,
+      fileSource_Name_In
     };
 
-    console.log('refetchVars', refetchVars);
+    fetchQuery(this.props.relay.environment, indicatorQuery, refetchVars).then(
+      data => {
+        let allIndNames = data.allIndicators.edges.map(indicator => {
+          return { label: indicator.node.name, value: indicator.node.name };
+        });
 
-    this.props.relay.refetch(
-      value => {
-        console.log('REFETCH VARIABLES value', value);
-        return {
-          fileSource_Name_In:
-            '26,Aidsfonds,CBS,Country Detail Indicators,FAO FILTER,MortyTestSource,New Data Source,Test,Test-1,',
-          year_Range: '2003,2016'
-        };
-      },
-      null,
-      () => this.resetIndicators(),
-      {
-        force: true
+        allIndNames = sortBy(allIndNames, ['label']);
+
+        this.setState({ allIndNames }, this.resetIndicators);
       }
     );
   }
 
   resetIndicators() {
-    console.log('RESET INDICATORS CALLED, #CALLBACK');
     // and we also deselect the indicators
     this.props.selectInd1({ value: undefined });
     this.props.selectInd2({ value: undefined });
@@ -218,11 +198,6 @@ class ExplorePanelMediator extends React.Component {
 
   render() {
     const { dropDownData, ...otherProps } = this.props;
-
-    console.log(
-      'this.props.dropDownData.exploreIndicators.edges',
-      this.props.dropDownData.exploreIndicators.edges
-    );
 
     return (
       <DataExplorePane
@@ -243,14 +218,10 @@ class ExplorePanelMediator extends React.Component {
 ExplorePanelMediator.propTypes = propTypes;
 ExplorePanelMediator.defaultProps = defaultProps;
 
-export default createRefetchContainer(
+export default createFragmentContainer(
   ExplorePanelMediator,
   graphql`
-    fragment ExplorePanelMediator_dropDownData on Query
-      @argumentDefinitions(
-        fileSource_Name_In: { type: "String", defaultValue: "null" }
-        year_Range: { type: "String", defaultValue: "0,0" }
-      ) {
+    fragment ExplorePanelMediator_dropDownData on Query {
       allCountries {
         edges {
           node {
@@ -266,16 +237,6 @@ export default createRefetchContainer(
           }
         }
       }
-      exploreIndicators: allIndicators(
-        fileSource_Name_In: $fileSource_Name_In
-        year_Range: $year_Range
-      ) {
-        edges {
-          node {
-            name
-          }
-        }
-      }
       allRegions {
         edges {
           node {
@@ -283,23 +244,6 @@ export default createRefetchContainer(
             country {
               iso2
             }
-          }
-        }
-      }
-    }
-  `,
-  graphql`
-    query ExplorePanelMediatorQuery(
-      $fileSource_Name_In: String!
-      $year_Range: String!
-    ) {
-      exploreIndicators: allIndicators(
-        fileSource_Name_In: $fileSource_Name_In
-        year_Range: $year_Range
-      ) {
-        edges {
-          node {
-            name
           }
         }
       }

@@ -27,7 +27,7 @@ const defaultProps = {};
 const DataPaneContainer = props => {
   return (
     <NoSsr>
-      <Component disableRipple {...props}>
+      <Component style={{ display: props.display }} disableRipple {...props}>
         {props.children}
       </Component>
     </NoSsr>

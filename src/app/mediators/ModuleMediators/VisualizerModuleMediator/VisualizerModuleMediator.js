@@ -90,10 +90,14 @@ class VisualizerModuleMediator extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      selectedYear: this.props.chartData.selectedYear
+        ? this.props.chartData.selectedYear
+        : initialState.yearPeriod[0],
       indicators: []
     };
 
     this.refetch = this.refetch.bind(this);
+    this.selectYear = this.selectYear.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -104,6 +108,33 @@ class VisualizerModuleMediator extends Component {
       )
     ) {
       this.updateIndicators();
+    }
+
+    if (
+      this.props.paneData.yearRange !== prevProps.paneData.yearRange &&
+      this.props.paneData.yearRange
+    ) {
+      const currStartYear = this.props.paneData.yearRange.substring(
+        0,
+        this.props.paneData.yearRange.indexOf(',')
+      );
+
+      if (prevProps.paneData.yearRange) {
+        const prevStartYear = prevProps.paneData.yearRange.substring(
+          0,
+          prevProps.paneData.yearRange.indexOf(',')
+        );
+
+        if (prevStartYear !== currStartYear) {
+          // this is the year selection for the geomaps/homepage timeline
+          this.selectYear(currStartYear);
+          this.updateIndicators();
+        }
+      } else {
+        // this is the year selection for the geomaps/homepage timeline
+        this.selectYear(currStartYear);
+        this.updateIndicators();
+      }
     }
 
     // so we refetch data when chartData changes
@@ -236,7 +267,7 @@ class VisualizerModuleMediator extends Component {
   refetch(
     ind1 = this.props.chartData.selectedInd1,
     ind2 = this.props.chartData.selectedInd2,
-    datePeriod = this.props.chartData.yearPeriod,
+    selectedYear = this.state.selectedYear,
     subInd1 = this.props.chartData.selectedSubInd1,
     subInd2 = this.props.chartData.selectedSubInd2,
     countriesCodes = this.props.chartData.selectedCountryVal,
@@ -255,7 +286,7 @@ class VisualizerModuleMediator extends Component {
       countriesISO2,
       singleInd1: ind1 ? ind1 : 'null',
       singleInd2: ind2 ? ind2 : 'null',
-      datePeriod,
+      datePeriod: [selectedYear],
       subInd1: subInd1.length > 0 ? subInd1 : ['undefined'],
       subInd2: subInd2.length > 0 ? subInd2 : ['undefined']
     };
@@ -263,9 +294,21 @@ class VisualizerModuleMediator extends Component {
     this.props.relay.refetch(refetchVars);
   }
 
+  selectYear(val) {
+    this.setState({ selectedYear: val });
+    // so we set the values for chart data
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        selectedYear: val
+      })
+    );
+  }
+
   render() {
     return (
       <VisualizerModule
+        selectYear={this.selectYear}
+        selectedYear={this.state.selectedYear}
         indicators={this.state.indicators}
         dropDownData={this.props.dropDownData}
       />
@@ -278,7 +321,8 @@ VisualizerModuleMediator.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
-    chartData: state.chartData.chartData
+    chartData: state.chartData.chartData,
+    paneData: state.paneData.paneData
   };
 };
 

@@ -36,7 +36,7 @@ const propTypes = {
   longitude: PropTypes.number,
   zoom: PropTypes.number,
   indicatorData: PropTypes.array,
-  selectedYears: PropTypes.array,
+  selectedYear: PropTypes.string,
   disableYear: PropTypes.bool,
   selectYear: PropTypes.func
 };
@@ -245,7 +245,7 @@ export class GeoMap extends Component {
           }
         >
           <CustomYearSelector
-            selectedYears={this.props.selectedYears}
+            selectedYear={this.props.selectedYear}
             selectYear={this.props.selectYear}
           />
         </YearContainer>

@@ -10,6 +10,7 @@ import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFr
 
 import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment';
 import { PreviewTextContainer, ComponentBase, Box } from './VizContainer.style';
+import VisualizerModule from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -62,6 +63,8 @@ class VizContainer extends React.Component {
 
         <React.Fragment>
           <PropsRoute
+            selectYear={this.props.selectYear}
+            selectedYear={this.props.selectedYear}
             indicatorData={this.props.indicators}
             path="/visualizer/geomap/:code/:tab"
             component={GeomapFragment}

@@ -15,6 +15,17 @@ export const YearLabel = styled.div`
   line-height: 12px;
   flex-grow: 1;
   text-align: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+  -o-user-select: none;
+  -moz-user-select: none;
 `;
 
 export const SelectedYearLabel = styled(YearLabel)`
@@ -23,6 +34,13 @@ export const SelectedYearLabel = styled(YearLabel)`
   &:first-child {
     background-color: #000;4
   }
+  
+  &:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+  }
+  
 `;
 
 export const StartControl = styled(YearLabel)`

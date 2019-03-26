@@ -1,6 +1,7 @@
 /* base */
 import React from 'react';
-import { createRefetchContainer, graphql } from 'react-relay';
+import { createFragmentContainer, graphql } from 'react-relay';
+import { fetchQuery } from 'relay-runtime';
 import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePanel';
 import PropTypes from 'prop-types';
 
@@ -44,14 +45,41 @@ const defaultProps = {
   dropDownData: {}
 };
 
+const indicatorQuery = graphql`
+  query VizPaneMediatorQuery(
+    $year_Range: String!
+    $fileSource_Name_In: String!
+  ) {
+    allIndicators(
+      year_Range: $year_Range
+      fileSource_Name_In: $fileSource_Name_In
+    ) {
+      edges {
+        node {
+          name
+        }
+      }
+    }
+  }
+`;
+
 class VizPaneMediator extends React.Component {
   constructor(props) {
     super(props);
+
+    const yearRange = ''
+      .concat(initialState.yearPeriod[0])
+      .concat(',')
+      .concat(initialState.yearPeriod[initialState.yearPeriod.length - 1]);
+
     this.state = {
       allIndNames: [],
       allCountries: [],
       allFileSources: [],
-      selectedSources: [],
+      selectedSources: this.props.paneData.selectedSources
+        ? this.props.paneData.selectedSources
+        : [],
+      yearRange,
       allRegions: []
     };
 
@@ -59,13 +87,13 @@ class VizPaneMediator extends React.Component {
     this.selectInd2 = this.selectInd2.bind(this);
     this.selectSubInd1 = this.selectSubInd1.bind(this);
     this.selectSubInd2 = this.selectSubInd2.bind(this);
-    this.selectYear = this.selectYear.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
     this.selectRegion = this.selectRegion.bind(this);
     this.resetAll = this.resetAll.bind(this);
     this.refetch = this.refetch.bind(this);
     this.selectDataSource = this.selectDataSource.bind(this);
     this.resetIndicators = this.resetIndicators.bind(this);
+    this.selectYearRange = this.selectYearRange.bind(this);
   }
 
   componentDidMount() {
@@ -101,37 +129,6 @@ class VizPaneMediator extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (
-      !isEqual(
-        this.props.dropDownData.exploreIndicators.edges,
-        prevProps.dropDownData.exploreIndicators.edges
-      )
-    ) {
-      if (
-        !(
-          this.state.selectedSources.length > 0 &&
-          this.props.dropDownData.exploreIndicators.edges.length === 0
-        )
-      ) {
-        let allIndNames = this.props.dropDownData.exploreIndicators.edges.map(
-          indicator => {
-            return { label: indicator.node.name, value: indicator.node.name };
-          }
-        );
-
-        // We make the array only from unique indicators
-        // cause we receive several indicators with the same names
-        // most likely because of data points stuff
-        // allIndNames = allIndNames.filter(this.onlyUnique);
-
-        allIndNames = sortBy(allIndNames, ['label']);
-
-        this.setState({ allIndNames });
-      }
-    }
-  }
-
   selectDataSource(item, array = false) {
     let selectedSources = [];
     let allIndNames = [...this.state.allIndNames];
@@ -154,16 +151,34 @@ class VizPaneMediator extends React.Component {
       }
     }
 
-    if (
-      this.props.dropDownData.exploreIndicators.edges.length === 0 &&
-      selectedSources.length === 0
-    )
-      allIndNames = [];
-
     this.setState({ selectedSources, allIndNames }, this.refetch);
+    // and we store this so it would be accessible to the visualizer mediator
+    this.props.dispatch(
+      actions.storePaneDataRequest({
+        selectedSources
+      })
+    );
   }
 
-  refetch(selectedSources = this.state.selectedSources) {
+  selectYearRange(value) {
+    const yearRange = ''
+      .concat(value[0])
+      .concat(',')
+      .concat(value[1]);
+    this.setState({ yearRange }, this.refetch);
+
+    // and we store this so it would be accessible to the visualizer mediator
+    this.props.dispatch(
+      actions.storePaneDataRequest({
+        yearRange
+      })
+    );
+  }
+
+  refetch(
+    selectedSources = this.state.selectedSources,
+    year_Range = this.state.yearRange
+  ) {
     let fileSource_Name_In = '';
 
     selectedSources.forEach(source => {
@@ -174,12 +189,21 @@ class VizPaneMediator extends React.Component {
       fileSource_Name_In.length === 0 ? 'null' : fileSource_Name_In;
 
     const refetchVars = {
+      year_Range,
       fileSource_Name_In
     };
 
-    this.props.relay.refetch(refetchVars, null, () => this.resetIndicators(), {
-      force: true
-    });
+    fetchQuery(this.props.relay.environment, indicatorQuery, refetchVars).then(
+      data => {
+        let allIndNames = data.allIndicators.edges.map(indicator => {
+          return { label: indicator.node.name, value: indicator.node.name };
+        });
+
+        allIndNames = sortBy(allIndNames, ['label']);
+
+        this.setState({ allIndNames }, this.resetIndicators);
+      }
+    );
   }
 
   resetIndicators() {
@@ -284,15 +308,6 @@ class VizPaneMediator extends React.Component {
     );
   }
 
-  selectYear(val) {
-    // so we set the values for chart data
-    this.props.dispatch(
-      actions.storeChartDataRequest({
-        yearPeriod: formatYearParam(val)
-      })
-    );
-  }
-
   selectCountry(item, array = false) {
     let selectedCountryVal = [];
 
@@ -377,7 +392,6 @@ class VizPaneMediator extends React.Component {
         indNames={this.state.allIndNames}
         countries={this.state.allCountries}
         regions={this.state.allRegions}
-        yearPeriod={this.props.chartData.yearPeriod}
         // okay so we use this variable to change the
         // to disable the geolocation dropdowns being defaultly selected
         locationSelected={isEqual(this.props.chartData, initialState)}
@@ -391,7 +405,6 @@ class VizPaneMediator extends React.Component {
         )}
         selectInd1={this.selectInd1}
         selectInd2={this.selectInd2}
-        selectYear={this.selectYear}
         selectSubInd1={this.selectSubInd1}
         selectSubInd2={this.selectSubInd2}
         selectedInd1={this.props.chartData.selectedInd1}
@@ -405,6 +418,8 @@ class VizPaneMediator extends React.Component {
         selectedRegionVal={this.props.chartData.selectedRegionVal}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
+        selectYearRange={this.selectYearRange}
+        yearRange={this.state.yearRange}
       />
     );
   }
@@ -420,13 +435,10 @@ const mapStateToProps = state => {
   };
 };
 
-export default createRefetchContainer(
+export default createFragmentContainer(
   connect(mapStateToProps)(VizPaneMediator),
   graphql`
-    fragment VizPaneMediator_dropDownData on Query
-      @argumentDefinitions(
-        fileSource_Name_In: { type: "String", defaultValue: "null" }
-      ) {
+    fragment VizPaneMediator_dropDownData on Query {
       allCountries {
         edges {
           node {
@@ -442,15 +454,6 @@ export default createRefetchContainer(
           }
         }
       }
-      visualizerIndicators: allIndicators(
-        fileSource_Name_In: $fileSource_Name_In
-      ) {
-        edges {
-          node {
-            name
-          }
-        }
-      }
       allRegions {
         edges {
           node {
@@ -458,19 +461,6 @@ export default createRefetchContainer(
             country {
               iso2
             }
-          }
-        }
-      }
-    }
-  `,
-  graphql`
-    query VizPaneMediatorQuery($fileSource_Name_In: String!) {
-      visualizerIndicators: allIndicators(
-        fileSource_Name_In: $fileSource_Name_In
-      ) {
-        edges {
-          node {
-            name
           }
         }
       }

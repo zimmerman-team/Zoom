@@ -13,7 +13,7 @@ if [ ! -e /usr/local/bin/watchman -a ! -e node_modules/.bin/watchman ]; then
     cd /tmp
     git clone https://github.com/facebook/watchman.git
     cd watchman
-
+    git checkout v4.7.0
 
     ./autogen.sh
     ./configure --enable-statedir=/tmp

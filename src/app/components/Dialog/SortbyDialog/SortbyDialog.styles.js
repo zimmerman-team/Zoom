@@ -9,6 +9,8 @@ export const ComponentBase = styled.div`
   margin-top: 10px;
   padding: 10px 0;
   z-index: 1;
+  top: 20px;
+  right: 0;
 `;
 
 export const OptionRow = styled.div`

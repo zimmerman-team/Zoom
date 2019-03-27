@@ -7,6 +7,7 @@ import SvgIconAdd from '../../../../../../assets/icons/IconAdd';
 import GridListOption from './common/GridListOption';
 
 const ComponentBase = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -35,9 +36,11 @@ const GridListOptionsPane = props => {
         icon={<SvgIconAdd />}
         label={props.leftOptionLabel}
         visibility={props.visibilityLeftButton}
+        targetUrl={props.targetUrl}
       />
       <GridListOption
         icon={<SvgIconSort />}
+        isSort
         isSortByOpen={props.isSortByOpen}
         changeSortBy={props.changeSortBy}
         setWrapperRef={props.setWrapperRef}

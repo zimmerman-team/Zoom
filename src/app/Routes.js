@@ -96,6 +96,7 @@ const Routes = props => {
             render={() => <IatiDetailMediator />}
           />
           <Route
+            exact
             path="/add-user"
             render={() =>
               props.auth0Client.isAuthenticated() &&
@@ -107,6 +108,7 @@ const Routes = props => {
             }
           />
           <Route
+            exact
             path="/create-team"
             render={() =>
               props.auth0Client.isAuthenticated() &&

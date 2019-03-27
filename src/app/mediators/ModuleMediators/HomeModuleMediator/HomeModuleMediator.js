@@ -94,6 +94,7 @@ class HomeModuleMediator extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       selectedYear: generalInitial.yearPeriod[0],
       ...initialState
     };
@@ -223,7 +224,11 @@ class HomeModuleMediator extends Component {
       });
     }
 
-    this.setState({ indicators, subIndicators1, subIndicators2 });
+    this.setState({
+      indicators,
+      subIndicators1,
+      subIndicators2
+    });
   }
 
   refetch(
@@ -253,7 +258,15 @@ class HomeModuleMediator extends Component {
       subInd2: subInd2.length > 0 ? subInd2 : ['undefined']
     };
 
-    this.props.relay.refetch(refetchVars);
+    this.setState({
+      loading: true
+    });
+
+    this.props.relay.refetch(refetchVars, null, () =>
+      this.setState({
+        loading: false
+      })
+    );
   }
 
   selectInd1(val) {
@@ -395,6 +408,7 @@ class HomeModuleMediator extends Component {
   render() {
     return (
       <HomeModule
+        loading={this.state.loading}
         indicators={this.state.indicators}
         dropDownData={this.props.dropDownData}
         selectInd1={this.selectInd1}

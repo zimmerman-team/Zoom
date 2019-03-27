@@ -90,6 +90,7 @@ class VisualizerModuleMediator extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       selectedYear: this.props.chartData.selectedYear
         ? this.props.chartData.selectedYear
         : initialState.yearPeriod[0],
@@ -273,6 +274,10 @@ class VisualizerModuleMediator extends Component {
     countriesCodes = this.props.chartData.selectedCountryVal,
     regionCountriesCodes = this.props.chartData.selectedRegionVal
   ) {
+    this.setState({
+      loading: true
+    });
+
     // We forming the param for countries from the selected countries of a region
     // and single selected countries
     const countriesISO2 = formatCountryParam(
@@ -291,7 +296,9 @@ class VisualizerModuleMediator extends Component {
       subInd2: subInd2.length > 0 ? subInd2 : ['undefined']
     };
 
-    this.props.relay.refetch(refetchVars);
+    this.props.relay.refetch(refetchVars, null, () =>
+      this.setState({ loading: false })
+    );
   }
 
   selectYear(val) {
@@ -307,6 +314,7 @@ class VisualizerModuleMediator extends Component {
   render() {
     return (
       <VisualizerModule
+        loading={this.state.loading}
         selectYear={this.selectYear}
         selectedYear={this.state.selectedYear}
         indicators={this.state.indicators}

@@ -49,7 +49,6 @@ const GridItem = props => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseEnter}
       onClick={handleClick}
-      options={props.withoptions ? 'pointer' : 'default'}
       to={path}
     >
       <Box>

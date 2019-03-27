@@ -20,6 +20,7 @@ import {
   ComponentBase,
   PaneButton,
   PaneButContainer,
+  PaneButtonTextVar,
   PaneButtonVar,
   PaneButtonText
 } from 'components/AppBar/AppBar.styles';
@@ -73,7 +74,8 @@ export class AppBar extends React.Component {
 
   closeSave() {
     this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
-    console.log('chart saved!!!', this.props);
+    this.props.history.push('/dashboard');
+    console.log('chart saved!!');
   }
 
   loadPaneButton() {
@@ -88,7 +90,7 @@ export class AppBar extends React.Component {
           buttonLabel = 'Create';
         } else if (this.props.location.pathname.indexOf('/visualizer') !== -1) {
           paneType = paneTypes.visualizer;
-          buttonLabel = 'Hide Filters';
+          buttonLabel = 'Show Filters';
         }
       } else {
         paneType = paneTypes.none;
@@ -146,9 +148,9 @@ export class AppBar extends React.Component {
               data-cy="geomap-close-save-button"
               onClick={() => this.closeSave()}
             >
-              <PaneButtonText data-cy="appbar-right-button">
+              <PaneButtonTextVar data-cy="appbar-right-button">
                 Close & Save
-              </PaneButtonText>
+              </PaneButtonTextVar>
             </PaneButtonVar>
             <PaneButtonVar
               data-cy="geomap-filter-button"
@@ -156,9 +158,9 @@ export class AppBar extends React.Component {
                 this.props.dispatch(actions.dataPaneToggleRequest(paneType))
               }
             >
-              <PaneButtonText data-cy="appbar-right-button">
+              <PaneButtonTextVar data-cy="appbar-right-button">
                 {buttonLabel}
-              </PaneButtonText>
+              </PaneButtonTextVar>
             </PaneButtonVar>
           </PaneButContainer>
         );

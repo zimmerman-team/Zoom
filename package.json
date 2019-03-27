@@ -280,5 +280,6 @@
   },
   "peerDependencies": {
     "@material-ui/core": "^3.9.0"
-  }
+  },
+  "proxy": "http://localhost:4200"
 }

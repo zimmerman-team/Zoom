@@ -16,8 +16,7 @@ import ExpansionPanelSummary from './components/ExpansionPanelSummary';
 
 const propTypes = {
   isYearSelect: PropTypes.bool,
-  selectYear: PropTypes.func,
-  selectedYears: PropTypes.arrayOf(PropTypes.string),
+  selectYearRange: PropTypes.func,
 
   isDropdownSelect: PropTypes.bool,
   panelDetails: PropTypes.arrayOf(
@@ -38,8 +37,7 @@ const propTypes = {
 
 const defaultProps = {
   isYearSelect: false,
-  selectYear: undefined,
-  selectedYears: [],
+  selectYearRange: undefined,
 
   isDropdownSelect: false,
   panelDetails: [
@@ -105,8 +103,7 @@ class ExpansionPanel extends React.Component {
             isDropdownSelect={this.props.isDropdownSelect}
             panelDetails={this.props.panelDetails}
             isYearSelect={this.props.isYearSelect}
-            selectYear={this.props.selectYear}
-            selectedYears={this.props.selectedYears}
+            selectYearRange={this.props.selectYearRange}
           />
         </ExpansionzPanel>
       </ComponentBase>

@@ -18,7 +18,7 @@ import {
 } from './DataExplorerPane.style';
 import SimpleToolTip from '../../ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
-import ExpansionPanel from './components/ExpansionPanel/ExpansionPanel';
+import ExpansionPanelContainer from 'components/Panes/DataExplorePane/components/ExpansionPanel/ExpansionPanelContainer';
 
 const propTypes = {
   selectedInd2: PropTypes.string,
@@ -123,7 +123,7 @@ class DataExplorePane extends React.Component {
         >
           {/*TODO: Store props somewhere different to improve readablitity */}
           {/*DATASOURCE*/}
-          <ExpansionPanel
+          <ExpansionPanelContainer
             isDropdownSelect
             icon={<IconRedIndicators />}
             label="Datasource"
@@ -143,7 +143,7 @@ class DataExplorePane extends React.Component {
           />
 
           {/*GEO LOCATION*/}
-          <ExpansionPanel
+          <ExpansionPanelContainer
             isDropdownSelect
             multiple
             selectAll
@@ -176,7 +176,7 @@ class DataExplorePane extends React.Component {
           />
 
           {/*TIME PERIOD*/}
-          <ExpansionPanel
+          <ExpansionPanelContainer
             isYearSelect
             icon={<IconRedPeriod />}
             label="Time Period"
@@ -184,7 +184,7 @@ class DataExplorePane extends React.Component {
           />
 
           {/*INDICATORS*/}
-          <ExpansionPanel
+          <ExpansionPanelContainer
             isDropdownSelect
             categorise
             icon={<IconRedIndicators />}

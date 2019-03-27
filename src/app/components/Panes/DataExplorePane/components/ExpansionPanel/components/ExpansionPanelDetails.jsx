@@ -72,9 +72,9 @@ const ExpansionPanelDetails = props => {
   return (
     <ExpansionPanelDetailsContainer>
       {props.isDropdownSelect &&
-        props.panelDetails.map(detail => (
+        props.panelDetails.map((detail, index) => (
           // FIXME: creating a key for this listItem messes up the indicator results.
-          <DropDownCont>
+          <DropDownCont key={index}>
             <ZoomSelect
               categorise={detail.categorise}
               multiple={detail.multiple}

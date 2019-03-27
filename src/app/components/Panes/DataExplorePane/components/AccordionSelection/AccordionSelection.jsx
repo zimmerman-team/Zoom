@@ -9,7 +9,7 @@ import {
 } from 'components/Panes/DataExplorePane/components/AccordionSelection/AccordionSelection.styles';
 import IconPointer from 'assets/icons/IconPointer';
 import theme from 'theme/Theme';
-import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePanel';
+import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePane';
 
 const propTypes = {
   active: PropTypes.bool

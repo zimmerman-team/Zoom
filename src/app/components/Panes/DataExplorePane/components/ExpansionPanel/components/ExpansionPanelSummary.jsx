@@ -6,7 +6,7 @@ import theme from 'theme/Theme';
 import _ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-export const ExpansionPanelSummaryContainer = styled(_ExpansionPanelSummary)`
+const ExpansionPanelSummaryContainer = styled(_ExpansionPanelSummary)`
   font-family: ${theme.font.zoomFontFamOne};
   font-size: 14px;
   line-height: 40px;
@@ -16,7 +16,7 @@ export const ExpansionPanelSummaryContainer = styled(_ExpansionPanelSummary)`
   }
 `;
 
-export const IconContainer = styled.div`
+const IconContainer = styled.div`
   display: flex;
   height: 40px;
   width: 40px;
@@ -52,15 +52,13 @@ const ExpansionPanelSummary = props => {
       };
 
   return (
-    <React.Fragment>
-      <ExpansionPanelSummaryContainer
-        style={headerStyle}
-        expandIcon={<ExpandMoreIcon />}
-      >
-        <IconContainer styles={headerStyle}>{props.icon}</IconContainer>
-        {props.label}
-      </ExpansionPanelSummaryContainer>
-    </React.Fragment>
+    <ExpansionPanelSummaryContainer
+      style={headerStyle}
+      expandIcon={<ExpandMoreIcon />}
+    >
+      <IconContainer styles={headerStyle}>{props.icon}</IconContainer>
+      {props.label}
+    </ExpansionPanelSummaryContainer>
   );
 };
 ExpansionPanelSummary.propTypes = propTypes;

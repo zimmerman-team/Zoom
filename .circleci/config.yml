@@ -31,6 +31,8 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/zoom-v2-ui
+      - run: sudo apt-get install python-dev
+      - run: ./scripts/install-watchman.sh
       - run: yarn relay
       - run:
           name: Set REACT_APP_PROJECT_URL env var

@@ -14,12 +14,15 @@ import ExplorePanelMediator from 'mediators/ComponentMediators/PaneMediators/Exp
 import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
 import NavPane from 'components/Panes/NavPane/NavPane';
 import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
+import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
 const propTypes = {
+  loading: PropTypes.bool,
   indicators: PropTypes.arrayOf(PropTypes.shape)
 };
 
 const defaultProps = {
+  loading: false,
   indicators: []
 };
 
@@ -58,7 +61,13 @@ export class HomeModule extends Component {
 
     return (
       <React.Fragment>
-        <ModuleContainer>
+        <ModuleContainer
+          style={
+            this.props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}
+          }
+        >
+          {this.props.loading && <ProgressIcon />}
+
           {this.state.dialogShown === 'false' && (
             <BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />
           )}

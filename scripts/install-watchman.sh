@@ -14,6 +14,7 @@ if [ ! -e /usr/local/bin/watchman -a ! -e node_modules/.bin/watchman ]; then
     git clone https://github.com/facebook/watchman.git
     cd watchman
 
+
     ./autogen.sh
     ./configure --enable-statedir=/tmp
     make

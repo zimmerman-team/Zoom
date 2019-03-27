@@ -68,7 +68,7 @@ const propTypes = {
   ),
   selectCountry: PropTypes.func,
   selectRegion: PropTypes.func,
-  selectYear: PropTypes.func,
+  selectYearRange: PropTypes.func,
   selectInd1: PropTypes.func,
   selectInd2: PropTypes.func,
   selectedSubInd1: PropTypes.arrayOf(PropTypes.string),
@@ -87,7 +87,7 @@ const defaultProps = {
   locationSelected: true,
   subInd1AllSelected: true,
   subInd2AllSelected: true,
-  selectYear: undefined,
+  selectYearRange: undefined,
   indNames: [],
   countries: [],
   regions: [],
@@ -113,7 +113,7 @@ class DataExplorePane extends React.Component {
 
   render() {
     return (
-      <ComponentBase>
+      <ComponentBase style={{ display: this.props.display }}>
         <PanelAccordion
           animate
           multiple
@@ -180,8 +180,7 @@ class DataExplorePane extends React.Component {
             isYearSelect
             icon={<IconRedPeriod />}
             label="Time Period"
-            selectYear={this.props.selectYear}
-            selectedYears={this.props.yearPeriod}
+            selectYearRange={this.props.selectYearRange}
           />
 
           {/*INDICATORS*/}

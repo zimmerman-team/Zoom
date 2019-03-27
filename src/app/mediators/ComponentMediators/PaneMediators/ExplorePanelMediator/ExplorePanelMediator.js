@@ -84,36 +84,40 @@ class ExplorePanelMediator extends React.Component {
   }
 
   componentDidMount() {
-    let allCountries = this.props.dropDownData.allCountries.edges.map(
-      indicator => {
-        return { label: indicator.node.name, value: indicator.node.iso2 };
-      }
-    );
+    if (this.props.dropDownData) {
+      let allCountries = this.props.dropDownData.allCountries.edges.map(
+        indicator => {
+          return { label: indicator.node.name, value: indicator.node.iso2 };
+        }
+      );
 
-    allCountries = sortBy(allCountries, ['label']);
+      allCountries = sortBy(allCountries, ['label']);
 
-    let allRegions = this.props.dropDownData.allRegions.edges.map(indicator => {
-      return { label: indicator.node.name, value: indicator.node.country };
-    });
+      let allRegions = this.props.dropDownData.allRegions.edges.map(
+        indicator => {
+          return { label: indicator.node.name, value: indicator.node.country };
+        }
+      );
 
-    allRegions = sortBy(allRegions, ['label']);
+      allRegions = sortBy(allRegions, ['label']);
 
-    // and we also push in a variable for undefined
-    allRegions.push({ label: 'undefined', value: [{ iso2: '' }] });
+      // and we also push in a variable for undefined
+      allRegions.push({ label: 'undefined', value: [{ iso2: '' }] });
 
-    let allFileSources = this.props.dropDownData.allFileSources.edges.map(
-      indicator => {
-        return { label: indicator.node.name, value: indicator.node.name };
-      }
-    );
+      let allFileSources = this.props.dropDownData.allFileSources.edges.map(
+        indicator => {
+          return { label: indicator.node.name, value: indicator.node.name };
+        }
+      );
 
-    allFileSources = sortBy(allFileSources, ['label']);
+      allFileSources = sortBy(allFileSources, ['label']);
 
-    this.setState({
-      allFileSources,
-      allCountries,
-      allRegions
-    });
+      this.setState({
+        allFileSources,
+        allCountries,
+        allRegions
+      });
+    }
   }
 
   selectDataSource(item, array = false) {

@@ -110,16 +110,10 @@ class DataExplorePane extends React.Component {
   state = {
     activeIndex: []
   };
-  //TODO TODO TODO TODO
-  //todo: add comments
-  //todo: Remove all warnings
-  //todo: See if there is a way to fit paneldetails in a const file? Else: add comment
-  //todo: Cleanup default props and proptypes
-  //todo: Make components of summary and details.
+
   render() {
     return (
       <ComponentBase>
-        {/*TODO: Check what it does and if its nessecary*/}
         <PanelAccordion
           animate
           multiple
@@ -127,8 +121,10 @@ class DataExplorePane extends React.Component {
             this.setState({ activeIndex: newActiveIndex })
           }
         >
+          {/*TODO: Store props somewhere different to improve readablitity */}
+          {/*DATASOURCE*/}
           <ExpansionPanel
-            isDropDownSelect
+            isDropdownSelect
             icon={<IconRedIndicators />}
             label="Datasource"
             panelDetails={[
@@ -146,8 +142,9 @@ class DataExplorePane extends React.Component {
             ]}
           />
 
+          {/*GEO LOCATION*/}
           <ExpansionPanel
-            isDropDownSelect
+            isDropdownSelect
             multiple
             selectAll
             icon={<IconRedLocation />}
@@ -178,16 +175,18 @@ class DataExplorePane extends React.Component {
             ]}
           />
 
+          {/*TIME PERIOD*/}
           <ExpansionPanel
+            isYearSelect
             icon={<IconRedPeriod />}
             label="Time Period"
-            isYearSelect
             selectYear={this.props.selectYear}
             selectedYears={this.props.yearPeriod}
           />
 
+          {/*INDICATORS*/}
           <ExpansionPanel
-            isDropDownSelect
+            isDropdownSelect
             categorise
             icon={<IconRedIndicators />}
             label="Indicators"

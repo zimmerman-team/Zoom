@@ -53,7 +53,7 @@ const defaultProps = {
   defaultAll: true,
   placeHolder: 'Has no indicators',
   placeHolderText: 'Has no indicators',
-  placeHolderNumber: '',
+  placeHolderNumber: undefined,
   reset: undefined,
   search: true,
   selectAll: false,

@@ -33,7 +33,7 @@ const SelectHeader = props => (
     </PointerContainer>
     <LabelContainer>
       {props.label}
-      {props.placeHolderNumber !== '' ? (
+      {props.placeHolderNumber !== undefined ? (
         <Span> ({props.placeHolderNumber})</Span>
       ) : (
         ''

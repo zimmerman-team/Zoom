@@ -1,28 +1,23 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import theme from 'theme/Theme';
 
 /* components */
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {
   ComponentBase,
-  ExpansionzPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
-  IconContainer,
-  ZoomSelect,
-  Box
+  ExpansionzPanel
+  // ExpansionPanelSummary,
+  // IconContainer
 } from './ExpansionPanel.styles';
-import { DropDownCont } from '../../DataExplorerPane.style';
-import YearSelector from '../../../../YearSelector/YearSelector';
+import ExpansionPanelDetails from './components/ExpansionPanelDetails';
+import ExpansionPanelSummary from './components/ExpansionPanelSummary';
 
 const propTypes = {
-  //TODO: refactor to oneof()
-  //TODO: see if there is a way to make certain proptypes required when oneofthese
-
   isYearSelect: PropTypes.bool,
+  selectYear: PropTypes.func,
+  selectedYears: PropTypes.arrayOf(PropTypes.string),
 
   isDropdownSelect: PropTypes.bool,
   panelDetails: PropTypes.arrayOf(
@@ -35,99 +30,89 @@ const propTypes = {
       multiple: PropTypes.bool,
       selectAll: PropTypes.bool,
       defaultAll: PropTypes.array,
+      placeHolderNumber: PropTypes.number,
       reset: PropTypes.func
     })
   )
 };
 
 const defaultProps = {
+  isYearSelect: false,
+  selectYear: undefined,
+  selectedYears: [],
+
+  isDropdownSelect: false,
   panelDetails: [
     {
+      locationSelected: false,
+      categorise: false,
+      allFileSources: [],
+      selectedSources: [],
+      selectDataSource: undefined,
       multiple: false,
       selectAll: false,
-      categorise: false,
-      locationSelected: false,
-      allFileSources: [1, 2],
-      selectedSources: [1, 2],
-      selectDataSource: [1, 2],
-      defaultAll: [1, 2],
+      defaultAll: [],
       placeHolderNumber: undefined,
       reset: undefined
     }
-  ],
-
-  locationSelected: true,
-  allFileSources: {},
-  selectDataSource: {},
-  selectedSources: {},
-
-  isSelect: false,
-  isYearSelect: false,
-
-  categorise: false
+  ]
 };
 
-const ExpansionPanel = props => {
-  const [expanded, setExpanded] = React.useState(true);
+class ExpansionPanel extends React.Component {
+  // const [expanded, setExpanded] = React.useState(true);
 
-  function handleChange() {
-    setExpanded(!expanded);
-  }
+  state = {
+    expanded: true
+  };
 
-  //TODO: Styles related put in appropriate file sahbi
-  const headerStyle = expanded
-    ? {
-        backgroundColor: theme.color.zoomGreyZero,
-        color: theme.color.aidsFondsBlue,
-        borderBottom: `1px solid ${theme.color.zoomGreyFour}`
-      }
-    : {
-        backgroundColor: theme.color.aidsFondsWhite,
-        color: theme.color.aidsFondsRed
-      };
+  //TODO: Styles related, this should be in ExpansionPanelSummary
+  // const headerStyle = expanded
+  //   ? {
+  //       backgroundColor: theme.color.zoomGreyZero,
+  //       color: theme.color.aidsFondsBlue,
+  //       borderBottom: `1px solid ${theme.color.zoomGreyFour}`
+  //     }
+  //   : {
+  //       backgroundColor: theme.color.aidsFondsWhite,
+  //       color: theme.color.aidsFondsRed
+  //     };
 
-  return (
-    <ComponentBase>
-      <Box>
-        <ExpansionzPanel expanded={expanded} onChange={handleChange}>
+  handleChange = () => {
+    // setExpanded(!expanded);
+    this.setState({
+      expanded: !this.state.expanded
+    });
+  };
+
+  render() {
+    return (
+      <ComponentBase>
+        <ExpansionzPanel onChange={this.handleChange}>
+          {/*TODO: ExpansionPanelSummary and ExpansionPanelDetails should be own component*/}
+          {/*<ExpansionPanelSummary*/}
+          {/*style={headerStyle}*/}
+          {/*expandIcon={<ExpandMoreIcon />}*/}
+          {/*>*/}
+          {/*<IconContainer styles={headerStyle}>{props.icon}</IconContainer>*/}
+          {/*{props.label}*/}
+          {/*</ExpansionPanelSummary>*/}
           <ExpansionPanelSummary
-            style={headerStyle}
-            expandIcon={<ExpandMoreIcon />}
-          >
-            <IconContainer styles={headerStyle}>{props.icon}</IconContainer>
-            {props.label}
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            {props.isDropDownSelect &&
-              props.panelDetails.map(detail => (
-                <DropDownCont>
-                  <ZoomSelect
-                    categorise={detail.categorise}
-                    multiple={detail.multiple}
-                    selectAll={detail.selectAll}
-                    defaultAll={detail.locationSelected}
-                    reset={detail.reset}
-                    placeHolderText={detail.placeHolderText}
-                    placeHolderNumber={detail.placeHolderNumber}
-                    data={detail.allFileSources}
-                    arraySelected={detail.selectedSources}
-                    selectVal={detail.selectDataSource}
-                  />
-                </DropDownCont>
-              ))}
-
-            {props.isYearSelect && (
-              <YearSelector
-                selectYear={props.selectYear}
-                selectedYears={props.selectedYears}
-              />
-            )}
-          </ExpansionPanelDetails>
+            label={this.props.label}
+            icon={this.props.icon}
+            expanded={this.state.expanded}
+          />
+          <ExpansionPanelDetails
+            isDropdownSelect={this.props.isDropdownSelect}
+            panelDetails={this.props.panelDetails}
+            isYearSelect={this.props.isYearSelect}
+            selectYear={this.props.selectYear}
+            selectedYears={this.props.selectedYears}
+          />
         </ExpansionzPanel>
-      </Box>
-    </ComponentBase>
-  );
-};
+      </ComponentBase>
+    );
+  }
+}
 ExpansionPanel.propTypes = propTypes;
 ExpansionPanel.defaultProps = defaultProps;
 export default ExpansionPanel;

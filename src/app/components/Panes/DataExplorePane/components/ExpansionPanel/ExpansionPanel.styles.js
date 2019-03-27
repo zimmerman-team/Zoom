@@ -3,8 +3,6 @@ import { withStyles } from '@material-ui/core';
 import styled from 'styled-components';
 import _ExpansionPanel from '@material-ui/core/ExpansionPanel/ExpansionPanel';
 import _ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary';
-import _ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails/ExpansionPanelDetails';
-import _ZoomSelect from '../../../../Select/ZoomSelect';
 
 export const ComponentBase = styled.div`
   border-bottom: 1px solid ${theme.color.zoomGreyEleven};
@@ -49,18 +47,3 @@ export const IconContainer = styled.div`
     fill: ${props => props.styles.color};
   }
 `;
-
-export const ExpansionPanelDetails = styled(_ExpansionPanelDetails)`
-  display: flex;
-  flex-direction: column;
-  background-color: ${theme.color.zoomGreyZero};
-  && {
-    padding: 8px 0;
-  }
-`;
-
-export const ZoomSelect = styled(_ZoomSelect)`
-  width: 100%;
-`;
-
-export const Box = styled.div``;

@@ -18,7 +18,7 @@ import {
 } from './DataExplorerPane.style';
 import SimpleToolTip from '../../ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
-import ExpansionPanel from './components/ExpansionPanel/ExpansionPanel';
+import ExpansionPanelContainer from 'components/Panes/DataExplorePane/components/ExpansionPanel/ExpansionPanelContainer';
 
 const propTypes = {
   selectedInd2: PropTypes.string,
@@ -123,7 +123,7 @@ class DataExplorePane extends React.Component {
         >
           {/*TODO: Store props somewhere different to improve readablitity */}
           {/*DATASOURCE*/}
-          <ExpansionPanel
+          <ExpansionPanelContainer
             isDropdownSelect
             icon={<IconRedIndicators />}
             label="Datasource"
@@ -143,7 +143,7 @@ class DataExplorePane extends React.Component {
           />
 
           {/*GEO LOCATION*/}
-          <ExpansionPanel
+          <ExpansionPanelContainer
             isDropdownSelect
             multiple
             selectAll
@@ -176,7 +176,7 @@ class DataExplorePane extends React.Component {
           />
 
           {/*TIME PERIOD*/}
-          <ExpansionPanel
+          <ExpansionPanelContainer
             isYearSelect
             icon={<IconRedPeriod />}
             label="Time Period"
@@ -184,7 +184,7 @@ class DataExplorePane extends React.Component {
           />
 
           {/*INDICATORS*/}
-          <ExpansionPanel
+          <ExpansionPanelContainer
             isDropdownSelect
             categorise
             icon={<IconRedIndicators />}
@@ -197,6 +197,7 @@ class DataExplorePane extends React.Component {
                 selectDataSource: this.props.selectInd1,
                 allFileSources: this.props.indNames,
                 selectedSources: this.props.selectedInd1,
+                valueSelected: this.props.selectedInd1,
                 reset: () => this.props.selectInd1('reset')
               },
               {
@@ -206,8 +207,7 @@ class DataExplorePane extends React.Component {
                 placeHolderText: 'Select sub indicator',
                 selectDataSource: this.props.selectSubInd1,
                 allFileSources: this.props.subIndicators1,
-                selectedSources: this.props.selectedSubInd1,
-                reset: undefined
+                selectedSources: this.props.selectedSubInd1
               },
               {
                 categorise: true,
@@ -216,6 +216,7 @@ class DataExplorePane extends React.Component {
                 selectDataSource: this.props.selectInd2,
                 allFileSources: this.props.indNames,
                 selectedSources: this.props.selectedInd2,
+                valueSelected: this.props.selectedInd2,
                 reset: () => this.props.selectInd2('reset')
               },
               {
@@ -225,8 +226,7 @@ class DataExplorePane extends React.Component {
                 placeHolderText: 'Select sub indicator',
                 selectDataSource: this.props.selectSubInd2,
                 allFileSources: this.props.subIndicators2,
-                selectedSources: this.props.selectedSubInd2,
-                reset: undefined
+                selectedSources: this.props.selectedSubInd2
               }
             ]}
           />

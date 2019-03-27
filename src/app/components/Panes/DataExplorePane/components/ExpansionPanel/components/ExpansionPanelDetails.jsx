@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
-import shortID from 'shortid';
 
 /*Components*/
 import _ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails/ExpansionPanelDetails';
@@ -34,7 +33,7 @@ const propTypes = {
       categorise: PropTypes.bool,
       locationSelected: PropTypes.bool,
       allFileSources: PropTypes.array,
-      selectedSources: PropTypes.array,
+      selectedSources: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
       selectDataSource: PropTypes.func,
       multiple: PropTypes.bool,
       selectAll: PropTypes.bool,
@@ -70,9 +69,10 @@ const ExpansionPanelDetails = props => {
   return (
     <ExpansionPanelDetailsContainer>
       {props.isDropdownSelect &&
-        props.panelDetails.map(detail => (
+        props.panelDetails.map((detail, index) => (
           // FIXME: creating a key for this listItem messes up the indicator results.
           <DropDownCont>
+            {console.log(detail.selectedSources)}
             <ZoomSelect
               categorise={detail.categorise}
               multiple={detail.multiple}
@@ -84,15 +84,13 @@ const ExpansionPanelDetails = props => {
               data={detail.allFileSources}
               arraySelected={detail.selectedSources}
               selectVal={detail.selectDataSource}
+              valueSelected={detail.valueSelected}
             />
           </DropDownCont>
         ))}
 
       {props.isYearSelect && (
-        <YearSelector
-          selectYear={props.selectYear}
-          selectedYears={props.selectedYears}
-        />
+        <YearSelector selectYearRange={props.selectYearRange} />
       )}
     </ExpansionPanelDetailsContainer>
   );

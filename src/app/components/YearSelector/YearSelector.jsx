@@ -50,7 +50,10 @@ class YearSelector extends React.Component {
             )
           ]}
           handle={val => this.renderHandle(val)}
-          onAfterChange={years => this.props.selectYearRange(years)}
+          onAfterChange={years => {
+            console.log(years);
+            this.props.selectYearRange(years);
+          }}
         />
         <YearLabel> 2019 </YearLabel>
       </ComponentBase>

@@ -227,8 +227,7 @@ class HomeModuleMediator extends Component {
     this.setState({
       indicators,
       subIndicators1,
-      subIndicators2,
-      loading: false
+      subIndicators2
     });
   }
 
@@ -258,6 +257,10 @@ class HomeModuleMediator extends Component {
       subInd1: subInd1.length > 0 ? subInd1 : ['undefined'],
       subInd2: subInd2.length > 0 ? subInd2 : ['undefined']
     };
+
+    this.setState({
+      loading: true
+    });
 
     this.props.relay.refetch(refetchVars, null, () =>
       this.setState({

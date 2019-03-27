@@ -11,6 +11,7 @@ import { ControlPanelContainer } from 'modules/visualizer/VisualizerModule.style
 import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';
 import VizContainer from 'modules/visualizer/sort/container/VizContainer';
 import VisualizerModule from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator';
+import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
 // import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
@@ -60,7 +61,12 @@ class BuilderModule extends Component {
   render() {
     return (
       <Router>
-        <ModuleBase>
+        <ModuleBase
+          style={
+            this.props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}
+          }
+        >
+          {this.props.loading && <ProgressIcon />}
           <VizSidebar dropDownData={this.props.dropDownData} />
           <VizContainer
             indicators={this.props.indicators}

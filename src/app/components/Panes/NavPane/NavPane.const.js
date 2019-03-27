@@ -19,6 +19,7 @@ export const startItems = [
 export const createChartItems = [
   {
     label: 'Geo Map Chart',
+
     navTo: '/visualizer/geomap/vizID/edit'
   },
   {

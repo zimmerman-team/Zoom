@@ -117,9 +117,6 @@ class App extends React.Component {
   };
 
   render = () => {
-    console.log('this.props.user.data', this.props.user.data);
-    console.log('this.props.userUpdated.data', this.props.userUpdated.data);
-
     return (
       <Grommet theme={ZoomTheme}>
         <QueryRenderer

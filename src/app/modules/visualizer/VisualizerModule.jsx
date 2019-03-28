@@ -4,6 +4,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
+
+/* consts */
+import paneTypes from '__consts__/PaneTypesConst';
+
 /* components */
 import GeoMap from 'components/GeoMap/GeoMap';
 import { ControlPanelContainer } from 'modules/visualizer/VisualizerModule.style';
@@ -28,11 +32,13 @@ const propTypes = {
   sideBarOpen: PropTypes.bool,
   dropDownData: PropTypes.shape({}),
   indicators: PropTypes.arrayOf(PropTypes.shape({})),
+  dataPaneOpen: PropTypes.string,
   moduleMode: PropTypes.string
 };
 
 const defaultProps = {
   indicators: [],
+  dataPaneOpen: 'visualizer',
   dropDownData: {},
   loggedIn: true
 };
@@ -67,7 +73,12 @@ class BuilderModule extends Component {
           }
         >
           {this.props.loading && <ProgressIcon />}
-          <VizSidebar dropDownData={this.props.dropDownData} />
+          <VizSidebar
+            chartType={this.props.chartType}
+            code={this.props.code}
+            dropDownData={this.props.dropDownData}
+            display={this.props.dataPaneOpen === paneTypes.visualizer}
+          />
           <VizContainer
             indicators={this.props.indicators}
             selectYear={this.props.selectYear}

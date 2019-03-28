@@ -28,7 +28,7 @@ router.get('/getAllCharts', ChartController.getAll);
 // gets all team charts
 router.get('/getTeamFeedCharts', ChartController.getTeamFeedCharts);
 
-router.post('/createChart', ChartController.create);
+router.post('/updateCreateChart', ChartController.updateCreate);
 
 router.post('/updateChart', ChartController.update);
 

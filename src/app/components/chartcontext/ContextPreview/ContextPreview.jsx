@@ -43,7 +43,12 @@ const defaultProps = {
 const ContextPreview = props => {
   return (
     <ComponentBase>
-      <ContextHeader noBottom />
+      <ContextHeader
+        title={props.title}
+        authorName={props.authorName}
+        createdDate={props.createdDate}
+        noBottom
+      />
       <ContextBody>
         <div className="ql-editor">{ReactHtmlParser(props.desc)}</div>
       </ContextBody>

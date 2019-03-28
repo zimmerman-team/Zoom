@@ -194,14 +194,16 @@ class ZoomSelect extends React.Component {
   }
 
   allCheck() {
-    // so if an option is selected and 'selected all' is not checked
-    // we check it, as it is the functionality shown in the VD
-    if (this.props.arraySelected.length > 0)
-      this.setState({ allSelected: true });
-    else if (this.props.arraySelected.length === 0)
-      //  and if the selected array becomes 0 and the all selected was checked
-      //  we uncheck it
-      this.setState({ allSelected: false });
+    if (this.props.arraySelected) {
+      // so if an option is selected and 'selected all' is not checked
+      // we check it, as it is the functionality shown in the VD
+      if (this.props.arraySelected.length > 0)
+        this.setState({ allSelected: true });
+      else if (this.props.arraySelected.length === 0)
+        //  and if the selected array becomes 0 and the all selected was checked
+        //  we uncheck it
+        this.setState({ allSelected: false });
+    }
   }
 
   renderDropDownItem(item, index) {

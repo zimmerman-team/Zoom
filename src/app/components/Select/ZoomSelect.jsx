@@ -203,11 +203,12 @@ class ZoomSelect extends React.Component {
       this.setState({ allSelected: false });
   }
 
+  // trims a string starting at the, character
+  // pushes it to a new array and returns
+  // europe, regional -> europe
   trimSelectedValues(selectedValues) {
     const newSelectedValues = selectedValues;
-    // trims a string starting at the, character
-    // europe, reginonal -> europe
-    // pushes it to a new array and returns
+
     if (selectedValues.length > 1)
       selectedValues.forEach((val, index) => {
         if (val.includes(',')) {
@@ -218,6 +219,9 @@ class ZoomSelect extends React.Component {
     return newSelectedValues;
   }
 
+  // europe, regional -> europe, regional
+  // ["europe, regional", "africa, regional" ] -> europe, africa
+  // ["europe, regional", "africa, regional", "far east asia, regional " ] -> europe, africa...
   createLabel(selectedValues) {
     const trimmedValues = this.trimSelectedValues(selectedValues);
 

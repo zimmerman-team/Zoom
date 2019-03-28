@@ -414,6 +414,7 @@ class VisualizerModuleMediator extends Component {
   }
 
   render() {
+    console.log('this.props.chartResults', this.props.chartResults);
     return (
       <VisualizerModule
         chartType={this.props.paneData.chartType}

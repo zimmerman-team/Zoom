@@ -1,11 +1,13 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import TabNavigator from 'modules/visualizer/sort/sidebar/tabs/TabNavigator/TabNavigator';
 import TabContent from 'modules/visualizer/sort/sidebar/tabs/TabContent/TabContent';
 import data from 'modules/visualizer/sort/sidebar/VizSidebar.const';
 import { ComponentBase } from './VizSidebar.style';
+import paneTypes from '__consts__/PaneTypesConst';
 
 /**
  * The VizSidebar acts as a container component for the tab navigator and tab content
@@ -33,7 +35,11 @@ const defaultProps = {
 const VizSidebar = props => {
   return (
     /** component base container */
-    <ComponentBase>
+    <ComponentBase
+      style={{
+        display: props.dataPaneOpen === paneTypes.visualizer ? 'unset' : 'none'
+      }}
+    >
       {/** tab navigator */}
       {props.loggedIn && <TabNavigator code={code} navItems={props.data} />}
 
@@ -50,4 +56,10 @@ const VizSidebar = props => {
 VizSidebar.propTypes = propTypes;
 VizSidebar.defaultProps = defaultProps;
 
-export default VizSidebar;
+const mapStateToProps = state => {
+  return {
+    dataPaneOpen: state.dataPaneOpen.open
+  };
+};
+
+export default connect(mapStateToProps)(VizSidebar);

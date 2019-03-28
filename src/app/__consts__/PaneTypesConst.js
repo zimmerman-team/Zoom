@@ -3,6 +3,7 @@ const paneTypes = {
   privPane: 'privPane',
   createChart: 'createChart',
   convertData: 'convertData',
+  visualizer: 'visualizer',
   none: 'none'
 };
 

@@ -2,6 +2,7 @@ import theme from 'theme/Theme';
 import { withStyles } from '@material-ui/core';
 import styled from 'styled-components';
 import BaseComponent from '@material-ui/core/ExpansionPanel/ExpansionPanel';
+import BaseCompenetSummary from '@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary';
 
 export const ComponentBase = styled.div`
   border-bottom: 1px solid ${theme.color.zoomGreyEleven};
@@ -24,6 +25,16 @@ export const ExpansionPanel = withStyles({
     }
   }
 })(BaseComponent);
+
+export const ExpansionPanelSummary = styled(BaseCompenetSummary)`
+  font-family: ${theme.font.zoomFontFamOne};
+  font-size: 14px;
+  line-height: 40px;
+
+  & > div {
+    margin: 0;
+  }
+`;
 
 export const IconContainer = styled.div`
   display: flex;

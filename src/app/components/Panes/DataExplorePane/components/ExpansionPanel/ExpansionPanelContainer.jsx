@@ -8,13 +8,10 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {
   ComponentBase,
   ExpansionPanel,
-  // ExpansionPanelSummary,
+  ExpansionPanelSummary,
   IconContainer
 } from 'components/Panes/DataExplorePane/components/ExpansionPanel/ExpansionPanel.style';
 import ExpansionPanelDetails from './components/ExpansionPanelDetails';
-import ExpansionPanelSummary from './components/ExpansionPanelSummary';
-// import ExpansionPanelSummary from './sort/ExpansionPanelSummary';
-// import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 
 const propTypes = {
   isYearSelect: PropTypes.bool,

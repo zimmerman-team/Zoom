@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 
-/*Components*/
-import _ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails/ExpansionPanelDetails';
+/* components */
+import BaseComponent from '@material-ui/core/ExpansionPanelDetails/ExpansionPanelDetails';
 import { DropDownCont } from '../../../DataExplorerPane.style';
 import YearSelector from '../../../../../YearSelector/YearSelector';
 import _ZoomSelect from '../../../../../Select/ZoomSelect';
 
-const ExpansionPanelDetailsContainer = styled(_ExpansionPanelDetails)`
+const ExpansionPanelDetailsContainer = styled(BaseComponent)`
   display: flex;
   flex-direction: column;
   background-color: ${theme.color.zoomGreyZero};
@@ -71,8 +71,7 @@ const ExpansionPanelDetails = props => {
       {props.isDropdownSelect &&
         props.panelDetails.map((detail, index) => (
           // FIXME: creating a key for this listItem messes up the indicator results.
-          <DropDownCont>
-            {console.log(detail.selectedSources)}
+          <DropDownCont key={index}>
             <ZoomSelect
               categorise={detail.categorise}
               multiple={detail.multiple}

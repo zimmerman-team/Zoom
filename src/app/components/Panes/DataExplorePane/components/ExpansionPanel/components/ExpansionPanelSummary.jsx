@@ -3,10 +3,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
-import _ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary';
+
+/* components */
+import BaseComponent from '@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-const ExpansionPanelSummaryContainer = styled(_ExpansionPanelSummary)`
+// This component is not being used at the moment,
+// due to the fact that the onChange of ExpansionPanel does not
+// get triggered from this component.
+const ExpansionPanelSummaryContainer = styled(BaseComponent)`
   font-family: ${theme.font.zoomFontFamOne};
   font-size: 14px;
   line-height: 40px;

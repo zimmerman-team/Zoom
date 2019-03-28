@@ -74,6 +74,13 @@ const propTypes = {
       })
     )
   ),
+  selectedRegionLabels: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string
+      })
+    )
+  ),
   selectCountry: PropTypes.func,
   selectRegion: PropTypes.func,
   selectYearRange: PropTypes.func,
@@ -102,6 +109,7 @@ const defaultProps = {
   subIndicators2: [],
   selectedCountryVal: [],
   selectedRegionVal: [],
+  selectedRegionLabels: [],
   selectCountry: null,
   selectRegion: null,
   selectInd1: null,
@@ -194,6 +202,7 @@ class DataExplorePane extends React.Component {
                   data={this.props.regions}
                   arraySelected={this.props.selectedRegionVal}
                   selectVal={this.props.selectRegion}
+                  valueSelected={this.props.selectedRegionLabels}
                   reset={() => this.props.selectRegion('reset')}
                 />
               </DropDownCont>

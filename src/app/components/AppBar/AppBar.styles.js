@@ -39,3 +39,24 @@ export const PaneButtonText = styled.div`
   font-family: ${theme.font.zoomFontFamOne};
   font-size: 14px;
 `;
+
+export const PaneButContainer = styled.div`
+  margin-left: auto;
+  display: flex;
+`;
+
+export const PaneButtonTextVar = styled(PaneButtonText)`
+  margin-left: 0;
+`;
+
+export const PaneButtonVar = styled(PaneButton)`
+  border-radius: 10px;
+  padding: 0 5px;
+  margin-left: 12px;
+  background-color: ${theme.color.zoomGreyZero};
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${theme.color.zoomGreyOne};
+  }
+`;

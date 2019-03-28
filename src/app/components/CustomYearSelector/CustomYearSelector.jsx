@@ -10,19 +10,19 @@ import {
   YearLabel,
   SelectedYearLabel,
   StartControl,
-  EndControl,
+  EndControl
 } from './CustomYearSelector.style';
 
 const propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
-  selectedYears: PropTypes.arrayOf(PropTypes.string),
+  selectedYears: PropTypes.arrayOf(PropTypes.string)
 };
 
 const defaultProps = {
   min: 1990,
   max: 2019,
-  selectedYears: ['2002', '2003', '2004', '2005', '2006', '2007', '2008'],
+  selectedYears: ['2002', '2003', '2004', '2005', '2006', '2007', '2008']
 };
 
 class CustomYearSelector extends React.Component {
@@ -32,7 +32,7 @@ class CustomYearSelector extends React.Component {
     this.state = {
       numArray: [],
       mouseDown: 'none',
-      selectedYears: props.selectedYears,
+      selectedYears: props.selectedYears
     };
 
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
@@ -68,8 +68,8 @@ class CustomYearSelector extends React.Component {
         parseInt(this.state.selectedYears[0], 10),
         parseInt(
           this.state.selectedYears[this.state.selectedYears.length - 1],
-          10,
-        ),
+          10
+        )
       ]);
     }
   }

@@ -5,7 +5,7 @@ const SvgIconRedIndicators = props => (
     width={23}
     height={23}
     style={{
-      margin: 'auto',
+      margin: 'auto'
     }}
     display="flex"
     {...props}

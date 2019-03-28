@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
+import paneTypes from '__consts__/PaneTypesConst';
 
 /* actions */
 import * as actions from 'services/actions/general';
@@ -99,6 +100,11 @@ class VisualizerModuleMediator extends Component {
 
     this.refetch = this.refetch.bind(this);
     this.selectYear = this.selectYear.bind(this);
+  }
+
+  componentDidMount() {
+    // so yeah with this we update the top bar pane with correct data
+    this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.visualizer));
   }
 
   componentDidUpdate(prevProps) {

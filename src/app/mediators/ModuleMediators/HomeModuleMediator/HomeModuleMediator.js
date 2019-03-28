@@ -373,6 +373,9 @@ class HomeModuleMediator extends Component {
 
   selectRegion(item, array = false) {
     let selectedRegionVal = [];
+    // Adding labels to selectedRegionVal would break to many things,
+    // therefor chose to do it in a separate var. WET solution..
+    let selectedRegionLabels = [];
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
@@ -380,19 +383,28 @@ class HomeModuleMediator extends Component {
       if (array) {
         item.forEach(it => {
           selectedRegionVal.push(it.value);
+          selectedRegionLabels.push(it.label);
         });
       } else {
         selectedRegionVal = [...this.state.selectedRegionVal];
+        selectedRegionLabels = [...this.state.selectedRegionLabels];
+
         const regionIndex = selectedRegionVal.indexOf(item.value);
 
-        if (regionIndex === -1)
-          // so if it doesn't exist we add it
+        // so if it doesn't exist we add it
+        if (regionIndex === -1) {
           selectedRegionVal.push(item.value);
+          selectedRegionLabels.push(item.label);
+        }
+
         // if it does exist we remove it
-        else selectedRegionVal.splice(regionIndex, 1);
+        else {
+          selectedRegionVal.splice(regionIndex, 1);
+          selectedRegionLabels.splice(regionIndex, 1);
+        }
       }
     }
-
+    this.setState({ selectedRegionLabels });
     this.setState({ selectedRegionVal }, this.refetch);
   }
 
@@ -425,6 +437,7 @@ class HomeModuleMediator extends Component {
         selectCountry={this.selectCountry}
         selectedCountryVal={this.state.selectedCountryVal}
         selectedRegionVal={this.state.selectedRegionVal}
+        selectedRegionLabels={this.state.selectedRegionLabels}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
         selectedYear={this.state.selectedYear}

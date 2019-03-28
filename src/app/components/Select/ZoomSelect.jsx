@@ -84,7 +84,6 @@ class ZoomSelect extends React.Component {
 
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClickOutside);
-
     // so we need the checkbox to be by default selected if the component mounts
     // with stuff already selected
     if (this.props.arraySelected) {
@@ -204,6 +203,33 @@ class ZoomSelect extends React.Component {
       this.setState({ allSelected: false });
   }
 
+  trimSelectedValues(selectedValues) {
+    const newSelectedValues = selectedValues;
+    // trims a string starting at the, character
+    // europe, reginonal -> europe
+    // pushes it to a new array and returns
+    if (selectedValues.length > 1)
+      selectedValues.forEach((val, index) => {
+        if (val.includes(',')) {
+          newSelectedValues[index] = val.substring(0, val.indexOf(','));
+        }
+      });
+
+    return newSelectedValues;
+  }
+
+  createLabel(selectedValues) {
+    const trimmedValues = this.trimSelectedValues(selectedValues);
+
+    if (trimmedValues.length === 1) {
+      return trimmedValues[0];
+    }
+    if (trimmedValues.length === 2) {
+      return `${trimmedValues[0]}, ${trimmedValues[1]}`;
+    }
+    return `${trimmedValues[0]}, ${trimmedValues[1]}...`;
+  }
+
   renderDropDownItem(item, index) {
     if (item.value === 'category')
       return (
@@ -229,7 +255,6 @@ class ZoomSelect extends React.Component {
                 if (item.value instanceof Array) {
                   return isEqual(item.value, arrItemn);
                 }
-
                 return item.value === arrItemn;
               }) !== -1
             }
@@ -249,12 +274,16 @@ class ZoomSelect extends React.Component {
         <SelectHeader
           headerStyle={this.props.headerStyle}
           arrowMargins={this.props.arrowMargins}
-          label={
-            this.props.valueSelected
-              ? this.props.valueSelected
-              : this.props.placeHolderText
-          }
           placeHolderNumber={this.props.placeHolderNumber}
+          label={
+            this.props.valueSelected === undefined ||
+            this.props.valueSelected.length === 0
+              ? this.props.placeHolderText
+              : Array.isArray(this.props.valueSelected) &&
+                this.props.valueSelected.length > 1
+              ? this.createLabel(this.props.valueSelected)
+              : this.props.valueSelected
+          }
           onClick={() =>
             this.setState(prevState => {
               return { open: !prevState.open };

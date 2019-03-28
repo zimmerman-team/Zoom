@@ -8,6 +8,7 @@ import { formatYearParam } from 'utils/genericUtils';
 
 const initialState = {
   yearPeriod: formatYearParam([2003, 2016]),
+  selectedYear: '2003',
   indicators: [],
   selectedInd1: undefined,
   selectedInd2: undefined,

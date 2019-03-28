@@ -19,6 +19,9 @@ import {
   MenuButton,
   ComponentBase,
   PaneButton,
+  PaneButContainer,
+  PaneButtonTextVar,
+  PaneButtonVar,
   PaneButtonText
 } from 'components/AppBar/AppBar.styles';
 
@@ -29,6 +32,7 @@ import SvgIconBack from 'assets/icons/IconBack';
 
 /* actions */
 import * as actions from 'services/actions/general';
+import initialState from '__consts__/InitialChartDataConst';
 
 const propTypes = {
   toggleSideBar: PropTypes.func
@@ -38,17 +42,28 @@ const defaultProps = {
 };
 
 export class AppBar extends React.Component {
-  state = {
-    auth: true,
-    anchorEl: null,
-    paneButton: null
-  };
+  constructor(props) {
+    super(props);
+
+    const yearRange = ''
+      .concat(initialState.yearPeriod[0])
+      .concat(',')
+      .concat(initialState.yearPeriod[initialState.yearPeriod.length - 1]);
+
+    this.state = {
+      auth: true,
+      anchorEl: null,
+      paneButton: null
+    };
+
+    this.closeSave = this.closeSave.bind(this);
+  }
 
   componentDidMount() {
     this.loadPaneButton();
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps) {
     if (
       this.props.location.pathname !== prevProps.location.pathname ||
       this.props.dataPaneOpen !== prevProps.dataPaneOpen
@@ -57,17 +72,33 @@ export class AppBar extends React.Component {
     }
   }
 
+  closeSave() {
+    this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
+    this.props.history.push('/dashboard');
+    console.log('chart saved!!');
+  }
+
   loadPaneButton() {
     let paneButton = '';
     let buttonLabel = '';
     let paneType = 'none';
 
     if (this.props.auth0Client.isAuthenticated()) {
-      paneType =
-        this.props.dataPaneOpen === paneTypes.none
-          ? paneTypes.privPane
-          : paneTypes.none;
-      buttonLabel = paneType !== paneTypes.none ? 'Create' : 'Close';
+      if (this.props.dataPaneOpen === paneTypes.none) {
+        if (this.props.location.pathname.indexOf('/home') !== -1) {
+          paneType = paneTypes.privPane;
+          buttonLabel = 'Create';
+        } else if (this.props.location.pathname.indexOf('/visualizer') !== -1) {
+          paneType = paneTypes.visualizer;
+          buttonLabel = 'Show Filters';
+        }
+      } else {
+        paneType = paneTypes.none;
+        buttonLabel =
+          this.props.location.pathname.indexOf('/visualizer') !== -1
+            ? 'Hide Filters'
+            : 'Close';
+      }
     } else {
       paneType =
         this.props.dataPaneOpen === paneTypes.none
@@ -108,6 +139,30 @@ export class AppBar extends React.Component {
               {buttonLabel}
             </PaneButtonText>
           </PaneButton>
+        );
+        break;
+      case this.props.location.pathname.indexOf('/visualizer') !== -1:
+        paneButton = (
+          <PaneButContainer>
+            <PaneButtonVar
+              data-cy="geomap-close-save-button"
+              onClick={() => this.closeSave()}
+            >
+              <PaneButtonTextVar data-cy="appbar-right-button">
+                Close & Save
+              </PaneButtonTextVar>
+            </PaneButtonVar>
+            <PaneButtonVar
+              data-cy="geomap-filter-button"
+              onClick={() =>
+                this.props.dispatch(actions.dataPaneToggleRequest(paneType))
+              }
+            >
+              <PaneButtonTextVar data-cy="appbar-right-button">
+                {buttonLabel}
+              </PaneButtonTextVar>
+            </PaneButtonVar>
+          </PaneButContainer>
         );
         break;
       default:

@@ -32,7 +32,7 @@ import SvgIconBack from 'assets/icons/IconBack';
 
 /* actions */
 import * as actions from 'services/actions/general';
-import initialState from '__consts__/InitialChartDataConst';
+import * as nodeActions from 'services/actions/nodeBackend';
 
 const propTypes = {
   toggleSideBar: PropTypes.func
@@ -44,11 +44,6 @@ const defaultProps = {
 export class AppBar extends React.Component {
   constructor(props) {
     super(props);
-
-    const yearRange = ''
-      .concat(initialState.yearPeriod[0])
-      .concat(',')
-      .concat(initialState.yearPeriod[initialState.yearPeriod.length - 1]);
 
     this.state = {
       auth: true,
@@ -74,8 +69,35 @@ export class AppBar extends React.Component {
 
   closeSave() {
     this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
+
+    const profile = this.props.auth0Client.getProfile();
+
+    const chartData = {
+      authId: profile.sub,
+      chartId: this.props.chartData.chartId,
+      name: this.props.chartData.name,
+      description: this.props.chartData.desc,
+      type: this.props.paneData.chartType,
+      indicatorItems: [
+        {
+          indicator: this.props.chartData.selectedInd1,
+          subIndicators: this.props.chartData.selectedSubInd1
+        },
+        {
+          indicator: this.props.chartData.selectedInd2,
+          subIndicators: this.props.chartData.selectedSubInd2
+        }
+      ],
+      selectedSources: this.props.paneData.selectedSources,
+      yearRange: this.props.paneData.yearRange,
+      selectedYear: this.props.chartData.selectedYear,
+      selectedCountryVal: this.props.chartData.selectedCountryVal,
+      selectedRegionVal: this.props.chartData.selectedRegionVal
+    };
+
+    this.props.dispatch(nodeActions.createUpdateChartRequest(chartData));
+
     this.props.history.push('/dashboard');
-    console.log('chart saved!!');
   }
 
   loadPaneButton() {
@@ -173,6 +195,10 @@ export class AppBar extends React.Component {
   }
 
   render() {
+    if (this.props.chartCreated.data) {
+      console.log('created chart id', this.props.chartCreated.data.id);
+    }
+    // console.log('this.props.chartCreated', this.props.chartCreated);
     return (
       <ComponentBase
         elevation="small"
@@ -206,6 +232,10 @@ AppBar.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
+    chartData: state.chartData.chartData,
+    paneData: state.paneData.paneData,
+
+    chartCreated: state.chartCreated,
     dataPaneOpen: state.dataPaneOpen.open
   };
 };

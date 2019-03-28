@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
 import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
+import { withRouter } from 'react-router';
 import {
   formatCountryCenterData,
   formatCountryLayerData,
   formatCountryParam,
+  formatDate,
   formatLongLatData,
+  removeIds,
   updatePercentiles
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 import PropTypes from 'prop-types';
@@ -18,6 +21,7 @@ import initialState from '__consts__/InitialChartDataConst';
 import paneTypes from '__consts__/PaneTypesConst';
 
 /* actions */
+import * as nodeActions from 'services/actions/nodeBackend';
 import * as actions from 'services/actions/general';
 
 const propTypes = {
@@ -105,9 +109,37 @@ class VisualizerModuleMediator extends Component {
   componentDidMount() {
     // so yeah with this we update the top bar pane with correct data
     this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.visualizer));
+
+    if (this.props.match.params.code !== 'vizID') {
+      if (this.props.user)
+        this.props.dispatch(
+          nodeActions.getChartRequest({
+            authId: this.props.user.authId,
+            chartId: this.props.match.params.code
+          })
+        );
+    }
+    // and we store this so it would be accessible to the visualizer mediator
+    else
+      this.props.dispatch(
+        actions.storePaneDataRequest({
+          chartType: this.props.match.params.chart
+        })
+      );
   }
 
   componentDidUpdate(prevProps) {
+    if (!isEqual(this.props.user, prevProps.user) && this.props.user) {
+      if (this.props.match.params.code !== 'vizID') {
+        this.props.dispatch(
+          nodeActions.getChartRequest({
+            authId: this.props.user.authId,
+            chartId: this.props.match.params.code
+          })
+        );
+      }
+    }
+
     if (
       !isEqual(
         this.props.indicatorAggregations,
@@ -144,8 +176,66 @@ class VisualizerModuleMediator extends Component {
       }
     }
 
+    // and we load in the chart data retrieved from the node backend
+    if (
+      !isEqual(this.props.chartResults, prevProps.chartResults) &&
+      this.props.chartResults
+    ) {
+      const {
+        _id,
+        name,
+        selectedYear,
+        indicatorItems,
+        selectedCountryVal,
+        description,
+        selectedRegionVal,
+        type,
+        selectedSources,
+        author,
+        created,
+        yearRange
+      } = this.props.chartResults;
+
+      // we load up the redux chartData variable
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          chartMounted: true,
+          name,
+          chartId: _id,
+          selectedYear,
+          // TODO this will need to be redone after we implement the logic for infinite amounts of indicators
+          selectedInd1: indicatorItems[0].indicator,
+          selectedInd2: indicatorItems[1].indicator,
+          selectedCountryVal,
+          desc: description,
+          selectedSubInd1: indicatorItems[0].subIndicators,
+          selectedSubInd2: indicatorItems[1].subIndicators,
+          authorName: author.username,
+          createdDate: formatDate(created),
+          selectedRegionVal: removeIds(selectedRegionVal)
+        })
+      );
+
+      // we load up the redux paneData variable
+      this.props.dispatch(
+        actions.storePaneDataRequest({
+          chartType: type,
+          selectedSources,
+          yearRange
+        })
+      );
+    }
+
+    // TODO redo this check properly
+    const { name, desc, ...restChart } = this.props.chartData;
+    const {
+      name: prevName,
+      desc: prevDesc,
+      ...prevRestChart
+    } = prevProps.chartData;
     // so we refetch data when chartData changes
-    if (!isEqual(this.props.chartData, prevProps.chartData)) this.refetch();
+    // and we dont want to refetch data when only the name/description ofthe chart is changed
+    if (!isEqual(restChart, prevRestChart)) this.refetch();
   }
 
   componentWillUnmount() {
@@ -159,10 +249,16 @@ class VisualizerModuleMediator extends Component {
 
     this.props.dispatch(
       actions.storePaneDataRequest({
+        chartType: '',
+        selectedSources: [],
+        yearRange: '2003,2016',
         subIndicators1: [],
         subIndicators2: []
       })
     );
+
+    // and we close the datapane
+    this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
   }
 
   updateIndicators() {
@@ -320,9 +416,11 @@ class VisualizerModuleMediator extends Component {
   render() {
     return (
       <VisualizerModule
+        chartType={this.props.paneData.chartType}
+        code={this.props.match.params.code}
         loading={this.state.loading}
         selectYear={this.selectYear}
-        selectedYear={this.state.selectedYear}
+        selectedYear={this.props.chartData.selectedYear}
         indicators={this.state.indicators}
         dropDownData={this.props.dropDownData}
       />
@@ -335,13 +433,15 @@ VisualizerModuleMediator.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
+    chartResults: state.chartResults.data,
     chartData: state.chartData.chartData,
+    user: state.user.data,
     paneData: state.paneData.paneData
   };
 };
 
 export default createRefetchContainer(
-  connect(mapStateToProps)(VisualizerModuleMediator),
+  connect(mapStateToProps)(withRouter(VisualizerModuleMediator)),
   graphql`
     fragment VisualizerModuleMediator_indicatorAggregations on Query
       @argumentDefinitions(

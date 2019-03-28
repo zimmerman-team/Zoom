@@ -226,8 +226,44 @@ export function* addNewDatasetRequest(action) {
   }
 }
 
+export function* createUpdateChartRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'updateCreateChart',
+      values: action.values
+    });
+    yield put(nodeActions.createUpdateChartSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.createUpdateChartFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* getChartRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getChart',
+      values: action.values
+    });
+    yield put(nodeActions.getChartSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.getChartFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('GET_CHART_REQUEST', getChartRequest),
+    takeLatest('CREATE_UPDATE_CHART_REQUEST', createUpdateChartRequest),
     takeLatest('STORE_PANE_DATA_REQUEST', storePaneDataRequest),
     takeLatest('STORE_CHART_DATA_REQUEST', storeChartDataRequest),
     takeLatest('ADD_NEW_DATASET_REQUEST', addNewDatasetRequest),

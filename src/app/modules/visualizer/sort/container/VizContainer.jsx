@@ -58,7 +58,12 @@ class VizContainer extends React.Component {
     return (
       <ComponentBase mode={this.state.preview ? 'initial' : 'center'}>
         <PreviewTextContainer mode={this.state.preview ? 'flex' : 'none'}>
-          <ContextPreview desc={this.props.chartData.desc} />
+          <ContextPreview
+            createdDate={this.props.chartData.createdDate}
+            authorName={this.props.chartData.authorName}
+            title={this.props.chartData.name}
+            desc={this.props.chartData.desc}
+          />
         </PreviewTextContainer>
 
         <React.Fragment>

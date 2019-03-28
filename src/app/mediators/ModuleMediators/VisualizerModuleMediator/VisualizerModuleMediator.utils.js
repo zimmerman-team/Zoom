@@ -191,3 +191,51 @@ export function formatLongLatData(indicators, indName) {
 
   return longLatData;
 }
+
+// removes the ID variable from region array, because for some reason
+// mongoose generates and returns ids for objects stored in a model...
+export function removeIds(regionArray) {
+  return regionArray.map(countryArray => {
+    return countryArray.map(country => {
+      return { iso2: country.iso2 };
+    });
+  });
+}
+
+function ordinal_suffix_of(i) {
+  const j = i % 10,
+    k = i % 100;
+  if (j === 1 && k !== 11) {
+    return i + 'st';
+  }
+  if (j === 2 && k !== 12) {
+    return i + 'nd';
+  }
+  if (j === 3 && k !== 13) {
+    return i + 'rd';
+  }
+  return i + 'th';
+}
+
+// formats date according to design
+export function formatDate(created) {
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
+
+  const date = new Date(created);
+  return `Published on ${monthNames[date.getMonth()]} ${ordinal_suffix_of(
+    date.getDate()
+  )} ${date.getFullYear()}`;
+}

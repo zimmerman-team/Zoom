@@ -190,3 +190,67 @@ export function addNewDatasetFailed(error) {
     error
   };
 }
+
+export const CREATE_UPDATE_CHART_INITIAL = 'CREATE_UPDATE_CHART_INITIAL';
+export const CREATE_UPDATE_CHART_REQUEST = 'CREATE_UPDATE_CHART_REQUEST';
+export const CREATE_UPDATE_CHART_SUCCESS = 'CREATE_UPDATE_CHART_SUCCESS';
+export const CREATE_UPDATE_CHART_FAILED = 'CREATE_UPDATE_CHART_FAILED';
+
+export function createUpdateChartInitial() {
+  return {
+    type: CREATE_UPDATE_CHART_INITIAL
+  };
+}
+
+export function createUpdateChartRequest(values) {
+  return {
+    type: CREATE_UPDATE_CHART_REQUEST,
+    values
+  };
+}
+
+export function createUpdateChartSuccess(data) {
+  return {
+    type: CREATE_UPDATE_CHART_SUCCESS,
+    data
+  };
+}
+
+export function createUpdateChartFailed(error) {
+  return {
+    type: CREATE_UPDATE_CHART_FAILED,
+    error
+  };
+}
+
+export const GET_CHART_INITIAL = 'GET_CHART_INITIAL';
+export const GET_CHART_REQUEST = 'GET_CHART_REQUEST';
+export const GET_CHART_SUCCESS = 'GET_CHART_SUCCESS';
+export const GET_CHART_FAILED = 'GET_CHART_FAILED';
+
+export function getChartInitial() {
+  return {
+    type: GET_CHART_INITIAL
+  };
+}
+
+export function getChartRequest(values) {
+  return {
+    type: GET_CHART_REQUEST,
+    values
+  };
+}
+
+export function getChartSuccess(data) {
+  return {
+    type: GET_CHART_SUCCESS,
+    data
+  };
+}
+
+export function getChartFailed(error) {
+  return {
+    type: GET_CHART_FAILED,
+    error
+  };
+}

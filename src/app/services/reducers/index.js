@@ -2,6 +2,14 @@ import update from 'immutability-helper';
 import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
 import * as nodeActions from 'services/actions/nodeBackend';
+import { CREATE_UPDATE_CHART_INITIAL } from 'services/actions/nodeBackend';
+import { CREATE_UPDATE_CHART_REQUEST } from 'services/actions/nodeBackend';
+import { CREATE_UPDATE_CHART_SUCCESS } from 'services/actions/nodeBackend';
+import { CREATE_UPDATE_CHART_FAILED } from 'services/actions/nodeBackend';
+import { GET_CHART_INITIAL } from 'services/actions/nodeBackend';
+import { GET_CHART_REQUEST } from 'services/actions/nodeBackend';
+import { GET_CHART_SUCCESS } from 'services/actions/nodeBackend';
+import { GET_CHART_FAILED } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -311,7 +319,39 @@ function datasetAdded(state = initial, action) {
   }
 }
 
+function chartCreated(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.CREATE_UPDATE_CHART_INITIAL:
+      return updateInitial(state);
+    case nodeActions.CREATE_UPDATE_CHART_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.CREATE_UPDATE_CHART_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.CREATE_UPDATE_CHART_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function chartResults(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_CHART_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_CHART_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_CHART_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_CHART_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  chartResults,
+  chartCreated,
   datasetAdded,
   usersTeam,
   userUpdated,

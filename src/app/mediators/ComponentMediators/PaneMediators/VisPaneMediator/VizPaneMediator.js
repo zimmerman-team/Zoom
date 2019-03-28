@@ -4,15 +4,15 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { fetchQuery } from 'relay-runtime';
 import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePanel';
 import PropTypes from 'prop-types';
+import connect from 'react-redux/es/connect/connect';
 
 /* actions */
 import * as actions from 'services/actions/general';
 
 /* helpers */
 import sortBy from 'lodash/sortBy';
-import { formatYearParam } from 'utils/genericUtils';
-import connect from 'react-redux/es/connect/connect';
 import isEqual from 'lodash/isEqual';
+import { yearStrToArray } from 'utils/genericUtils';
 
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
@@ -76,10 +76,12 @@ class VizPaneMediator extends React.Component {
       allIndNames: [],
       allCountries: [],
       allFileSources: [],
-      selectedSources: this.props.paneData.selectedSources
-        ? this.props.paneData.selectedSources
+      selectedSources: props.paneData.selectedSources
+        ? props.paneData.selectedSources
         : [],
-      yearRange,
+      yearRange: props.paneData.yearRange
+        ? props.paneData.yearRange
+        : yearRange,
       allRegions: []
     };
 
@@ -122,16 +124,18 @@ class VizPaneMediator extends React.Component {
 
     allFileSources = sortBy(allFileSources, ['label']);
 
-    this.setState({
-      allFileSources,
-      allCountries,
-      allRegions
-    });
+    this.setState(
+      {
+        allFileSources,
+        allCountries,
+        allRegions
+      },
+      this.refetch
+    );
   }
 
   selectDataSource(item, array = false) {
     let selectedSources = [];
-    let allIndNames = [...this.state.allIndNames];
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
@@ -151,13 +155,24 @@ class VizPaneMediator extends React.Component {
       }
     }
 
-    this.setState({ selectedSources, allIndNames }, this.refetch);
+    this.setState({ selectedSources }, this.refetch);
+
+    // and ofcourse we reset the selected indicators
+    this.resetIndicators();
+
     // and we store this so it would be accessible to the visualizer mediator
     this.props.dispatch(
       actions.storePaneDataRequest({
         selectedSources
       })
     );
+
+    if (!this.props.chartData.chartMounted)
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          chartMounted: true
+        })
+      );
   }
 
   selectYearRange(value) {
@@ -166,6 +181,9 @@ class VizPaneMediator extends React.Component {
       .concat(',')
       .concat(value[1]);
     this.setState({ yearRange }, this.refetch);
+
+    // and ofcourse we reset the selected indicators
+    this.resetIndicators();
 
     // and we store this so it would be accessible to the visualizer mediator
     this.props.dispatch(
@@ -201,7 +219,7 @@ class VizPaneMediator extends React.Component {
 
         allIndNames = sortBy(allIndNames, ['label']);
 
-        this.setState({ allIndNames }, this.resetIndicators);
+        this.setState({ allIndNames });
       }
     );
   }
@@ -261,7 +279,7 @@ class VizPaneMediator extends React.Component {
           selectedSubInd1.push(it.value);
         });
       } else {
-        selectedSubInd1 = [...this.state.selectedSubInd1];
+        selectedSubInd1 = [...this.props.chartData.selectedSubInd1];
         const subIndicatorIndex = selectedSubInd1.indexOf(item.value);
         if (subIndicatorIndex === -1)
           // so if it doesn't exist we add it
@@ -394,7 +412,7 @@ class VizPaneMediator extends React.Component {
         regions={this.state.allRegions}
         // okay so we use this variable to change the
         // to disable the geolocation dropdowns being defaultly selected
-        locationSelected={isEqual(this.props.chartData, initialState)}
+        locationSelected={!this.props.chartData.chartMounted}
         subInd1AllSelected={isEqual(
           this.props.chartData.selectedSubInd1,
           initialState.selectedSubInd1
@@ -419,7 +437,7 @@ class VizPaneMediator extends React.Component {
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
         selectYearRange={this.selectYearRange}
-        yearRange={this.state.yearRange}
+        yearRange={yearStrToArray(this.state.yearRange)}
       />
     );
   }

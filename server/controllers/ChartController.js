@@ -32,20 +32,19 @@ const ChartController = {
       author,
 
       description: 'Bobs description',
-      descriptionPlainText: 'Bobs descriptionPlainText',
 
       // so the type of chart
       type: 'Bob',
 
       /* indicators/ sub-indicators of chart */
-      items: [
+      indicatorItems: [
         {
           indicator: 'Bobs indicator',
-          sub_indicators: ['Bobs sub_indicators']
+          subIndicators: ['Bobs sub_indicators']
         }
       ],
 
-      dateRange: ['1990'],
+      yearRange: '1990,1991',
 
       // with what team is this chart associated
       team: 'Bobs team'
@@ -56,16 +55,19 @@ const ChartController = {
     res.json(chart);
   },
 
-  get: function(req, res) {
+  get: (req, res) => {
     const { chartId, authId } = req.query;
 
     User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
+      else if (!author) general.handleError(res, 'User not found', 404);
       else
-        Chart.findOne({ _id: chartId, author }, 'name', (chartError, chart) => {
-          if (chartError) general.handleError(res, chartError);
-          res.json(chart);
-        });
+        Chart.findOne({ _id: chartId, author })
+          .populate('author')
+          .exec((chartError, chart) => {
+            if (chartError) general.handleError(res, chartError);
+            res.json(chart);
+          });
     });
   },
 
@@ -132,28 +134,80 @@ const ChartController = {
     });
   },
 
-  create: function(user, data, res) {
-    // TODO: should be adjusted without the promises, or maybe with promises if
-    // TODO: it works and makes sense
-    /*
-     * Creates a new Chart, and generates the resulting data by querying OIPA
-     */
-    data.author = user;
+  updateCreate: (req, res) => {
+    const {
+      authId,
+      chartId,
+      name,
+      description,
+      type,
+      indicatorItems,
+      selectedSources,
+      yearRange,
+      selectedYear,
+      selectedCountryVal,
+      selectedRegionVal
+    } = req.body;
 
-    let viz = new Chart(data);
+    User.findOne({ authId }, (error, author) => {
+      if (error) general.handleError(res, error);
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else {
+        Chart.findOne({ _id: chartId }, (chartError, chart) => {
+          if (!chart) {
+            const chartz = new Chart({
+              name,
+              author,
 
-    Chart.countForUser(user)
-      .then(count => {
-        if (count > config.MAX_CHARTS) {
-          throw new Error(`Maximum number of Charts reached`);
-        }
-      })
-      // .then(() => viz.saveAndPopulate())
-      // .then(viz => viz.refresh()) // TODO: integrity flag before refresh - 2016-02-12
-      .then(viz => viz.saveAndPopulate())
-      // response
-      .then(viz => res(null, viz)) // TODO: wrap socket.io to promises server-side - 2016-02-11
-      .catch(general.handleError.bind(null, res));
+              description,
+
+              // so the type of chart
+              type,
+
+              /* indicators/ sub-indicators of chart */
+              indicatorItems,
+
+              selectedSources,
+              yearRange,
+
+              selectedYear,
+              selectedCountryVal,
+              selectedRegionVal
+            });
+
+            chartz.save(err => {
+              if (err) general.handleError(res, err);
+
+              res.json({ message: 'chart created', id: chartz._id });
+            });
+          } else {
+            chart.name = name;
+            chart.author = author;
+
+            chart.description = description;
+
+            // so the type of chart
+            chart.type = type;
+
+            /* indicators/ sub-indicators of chart */
+            chart.indicatorItems = indicatorItems;
+
+            chart.selectedSources = selectedSources;
+            chart.yearRange = yearRange;
+
+            chart.selectedYear = selectedYear;
+            chart.selectedCountryVal = selectedCountryVal;
+            chart.selectedRegionVal = selectedRegionVal;
+
+            chart.save(err => {
+              if (err) general.handleError(res, err);
+
+              res.json({ message: 'chart updated', id: chart._id });
+            });
+          }
+        });
+      }
+    });
   },
 
   update: function(user, vizId, viz, res) {

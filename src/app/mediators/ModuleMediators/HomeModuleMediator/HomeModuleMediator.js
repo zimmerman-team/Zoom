@@ -419,6 +419,26 @@ class HomeModuleMediator extends Component {
     this.setState({ selectedRegionVal }, this.refetch);
   }
 
+  //Gets all countries that are in a region
+  getCountriesByRegion(selectedRegionsVal, allCountriesISO2) {
+    let selectedCountryVal = [];
+
+    if (selectedRegionsVal && allCountriesISO2) {
+      selectedRegionsVal.forEach(region =>
+        region.forEach(country =>
+          allCountriesISO2.forEach(iso2 => {
+            if (country.iso2 === iso2) {
+              console.log(country.iso2, iso2);
+              selectedCountryVal.push(country.iso2);
+            }
+          })
+        )
+      );
+    }
+
+    return selectedCountryVal;
+  }
+
   resetAll() {
     this.setState(
       {

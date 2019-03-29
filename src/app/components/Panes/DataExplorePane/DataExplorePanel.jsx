@@ -227,7 +227,6 @@ class DataExplorePane extends React.Component {
                   valueSelected={this.props.selectedCountryLabel}
                   selectVal={this.props.selectCountry}
                 />
-                {console.log(this.props.selectedCountryVal)}
               </DropDownCont>
             </FilterContainer>
           </AccordionSection>

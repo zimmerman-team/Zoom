@@ -96,6 +96,7 @@ const DashboardModule = ({
   tabs,
   sort,
   users,
+  charts,
   teams,
   activeTab,
   greetingName,
@@ -117,6 +118,7 @@ const DashboardModule = ({
     {/*todo: sorting logic must be refactored/fixed*/}
     <DashboardContent
       users={users}
+      charts={charts}
       teams={teams}
       isSortByOpen={isSortByOpen}
       changeSortBy={changeSortBy}

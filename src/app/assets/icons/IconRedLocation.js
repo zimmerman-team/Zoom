@@ -3,7 +3,7 @@ import React from 'react';
 const SvgIconRedLocation = props => (
   <svg
     style={{
-      margin: 'auto',
+      margin: 'auto'
     }}
     width={16}
     height={22}

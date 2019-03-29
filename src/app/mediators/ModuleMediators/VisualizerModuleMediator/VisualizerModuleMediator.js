@@ -192,6 +192,7 @@ class VisualizerModuleMediator extends Component {
         type,
         selectedSources,
         author,
+        dataSources,
         created,
         yearRange
       } = this.props.chartResults;
@@ -210,6 +211,8 @@ class VisualizerModuleMediator extends Component {
           desc: description,
           selectedSubInd1: indicatorItems[0].subIndicators,
           selectedSubInd2: indicatorItems[1].subIndicators,
+          dataSource1: dataSources[0],
+          dataSource2: dataSources[1],
           authorName: author.username,
           createdDate: formatDate(created),
           selectedRegionVal: removeIds(selectedRegionVal)
@@ -414,9 +417,9 @@ class VisualizerModuleMediator extends Component {
   }
 
   render() {
-    console.log('this.props.chartResults', this.props.chartResults);
     return (
       <VisualizerModule
+        outerHistory={this.props.history}
         chartType={this.props.paneData.chartType}
         code={this.props.match.params.code}
         loading={this.state.loading}

@@ -263,7 +263,7 @@ class VizPaneMediator extends React.Component {
       actions.storeChartDataRequest({
         selectedInd2: val.value,
         dataSource2: val.dataSource,
-        subIndicators2: []
+        selectedSubInd2: []
       })
     );
 
@@ -272,7 +272,7 @@ class VizPaneMediator extends React.Component {
     // whenever an indicator is changed
     this.props.dispatch(
       actions.storePaneDataRequest({
-        selectedSubInd2: []
+        subIndicators2: []
       })
     );
   }

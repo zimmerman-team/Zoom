@@ -36,7 +36,7 @@ const ChartSchema = new Schema(
     hiddenFromFeed: { type: Boolean, default: false },
 
     // with what team is this chart associated
-    team: String,
+    team: { type: String, default: '' },
 
     /* chart options */
     // axis: { type: String },

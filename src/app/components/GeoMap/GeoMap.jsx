@@ -178,6 +178,7 @@ export class GeoMap extends Component {
   _showLayerInfo() {
     const { hoverLayerInfo, hoverMarkerInfo } = this.state;
     if (!hoverMarkerInfo) return layerInfo(hoverLayerInfo);
+
     return null;
   }
 
@@ -196,7 +197,8 @@ export class GeoMap extends Component {
     const { features } = event;
 
     const feature = features && features.find(f => f.layer.id === 'layer');
-    if (feature) this.props.history.push(`country/${feature.properties.iso2}`);
+    if (feature)
+      this.props.outerHistory.push(`/country/${feature.properties.iso2}`);
   };
 
   _handleMapLoaded = event => {

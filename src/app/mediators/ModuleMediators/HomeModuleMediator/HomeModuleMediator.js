@@ -379,7 +379,7 @@ class HomeModuleMediator extends Component {
     }
 
     this.setState({ selectedCountryVal }, this.refetch);
-    this.setState({ selectedCountryLabel }, this.refetch);
+    this.setState({ selectedCountryLabel });
   }
 
   selectRegion(item, array = false) {
@@ -419,7 +419,7 @@ class HomeModuleMediator extends Component {
     this.setState({ selectedRegionVal }, this.refetch);
   }
 
-  //Gets all countries that are in a region
+  //Compares the selectedRegions with all the countries, to output only countries that are in that region.
   getCountriesByRegion(selectedRegionsVal, allCountriesISO2) {
     let selectedCountryVal = [];
 
@@ -428,14 +428,12 @@ class HomeModuleMediator extends Component {
         region.forEach(country =>
           allCountriesISO2.forEach(iso2 => {
             if (country.iso2 === iso2) {
-              console.log(country.iso2, iso2);
               selectedCountryVal.push(country.iso2);
             }
           })
         )
       );
     }
-
     return selectedCountryVal;
   }
 
@@ -465,12 +463,12 @@ class HomeModuleMediator extends Component {
         selectedSubInd2={this.state.selectedSubInd2}
         subIndicators1={this.state.subIndicators1}
         subIndicators2={this.state.subIndicators2}
+        selectRegion={this.selectRegion}
+        selectedRegionVal={this.state.selectedRegionVal}
+        selectedRegionLabels={this.state.selectedRegionLabels}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.state.selectedCountryVal}
         selectedCountryLabel={this.state.selectedCountryLabel}
-        selectedRegionVal={this.state.selectedRegionVal}
-        selectedRegionLabels={this.state.selectedRegionLabels}
-        selectRegion={this.selectRegion}
         resetAll={this.resetAll}
         selectedYear={this.state.selectedYear}
       />

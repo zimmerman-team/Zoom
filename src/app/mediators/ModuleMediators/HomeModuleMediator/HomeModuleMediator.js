@@ -136,6 +136,7 @@ class HomeModuleMediator extends Component {
     this.props.dispatch(
       actions.storePaneDataRequest({
         allCountries: [],
+        allRegions: [],
         selectedSources: [],
         yearRange: '2003,2016',
         subIndicators1: [],

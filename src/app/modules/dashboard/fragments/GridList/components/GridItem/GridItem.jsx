@@ -59,7 +59,14 @@ const GridItem = props => {
           ))}
         </GridItemInfoContainer>
       </Box>
-      {props.withoptions && isHovered ? <GridItemToolbar /> : null}
+      {props.withoptions && isHovered ? (
+        <GridItemToolbar
+          onEdit={props.onEdit}
+          onView={props.onView}
+          onDuplicate={props.onDuplicate}
+          onDelete={props.onDelete}
+        />
+      ) : null}
     </ComponentBase>
   );
 };

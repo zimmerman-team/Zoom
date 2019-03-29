@@ -80,6 +80,7 @@ class BuilderModule extends Component {
             display={this.props.dataPaneOpen === paneTypes.visualizer}
           />
           <VizContainer
+            outerHistory={this.props.outerHistory}
             indicators={this.props.indicators}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}

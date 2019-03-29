@@ -55,6 +55,7 @@ const ChartController = {
     res.json(chart);
   },
 
+  // gets one user chart
   get: (req, res) => {
     const { chartId, authId } = req.query;
 
@@ -101,18 +102,25 @@ const ChartController = {
     });
   },
 
-  getAll: function(req, res) {
-    const { authId } = req.query;
+  // gets all user charts
+  getAll: (req, res) => {
+    const { authId, sortBy } = req.query;
     User.findOne({ authId }).exec((userError, author) => {
-      if (userError) {
-        general.handleError(res, userError);
-      } else if (!author) {
-        general.handleError(res, 'User not found', 404);
-      } else {
-        Chart.find({ author }, 'name', (chartError, chart) => {
-          if (chartError) general.handleError(res, chartError);
-          res.json(chart);
-        });
+      if (userError) general.handleError(res, userError);
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else {
+        const sort = sortBy || { name: 1 };
+
+        Chart.find(
+          { author, archived: false },
+          'created last_updated team _public type dataSources _id name archived'
+        )
+          .sort({ name: 1 })
+          .populate('author', 'username')
+          .exec((chartError, chart) => {
+            if (chartError) general.handleError(res, chartError);
+            res.json(chart);
+          });
       }
     });
   },
@@ -145,6 +153,7 @@ const ChartController = {
       selectedSources,
       yearRange,
       selectedYear,
+      dataSources,
       selectedCountryVal,
       selectedRegionVal
     } = req.body;
@@ -158,7 +167,7 @@ const ChartController = {
             const chartz = new Chart({
               name,
               author,
-
+              dataSources,
               description,
 
               // so the type of chart
@@ -185,6 +194,7 @@ const ChartController = {
             chart.author = author;
 
             chart.description = description;
+            chart.dataSources = dataSources;
 
             // so the type of chart
             chart.type = type;
@@ -226,18 +236,29 @@ const ChartController = {
       });
   },
 
-  delete: function(user, vizId, res) {
-    // TODO: should be adjusted without the promises, or maybe with promises if
-    // TODO: it works and makes sense
-    /*
-     * Permanently delete a Chart
-     */
+  // archives the chart
+  delete: (req, res) => {
+    const { authId, chartId } = req.body;
 
-    return Chart.deleteByUser(vizId, user)
-      .then(viz => res(null, viz))
-      .catch(error => {
-        general.handleError(res, error);
-      });
+    User.findOne({ authId }).exec((userError, author) => {
+      if (userError) general.handleError(res, userError);
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else {
+        Chart.findOne({ author, archived: false, _id: chartId }).exec(
+          (chartError, chart) => {
+            if (chartError) general.handleError(res, chartError);
+
+            chart.archived = true;
+
+            chart.save(err => {
+              if (err) general.handleError(res, err);
+
+              res.json({ message: 'chart archived', id: chart._id });
+            });
+          }
+        );
+      }
+    });
   },
 
   emptyTrash: function(user, res) {

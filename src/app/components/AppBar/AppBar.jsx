@@ -76,10 +76,11 @@ export class AppBar extends React.Component {
     if (this.props.chartData.dataSource1)
       dataSources.push(this.props.chartData.dataSource1);
 
-    if (this.props.chartData.dataSource2)
+    if (
+      this.props.chartData.dataSource2 &&
+      dataSources.indexOf(this.props.chartData.dataSource2) === -1
+    )
       dataSources.push(this.props.chartData.dataSource2);
-
-    console.log('dataSources', dataSources);
 
     const chartData = {
       authId: profile.sub,
@@ -205,9 +206,6 @@ export class AppBar extends React.Component {
   }
 
   render() {
-    if (this.props.chartCreated.data) {
-      console.log('created chart id', this.props.chartCreated.data.id);
-    }
     return (
       <ComponentBase
         elevation="small"

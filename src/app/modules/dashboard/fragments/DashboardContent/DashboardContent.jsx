@@ -40,6 +40,7 @@ const DashboardContent = props => {
       <DashboardTabNavigator navItems={props.navItems} />
       {/** tab content */}
       <DashboardTabContent
+        charts={props.charts}
         users={props.users}
         teams={props.teams}
         isSortByOpen={props.isSortByOpen}

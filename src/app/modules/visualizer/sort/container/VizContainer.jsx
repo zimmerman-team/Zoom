@@ -48,6 +48,10 @@ class VizContainer extends React.Component {
   };
 
   componentDidMount() {
+    // need an initial set here, because those default props, don't actually set
+    // the state correctly
+    this.setState({ preview: location.pathname.includes('preview') });
+
     this.props.history.listen((location, action) => {
       const mode = location.pathname.includes('preview');
       this.setState({ preview: mode });
@@ -68,6 +72,7 @@ class VizContainer extends React.Component {
 
         <React.Fragment>
           <PropsRoute
+            outerHistory={this.props.outerHistory}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
             indicatorData={this.props.indicators}

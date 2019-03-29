@@ -278,7 +278,13 @@ class ZoomSelect extends React.Component {
         <SelectHeader
           headerStyle={this.props.headerStyle}
           arrowMargins={this.props.arrowMargins}
-          placeHolderNumber={this.props.placeHolderNumber}
+          placeHolderNumber={
+            this.props.valueSelected === undefined ||
+            this.props.valueSelected.length === 0 ||
+            typeof this.props.valueSelected === 'string'
+              ? this.props.placeHolderNumber
+              : this.props.valueSelected.length
+          }
           label={
             this.props.valueSelected === undefined ||
             this.props.valueSelected.length === 0

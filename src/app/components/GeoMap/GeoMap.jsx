@@ -35,6 +35,11 @@ const propTypes = {
   latitude: PropTypes.number,
   longitude: PropTypes.number,
   zoom: PropTypes.number,
+  focus: PropTypes.shape({
+    latitude: PropTypes.number,
+    longitude: PropTypes.number,
+    zoom: PropTypes.number
+  }),
   indicatorData: PropTypes.array,
   selectedYear: PropTypes.string,
   disableYear: PropTypes.bool,
@@ -96,6 +101,16 @@ export class GeoMap extends Component {
     if (!isEqual(this.props.indicatorData, prevProps.indicatorData)) {
       this.updateMap(this.props.indicatorData);
     }
+
+    if (!isEqual(this.props.focus, prevProps.focus))
+      this.setState({
+        viewport: {
+          latitude: this.props.focus.latitude,
+          longitude: this.props.focus.longitude,
+
+          zoom: this.props.focus.zoom
+        }
+      });
   }
 
   componentWillUnmount() {

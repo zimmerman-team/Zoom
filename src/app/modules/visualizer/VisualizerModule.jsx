@@ -33,6 +33,7 @@ const propTypes = {
   dropDownData: PropTypes.shape({}),
   indicators: PropTypes.arrayOf(PropTypes.shape({})),
   dataPaneOpen: PropTypes.string,
+  chartType: PropTypes.string,
   moduleMode: PropTypes.string
 };
 
@@ -40,6 +41,7 @@ const defaultProps = {
   indicators: [],
   dataPaneOpen: 'visualizer',
   dropDownData: {},
+  chartType: PropTypes.string,
   loggedIn: true
 };
 
@@ -80,6 +82,7 @@ class BuilderModule extends Component {
             display={this.props.dataPaneOpen === paneTypes.visualizer}
           />
           <VizContainer
+            chartType={this.props.chartType}
             outerHistory={this.props.outerHistory}
             indicators={this.props.indicators}
             selectYear={this.props.selectYear}

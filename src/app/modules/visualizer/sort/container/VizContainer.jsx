@@ -34,11 +34,11 @@ const PropsRoute = ({ component, ...rest }) => {
 };
 
 const propTypes = {
-  type: PropTypes.string,
+  chartType: PropTypes.string,
   mode: PropTypes.bool
 };
 const defaultProps = {
-  type: 'geomap',
+  chartType: 'geomap',
   mode: location.pathname.includes('preview')
 };
 
@@ -72,11 +72,12 @@ class VizContainer extends React.Component {
 
         <React.Fragment>
           <PropsRoute
+            chartType={this.props.chartType}
             outerHistory={this.props.outerHistory}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
             indicatorData={this.props.indicators}
-            path="/visualizer/geomap/:code/:tab"
+            path="/visualizer/(geomap|focusKE|focusNL)/:code/:tab"
             component={GeomapFragment}
             mode={this.state.preview}
           />

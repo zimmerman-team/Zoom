@@ -208,7 +208,6 @@ class ZoomSelect extends React.Component {
   // europe, regional -> europe
   trimSelectedValues(selectedValues) {
     const newSelectedValues = selectedValues;
-
     if (selectedValues.length > 1)
       selectedValues.forEach((val, index) => {
         if (val.includes(',')) {

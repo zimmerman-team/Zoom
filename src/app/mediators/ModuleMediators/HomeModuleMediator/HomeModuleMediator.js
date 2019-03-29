@@ -366,7 +366,7 @@ class HomeModuleMediator extends Component {
   selectCountry(item, array = false) {
     let selectedCountryVal = [];
     let selectedCountryLabel = [];
-
+    console.log(item);
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
     if (item !== 'reset') {
@@ -432,9 +432,7 @@ class HomeModuleMediator extends Component {
       }
     }
 
-    const hello = this.getCountriesByRegion(selectedRegionVal);
-    console.log('hello', hello);
-
+    this.selectCountry(this.getCountriesByRegion(selectedRegionVal), true);
     this.setState({ selectedRegionLabels, selectedRegionVal }, this.refetch);
   }
 

@@ -14,6 +14,8 @@ const initialState = {
   chartId: 'vizID',
   name: 'Chart',
   selectedYear: '2003',
+  _public: false,
+  team: false,
   indicators: [],
   dataSource1: undefined,
   dataSource2: undefined,

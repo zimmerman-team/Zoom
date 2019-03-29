@@ -16,6 +16,8 @@ import PropTypes from 'prop-types';
 /* consts */
 import { initialState } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.consts';
 import generalInitial from '__consts__/InitialChartDataConst';
+import { connect } from 'react-redux';
+import * as actions from 'services/actions/general';
 
 const propTypes = {
   indicatorAggregations: PropTypes.shape({
@@ -108,6 +110,7 @@ class HomeModuleMediator extends Component {
     this.selectCountry = this.selectCountry.bind(this);
     this.selectRegion = this.selectRegion.bind(this);
     this.resetAll = this.resetAll.bind(this);
+    this.getCountriesByRegion = this.getCountriesByRegion.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -127,6 +130,18 @@ class HomeModuleMediator extends Component {
     ) {
       this.refetch();
     }
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch(
+      actions.storePaneDataRequest({
+        allCountries: [],
+        selectedSources: [],
+        yearRange: '2003,2016',
+        subIndicators1: [],
+        subIndicators2: []
+      })
+    );
   }
 
   updateIndicators() {
@@ -415,19 +430,25 @@ class HomeModuleMediator extends Component {
         }
       }
     }
-    this.setState({ selectedRegionLabels });
-    this.setState({ selectedRegionVal }, this.refetch);
+
+    const hello = this.getCountriesByRegion(selectedRegionVal);
+    console.log('hello', hello);
+
+    this.setState({ selectedRegionLabels, selectedRegionVal }, this.refetch);
   }
 
   //Compares the selectedRegions with all the countries, to output only countries that are in that region.
-  getCountriesByRegion(selectedRegionsVal, allCountriesISO2) {
+  getCountriesByRegion(
+    selectedRegionsVal,
+    allCountriesISO2 = this.props.paneData.allCountries
+  ) {
     let selectedCountryVal = [];
 
     if (selectedRegionsVal && allCountriesISO2) {
       selectedRegionsVal.forEach(region =>
         region.forEach(country =>
-          allCountriesISO2.forEach(iso2 => {
-            if (country.iso2 === iso2) {
+          allCountriesISO2.forEach(allCountry => {
+            if (country.iso2 === allCountry.value) {
               selectedCountryVal.push(country.iso2);
             }
           })
@@ -479,8 +500,14 @@ class HomeModuleMediator extends Component {
 HomeModuleMediator.propTypes = propTypes;
 HomeModuleMediator.defaultProps = defaultProps;
 
+const mapStateToProps = state => {
+  return {
+    paneData: state.paneData.paneData
+  };
+};
+
 export default createRefetchContainer(
-  HomeModuleMediator,
+  connect(mapStateToProps)(HomeModuleMediator),
   graphql`
     fragment HomeModuleMediator_indicatorAggregations on Query
       @argumentDefinitions(

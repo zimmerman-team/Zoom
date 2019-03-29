@@ -4,6 +4,10 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { fetchQuery } from 'relay-runtime';
 import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePanel';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+/* acitons */
+import * as actions from 'services/actions/general';
 
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
@@ -11,6 +15,7 @@ import initialState from '__consts__/InitialChartDataConst';
 /* helpers */
 import sortBy from 'lodash/sortBy';
 import isEqual from 'lodash/isEqual';
+
 // import findIndex from 'lodash/findIndex';
 
 const propTypes = {
@@ -111,6 +116,12 @@ class ExplorePanelMediator extends React.Component {
       );
 
       allFileSources = sortBy(allFileSources, ['label']);
+
+      this.props.dispatch(
+        actions.storePaneDataRequest({
+          allCountries
+        })
+      );
 
       this.setState({
         allFileSources,
@@ -223,7 +234,7 @@ ExplorePanelMediator.propTypes = propTypes;
 ExplorePanelMediator.defaultProps = defaultProps;
 
 export default createFragmentContainer(
-  ExplorePanelMediator,
+  connect(null)(ExplorePanelMediator),
   graphql`
     fragment ExplorePanelMediator_dropDownData on Query {
       allCountries {

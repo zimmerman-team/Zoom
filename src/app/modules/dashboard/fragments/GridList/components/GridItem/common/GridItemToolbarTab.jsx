@@ -24,17 +24,9 @@ const propTypes = {
 const defaultProps = {};
 
 const GridItemToolbarTab = props => {
-  function handleClick(indexTab) {
-    console.log('Clicked: ' + indexTab);
-  }
-
   return (
     // todo: Evaluate element, React.Fragment only takes key/children attribute.
-    <TabIconButton
-      onClick={() => {
-        handleClick(props.indexTab);
-      }}
-    >
+    <TabIconButton onClick={() => props.handleClick()}>
       {props.icon}
     </TabIconButton>
   );

@@ -3,7 +3,7 @@ import React from 'react';
 const SvgIconRedPeriod = props => (
   <svg
     style={{
-      margin: 'auto',
+      margin: 'auto'
     }}
     width={16}
     height={15}

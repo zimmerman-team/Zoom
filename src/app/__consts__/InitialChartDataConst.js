@@ -15,6 +15,8 @@ const initialState = {
   name: 'Chart',
   selectedYear: '2003',
   indicators: [],
+  dataSource1: undefined,
+  dataSource2: undefined,
   selectedInd1: undefined,
   selectedInd2: undefined,
   selectedCountryVal: [],

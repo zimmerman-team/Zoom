@@ -71,9 +71,20 @@ export class AppBar extends React.Component {
     this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
 
     const profile = this.props.auth0Client.getProfile();
+    const dataSources = [];
+
+    if (this.props.chartData.dataSource1)
+      dataSources.push(this.props.chartData.dataSource1);
+
+    if (
+      this.props.chartData.dataSource2 &&
+      dataSources.indexOf(this.props.chartData.dataSource2) === -1
+    )
+      dataSources.push(this.props.chartData.dataSource2);
 
     const chartData = {
       authId: profile.sub,
+      dataSources,
       chartId: this.props.chartData.chartId,
       name: this.props.chartData.name,
       description: this.props.chartData.desc,
@@ -195,10 +206,6 @@ export class AppBar extends React.Component {
   }
 
   render() {
-    if (this.props.chartCreated.data) {
-      console.log('created chart id', this.props.chartCreated.data.id);
-    }
-    // console.log('this.props.chartCreated', this.props.chartCreated);
     return (
       <ComponentBase
         elevation="small"

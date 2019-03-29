@@ -349,6 +349,7 @@ class HomeModuleMediator extends Component {
 
   selectCountry(item, array = false) {
     let selectedCountryVal = [];
+    let selectedCountryLabel = [];
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
@@ -356,19 +357,29 @@ class HomeModuleMediator extends Component {
       if (array) {
         item.forEach(it => {
           selectedCountryVal.push(it.value);
+          selectedCountryLabel.push(it.label);
         });
       } else {
         selectedCountryVal = [...this.state.selectedCountryVal];
+        selectedCountryLabel = [...this.state.selectedCountryLabel];
+
         const countryIndex = selectedCountryVal.indexOf(item.value);
-        if (countryIndex === -1)
+
+        if (countryIndex === -1) {
           // so if it doesn't exist we add it
           selectedCountryVal.push(item.value);
+          selectedCountryLabel.push(item.label);
+        }
         // if it does exist we remove it
-        else selectedCountryVal.splice(countryIndex, 1);
+        else {
+          selectedCountryVal.splice(countryIndex, 1);
+          selectedCountryLabel.splice(countryIndex, 1);
+        }
       }
     }
 
     this.setState({ selectedCountryVal }, this.refetch);
+    this.setState({ selectedCountryLabel }, this.refetch);
   }
 
   selectRegion(item, array = false) {
@@ -436,6 +447,7 @@ class HomeModuleMediator extends Component {
         subIndicators2={this.state.subIndicators2}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.state.selectedCountryVal}
+        selectedCountryLabel={this.state.selectedCountryLabel}
         selectedRegionVal={this.state.selectedRegionVal}
         selectedRegionLabels={this.state.selectedRegionLabels}
         selectRegion={this.selectRegion}

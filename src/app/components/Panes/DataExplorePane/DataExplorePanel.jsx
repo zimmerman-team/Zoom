@@ -67,6 +67,13 @@ const propTypes = {
     })
   ),
   selectedCountryVal: PropTypes.arrayOf(PropTypes.string),
+  selectedCountryLabels: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string
+      })
+    )
+  ),
   selectedRegionVal: PropTypes.arrayOf(
     PropTypes.arrayOf(
       PropTypes.shape({
@@ -108,6 +115,7 @@ const defaultProps = {
   subIndicators1: [],
   subIndicators2: [],
   selectedCountryVal: [],
+  selectedCountryLabels: [],
   selectedRegionVal: [],
   selectedRegionLabels: [],
   selectCountry: null,
@@ -216,8 +224,10 @@ class DataExplorePane extends React.Component {
                   placeHolderNumber={this.props.countries.length}
                   data={this.props.countries}
                   arraySelected={this.props.selectedCountryVal}
+                  valueSelected={this.props.selectedCountryLabel}
                   selectVal={this.props.selectCountry}
                 />
+                {console.log(this.props.selectedCountryVal)}
               </DropDownCont>
             </FilterContainer>
           </AccordionSection>

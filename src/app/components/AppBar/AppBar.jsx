@@ -65,6 +65,16 @@ export class AppBar extends React.Component {
     ) {
       this.loadPaneButton();
     }
+
+    // so we only want to load the user to the dashboard after their
+    // chart was saved
+    // so that the edited chart would appear with the new data in the dashboard
+    if (
+      !isEqual(this.props.chartCreated, prevProps.chartCreated) &&
+      this.props.chartCreated.data
+    ) {
+      this.props.history.push('/dashboard');
+    }
   }
 
   closeSave() {
@@ -85,6 +95,8 @@ export class AppBar extends React.Component {
     const chartData = {
       authId: profile.sub,
       dataSources,
+      _public: this.props.chartData._public,
+      team: this.props.chartData.team ? this.props.user.data.team : '',
       chartId: this.props.chartData.chartId,
       name: this.props.chartData.name,
       description: this.props.chartData.desc,
@@ -107,8 +119,6 @@ export class AppBar extends React.Component {
     };
 
     this.props.dispatch(nodeActions.createUpdateChartRequest(chartData));
-
-    this.props.history.push('/dashboard');
   }
 
   loadPaneButton() {
@@ -241,7 +251,7 @@ const mapStateToProps = state => {
   return {
     chartData: state.chartData.chartData,
     paneData: state.paneData.paneData,
-
+    user: state.user,
     chartCreated: state.chartCreated,
     dataPaneOpen: state.dataPaneOpen.open
   };

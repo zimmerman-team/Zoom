@@ -110,6 +110,9 @@ class VisualizerModuleMediator extends Component {
     // so yeah with this we update the top bar pane with correct data
     this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.visualizer));
 
+    // we also want to reset the previously created/updated chart
+    this.props.dispatch(nodeActions.createUpdateChartInitial());
+
     if (this.props.match.params.code !== 'vizID') {
       if (this.props.user)
         this.props.dispatch(
@@ -193,6 +196,8 @@ class VisualizerModuleMediator extends Component {
         selectedSources,
         author,
         dataSources,
+        _public,
+        team,
         created,
         yearRange
       } = this.props.chartResults;
@@ -202,6 +207,8 @@ class VisualizerModuleMediator extends Component {
         actions.storeChartDataRequest({
           chartMounted: true,
           name,
+          _public,
+          team: team.length > 0,
           chartId: _id,
           selectedYear,
           // TODO this will need to be redone after we implement the logic for infinite amounts of indicators
@@ -230,10 +237,12 @@ class VisualizerModuleMediator extends Component {
     }
 
     // TODO redo this check properly
-    const { name, desc, ...restChart } = this.props.chartData;
+    const { name, desc, _public, team, ...restChart } = this.props.chartData;
     const {
       name: prevName,
       desc: prevDesc,
+      _public: prevPublc,
+      team: prevTeam,
       ...prevRestChart
     } = prevProps.chartData;
     // so we refetch data when chartData changes

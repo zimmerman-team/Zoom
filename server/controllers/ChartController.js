@@ -154,6 +154,8 @@ const ChartController = {
       yearRange,
       selectedYear,
       dataSources,
+      _public,
+      team,
       selectedCountryVal,
       selectedRegionVal
     } = req.body;
@@ -169,6 +171,8 @@ const ChartController = {
               author,
               dataSources,
               description,
+              _public,
+              team,
 
               // so the type of chart
               type,
@@ -198,6 +202,8 @@ const ChartController = {
 
             // so the type of chart
             chart.type = type;
+            chart._public = _public;
+            chart.team = team;
 
             /* indicators/ sub-indicators of chart */
             chart.indicatorItems = indicatorItems;

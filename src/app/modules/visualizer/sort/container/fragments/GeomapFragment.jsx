@@ -6,6 +6,10 @@ import { matchPath } from 'react-router';
 
 import GeoMap from 'components/GeoMap/GeoMap';
 import theme from 'theme/Theme';
+import initialState from '__consts__/InitialChartDataConst';
+
+/* utils */
+import { getFocus } from 'modules/visualizer/VisualizerModule.utils';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -25,15 +29,33 @@ const ComponentBase = styled.div`
 const propTypes = {};
 const defaultProps = {};
 
-const GeomapFragment = props => {
-  const { mode, ...otherProps } = props;
+class GeomapFragment extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      zoom: 2,
+      longitude: 0,
+      latitude: 15
+    };
+  }
 
-  return (
-    <ComponentBase height={mode ? '400px' : '100%'}>
-      <GeoMap {...otherProps} />
-    </ComponentBase>
-  );
-};
+  componentDidUpdate(prevProps) {
+    if (this.props.chartType !== prevProps.chartType) {
+      this.setState({
+        focus: getFocus(this.props.chartType)
+      });
+    }
+  }
+
+  render() {
+    const { mode, ...otherProps } = this.props;
+    return (
+      <ComponentBase height={mode ? '400px' : '100%'}>
+        <GeoMap focus={this.state.focus} {...otherProps} />
+      </ComponentBase>
+    );
+  }
+}
 
 GeomapFragment.propTypes = propTypes;
 GeomapFragment.defaultProps = defaultProps;

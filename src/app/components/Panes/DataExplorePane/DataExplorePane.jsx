@@ -73,13 +73,10 @@ const propTypes = {
       })
     )
   ),
-  selectedRegionLabels: PropTypes.arrayOf(
-    PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string
-      })
-    )
-  ),
+  selectedRegionLabels: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array
+  ]),
   selectCountry: PropTypes.func,
   selectRegion: PropTypes.func,
   selectYearRange: PropTypes.func,

@@ -392,10 +392,12 @@ class HomeModuleMediator extends Component {
           selectedCountryLabel.splice(countryIndex, 1);
         }
       }
+    } else {
+      this.setState({ selectedRegionLabels: [] });
+      this.setState({ selectedRegionVal: [] });
     }
 
-    this.setState({ selectedCountryVal }, this.refetch);
-    this.setState({ selectedCountryLabel });
+    this.setState({ selectedCountryVal, selectedCountryLabel }, this.refetch);
   }
 
   selectRegion(item, array = false) {

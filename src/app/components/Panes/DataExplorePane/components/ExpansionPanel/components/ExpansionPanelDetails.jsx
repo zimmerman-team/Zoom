@@ -25,8 +25,8 @@ const ZoomSelect = styled(_ZoomSelect)`
 
 const propTypes = {
   isYearSelect: PropTypes.bool,
-  selectYearRange: PropTypes.array,
-  yearRange: PropTypes.func,
+  selectYearRange: PropTypes.func,
+  yearRange: PropTypes.array,
 
   isDropdownSelect: PropTypes.bool,
   panelDetails: PropTypes.arrayOf(
@@ -47,8 +47,8 @@ const propTypes = {
 
 const defaultProps = {
   isYearSelect: false,
-  selectYearRange: [],
-  yearRange: undefined,
+  selectYearRange: undefined,
+  yearRange: [],
 
   isDropdownSelect: false,
   panelDetails: [

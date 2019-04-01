@@ -57,6 +57,9 @@ const indicatorQuery = graphql`
       edges {
         node {
           name
+          fileSource {
+            name
+          }
         }
       }
     }
@@ -214,7 +217,11 @@ class VizPaneMediator extends React.Component {
     fetchQuery(this.props.relay.environment, indicatorQuery, refetchVars).then(
       data => {
         let allIndNames = data.allIndicators.edges.map(indicator => {
-          return { label: indicator.node.name, value: indicator.node.name };
+          return {
+            label: indicator.node.name,
+            value: indicator.node.name,
+            dataSource: indicator.node.fileSource.name
+          };
         });
 
         allIndNames = sortBy(allIndNames, ['label']);
@@ -235,6 +242,7 @@ class VizPaneMediator extends React.Component {
     this.props.dispatch(
       actions.storeChartDataRequest({
         selectedInd1: val.value,
+        dataSource1: val.dataSource,
         selectedSubInd1: []
       })
     );
@@ -254,7 +262,8 @@ class VizPaneMediator extends React.Component {
     this.props.dispatch(
       actions.storeChartDataRequest({
         selectedInd2: val.value,
-        subIndicators2: []
+        dataSource2: val.dataSource,
+        selectedSubInd2: []
       })
     );
 
@@ -263,7 +272,7 @@ class VizPaneMediator extends React.Component {
     // whenever an indicator is changed
     this.props.dispatch(
       actions.storePaneDataRequest({
-        selectedSubInd2: []
+        subIndicators2: []
       })
     );
   }

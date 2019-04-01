@@ -35,6 +35,11 @@ const propTypes = {
   latitude: PropTypes.number,
   longitude: PropTypes.number,
   zoom: PropTypes.number,
+  focus: PropTypes.shape({
+    latitude: PropTypes.number,
+    longitude: PropTypes.number,
+    zoom: PropTypes.number
+  }),
   indicatorData: PropTypes.array,
   selectedYear: PropTypes.string,
   disableYear: PropTypes.bool,
@@ -96,6 +101,16 @@ export class GeoMap extends Component {
     if (!isEqual(this.props.indicatorData, prevProps.indicatorData)) {
       this.updateMap(this.props.indicatorData);
     }
+
+    if (!isEqual(this.props.focus, prevProps.focus))
+      this.setState({
+        viewport: {
+          latitude: this.props.focus.latitude,
+          longitude: this.props.focus.longitude,
+
+          zoom: this.props.focus.zoom
+        }
+      });
   }
 
   componentWillUnmount() {
@@ -178,6 +193,7 @@ export class GeoMap extends Component {
   _showLayerInfo() {
     const { hoverLayerInfo, hoverMarkerInfo } = this.state;
     if (!hoverMarkerInfo) return layerInfo(hoverLayerInfo);
+
     return null;
   }
 
@@ -196,7 +212,8 @@ export class GeoMap extends Component {
     const { features } = event;
 
     const feature = features && features.find(f => f.layer.id === 'layer');
-    if (feature) this.props.history.push(`country/${feature.properties.iso2}`);
+    if (feature)
+      this.props.outerHistory.push(`/country/${feature.properties.iso2}`);
   };
 
   _handleMapLoaded = event => {

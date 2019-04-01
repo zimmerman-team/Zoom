@@ -10,6 +10,18 @@ import { GET_CHART_INITIAL } from 'services/actions/nodeBackend';
 import { GET_CHART_REQUEST } from 'services/actions/nodeBackend';
 import { GET_CHART_SUCCESS } from 'services/actions/nodeBackend';
 import { GET_CHART_FAILED } from 'services/actions/nodeBackend';
+import { GET_USER_CHARTS_INITIAL } from 'services/actions/nodeBackend';
+import { GET_USER_CHARTS_REQUEST } from 'services/actions/nodeBackend';
+import { GET_USER_CHARTS_SUCCESS } from 'services/actions/nodeBackend';
+import { GET_USER_CHARTS_FAILED } from 'services/actions/nodeBackend';
+import { DELETE_CHART_INITIAL } from 'services/actions/nodeBackend';
+import { DELETE_CHART_REQUEST } from 'services/actions/nodeBackend';
+import { DELETE_CHART_SUCCESS } from 'services/actions/nodeBackend';
+import { DELETE_CHART_FAILED } from 'services/actions/nodeBackend';
+import { GET_USER_DATASETS_INITIAL } from 'services/actions/nodeBackend';
+import { GET_USER_DATASETS_REQUEST } from 'services/actions/nodeBackend';
+import { GET_USER_DATASETS_SUCCESS } from 'services/actions/nodeBackend';
+import { GET_USER_DATASETS_FAILED } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -349,7 +361,55 @@ function chartResults(state = initial, action) {
   }
 }
 
+function userCharts(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_USER_CHARTS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_USER_CHARTS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_USER_CHARTS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_USER_CHARTS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function chartDeleted(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.DELETE_CHART_INITIAL:
+      return updateInitial(state);
+    case nodeActions.DELETE_CHART_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.DELETE_CHART_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.DELETE_CHART_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function userDatasets(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_USER_DATASETS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_USER_DATASETS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_USER_DATASETS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_USER_DATASETS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  userDatasets,
+  chartDeleted,
+  userCharts,
   chartResults,
   chartCreated,
   datasetAdded,

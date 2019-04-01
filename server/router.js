@@ -32,7 +32,7 @@ router.post('/updateCreateChart', ChartController.updateCreate);
 
 router.post('/updateChart', ChartController.update);
 
-router.delete('/delete', ChartController.delete);
+router.post('/deleteChart', ChartController.delete);
 /* -------------- CHART CONTROLLER END ------------------------ */
 
 /* -------------- USER CONTROLLER START ----------------------- */

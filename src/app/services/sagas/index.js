@@ -260,8 +260,62 @@ export function* getChartRequest(action) {
   }
 }
 
+export function* getUserChartsRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getAllCharts',
+      values: action.values
+    });
+    yield put(nodeActions.getUserChartsSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.getUserChartsFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* deleteChartRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'deleteChart',
+      values: action.values
+    });
+    yield put(nodeActions.deleteChartSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.deleteChartFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* getUserDatasetsRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getOwnerDatasets',
+      values: action.values
+    });
+    yield put(nodeActions.getUserDatasetsSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.getUserDatasetsFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('GET_USER_DATASETS_REQUEST', getUserDatasetsRequest),
+    takeLatest('DELETE_CHART_REQUEST', deleteChartRequest),
+    takeLatest('GET_USER_CHARTS_REQUEST', getUserChartsRequest),
     takeLatest('GET_CHART_REQUEST', getChartRequest),
     takeLatest('CREATE_UPDATE_CHART_REQUEST', createUpdateChartRequest),
     takeLatest('STORE_PANE_DATA_REQUEST', storePaneDataRequest),

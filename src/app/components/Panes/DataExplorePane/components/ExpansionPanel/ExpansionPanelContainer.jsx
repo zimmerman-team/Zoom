@@ -15,7 +15,7 @@ import ExpansionPanelDetails from './components/ExpansionPanelDetails';
 
 const propTypes = {
   isYearSelect: PropTypes.bool,
-  selectYearRange: PropTypes.func,
+  selectYearRange: PropTypes.array,
 
   isDropdownSelect: PropTypes.bool,
   panelDetails: PropTypes.arrayOf(
@@ -37,7 +37,7 @@ const propTypes = {
 
 const defaultProps = {
   isYearSelect: false,
-  selectYearRange: undefined,
+  selectYearRange: [],
 
   isDropdownSelect: false,
   panelDetails: [

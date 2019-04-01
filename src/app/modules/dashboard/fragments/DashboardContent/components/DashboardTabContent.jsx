@@ -31,10 +31,12 @@ const Box = styled.div``;
 const propTypes = {
   data: PropTypes.array,
   tabContentName: PropTypes.string,
+  charts: PropTypes.array,
   users: PropTypes.array,
   teams: PropTypes.array
 };
 const defaultProps = {
+  charts: [],
   data: [],
   users: [],
   teams: [],
@@ -73,7 +75,7 @@ const DashboardTabContent = props => {
     leftOptionLabel = 'map data set';
     tabContentName = 'Data sets';
   } else if (currentURL.includes('charts')) {
-    targetData = '';
+    targetData = props.charts;
     leftOptionLabel = 'add chart';
     tabContentName = 'Charts';
   } else if (currentURL.includes('trash')) {
@@ -82,7 +84,6 @@ const DashboardTabContent = props => {
     sortIsVisible = false;
     isRemoveOption = true;
   }
-
   return (
     <ComponentBase>
       {isRemoveOption && (
@@ -90,8 +91,6 @@ const DashboardTabContent = props => {
           leftOptionLabel={leftOptionLabel}
           sortIsVisible={sortIsVisible}
           isRemoveOption={isRemoveOption}
-          users={props.users}
-          teams={props.teams}
           isSortByOpen={props.isSortByOpen}
           changeSortBy={props.changeSortBy}
           setWrapperRef={props.setWrapperRef}
@@ -112,8 +111,6 @@ const DashboardTabContent = props => {
             leftOptionLabel={leftOptionLabel}
             sortIsVisible={sortIsVisible}
             isRemoveOption={isRemoveOption}
-            users={props.users}
-            teams={props.teams}
             isSortByOpen={props.isSortByOpen}
             changeSortBy={props.changeSortBy}
             setWrapperRef={props.setWrapperRef}

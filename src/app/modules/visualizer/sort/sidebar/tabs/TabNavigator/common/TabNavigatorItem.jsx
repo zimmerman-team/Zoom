@@ -38,7 +38,7 @@ const defaultProps = {};
 const TabNavigatorItem = props => {
   return (
     <ComponentBase
-      to={formPath(props.code, props.path)}
+      to={formPath(props.code, props.path, props.chart)}
       isActive={(match, location) => {
         const selectedTab = location.pathname.substr(
           location.pathname.lastIndexOf('/')

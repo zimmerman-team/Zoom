@@ -80,6 +80,7 @@ const Routes = props => {
               <VisualizerModuleMediator
                 indicatorAggregations={props}
                 dropDownData={props}
+                auth0Client={props.auth0Client}
               />
             )}
           />

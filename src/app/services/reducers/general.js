@@ -9,6 +9,7 @@ const initial = {
   open: paneTypes.none,
   chartData: { ...initialState },
   paneData: {
+    chartType: '',
     selectedSources: [],
     yearRange: '2003,2016',
     subIndicators1: [],

@@ -19,6 +19,22 @@ const propTypes = {};
 const defaultProps = {};
 
 class YearSelector extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      yearPeriod: props.yearRange
+    };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!isEqual(this.props.yearRange, prevProps.yearRange)) {
+      this.setState({
+        yearPeriod: this.props.yearRange
+      });
+    }
+  }
+
   lastTwoDigits(value) {
     const string = value.toString();
     const numbArray = string.split('');
@@ -42,18 +58,16 @@ class YearSelector extends React.Component {
         <RangeContainer
           min={1990}
           max={2019}
-          defaultValue={[
-            parseInt(initialState.yearPeriod[0], 10),
-            parseInt(
-              initialState.yearPeriod[initialState.yearPeriod.length - 1],
-              10
-            )
-          ]}
+          value={this.state.yearPeriod}
           handle={val => this.renderHandle(val)}
-          onAfterChange={years => {
-            console.log(years);
-            this.props.selectYearRange(years);
-          }}
+          // onAfterChange={years => {
+          //   console.log(years);
+          //   this.props.selectYearRange(years);
+          // }}
+          onAfterChange={() =>
+            this.props.selectYearRange(this.state.yearPeriod)
+          }
+          onChange={yearPeriod => this.setState({ yearPeriod })}
         />
         <YearLabel> 2019 </YearLabel>
       </ComponentBase>

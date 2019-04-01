@@ -8,11 +8,21 @@ import { formatYearParam } from 'utils/genericUtils';
 
 const initialState = {
   yearPeriod: formatYearParam([2003, 2016]),
+  chartMounted: false,
+  authorName: 'You',
+  createdDate: '',
+  chartId: 'vizID',
+  name: 'Chart',
   selectedYear: '2003',
+  _public: false,
+  team: false,
   indicators: [],
+  dataSource1: undefined,
+  dataSource2: undefined,
   selectedInd1: undefined,
   selectedInd2: undefined,
   selectedCountryVal: [],
+  desc: '',
   selectedSubInd1: [],
   selectedSubInd2: [],
   selectedRegionVal: []

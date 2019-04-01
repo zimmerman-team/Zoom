@@ -18,6 +18,7 @@ import { Tooltip } from 'react-tippy';
 import userManagementMockData from '__mocks__/userManagementMock';
 import { Box } from 'grommet';
 import theme from 'theme/Theme';
+import ZoomSelect from 'components/Select/ZoomSelect';
 
 const propTypes = {
   email: PropTypes.string,
@@ -119,22 +120,26 @@ const AddUserModule = props => {
           {/* user role dropdown */}
           <DropDownContainer>
             <DropDownLabel>User role</DropDownLabel>
-            <FormSelect
+            <ZoomSelect
               data={props.roleOptions}
-              placeHolder=""
+              placeHolder="Select user role"
+              placeHolderText="Select user role"
               selectVal={props.changeUserRole}
               valueSelected={props.roleSelected.label}
+              compContext="dashboard"
             />
           </DropDownContainer>
 
           {/* organisation dropdown */}
           <DropDownContainer>
             <DropDownLabel>Organisation</DropDownLabel>
-            <FormSelect
+            <ZoomSelect
               data={props.orgOptions}
-              placeHolder=""
+              placeHolder="Select organisation"
+              placeHolderText="Select organisation"
               selectVal={props.changeOrganisation}
               valueSelected={props.orgSelected.label}
+              compContext="dashboard"
             />
           </DropDownContainer>
         </Box>

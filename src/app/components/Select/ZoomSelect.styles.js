@@ -28,6 +28,7 @@ export const ComponentBase = styled.div`
   & button {
     border-style: none !important;
   }
+  border: 1px solid #d1d1d1;
 `;
 
 export const ResetContainer = styled.div`

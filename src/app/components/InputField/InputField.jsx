@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import theme from 'theme/Theme';
 
 /* components */
 import { FormField, TextInput } from 'grommet';
@@ -10,6 +11,15 @@ const Label = styled.span`
   margin-left: -12px;
 `;
 
+const ZoomFormField = styled(FormField)`
+  && {
+    span {
+      font-size: 14px;
+      font-weight: 500;
+      font-family: ${theme.font.zoomFontFamOne};
+    }
+  }
+`;
 const propTypes = {
   label: PropTypes.string,
   id: PropTypes.string,
@@ -17,10 +27,10 @@ const propTypes = {
   required: PropTypes.bool,
   type: PropTypes.string,
   validate: PropTypes.shape({
-    regexp: PropTypes.instanceOf(RegExp),
+    regexp: PropTypes.instanceOf(RegExp)
   }),
   value: PropTypes.string,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func
 };
 
 const defaultProps = {
@@ -30,15 +40,15 @@ const defaultProps = {
   required: false,
   type: 'text',
   validate: {
-    regexp: /^[a-z]/i,
+    regexp: /^[a-z]/i
   },
   value: '',
-  onChange: null,
+  onChange: null
 };
 
 const InputField = props => {
   return (
-    <FormField
+    <ZoomFormField
       label={<Label>{props.label}</Label>}
       htmlFor={props.id}
       name={props.name}
@@ -51,7 +61,7 @@ const InputField = props => {
         onChange={props.onChange}
         type={props.type}
       />
-    </FormField>
+    </ZoomFormField>
   );
 };
 

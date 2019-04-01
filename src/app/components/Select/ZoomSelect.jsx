@@ -45,7 +45,8 @@ const propTypes = {
   selectAll: PropTypes.bool,
   defaultAll: PropTypes.bool,
   disabledValues: PropTypes.arrayOf(PropTypes.string),
-  dropDownWidth: PropTypes.number
+  dropDownWidth: PropTypes.number,
+  compContext: PropTypes.string
 };
 
 const defaultProps = {
@@ -58,7 +59,8 @@ const defaultProps = {
   search: true,
   selectAll: false,
   disabledValues: [],
-  dropDownWidth: undefined
+  dropDownWidth: undefined,
+  compContext: 'general'
 };
 
 class ZoomSelect extends React.Component {
@@ -273,17 +275,18 @@ class ZoomSelect extends React.Component {
                     </InfoLabel>
                   </ItemContainer>
                 )}
-                {this.props.search && (
-                  <ItemContainer>
-                    <SearchField
-                      data-cy="geo-map-search"
-                      value={this.state.searchWord}
-                      onChange={e =>
-                        this.setState({ searchWord: e.target.value })
-                      }
-                    />
-                  </ItemContainer>
-                )}
+                {this.props.search &&
+                  (this.props.compContext != 'dashboard' && (
+                    <ItemContainer>
+                      <SearchField
+                        data-cy="geo-map-search"
+                        value={this.state.searchWord}
+                        onChange={e =>
+                          this.setState({ searchWord: e.target.value })
+                        }
+                      />
+                    </ItemContainer>
+                  ))}
                 {this.props.selectAll && this.props.multiple && (
                   <SelectAll onClick={() => this.selectAllClick()}>
                     <DropDownCheckbox checked={this.state.allSelected} />

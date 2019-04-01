@@ -11,6 +11,7 @@ export const AddUserForm = styled.form`
 
 export const DropDownContainer = styled(Box)`
   margin-right: 40px;
+  width: 280px;
 `;
 
 export const DropDownLabel = styled.span`

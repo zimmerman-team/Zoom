@@ -275,18 +275,17 @@ class ZoomSelect extends React.Component {
                     </InfoLabel>
                   </ItemContainer>
                 )}
-                {this.props.search &&
-                  (this.props.compContext != 'dashboard' && (
-                    <ItemContainer>
-                      <SearchField
-                        data-cy="geo-map-search"
-                        value={this.state.searchWord}
-                        onChange={e =>
-                          this.setState({ searchWord: e.target.value })
-                        }
-                      />
-                    </ItemContainer>
-                  ))}
+                {this.props.search && (
+                  <ItemContainer>
+                    <SearchField
+                      data-cy="geo-map-search"
+                      value={this.state.searchWord}
+                      onChange={e =>
+                        this.setState({ searchWord: e.target.value })
+                      }
+                    />
+                  </ItemContainer>
+                )}
                 {this.props.selectAll && this.props.multiple && (
                   <SelectAll onClick={() => this.selectAllClick()}>
                     <DropDownCheckbox checked={this.state.allSelected} />

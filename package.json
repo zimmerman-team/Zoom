@@ -26,7 +26,7 @@
     "express": "^4.16.4",
     "getenv": "^0.7.0",
     "graphql": "^14.1.1",
-    "grommet": "2.5.5",
+    "grommet": "2.6.5",
     "grommet-icons": "4.2.0",
     "immutability-helper": "3.0.0",
     "immutable": "^4.0.0-rc.12",

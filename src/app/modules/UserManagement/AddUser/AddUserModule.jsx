@@ -10,15 +10,19 @@ import {
   SubmitButton
 } from 'modules/UserManagement/AddUser/AddUserModule.styles';
 
+import ZoomButton from 'components/ZoomButton/ZoomButton';
+
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';
-import FormSelect from 'components/FormSelect/FormSelect';
+// import FormSelect from 'components/FormSelect/FormSelect';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
 import userManagementMockData from '__mocks__/userManagementMock';
 import { Box } from 'grommet';
 import theme from 'theme/Theme';
 import ZoomSelect from 'components/Select/ZoomSelect';
+
+import ErrorBoundary from 'components/ErrorBoundry/ErrorBoundry';
 
 const propTypes = {
   email: PropTypes.string,
@@ -121,12 +125,13 @@ const AddUserModule = props => {
           <DropDownContainer>
             <DropDownLabel>User role</DropDownLabel>
             <ZoomSelect
-              data={props.roleOptions}
+              search={false}
+              dropDownWidth={280}
               placeHolder="Select user role"
               placeHolderText="Select user role"
-              selectVal={props.changeUserRole}
+              data={props.roleOptions}
+              selectVal={value => props.changeUserRole}
               valueSelected={props.roleSelected.label}
-              compContext="dashboard"
             />
           </DropDownContainer>
 
@@ -137,9 +142,9 @@ const AddUserModule = props => {
               data={props.orgOptions}
               placeHolder="Select organisation"
               placeHolderText="Select organisation"
-              selectVal={props.changeOrganisation}
+              selectVal={value => props.changeOrganisation}
               valueSelected={props.orgSelected.label}
-              compContext="dashboard"
+              search={false}
             />
           </DropDownContainer>
         </Box>
@@ -150,9 +155,11 @@ const AddUserModule = props => {
           disabled={!disableSubmit}
           html={<SimpleToolTip title="All the fields are required" />}
         >
-          <SubmitButton type="submit" disabled={disableSubmit}>
-            send invitation
-          </SubmitButton>
+          <ErrorBoundary>
+            <SubmitButton type="submit" disabled={disableSubmit}>
+              send invitation
+            </SubmitButton>
+          </ErrorBoundary>
         </Tooltip>
 
         {props.success && (

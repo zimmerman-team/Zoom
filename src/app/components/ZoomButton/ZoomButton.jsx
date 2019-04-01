@@ -40,6 +40,7 @@ const defaultProps = {
 const ZoomButton = props => {
   return (
     <ComponentBase
+      opacity={1}
       width={props.width}
       fontSize={props.fontSize}
       onClick={props.onClick}

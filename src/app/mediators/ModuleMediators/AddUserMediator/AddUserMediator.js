@@ -54,8 +54,10 @@ class AddUserMediator extends React.Component {
 
   changeUserRole(e) {
     this.setState({
-      userRole: e.option
+      userRole: e.name
     });
+
+    console.log('user role changed to ', e.name);
   }
 
   changeOrganisation(e) {

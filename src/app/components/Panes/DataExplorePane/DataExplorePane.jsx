@@ -59,10 +59,24 @@ const propTypes = {
     })
   ),
   selectedCountryVal: PropTypes.arrayOf(PropTypes.string),
+  selectedCountryLabels: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string
+      })
+    )
+  ),
   selectedRegionVal: PropTypes.arrayOf(
     PropTypes.arrayOf(
       PropTypes.shape({
         iso2: PropTypes.string
+      })
+    )
+  ),
+  selectedRegionLabels: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string
       })
     )
   ),
@@ -96,7 +110,9 @@ const defaultProps = {
   subIndicators1: [],
   subIndicators2: [],
   selectedCountryVal: [],
+  selectedCountryLabels: [],
   selectedRegionVal: [],
+  selectedRegionLabels: [],
   selectCountry: null,
   selectRegion: null,
   selectInd1: null,
@@ -139,6 +155,7 @@ class DataExplorePane extends React.Component {
                 allFileSources: this.props.allFileSources,
                 locationSelected: this.props.locationSelected,
                 selectedSources: this.props.selectedSources,
+                valueSelected: this.props.selectedSources,
                 reset: () => this.props.selectDataSource('reset')
               }
             ]}
@@ -161,6 +178,7 @@ class DataExplorePane extends React.Component {
                 allFileSources: this.props.regions,
                 locationSelected: this.props.locationSelected,
                 selectedSources: this.props.selectedRegionVal,
+                valueSelected: this.props.selectedRegionLabels,
                 reset: () => this.props.selectRegion('reset')
               },
               {
@@ -172,6 +190,7 @@ class DataExplorePane extends React.Component {
                 allFileSources: this.props.countries,
                 locationSelected: this.props.locationSelected,
                 selectedSources: this.props.selectedCountryVal,
+                valueSelected: this.props.selectedCountryLabel,
                 reset: () => this.props.selectCountry('reset')
               }
             ]}

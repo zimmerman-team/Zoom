@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 /* components */
 import {
   AddUserForm,
-  DropDown,
+  DropDownContainer,
   DropDownLabel,
   Message,
   SubmitButton
@@ -82,6 +82,7 @@ const AddUserModule = props => {
   return (
     <ModuleFragment title="Add user">
       <AddUserForm onSubmit={props.submitForm}>
+        {/* first name field */}
         <InputField
           label="First name"
           id="firstName-input"
@@ -92,6 +93,7 @@ const AddUserModule = props => {
           onChange={props.changeFirstName}
         />
 
+        {/* last name field */}
         <InputField
           label="Last name"
           id="lastName-input"
@@ -102,6 +104,7 @@ const AddUserModule = props => {
           onChange={props.changeLastName}
         />
 
+        {/* email field*/}
         <InputField
           label="Email"
           id="email-input"
@@ -113,7 +116,8 @@ const AddUserModule = props => {
         />
 
         <Box direction="row-responsive">
-          <DropDown>
+          {/* user role dropdown */}
+          <DropDownContainer>
             <DropDownLabel>User role</DropDownLabel>
             <FormSelect
               data={props.roleOptions}
@@ -121,8 +125,10 @@ const AddUserModule = props => {
               selectVal={props.changeUserRole}
               valueSelected={props.roleSelected.label}
             />
-          </DropDown>
-          <DropDown>
+          </DropDownContainer>
+
+          {/* organisation dropdown */}
+          <DropDownContainer>
             <DropDownLabel>Organisation</DropDownLabel>
             <FormSelect
               data={props.orgOptions}
@@ -130,7 +136,7 @@ const AddUserModule = props => {
               selectVal={props.changeOrganisation}
               valueSelected={props.orgSelected.label}
             />
-          </DropDown>
+          </DropDownContainer>
         </Box>
 
         <Tooltip

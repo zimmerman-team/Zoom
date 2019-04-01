@@ -90,7 +90,7 @@ const propTypes = {
   resetAll: PropTypes.func
 };
 const defaultProps = {
-  yearRange: '0,0',
+  yearRange: '2003,2016',
   selectedInd2: undefined,
   selectedInd1: undefined,
   locationSelected: true,

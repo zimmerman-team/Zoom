@@ -69,6 +69,12 @@ export const data = [
     env: 'development'
   },
   {
+    label: 'Dashboard',
+    path: `${pathPrefix}dashboard`,
+    icon: <IconCharts />,
+    env: 'production'
+  },
+  {
     label: 'Dashboard users ',
     path: `${pathPrefix}dashboard/users`,
     icon: <IconCharts />,

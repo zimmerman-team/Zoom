@@ -2,7 +2,7 @@
 import React from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { fetchQuery } from 'relay-runtime';
-import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePanel';
+import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePane';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 

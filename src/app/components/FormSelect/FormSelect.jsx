@@ -26,19 +26,19 @@ const propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
-      value: PropTypes.string,
-    }),
+      value: PropTypes.string
+    })
   ),
   placeHolder: PropTypes.string,
   selectVal: PropTypes.func,
-  valueSelected: PropTypes.string,
+  valueSelected: PropTypes.string
 };
 
 const defaultProps = {
   data: [{ label: '', value: '' }],
   placeHolder: '',
   selectVal: null,
-  valueSelected: '',
+  valueSelected: ''
 };
 
 const FormSelect = props => {

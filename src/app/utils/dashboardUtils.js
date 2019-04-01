@@ -46,30 +46,6 @@ export function formatTeamsTabData(data, sort, search) {
   });
 }
 
-// basically takes in the currently used sort
-// in the dashboard like 'name:1'
-// and turns it into an acceptable sort
-// for the nodeBackend which would become {name: 1}
-export function formatSort(sortz) {
-  let sort = {};
-
-  if (sortz && sortz.length > 0) {
-    const key = sortz.substring(0, sortz.indexOf(':')).trim();
-    sort[key] = parseInt(sortz.substring(sortz.indexOf(':') + 1).trim(), 10);
-  } else {
-    sort = { name: 1 };
-  }
-
-  return sort;
-}
-
-// Author: Jane Doe
-// Publication date: 01-01-2019
-// Updated: n/a
-// Shared: Team Jane Doe, Public
-// Type of chart: Line chart
-// Data sources: UN AIDS
-
 // formats chart data for the dashboard
 export function formatChartData(charts, history, remove) {
   return charts.map(chart => {
@@ -109,6 +85,38 @@ export function formatChartData(charts, history, remove) {
         history.push(`/visualizer/${chart.type}/${chart._id}/preview`),
       onDuplicate: () => console.log('duplicate'),
       onDelete: () => remove(chart._id)
+    };
+  });
+}
+
+// formats chart data for the dashboard
+export function formatDatasets(datasets) {
+  return datasets.map(dataset => {
+    let shared = '';
+    if (dataset.team.length > 0) shared = shared.concat(dataset.team);
+    if (dataset._public)
+      shared =
+        shared.length > 0
+          ? shared.concat(', ').concat('Public')
+          : shared.concat('Public');
+
+    return {
+      id: dataset.datasetId,
+      title: dataset.name,
+      info: {
+        'Publication date': dataset.created
+          ? dataset.created.substring(0, dataset.created.indexOf('T'))
+          : '',
+        Updated: dataset.last_updated
+          ? dataset.last_updated.substring(0, dataset.last_updated.indexOf('T'))
+          : '',
+        Shared: shared,
+        'Data sources': dataset.dataSource
+      },
+      onEdit: () => console.log('edit'),
+      onView: () => console.log('preview'),
+      onDuplicate: () => console.log('duplicate'),
+      onDelete: () => console.log('delete')
     };
   });
 }

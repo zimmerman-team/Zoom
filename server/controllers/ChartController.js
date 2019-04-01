@@ -105,7 +105,7 @@ const ChartController = {
     });
   },
 
-  // gets all user charts
+  // gets all user charts and team charts
   getAll: (req, res) => {
     const { authId, sortBy } = req.query;
     User.findOne({ authId }).exec((userError, author) => {
@@ -115,7 +115,12 @@ const ChartController = {
         const sort = utils.getDashboardSortBy(sortBy);
 
         Chart.find(
-          { author, archived: false },
+          {
+            $or: [
+              { author, archived: false },
+              { team: author.team, archived: false }
+            ]
+          },
           'created last_updated team _public type dataSources _id name archived'
         )
           .collation({ locale: 'en' })

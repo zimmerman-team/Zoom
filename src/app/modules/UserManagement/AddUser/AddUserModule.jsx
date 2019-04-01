@@ -17,12 +17,14 @@ import InputField from 'components/InputField/InputField';
 // import FormSelect from 'components/FormSelect/FormSelect';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
+
 import userManagementMockData from '__mocks__/userManagementMock';
 import { Box } from 'grommet';
 import theme from 'theme/Theme';
 import ZoomSelect from 'components/Select/ZoomSelect';
 
 import ErrorBoundary from 'components/ErrorBoundry/ErrorBoundry';
+import ZimmermanButton from 'components/ZimmermanButton/ZimmermanButton';
 
 const propTypes = {
   email: PropTypes.string,
@@ -161,6 +163,15 @@ const AddUserModule = props => {
             </SubmitButton>
           </ErrorBoundary>
         </Tooltip>
+
+        {/* todo: replace grommet based button with material ui based button */}
+        {/*<React.Fragment>
+          <ErrorBoundary>
+            <Tooltip>
+              <ZimmermanButton width={180}>send invitation</ZimmermanButton>
+            </Tooltip>
+          </ErrorBoundary>
+        </React.Fragment>*/}
 
         {props.success && (
           <Message theme={{ color: 'green' }}>

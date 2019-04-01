@@ -6,7 +6,7 @@ import { Select, Box, RangeInput, Tabs, Tab, Text } from 'grommet';
 
 // import RichtTabTitle from './comps/RichtTabTitle';
 import { CircleInformation } from 'grommet-icons';
-import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePanel';
+import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePane';
 
 const ComponentBase = styled.div`
   outline: 1px solid darkseagreen;

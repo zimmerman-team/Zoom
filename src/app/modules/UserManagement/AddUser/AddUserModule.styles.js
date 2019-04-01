@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Box, Text, Form } from 'grommet';
+import theme from 'theme/Theme';
 
 import ZoomButton from 'components/ZoomButton/ZoomButton';
 
@@ -8,15 +9,17 @@ export const AddUserForm = styled.form`
   width: 100%;
 `;
 
-export const DropDown = styled(Box)`
+export const DropDownContainer = styled(Box)`
   margin-right: 40px;
 `;
 
-export const DropDownLabel = styled(Text)`
+export const DropDownLabel = styled.span`
   color: #9b9b9b;
-  font-size: 15px;
   margin-bottom: 5px;
   margin-top: 10px;
+  font-family: ${theme.font.zoomFontFamOne};
+  font-weight: 500;
+  font-size: 14px;
 `;
 
 export const SubmitButton = styled(ZoomButton)`

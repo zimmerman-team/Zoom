@@ -26,11 +26,11 @@ const AccordionSelection = props => {
       >
         {props.label}
       </FilterLabel>
-      <PointerContainer
+      {/*<PointerContainer
         style={{ transform: props.active ? 'rotate(180deg)' : 'rotate(0deg)' }}
       >
         <IconPointer />
-      </PointerContainer>
+      </PointerContainer>*/}
     </ComponentBase>
   );
 };

@@ -14,7 +14,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 // import Menu from '@material-ui/core/Menu';
 import { Menu } from 'grommet-icons';
-import TempDrawer from 'components/TempDrawer/TempDrawer';
+import MainMenuDrawer from 'components/MainMenuDrawer/MainMenuDrawer';
 import { Box, Button, Image } from 'grommet';
 import theme from 'theme/Theme';
 

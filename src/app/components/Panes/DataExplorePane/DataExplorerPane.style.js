@@ -20,7 +20,8 @@ export const ExplorerHeader = styled.div`
 
 export const FilterContainer = styled(Box)`
   background-color: ${theme.color.zoomGreyZero};
-  padding: 12px 0;
+  padding-bottom: 6px;
+  padding-top: 6px;
 `;
 
 export const PanelAccordion = styled(Accordion)`
@@ -41,4 +42,8 @@ export const ResetContainer = styled.div`
 export const DropDownCont = styled.div`
   background-color: ${theme.color.aidsFondsWhite};
   margin: 6px 20px 6px 18px;
+
+  &&:nth-child(3) {
+    margin-top: 30px;
+  }
 `;

@@ -21,10 +21,15 @@ const GridList = ({ items, withoptions }) => (
   <Container cellHeight={153} cols={3}>
     {items.map(item => (
       <GridItem
+        id={item.id}
         withoptions={withoptions}
         key={shortid.generate()}
         title={item.title}
         values={item.info}
+        onEdit={item.onEdit}
+        onView={item.onView}
+        onDuplicate={item.onDuplicate}
+        onDelete={item.onDelete}
       />
     ))}
   </Container>

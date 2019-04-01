@@ -32,6 +32,7 @@ const propTypes = {
   selectedInd2: PropTypes.string,
   selectedInd1: PropTypes.string,
   regionAmount: PropTypes.number,
+  yearRange: PropTypes.arrayOf(PropTypes.number),
   indNames: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
@@ -76,7 +77,7 @@ const propTypes = {
   ),
   selectCountry: PropTypes.func,
   selectRegion: PropTypes.func,
-  selectYear: PropTypes.func,
+  selectYearRange: PropTypes.func,
   selectInd1: PropTypes.func,
   selectInd2: PropTypes.func,
   selectedSubInd1: PropTypes.arrayOf(PropTypes.string),
@@ -89,12 +90,13 @@ const propTypes = {
   resetAll: PropTypes.func
 };
 const defaultProps = {
+  yearRange: '2003,2016',
   selectedInd2: undefined,
   selectedInd1: undefined,
   locationSelected: true,
   subInd1AllSelected: true,
   subInd2AllSelected: true,
-  selectYear: undefined,
+  selectYearRange: undefined,
   indNames: [],
   countries: [],
   regions: [],
@@ -158,7 +160,7 @@ class DataExplorePane extends React.Component {
   render() {
     // console.log('this.props.indNames', this.props.indNames);
     return (
-      <ComponentBase>
+      <ComponentBase style={{ display: this.props.display }}>
         <PanelAccordion
           animate
           multiple
@@ -215,8 +217,8 @@ class DataExplorePane extends React.Component {
           <AccordionSection header={this.renderHeader('Time period')}>
             <FilterContainer>
               <YearSelector
-                selectYear={this.props.selectYear}
-                selectedYears={this.props.yearPeriod}
+                selectYearRange={this.props.selectYearRange}
+                yearRange={this.props.yearRange}
               />
             </FilterContainer>
           </AccordionSection>

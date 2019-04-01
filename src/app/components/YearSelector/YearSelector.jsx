@@ -3,6 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 
+/* consts */
+import initialState from '__consts__/InitialChartDataConst';
+
 /* styles */
 import {
   YearLabel,
@@ -20,23 +23,14 @@ class YearSelector extends React.Component {
     super(props);
 
     this.state = {
-      yearPeriod: [
-        parseInt(props.selectedYears[0], 10),
-        parseInt(props.selectedYears[this.props.selectedYears.length - 1], 10)
-      ]
+      yearPeriod: props.yearRange
     };
   }
 
   componentDidUpdate(prevProps) {
-    if (!isEqual(this.props.selectedYears, prevProps.selectedYears)) {
+    if (!isEqual(this.props.yearRange, prevProps.yearRange)) {
       this.setState({
-        yearPeriod: [
-          parseInt(this.props.selectedYears[0], 10),
-          parseInt(
-            this.props.selectedYears[this.props.selectedYears.length - 1],
-            10
-          )
-        ]
+        yearPeriod: this.props.yearRange
       });
     }
   }
@@ -66,7 +60,9 @@ class YearSelector extends React.Component {
           max={2019}
           value={this.state.yearPeriod}
           handle={val => this.renderHandle(val)}
-          onAfterChange={() => this.props.selectYear(this.state.yearPeriod)}
+          onAfterChange={() =>
+            this.props.selectYearRange(this.state.yearPeriod)
+          }
           onChange={yearPeriod => this.setState({ yearPeriod })}
         />
         <YearLabel> 2019 </YearLabel>

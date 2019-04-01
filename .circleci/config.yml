@@ -31,6 +31,8 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/zoom-v2-ui
+      - run: sudo apt-get install python-dev
+      - run: ./scripts/install-watchman.sh
       - run: yarn relay
       - run:
           name: Set REACT_APP_PROJECT_URL env var
@@ -60,6 +62,19 @@ jobs:
             else
               echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_DEV"' >> $BASH_ENV
               echo 'export REACT_APP_BACKEND_HOST="$DUCT_DEV"' >> $BASH_ENV
+            fi
+            source $BASH_ENV
+      - run:
+          name: Set REACT_APP_EXPRESS_BACKEND_BASE_URL env var
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
+            elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
+            elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
+              echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
+            else
+              echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
             fi
             source $BASH_ENV
       - run: yarn build

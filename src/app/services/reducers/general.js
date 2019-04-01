@@ -9,6 +9,9 @@ const initial = {
   open: paneTypes.none,
   chartData: { ...initialState },
   paneData: {
+    chartType: '',
+    selectedSources: [],
+    yearRange: '2003,2016',
     subIndicators1: [],
     subIndicators2: []
   },
@@ -55,9 +58,11 @@ function chartData(state = initial, action) {
 function paneData(state = initial, action) {
   switch (action.type) {
     case actions.STORE_PANE_DATA_REQUEST:
-      return update(state, { paneData: { $set: {} } });
+      return update(state, { paneData: { $set: { ...state.paneData } } });
     case actions.STORE_PANE_DATA_DONE:
-      return update(state, { paneData: { $set: action.data } });
+      return update(state, {
+        paneData: { $set: { ...state.paneData, ...action.data } }
+      });
     default:
       return state;
   }

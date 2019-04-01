@@ -10,6 +10,7 @@ export default styled(({ ...props }) => (
   </NoSsr>
 ))`
   && {
+    z-index: 1;
     position: fixed;
     top: 40%;
     left: 46%;

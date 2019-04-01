@@ -243,7 +243,6 @@ class ZoomSelect extends React.Component {
       if (categorise && valueSelected) return undefined;
       return placeHolderNumber;
     }
-
     return valueSelected.length;
   }
 

@@ -31,7 +31,7 @@ const propTypes = {
       defaultAll: PropTypes.array,
       placeHolderNumber: PropTypes.number,
       reset: PropTypes.func,
-      valueSelected: PropTypes.string
+      valueSelected: PropTypes.array
     })
   )
 };
@@ -54,7 +54,7 @@ const defaultProps = {
       defaultAll: [],
       placeHolderNumber: undefined,
       reset: undefined,
-      valueSelected: ''
+      valueSelected: []
     }
   ]
 };

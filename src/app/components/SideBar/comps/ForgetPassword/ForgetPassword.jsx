@@ -11,16 +11,16 @@ import * as syncActions from 'services/actions/sync';
 import {
   ForgotPassLink,
   TextField,
-  FormButton,
+  FormButton
 } from '../LoginForm/LoginForm.styles';
 
 const propTypes = {
   view: PropTypes.oneOf(['login', 'forget_password']),
-  changeView: PropTypes.func,
+  changeView: PropTypes.func
 };
 const defaultProps = {
   view: 'login',
-  changeView: null,
+  changeView: null
 };
 
 const validateEmail = mail => {
@@ -36,13 +36,13 @@ export class ForgetPassword extends React.Component {
 
     this.state = {
       email: '',
-      isEmailValid: false,
+      isEmailValid: false
     };
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onEmailChange = this.onEmailChange.bind(this);
     this.setForgotPasswordStatusMessage = this.setForgotPasswordStatusMessage.bind(
-      this,
+      this
     );
   }
 
@@ -50,7 +50,7 @@ export class ForgetPassword extends React.Component {
     if (
       !isEqual(
         this.props.forgotPasswordEmailSent,
-        prevProps.forgotPasswordEmailSent,
+        prevProps.forgotPasswordEmailSent
       )
     ) {
       this.setState({ email: '', isEmailValid: false });
@@ -61,14 +61,14 @@ export class ForgetPassword extends React.Component {
   onEmailChange(e) {
     this.setState({
       email: e.target.value,
-      isEmailValid: validateEmail(e.target.value),
+      isEmailValid: validateEmail(e.target.value)
     });
   }
 
   onSubmit() {
     this.props.auth0Client.forgetPassword(
       this.state.email,
-      this.setForgotPasswordStatusMessage,
+      this.setForgotPasswordStatusMessage
     );
   }
 
@@ -76,8 +76,8 @@ export class ForgetPassword extends React.Component {
     this.props.dispatch(
       syncActions.setForgotPasswordEmailSent({
         value,
-        email: this.state.email,
-      }),
+        email: this.state.email
+      })
     );
   }
 
@@ -112,7 +112,7 @@ export class ForgetPassword extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    forgotPasswordEmailSent: state.forgotPasswordEmailSent.data,
+    forgotPasswordEmailSent: state.forgotPasswordEmailSent.data
   };
 };
 

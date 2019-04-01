@@ -4,7 +4,7 @@ import AddUserModule from 'modules/UserManagement/AddUser/AddUserModule';
 // Components
 import {
   AddUserForm,
-  DropDown,
+  DropDownContainer,
   DropDownLabel,
   SubmitButton
 } from 'modules/UserManagement/AddUser/AddUserModule.styles';
@@ -29,7 +29,7 @@ describe('<AddUserModule />', () => {
     expect(wrapper.find(Box)).toHaveLength(1);
   });
   it('renders two <DropDown/> components', () => {
-    expect(wrapper.find(DropDown)).toHaveLength(2);
+    expect(wrapper.find(DropDownContainer)).toHaveLength(2);
   });
   it('renders two <DropDownLabel/> components', () => {
     expect(wrapper.find(DropDownLabel)).toHaveLength(2);

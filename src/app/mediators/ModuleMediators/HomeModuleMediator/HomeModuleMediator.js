@@ -366,7 +366,6 @@ class HomeModuleMediator extends Component {
   selectCountry(item, array = false) {
     let selectedCountryVal = [];
     let selectedCountryLabel = [];
-    console.log(item);
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
     if (item !== 'reset') {
@@ -431,7 +430,7 @@ class HomeModuleMediator extends Component {
         }
       }
     }
-
+    // console.log(this.getCountriesByRegion(selectedRegionVal), true);
     this.selectCountry(this.getCountriesByRegion(selectedRegionVal), true);
     this.setState({ selectedRegionLabels, selectedRegionVal }, this.refetch);
   }
@@ -439,14 +438,16 @@ class HomeModuleMediator extends Component {
   //Compares the selectedRegions with all the countries, to output only countries that are in that region.
   getCountriesByRegion(
     selectedRegionsVal,
-    allCountriesISO2 = this.props.paneData.allCountries
+    allCountries = this.props.paneData.allCountries
   ) {
+    console.log(allCountries);
+    console.log(selectedRegionsVal);
     let selectedCountryVal = [];
 
-    if (selectedRegionsVal && allCountriesISO2) {
+    if (selectedRegionsVal && allCountries) {
       selectedRegionsVal.forEach(region =>
         region.forEach(country =>
-          allCountriesISO2.forEach(allCountry => {
+          allCountries.forEach(allCountry => {
             if (country.iso2 === allCountry.value) {
               selectedCountryVal.push(country.iso2);
             }
@@ -454,6 +455,7 @@ class HomeModuleMediator extends Component {
         )
       );
     }
+    console.log(selectedCountryVal);
     return selectedCountryVal;
   }
 

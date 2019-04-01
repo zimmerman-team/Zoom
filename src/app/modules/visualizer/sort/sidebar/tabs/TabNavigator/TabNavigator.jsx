@@ -28,6 +28,7 @@ const TabNavigator = props => {
     <ComponentBase>
       {props.navItems.map(item => (
         <TabNavigatorItem
+          chart={props.chart}
           key={item.path}
           code={props.code}
           path={item.path}

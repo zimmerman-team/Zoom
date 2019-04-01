@@ -223,7 +223,6 @@ class ZoomSelect extends React.Component {
   // ["europe, regional", "africa, regional", "far east asia, regional " ] -> europe, africa...
   createLabel(selectedValues) {
     const trimmedValues = this.trimSelectedValues(selectedValues);
-
     if (trimmedValues.length === 1) {
       return trimmedValues[0];
     }

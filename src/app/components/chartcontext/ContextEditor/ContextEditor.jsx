@@ -48,7 +48,11 @@ class ContextEditor extends React.Component {
   render() {
     return (
       <ComponentBase>
-        <ContextHeader />
+        <ContextHeader
+          createdDate={this.props.chartData.createdDate}
+          authorName={this.props.chartData.authorName}
+          title={this.props.chartData.name}
+        />
         <ContextBody>
           <TextEditor
             saveDesc={desc =>

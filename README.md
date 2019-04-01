@@ -1,5 +1,4 @@
-
-[![CircleCI](https://circleci.com/gh/zimmerman-zimmerman/zoom-v2-ui/tree/develop.svg?style=svg)](https://circleci.com/gh/zimmerman-zimmerman/zoom-v2-ui/tree/develop)
+[![CircleCI](https://circleci.com/gh/zimmerman-zimmerman/zoom-v2-ui.svg?style=svg&circle-token=41f4daf9d89b5f25efa5f455b6db87611527af85)](https://circleci.com/gh/zimmerman-zimmerman/zoom-v2-ui)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/732613b2d3df4672bd570f14247234fe)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zimmerman-zimmerman/zoom-v2-ui&amp;utm_campaign=Badge_Grade)
 
 # ZOOM V2 UI

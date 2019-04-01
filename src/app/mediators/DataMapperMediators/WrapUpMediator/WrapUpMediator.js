@@ -116,6 +116,7 @@ class WrapUpMediator extends React.Component {
     this.state = {
       loading: true,
       mappingErrors: [],
+      sourceName: undefined,
       sourceId: undefined,
       surveyId: ''
     };
@@ -154,7 +155,10 @@ class WrapUpMediator extends React.Component {
   handleSourceCompleted(response) {
     if (response) {
       this.setState(
-        { sourceId: response.fileSource.entryId },
+        {
+          sourceId: response.fileSource.entryId,
+          sourceName: response.fileSource.name
+        },
         this.addMetaData
       );
     }
@@ -364,6 +368,8 @@ class WrapUpMediator extends React.Component {
           authId: profile.sub,
           datasetId: this.props.fileId,
           name: this.props.metaData.title,
+          dataSource:
+            this.state.sourceName || this.props.metaData.dataSource.label,
           team: 'none',
           public: this.props.metaData.shared === 'Yes'
         })
@@ -404,7 +410,6 @@ class WrapUpMediator extends React.Component {
   }
 
   render() {
-    console.log('datasetAdded', this.props.datasetAdded);
     return (
       <WrapUpStep
         loading={this.state.loading}

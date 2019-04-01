@@ -10,7 +10,7 @@ export function data(users, teams, charts, dataSets, focusPages) {
     {
       label: 'Data sets',
       path: Path + 'data-sets',
-      count: 0
+      count: dataSets.length
     },
     {
       label: 'Focus pages',

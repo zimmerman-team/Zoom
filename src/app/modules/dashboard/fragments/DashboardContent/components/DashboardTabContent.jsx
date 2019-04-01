@@ -71,7 +71,8 @@ const DashboardTabContent = props => {
     leftOptionLabel = 'add focus page';
     tabContentName = 'Focus page';
   } else if (currentURL.includes('data-sets')) {
-    targetData = '';
+    targetData = props.datasets;
+    targetUrl = '/mapper';
     leftOptionLabel = 'map data set';
     tabContentName = 'Data sets';
   } else if (currentURL.includes('charts')) {

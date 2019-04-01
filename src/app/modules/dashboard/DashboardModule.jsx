@@ -96,6 +96,7 @@ const DashboardModule = ({
   tabs,
   sort,
   users,
+  datasets,
   charts,
   teams,
   activeTab,
@@ -119,6 +120,7 @@ const DashboardModule = ({
     <DashboardContent
       users={users}
       charts={charts}
+      datasets={datasets}
       teams={teams}
       isSortByOpen={isSortByOpen}
       changeSortBy={changeSortBy}

@@ -4,6 +4,9 @@ const config = require('../config/config');
 /* general */
 const general = require('./generalResponse');
 
+/* utils */
+const utils = require('../utils/general');
+
 const Chart = require('../models/Chart');
 const User = require('../models/User');
 
@@ -109,13 +112,14 @@ const ChartController = {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
       else {
-        const sort = sortBy || { name: 1 };
+        const sort = utils.getDashboardSortBy(sortBy);
 
         Chart.find(
           { author, archived: false },
           'created last_updated team _public type dataSources _id name archived'
         )
-          .sort({ name: 1 })
+          .collation({ locale: 'en' })
+          .sort(sort)
           .populate('author', 'username')
           .exec((chartError, chart) => {
             if (chartError) general.handleError(res, chartError);

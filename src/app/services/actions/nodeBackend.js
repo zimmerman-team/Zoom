@@ -318,3 +318,35 @@ export function deleteChartFailed(error) {
     error
   };
 }
+
+export const GET_USER_DATASETS_INITIAL = 'GET_USER_DATASETS_INITIAL';
+export const GET_USER_DATASETS_REQUEST = 'GET_USER_DATASETS_REQUEST';
+export const GET_USER_DATASETS_SUCCESS = 'GET_USER_DATASETS_SUCCESS';
+export const GET_USER_DATASETS_FAILED = 'GET_USER_DATASETS_FAILED';
+
+export function getUserDatasetsInitial() {
+  return {
+    type: GET_USER_DATASETS_INITIAL
+  };
+}
+
+export function getUserDatasetsRequest(values) {
+  return {
+    type: GET_USER_DATASETS_REQUEST,
+    values
+  };
+}
+
+export function getUserDatasetsSuccess(data) {
+  return {
+    type: GET_USER_DATASETS_SUCCESS,
+    data
+  };
+}
+
+export function getUserDatasetsFailed(error) {
+  return {
+    type: GET_USER_DATASETS_FAILED,
+    error
+  };
+}

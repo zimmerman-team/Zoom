@@ -9,12 +9,9 @@ import { Route, BrowserRouter as Router } from 'react-router-dom';
 import paneTypes from '__consts__/PaneTypesConst';
 
 /* components */
-import GeoMap from 'components/GeoMap/GeoMap';
-import { ControlPanelContainer } from 'modules/visualizer/VisualizerModule.style';
-// import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
+
 import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';
 import VizContainer from 'modules/visualizer/sort/container/VizContainer';
-import VisualizerModule from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
 // import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';

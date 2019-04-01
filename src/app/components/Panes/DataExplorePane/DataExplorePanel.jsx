@@ -32,6 +32,7 @@ const propTypes = {
   selectedInd2: PropTypes.string,
   selectedInd1: PropTypes.string,
   regionAmount: PropTypes.number,
+  yearRange: PropTypes.arrayOf(PropTypes.number),
   indNames: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
@@ -103,6 +104,7 @@ const propTypes = {
   resetAll: PropTypes.func
 };
 const defaultProps = {
+  yearRange: '0,0',
   selectedInd2: undefined,
   selectedInd1: undefined,
   locationSelected: true,
@@ -232,7 +234,10 @@ class DataExplorePane extends React.Component {
           </AccordionSection>
           <AccordionSection header={this.renderHeader('Time period')}>
             <FilterContainer>
-              <YearSelector selectYearRange={this.props.selectYearRange} />
+              <YearSelector
+                selectYearRange={this.props.selectYearRange}
+                yearRange={this.props.yearRange}
+              />
             </FilterContainer>
           </AccordionSection>
           <AccordionSection header={this.renderHeader('Indicators')}>

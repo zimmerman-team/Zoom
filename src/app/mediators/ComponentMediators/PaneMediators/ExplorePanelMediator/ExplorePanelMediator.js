@@ -16,6 +16,7 @@ import initialState from '__consts__/InitialChartDataConst';
 import sortBy from 'lodash/sortBy';
 import isEqual from 'lodash/isEqual';
 
+import { yearStrToArray } from 'utils/genericUtils';
 // import findIndex from 'lodash/findIndex';
 
 const propTypes = {
@@ -223,7 +224,7 @@ class ExplorePanelMediator extends React.Component {
         selectDataSource={this.selectDataSource}
         selectedSources={this.state.selectedSources}
         selectYearRange={this.selectYearRange}
-        yearRange={this.state.yearRange}
+        yearRange={yearStrToArray(this.state.yearRange)}
         {...otherProps}
       />
     );

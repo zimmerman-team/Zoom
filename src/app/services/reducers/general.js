@@ -11,6 +11,7 @@ const initial = {
   paneData: {
     allCountries: [],
     allRegions: [],
+    chartType: '',
     selectedSources: [],
     yearRange: '2003,2016',
     subIndicators1: [],

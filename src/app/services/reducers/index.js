@@ -2,26 +2,6 @@ import update from 'immutability-helper';
 import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
 import * as nodeActions from 'services/actions/nodeBackend';
-import { CREATE_UPDATE_CHART_INITIAL } from 'services/actions/nodeBackend';
-import { CREATE_UPDATE_CHART_REQUEST } from 'services/actions/nodeBackend';
-import { CREATE_UPDATE_CHART_SUCCESS } from 'services/actions/nodeBackend';
-import { CREATE_UPDATE_CHART_FAILED } from 'services/actions/nodeBackend';
-import { GET_CHART_INITIAL } from 'services/actions/nodeBackend';
-import { GET_CHART_REQUEST } from 'services/actions/nodeBackend';
-import { GET_CHART_SUCCESS } from 'services/actions/nodeBackend';
-import { GET_CHART_FAILED } from 'services/actions/nodeBackend';
-import { GET_USER_CHARTS_INITIAL } from 'services/actions/nodeBackend';
-import { GET_USER_CHARTS_REQUEST } from 'services/actions/nodeBackend';
-import { GET_USER_CHARTS_SUCCESS } from 'services/actions/nodeBackend';
-import { GET_USER_CHARTS_FAILED } from 'services/actions/nodeBackend';
-import { DELETE_CHART_INITIAL } from 'services/actions/nodeBackend';
-import { DELETE_CHART_REQUEST } from 'services/actions/nodeBackend';
-import { DELETE_CHART_SUCCESS } from 'services/actions/nodeBackend';
-import { DELETE_CHART_FAILED } from 'services/actions/nodeBackend';
-import { GET_USER_DATASETS_INITIAL } from 'services/actions/nodeBackend';
-import { GET_USER_DATASETS_REQUEST } from 'services/actions/nodeBackend';
-import { GET_USER_DATASETS_SUCCESS } from 'services/actions/nodeBackend';
-import { GET_USER_DATASETS_FAILED } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,

@@ -9,7 +9,7 @@ import {
 } from 'components/Panes/DataExplorePane/components/AccordionSelection/AccordionSelection.styles';
 import IconPointer from 'assets/icons/IconPointer';
 import theme from 'theme/Theme';
-import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePanel';
+import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePane';
 
 const propTypes = {
   active: PropTypes.bool
@@ -23,7 +23,10 @@ const AccordionSelection = props => {
         backgroundColor: theme.color.zoomGreyZero,
         borderBottom: `1px solid ${theme.color.zoomGreyFour}`
       }
-    : { backgroundColor: theme.color.aidsFondsWhite };
+    : {
+        backgroundColor: theme.color.aidsFondsWhite,
+        borderBottom: `2px solid ${theme.color.zoomGreyFour}`
+      };
   return (
     <ComponentBase style={compStyle}>
       <IconContainer>{props.icon}</IconContainer>
@@ -36,11 +39,11 @@ const AccordionSelection = props => {
       >
         {props.label}
       </FilterLabel>
-      <PointerContainer
+      {/*<PointerContainer
         style={{ transform: props.active ? 'rotate(180deg)' : 'rotate(0deg)' }}
       >
         <IconPointer />
-      </PointerContainer>
+      </PointerContainer>*/}
     </ComponentBase>
   );
 };

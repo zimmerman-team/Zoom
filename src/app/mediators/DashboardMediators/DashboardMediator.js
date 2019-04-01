@@ -14,7 +14,7 @@ import {
   formatUsersTabData,
   formatTeamsTabData,
   formatChartData,
-  formatSort
+  formatDatasets
 } from 'utils/dashboardUtils';
 
 /* components */
@@ -126,7 +126,16 @@ class DashboardMediator extends React.Component {
       this.props.dispatch(
         actions.getUserChartsRequest({
           authId: this.props.user.authId,
-          sortBy: formatSort(this.state.sort)
+          sortBy: this.state.sort
+        })
+      );
+    }
+
+    if (this.props.user) {
+      this.props.dispatch(
+        actions.getUserDatasetsRequest({
+          authId: this.props.user.authId,
+          sortBy: this.state.sort
         })
       );
     }
@@ -143,11 +152,14 @@ class DashboardMediator extends React.Component {
 
   render() {
     const charts = this.props.userCharts.data || [];
+    const datasets = this.props.userDatasets.data || [];
+
     return (
       <DashboardModule
         // tabs={tabs}
         sort={this.state.sort}
         users={this.state.users}
+        datasets={formatDatasets(datasets)}
         charts={formatChartData(charts, this.props.history, this.deleteChart)}
         changeSortBy={this.changeSortBy}
         setWrapperRef={this.setWrapperRef}
@@ -161,7 +173,7 @@ class DashboardMediator extends React.Component {
           this.state.sort,
           this.state.searchKeyword
         )}
-        navItems={data(this.state.users, this.state.teams, charts)}
+        navItems={data(this.state.users, this.state.teams, charts, datasets)}
         greetingName={get(this.props.auth0Client.getProfile(), 'nickname', '')}
       />
     );
@@ -170,6 +182,7 @@ class DashboardMediator extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    userDatasets: state.userDatasets,
     chartDeleted: state.chartDeleted,
     userCharts: state.userCharts,
     user: state.user.data

@@ -18,6 +18,10 @@ import { DELETE_CHART_INITIAL } from 'services/actions/nodeBackend';
 import { DELETE_CHART_REQUEST } from 'services/actions/nodeBackend';
 import { DELETE_CHART_SUCCESS } from 'services/actions/nodeBackend';
 import { DELETE_CHART_FAILED } from 'services/actions/nodeBackend';
+import { GET_USER_DATASETS_INITIAL } from 'services/actions/nodeBackend';
+import { GET_USER_DATASETS_REQUEST } from 'services/actions/nodeBackend';
+import { GET_USER_DATASETS_SUCCESS } from 'services/actions/nodeBackend';
+import { GET_USER_DATASETS_FAILED } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -387,7 +391,23 @@ function chartDeleted(state = initial, action) {
   }
 }
 
+function userDatasets(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_USER_DATASETS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_USER_DATASETS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_USER_DATASETS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_USER_DATASETS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  userDatasets,
   chartDeleted,
   userCharts,
   chartResults,

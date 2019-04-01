@@ -234,6 +234,19 @@ class ZoomSelect extends React.Component {
     return `${trimmedValues[0]}, ${trimmedValues[1]}...`;
   }
 
+  placeHolderNumber(valueSelected, placeHolderNumber, categorise) {
+    if (
+      valueSelected === undefined ||
+      valueSelected.length === 0 ||
+      typeof valueSelected === 'string'
+    ) {
+      if (categorise && valueSelected) return undefined;
+      return placeHolderNumber;
+    }
+
+    return valueSelected.length;
+  }
+
   renderDropDownItem(item, index) {
     if (item.value === 'category')
       return (
@@ -278,13 +291,11 @@ class ZoomSelect extends React.Component {
         <SelectHeader
           headerStyle={this.props.headerStyle}
           arrowMargins={this.props.arrowMargins}
-          placeHolderNumber={
-            this.props.valueSelected === undefined ||
-            this.props.valueSelected.length === 0 ||
-            typeof this.props.valueSelected === 'string'
-              ? this.props.placeHolderNumber
-              : this.props.valueSelected.length
-          }
+          placeHolderNumber={this.placeHolderNumber(
+            this.props.valueSelected,
+            this.props.placeHolderNumber,
+            this.props.categorise
+          )}
           label={
             this.props.valueSelected === undefined ||
             this.props.valueSelected.length === 0

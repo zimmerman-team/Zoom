@@ -60,10 +60,6 @@ class YearSelector extends React.Component {
           max={2019}
           value={this.state.yearPeriod}
           handle={val => this.renderHandle(val)}
-          // onAfterChange={years => {
-          //   console.log(years);
-          //   this.props.selectYearRange(years);
-          // }}
           onAfterChange={() =>
             this.props.selectYearRange(this.state.yearPeriod)
           }

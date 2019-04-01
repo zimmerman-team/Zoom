@@ -69,7 +69,7 @@ const propTypes = {
   selectCountry: PropTypes.func,
   selectRegion: PropTypes.func,
   selectYearRange: PropTypes.array,
-  yearRange: PropTypes.func,
+  yearRange: PropTypes.array,
   selectInd1: PropTypes.func,
   selectInd2: PropTypes.func,
   selectedSubInd1: PropTypes.arrayOf(PropTypes.string),
@@ -88,8 +88,8 @@ const defaultProps = {
   locationSelected: true,
   subInd1AllSelected: true,
   subInd2AllSelected: true,
-  selectYearRange: undefined,
-  yearRange: [],
+  selectYearRange: [],
+  yearRange: [2003, 2016],
   indNames: [],
   countries: [],
   regions: [],
@@ -183,6 +183,7 @@ class DataExplorePane extends React.Component {
             icon={<IconRedPeriod />}
             label="Time Period"
             selectYearRange={this.props.selectYearRange}
+            yearRange={this.props.yearRange}
           />
 
           {/*INDICATORS*/}

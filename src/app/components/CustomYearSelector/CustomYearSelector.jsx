@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/* consts */
+import initialState from '__consts__/InitialChartDataConst';
+
 /* utils */
 import isEqual from 'lodash/isEqual';
 
@@ -10,19 +13,19 @@ import {
   YearLabel,
   SelectedYearLabel,
   StartControl,
-  EndControl,
+  EndControl
 } from './CustomYearSelector.style';
 
 const propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
-  selectedYears: PropTypes.arrayOf(PropTypes.string),
+  selectedYear: PropTypes.string
 };
 
 const defaultProps = {
   min: 1990,
   max: 2019,
-  selectedYears: ['2002', '2003', '2004', '2005', '2006', '2007', '2008'],
+  selectedYear: parseInt(initialState.yearPeriod[0], 10)
 };
 
 class CustomYearSelector extends React.Component {
@@ -31,8 +34,8 @@ class CustomYearSelector extends React.Component {
 
     this.state = {
       numArray: [],
-      mouseDown: 'none',
-      selectedYears: props.selectedYears,
+      mouseDown: false,
+      selectedYear: props.selectedYear
     };
 
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
@@ -41,6 +44,7 @@ class CustomYearSelector extends React.Component {
     this.renderYearLabels = this.renderYearLabels.bind(this);
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleMoveOutside = this.handleMoveOutside.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -55,22 +59,9 @@ class CustomYearSelector extends React.Component {
     this.setState({ numArray });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (!isEqual(this.props.selectedYears, prevProps.selectedYears)) {
-      this.setState({ selectedYears: this.props.selectedYears });
-    }
-
-    if (
-      this.state.mouseDown !== prevState.mouseDown &&
-      this.state.mouseDown === 'none'
-    ) {
-      this.props.selectYear([
-        parseInt(this.state.selectedYears[0], 10),
-        parseInt(
-          this.state.selectedYears[this.state.selectedYears.length - 1],
-          10,
-        ),
-      ]);
+  componentDidUpdate(prevProps) {
+    if (!isEqual(this.props.selectedYear, prevProps.selectedYear)) {
+      this.setState({ selectedYear: this.props.selectedYear });
     }
   }
 
@@ -89,86 +80,40 @@ class CustomYearSelector extends React.Component {
    * Alert if clicked on outside of element
    */
   handleMoveOutside(event) {
-    if (
-      this.wrapperRef &&
-      !this.wrapperRef.contains(event.target) &&
-      this.state.mouseDown !== 'none'
-    ) {
-      this.setState({ mouseDown: 'none' });
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+      this.handleMouseUp();
     }
   }
 
   handleMouseEnter(number) {
-    if (this.state.mouseDown !== 'none') {
-      this.setState(prevState => {
-        const selectedYears = [...prevState.selectedYears];
-
-        const numberInt = parseInt(number, 10);
-        const startInt = parseInt(selectedYears[0], 10);
-        const endInt = parseInt(selectedYears[selectedYears.length - 1], 10);
-
-        // so we basically use this weird if because mouse enter event doesn't triggger
-        // when you hover very quickly, so this basically disables your drag if you
-        // try to drag the control too quickly.
-        if (
-          (numberInt < startInt && startInt - 1 !== numberInt) ||
-          (numberInt > endInt && endInt + 1 !== numberInt) ||
-          (numberInt > startInt &&
-            numberInt < endInt &&
-            ((prevState.mouseDown === 'start' && startInt + 1 !== numberInt) ||
-              (prevState.mouseDown === 'end' && endInt - 1 !== numberInt)))
-        ) {
-          return { mouseDown: 'none' };
-        }
-
-        const yearInd = selectedYears.indexOf(number);
-        if (yearInd !== -1) {
-          if (selectedYears[1] === number) selectedYears.splice(yearInd - 1, 1);
-          else selectedYears.splice(yearInd + 1, 1);
-        } else if (numberInt < startInt) selectedYears.unshift(number);
-        else selectedYears.push(number);
-        return { selectedYears };
-      });
+    if (this.state.mouseDown) {
+      this.setState({ selectedYear: number });
     }
   }
 
-  handleMouseDown(mouseDown) {
-    this.setState({ mouseDown });
+  handleMouseDown() {
+    this.setState({ mouseDown: true });
   }
 
   handleMouseUp() {
-    this.setState({ mouseDown: 'none' });
+    if (this.state.mouseDown) {
+      this.setState({ mouseDown: false });
+      this.props.selectYear(this.state.selectedYear);
+    }
+  }
+
+  handleClick(number) {
+    this.setState({ selectedYear: number });
+    this.props.selectYear(number);
   }
 
   renderYearLabels(number, index) {
     let yearLabels = '';
 
-    if (number === this.state.selectedYears[0])
-      yearLabels = (
-        <StartControl
-          onMouseDown={() => this.handleMouseDown('start')}
-          onMouseUp={() => this.handleMouseUp()}
-          key={`year-${index}`}
-        >
-          {number}
-        </StartControl>
-      );
-    else if (
-      number === this.state.selectedYears[this.state.selectedYears.length - 1]
-    )
-      yearLabels = (
-        <EndControl
-          key={`year-${index}`}
-          onMouseDown={() => this.handleMouseDown('end')}
-          onMouseUp={() => this.handleMouseUp()}
-        >
-          {number}
-        </EndControl>
-      );
-    else if (this.state.selectedYears.indexOf(number) !== -1)
+    if (this.state.selectedYear === number)
       yearLabels = (
         <SelectedYearLabel
-          onMouseEnter={() => this.handleMouseEnter(number)}
+          onMouseDown={() => this.handleMouseDown()}
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
@@ -178,6 +123,7 @@ class CustomYearSelector extends React.Component {
     else
       yearLabels = (
         <YearLabel
+          onClick={() => this.handleClick(number)}
           onMouseEnter={() => this.handleMouseEnter(number)}
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}

@@ -31,10 +31,12 @@ const Box = styled.div``;
 const propTypes = {
   data: PropTypes.array,
   tabContentName: PropTypes.string,
+  charts: PropTypes.array,
   users: PropTypes.array,
   teams: PropTypes.array
 };
 const defaultProps = {
+  charts: [],
   data: [],
   users: [],
   teams: [],
@@ -46,6 +48,7 @@ const DashboardTabContent = props => {
   const currentURL = history.location.pathname;
 
   let targetData = [];
+  let targetUrl = '';
   let leftOptionLabel = '';
   let sortIsVisible = true;
   let tabContentName = true;
@@ -55,10 +58,12 @@ const DashboardTabContent = props => {
   //todo: check on exact path instead of includes: too vulnerable
   if (currentURL.includes('users')) {
     targetData = props.users;
+    targetUrl = '/add-user';
     leftOptionLabel = 'add users';
     tabContentName = 'Users';
   } else if (currentURL.includes('teams')) {
     targetData = props.teams;
+    targetUrl = '/create-team';
     leftOptionLabel = 'create users';
     tabContentName = 'Teams';
   } else if (currentURL.includes('focus-pages')) {
@@ -66,11 +71,12 @@ const DashboardTabContent = props => {
     leftOptionLabel = 'add focus page';
     tabContentName = 'Focus page';
   } else if (currentURL.includes('data-sets')) {
-    targetData = '';
+    targetData = props.datasets;
+    targetUrl = '/mapper';
     leftOptionLabel = 'map data set';
     tabContentName = 'Data sets';
   } else if (currentURL.includes('charts')) {
-    targetData = '';
+    targetData = props.charts;
     leftOptionLabel = 'add chart';
     tabContentName = 'Charts';
   } else if (currentURL.includes('trash')) {
@@ -79,7 +85,6 @@ const DashboardTabContent = props => {
     sortIsVisible = false;
     isRemoveOption = true;
   }
-
   return (
     <ComponentBase>
       {isRemoveOption && (
@@ -87,8 +92,6 @@ const DashboardTabContent = props => {
           leftOptionLabel={leftOptionLabel}
           sortIsVisible={sortIsVisible}
           isRemoveOption={isRemoveOption}
-          users={props.users}
-          teams={props.teams}
           isSortByOpen={props.isSortByOpen}
           changeSortBy={props.changeSortBy}
           setWrapperRef={props.setWrapperRef}
@@ -109,8 +112,6 @@ const DashboardTabContent = props => {
             leftOptionLabel={leftOptionLabel}
             sortIsVisible={sortIsVisible}
             isRemoveOption={isRemoveOption}
-            users={props.users}
-            teams={props.teams}
             isSortByOpen={props.isSortByOpen}
             changeSortBy={props.changeSortBy}
             setWrapperRef={props.setWrapperRef}
@@ -118,6 +119,7 @@ const DashboardTabContent = props => {
             activeTab={props.activeTab}
             sort={props.sort}
             tabs={props.tabs}
+            targetUrl={targetUrl}
           />
           <GridList items={targetData} />
         </Box>

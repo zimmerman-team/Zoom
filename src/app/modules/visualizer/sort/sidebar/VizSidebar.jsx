@@ -11,18 +11,20 @@ import { ComponentBase } from './VizSidebar.style';
  * The VizSidebar acts as a container component for the tab navigator and tab content
  */
 
-const code = 'vizID';
+// const code = 'vizID';
 
 const propTypes = {
   /* todo: pass indicator data to tab content*/
 
   loggedIn: PropTypes.bool,
   visible: PropTypes.bool,
+  display: PropTypes.bool,
   /** contains data for generation of tab nav items and providing the tab content with the proper components */
   data: PropTypes.array
 };
 
 const defaultProps = {
+  display: true,
   data: data.sections,
   visible: true,
   loggedIn: true
@@ -33,13 +35,24 @@ const defaultProps = {
 const VizSidebar = props => {
   return (
     /** component base container */
-    <ComponentBase>
+    <ComponentBase
+      style={{
+        display: props.display ? 'unset' : 'none'
+      }}
+    >
       {/** tab navigator */}
-      {props.loggedIn && <TabNavigator code={code} navItems={props.data} />}
+      {props.loggedIn && (
+        <TabNavigator
+          code={props.code}
+          chart={props.chartType}
+          navItems={props.data}
+        />
+      )}
 
       {/** tab content */}
       <TabContent
-        code={code}
+        chart={props.chartType}
+        code={props.code}
         data={props.data}
         dropDownData={props.dropDownData}
       />

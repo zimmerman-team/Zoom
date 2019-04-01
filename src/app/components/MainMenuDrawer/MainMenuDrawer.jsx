@@ -31,7 +31,7 @@ const defaultProps = {
   env: process.env.NODE_ENV
 };
 
-class TempDrawer extends React.Component {
+class MainMenuDrawer extends React.Component {
   state = {
     open: this.props.open
   };
@@ -112,7 +112,7 @@ class TempDrawer extends React.Component {
   }
 }
 
-TempDrawer.propTypes = propTypes;
-TempDrawer.defaultProps = defaultProps;
+MainMenuDrawer.propTypes = propTypes;
+MainMenuDrawer.defaultProps = defaultProps;
 
-export default TempDrawer;
+export default MainMenuDrawer;

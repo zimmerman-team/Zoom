@@ -4,7 +4,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import PageLoader from 'modules/common/pageloader/PageLoader';
 // always active
 
-import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel';
+import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePane';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
 import PublicChartLibraryModule from './modules/PublicChartLibrary/PublicChartLibraryModule';
@@ -80,6 +80,7 @@ const Routes = props => {
               <VisualizerModuleMediator
                 indicatorAggregations={props}
                 dropDownData={props}
+                auth0Client={props.auth0Client}
               />
             )}
           />
@@ -96,6 +97,7 @@ const Routes = props => {
             render={() => <IatiDetailMediator />}
           />
           <Route
+            exact
             path="/add-user"
             render={() =>
               props.auth0Client.isAuthenticated() &&
@@ -107,6 +109,7 @@ const Routes = props => {
             }
           />
           <Route
+            exact
             path="/create-team"
             render={() =>
               props.auth0Client.isAuthenticated() &&

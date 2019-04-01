@@ -2,32 +2,56 @@
 import React from 'react';
 import { matchPath } from 'react-router';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+/* actions */
+import * as actions from 'services/actions/nodeBackend';
 
 /* utils */
 import get from 'lodash/get';
+import isEqual from 'lodash/isEqual';
+import {
+  formatUsersTabData,
+  formatTeamsTabData,
+  formatChartData,
+  formatDatasets
+} from 'utils/dashboardUtils';
 
 /* components */
 import DashboardModule from 'modules/dashboard/DashboardModule';
-import { formatUsersTabData, formatTeamsTabData } from 'utils/dashboardUtils';
 
 /* consts */
 import tabs from '__consts__/DashboardTabsConsts';
 import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
 
 class DashboardMediator extends React.Component {
-  state = {
-    users: [],
-    teams: [],
-    sort: 'name:1',
-    searchKeyword: '',
-    isSortByOpen: false
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      users: [],
+      teams: [],
+      sort: 'name:1',
+      searchKeyword: '',
+      isSortByOpen: false
+    };
+
+    this.deleteChart = this.deleteChart.bind(this);
+  }
 
   componentDidMount = () => {
     this.reloadData();
     /* todo: not sure if this is the best way to handle this, see if it can be refactored */
     document.addEventListener('mousedown', this.handleClickOutside);
   };
+
+  componentDidUpdate(prevProps) {
+    if (!isEqual(this.props.user, prevProps.user) && this.props.user)
+      this.reloadData();
+
+    if (!isEqual(this.props.chartDeleted, prevProps.chartDeleted))
+      this.reloadData();
+  }
 
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
@@ -92,18 +116,51 @@ class DashboardMediator extends React.Component {
     if (typeOfChange === 'sort' && this.props.match.params.tab === 'users') {
       this.getAllUsers();
     }
+
     if (typeOfChange !== 'sort') {
       this.getAllUsers();
       this.props.auth0Client.getUserGroups(this, 'teams');
     }
+
+    if (this.props.user) {
+      this.props.dispatch(
+        actions.getUserChartsRequest({
+          authId: this.props.user.authId,
+          sortBy: this.state.sort
+        })
+      );
+    }
+
+    if (this.props.user) {
+      this.props.dispatch(
+        actions.getUserDatasetsRequest({
+          authId: this.props.user.authId,
+          sortBy: this.state.sort
+        })
+      );
+    }
   };
 
+  deleteChart(chartId) {
+    this.props.dispatch(
+      actions.deleteChartRequest({
+        authId: this.props.user.authId,
+        chartId
+      })
+    );
+  }
+
   render() {
+    const charts = this.props.userCharts.data || [];
+    const datasets = this.props.userDatasets.data || [];
+
     return (
       <DashboardModule
         // tabs={tabs}
         sort={this.state.sort}
         users={this.state.users}
+        datasets={formatDatasets(datasets)}
+        charts={formatChartData(charts, this.props.history, this.deleteChart)}
         changeSortBy={this.changeSortBy}
         setWrapperRef={this.setWrapperRef}
         setIsSortByOpen={this.setIsSortByOpen}
@@ -116,11 +173,22 @@ class DashboardMediator extends React.Component {
           this.state.sort,
           this.state.searchKeyword
         )}
-        navItems={data(this.state.users, this.state.teams)}
+        navItems={data(this.state.users, this.state.teams, charts, datasets)}
         greetingName={get(this.props.auth0Client.getProfile(), 'nickname', '')}
       />
     );
   }
 }
 
-export default withRouter(DashboardMediator);
+const mapStateToProps = state => {
+  return {
+    userDatasets: state.userDatasets,
+    chartDeleted: state.chartDeleted,
+    userCharts: state.userCharts,
+    user: state.user.data
+  };
+};
+
+// this is the correct syntax for routing to NOT mess up when using both
+// withRouter and connect
+export default withRouter(connect(mapStateToProps)(DashboardMediator));

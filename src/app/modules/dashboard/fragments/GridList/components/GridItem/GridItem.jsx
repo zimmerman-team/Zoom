@@ -49,7 +49,6 @@ const GridItem = props => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseEnter}
       onClick={handleClick}
-      options={props.withoptions ? 'pointer' : 'default'}
       to={path}
     >
       <Box>
@@ -60,7 +59,14 @@ const GridItem = props => {
           ))}
         </GridItemInfoContainer>
       </Box>
-      {props.withoptions && isHovered ? <GridItemToolbar /> : null}
+      {props.withoptions && isHovered ? (
+        <GridItemToolbar
+          onEdit={props.onEdit}
+          onView={props.onView}
+          onDuplicate={props.onDuplicate}
+          onDelete={props.onDelete}
+        />
+      ) : null}
     </ComponentBase>
   );
 };

@@ -12,7 +12,10 @@ import {
 import { formatYearParam } from 'utils/genericUtils';
 import HomeModule from 'modules/home/HomeModule';
 import PropTypes from 'prop-types';
+
+/* consts */
 import { initialState } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.consts';
+import generalInitial from '__consts__/InitialChartDataConst';
 
 const propTypes = {
   indicatorAggregations: PropTypes.shape({
@@ -91,7 +94,8 @@ class HomeModuleMediator extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      yearPeriod: formatYearParam([yearBefore, currentYear]),
+      loading: false,
+      selectedYear: generalInitial.yearPeriod[0],
       ...initialState
     };
 
@@ -220,13 +224,17 @@ class HomeModuleMediator extends Component {
       });
     }
 
-    this.setState({ indicators, subIndicators1, subIndicators2 });
+    this.setState({
+      indicators,
+      subIndicators1,
+      subIndicators2
+    });
   }
 
   refetch(
     ind1 = this.state.selectedInd1,
     ind2 = this.state.selectedInd2,
-    datePeriod = this.state.yearPeriod,
+    selectedYear = this.state.selectedYear,
     subInd1 = this.state.selectedSubInd1,
     subInd2 = this.state.selectedSubInd2,
     countriesCodes = this.state.selectedCountryVal,
@@ -245,12 +253,20 @@ class HomeModuleMediator extends Component {
       countriesISO2,
       singleInd1: ind1 ? ind1 : 'null',
       singleInd2: ind2 ? ind2 : 'null',
-      datePeriod,
+      datePeriod: [selectedYear],
       subInd1: subInd1.length > 0 ? subInd1 : ['undefined'],
       subInd2: subInd2.length > 0 ? subInd2 : ['undefined']
     };
 
-    this.props.relay.refetch(refetchVars);
+    this.setState({
+      loading: true
+    });
+
+    this.props.relay.refetch(refetchVars, null, () =>
+      this.setState({
+        loading: false
+      })
+    );
   }
 
   selectInd1(val) {
@@ -328,7 +344,7 @@ class HomeModuleMediator extends Component {
   }
 
   selectYear(val) {
-    this.setState({ yearPeriod: formatYearParam(val) }, this.refetch);
+    this.setState({ selectedYear: val }, this.refetch);
   }
 
   selectCountry(item, array = false) {
@@ -392,6 +408,7 @@ class HomeModuleMediator extends Component {
   render() {
     return (
       <HomeModule
+        loading={this.state.loading}
         indicators={this.state.indicators}
         dropDownData={this.props.dropDownData}
         selectInd1={this.selectInd1}
@@ -410,7 +427,7 @@ class HomeModuleMediator extends Component {
         selectedRegionVal={this.state.selectedRegionVal}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
-        yearPeriod={this.state.yearPeriod}
+        selectedYear={this.state.selectedYear}
       />
     );
   }

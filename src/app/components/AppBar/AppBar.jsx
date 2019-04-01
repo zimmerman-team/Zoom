@@ -19,6 +19,9 @@ import {
   MenuButton,
   ComponentBase,
   PaneButton,
+  PaneButContainer,
+  PaneButtonTextVar,
+  PaneButtonVar,
   PaneButtonText
 } from 'components/AppBar/AppBar.styles';
 
@@ -29,6 +32,7 @@ import SvgIconBack from 'assets/icons/IconBack';
 
 /* actions */
 import * as actions from 'services/actions/general';
+import * as nodeActions from 'services/actions/nodeBackend';
 
 const propTypes = {
   toggleSideBar: PropTypes.func
@@ -38,23 +42,83 @@ const defaultProps = {
 };
 
 export class AppBar extends React.Component {
-  state = {
-    auth: true,
-    anchorEl: null,
-    paneButton: null
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      auth: true,
+      anchorEl: null,
+      paneButton: null
+    };
+
+    this.closeSave = this.closeSave.bind(this);
+  }
 
   componentDidMount() {
     this.loadPaneButton();
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps) {
     if (
       this.props.location.pathname !== prevProps.location.pathname ||
       this.props.dataPaneOpen !== prevProps.dataPaneOpen
     ) {
       this.loadPaneButton();
     }
+
+    // so we only want to load the user to the dashboard after their
+    // chart was saved
+    // so that the edited chart would appear with the new data in the dashboard
+    if (
+      !isEqual(this.props.chartCreated, prevProps.chartCreated) &&
+      this.props.chartCreated.data
+    ) {
+      this.props.history.push('/dashboard');
+    }
+  }
+
+  closeSave() {
+    this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
+
+    const profile = this.props.auth0Client.getProfile();
+    const dataSources = [];
+
+    if (this.props.chartData.dataSource1)
+      dataSources.push(this.props.chartData.dataSource1);
+
+    if (
+      this.props.chartData.dataSource2 &&
+      dataSources.indexOf(this.props.chartData.dataSource2) === -1
+    )
+      dataSources.push(this.props.chartData.dataSource2);
+
+    const chartData = {
+      authId: profile.sub,
+      dataSources,
+      _public: this.props.chartData._public,
+      team: this.props.chartData.team ? this.props.user.data.team : '',
+      chartId: this.props.chartData.chartId,
+      name: this.props.chartData.name,
+      description: this.props.chartData.desc,
+      type: this.props.paneData.chartType,
+      indicatorItems: [
+        {
+          indicator: this.props.chartData.selectedInd1,
+          subIndicators: this.props.chartData.selectedSubInd1
+        },
+        {
+          indicator: this.props.chartData.selectedInd2,
+          subIndicators: this.props.chartData.selectedSubInd2
+        }
+      ],
+      selectedSources: this.props.paneData.selectedSources,
+      yearRange: this.props.paneData.yearRange,
+      selectedYear: this.props.chartData.selectedYear,
+      selectedCountryVal: this.props.chartData.selectedCountryVal,
+      selectedRegionVal: this.props.chartData.selectedRegionVal
+    };
+
+    this.props.dispatch(nodeActions.createUpdateChartRequest(chartData));
   }
 
   loadPaneButton() {
@@ -63,11 +127,21 @@ export class AppBar extends React.Component {
     let paneType = 'none';
 
     if (this.props.auth0Client.isAuthenticated()) {
-      paneType =
-        this.props.dataPaneOpen === paneTypes.none
-          ? paneTypes.privPane
-          : paneTypes.none;
-      buttonLabel = paneType !== paneTypes.none ? 'Create' : 'Close';
+      if (this.props.dataPaneOpen === paneTypes.none) {
+        if (this.props.location.pathname.indexOf('/home') !== -1) {
+          paneType = paneTypes.privPane;
+          buttonLabel = 'Create';
+        } else if (this.props.location.pathname.indexOf('/visualizer') !== -1) {
+          paneType = paneTypes.visualizer;
+          buttonLabel = 'Show Filters';
+        }
+      } else {
+        paneType = paneTypes.none;
+        buttonLabel =
+          this.props.location.pathname.indexOf('/visualizer') !== -1
+            ? 'Hide Filters'
+            : 'Close';
+      }
     } else {
       paneType =
         this.props.dataPaneOpen === paneTypes.none
@@ -108,6 +182,30 @@ export class AppBar extends React.Component {
               {buttonLabel}
             </PaneButtonText>
           </PaneButton>
+        );
+        break;
+      case this.props.location.pathname.indexOf('/visualizer') !== -1:
+        paneButton = (
+          <PaneButContainer>
+            <PaneButtonVar
+              data-cy="geomap-close-save-button"
+              onClick={() => this.closeSave()}
+            >
+              <PaneButtonTextVar data-cy="appbar-right-button">
+                Close & Save
+              </PaneButtonTextVar>
+            </PaneButtonVar>
+            <PaneButtonVar
+              data-cy="geomap-filter-button"
+              onClick={() =>
+                this.props.dispatch(actions.dataPaneToggleRequest(paneType))
+              }
+            >
+              <PaneButtonTextVar data-cy="appbar-right-button">
+                {buttonLabel}
+              </PaneButtonTextVar>
+            </PaneButtonVar>
+          </PaneButContainer>
         );
         break;
       default:
@@ -151,6 +249,10 @@ AppBar.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
+    chartData: state.chartData.chartData,
+    paneData: state.paneData.paneData,
+    user: state.user,
+    chartCreated: state.chartCreated,
     dataPaneOpen: state.dataPaneOpen.open
   };
 };

@@ -17,10 +17,10 @@ const propTypes = {
   required: PropTypes.bool,
   type: PropTypes.string,
   validate: PropTypes.shape({
-    regexp: PropTypes.instanceOf(RegExp),
+    regexp: PropTypes.instanceOf(RegExp)
   }),
   value: PropTypes.string,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func
 };
 
 const defaultProps = {
@@ -30,10 +30,10 @@ const defaultProps = {
   required: false,
   type: 'text',
   validate: {
-    regexp: /^[a-z]/i,
+    regexp: /^[a-z]/i
   },
   value: '',
-  onChange: null,
+  onChange: null
 };
 
 const InputField = props => {

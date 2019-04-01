@@ -13,6 +13,7 @@ export const FilterLabel = styled.div`
 export const ComponentBase = styled.div`
   display: flex;
   color: ${theme.color.aidsFondsRed};
+  width: 100%;
 `;
 
 export const IconContainer = styled.div`

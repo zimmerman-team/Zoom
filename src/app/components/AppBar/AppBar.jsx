@@ -65,15 +65,38 @@ export class AppBar extends React.Component {
     ) {
       this.loadPaneButton();
     }
+
+    // so we only want to load the user to the dashboard after their
+    // chart was saved
+    // so that the edited chart would appear with the new data in the dashboard
+    if (
+      !isEqual(this.props.chartCreated, prevProps.chartCreated) &&
+      this.props.chartCreated.data
+    ) {
+      this.props.history.push('/dashboard');
+    }
   }
 
   closeSave() {
     this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
 
     const profile = this.props.auth0Client.getProfile();
+    const dataSources = [];
+
+    if (this.props.chartData.dataSource1)
+      dataSources.push(this.props.chartData.dataSource1);
+
+    if (
+      this.props.chartData.dataSource2 &&
+      dataSources.indexOf(this.props.chartData.dataSource2) === -1
+    )
+      dataSources.push(this.props.chartData.dataSource2);
 
     const chartData = {
       authId: profile.sub,
+      dataSources,
+      _public: this.props.chartData._public,
+      team: this.props.chartData.team ? this.props.user.data.team : '',
       chartId: this.props.chartData.chartId,
       name: this.props.chartData.name,
       description: this.props.chartData.desc,
@@ -96,8 +119,6 @@ export class AppBar extends React.Component {
     };
 
     this.props.dispatch(nodeActions.createUpdateChartRequest(chartData));
-
-    this.props.history.push('/dashboard');
   }
 
   loadPaneButton() {
@@ -195,10 +216,6 @@ export class AppBar extends React.Component {
   }
 
   render() {
-    if (this.props.chartCreated.data) {
-      console.log('created chart id', this.props.chartCreated.data.id);
-    }
-    // console.log('this.props.chartCreated', this.props.chartCreated);
     return (
       <ComponentBase
         elevation="small"
@@ -234,7 +251,7 @@ const mapStateToProps = state => {
   return {
     chartData: state.chartData.chartData,
     paneData: state.paneData.paneData,
-
+    user: state.user,
     chartCreated: state.chartCreated,
     dataPaneOpen: state.dataPaneOpen.open
   };

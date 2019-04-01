@@ -7,6 +7,8 @@ mongoose.Promise = global.Promise; // use ES6 promises
 
 const ChartSchema = new Schema(
   {
+    dataSources: [String],
+
     /* meta data of chart */
     name: { type: String, default: 'Untitled', min: 1, max: 1000 },
     author: { type: Schema.Types.ObjectId, ref: User },
@@ -34,7 +36,7 @@ const ChartSchema = new Schema(
     hiddenFromFeed: { type: Boolean, default: false },
 
     // with what team is this chart associated
-    team: String,
+    team: { type: String, default: '' },
 
     /* chart options */
     // axis: { type: String },

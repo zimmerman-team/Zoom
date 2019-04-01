@@ -254,3 +254,99 @@ export function getChartFailed(error) {
     error
   };
 }
+
+export const GET_USER_CHARTS_INITIAL = 'GET_USER_CHARTS_INITIAL';
+export const GET_USER_CHARTS_REQUEST = 'GET_USER_CHARTS_REQUEST';
+export const GET_USER_CHARTS_SUCCESS = 'GET_USER_CHARTS_SUCCESS';
+export const GET_USER_CHARTS_FAILED = 'GET_USER_CHARTS_FAILED';
+
+export function getUserChartsInitial() {
+  return {
+    type: GET_USER_CHARTS_INITIAL
+  };
+}
+
+export function getUserChartsRequest(values) {
+  return {
+    type: GET_USER_CHARTS_REQUEST,
+    values
+  };
+}
+
+export function getUserChartsSuccess(data) {
+  return {
+    type: GET_USER_CHARTS_SUCCESS,
+    data
+  };
+}
+
+export function getUserChartsFailed(error) {
+  return {
+    type: GET_USER_CHARTS_FAILED,
+    error
+  };
+}
+
+export const DELETE_CHART_INITIAL = 'DELETE_CHART_INITIAL';
+export const DELETE_CHART_REQUEST = 'DELETE_CHART_REQUEST';
+export const DELETE_CHART_SUCCESS = 'DELETE_CHART_SUCCESS';
+export const DELETE_CHART_FAILED = 'DELETE_CHART_FAILED';
+
+export function deleteChartInitial() {
+  return {
+    type: DELETE_CHART_INITIAL
+  };
+}
+
+export function deleteChartRequest(values) {
+  return {
+    type: DELETE_CHART_REQUEST,
+    values
+  };
+}
+
+export function deleteChartSuccess(data) {
+  return {
+    type: DELETE_CHART_SUCCESS,
+    data
+  };
+}
+
+export function deleteChartFailed(error) {
+  return {
+    type: DELETE_CHART_FAILED,
+    error
+  };
+}
+
+export const GET_USER_DATASETS_INITIAL = 'GET_USER_DATASETS_INITIAL';
+export const GET_USER_DATASETS_REQUEST = 'GET_USER_DATASETS_REQUEST';
+export const GET_USER_DATASETS_SUCCESS = 'GET_USER_DATASETS_SUCCESS';
+export const GET_USER_DATASETS_FAILED = 'GET_USER_DATASETS_FAILED';
+
+export function getUserDatasetsInitial() {
+  return {
+    type: GET_USER_DATASETS_INITIAL
+  };
+}
+
+export function getUserDatasetsRequest(values) {
+  return {
+    type: GET_USER_DATASETS_REQUEST,
+    values
+  };
+}
+
+export function getUserDatasetsSuccess(data) {
+  return {
+    type: GET_USER_DATASETS_SUCCESS,
+    data
+  };
+}
+
+export function getUserDatasetsFailed(error) {
+  return {
+    type: GET_USER_DATASETS_FAILED,
+    error
+  };
+}

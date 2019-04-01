@@ -10,6 +10,10 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { makeStyles } from '@material-ui/styles';
 import Switch from '@material-ui/core/Switch';
+import { connect } from 'react-redux';
+
+/* actions */
+import * as actions from 'services/actions/general';
 
 /** Button component description */
 
@@ -110,16 +114,15 @@ const ZoomSwitch = styled(Switch)`
   }
 `;
 
-function VisibilityTab() {
+function VisibilityTab(props) {
   const classes = useStyles();
 
-  const [state, setState] = React.useState({
-    public: true,
-    team: false
-  });
-
   const handleChange = name => event => {
-    setState({ ...state, [name]: event.target.checked });
+    props.dispatch(
+      actions.storeChartDataRequest({
+        [name]: event.target.checked
+      })
+    );
   };
 
   /*todo: figure out why the custom styling is resetting to the default styling*/
@@ -135,8 +138,8 @@ function VisibilityTab() {
             <ControlLabel
               control={
                 <Switch
-                  checked={state.public}
-                  onChange={handleChange('public')}
+                  checked={props.chartData._public}
+                  onChange={handleChange('_public')}
                   value="public"
                   classes={{
                     switchBase: classes.iOSSwitchBase,
@@ -153,7 +156,7 @@ function VisibilityTab() {
             <ControlLabel
               control={
                 <Switch
-                  checked={state.team}
+                  checked={props.chartData.team}
                   onChange={handleChange('team')}
                   value="team"
                   classes={{
@@ -178,4 +181,10 @@ function VisibilityTab() {
 VisibilityTab.propTypes = propTypes;
 VisibilityTab.defaultProps = defaultProps;
 
-export default VisibilityTab;
+const mapStateToProps = state => {
+  return {
+    chartData: state.chartData.chartData
+  };
+};
+
+export default connect(mapStateToProps)(VisibilityTab);

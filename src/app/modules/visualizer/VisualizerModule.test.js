@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Route, BrowserRouter as Router } from 'react-router-dom';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
 
 import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';

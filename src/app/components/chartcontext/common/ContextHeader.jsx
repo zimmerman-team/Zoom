@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
+import EditableTitle from 'components/chartcontext/common/EditableTitle';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -52,7 +53,8 @@ const defaultProps = {
 const ContextHeader = props => {
   return (
     <ComponentBase style={{ paddingBottom: props.noBottom ? '0' : '' }}>
-      <Title>{props.title}</Title>
+      {/*<Title>{props.title}</Title>*/}
+      <EditableTitle defaultValue={props.title} />
       <Details>
         By {props.authorName} {props.createdDate && `| ${props.createdDate}`}
       </Details>

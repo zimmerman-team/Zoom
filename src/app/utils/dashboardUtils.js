@@ -25,7 +25,7 @@ export function formatTeamsTabData(data, sort, search) {
   const queriedData =
     search !== '' ? filter(data, d => d.name.indexOf(search) > -1) : data;
   const sortedData =
-    sort[0] === '-'
+    sort === 'name:-1'
       ? sortBy(queriedData, [sort]).reverse()
       : sortBy(queriedData, [sort]);
   return sortedData.map(d => {

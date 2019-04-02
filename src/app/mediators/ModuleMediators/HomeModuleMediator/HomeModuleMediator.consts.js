@@ -7,5 +7,5 @@ export const initialState = {
   selectedCountryVal: [],
   selectedSubInd1: [],
   selectedSubInd2: [],
-  selectedRegionVal: [],
+  selectedRegionVal: []
 };

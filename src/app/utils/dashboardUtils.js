@@ -47,7 +47,7 @@ export function formatTeamsTabData(data, sort, search) {
 }
 
 // formats chart data for the dashboard
-export function formatChartData(charts, history, remove) {
+export function formatChartData(charts, userId, history, remove) {
   return charts.map(chart => {
     let shared = '';
     if (chart.team.length > 0) shared = shared.concat(chart.team);
@@ -62,6 +62,23 @@ export function formatChartData(charts, history, remove) {
       if (index) dataSources = dataSources.concat(', ').concat(source);
       else dataSources = source;
     });
+
+    let onEdit = undefined;
+    let onView = undefined;
+    let onDuplicate = () => console.log('duplicate');
+    let onDelete = undefined;
+
+    if (history && remove) {
+      onView = () => history.push(`/public/${chart.type}/${chart._id}/preview`);
+
+      if (chart.author.authId === userId && remove) {
+        onEdit = () =>
+          history.push(`/visualizer/${chart.type}/${chart._id}/edit`);
+        onView = () =>
+          history.push(`/visualizer/${chart.type}/${chart._id}/preview`);
+        onDelete = () => remove(chart._id);
+      }
+    }
 
     return {
       id: chart._id,
@@ -80,11 +97,11 @@ export function formatChartData(charts, history, remove) {
         'Type of chart': chart.type,
         'Data sources': dataSources
       },
-      onEdit: () => history.push(`/visualizer/${chart.type}/${chart._id}/edit`),
-      onView: () =>
-        history.push(`/visualizer/${chart.type}/${chart._id}/preview`),
-      onDuplicate: () => console.log('duplicate'),
-      onDelete: () => remove(chart._id)
+      chartType: chart.type,
+      onEdit,
+      onView,
+      onDuplicate,
+      onDelete
     };
   });
 }

@@ -61,7 +61,7 @@ const ContextHeader = props => {
   return (
     <ComponentBase style={{ paddingBottom: props.noBottom ? '0' : '' }}>
       {props.edit ? (
-        <TitleEditor
+        <EditableTitle
           defaultValue={props.title}
           onChange={e => props.saveTitle(e.target.value)}
         />
@@ -69,7 +69,7 @@ const ContextHeader = props => {
         <Title>{props.title}</Title>
       )}
 
-      <EditableTitle defaultValue={props.title} />
+      {/*<TitleEditor defaultValue={props.title} />*/}
       <Details>
         By {props.authorName} {props.createdDate && `| ${props.createdDate}`}
       </Details>

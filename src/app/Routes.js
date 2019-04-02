@@ -7,7 +7,6 @@ import PageLoader from 'modules/common/pageloader/PageLoader';
 import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePane';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
-import PublicChartLibraryModule from './modules/PublicChartLibrary/PublicChartLibraryModule';
 import ProfileSettingsModule from './modules/profilesettings/ProfileSettingsModule';
 
 // Modules lazy load
@@ -35,6 +34,10 @@ const AddUserMediator = lazy(() =>
 const CreateTeamMediator = lazy(() =>
   import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator')
 );
+const PublicDashMediator = lazy(() =>
+  import('mediators/DashboardMediators/PublicDashMediator')
+);
+
 const DashboardMediator = lazy(() =>
   import('mediators/DashboardMediators/DashboardMediator')
 );
@@ -154,7 +157,7 @@ const Routes = props => {
           />
           <Route
             path="/public/chart-library"
-            render={() => <PublicChartLibraryModule />}
+            render={() => <PublicDashMediator />}
           />
 
           <Route

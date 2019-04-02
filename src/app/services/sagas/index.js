@@ -311,8 +311,26 @@ export function* getUserDatasetsRequest(action) {
   }
 }
 
+export function* getPublicChartsRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getPublicCharts',
+      values: action.values
+    });
+    yield put(nodeActions.getPublicChartsSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.getPublicChartsFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('GET_PUBLIC_CHARTS_REQUEST', getPublicChartsRequest),
     takeLatest('GET_USER_DATASETS_REQUEST', getUserDatasetsRequest),
     takeLatest('DELETE_CHART_REQUEST', deleteChartRequest),
     takeLatest('GET_USER_CHARTS_REQUEST', getUserChartsRequest),

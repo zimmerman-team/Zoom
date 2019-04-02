@@ -17,27 +17,31 @@ import {
 } from './GridItem.styles';
 
 const propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
   title: PropTypes.string,
   values: PropTypes.object,
-  chartType: PropTypes.number,
+  chartType: PropTypes.string,
   withoptions: PropTypes.bool
 };
 
 const defaultProps = {
-  id: 1,
+  id: '1',
   title: PropTypes.string,
   values: {},
-  chartType: 1,
+  chartType: 'geomap',
   withoptions: true
 };
 
 const GridItem = props => {
   const [isHovered, setIsHovered] = React.useState(false);
-  const path = `/public/chart-library/${props.id}/${props.chartType}`;
+  const path = `/public/${props.chartType}/${props.id}/preview`;
 
   function handleMouseEnter() {
-    setIsHovered(!isHovered);
+    setIsHovered(true);
+  }
+
+  function handleMouseLeave() {
+    setIsHovered(false);
   }
 
   function handleClick(e) {
@@ -47,7 +51,7 @@ const GridItem = props => {
   return (
     <ComponentBase
       onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       onClick={handleClick}
       to={path}
     >

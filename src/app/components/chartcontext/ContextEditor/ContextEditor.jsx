@@ -29,10 +29,15 @@ const Box = styled.div`
   display: flex;
 `;
 
-const ContextBody = styled.section``;
+const ContextBody = styled.section`
+  width: 650px;
+`;
 const ContextFooter = styled.section``;
 
-const propTypes = {};
+const propTypes = {
+  author: PropTypes.string,
+  authorName: PropTypes.string
+};
 const defaultProps = {};
 
 class ContextEditor extends React.Component {

@@ -14,7 +14,7 @@ import Searchbox from 'modules/dashboard/fragments/Searchbox/Searchbox';
 import GridListOptionsPane from '../dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
 import Pagination from '../../components/Pagination/Pagination';
 import GridList from '../dashboard/fragments/GridList/GridList';
-import data from './PublicChartLibraryModule.const';
+// import data from './PublicChartLibraryModule.const';
 
 const PageHeading = styled(_PageHeading)`
   margin-bottom: 28px;
@@ -40,7 +40,7 @@ const PublicChartLibraryModule = props => {
       <Box>
         <GridListOptionsPane visibilityLeftButton="hidden" />
         <ViewContainer>
-          <GridList withoptions={false} items={data} />
+          <GridList withoptions={false} items={props.data} />
         </ViewContainer>
       </Box>
       <Pagination />

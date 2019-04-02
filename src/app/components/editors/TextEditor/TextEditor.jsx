@@ -32,7 +32,6 @@ const ZoomQuill = styled(props => <ReactQuill {...props} />)`
         font-size: 14px;
         font-style: normal;
       }
-
       p {
         font-family: ${theme.font.zoomFontFamTwo};
         font-size: 14px;

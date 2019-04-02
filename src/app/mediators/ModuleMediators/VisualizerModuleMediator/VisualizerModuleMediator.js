@@ -382,7 +382,7 @@ class VisualizerModuleMediator extends Component {
   refetch(
     ind1 = this.props.chartData.selectedInd1,
     ind2 = this.props.chartData.selectedInd2,
-    selectedYear = this.state.selectedYear,
+    selectedYear = this.props.chartData.selectedYear,
     subInd1 = this.props.chartData.selectedSubInd1,
     subInd2 = this.props.chartData.selectedSubInd2,
     countriesCodes = this.props.chartData.selectedCountryVal,

@@ -350,3 +350,35 @@ export function getUserDatasetsFailed(error) {
     error
   };
 }
+
+export const GET_PUBLIC_CHARTS_INITIAL = 'GET_PUBLIC_CHARTS_INITIAL';
+export const GET_PUBLIC_CHARTS_REQUEST = 'GET_PUBLIC_CHARTS_REQUEST';
+export const GET_PUBLIC_CHARTS_SUCCESS = 'GET_PUBLIC_CHARTS_SUCCESS';
+export const GET_PUBLIC_CHARTS_FAILED = 'GET_PUBLIC_CHARTS_FAILED';
+
+export function getPublicChartsInitial() {
+  return {
+    type: GET_PUBLIC_CHARTS_INITIAL
+  };
+}
+
+export function getPublicChartsRequest(values) {
+  return {
+    type: GET_PUBLIC_CHARTS_REQUEST,
+    values
+  };
+}
+
+export function getPublicChartsSuccess(data) {
+  return {
+    type: GET_PUBLIC_CHARTS_SUCCESS,
+    data
+  };
+}
+
+export function getPublicChartsFailed(error) {
+  return {
+    type: GET_PUBLIC_CHARTS_FAILED,
+    error
+  };
+}

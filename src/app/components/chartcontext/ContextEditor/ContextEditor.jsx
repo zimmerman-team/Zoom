@@ -57,6 +57,10 @@ class ContextEditor extends React.Component {
           createdDate={this.props.chartData.createdDate}
           authorName={this.props.chartData.authorName}
           title={this.props.chartData.name}
+          saveTitle={name =>
+            this.props.dispatch(actions.storeChartDataRequest({ name }))
+          }
+          edit
         />
         <ContextBody>
           <TextEditor

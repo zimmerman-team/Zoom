@@ -1,9 +1,8 @@
 import React from 'react';
-import NoSsr from '@material-ui/core/NoSsr';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 
-const TitleInput = styled.input`
+const TitleEditor = styled(props => <input {...props} />)`
   color: ${theme.color.zoomBlack};
   font-family: ${theme.font.zoomFontFamOne};
   font-size: 32px;
@@ -14,17 +13,15 @@ const TitleInput = styled.input`
   border: 0;
   text-align: center;
   margin-bottom: 5px;
+  border: 2px solid transparent;
+
   &:focus {
     outline: none;
   }
-`;
 
-const TitleEditor = props => {
-  return (
-    <NoSsr>
-      <TitleInput type="text" {...props} />
-    </NoSsr>
-  );
-};
+  &:hover {
+    border-color: #cccccc;
+  }
+`;
 
 export default TitleEditor;

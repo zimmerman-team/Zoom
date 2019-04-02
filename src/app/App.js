@@ -27,7 +27,7 @@ import {
   ToastsContainerPosition
 } from 'react-toasts';
 
-import TempDrawer from 'components/TempDrawer/TempDrawer';
+import MainMenuDrawer from 'components/MainMenuDrawer/MainMenuDrawer';
 
 const modernEnvironment = new Environment({
   network: Network.create(fetchQuery),
@@ -150,7 +150,7 @@ class App extends React.Component {
                       }
                       auth0Client={auth0Client}
                     />
-                    <TempDrawer
+                    <MainMenuDrawer
                       auth0Client={auth0Client}
                       open={this.state.showSidebar}
                       toggleSideBar={() =>

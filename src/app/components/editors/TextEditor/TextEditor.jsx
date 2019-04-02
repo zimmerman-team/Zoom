@@ -11,6 +11,27 @@ import theme from 'theme/Theme';
  * @param {Object} customProperty - please describe component property
  */
 
+const ZoomQuill = styled(props => <ReactQuill {...props} />)`
+  && {
+    padding: 0;
+    marging: 0;
+
+    div {
+      &:first-child {
+        border-top-color: black;
+        border-top-width: 2px;
+        border-right: initial;
+        border-left: initial;
+      }
+
+      &:last-child {
+        border: initial;
+        border-bottom: initial !important;
+      }
+    }
+  }
+`;
+
 const propTypes = {
   saveDesc: PropTypes.func,
   defaultVal: PropTypes.string,
@@ -44,17 +65,13 @@ class TextEditor extends React.Component {
 
   render() {
     return (
-      <ReactQuill
-        // theme="snow"
-        // value={this.state.text}
-        // onChange={this.handleChange}
-
+      <ZoomQuill
         theme={this.state.theme}
         onChange={this.handleChange}
         value={this.state.editorHtml}
         modules={TextEditor.modules}
         formats={TextEditor.formats}
-        bounds={'.app'}
+        bounds=".app"
         placeholder={this.props.placeholder}
       />
     );
@@ -77,21 +94,25 @@ TextEditor.formats = [
   'indent',
   'link',
   'image',
-  'video'
+  'align',
+  'background',
+  'color'
 ];
 
 TextEditor.modules = {
   toolbar: [
-    [{ header: '1' }, { header: '2' }, { font: [] }],
-    [{ size: [] }],
+    // [{ header: '1' }, { header: '2' }, { font: [] }],
     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    [{ align: [] }],
+    [{ size: [] }],
+    [{ color: [] }, { background: [] }],
     [
       { list: 'ordered' },
       { list: 'bullet' },
       { indent: '-1' },
       { indent: '+1' }
     ],
-    ['link', 'image', 'video'],
+    ['link', 'image'],
     ['clean']
   ],
   clipboard: {

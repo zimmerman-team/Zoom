@@ -19,36 +19,43 @@ const ComponentBase = styled.div`
 `;
 
 const Title = styled.h3`
+  color: ${theme.color.zoomBlack};
+  letter-spacing: 0;
   font-family: ${theme.font.zoomFontFamOne};
-  font-size: 40px;
+  font-size: 32px;
+  font-weight: 400;
   line-height: 1;
-  //outline: 1px solid green;
   margin: 0;
   margin-bottom: 5px;
 `;
 const Details = styled.span`
   line-height: 1;
-  font-size: 14px;
+  font-size: 11px;
+  color: ${theme.color.zoomBlack};
   font-family: ${theme.font.zoomFontFamTwo};
 `;
 
 const propTypes = {
   title: PropTypes.string,
   author: PropTypes.string,
-  publishDate: PropTypes.string
+  authorName: PropTypes.string,
+  publishDate: PropTypes.string,
+  createdDate: PropTypes.string,
+  noBottom: PropTypes.bool
 };
 const defaultProps = {
   title: 'Untitled chart 01',
   author: 'Jane Doe',
-  publishDate: 'January 12th 2019'
+  publishDate: 'January 12th 2019',
+  createdDate: 'January 12th 2019'
 };
 const ContextHeader = props => {
+  console.log('ContextHeader', props);
   return (
     <ComponentBase style={{ paddingBottom: props.noBottom ? '0' : '' }}>
       <Title>{props.title}</Title>
-      {/*TODO: interpret iso date with luxon*/}
       <Details>
-        By {props.authorName} | {props.createdDate}
+        By {props.authorName} {props.createdDate && `| ${props.createdDate}`}
       </Details>
     </ComponentBase>
   );

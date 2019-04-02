@@ -37,7 +37,7 @@ const VizSidebar = props => {
     /** component base container */
     <ComponentBase
       style={{
-        display: props.display ? 'unset' : 'none'
+        display: props.display ? 'flex' : 'none'
       }}
     >
       {/** tab navigator */}

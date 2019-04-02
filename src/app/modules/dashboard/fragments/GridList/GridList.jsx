@@ -24,6 +24,7 @@ const GridList = ({ items, withoptions }) => (
         id={item.id}
         withoptions={withoptions}
         key={shortid.generate()}
+        chartType={item.chartType}
         title={item.title}
         values={item.info}
         onEdit={item.onEdit}

@@ -22,7 +22,7 @@ router.get('/getPublicCharts', ChartController.getPublic);
 // gets one public chart
 router.get('/getOnePublicChart', ChartController.getOnePublic);
 
-// gets all user charts
+// gets all user charts and team charts
 router.get('/getAllCharts', ChartController.getAll);
 
 // gets all team charts

@@ -76,15 +76,25 @@ const ChartController = {
   },
 
   // this basically validates the user and gets all public charts
-  getPublic: function(req, res) {
-    const { authId } = req.query;
-    User.findOne({ authId }).exec(userError => {
+  getPublic: (req, res) => {
+    const { authId, sortBy } = req.query;
+    User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
-      else
-        Chart.findOne({ _public: true }, 'name', (chartError, chart) => {
-          if (chartError) general.handleError(res, chartError);
-          res.json(chart);
-        });
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else {
+        const sort = utils.getDashboardSortBy(sortBy);
+        Chart.find(
+          { _public: true, archived: false },
+          'created last_updated team type dataSources _id name _public'
+        )
+          .collation({ locale: 'en' })
+          .sort(sort)
+          .populate('author', 'username authId')
+          .exec((chartError, charts) => {
+            if (chartError) general.handleError(res, chartError);
+            res.json(charts);
+          });
+      }
     });
   },
 
@@ -105,7 +115,7 @@ const ChartController = {
     });
   },
 
-  // gets all user charts
+  // gets all user charts and team charts
   getAll: (req, res) => {
     const { authId, sortBy } = req.query;
     User.findOne({ authId }).exec((userError, author) => {
@@ -115,12 +125,17 @@ const ChartController = {
         const sort = utils.getDashboardSortBy(sortBy);
 
         Chart.find(
-          { author, archived: false },
+          {
+            $or: [
+              { author, archived: false },
+              { team: author.team, archived: false }
+            ]
+          },
           'created last_updated team _public type dataSources _id name archived'
         )
           .collation({ locale: 'en' })
           .sort(sort)
-          .populate('author', 'username')
+          .populate('author', 'username authId')
           .exec((chartError, chart) => {
             if (chartError) general.handleError(res, chartError);
             res.json(chart);

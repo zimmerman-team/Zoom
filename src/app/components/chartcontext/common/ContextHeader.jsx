@@ -50,7 +50,6 @@ const defaultProps = {
   createdDate: 'January 12th 2019'
 };
 const ContextHeader = props => {
-  console.log('ContextHeader', props);
   return (
     <ComponentBase style={{ paddingBottom: props.noBottom ? '0' : '' }}>
       <Title>{props.title}</Title>

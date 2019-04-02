@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import ReactQuill from 'react-quill'; // ES6
 import 'react-quill/dist/quill.snow.css'; // ES
 import theme from 'theme/Theme';
+import CreateTeam from 'modules/UserManagement/CreateTeam/CreateTeamModule';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -13,23 +14,35 @@ import theme from 'theme/Theme';
 
 const ZoomQuill = styled(props => <ReactQuill {...props} />)`
   && {
-    padding: 0;
-    marging: 0;
+    .ql-toolbar {
+      border-top-color: black;
+      border-top-width: 2px;
+      border-right: initial;
+      border-left: initial;
+    }
+    .ql-container {
+      border: initial;
+      border-bottom: initial !important;
+    }
 
-    div {
-      &:first-child {
-        border-top-color: black;
-        border-top-width: 2px;
-        border-right: initial;
-        border-left: initial;
+    .ql-editor {
+      &:before {
+        color: ${theme.color.zoomBlack};
+        font-family: ${theme.font.zoomFontFamOne};
+        font-size: 14px;
+        font-style: normal;
       }
 
-      &:last-child {
-        border: initial;
-        border-bottom: initial !important;
+      p {
+        font-family: ${theme.font.zoomFontFamTwo};
+        font-size: 14px;
       }
     }
   }
+`;
+
+const EditAreaOne = styled.div`
+  background-color: #e3e3e3;
 `;
 
 const propTypes = {
@@ -40,7 +53,8 @@ const propTypes = {
 const defaultProps = {
   saveDesc: undefined,
   defaultVal: '',
-  data: []
+  data: [],
+  placeholder: '[Inset text here]'
 };
 
 class TextEditor extends React.Component {

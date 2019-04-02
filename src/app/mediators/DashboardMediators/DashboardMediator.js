@@ -33,6 +33,8 @@ class DashboardMediator extends React.Component {
       teams: [],
       sort: 'name:1',
       searchKeyword: '',
+      charts: [],
+      datasets: [],
       isSortByOpen: false
     };
 
@@ -51,6 +53,27 @@ class DashboardMediator extends React.Component {
 
     if (!isEqual(this.props.chartDeleted, prevProps.chartDeleted))
       this.reloadData();
+
+    // we format the charts
+    if (
+      !isEqual(this.props.userCharts, prevProps.userCharts) &&
+      this.props.userCharts.data
+    )
+      this.setState({
+        charts: formatChartData(
+          this.props.userCharts.data,
+          this.props.user.authId,
+          this.props.history,
+          this.deleteChart
+        )
+      });
+
+    // we format the datasets
+    if (
+      !isEqual(this.props.userDatasets, prevProps.userDatasets) &&
+      this.props.userDatasets.data
+    )
+      this.setState({ datasets: formatDatasets(this.props.userDatasets.data) });
   }
 
   componentWillUnmount() {
@@ -151,16 +174,13 @@ class DashboardMediator extends React.Component {
   }
 
   render() {
-    const charts = this.props.userCharts.data || [];
-    const datasets = this.props.userDatasets.data || [];
-
     return (
       <DashboardModule
         // tabs={tabs}
         sort={this.state.sort}
         users={this.state.users}
-        datasets={formatDatasets(datasets)}
-        charts={formatChartData(charts, this.props.history, this.deleteChart)}
+        datasets={this.state.datasets}
+        charts={this.state.charts}
         changeSortBy={this.changeSortBy}
         setWrapperRef={this.setWrapperRef}
         setIsSortByOpen={this.setIsSortByOpen}
@@ -173,7 +193,12 @@ class DashboardMediator extends React.Component {
           this.state.sort,
           this.state.searchKeyword
         )}
-        navItems={data(this.state.users, this.state.teams, charts, datasets)}
+        navItems={data(
+          this.state.users,
+          this.state.teams,
+          this.state.charts,
+          this.state.datasets
+        )}
         greetingName={get(this.props.auth0Client.getProfile(), 'nickname', '')}
       />
     );
@@ -184,6 +209,7 @@ const mapStateToProps = state => {
   return {
     userDatasets: state.userDatasets,
     chartDeleted: state.chartDeleted,
+    // yeah so actually these are the user and team charts
     userCharts: state.userCharts,
     user: state.user.data
   };

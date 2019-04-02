@@ -72,6 +72,7 @@
   },
   "scripts": {
     "visual:test": "loki:update; yarn loki:test; yarn reg:compare;",
+    "postbuild": "react-snap",
     "reg:update": "reg-cli .loki/current .loki/reference .loki/difference -U ./report/index.html",
     "reg:compare": "reg-cli .loki/current .loki/reference .loki/difference -R ./report/index.html",
     "loki:update": "loki update",

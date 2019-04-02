@@ -34,11 +34,11 @@ const PropsRoute = ({ component, ...rest }) => {
 };
 
 const propTypes = {
-  type: PropTypes.string,
+  chartType: PropTypes.string,
   mode: PropTypes.bool
 };
 const defaultProps = {
-  type: 'geomap',
+  chartType: 'geomap',
   mode: location.pathname.includes('preview')
 };
 
@@ -48,6 +48,10 @@ class VizContainer extends React.Component {
   };
 
   componentDidMount() {
+    // need an initial set here, because those default props, don't actually set
+    // the state correctly
+    this.setState({ preview: location.pathname.includes('preview') });
+
     this.props.history.listen((location, action) => {
       const mode = location.pathname.includes('preview');
       this.setState({ preview: mode });
@@ -58,15 +62,22 @@ class VizContainer extends React.Component {
     return (
       <ComponentBase mode={this.state.preview ? 'initial' : 'center'}>
         <PreviewTextContainer mode={this.state.preview ? 'flex' : 'none'}>
-          <ContextPreview desc={this.props.chartData.desc} />
+          <ContextPreview
+            createdDate={this.props.chartData.createdDate}
+            authorName={this.props.chartData.authorName}
+            title={this.props.chartData.name}
+            desc={this.props.chartData.desc}
+          />
         </PreviewTextContainer>
 
         <React.Fragment>
           <PropsRoute
+            chartType={this.props.chartType}
+            outerHistory={this.props.outerHistory}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
             indicatorData={this.props.indicators}
-            path="/visualizer/geomap/:code/:tab"
+            path="/visualizer/(geomap|focusKE|focusNL)/:code/:tab"
             component={GeomapFragment}
             mode={this.state.preview}
           />

@@ -1,3 +1,6 @@
+/* utils */
+const utils = require('../utils/general');
+
 /* general */
 const general = require('./generalResponse');
 
@@ -17,14 +20,24 @@ const DatasetApi = {
   },
 
   // gets all datasets of the owner
-  getOwnerDatasets: function(author, res) {
-    // TODO: should be adjusted without the promises, or maybe with promises if
-    // TODO: it works and makes sense
-    return Dataset.find({ author })
-      .then(set => res(null, set))
-      .catch(error => {
-        general.handleError(res, error);
-      });
+  getOwnerDatasets: (req, res) => {
+    const { authId, sortBy } = req.query;
+
+    User.findOne({ authId }, (error, author) => {
+      if (error) general.handleError(res, error);
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else {
+        const sort = utils.getDashboardSortBy(sortBy);
+
+        Dataset.find({ author })
+          .collation({ locale: 'en' })
+          .sort(sort)
+          .exec((setError, dataset) => {
+            if (setError) general.handleError(res, setError);
+            else res.json(dataset);
+          });
+      }
+    });
   },
 
   // so this updates the team related to the dataset
@@ -77,6 +90,7 @@ const DatasetApi = {
             author: acc,
             name: data.name,
             team: data.team,
+            dataSource: data.dataSource,
             public: data.public
           });
 

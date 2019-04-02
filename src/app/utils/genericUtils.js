@@ -16,3 +16,16 @@ export function formatYearParam(val) {
   }
   return yearArray;
 }
+
+// function specifically made for the year selector
+// cause it requires years as an array of numbers
+// where graphql needs it to be a string
+// so this basically reformats the string to an array
+export function yearStrToArray(yearRange) {
+  const startYear = parseInt(
+    yearRange.substring(0, yearRange.indexOf(',')),
+    10
+  );
+  const endYear = parseInt(yearRange.substring(yearRange.indexOf(',') + 1), 10);
+  return [startYear, endYear];
+}

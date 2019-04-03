@@ -256,7 +256,14 @@ class VisualizerModuleMediator extends Component {
     }
 
     // TODO redo this check properly
-    const { name, desc,descIntro, _public, team, ...restChart } = this.props.chartData;
+    const {
+      name,
+      desc,
+      descIntro,
+      _public,
+      team,
+      ...restChart
+    } = this.props.chartData;
     const {
       name: prevName,
       desc: prevDesc,
@@ -454,7 +461,6 @@ class VisualizerModuleMediator extends Component {
   }
 
   render() {
-    // console.log('this.props.chartResults', this.props.chartResults);
     return (
       <VisualizerModule
         outerHistory={this.props.history}
@@ -501,6 +507,7 @@ export default createRefetchContainer(
           "indicatorName"
           "geolocationTag"
           "date"
+          "geolocationType"
           "geolocationIso2"
           "geolocationPolygons"
           "valueFormatType"
@@ -515,6 +522,7 @@ export default createRefetchContainer(
         indicatorName
         geolocationIso2
         geolocationTag
+        geolocationType
         geolocationPolygons
         valueFormatType
         date
@@ -525,6 +533,7 @@ export default createRefetchContainer(
           "indicatorName"
           "geolocationTag"
           "date"
+          "geolocationType"
           "geolocationIso2"
           "geolocationCenterLongLat"
           "valueFormatType"
@@ -539,6 +548,7 @@ export default createRefetchContainer(
         indicatorName
         geolocationIso2
         geolocationTag
+        geolocationType
         geolocationCenterLongLat
         valueFormatType
         date

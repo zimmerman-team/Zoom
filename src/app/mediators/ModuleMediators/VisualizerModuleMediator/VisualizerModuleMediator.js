@@ -237,10 +237,11 @@ class VisualizerModuleMediator extends Component {
     }
 
     // TODO redo this check properly
-    const { name, desc, _public, team, ...restChart } = this.props.chartData;
+    const { name, desc,descIntro, _public, team, ...restChart } = this.props.chartData;
     const {
       name: prevName,
       desc: prevDesc,
+      descIntro: prevDescIntro,
       _public: prevPublc,
       team: prevTeam,
       ...prevRestChart

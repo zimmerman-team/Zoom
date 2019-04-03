@@ -212,7 +212,7 @@ export class GeoMap extends Component {
     const { features } = event;
 
     const feature = features && features.find(f => f.layer.id === 'layer');
-    if (feature)
+    if (feature && feature.properties.geolocationType === 'country')
       this.props.outerHistory.push(`/country/${feature.properties.iso2}`);
   };
 

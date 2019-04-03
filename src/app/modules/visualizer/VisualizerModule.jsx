@@ -31,11 +31,13 @@ const propTypes = {
   indicators: PropTypes.arrayOf(PropTypes.shape({})),
   dataPaneOpen: PropTypes.string,
   chartType: PropTypes.string,
+  publicPage: PropTypes.bool,
   moduleMode: PropTypes.string
 };
 
 const defaultProps = {
   indicators: [],
+  publicPage: false,
   dataPaneOpen: 'visualizer',
   dropDownData: {},
   chartType: PropTypes.string,
@@ -72,13 +74,16 @@ class BuilderModule extends Component {
           }
         >
           {this.props.loading && <ProgressIcon />}
-          <VizSidebar
-            chartType={this.props.chartType}
-            code={this.props.code}
-            dropDownData={this.props.dropDownData}
-            display={this.props.dataPaneOpen === paneTypes.visualizer}
-          />
+          {!this.props.publicPage && (
+            <VizSidebar
+              chartType={this.props.chartType}
+              code={this.props.code}
+              dropDownData={this.props.dropDownData}
+              display={this.props.dataPaneOpen === paneTypes.visualizer}
+            />
+          )}
           <VizContainer
+            publicPage={this.props.publicPage}
             chartType={this.props.chartType}
             outerHistory={this.props.outerHistory}
             indicators={this.props.indicators}

@@ -77,6 +77,11 @@ jobs:
               echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
             fi
             source $BASH_ENV
+      - run:
+          name: Set REACT_APP_POSTMARK_CLIENT_ID env var
+          command: |
+            echo 'export REACT_APP_POSTMARK_CLIENT_ID="$REACT_APP_POSTMARK_CLIENT_ID"' >> $BASH_ENV
+            source $BASH_ENV
       - run: yarn build
       - run:
           name: Add target host to known_hosts files

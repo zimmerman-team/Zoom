@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import ReactQuill from 'react-quill'; // ES6
 import 'react-quill/dist/quill.snow.css'; // ES
 import theme from 'theme/Theme';
-import CreateTeam from 'modules/UserManagement/CreateTeam/CreateTeamModule';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -40,10 +39,6 @@ const ZoomQuill = styled(props => <ReactQuill {...props} />)`
   }
 `;
 
-const EditAreaOne = styled.div`
-  background-color: #e3e3e3;
-`;
-
 const propTypes = {
   saveDesc: PropTypes.func,
   defaultVal: PropTypes.string,
@@ -53,7 +48,7 @@ const defaultProps = {
   saveDesc: undefined,
   defaultVal: '',
   data: [],
-  placeholder: '[Inset text here]'
+  placeholder: '[ Insert body text here ]'
 };
 
 class TextEditor extends React.Component {
@@ -106,7 +101,6 @@ TextEditor.formats = [
   'bullet',
   'indent',
   'link',
-  'image',
   'align',
   'background',
   'color'
@@ -125,7 +119,7 @@ TextEditor.modules = {
       { indent: '-1' },
       { indent: '+1' }
     ],
-    ['link', 'image'],
+    ['link'],
     ['clean']
   ],
   clipboard: {

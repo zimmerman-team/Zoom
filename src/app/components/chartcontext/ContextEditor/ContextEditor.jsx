@@ -5,6 +5,7 @@ import connect from 'react-redux/es/connect/connect';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 import TextEditor from 'components/editors/TextEditor/TextEditor';
+import DescriptionEditor from 'components/chartcontext/common/DescriptionEditor';
 import ContextHeader from 'components/chartcontext/common/ContextHeader';
 
 /* actions */
@@ -63,6 +64,7 @@ class ContextEditor extends React.Component {
           edit
         />
         <ContextBody>
+          <DescriptionEditor />
           <TextEditor
             saveDesc={desc =>
               this.props.dispatch(actions.storeChartDataRequest({ desc }))

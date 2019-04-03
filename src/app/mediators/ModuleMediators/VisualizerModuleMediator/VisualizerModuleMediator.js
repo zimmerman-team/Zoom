@@ -162,35 +162,6 @@ class VisualizerModuleMediator extends Component {
       this.updateIndicators();
     }
 
-    if (
-      this.props.paneData.yearRange !== prevProps.paneData.yearRange &&
-      this.props.paneData.yearRange
-    ) {
-      const currStartYear = this.props.paneData.yearRange.substring(
-        0,
-        this.props.paneData.yearRange.indexOf(',')
-      );
-
-      if (prevProps.paneData.yearRange) {
-        const prevStartYear = prevProps.paneData.yearRange.substring(
-          0,
-          prevProps.paneData.yearRange.indexOf(',')
-        );
-
-        if (prevStartYear !== currStartYear) {
-          // this is the year selection for the geomaps/homepage timeline
-          this.selectYear(currStartYear);
-
-          if (this.props.chartData.changesMade) this.updateIndicators();
-        }
-      } else {
-        // this is the year selection for the geomaps/homepage timeline
-        this.selectYear(currStartYear);
-
-        if (this.props.chartData.changesMade) this.updateIndicators();
-      }
-    }
-
     // and we load in the chart data retrieved from the node backend
     if (
       !isEqual(this.props.chartResults, prevProps.chartResults) &&
@@ -455,7 +426,8 @@ class VisualizerModuleMediator extends Component {
     // so we set the values for chart data
     this.props.dispatch(
       actions.storeChartDataRequest({
-        selectedYear: val
+        selectedYear: val,
+        changesMade: true
       })
     );
   }

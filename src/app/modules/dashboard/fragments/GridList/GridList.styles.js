@@ -8,5 +8,5 @@ export const Container = styled(MuiGridList)`
   //justify-content: space-between;
   flex-wrap: wrap;
   width: 1024px;
-  overflow: initial!important;
+  overflow: initial !important;
 `;

@@ -7,5 +7,5 @@ export const Container = styled(MuiGridList)`
   padding-bottom: 40px !important;
   justify-content: space-between;
   width: 1024px;
-  overflow: initial!important;
+  overflow: initial !important;
 `;

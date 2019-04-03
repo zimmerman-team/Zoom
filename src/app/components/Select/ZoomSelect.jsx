@@ -92,7 +92,11 @@ class ZoomSelect extends React.Component {
       this.allCheck();
     }
 
-    if (this.props.data && this.props.data.length > 0) {
+    if (
+      this.props.data &&
+      this.props.data.length > 0 &&
+      this.props.categorise
+    ) {
       this.categorise();
     }
   }

@@ -29,9 +29,9 @@ export const ComponentBase = styled(NavLink)`
   &:hover {
     cursor: pointer;
   }
-  
-  &:nth-child(3n){
-  margin-right:0; 
+
+  &:nth-child(3n) {
+    margin-right: 0;
   }
 `;
 

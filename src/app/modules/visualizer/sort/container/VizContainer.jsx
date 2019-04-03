@@ -10,7 +10,6 @@ import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFr
 
 import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment';
 import { PreviewTextContainer, ComponentBase, Box } from './VizContainer.style';
-import VisualizerModule from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -35,10 +34,12 @@ const PropsRoute = ({ component, ...rest }) => {
 
 const propTypes = {
   chartType: PropTypes.string,
+  publicPage: PropTypes.bool,
   mode: PropTypes.bool
 };
 const defaultProps = {
   chartType: 'geomap',
+  publicPage: false,
   mode: location.pathname.includes('preview')
 };
 
@@ -60,8 +61,14 @@ class VizContainer extends React.Component {
 
   render() {
     return (
-      <ComponentBase mode={this.state.preview ? 'initial' : 'center'}>
-        <PreviewTextContainer mode={this.state.preview ? 'flex' : 'none'}>
+      <ComponentBase
+        mode={
+          this.state.preview || this.props.publicPage ? 'initial' : 'center'
+        }
+      >
+        <PreviewTextContainer
+          mode={this.state.preview || this.props.publicPage ? 'flex' : 'none'}
+        >
           <ContextPreview
             createdDate={this.props.chartData.createdDate}
             authorName={this.props.chartData.authorName}
@@ -79,7 +86,7 @@ class VizContainer extends React.Component {
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
             indicatorData={this.props.indicators}
-            path="/visualizer/(geomap|focusKE|focusNL)/:code/:tab"
+            path="/(visualizer|public)/(geomap|focusKE|focusNL)/:code/:tab"
             component={GeomapFragment}
             mode={this.state.preview}
           />

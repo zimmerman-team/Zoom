@@ -63,6 +63,11 @@ const propTypes = {
       )
     })
   }),
+  chartResults: PropTypes.shape({}),
+  chartData: PropTypes.shape({}),
+  user: PropTypes.shape({}),
+  paneData: PropTypes.shape({}),
+  publicPage: PropTypes.bool,
   dropDownData: PropTypes.shape({
     allIndicators: PropTypes.shape({
       edges: PropTypes.arrayOf(
@@ -73,10 +78,6 @@ const propTypes = {
         })
       )
     }),
-    chartResults: PropTypes.shape({}),
-    chartData: PropTypes.shape({}),
-    user: PropTypes.shape({}),
-    paneData: PropTypes.shape({}),
     allCountries: PropTypes.shape({
       edges: PropTypes.arrayOf(
         PropTypes.shape({
@@ -92,6 +93,11 @@ const propTypes = {
 
 const defaultProps = {
   dropDownData: {},
+  publicPage: false,
+  chartResults: {},
+  chartData: {},
+  user: {},
+  paneData: {},
   indicatorAggregations: {}
 };
 
@@ -435,6 +441,7 @@ class VisualizerModuleMediator extends Component {
   render() {
     return (
       <VisualizerModule
+        publicPage={this.props.publicPage}
         outerHistory={this.props.history}
         chartType={this.props.paneData.chartType}
         code={this.props.match.params.code}

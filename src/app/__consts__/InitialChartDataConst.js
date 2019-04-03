@@ -7,6 +7,15 @@ import { formatYearParam } from 'utils/genericUtils';
 // const yearBefore = currentYear - 15;
 
 const initialState = {
+  // so this variable is mainly used to control
+  // the loading of data from zoombackend or DUCT
+  // initially before changes are made in the data pane
+  // the indicator data saved in the zoombackend will load
+  // and if changes have been made then the data from DUCT
+  // will be loading
+  // and this ofcourse becomes false only when
+  // actual chart data from the zoombackend has been loaded
+  changesMade: true,
   yearPeriod: formatYearParam([2003, 2016]),
   chartMounted: false,
   authorName: 'You',
@@ -16,6 +25,7 @@ const initialState = {
   selectedYear: '2003',
   _public: false,
   team: false,
+  // this is the actual data loaded into the chart
   indicators: [],
   dataSource1: undefined,
   dataSource2: undefined,

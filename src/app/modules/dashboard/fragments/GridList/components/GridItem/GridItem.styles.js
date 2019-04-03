@@ -24,9 +24,14 @@ export const ComponentBase = styled(NavLink)`
   background-color: ${Theme.color.zoomGreyZero};
   box-shadow: 0 2px 4px 2px rgba(157, 157, 157, 0.5);
   margin-left: 6px;
+  margin-right: 30px;
 
   &:hover {
     cursor: pointer;
+  }
+  
+  &:nth-child(3n){
+  margin-right:0; 
   }
 `;
 

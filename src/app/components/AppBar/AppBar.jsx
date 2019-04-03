@@ -101,14 +101,31 @@ export class AppBar extends React.Component {
       name: this.props.chartData.name,
       description: this.props.chartData.desc,
       type: this.props.paneData.chartType,
+      data: this.props.chartData.indicators,
       indicatorItems: [
         {
           indicator: this.props.chartData.selectedInd1,
-          subIndicators: this.props.chartData.selectedSubInd1
+          subIndicators: this.props.chartData.selectedSubInd1,
+          // we also need to save the all sub indicators
+          // for the datapanes default selections
+          // because usually subindicators are refetched
+          // when an indicator is selected
+          // and because we want to initially load in just the
+          // data from zoombackend, we don't want to be refetching
+          // anything
+          allSubIndicators: this.props.paneData.subIndicators1
         },
         {
           indicator: this.props.chartData.selectedInd2,
-          subIndicators: this.props.chartData.selectedSubInd2
+          subIndicators: this.props.chartData.selectedSubInd2,
+          // we also need to save the all sub indicators
+          // for the datapanes default selections
+          // because usually subindicators are refetched
+          // when an indicator is selected
+          // and because we want to initially load in just the
+          // data from zoombackend, we don't want to be refetching
+          // anything
+          allSubIndicators: this.props.paneData.subIndicators2
         }
       ],
       selectedSources: this.props.paneData.selectedSources,

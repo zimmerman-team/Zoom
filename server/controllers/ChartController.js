@@ -174,6 +174,7 @@ const ChartController = {
       selectedYear,
       dataSources,
       _public,
+      data,
       team,
       selectedCountryVal,
       selectedRegionVal
@@ -192,6 +193,7 @@ const ChartController = {
               description,
               _public,
               team,
+              data,
 
               // so the type of chart
               type,
@@ -218,6 +220,8 @@ const ChartController = {
 
             chart.description = description;
             chart.dataSources = dataSources;
+
+            chart.data = data;
 
             // so the type of chart
             chart.type = type;

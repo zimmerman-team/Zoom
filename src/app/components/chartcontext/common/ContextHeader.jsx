@@ -69,7 +69,6 @@ const ContextHeader = props => {
         <Title>{props.title}</Title>
       )}
 
-      {/*<TitleEditor defaultValue={props.title} />*/}
       <Details>
         By {props.authorName} {props.createdDate && `| ${props.createdDate}`}
       </Details>

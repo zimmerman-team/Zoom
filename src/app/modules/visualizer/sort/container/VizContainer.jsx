@@ -67,6 +67,8 @@ class VizContainer extends React.Component {
             authorName={this.props.chartData.authorName}
             title={this.props.chartData.name}
             desc={this.props.chartData.desc}
+            descIntro={this.props.chartData.descIntro}
+            show={'descIntro'}
           />
         </PreviewTextContainer>
 
@@ -96,6 +98,16 @@ class VizContainer extends React.Component {
             mode={this.state.preview}
           />
         </React.Fragment>
+        <PreviewTextContainer mode={this.state.preview ? 'flex' : 'none'}>
+          <ContextPreview
+            createdDate={this.props.chartData.createdDate}
+            authorName={this.props.chartData.authorName}
+            title={this.props.chartData.name}
+            desc={this.props.chartData.desc}
+            descIntro={this.props.chartData.descIntro}
+            show={'descBody'}
+          />
+        </PreviewTextContainer>
       </ComponentBase>
     );
   }

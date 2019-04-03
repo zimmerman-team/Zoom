@@ -23,6 +23,7 @@ export const ComponentBase = styled(NavLink)`
   padding: 15px;
   background-color: ${Theme.color.zoomGreyZero};
   box-shadow: 0 2px 4px 2px rgba(157, 157, 157, 0.5);
+  margin-left: 6px;
 
   &:hover {
     cursor: pointer;

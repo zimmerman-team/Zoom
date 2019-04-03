@@ -15,6 +15,7 @@ const FragmentBase = styled.div`
   max-width: 1024px;
   flex-direction: column;
   align-items: center;
+
   //outline: 1px solid crimson;
 `;
 

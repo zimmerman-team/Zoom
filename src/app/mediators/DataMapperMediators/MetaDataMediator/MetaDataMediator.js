@@ -12,6 +12,7 @@ import * as actions from 'services/actions/general';
 
 /* utils */
 import findIndex from 'lodash/findIndex';
+import sortBy from 'lodash/sortBy';
 
 /* consts */
 import { step1InitialData } from '__consts__/DataMapperStepConsts';
@@ -115,11 +116,10 @@ class MetaDataMediator extends React.Component {
       this.props.dispatch(actions.saveStepDataRequest(stepData));
     }
 
-    const fileSources = this.props.dropDownData.allFileSources.edges.map(
-      node => {
-        return { label: node.node.name, value: node.node.entryId };
-      }
-    );
+    let fileSources = this.props.dropDownData.allFileSources.edges.map(node => {
+      return { label: node.node.name, value: node.node.entryId };
+    });
+    fileSources = sortBy(fileSources, ['label']);
     this.simpleChange(fileSources, 'fileSources');
   }
 

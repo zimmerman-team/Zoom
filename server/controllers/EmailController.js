@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const dotenv = require('dotenv');
 const postmark = require('postmark');
 
@@ -23,7 +24,12 @@ const EmailController = {
         Attachments: [
           {
             Content: fs
-              .readFileSync('src/app/assets/images/zoom_logo.png')
+              .readFileSync(
+                path.resolve(
+                  __dirname,
+                  '../../src/app/assets/images/zoom_logo.png'
+                )
+              )
               .toString('base64'),
             Name: 'zoom_logo.png',
             ContentType: 'image/png',

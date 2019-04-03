@@ -89,6 +89,18 @@ const Routes = props => {
           />
           <Route
             exact
+            path="/public/:chart/:code/:tab"
+            render={() => (
+              <VisualizerModuleMediator
+                publicPage
+                indicatorAggregations={props}
+                dropDownData={props}
+                auth0Client={props.auth0Client}
+              />
+            )}
+          />
+          <Route
+            exact
             path="/country/:iso2"
             render={() => (
               <CountryDetailMediator indicatorAggregations={props} />

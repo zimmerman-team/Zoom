@@ -58,7 +58,7 @@ const ChartController = {
     res.json(chart);
   },
 
-  // gets one user chart
+  // gets one user or public chart
   get: (req, res) => {
     const { chartId, authId } = req.query;
 
@@ -66,7 +66,12 @@ const ChartController = {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
       else
-        Chart.findOne({ _id: chartId, author })
+        Chart.findOne({
+          $or: [
+            { _id: chartId, author, archived: false },
+            { _id: chartId, _public: true, archived: false }
+          ]
+        })
           .populate('author')
           .exec((chartError, chart) => {
             if (chartError) general.handleError(res, chartError);
@@ -214,7 +219,7 @@ const ChartController = {
 
               res.json({ message: 'chart created', id: chartz._id });
             });
-          } else {
+          } else if (author.equals(chart.author)) {
             chart.name = name;
             chart.author = author;
 
@@ -243,7 +248,7 @@ const ChartController = {
 
               res.json({ message: 'chart updated', id: chart._id });
             });
-          }
+          } else general.handleError(res, 'Unauthorized', 401);
         });
       }
     });

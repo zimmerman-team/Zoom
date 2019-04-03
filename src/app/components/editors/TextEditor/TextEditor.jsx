@@ -26,7 +26,7 @@ const ZoomQuill = styled(props => <ReactQuill {...props} />)`
 
     .ql-editor {
       &:before {
-        color: ${theme.color.zoomBlack};
+        color: ${theme.color.zoomGreyOne};
         font-family: ${theme.font.zoomFontFamOne};
         font-size: 14px;
         font-style: normal;
@@ -34,6 +34,7 @@ const ZoomQuill = styled(props => <ReactQuill {...props} />)`
       p {
         font-family: ${theme.font.zoomFontFamTwo};
         font-size: 14px;
+        color: ${theme.color.zoomGreyOne};
       }
     }
   }

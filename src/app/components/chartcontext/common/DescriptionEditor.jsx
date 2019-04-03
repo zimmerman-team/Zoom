@@ -1,8 +1,17 @@
 /* base */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import InputBase from '@material-ui/core/InputBase';
 import theme from 'theme/Theme';
+import ContextHeader from 'components/chartcontext/common/ContextHeader';
+
+const propTypes = {
+  saveText: PropTypes.func,
+  defaultVal: PropTypes.string
+};
+
+const defaultProps = {};
 
 const DescriptionEditor = styled(props => (
   <InputBase
@@ -11,6 +20,8 @@ const DescriptionEditor = styled(props => (
     rows={3}
     rowsMax={3}
     type="text"
+    value={props.defaultVal}
+    onChange={e => props.saveText(e.target.value)}
     {...props}
   />
 ))`
@@ -20,6 +31,7 @@ const DescriptionEditor = styled(props => (
     width: 100%;
     border-top: 2px solid black;
     padding: 15px;
+    margin-bottom: 20px;
 
     textarea {
       &::placeholder {
@@ -30,5 +42,8 @@ const DescriptionEditor = styled(props => (
     }
   }
 `;
+
+DescriptionEditor.propTypes = propTypes;
+DescriptionEditor.defaultProps = defaultProps;
 
 export default DescriptionEditor;

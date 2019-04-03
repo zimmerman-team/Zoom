@@ -10,6 +10,7 @@ import ContextHeader from 'components/chartcontext/common/ContextHeader';
 
 /* actions */
 import * as actions from 'services/actions/general';
+import EditableTitle from 'components/chartcontext/common/EditableTitle';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -64,7 +65,12 @@ class ContextEditor extends React.Component {
           edit
         />
         <ContextBody>
-          <DescriptionEditor />
+          <DescriptionEditor
+            defaultVal={this.props.chartData.descIntro}
+            saveText={descIntro =>
+              this.props.dispatch(actions.storeChartDataRequest({ descIntro }))
+            }
+          />
           <TextEditor
             saveDesc={desc =>
               this.props.dispatch(actions.storeChartDataRequest({ desc }))

@@ -1,5 +1,7 @@
 import axios from 'axios';
 import auth0 from 'auth0-js';
+import postmark from 'postmark';
+import { nodeBackendGetRequest } from 'services/index';
 
 class Auth {
   constructor() {
@@ -434,7 +436,7 @@ class Auth {
           )
           .then(res2 => {
             if (res2.status === 201) {
-              _this.forgetPassword(email, null);
+              _this.sendWelcomeEmail(res2.data.user_id, name, surname, email);
               parent.setState({
                 success: true,
                 errorMessage: null,
@@ -572,6 +574,58 @@ class Auth {
           });
         });
     });
+  }
+
+  sendWelcomeEmail(userId, name, surname, email) {
+    axios
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
+        grant_type: 'client_credentials'
+      })
+      .then(res1 => {
+        axios
+          .post(
+            `${
+              process.env.REACT_APP_AUTH_DOMAIN
+            }/api/v2/tickets/password-change`,
+            {
+              user_id: userId
+            },
+            {
+              headers: {
+                Authorization: `${res1.data.token_type} ${
+                  res1.data.access_token
+                }`
+              }
+            }
+          )
+          .then(res2 => {
+            nodeBackendGetRequest({
+              endpoint: 'sendEmail',
+              values: {
+                name,
+                surname,
+                email,
+                link: res2.data.ticket
+              }
+            });
+          })
+          .catch(error => {
+            console.log(error);
+            parent.setState({
+              success: false,
+              errorMessage: error.response.data.message
+            });
+          });
+      })
+      .catch(error => {
+        parent.setState({
+          success: false,
+          errorMessage: error.response.data.message
+        });
+      });
   }
 }
 

@@ -95,12 +95,13 @@ class ManMappingStep extends React.Component {
                 arrowMargins="auto 22px auto 4px"
                 placeHolder="-None-"
                 data={this.props.modelOptions}
-                valueSelected={val.zoomModel}
+                valueSelected={val.zoomModelLabel}
                 selectVal={zoomModel =>
                   this.selectDataType(
                     zoomModel.value,
                     val.fileType,
-                    val.zoomModel
+                    val.zoomModel,
+                    zoomModel.label
                   )
                 }
               />
@@ -263,7 +264,7 @@ class ManMappingStep extends React.Component {
     });
   }
 
-  selectDataType(zoomModel, fileType, prevModel) {
+  selectDataType(zoomModel, fileType, prevModel, zoomModelLabel) {
     const { data } = this.props;
     const itemIndex = findIndex(data, ['fileType', fileType]);
 
@@ -282,6 +283,7 @@ class ManMappingStep extends React.Component {
     const disabledValues = this.changeDisabledVal(zoomModel, prevModel);
 
     data[itemIndex].zoomModel = zoomModel;
+    data[itemIndex].zoomModelLabel = zoomModelLabel;
 
     // and we save the shared manMapData
     const stepData = { ...this.props.stepData };

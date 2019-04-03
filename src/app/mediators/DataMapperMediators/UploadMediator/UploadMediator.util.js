@@ -1,5 +1,6 @@
 import findIndex from 'lodash/findIndex';
 import find from 'lodash/find';
+import sortBy from 'lodash/sortBy';
 
 export const arrayOfValues = [
   'Number Value',
@@ -85,7 +86,7 @@ export function formatOverviewData(sumString, typesString) {
 }
 
 export function formatModelOptions(dataModelHeading) {
-  const modelOptions = [];
+  let modelOptions = [];
 
   // We push in the default label none
   modelOptions.push({
@@ -119,11 +120,13 @@ export function formatModelOptions(dataModelHeading) {
     if (key !== 'value') {
       // and now we push in the rest
       modelOptions.push({
-        label: key,
+        label: key.charAt(0).toUpperCase() + key.slice(1),
         value: key
       });
     }
   });
+
+  modelOptions = sortBy(modelOptions, ['label']);
 
   return modelOptions;
 }
@@ -137,13 +140,14 @@ export function formatManData(typesString, modelOptions) {
 
   // yet again this is super weird data so we form it in a weird way.
   Object.keys(types).forEach(typeKey => {
+    const modelOption = find(modelOptions, ['value', types[typeKey][0]]);
+
     manMapData.push({
       lockedIn: false,
       fileType: types[typeKey][0],
       // so if a file type exists as a model, it should be selected by default
-      zoomModel: find(modelOptions, ['value', types[typeKey][0]])
-        ? types[typeKey][0]
-        : '-None-',
+      zoomModel: modelOption ? types[typeKey][0] : '-None-',
+      zoomModelLabel: modelOption ? modelOption.label : '-None-',
       label: undefined,
       emptyFieldRow: false
     });

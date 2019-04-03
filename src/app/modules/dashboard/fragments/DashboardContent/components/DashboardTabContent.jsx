@@ -13,8 +13,9 @@ const ComponentBase = styled.div`
   width: 100%;
   max-width: 1024px;
   justify-content: center;
-
   flex-direction: column;
+  border-top: 2px solid #cfcfcf;
+  //overflow: hidden;
 `;
 
 const Message = styled.div`

@@ -19,7 +19,7 @@ const HeaderIcon = styled.div`
 const HeaderGreeting = styled.div`
   display: flex;
   justify-content: center;
-  margin: 5px 0;
+  margin: 3px 0;
   font-size: 14px;
   font-weight: 300;
   color: ${Theme.color.aidsFondsRed};

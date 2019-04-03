@@ -19,7 +19,7 @@ const DescriptionEditor = styled(props => (
     placeholder="[ Insert description here ]"
     rows={3}
     rowsMax={3}
-    // type="text"
+    type="text"
     value={props.defaultVal}
     onChange={e => props.saveText(e.target.value)}
     {...props}

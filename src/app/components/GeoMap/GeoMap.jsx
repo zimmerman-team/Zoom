@@ -282,7 +282,11 @@ export class GeoMap extends Component {
           /*todo: refactor zooming functionality to facilitate both zooming by using the zoom controls and zooming by scrolling*/
           ref={map => (this.mapRef = map)}
           attributionControl
-          reuseMaps
+          // so commenting this out cause it causes the
+          // onHover to NOT receive features...
+          // dunno why though seems like just a bug in this react-map-gl library
+          // cause the on click does receive the features...
+          // reuseMaps
         >
           {/*So this is the layer tooltip, and we seperate it from the
               martker tooltip, cause its functionality as a tooltip is a bit different

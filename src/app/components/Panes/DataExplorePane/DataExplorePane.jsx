@@ -137,7 +137,7 @@ class DataExplorePane extends React.Component {
                 placeHolderNumber: this.props.allFileSources.length,
                 selectDataSource: this.props.selectDataSource,
                 allFileSources: this.props.allFileSources,
-                locationSelected: this.props.locationSelected,
+                defaultAll: this.props.locationSelected,
                 selectedSources: this.props.selectedSources,
                 reset: () => this.props.selectDataSource('reset')
               }
@@ -159,7 +159,7 @@ class DataExplorePane extends React.Component {
                 placeHolderNumber: this.props.regions.length,
                 selectDataSource: this.props.selectRegion,
                 allFileSources: this.props.regions,
-                locationSelected: this.props.locationSelected,
+                defaultAll: this.props.locationSelected,
                 selectedSources: this.props.selectedRegionVal,
                 reset: () => this.props.selectRegion('reset')
               },
@@ -170,7 +170,7 @@ class DataExplorePane extends React.Component {
                 placeHolderNumber: this.props.countries.length,
                 selectDataSource: this.props.selectCountry,
                 allFileSources: this.props.countries,
-                locationSelected: this.props.locationSelected,
+                defaultAll: this.props.locationSelected,
                 selectedSources: this.props.selectedCountryVal,
                 reset: () => this.props.selectCountry('reset')
               }
@@ -209,6 +209,7 @@ class DataExplorePane extends React.Component {
                 selectAll: true,
                 placeHolderText: 'Select sub indicator',
                 selectDataSource: this.props.selectSubInd1,
+                defaultAll: this.props.subInd1AllSelected,
                 allFileSources: this.props.subIndicators1,
                 selectedSources: this.props.selectedSubInd1
               },
@@ -228,6 +229,7 @@ class DataExplorePane extends React.Component {
                 selectAll: true,
                 placeHolderText: 'Select sub indicator',
                 selectDataSource: this.props.selectSubInd2,
+                defaultAll: this.props.subInd2AllSelected,
                 allFileSources: this.props.subIndicators2,
                 selectedSources: this.props.selectedSubInd2
               }

@@ -152,16 +152,6 @@ class ExplorePanelMediator extends React.Component {
       .concat(',')
       .concat(value[1]);
     this.setState({ yearRange }, this.refetch);
-
-    const prevStartYear = this.state.yearRange.substring(
-      0,
-      this.state.yearRange.indexOf(',')
-    );
-
-    if (prevStartYear !== value[0].toString()) {
-      // this is the year selection for the geomaps/homepage timeline
-      this.props.selectYear(value[0].toString());
-    }
   }
 
   refetch(

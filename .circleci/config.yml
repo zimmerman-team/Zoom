@@ -113,6 +113,38 @@ jobs:
             else
               rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_DEV":~/zoom-v2-ui
             fi
+      - run:
+          name: Update zoom backend
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ssh "$SSH_USER"@"$SSH_HOST_STAGING"
+              cd ~/zoom-v2-ui/
+              git pull
+              yarn install
+              yarn relay
+              pm2 restart server/server.js
+            elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              ssh "$SSH_USER"@"$SSH_HOST_TEST"
+              cd ~/zoom-v2-ui/
+              git pull
+              yarn install
+              yarn relay
+              pm2 restart server/server.js
+            elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
+              ssh "$SSH_USER"@"$SSH_HOST_DEV"
+              cd ~/zoom-v2-ui/
+              git pull
+              yarn install
+              yarn relay
+              pm2 restart server/server.js
+            else
+              ssh "$SSH_USER"@"$SSH_HOST_DEV"
+              cd ~/zoom-v2-ui/
+              git pull
+              yarn install
+              yarn relay
+              pm2 restart server/server.js
+            fi
 
   test_e2e:
     docker:

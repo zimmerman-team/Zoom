@@ -117,13 +117,13 @@ jobs:
           name: Update zoom frontend and backend
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              ssh "$SSH_USER"@"$SSH_HOST_STAGING" "cd ~/zoom-v2-ui/; git pull; yarn install; echo ""$SSH_STAGING_PASS"" | sudo -S service supervisor restart"
+              ssh "$SSH_USER"@"$SSH_HOST_STAGING" "cd ~/zoom-v2-ui/; git pull; yarn install; echo '"$SSH_STAGING_PASS"' | sudo -S service supervisor restart"
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              ssh "$SSH_USER"@"$SSH_HOST_TEST" "cd ~/zoom-v2-ui/; git pull; yarn install; echo ""$SSH_TEST_PASS"" | sudo -S service supervisor restart"
+              ssh "$SSH_USER"@"$SSH_HOST_TEST" "cd ~/zoom-v2-ui/; git pull; yarn install; echo '"$SSH_TEST_PASS"' | sudo -S service supervisor restart"
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
-              ssh "$SSH_USER"@"$SSH_HOST_DEV" "cd ~/zoom-v2-ui/; git pull; yarn install; echo ""$SSH_DEV_PASS"" | sudo -S service supervisor restart"
+              ssh "$SSH_USER"@"$SSH_HOST_DEV" "cd ~/zoom-v2-ui/; git pull; yarn install; echo '"$SSH_DEV_PASS"' | sudo -S service supervisor restart"
             else
-              ssh "$SSH_USER"@"$SSH_HOST_DEV" "cd ~/zoom-v2-ui/; git pull; yarn install; echo ""$SSH_DEV_PASS"" | sudo -S service supervisor restart"
+              ssh "$SSH_USER"@"$SSH_HOST_DEV" "cd ~/zoom-v2-ui/; git pull; yarn install; echo '"$SSH_DEV_PASS"' | sudo -S service supervisor restart"
             fi
 
   test_e2e:

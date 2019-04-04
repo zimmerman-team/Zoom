@@ -145,7 +145,10 @@ export class AppBar extends React.Component {
 
     if (this.props.auth0Client.isAuthenticated()) {
       if (this.props.dataPaneOpen === paneTypes.none) {
-        if (this.props.location.pathname.indexOf('/home') !== -1) {
+        if (
+          this.props.location.pathname.indexOf('/home') !== -1 ||
+          this.props.location.pathname.indexOf('/dashboard') !== -1
+        ) {
           paneType = paneTypes.privPane;
           buttonLabel = 'Create';
         } else if (this.props.location.pathname.indexOf('/visualizer') !== -1) {
@@ -182,6 +185,7 @@ export class AppBar extends React.Component {
 
     switch (true) {
       case this.props.location.pathname === '/home' ||
+        this.props.location.pathname.indexOf('/dashboard') !== -1 ||
         this.props.location.pathname === '/focus/NL' ||
         this.props.location.pathname === '/focus/nl' ||
         this.props.location.pathname === '/focus/KE' ||

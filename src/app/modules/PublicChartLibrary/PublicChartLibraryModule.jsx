@@ -25,10 +25,20 @@ const Box = styled.div`
 `;
 
 const propTypes = {
-  changeSearchKeyword: PropTypes.func
+  changeSearchKeyword: PropTypes.func,
+  changePage: PropTypes.func,
+  changeSortBy: PropTypes.func,
+  isSortByOpen: PropTypes.bool,
+  setIsSortByOpen: PropTypes.func,
+  pageCount: PropTypes.number
 };
 
 const defaultProps = {
+  pageCount: 1,
+  changePage: null,
+  changeSortBy: null,
+  setIsSortByOpen: null,
+  isSortByOpen: false,
   changeSearchKeyword: null
 };
 
@@ -36,14 +46,22 @@ const PublicChartLibraryModule = props => {
   return (
     <ModuleContainer>
       <PageHeading>Zoom chart library</PageHeading>
-      <Searchbox inputChange={props.changeSearchKeyword} />
+      <Searchbox
+        inputChange={props.changeSearchKeyword}
+        onEnterPressed={props.onEnterPressed}
+      />
       <Box>
-        <GridListOptionsPane visibilityLeftButton="hidden" />
+        <GridListOptionsPane
+          changeSortBy={props.changeSortBy}
+          setIsSortByOpen={props.setIsSortByOpen}
+          isSortByOpen={props.isSortByOpen}
+          visibilityLeftButton="hidden"
+        />
         <ViewContainer>
           <GridList withoptions={false} items={props.data} />
         </ViewContainer>
       </Box>
-      <Pagination />
+      <Pagination pageCount={props.pageCount} changePage={props.changePage} />
     </ModuleContainer>
   );
 };

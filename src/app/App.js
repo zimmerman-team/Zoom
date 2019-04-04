@@ -34,6 +34,7 @@ const modernEnvironment = new Environment({
   store: new Store(new RecordSource())
 });
 
+
 function fetchQuery(operation, variables) {
   return fetch(`${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`, {
     method: 'POST',

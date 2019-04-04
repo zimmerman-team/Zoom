@@ -29,15 +29,39 @@ const ComponentBase = styled.div`
 const propTypes = {};
 const defaultProps = {};
 
+const boundsNL = [[0.2252, 50.2378], [10.756, 54.2068]];
+const boundsKE = [[26.82, -7.15], [50.89, 7.57]];
+
 class GeomapFragment extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      zoom: 2,
-      longitude: 0,
-      latitude: 15
-    };
-  }
+  state = {
+    zoom: 2,
+    longitude: 0,
+    latitude: 15
+  };
+
+  componentWillMount = () => {
+    const isNL = location.pathname.includes('NL');
+    const isKE = location.pathname.includes('KE');
+
+    const boundsNL = [[0.2252, 50.2378], [10.756, 54.2068]];
+    const boundsKE = [[26.82, -7.15], [50.89, 7.57]];
+
+    if (isNL) {
+      this.setState({
+        latitude: 52.1326,
+        longitude: 5.2913,
+        zoom: 7,
+        bounds: boundsNL
+      });
+    } else if (isKE) {
+      this.setState({
+        latitude: 0.0236,
+        longitude: 37.9062,
+        zoom: 6,
+        bounds: boundsKE
+      });
+    }
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.chartType !== prevProps.chartType) {
@@ -49,9 +73,15 @@ class GeomapFragment extends React.Component {
 
   render() {
     const { mode, ...otherProps } = this.props;
+
+    // console.log(this.state.focus);
     return (
       <ComponentBase height={mode ? '400px' : '100%'}>
-        <GeoMap focus={this.state.focus} {...otherProps} />
+        <GeoMap
+          focus={this.state.focus && this.state.focus}
+          {...otherProps}
+          mapOptions={{ maxBounds: this.state.bounds }}
+        />
       </ComponentBase>
     );
   }

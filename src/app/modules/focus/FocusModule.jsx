@@ -19,13 +19,21 @@ const defaultProps = {
   indicators: []
 };
 
+const geoData = [
+  [26.8946016977, -7.1943442623],
+  [26.8245342694, 7.4562870649],
+  [50.8189256861, 7.5697456948],
+  [50.8889931145, -7.0807900169],
+  [26.8946016977, -7.1943442623]
+];
+
 class FocusModule extends React.Component {
   state = {
     sideBarOpen: true,
     indicators: [],
     latitude: 0.0236,
-    longitude: 37.9062,
-    zoom: 6
+    longitude: 37.9062
+    // zoom: 6
   };
 
   onClose = () => {
@@ -40,16 +48,30 @@ class FocusModule extends React.Component {
     const isNL = location.pathname.includes('NL');
     const isKE = location.pathname.includes('KE');
 
+    const boundsNL = [[0.2252, 50.2378], [10.756, 54.2068]];
+    const boundsKE = [[26.82, -7.15], [50.89, 7.57]];
+
     if (isNL) {
-      this.setState({ latitude: 52.1326, longitude: 5.2913, zoom: 7 });
+      this.setState({
+        latitude: 52.1326,
+        longitude: 5.2913,
+        zoom: 7,
+        bounds: boundsNL
+      });
     } else if (isKE) {
-      this.setState({ latitude: 0.0236, longitude: 37.9062, zoom: 6 });
+      this.setState({
+        latitude: 0.0236,
+        longitude: 37.9062,
+        zoom: 6,
+        bounds: boundsKE
+      });
     }
   };
 
   render = () => {
     const { indicators, ...otherProps } = this.props;
 
+    console.log(this.state.bounds);
     return (
       <React.Fragment>
         <ModuleContainer>
@@ -60,6 +82,7 @@ class FocusModule extends React.Component {
             latitude={this.state.latitude}
             longitude={this.state.longitude}
             zoom={this.state.zoom}
+            mapOptions={{ maxBounds: this.state.bounds }}
           />
           {this.props.dataPaneOpen !== paneTypes.none && (
             <DataPaneContainer>

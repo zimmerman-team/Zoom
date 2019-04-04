@@ -35,6 +35,7 @@ const propTypes = {
   latitude: PropTypes.number,
   longitude: PropTypes.number,
   zoom: PropTypes.number,
+  /* todo: don't know about this focus object tbh, might refactor this */
   focus: PropTypes.shape({
     latitude: PropTypes.number,
     longitude: PropTypes.number,
@@ -43,7 +44,8 @@ const propTypes = {
   indicatorData: PropTypes.array,
   selectedYear: PropTypes.string,
   disableYear: PropTypes.bool,
-  selectYear: PropTypes.func
+  selectYear: PropTypes.func,
+  mapOptions: PropTypes.object
 };
 
 const defaultProps = {
@@ -51,7 +53,8 @@ const defaultProps = {
   // just show worldview when no lat long is specified
   latitude: 15,
   longitude: 0,
-  zoom: 2
+  zoom: 2,
+  mapOptions: {}
 };
 
 export class GeoMap extends Component {
@@ -72,7 +75,6 @@ export class GeoMap extends Component {
       viewport: {
         latitude: this.props.latitude,
         longitude: this.props.longitude,
-
         zoom: this.props.zoom
       },
       settings: {
@@ -242,6 +244,7 @@ export class GeoMap extends Component {
 
   render() {
     const { viewport, settings, mapStyle, markerArray, legends } = this.state;
+
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
 
@@ -279,9 +282,10 @@ export class GeoMap extends Component {
           onClick={this._onCountryClick}
           onLoad={this._handleMapLoaded}
           mapboxApiAccessToken={MAPBOX_TOKEN}
-          /*todo: refactor zooming functionality to facilitate both zooming by using the zoom controls and zooming by scrolling*/
+          mapOptions={this.props.mapOptions}
           ref={map => (this.mapRef = map)}
           attributionControl
+          // bounds={ya}
           // so commenting this out cause it causes the
           // onHover to NOT receive features...
           // dunno why though seems like just a bug in this react-map-gl library

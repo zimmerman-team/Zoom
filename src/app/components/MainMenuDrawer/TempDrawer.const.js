@@ -38,7 +38,7 @@ export const data = [
     icon: <IconCharts />,
     env: 'development'
   },
-  {
+  /*{
     label: 'NL Focus',
     path: `${pathPrefix}focus/NL`,
     icon: <IconCharts />,
@@ -49,7 +49,7 @@ export const data = [
     path: `${pathPrefix}focus/KE`,
     icon: <IconCharts />,
     env: 'development'
-  },
+  },*/
   {
     label: 'Visualizer',
     path: `${pathPrefix}visualizer/geomap/vizID/edit`,

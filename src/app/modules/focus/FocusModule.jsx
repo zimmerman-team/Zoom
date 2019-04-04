@@ -48,6 +48,10 @@ class FocusModule extends React.Component {
     const isNL = location.pathname.includes('NL');
     const isKE = location.pathname.includes('KE');
 
+    /* bounds are made with http://boundingbox.klokantech.com/ */
+    /* we can also use a generalized list of country bounds, the problem with those bounds is that they're too narrow, which in turns causes problems when zooming in/out*/
+    /* a possible solution could also be to device a way of dynamically calculating optimal bounds */
+
     const boundsNL = [[0.2252, 50.2378], [10.756, 54.2068]];
     const boundsKE = [[26.82, -7.15], [50.89, 7.57]];
 

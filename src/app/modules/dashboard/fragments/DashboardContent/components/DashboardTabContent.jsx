@@ -4,9 +4,16 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 import { createBrowserHistory } from 'history';
+import { connect } from 'react-redux';
 
+/* consts */
+import paneTypes from '__consts__/PaneTypesConst';
+
+/* components */
 import GridList from 'modules/dashboard/fragments/GridList/GridList';
 import GridListOptionsPane from 'modules/dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
+import NavPane from 'components/Panes/NavPane/NavPane';
+import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
 
 const ComponentBase = styled.div`
   display: flex;
@@ -78,7 +85,7 @@ const DashboardTabContent = props => {
     tabContentName = 'Data sets';
   } else if (currentURL.includes('charts')) {
     targetData = props.charts;
-    leftOptionLabel = 'add chart';
+    leftOptionLabel = undefined;
     tabContentName = 'Charts';
   } else if (currentURL.includes('trash')) {
     targetData = '';
@@ -107,6 +114,14 @@ const DashboardTabContent = props => {
         <Message>No item in {tabContentName}</Message>
       )}
 
+      {(props.dataPaneOpen === paneTypes.privPane ||
+        props.dataPaneOpen === paneTypes.createChart ||
+        props.dataPaneOpen === paneTypes.convertData) && (
+        <DataPaneContainer>
+          <NavPane />
+        </DataPaneContainer>
+      )}
+
       {targetData.length > 0 && (
         <Box>
           <GridListOptionsPane
@@ -132,4 +147,10 @@ const DashboardTabContent = props => {
 DashboardTabContent.propTypes = propTypes;
 DashboardTabContent.defaultProps = defaultProps;
 
-export default DashboardTabContent;
+const mapStateToProps = state => {
+  return {
+    dataPaneOpen: state.dataPaneOpen.open
+  };
+};
+
+export default connect(mapStateToProps)(DashboardTabContent);

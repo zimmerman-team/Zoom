@@ -10,6 +10,9 @@ import {
 } from './NavPane.const';
 import paneTypes from '__consts__/PaneTypesConst';
 
+/* actions */
+import * as actions from 'services/actions/general';
+
 /* icons */
 import SvgIconPointer from 'assets/icons/IconPointer';
 
@@ -20,7 +23,6 @@ import {
   ItemLabel,
   ItemIcon
 } from './NavPane.style';
-import * as actions from 'services/actions/general';
 
 class NavPane extends React.Component {
   constructor(props) {
@@ -31,11 +33,25 @@ class NavPane extends React.Component {
     };
 
     this.renderPaneItems = this.renderPaneItems.bind(this);
+    this.clickStartPaneItem = this.clickStartPaneItem.bind(this);
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.dataPaneOpen !== prevProps.dataPaneOpen)
       this.setState({ pane: this.props.dataPaneOpen });
+  }
+
+  clickStartPaneItem(item) {
+    this.props.dispatch(actions.dataPaneToggleRequest(item.navTo));
+    // so basically we will have some different logic for the
+    // 'explore data' section when the user is in their dashboard
+    // when clicked it will redirect the user to the home page
+    // with the 'explora data'/ indicator pane open
+    if (
+      this.props.location.pathname.indexOf('/dashboard') !== -1 &&
+      item.navTo === paneTypes.pubPane
+    )
+      this.props.history.push('/home');
   }
 
   renderPaneItems() {
@@ -45,9 +61,7 @@ class NavPane extends React.Component {
           <NavPaneItem
             key={item.label}
             to="#"
-            onClick={() =>
-              this.props.dispatch(actions.dataPaneToggleRequest(item.navTo))
-            }
+            onClick={() => this.clickStartPaneItem(item)}
             data-cy="nav-pane-item"
           >
             <ItemIcon>

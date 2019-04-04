@@ -21,6 +21,10 @@ export const IconButton = styled.div`
   }
 `;
 
+export const SortIconButton = styled(IconButton)`
+  margin-left: auto;
+`;
+
 export const RemoveButton = styled.div`
   width: 160px;
   height: 30px;

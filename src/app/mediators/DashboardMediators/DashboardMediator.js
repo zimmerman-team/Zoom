@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 /* actions */
 import * as actions from 'services/actions/nodeBackend';
+import * as generalActions from 'services/actions/general';
 
 /* utils */
 import get from 'lodash/get';
@@ -23,6 +24,7 @@ import DashboardModule from 'modules/dashboard/DashboardModule';
 /* consts */
 import tabs from '__consts__/DashboardTabsConsts';
 import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
+import paneTypes from '__consts__/PaneTypesConst';
 
 class DashboardMediator extends React.Component {
   constructor(props) {
@@ -42,6 +44,10 @@ class DashboardMediator extends React.Component {
   }
 
   componentDidMount = () => {
+    // also when this component loads we want to reset the pane
+    // to its default state for this component
+    this.props.dispatch(generalActions.dataPaneToggleRequest(paneTypes.none));
+
     this.reloadData();
     /* todo: not sure if this is the best way to handle this, see if it can be refactored */
     document.addEventListener('mousedown', this.handleClickOutside);

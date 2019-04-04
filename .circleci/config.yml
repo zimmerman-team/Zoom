@@ -117,33 +117,13 @@ jobs:
           name: Update zoom backend
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              ssh "$SSH_USER"@"$SSH_HOST_STAGING"
-              cd ~/zoom-v2-ui/
-              git pull
-              yarn install
-              yarn relay
-              pm2 restart server/server.js
+              ssh "$SSH_USER"@"$SSH_HOST_STAGING" && cd ~/zoom-v2-ui/ && git pull && yarn install && yarn relay && pm2 restart server/server.js && exit
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              ssh "$SSH_USER"@"$SSH_HOST_TEST"
-              cd ~/zoom-v2-ui/
-              git pull
-              yarn install
-              yarn relay
-              pm2 restart server/server.js
+              ssh "$SSH_USER"@"$SSH_HOST_TEST" && cd ~/zoom-v2-ui/ && git pull && yarn install && yarn relay && pm2 restart server/server.js && exit
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
-              ssh "$SSH_USER"@"$SSH_HOST_DEV"
-              cd ~/zoom-v2-ui/
-              git pull
-              yarn install
-              yarn relay
-              pm2 restart server/server.js
+              ssh "$SSH_USER"@"$SSH_HOST_DEV" && cd ~/zoom-v2-ui/ && git pull && yarn install && yarn relay && pm2 restart server/server.js && exit
             else
-              ssh "$SSH_USER"@"$SSH_HOST_DEV"
-              cd ~/zoom-v2-ui/
-              git pull
-              yarn install
-              yarn relay
-              pm2 restart server/server.js
+              ssh "$SSH_USER"@"$SSH_HOST_DEV" && cd ~/zoom-v2-ui/ && git pull && yarn install && yarn relay && pm2 restart server/server.js && exit
             fi
 
   test_e2e:

@@ -48,7 +48,13 @@ export function formatTeamsTabData(data, sort, search) {
 
 // formats chart data for the dashboard
 export function formatChartData(charts, userId, history, remove) {
-  return charts.map(chart => {
+  // so basically when we have paginaton
+  // the count will be returned as count and the
+  // data will be in charts variable
+  // otherwise the charts will just be an array
+  const chartz = charts.charts ? charts.charts : charts;
+
+  return chartz.map(chart => {
     let shared = '';
     if (chart.team.length > 0) shared = shared.concat(chart.team);
     if (chart._public)

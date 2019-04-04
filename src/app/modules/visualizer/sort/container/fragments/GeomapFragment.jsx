@@ -40,9 +40,11 @@ class GeomapFragment extends React.Component {
   };
 
   componentWillMount = () => {
+    /* bounds are made with http://boundingbox.klokantech.com/ */
+    /* we can also use a generalized list of country bounds, the problem with those bounds is that they're too narrow, which in turns causes problems when zooming in/out*/
+    /* a possible solution could also be to device a way of dynamically calculating optimal bounds */
     const isNL = location.pathname.includes('NL');
     const isKE = location.pathname.includes('KE');
-
     const boundsNL = [[0.2252, 50.2378], [10.756, 54.2068]];
     const boundsKE = [[26.82, -7.15], [50.89, 7.57]];
 
@@ -66,6 +68,7 @@ class GeomapFragment extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.chartType !== prevProps.chartType) {
       this.setState({
+        /* morty, i don't know bout this solution */
         focus: getFocus(this.props.chartType)
       });
     }

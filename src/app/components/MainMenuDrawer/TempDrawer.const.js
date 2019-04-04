@@ -38,6 +38,12 @@ export const data = [
     icon: <IconCharts />,
     env: 'development'
   },
+  {
+    label: 'NL Focus',
+    path: `${pathPrefix}focus/NL`,
+    icon: <IconCharts />,
+    env: 'development'
+  },
   /*{
     label: 'NL Focus',
     path: `${pathPrefix}focus/NL`,

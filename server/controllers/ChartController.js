@@ -82,23 +82,44 @@ const ChartController = {
 
   // this basically validates the user and gets all public charts
   getPublic: (req, res) => {
-    const { authId, sortBy } = req.query;
+    const { authId, sortBy, pageSize, page, searchTitle } = req.query;
     User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
       else {
-        const sort = utils.getDashboardSortBy(sortBy);
-        Chart.find(
-          { _public: true, archived: false },
-          'created last_updated team type dataSources _id name _public'
-        )
-          .collation({ locale: 'en' })
-          .sort(sort)
-          .populate('author', 'username authId')
-          .exec((chartError, charts) => {
-            if (chartError) general.handleError(res, chartError);
-            res.json(charts);
-          });
+        Chart.countDocuments(
+          {
+            _public: true,
+            archived: false,
+            name: { $regex: searchTitle, $options: 'i' }
+          },
+          (countError, count) => {
+            if (userError) general.handleError(res, countError);
+            const sort = utils.getDashboardSortBy(sortBy);
+            const pSize = parseInt(pageSize, 10);
+            const p = parseInt(page, 10);
+            Chart.find(
+              {
+                _public: true,
+                archived: false,
+                name: { $regex: searchTitle, $options: 'i' }
+              },
+              'created last_updated team type dataSources _id name _public'
+            )
+              .limit(pSize)
+              .skip(p * pSize)
+              .collation({ locale: 'en' })
+              .sort(sort)
+              .populate('author', 'username authId')
+              .exec((chartError, charts) => {
+                if (chartError) general.handleError(res, chartError);
+                res.json({
+                  count,
+                  charts
+                });
+              });
+          }
+        );
       }
     });
   },

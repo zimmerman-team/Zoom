@@ -92,7 +92,7 @@ class FocusModule extends React.Component {
               {(this.props.dataPaneOpen === paneTypes.privPane ||
                 this.props.dataPaneOpen === paneTypes.createChart ||
                 this.props.dataPaneOpen === paneTypes.convertData) && (
-                <NavPane {...otherProps} />
+                <NavPane />
               )}
             </DataPaneContainer>
           )}

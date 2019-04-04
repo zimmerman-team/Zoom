@@ -93,14 +93,14 @@ class VizContainer extends React.Component {
 
           <PropsRoute
             indicatorData={this.props.indicators}
-            path="/visualizer/linechart/:code/:tab"
+            path="/(visualizer|public)/linechart/:code/:tab"
             component={LinechartFragment}
             mode={this.state.preview}
           />
 
           <PropsRoute
             indicatorData={this.props.indicators}
-            path="/visualizer/barchart/:code/:tab"
+            path="/(visualizer|public)/barchart/:code/:tab"
             component={BarchartFragment}
             mode={this.state.preview}
           />

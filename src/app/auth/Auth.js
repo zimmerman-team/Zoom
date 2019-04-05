@@ -204,39 +204,42 @@ class Auth {
   /* User management actions */
 
   getAllUsers(stateAction = null, page = 0, sort, search) {
-    axios
-      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
-        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
-        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-        audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
-        grant_type: 'client_credentials'
-      })
-      .then(response => {
-        axios
-          .get(
-            `${
-              process.env.REACT_APP_AUTH_DOMAIN
-            }/api/v2/users?include_totals=true&per_page=10&page=${page}&sort=${sort}&q=identities.connection:"Username-Password-Authentication"${search}&search_engine=v3`,
-            {
-              headers: {
-                Authorization: `${response.data.token_type} ${
-                  response.data.access_token
-                }`
+    return new Promise(resolve => {
+      axios
+        .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+          client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+          client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+          audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
+          grant_type: 'client_credentials'
+        })
+        .then(response => {
+          axios
+            .get(
+              `${
+                process.env.REACT_APP_AUTH_DOMAIN
+              }/api/v2/users?include_totals=true&per_page=10&page=${page}&sort=${sort}&q=identities.connection:"Username-Password-Authentication"${search}&search_engine=v3`,
+              {
+                headers: {
+                  Authorization: `${response.data.token_type} ${
+                    response.data.access_token
+                  }`
+                }
               }
-            }
-          )
-          .then(response2 => {
-            if (stateAction) {
-              stateAction(response2.data);
-            }
-          })
-          .catch(error => {
-            console.error(error);
-          });
-      })
-      .catch(error => {
-        console.error(error);
-      });
+            )
+            .then(response2 => {
+              if (stateAction) {
+                stateAction(response2.data);
+              }
+              resolve();
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    });
   }
 
   getUserGroups(that = null, stateVar = 'userGroups') {

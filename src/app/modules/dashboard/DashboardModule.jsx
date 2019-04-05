@@ -3,13 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /* components */
-import {
-  ModuleContainer,
-  SearchBox
-} from 'modules/dashboard/DashboardModule.styles';
-import SvgIconSearch from 'assets/icons/IconSearch';
+import { ModuleContainer } from 'modules/dashboard/DashboardModule.styles';
 import DashboardContent from 'modules/dashboard/fragments/DashboardContent/DashboardContent';
 import DashboardHeader from './fragments/DashboardHeader/DashboardHeader';
+import Searchbox from 'modules/dashboard/fragments/Searchbox/Searchbox';
 
 const propTypes = {
   tabs: PropTypes.arrayOf(
@@ -25,6 +22,7 @@ const propTypes = {
   isSortByOpen: PropTypes.bool,
   setWrapperRef: PropTypes.func,
   greetingName: PropTypes.string,
+  onEnterPressed: PropTypes.func,
   setIsSortByOpen: PropTypes.func,
   changeSearchKeyword: PropTypes.func,
   users: PropTypes.arrayOf(PropTypes.shape({})),
@@ -37,6 +35,7 @@ const defaultProps = {
   greetingName: '',
   changeSortBy: null,
   setWrapperRef: null,
+  onEnterPressed: null,
   isSortByOpen: false,
   setIsSortByOpen: null,
   changeSearchKeyword: null,
@@ -54,6 +53,7 @@ const DashboardModule = ({
   activeTab,
   greetingName,
   isSortByOpen,
+  onEnterPressed,
   changeSortBy,
   setWrapperRef,
   setIsSortByOpen,
@@ -66,10 +66,15 @@ const DashboardModule = ({
       title="Zoom dashboard"
       message="Welcome back"
     />
-    <SearchBox onChange={changeSearchKeyword} placeholder={<SvgIconSearch />} />
+
+    <Searchbox
+      inputChange={changeSearchKeyword}
+      onEnterPressed={onEnterPressed}
+    />
 
     {/*todo: sorting logic must be refactored/fixed*/}
     <DashboardContent
+      onEnterPressed={onEnterPressed}
       users={users}
       charts={charts}
       datasets={datasets}

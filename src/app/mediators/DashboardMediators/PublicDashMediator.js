@@ -92,6 +92,7 @@ class PublicDashMediator extends React.Component {
   render() {
     return (
       <PublicChartLibraryModule
+        loading={this.props.publicCharts.request}
         changeSearchKeyword={this.changeSearchKeyword}
         data={this.state.charts}
         onEnterPressed={this.onEnterPressed}

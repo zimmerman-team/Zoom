@@ -12,9 +12,9 @@ import Fullscreen from 'react-full-screen';
 import {
   LegendContainer,
   MapContainer,
-  YearContainer,
   ControlsContainer
 } from './GeoMap.style';
+import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 
 const wrapper = shallow(<GeoMap />);
 

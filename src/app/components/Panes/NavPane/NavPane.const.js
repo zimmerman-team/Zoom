@@ -29,11 +29,11 @@ export const createChartItems = [
   {
     label: 'Country Focus Page Netherlands',
     navTo: '/visualizer/focusNL/vizID/edit'
-  } /*,
+  },
   {
     label: 'Line chart',
-    navTo: '/create/linechart'
-  },
+    navTo: '/visualizer/linechart/vizID/edit'
+  } /*,
   {
     label: 'Bar chart',
     navTo: '/create/barchart'

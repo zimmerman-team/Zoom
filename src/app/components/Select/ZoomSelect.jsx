@@ -37,6 +37,7 @@ const propTypes = {
       label: PropTypes.string
     })
   ),
+  border: PropTypes.bool,
   placeHolderText: PropTypes.string,
   placeHolderNumber: PropTypes.number,
   reset: PropTypes.func,
@@ -49,6 +50,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+  border: false,
   categorise: false,
   defaultAll: true,
   placeHolder: 'Has no indicators',
@@ -260,6 +262,7 @@ class ZoomSelect extends React.Component {
       <ComponentBase
         style={this.props.disabled ? { pointerEvents: 'none' } : {}}
         ref={this.setWrapperRef}
+        compBorder={this.props.border}
       >
         <SelectHeader
           headerStyle={this.props.headerStyle}

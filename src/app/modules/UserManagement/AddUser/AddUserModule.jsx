@@ -122,6 +122,7 @@ const AddUserModule = props => {
           <DropDownContainer>
             <DropDownLabel>User role</DropDownLabel>
             <ZoomSelect
+              border
               search={false}
               dropDownWidth={280}
               placeHolderText="Select user role"
@@ -133,8 +134,9 @@ const AddUserModule = props => {
 
           {/* organisation dropdown */}
           <DropDownContainer>
-            <DropDownLabel>Organisation</DropDownLabel>
+            <DropDownLabel>Select organisation</DropDownLabel>
             <ZoomSelect
+              border
               search={false}
               dropDownWidth={280}
               placeHolderText="Select organisation"

@@ -29,12 +29,16 @@ const ComponentBase = styled(Button)`
 const propTypes = {
   fontSize: PropTypes.number,
   width: PropTypes.number,
-  color: PropTypes.string
+  color: PropTypes.string,
+  marginBottom: PropTypes.number,
+  marginTop: PropTypes.number
 };
 const defaultProps = {
   fontSize: 16,
   width: 160,
-  color: theme.color.aidsFondsRed
+  color: theme.color.aidsFondsRed,
+  marginBottom: 0,
+  marginTop: 0
 };
 
 const ZoomButton = props => {

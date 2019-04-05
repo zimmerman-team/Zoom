@@ -7,7 +7,8 @@ import {
   DropDownContainer,
   DropDownLabel,
   Message,
-  SubmitButton
+  SubmitButton,
+  Container
 } from 'modules/UserManagement/AddUser/AddUserModule.styles';
 
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
@@ -19,6 +20,7 @@ import userManagementMockData from '__mocks__/userManagementMock';
 import { Box } from 'grommet';
 import theme from 'theme/Theme';
 import ZoomSelect from 'components/Select/ZoomSelect';
+import ZoomButton from 'components/ZoomButton/ZoomButton';
 
 const propTypes = {
   email: PropTypes.string,
@@ -117,7 +119,7 @@ const AddUserModule = props => {
           onChange={props.changeEmail}
         />
 
-        <Box direction="row-responsive">
+        <Container>
           {/* user role dropdown */}
           <DropDownContainer>
             <DropDownLabel>User role</DropDownLabel>
@@ -145,7 +147,7 @@ const AddUserModule = props => {
               valueSelected={props.orgSelected.label}
             />
           </DropDownContainer>
-        </Box>
+        </Container>
 
         <Tooltip
           trigger="mouseenter"
@@ -153,9 +155,14 @@ const AddUserModule = props => {
           disabled={!disableSubmit}
           html={<SimpleToolTip title="All the fields are required" />}
         >
-          <SubmitButton type="submit" disabled={disableSubmit}>
+          <ZoomButton
+            type="submit"
+            disabled={disableSubmit}
+            fontSize={14}
+            width={160}
+          >
             send invitation
-          </SubmitButton>
+          </ZoomButton>
         </Tooltip>
 
         {/* todo: replace grommet based button with material ui based button */}

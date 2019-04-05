@@ -143,7 +143,7 @@ const ChartController = {
 
   // gets all user charts and team charts
   getAll: (req, res) => {
-    const { authId, sortBy } = req.query;
+    const { authId, sortBy, searchTitle } = req.query;
     User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
@@ -153,8 +153,16 @@ const ChartController = {
         Chart.find(
           {
             $or: [
-              { author, archived: false },
-              { team: author.team, archived: false }
+              {
+                author,
+                archived: false,
+                name: { $regex: searchTitle, $options: 'i' }
+              },
+              {
+                team: author.team,
+                archived: false,
+                name: { $regex: searchTitle, $options: 'i' }
+              }
             ]
           },
           'created last_updated team _public type dataSources _id name archived'

@@ -41,6 +41,7 @@ class DashboardMediator extends React.Component {
     };
 
     this.deleteChart = this.deleteChart.bind(this);
+    this.onEnterPressed = this.onEnterPressed.bind(this);
   }
 
   componentDidMount = () => {
@@ -131,15 +132,12 @@ class DashboardMediator extends React.Component {
   };
 
   changeSearchKeyword = e => {
-    this.setState(
-      {
-        searchKeyword: e.target.value
-      },
-      () => {
-        this.reloadData();
-      }
-    );
+    this.setState({ searchKeyword: e.target.value });
   };
+
+  onEnterPressed() {
+    this.reloadData();
+  }
 
   reloadData = typeOfChange => {
     if (typeOfChange === 'sort' && this.props.match.params.tab === 'users') {
@@ -155,7 +153,8 @@ class DashboardMediator extends React.Component {
       this.props.dispatch(
         actions.getUserChartsRequest({
           authId: this.props.user.authId,
-          sortBy: this.state.sort
+          sortBy: this.state.sort,
+          searchTitle: this.state.searchKeyword
         })
       );
     }
@@ -164,7 +163,8 @@ class DashboardMediator extends React.Component {
       this.props.dispatch(
         actions.getUserDatasetsRequest({
           authId: this.props.user.authId,
-          sortBy: this.state.sort
+          sortBy: this.state.sort,
+          searchTitle: this.state.searchKeyword
         })
       );
     }
@@ -191,6 +191,7 @@ class DashboardMediator extends React.Component {
         setWrapperRef={this.setWrapperRef}
         setIsSortByOpen={this.setIsSortByOpen}
         isSortByOpen={this.state.isSortByOpen}
+        onEnterPressed={this.onEnterPressed}
         // activeTab={this.props.match.params.tab}
         searchKeyword={this.state.searchKeyword}
         changeSearchKeyword={this.changeSearchKeyword}

@@ -19,12 +19,12 @@ import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
 import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import MapControls from 'components/GeoMap/components/MapControls/MapControls';
+import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 
 import MAP_STYLE from 'components/GeoMap/data/map-style-basic-v8';
 import {
   LegendContainer,
   MapContainer,
-  YearContainer,
   ControlsContainer
 } from './GeoMap.style';
 

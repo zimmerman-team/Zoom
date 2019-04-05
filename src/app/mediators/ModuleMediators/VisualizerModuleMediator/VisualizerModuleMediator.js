@@ -4,13 +4,11 @@ import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
 import { withRouter } from 'react-router';
 import {
-  formatCountryCenterData,
-  formatCountryLayerData,
   formatCountryParam,
   formatDate,
-  formatLongLatData,
-  removeIds,
-  updatePercentiles
+  formatGeoData,
+  formatLineData,
+  removeIds
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 import PropTypes from 'prop-types';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
@@ -19,6 +17,7 @@ import { connect } from 'react-redux';
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
 import paneTypes from '__consts__/PaneTypesConst';
+import chartTypes from '__consts__/ChartConst';
 
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
@@ -268,7 +267,7 @@ class VisualizerModuleMediator extends Component {
       actions.storePaneDataRequest({
         chartType: '',
         selectedSources: [],
-        yearRange: '2003,2016',
+        yearRange: '1992,2018',
         subIndicators1: [],
         subIndicators2: []
       })
@@ -297,82 +296,27 @@ class VisualizerModuleMediator extends Component {
     // and we sort them
     subIndicators2 = sortBy(subIndicators2, ['label']);
 
-    let longLatData = [];
-    let countryLayerData = {};
+    let indicators = [];
 
-    // so we check here if the retrieved data is long lat
-    // and then format it differently
-    // TODO: make this work differently, this is currently i quick and dirty fix
-    if (
-      this.props.indicatorAggregations.indicators1[0] &&
-      this.props.indicatorAggregations.indicators1[0].geolocationTag &&
-      this.props.indicatorAggregations.indicators1[0].geolocationTag.indexOf(
-        ','
-      ) !== -1 &&
-      /\d/.test(this.props.indicatorAggregations.indicators1[0].geolocationTag)
-    ) {
-      longLatData = formatLongLatData(
-        this.props.indicatorAggregations.indicators1,
-        this.props.chartData.selectedInd1
-      );
-    } else {
-      countryLayerData = formatCountryLayerData(
-        this.props.indicatorAggregations.indicators1,
-        this.props.chartData.selectedInd1
-      );
+    switch (this.props.match.params.chart) {
+      case chartTypes.geoMap:
+        indicators = formatGeoData(
+          this.props.indicatorAggregations.indicators1,
+          this.props.chartData.selectedInd1,
+          this.props.indicatorAggregations.indicators2,
+          this.props.chartData.selectedInd2
+        );
+        break;
+      case chartTypes.lineChart:
+        indicators = formatLineData([
+          this.props.indicatorAggregations.indicators1,
+          this.props.indicatorAggregations.indicators2
+        ]);
+        break;
+      default:
+        indicators = [];
+        break;
     }
-
-    let countryCircleData = [];
-    // so we check here if the retrieved data is long lat
-    // and then format it differently
-    // TODO: make this work differently, this is currently i quick and dirty fix
-    if (
-      this.props.indicatorAggregations.indicators2[0] &&
-      this.props.indicatorAggregations.indicators2[0].geolocationTag &&
-      this.props.indicatorAggregations.indicators2[0].geolocationTag.indexOf(
-        ','
-      ) !== -1 &&
-      /\d/.test(this.props.indicatorAggregations.indicators2[0].geolocationTag)
-    ) {
-      longLatData = formatLongLatData(
-        this.props.indicatorAggregations.indicators2,
-        this.props.chartData.selectedInd2
-      );
-    } else {
-      countryCircleData = formatCountryCenterData(
-        this.props.indicatorAggregations.indicators2,
-        this.props.chartData.selectedInd2
-      );
-    }
-
-    const indicators = [];
-
-    if (countryLayerData.features && countryLayerData.features.length > 0) {
-      updatePercentiles(countryLayerData, f => f.properties.value);
-
-      indicators.push({
-        type: 'layer',
-        data: countryLayerData,
-        legendName: ` ${this.props.chartData.selectedInd1} `
-      });
-    }
-
-    if (countryCircleData.length > 0) {
-      indicators.push({
-        type: 'circle',
-        data: countryCircleData,
-        legendName: ` ${this.props.chartData.selectedInd2} `
-      });
-    }
-
-    if (longLatData.length > 0) {
-      indicators.push({
-        type: 'location',
-        data: longLatData,
-        legendName: `POI`
-      });
-    }
-
     // and we save the subindicator selection for the datapane
     this.props.dispatch(
       actions.storePaneDataRequest({

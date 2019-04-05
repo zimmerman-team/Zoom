@@ -121,3 +121,12 @@ export const EndControl = styled(YearLabel)`
     cursor: -webkit-grabbing;
   }
 `;
+
+export const YearContainer = styled.div`
+  position: absolute;
+  z-index: 2;
+  width: calc(100% - 40px);
+  bottom: 40px;
+  left: 20px;
+  //left: 1%;
+`;

@@ -41,15 +41,21 @@ const LegendColor = styled.div`
   background-color: ${props => props.color};
 `;
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  color: PropTypes.string,
+  text: PropTypes.string
+};
+const defaultProps = {
+  color: '#f47c69',
+  text: ''
+};
 
-const ChartLegendItem = () => {
+const ChartLegendItem = props => {
   return (
     <ComponentBase>
       <Box>
-        <LegendColor color="#f47c69" />
-        <LegendLabel text="lorem ipsum empty" />
+        <LegendColor color={props.color} />
+        <LegendLabel text={props.text} />
       </Box>
       <FragmentInfoButton />
     </ComponentBase>

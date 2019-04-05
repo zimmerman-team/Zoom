@@ -14,6 +14,7 @@ import GridList from 'modules/dashboard/fragments/GridList/GridList';
 import GridListOptionsPane from 'modules/dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
 import NavPane from 'components/Panes/NavPane/NavPane';
 import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
+import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
 const ComponentBase = styled.div`
   display: flex;
@@ -41,6 +42,7 @@ const propTypes = {
   tabContentName: PropTypes.string,
   charts: PropTypes.array,
   users: PropTypes.array,
+  loading: PropTypes.bool,
   teams: PropTypes.array
 };
 const defaultProps = {
@@ -48,6 +50,7 @@ const defaultProps = {
   data: [],
   users: [],
   teams: [],
+  loading: false,
   tabContentName: 'Charts'
 };
 
@@ -94,7 +97,10 @@ const DashboardTabContent = props => {
     isRemoveOption = true;
   }
   return (
-    <ComponentBase>
+    <ComponentBase
+      style={props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}}
+    >
+      {props.loading && <ProgressIcon />}
       {isRemoveOption && (
         <GridListOptionsPane
           leftOptionLabel={leftOptionLabel}

@@ -37,11 +37,13 @@ class DashboardMediator extends React.Component {
       searchKeyword: '',
       charts: [],
       datasets: [],
+      loadUsers: false,
       isSortByOpen: false
     };
 
     this.deleteChart = this.deleteChart.bind(this);
     this.onEnterPressed = this.onEnterPressed.bind(this);
+    this.getAllUsers = this.getAllUsers.bind(this);
   }
 
   componentDidMount = () => {
@@ -80,7 +82,9 @@ class DashboardMediator extends React.Component {
       !isEqual(this.props.userDatasets, prevProps.userDatasets) &&
       this.props.userDatasets.data
     )
-      this.setState({ datasets: formatDatasets(this.props.userDatasets.data) });
+      this.setState({
+        datasets: formatDatasets(this.props.userDatasets.data)
+      });
   }
 
   componentWillUnmount() {
@@ -88,14 +92,17 @@ class DashboardMediator extends React.Component {
   }
 
   getAllUsers = () => {
-    this.props.auth0Client.getAllUsers(
-      this.setUsers,
-      this.state.page,
-      this.state.sort,
-      this.state.searchKeyword !== ''
-        ? ` AND name:${this.state.searchKeyword}*`
-        : ''
-    );
+    this.setState({ loadUsers: true });
+    this.props.auth0Client
+      .getAllUsers(
+        this.setUsers,
+        this.state.page,
+        this.state.sort,
+        this.state.searchKeyword !== ''
+          ? ` AND name:${this.state.searchKeyword}*`
+          : ''
+      )
+      .then(() => this.setState({ loadUsers: false }));
   };
 
   setUsers = data => {
@@ -182,6 +189,11 @@ class DashboardMediator extends React.Component {
   render() {
     return (
       <DashboardModule
+        loading={
+          this.props.userDatasets.request ||
+          this.props.userCharts.request ||
+          this.state.loadUsers
+        }
         // tabs={tabs}
         sort={this.state.sort}
         users={this.state.users}

@@ -25,6 +25,7 @@ const propTypes = {
   onEnterPressed: PropTypes.func,
   setIsSortByOpen: PropTypes.func,
   changeSearchKeyword: PropTypes.func,
+  loading: PropTypes.bool,
   users: PropTypes.arrayOf(PropTypes.shape({})),
   teams: PropTypes.arrayOf(PropTypes.shape({}))
 };
@@ -33,6 +34,7 @@ const defaultProps = {
   sort: '',
   activeTab: '',
   greetingName: '',
+  loading: false,
   changeSortBy: null,
   setWrapperRef: null,
   onEnterPressed: null,
@@ -44,6 +46,7 @@ const defaultProps = {
 };
 
 const DashboardModule = ({
+  loading,
   tabs,
   sort,
   users,
@@ -74,6 +77,7 @@ const DashboardModule = ({
 
     {/*todo: sorting logic must be refactored/fixed*/}
     <DashboardContent
+      loading={loading}
       onEnterPressed={onEnterPressed}
       users={users}
       charts={charts}

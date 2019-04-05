@@ -10,6 +10,8 @@ import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFr
 
 import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment';
 import { PreviewTextContainer, ComponentBase, Box } from './VizContainer.style';
+import CustomYearSelector from 'components/GeoMap/GeoMap';
+import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -92,6 +94,9 @@ class VizContainer extends React.Component {
           />
 
           <PropsRoute
+            chartType={this.props.chartType}
+            selectYear={this.props.selectYear}
+            selectedYear={this.props.selectedYear}
             indicatorData={this.props.indicators}
             path="/(visualizer|public)/linechart/:code/:tab"
             component={LinechartFragment}
@@ -99,6 +104,9 @@ class VizContainer extends React.Component {
           />
 
           <PropsRoute
+            chartType={this.props.chartType}
+            selectYear={this.props.selectYear}
+            selectedYear={this.props.selectedYear}
             indicatorData={this.props.indicators}
             path="/(visualizer|public)/barchart/:code/:tab"
             component={BarchartFragment}

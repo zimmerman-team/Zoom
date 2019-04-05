@@ -187,6 +187,7 @@ class DashboardMediator extends React.Component {
   }
 
   render() {
+    console.log('this.props.userDatasets', this.props.userDatasets);
     return (
       <DashboardModule
         loading={

@@ -445,7 +445,6 @@ class VizPaneMediator extends React.Component {
   }
 
   render() {
-    // console.log('this.props.paneData', this.props.paneData);
     return (
       <DataExplorePane
         allFileSources={this.state.allFileSources}

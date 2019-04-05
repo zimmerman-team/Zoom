@@ -95,7 +95,7 @@ class HomeModuleMediator extends Component {
     super(props);
     this.state = {
       loading: false,
-      selectedYear: generalInitial.yearPeriod[0],
+      selectedYear: generalInitial.selectedYear,
       ...initialState
     };
 

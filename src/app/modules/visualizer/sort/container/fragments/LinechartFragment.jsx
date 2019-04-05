@@ -2,10 +2,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
-import { ResponsiveLine } from '@nivo/line';
+
+/* mock */
 import { LinechartMockData } from './LinechartMockData';
+
+/* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
+import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
+import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
+import { ResponsiveLine } from '@nivo/line';
+
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
@@ -30,7 +36,7 @@ const Box = styled.div`
 const propTypes = {};
 const defaultProps = {};
 
-const LinechartFragment = () => {
+const LinechartFragment = props => {
   return (
     <ComponentBase>
       <Box>
@@ -85,6 +91,12 @@ const LinechartFragment = () => {
         />
       </Box>
       <ChartLegends />
+      <YearContainer>
+        <CustomYearSelector
+          selectedYear={props.selectedYear}
+          selectYear={props.selectYear}
+        />
+      </YearContainer>
     </ComponentBase>
   );
 };

@@ -3,6 +3,11 @@ import { Box } from 'grommet';
 import theme from 'theme/Theme';
 import ZoomButton from 'components/ZoomButton/ZoomButton';
 
+export const Container = styled.div`
+  display: flex;
+  margin-bottom: 30px;
+`;
+
 export const AddUserForm = styled.form`
   padding: 0 40px;
   width: 100%;

@@ -112,7 +112,7 @@ class DataExplorePane extends React.Component {
     activeIndex: []
   };
 
-  renderHeader(label) {
+  renderHeader = label => {
     let active = false;
     let icon = '';
     switch (label) {
@@ -140,7 +140,7 @@ class DataExplorePane extends React.Component {
     }
 
     return <AccordionSelection icon={icon} label={label} active={active} />;
-  }
+  };
 
   render() {
     return (

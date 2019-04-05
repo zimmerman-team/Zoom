@@ -75,7 +75,7 @@ class VizContainer extends React.Component {
             title={this.props.chartData.name}
             desc={this.props.chartData.desc}
             descIntro={this.props.chartData.descIntro}
-            show={'descIntro'}
+            show="descIntro"
           />
         </PreviewTextContainer>
 
@@ -112,7 +112,7 @@ class VizContainer extends React.Component {
             title={this.props.chartData.name}
             desc={this.props.chartData.desc}
             descIntro={this.props.chartData.descIntro}
-            show={'descBody'}
+            show="descBody"
           />
         </PreviewTextContainer>
       </ComponentBase>

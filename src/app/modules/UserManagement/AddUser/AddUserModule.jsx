@@ -12,12 +12,13 @@ import {
 
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';
-import FormSelect from 'components/FormSelect/FormSelect';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
+
 import userManagementMockData from '__mocks__/userManagementMock';
 import { Box } from 'grommet';
 import theme from 'theme/Theme';
+import ZoomSelect from 'components/Select/ZoomSelect';
 
 const propTypes = {
   email: PropTypes.string,
@@ -79,6 +80,7 @@ const AddUserModule = props => {
     props.email === '' ||
     props.orgSelected._id === '' ||
     props.roleSelected._id === '';
+
   return (
     <ModuleFragment title="Add user">
       <AddUserForm onSubmit={props.submitForm}>
@@ -104,7 +106,7 @@ const AddUserModule = props => {
           onChange={props.changeLastName}
         />
 
-        {/* email field*/}
+        {/* email field */}
         <InputField
           label="Email"
           id="email-input"
@@ -119,9 +121,11 @@ const AddUserModule = props => {
           {/* user role dropdown */}
           <DropDownContainer>
             <DropDownLabel>User role</DropDownLabel>
-            <FormSelect
+            <ZoomSelect
+              search={false}
+              dropDownWidth={280}
+              placeHolderText="Select user role"
               data={props.roleOptions}
-              placeHolder=""
               selectVal={props.changeUserRole}
               valueSelected={props.roleSelected.label}
             />
@@ -130,9 +134,11 @@ const AddUserModule = props => {
           {/* organisation dropdown */}
           <DropDownContainer>
             <DropDownLabel>Organisation</DropDownLabel>
-            <FormSelect
+            <ZoomSelect
+              search={false}
+              dropDownWidth={280}
+              placeHolderText="Select organisation"
               data={props.orgOptions}
-              placeHolder=""
               selectVal={props.changeOrganisation}
               valueSelected={props.orgSelected.label}
             />
@@ -149,6 +155,15 @@ const AddUserModule = props => {
             send invitation
           </SubmitButton>
         </Tooltip>
+
+        {/* todo: replace grommet based button with material ui based button */}
+        {/* <React.Fragment>
+          <ErrorBoundary>
+            <Tooltip>
+              <ZimmermanButton width={180}>send invitation</ZimmermanButton>
+            </Tooltip>
+          </ErrorBoundary>
+        </React.Fragment> */}
 
         {props.success && (
           <Message theme={{ color: 'green' }}>

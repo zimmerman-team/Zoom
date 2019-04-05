@@ -11,7 +11,7 @@ import {
   DetailListItem,
   ItemInfo,
   ItemLabel,
-  Tooltip,
+  Tooltip
 } from './Header.styles';
 
 const propTypes = {
@@ -22,9 +22,9 @@ const propTypes = {
         label: PropTypes.string,
         info: PropTypes.oneOfType([
           PropTypes.string,
-          PropTypes.arrayOf([PropTypes.string]),
-        ]),
-      }),
+          PropTypes.arrayOf([PropTypes.string])
+        ])
+      })
     ),
     title: PropTypes.string,
     detail: PropTypes.arrayOf(
@@ -32,33 +32,33 @@ const propTypes = {
         label: PropTypes.string,
         info: PropTypes.oneOfType([
           PropTypes.string,
-          PropTypes.arrayOf([PropTypes.string]),
+          PropTypes.arrayOf([PropTypes.string])
         ]),
-        moreData: PropTypes.arrayOf(PropTypes.string),
-      }),
-    ),
-  }),
+        moreData: PropTypes.arrayOf(PropTypes.string)
+      })
+    )
+  })
 };
 const defaultProps = {
   data: {
     timeline: [],
     title: '',
-    detail: [],
-  },
+    detail: []
+  }
 };
 
 class Header extends React.Component {
   state = {
-    showMoreData: false,
+    showMoreData: false
   };
 
-  handleMouseEnter() {
+  handleMouseEnter = () => {
     this.setState({ showMoreData: true });
-  }
+  };
 
-  handleMouseLeave() {
+  handleMouseLeave = () => {
     this.setState({ showMoreData: false });
-  }
+  };
 
   render() {
     return (

@@ -14,6 +14,7 @@ import Searchbox from 'modules/dashboard/fragments/Searchbox/Searchbox';
 import GridListOptionsPane from '../dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
 import Pagination from '../../components/Pagination/Pagination';
 import GridList from '../dashboard/fragments/GridList/GridList';
+import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 // import data from './PublicChartLibraryModule.const';
 
 const PageHeading = styled(_PageHeading)`
@@ -30,6 +31,7 @@ const propTypes = {
   changeSortBy: PropTypes.func,
   isSortByOpen: PropTypes.bool,
   setIsSortByOpen: PropTypes.func,
+  loading: PropTypes.bool,
   pageCount: PropTypes.number
 };
 
@@ -38,6 +40,7 @@ const defaultProps = {
   changePage: null,
   changeSortBy: null,
   setIsSortByOpen: null,
+  loading: false,
   isSortByOpen: false,
   changeSearchKeyword: null
 };
@@ -50,7 +53,10 @@ const PublicChartLibraryModule = props => {
         inputChange={props.changeSearchKeyword}
         onEnterPressed={props.onEnterPressed}
       />
-      <Box>
+      <Box
+        style={props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}}
+      >
+        {props.loading && <ProgressIcon />}
         <GridListOptionsPane
           changeSortBy={props.changeSortBy}
           setIsSortByOpen={props.setIsSortByOpen}

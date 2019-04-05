@@ -61,6 +61,7 @@ module.exports = {
     'prefer-destructuring': 0,
     'no-useless-constructor': 1,
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn'
+    'react-hooks/exhaustive-deps': 'warn',
+    'default-case': 0
   }
 };

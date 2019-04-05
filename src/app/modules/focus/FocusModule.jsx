@@ -19,14 +19,6 @@ const defaultProps = {
   indicators: []
 };
 
-const geoData = [
-  [26.8946016977, -7.1943442623],
-  [26.8245342694, 7.4562870649],
-  [50.8189256861, 7.5697456948],
-  [50.8889931145, -7.0807900169],
-  [26.8946016977, -7.1943442623]
-];
-
 class FocusModule extends React.Component {
   state = {
     sideBarOpen: true,

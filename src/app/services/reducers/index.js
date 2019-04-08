@@ -405,6 +405,21 @@ function publicCharts(state = initial, action) {
   }
 }
 
+function userDeleted(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.DELETE_USER_INITIAL:
+      return updateInitial(state);
+    case nodeActions.DELETE_USER_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.DELETE_USER_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.DELETE_USER_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
   publicCharts,
   userDatasets,
@@ -427,7 +442,8 @@ const reducers = {
   manualMapData,
   countryExcerpt,
   countryActivities,
-  activityData
+  activityData,
+  userDeleted
 };
 
 export default reducers;

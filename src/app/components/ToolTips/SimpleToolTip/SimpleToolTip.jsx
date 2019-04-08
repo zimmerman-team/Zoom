@@ -9,7 +9,7 @@ const ComponentBase = styled.div`
   font-size: 12px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   height: 17px;
-  width: 45px;
+  width: fit-content;
   overflow: hidden;
   display: flex;
   align-items: center;

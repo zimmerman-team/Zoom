@@ -218,7 +218,7 @@ class Auth {
             .get(
               `${
                 process.env.REACT_APP_AUTH_DOMAIN
-              }/api/v2/users?include_totals=true&per_page=20&page=${page}&sort=${sort}&q=identities.connection:"Username-Password-Authentication"${search}&search_engine=v3`,
+              }/api/v2/users?include_totals=true&sort=${sort}&q=identities.connection:"Username-Password-Authentication"${search}&search_engine=v3`,
               {
                 headers: {
                   Authorization: `${response.data.token_type} ${

@@ -58,10 +58,20 @@ class NavPane extends React.Component {
     if (this.state.pane === paneTypes.privPane)
       return startItems.map((item, index) => {
         const datacy = `nav-pane-item-${index}`;
+
+        let targetURL = '';
+
+        if (item.navTo === '/mapper') {
+          targetURL = item.navTo;
+        } else {
+          targetURL = '#';
+        }
+
         return (
           <NavPaneItem
             key={item.label}
-            to="#"
+            to={targetURL}
+            // to={item.navTo}
             onClick={() => this.clickStartPaneItem(item)}
             data-cy={datacy}
           >
@@ -80,6 +90,7 @@ class NavPane extends React.Component {
 
     return data.map((item, index) => {
       const datacy = `nav-pane-item-${index}`;
+      console.log('map', data);
       return (
         <NavPaneItem to={item.navTo} key={item.label} data-cy={datacy}>
           <ItemIcon>

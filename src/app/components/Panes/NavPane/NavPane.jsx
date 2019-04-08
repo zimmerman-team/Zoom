@@ -56,13 +56,14 @@ class NavPane extends React.Component {
 
   renderPaneItems() {
     if (this.state.pane === paneTypes.privPane)
-      return startItems.map(item => {
+      return startItems.map((item, index) => {
+        const datacy = `nav-pane-item-${index}`;
         return (
           <NavPaneItem
             key={item.label}
             to="#"
             onClick={() => this.clickStartPaneItem(item)}
-            data-cy="nav-pane-item"
+            data-cy={datacy}
           >
             <ItemIcon>
               <SvgIconPointer />
@@ -77,9 +78,10 @@ class NavPane extends React.Component {
         ? createChartItems
         : convertDataItems;
 
-    return data.map(item => {
+    return data.map((item, index) => {
+      const datacy = `nav-pane-item-${index}`;
       return (
-        <NavPaneItem to={item.navTo} key={item.label} data-cy="nav-pane-item">
+        <NavPaneItem to={item.navTo} key={item.label} data-cy={datacy}>
           <ItemIcon>
             <SvgIconPointer />
           </ItemIcon>

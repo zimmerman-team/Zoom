@@ -111,6 +111,40 @@ const DatasetApi = {
     });
   },
 
+  // so this updates the dataset
+  updateDataset: (req, res) => {
+    const data = req.body;
+
+    User.findOne({ authId: data.authId }, (error, author) => {
+      if (error) general.handleError(res, error);
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else if (author.role === 'Administrator') {
+        Dataset.findOne(
+          { author, datasetId: data.datasetId },
+          (setError, dataset) => {
+            if (setError) general.handleError(res, setError);
+            else {
+              if (data.name) dataset.name = data.name;
+
+              if (data.team) dataset.team = data.team;
+
+              if (data.dataSource) dataset.dataSource = data.dataSource;
+
+              if (data.public !== undefined) dataset.public = data.public;
+            }
+
+            dataset.save(err => {
+              if (err) general.handleError(res, err);
+              else res.json({ message: 'dataset saved' });
+            });
+          }
+        );
+      } else {
+        general.handleError(res, 'Unauthorized', 401);
+      }
+    });
+  },
+
   deleteDataset: function(author, datasetId, res) {
     // TODO: should be adjusted without the promises, or maybe with promises if
     // TODO: it works and makes sense

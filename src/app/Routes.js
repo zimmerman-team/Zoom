@@ -45,7 +45,7 @@ const DatasetMediator = lazy(() =>
 const About = lazy(() => import('modules/about/About'));
 
 const DashboardMediator = lazy(() =>
-  import('modules/datamapper/DataMapperModule')
+  import('mediators/DashboardMediators/DashboardMediator')
 );
 
 // const ManMappingStep = lazy(() =>

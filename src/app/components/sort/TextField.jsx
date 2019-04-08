@@ -21,7 +21,6 @@ const Container = styled(props => (
     id="standard-full-width"
     fullWidth
     margin="none"
-    // error
     label="Empty"
     InputLabelProps={{
       disableAnimation: true,
@@ -29,12 +28,7 @@ const Container = styled(props => (
     }}
     InputProps={{
       disableUnderline: true
-      // error: styles.error
     }}
-    // className={styles.error}
-    /* classes={{
-      error: styles.error
-    }}*/
     {...props}
   />
 ))`

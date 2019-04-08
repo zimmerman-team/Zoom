@@ -21,7 +21,7 @@ describe('Create geo functionality', function() {
     cy.url().should('not.include', '/create/geo');
   });
 
-  it('Should navigate to create/geo when clicking on the create geo button', function() {
+  it('Should navigate to "enter url here" when clicking on the create geo button', function() {
     signIn();
     cy.get('[data-cy="geomap-filter-button"]').click();
     cy.get('[data-cy="nav-pane-item"]')
@@ -32,7 +32,20 @@ describe('Create geo functionality', function() {
       .click();
     cy.url().should('include', '/create/geo');
   });
-
   // todo: Implement when routing from create/geo is more clear
-  it('Should pass text from the /context to /preview', function() {});
+  it('Should display appropriate content per tab', function() {});
+
+  it('Should pass self written text from the /context to /preview', function() {});
+
+  it('Should display mapped data', function() {});
+
+  it('Should "save" the chart to the dashboard', function() {});
+
+  it('Should "save" the chart as a JSON, CSV or XML file ', function() {});
+
+  it('Should duplicate chart to dashboard', function() {});
+
+  it('Should publish the chart to public zoom library', function() {});
+
+  it('Should publish the chart to the team', function() {});
 });

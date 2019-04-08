@@ -72,6 +72,7 @@ const propTypes = {
     q3Text: PropTypes.string,
     q4Text: PropTypes.string,
     q51Text: PropTypes.string,
+    alwaysSave: PropTypes.bool,
     fileSources: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
@@ -83,6 +84,7 @@ const propTypes = {
 
 const defaultProps = {
   dropDownData: {},
+  alwaysSave: false,
   saveStepData: undefined,
   stepData: step1InitialData,
   environment: null
@@ -93,6 +95,7 @@ class MetaDataMediator extends React.Component {
     super(props);
 
     this.state = {
+      dataLoaded: false,
       data: props.stepData.metaData
         ? props.stepData.metaData
         : step1InitialData.metaData
@@ -123,6 +126,23 @@ class MetaDataMediator extends React.Component {
     this.simpleChange(fileSources, 'fileSources');
   }
 
+  componentDidUpdate(prevProps) {
+    // so we want the data to load only once from the props here.
+    // this is mainly used for the dataset metadata edit page
+    if (
+      prevProps.stepData.metaData &&
+      this.props.stepData.metaData &&
+      this.props.stepData.metaData.title !==
+        prevProps.stepData.metaData.title &&
+      !this.state.dataLoaded
+    ) {
+      this.setState({
+        dataLoaded: true,
+        data: this.props.stepData.metaData
+      });
+    }
+  }
+
   // and we save the first steps data in redux
   componentWillUnmount() {
     const stepData = { ...this.props.stepData };
@@ -149,7 +169,11 @@ class MetaDataMediator extends React.Component {
 
       // here we will only save data into props
       // if its about one of the required fields
-      if (data.requiredFields.indexOf(question) !== -1) {
+      // or if its the dataset edit page where we will always save
+      if (
+        data.requiredFields.indexOf(question) !== -1 ||
+        this.props.alwaysSave
+      ) {
         const stepData = { ...props.stepData };
         stepData.metaData = data;
         props.dispatch(actions.saveStepDataRequest(stepData));

@@ -113,11 +113,13 @@ export function formatChartData(charts, userId, history, remove) {
 }
 
 // formats chart data for the dashboard
-export function formatDatasets(datasets) {
+export function formatDatasets(datasets, history) {
   return datasets.map(dataset => {
     let shared = '';
-    if (dataset.team.length > 0) shared = shared.concat(dataset.team);
-    if (dataset._public)
+    if (dataset.team.length > 0 && dataset.team !== 'none')
+      shared = shared.concat(dataset.team);
+
+    if (dataset.public)
       shared =
         shared.length > 0
           ? shared.concat(', ').concat('Public')
@@ -136,9 +138,7 @@ export function formatDatasets(datasets) {
         Shared: shared,
         'Data sources': dataset.dataSource
       },
-      onEdit: () => console.log('edit'),
-      onView: () => console.log('preview'),
-      onDuplicate: () => console.log('duplicate'),
+      onEdit: () => history.push(`/dataset/${dataset.datasetId}`),
       onDelete: () => console.log('delete')
     };
   });

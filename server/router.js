@@ -66,6 +66,8 @@ router.post('/updatePublic', DatasetController.updatePublic);
 
 router.post('/addNewDataset', DatasetController.addNewDataset);
 
+router.post('/updateDataset', DatasetController.updateDataset);
+
 router.delete('/deleteDataset', DatasetController.deleteDataset);
 
 /* -------------- DATASET CONTROLLER END ------------------------- */

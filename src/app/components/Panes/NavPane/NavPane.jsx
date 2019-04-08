@@ -90,7 +90,6 @@ class NavPane extends React.Component {
 
     return data.map((item, index) => {
       const datacy = `nav-pane-item-${index}`;
-      console.log('map', data);
       return (
         <NavPaneItem to={item.navTo} key={item.label} data-cy={datacy}>
           <ItemIcon>

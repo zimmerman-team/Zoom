@@ -414,3 +414,35 @@ export function getPublicChartsFailed(error) {
     error
   };
 }
+
+export const UPDATE_DATASET_INITIAL = 'UPDATE_DATASET_INITIAL';
+export const UPDATE_DATASET_REQUEST = 'UPDATE_DATASET_REQUEST';
+export const UPDATE_DATASET_SUCCESS = 'UPDATE_DATASET_SUCCESS';
+export const UPDATE_DATASET_FAILED = 'UPDATE_DATASET_FAILED';
+
+export function updateDatasetInitial() {
+  return {
+    type: UPDATE_DATASET_INITIAL
+  };
+}
+
+export function updateDatasetRequest(values) {
+  return {
+    type: UPDATE_DATASET_REQUEST,
+    values
+  };
+}
+
+export function updateDatasetSuccess(data) {
+  return {
+    type: UPDATE_DATASET_SUCCESS,
+    data
+  };
+}
+
+export function updateDatasetFailed(error) {
+  return {
+    type: UPDATE_DATASET_FAILED,
+    error
+  };
+}

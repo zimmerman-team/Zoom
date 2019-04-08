@@ -63,7 +63,10 @@ export function formatColumns(
             key === 'index' ? (
               <ErrorColHeader key={`header-${index}`}>{key}</ErrorColHeader>
             ) : (
-              <ErrorColHeader key={`header-${index}`}>
+              <ErrorColHeader
+                key={`header-${index}`}
+                style={{ pointerEvents: 'none', opacity: '0.4' }}
+              >
                 <HeaderName>{key}</HeaderName>
                 <IgnoreHeaderCheckBox key={`ignore-header-checkbox-${index}`}>
                   <Checkbox

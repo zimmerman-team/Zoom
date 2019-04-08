@@ -158,6 +158,23 @@ export function* getUserRequest(action) {
   }
 }
 
+export function* deleteUserRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'deleteUser',
+      values: { delId: action.values.userId }
+    });
+    yield put(nodeActions.deleteUserSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.deleteUserFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 export function* addUserRequest(action) {
   try {
     const response = yield call(api.nodeBackendPostRequest, {
@@ -361,7 +378,8 @@ function* sagas() {
     takeLatest('FILE_SOURCE_REQUEST', fileSourceRequest),
     takeLatest('FILE_REQUEST', fileRequest),
     takeLatest('ACTIVITY_DATA_REQUEST', activityDataRequest),
-    takeLatest('COUNTRY_EXCERPT_REQUEST', countryExcerptRequest)
+    takeLatest('COUNTRY_EXCERPT_REQUEST', countryExcerptRequest),
+    takeLatest('DELETE_USER_REQUEST', deleteUserRequest)
   ];
 }
 

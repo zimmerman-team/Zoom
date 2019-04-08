@@ -1,6 +1,6 @@
 /* base */
 import React from 'react';
-import { matchPath } from 'react-router';
+// import { matchPath } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -22,7 +22,6 @@ import {
 import DashboardModule from 'modules/dashboard/DashboardModule';
 
 /* consts */
-import tabs from '__consts__/DashboardTabsConsts';
 import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
 import paneTypes from '__consts__/PaneTypesConst';
 
@@ -51,14 +50,14 @@ class DashboardMediator extends React.Component {
     // to its default state for this component
     this.props.dispatch(generalActions.dataPaneToggleRequest(paneTypes.none));
 
-    this.reloadData();
+    this.reloadData('all');
     /* todo: not sure if this is the best way to handle this, see if it can be refactored */
     document.addEventListener('mousedown', this.handleClickOutside);
   };
 
   componentDidUpdate(prevProps) {
     if (!isEqual(this.props.user, prevProps.user) && this.props.user)
-      this.reloadData();
+      this.reloadData('all');
 
     if (!isEqual(this.props.chartDeleted, prevProps.chartDeleted))
       this.reloadData();
@@ -85,6 +84,10 @@ class DashboardMediator extends React.Component {
       this.setState({
         datasets: formatDatasets(this.props.userDatasets.data)
       });
+
+    // we re-load the users
+    if (!isEqual(this.props.userDeleted, prevProps.userDeleted))
+      this.reloadData();
   }
 
   componentWillUnmount() {
@@ -107,8 +110,18 @@ class DashboardMediator extends React.Component {
 
   setUsers = data => {
     this.setState({
-      users: formatUsersTabData(data)
+      users: formatUsersTabData(data, this.editUser, this.deleteUser)
     });
+  };
+
+  editUser = userId => {
+    this.props.history.push(`/edit-user/${userId}`);
+  };
+
+  deleteUser = userId => {
+    this.props.auth0Client.deleteUser(userId, this, () =>
+      this.props.dispatch(actions.deleteUserRequest({ userId }))
+    );
   };
 
   setWrapperRef = node => {
@@ -146,34 +159,57 @@ class DashboardMediator extends React.Component {
     this.reloadData();
   }
 
-  reloadData = typeOfChange => {
-    if (typeOfChange === 'sort' && this.props.match.params.tab === 'users') {
-      this.getAllUsers();
-    }
-
-    if (typeOfChange !== 'sort') {
-      this.getAllUsers();
-      this.props.auth0Client.getUserGroups(this, 'teams');
-    }
-
-    if (this.props.user) {
-      this.props.dispatch(
-        actions.getUserChartsRequest({
-          authId: this.props.user.authId,
-          sortBy: this.state.sort,
-          searchTitle: this.state.searchKeyword
-        })
-      );
-    }
-
-    if (this.props.user) {
-      this.props.dispatch(
-        actions.getUserDatasetsRequest({
-          authId: this.props.user.authId,
-          sortBy: this.state.sort,
-          searchTitle: this.state.searchKeyword
-        })
-      );
+  reloadData = type => {
+    if (type === 'all') {
+      if (this.props.user) {
+        this.props.dispatch(
+          actions.getUserChartsRequest({
+            authId: this.props.user.authId,
+            sortBy: this.state.sort,
+            searchTitle: this.state.searchKeyword
+          })
+        );
+        this.props.dispatch(
+          actions.getUserDatasetsRequest({
+            authId: this.props.user.authId,
+            sortBy: this.state.sort,
+            searchTitle: this.state.searchKeyword
+          })
+        );
+        this.getAllUsers();
+        this.props.auth0Client.getUserGroups(this, 'teams');
+      }
+    } else {
+      switch (this.props.match.params.tab) {
+        case 'charts':
+          if (this.props.user) {
+            this.props.dispatch(
+              actions.getUserChartsRequest({
+                authId: this.props.user.authId,
+                sortBy: this.state.sort,
+                searchTitle: this.state.searchKeyword
+              })
+            );
+          }
+          break;
+        case 'datasets':
+          if (this.props.user) {
+            this.props.dispatch(
+              actions.getUserDatasetsRequest({
+                authId: this.props.user.authId,
+                sortBy: this.state.sort,
+                searchTitle: this.state.searchKeyword
+              })
+            );
+          }
+          break;
+        case 'users':
+          this.getAllUsers();
+          break;
+        case 'teams':
+          this.props.auth0Client.getUserGroups(this, 'teams');
+          break;
+      }
     }
   };
 
@@ -227,7 +263,8 @@ class DashboardMediator extends React.Component {
 const mapStateToProps = state => {
   return {
     userDatasets: state.userDatasets,
-    chartDeleted: state.chartDeleted,
+    chartDeleted: state.userDeleted,
+    userDeleted: state.userDeleted,
     // yeah so actually these are the user and team charts
     userCharts: state.userCharts,
     user: state.user.data

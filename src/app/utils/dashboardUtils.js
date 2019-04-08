@@ -1,22 +1,30 @@
 import get from 'lodash/get';
 import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
+import isEmpty from 'lodash/isEmpty';
 
-export function formatUsersTabData(data) {
+export function formatUsersTabData(data, onEdit, onDelete) {
   return data.users.map(d => {
+    const title = !isEmpty(d.user_metadata)
+      ? `${get(d.user_metadata, 'firstName', '')} ${get(
+          d.user_metadata,
+          'lastName',
+          ''
+        )}`
+      : d.email;
     return {
+      title,
       id: d.user_id,
-      title: get(d, 'name', get(d, 'nickname', d.email)),
       info: {
         Role: get(d, 'app_metadata.authorization.roles[0]', ''),
         'Mapped data sets': 0,
         Charts: 0,
         Twitter: ''
       },
-      onEdit: () => console.log('edit'),
+      onEdit: () => onEdit(d.user_id),
       onView: () => console.log('view'),
       onDuplicate: () => console.log('duplicate'),
-      onDelete: () => console.log('archive')
+      onDelete: () => onDelete(d.user_id)
     };
   });
 }

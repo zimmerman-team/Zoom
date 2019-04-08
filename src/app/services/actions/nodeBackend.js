@@ -94,6 +94,38 @@ export function addUserFailed(error) {
   };
 }
 
+export const DELETE_USER_INITIAL = 'DELETE_USER_INITIAL';
+export const DELETE_USER_REQUEST = 'DELETE_USER_REQUEST';
+export const DELETE_USER_SUCCESS = 'DELETE_USER_SUCCESS';
+export const DELETE_USER_FAILED = 'DELETE_USER_FAILED';
+
+export function deleteUserInitial() {
+  return {
+    type: DELETE_USER_INITIAL
+  };
+}
+
+export function deleteUserRequest(values) {
+  return {
+    type: DELETE_USER_REQUEST,
+    values
+  };
+}
+
+export function deleteUserSuccess(data) {
+  return {
+    type: DELETE_USER_SUCCESS,
+    data
+  };
+}
+
+export function deleteUserFailed(error) {
+  return {
+    type: DELETE_USER_FAILED,
+    error
+  };
+}
+
 export const UPDATE_USER_INITIAL = 'UPDATE_USER_INITIAL';
 export const UPDATE_USER_REQUEST = 'UPDATE_USER_REQUEST';
 export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';

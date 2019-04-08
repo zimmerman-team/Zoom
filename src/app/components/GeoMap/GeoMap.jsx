@@ -1,7 +1,7 @@
 /* base */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import MapGL from 'react-map-gl';
+import MapGL, { LinearInterpolator } from 'react-map-gl';
 import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
 
@@ -75,7 +75,9 @@ export class GeoMap extends Component {
       viewport: {
         latitude: this.props.latitude,
         longitude: this.props.longitude,
-        zoom: this.props.zoom
+        zoom: this.props.zoom,
+        transitionInterpolator: new LinearInterpolator(),
+        transitionDuration: 1000
       },
       settings: {
         dragPan: true,
@@ -228,15 +230,23 @@ export class GeoMap extends Component {
     }
   };
 
-  handleZoomIn = () => {
-    this._updateViewport({ zoom: this.state.viewport.zoom + 1 });
-  };
+  handleZoomIn() {
+    this._updateViewport({
+      ...this.state.viewport,
+      zoom: this.state.viewport.zoom + 0.5
+    });
+  }
 
-  handleZoomOut = () => {
-    if (this.state.viewport.zoom <= this.state.settings.maxZoom) {
-      this._updateViewport({ zoom: this.state.viewport.zoom - 1 });
-    }
-  };
+  handleZoomOut() {
+    if (this.state.viewport.zoom >= this.state.settings.minZoom)
+      this._updateViewport({
+        ...this.state.viewport,
+        zoom:
+          this.state.viewport.zoom - 0.5 > this.state.settings.minZoom
+            ? this.state.viewport.zoom - 0.5
+            : this.state.settings.minZoom
+      });
+  }
 
   handleFullscreen() {
     /*todo: add logic that utilizes fullscreen util of react-map-gl itself instead of a thirdparty library*/

@@ -83,14 +83,19 @@ const Routes = props => {
           <Route
             exact
             path="/visualizer/:chart/:code/:tab"
-            render={() => (
-              <VisualizerModuleMediator
-                indicatorAggregations={props}
-                dropDownData={props}
-                auth0Client={props.auth0Client}
-              />
-            )}
+            render={() =>
+              props.auth0Client.isAuthenticated() ? (
+                <VisualizerModuleMediator
+                  indicatorAggregations={props}
+                  dropDownData={props}
+                  auth0Client={props.auth0Client}
+                />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
           />
+
           <Route
             exact
             path="/public/:chart/:code/:tab"

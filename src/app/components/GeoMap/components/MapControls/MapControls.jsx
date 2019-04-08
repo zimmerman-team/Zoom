@@ -33,14 +33,14 @@ const MapControls = props => (
     <ButtonContainer onClick={props.onZoomOut} data-cy="home-zoom-in-button">
       <IconOnlyMinus />
     </ButtonContainer>
-    <DisabledElement>
-      <ButtonContainer
-        onClick={props.onFullScreen}
-        data-cy="home-fullscreen-button"
-      >
-        <IconOnlyFullScreen />
-      </ButtonContainer>
-    </DisabledElement>
+    {/*<DisabledElement>*/}
+    <ButtonContainer
+      onClick={props.onFullScreen}
+      data-cy="home-fullscreen-button"
+    >
+      <IconOnlyFullScreen />
+    </ButtonContainer>
+    {/*</DisabledElement>*/}
   </ComponentBase>
 );
 

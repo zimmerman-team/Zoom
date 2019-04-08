@@ -2,10 +2,6 @@ import update from 'immutability-helper';
 import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
 import * as nodeActions from 'services/actions/nodeBackend';
-import { GET_PUBLIC_CHARTS_INITIAL } from 'services/actions/nodeBackend';
-import { GET_PUBLIC_CHARTS_REQUEST } from 'services/actions/nodeBackend';
-import { GET_PUBLIC_CHARTS_SUCCESS } from 'services/actions/nodeBackend';
-import { GET_PUBLIC_CHARTS_FAILED } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -419,8 +415,23 @@ function userDeleted(state = initial, action) {
       return state;
   }
 }
+function datasetUpdated(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.UPDATE_DATASET_INITIAL:
+      return updateInitial(state);
+    case nodeActions.UPDATE_DATASET_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.UPDATE_DATASET_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.UPDATE_DATASET_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
 
 const reducers = {
+  datasetUpdated,
   publicCharts,
   userDatasets,
   chartDeleted,

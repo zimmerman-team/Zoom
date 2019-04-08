@@ -345,8 +345,26 @@ export function* getPublicChartsRequest(action) {
   }
 }
 
+export function* updateDatasetRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'updateDataset',
+      values: action.values
+    });
+    yield put(nodeActions.updateDatasetSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.updateDatasetFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('UPDATE_DATASET_REQUEST', updateDatasetRequest),
     takeLatest('GET_PUBLIC_CHARTS_REQUEST', getPublicChartsRequest),
     takeLatest('GET_USER_DATASETS_REQUEST', getUserDatasetsRequest),
     takeLatest('DELETE_CHART_REQUEST', deleteChartRequest),

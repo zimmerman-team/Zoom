@@ -105,7 +105,9 @@ class DashboardMediator extends React.Component {
         this.state.page,
         this.state.sort,
         this.state.searchKeyword !== ''
-          ? ` AND name:${this.state.searchKeyword}*`
+          ? ` AND (user_metadata.firstName:${
+              this.state.searchKeyword
+            } OR user_metadata.lastName:${this.state.searchKeyword})`
           : ''
       )
       .then(() => this.setState({ loadUsers: false }));

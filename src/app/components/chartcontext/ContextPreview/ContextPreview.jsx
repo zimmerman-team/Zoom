@@ -66,7 +66,9 @@ const ContextPreview = props => {
       )}
       {props.show === 'descBody' && (
         <ContextBody>
-          <div className="ql-editor">{ReactHtmlParser(props.desc)}</div>
+          <div className="ql-editor" data-cy="context-preview-body">
+            {ReactHtmlParser(props.desc)}
+          </div>
         </ContextBody>
       )}
     </ComponentBase>

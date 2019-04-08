@@ -142,6 +142,7 @@ class DataExplorePane extends React.Component {
                 reset: () => this.props.selectDataSource('reset')
               }
             ]}
+            data-cy="nav-pane-item-datasource"
           />
 
           {/*GEO LOCATION*/}
@@ -175,6 +176,7 @@ class DataExplorePane extends React.Component {
                 reset: () => this.props.selectCountry('reset')
               }
             ]}
+            data-cy="nav-pane-item-geo-location"
           />
 
           {/*TIME PERIOD*/}
@@ -184,6 +186,7 @@ class DataExplorePane extends React.Component {
             label="Time Period"
             selectYearRange={this.props.selectYearRange}
             yearRange={this.props.yearRange}
+            data-cy="nav-pane-item-time-period"
           />
 
           {/*INDICATORS*/}
@@ -234,6 +237,7 @@ class DataExplorePane extends React.Component {
                 selectedSources: this.props.selectedSubInd2
               }
             ]}
+            data-cy="nav-pane-item-indicator"
           />
         </PanelAccordion>
         <ResetContainer

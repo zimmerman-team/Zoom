@@ -18,14 +18,21 @@ export const ComponentBase = styled(NavLink)`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 39px;
+
   width: 285px;
   padding: 15px;
   background-color: ${Theme.color.zoomGreyZero};
   box-shadow: 0 2px 4px 2px rgba(157, 157, 157, 0.5);
+  margin-left: 6px;
+  margin-right: 30px;
+  margin-bottom: 35px;
 
   &:hover {
     cursor: pointer;
+  }
+
+  &:nth-child(3n) {
+    margin-right: 0;
   }
 `;
 

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Cookies from 'universal-cookie';
+import { withRouter } from 'react-router';
 
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
@@ -73,6 +74,7 @@ export class HomeModule extends Component {
           )}
 
           <GeoMap
+            outerHistory={this.props.history}
             indicatorData={indicators}
             selectedYear={this.props.selectedYear}
             selectYear={this.props.selectYear}
@@ -85,9 +87,7 @@ export class HomeModule extends Component {
             <ExplorePanelMediator display={explorePaneVis} {...otherProps} />
             {(this.props.dataPaneOpen === paneTypes.privPane ||
               this.props.dataPaneOpen === paneTypes.createChart ||
-              this.props.dataPaneOpen === paneTypes.convertData) && (
-              <NavPane {...otherProps} />
-            )}
+              this.props.dataPaneOpen === paneTypes.convertData) && <NavPane />}
           </DataPaneContainer>
         </ModuleContainer>
       </React.Fragment>
@@ -103,4 +103,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(HomeModule);
+export default withRouter(connect(mapStateToProps)(HomeModule));

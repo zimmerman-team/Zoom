@@ -12,43 +12,43 @@ import IconVisibility from 'assets/icons/toolpanel/IconVisibility';
 import ContextEditor from 'components/chartcontext/ContextEditor/ContextEditor';
 import VizPaneMediator from 'mediators/ComponentMediators/PaneMediators/VisPaneMediator/VizPaneMediator';
 
-const Path = '/visualizer/geomap/vizID/';
+const Path = '/visualizer/:chart/:code/';
 
 export const data = {
   sections: [
     {
       label: 'edit',
-      path: Path + 'edit',
+      path: `${Path}edit`,
       component: VizPaneMediator,
       icon: <IconFilter />
     },
     {
       label: 'context',
-      path: Path + 'context',
+      path: `${Path}context`,
       component: ContextEditor,
       icon: <IconContext />
     },
     {
       label: 'preview',
-      path: Path + 'preview',
+      path: `${Path}preview`,
       component: undefined,
       icon: <IconPreview />
     },
     {
       label: 'download',
-      path: Path + 'download',
+      path: `${Path}download`,
       component: DownloadTab,
       icon: <IconDownload />
     },
     {
       label: 'duplicate',
-      path: Path + 'duplicate',
+      path: `${Path}duplicate`,
       component: DuplicatorTab,
       icon: <IconDuplicate />
     },
     {
       label: 'visibility',
-      path: Path + 'visibility',
+      path: `${Path}visibility`,
       component: VisibilityTab,
       icon: <IconVisibility />
     }

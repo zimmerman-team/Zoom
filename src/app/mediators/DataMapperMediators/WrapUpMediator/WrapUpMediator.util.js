@@ -83,7 +83,7 @@ export function formatMapJson(mappingJson, mapData, fileId) {
   });
 
   zoomValues.forEach(item => {
-    if (item.zoomModel === 'Mixed Values') {
+    if (item.zoomModel === 'Mixed Value') {
       mapJson.mapping_dict.value.push(item.fileType);
 
       const valueFormat = find(mapData, ['zoomModel', 'value_format']);

@@ -24,16 +24,16 @@ export const createChartItems = [
   },
   {
     label: 'Country Focus Page Kenya',
-    navTo: '/focus/KE'
+    navTo: '/visualizer/focusKE/vizID/edit'
   },
   {
     label: 'Country Focus Page Netherlands',
-    navTo: '/focus/NL'
-  } /*,
+    navTo: '/visualizer/focusNL/vizID/edit'
+  },
   {
     label: 'Line chart',
-    navTo: '/create/linechart'
-  },
+    navTo: '/visualizer/linechart/vizID/edit'
+  } /*,
   {
     label: 'Bar chart',
     navTo: '/create/barchart'

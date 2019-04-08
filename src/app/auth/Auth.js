@@ -1,5 +1,7 @@
 import axios from 'axios';
 import auth0 from 'auth0-js';
+import postmark from 'postmark';
+import { nodeBackendGetRequest } from 'services/index';
 
 class Auth {
   constructor() {
@@ -202,39 +204,42 @@ class Auth {
   /* User management actions */
 
   getAllUsers(stateAction = null, page = 0, sort, search) {
-    axios
-      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
-        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
-        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-        audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
-        grant_type: 'client_credentials'
-      })
-      .then(response => {
-        axios
-          .get(
-            `${
-              process.env.REACT_APP_AUTH_DOMAIN
-            }/api/v2/users?include_totals=true&per_page=10&page=${page}&sort=${sort}&q=identities.connection:"Username-Password-Authentication"${search}&search_engine=v3`,
-            {
-              headers: {
-                Authorization: `${response.data.token_type} ${
-                  response.data.access_token
-                }`
+    return new Promise(resolve => {
+      axios
+        .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+          client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+          client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+          audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
+          grant_type: 'client_credentials'
+        })
+        .then(response => {
+          axios
+            .get(
+              `${
+                process.env.REACT_APP_AUTH_DOMAIN
+              }/api/v2/users?include_totals=true&per_page=10&page=${page}&sort=${sort}&q=identities.connection:"Username-Password-Authentication"${search}&search_engine=v3`,
+              {
+                headers: {
+                  Authorization: `${response.data.token_type} ${
+                    response.data.access_token
+                  }`
+                }
               }
-            }
-          )
-          .then(response2 => {
-            if (stateAction) {
-              stateAction(response2.data);
-            }
-          })
-          .catch(error => {
-            console.error(error);
-          });
-      })
-      .catch(error => {
-        console.error(error);
-      });
+            )
+            .then(response2 => {
+              if (stateAction) {
+                stateAction(response2.data);
+              }
+              resolve();
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    });
   }
 
   getUserGroups(that = null, stateVar = 'userGroups') {
@@ -434,7 +439,7 @@ class Auth {
           )
           .then(res2 => {
             if (res2.status === 201) {
-              _this.forgetPassword(email, null);
+              _this.sendWelcomeEmail(res2.data.user_id, name, surname, email);
               parent.setState({
                 success: true,
                 errorMessage: null,
@@ -572,6 +577,58 @@ class Auth {
           });
         });
     });
+  }
+
+  sendWelcomeEmail(userId, name, surname, email) {
+    axios
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
+        grant_type: 'client_credentials'
+      })
+      .then(res1 => {
+        axios
+          .post(
+            `${
+              process.env.REACT_APP_AUTH_DOMAIN
+            }/api/v2/tickets/password-change`,
+            {
+              user_id: userId
+            },
+            {
+              headers: {
+                Authorization: `${res1.data.token_type} ${
+                  res1.data.access_token
+                }`
+              }
+            }
+          )
+          .then(res2 => {
+            nodeBackendGetRequest({
+              endpoint: 'sendEmail',
+              values: {
+                name,
+                surname,
+                email,
+                link: res2.data.ticket
+              }
+            });
+          })
+          .catch(error => {
+            console.log(error);
+            parent.setState({
+              success: false,
+              errorMessage: error.response.data.message
+            });
+          });
+      })
+      .catch(error => {
+        parent.setState({
+          success: false,
+          errorMessage: error.response.data.message
+        });
+      });
   }
 }
 

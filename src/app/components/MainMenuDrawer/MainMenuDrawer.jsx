@@ -31,7 +31,7 @@ const defaultProps = {
   env: process.env.NODE_ENV
 };
 
-class TempDrawer extends React.Component {
+class MainMenuDrawer extends React.Component {
   state = {
     open: this.props.open
   };
@@ -79,28 +79,7 @@ class TempDrawer extends React.Component {
               </ListItemIcon>
               <ZoomListItemText primary="Close" />
             </SidebarClosButton>
-            <SidebarNavList>
-              {sideList}
-              {this.props.auth0Client &&
-                (this.props.auth0Client.isAuthenticated() &&
-                  this.props.auth0Client.isAdministrator() && (
-                    /*todo: this is duplicate code and should actually be covered in the consts*/
-                    <ZoomLink to="/dashboard">
-                      <SidebarNavListItem
-                        label="Dashboard"
-                        onClick={this.props.toggleSideBar}
-                        icon={<IconCharts />}
-                        button
-                        data-cy="sidebar-dashboard"
-                      >
-                        <ListItemIcon>
-                          <IconClose />
-                        </ListItemIcon>
-                        <ZoomListItemText primary="Close" />
-                      </SidebarNavListItem>
-                    </ZoomLink>
-                  ))}
-            </SidebarNavList>
+            <SidebarNavList>{sideList}</SidebarNavList>
           </div>
 
           <LoginBox>
@@ -112,7 +91,7 @@ class TempDrawer extends React.Component {
   }
 }
 
-TempDrawer.propTypes = propTypes;
-TempDrawer.defaultProps = defaultProps;
+MainMenuDrawer.propTypes = propTypes;
+MainMenuDrawer.defaultProps = defaultProps;
 
-export default TempDrawer;
+export default MainMenuDrawer;

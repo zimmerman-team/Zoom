@@ -27,6 +27,7 @@ export const Section = styled.section`
 export const PageHeading = styled(_PageHeading)`
   font-size: 32px;
   margin-bottom: 15px;
+  line-height: 0.6;
 `;
 
 export const HeaderIcon = styled.div``;

@@ -4,17 +4,26 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 import { createBrowserHistory } from 'history';
+import { connect } from 'react-redux';
 
+/* consts */
+import paneTypes from '__consts__/PaneTypesConst';
+
+/* components */
 import GridList from 'modules/dashboard/fragments/GridList/GridList';
 import GridListOptionsPane from 'modules/dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
+import NavPane from 'components/Panes/NavPane/NavPane';
+import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
+import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
 const ComponentBase = styled.div`
   display: flex;
   width: 100%;
   max-width: 1024px;
   justify-content: center;
-
   flex-direction: column;
+  border-top: 2px solid #cfcfcf;
+  //overflow: hidden;
 `;
 
 const Message = styled.div`
@@ -31,13 +40,17 @@ const Box = styled.div``;
 const propTypes = {
   data: PropTypes.array,
   tabContentName: PropTypes.string,
+  charts: PropTypes.array,
   users: PropTypes.array,
+  loading: PropTypes.bool,
   teams: PropTypes.array
 };
 const defaultProps = {
+  charts: [],
   data: [],
   users: [],
   teams: [],
+  loading: false,
   tabContentName: 'Charts'
 };
 
@@ -69,12 +82,13 @@ const DashboardTabContent = props => {
     leftOptionLabel = 'add focus page';
     tabContentName = 'Focus page';
   } else if (currentURL.includes('data-sets')) {
-    targetData = '';
+    targetData = props.datasets;
+    targetUrl = '/mapper';
     leftOptionLabel = 'map data set';
     tabContentName = 'Data sets';
   } else if (currentURL.includes('charts')) {
-    targetData = '';
-    leftOptionLabel = 'add chart';
+    targetData = props.charts;
+    leftOptionLabel = undefined;
     tabContentName = 'Charts';
   } else if (currentURL.includes('trash')) {
     targetData = '';
@@ -82,16 +96,16 @@ const DashboardTabContent = props => {
     sortIsVisible = false;
     isRemoveOption = true;
   }
-
   return (
-    <ComponentBase>
+    <ComponentBase
+      style={props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}}
+    >
+      {props.loading && <ProgressIcon />}
       {isRemoveOption && (
         <GridListOptionsPane
           leftOptionLabel={leftOptionLabel}
           sortIsVisible={sortIsVisible}
           isRemoveOption={isRemoveOption}
-          users={props.users}
-          teams={props.teams}
           isSortByOpen={props.isSortByOpen}
           changeSortBy={props.changeSortBy}
           setWrapperRef={props.setWrapperRef}
@@ -106,14 +120,20 @@ const DashboardTabContent = props => {
         <Message>No item in {tabContentName}</Message>
       )}
 
+      {(props.dataPaneOpen === paneTypes.privPane ||
+        props.dataPaneOpen === paneTypes.createChart ||
+        props.dataPaneOpen === paneTypes.convertData) && (
+        <DataPaneContainer>
+          <NavPane />
+        </DataPaneContainer>
+      )}
+
       {targetData.length > 0 && (
         <Box>
           <GridListOptionsPane
             leftOptionLabel={leftOptionLabel}
             sortIsVisible={sortIsVisible}
             isRemoveOption={isRemoveOption}
-            users={props.users}
-            teams={props.teams}
             isSortByOpen={props.isSortByOpen}
             changeSortBy={props.changeSortBy}
             setWrapperRef={props.setWrapperRef}
@@ -133,4 +153,10 @@ const DashboardTabContent = props => {
 DashboardTabContent.propTypes = propTypes;
 DashboardTabContent.defaultProps = defaultProps;
 
-export default DashboardTabContent;
+const mapStateToProps = state => {
+  return {
+    dataPaneOpen: state.dataPaneOpen.open
+  };
+};
+
+export default connect(mapStateToProps)(DashboardTabContent);

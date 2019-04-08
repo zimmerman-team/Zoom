@@ -6,6 +6,10 @@ import { matchPath } from 'react-router';
 
 import GeoMap from 'components/GeoMap/GeoMap';
 import theme from 'theme/Theme';
+import initialState from '__consts__/InitialChartDataConst';
+
+/* utils */
+import { getFocus } from 'modules/visualizer/VisualizerModule.utils';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -25,15 +29,66 @@ const ComponentBase = styled.div`
 const propTypes = {};
 const defaultProps = {};
 
-const GeomapFragment = props => {
-  const { mode, ...otherProps } = props;
+const boundsNL = [[0.2252, 50.2378], [10.756, 54.2068]];
+const boundsKE = [[26.82, -7.15], [50.89, 7.57]];
 
-  return (
-    <ComponentBase height={mode ? '400px' : '100%'}>
-      <GeoMap {...otherProps} />
-    </ComponentBase>
-  );
-};
+class GeomapFragment extends React.Component {
+  state = {
+    zoom: 2,
+    longitude: 0,
+    latitude: 15
+  };
+
+  componentWillMount = () => {
+    /* bounds are made with http://boundingbox.klokantech.com/ */
+    /* we can also use a generalized list of country bounds, the problem with those bounds is that they're too narrow, which in turns causes problems when zooming in/out*/
+    /* a possible solution could also be to device a way of dynamically calculating optimal bounds */
+    const isNL = location.pathname.includes('NL');
+    const isKE = location.pathname.includes('KE');
+    const boundsNL = [[0.2252, 50.2378], [10.756, 54.2068]];
+    const boundsKE = [[26.82, -7.15], [50.89, 7.57]];
+
+    if (isNL) {
+      this.setState({
+        latitude: 52.1326,
+        longitude: 5.2913,
+        zoom: 7,
+        bounds: boundsNL
+      });
+    } else if (isKE) {
+      this.setState({
+        latitude: 0.0236,
+        longitude: 37.9062,
+        zoom: 6,
+        bounds: boundsKE
+      });
+    }
+  };
+
+  componentDidUpdate(prevProps) {
+    if (this.props.chartType !== prevProps.chartType) {
+      this.setState({
+        /* morty, i don't know bout this solution */
+        focus: getFocus(this.props.chartType)
+      });
+    }
+  }
+
+  render() {
+    const { mode, ...otherProps } = this.props;
+
+    // console.log(this.state.focus);
+    return (
+      <ComponentBase height={mode ? '400px' : '100%'}>
+        <GeoMap
+          focus={this.state.focus && this.state.focus}
+          {...otherProps}
+          mapOptions={{ maxBounds: this.state.bounds }}
+        />
+      </ComponentBase>
+    );
+  }
+}
 
 GeomapFragment.propTypes = propTypes;
 GeomapFragment.defaultProps = defaultProps;

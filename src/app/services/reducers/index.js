@@ -2,6 +2,10 @@ import update from 'immutability-helper';
 import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
 import * as nodeActions from 'services/actions/nodeBackend';
+import { GET_PUBLIC_CHARTS_INITIAL } from 'services/actions/nodeBackend';
+import { GET_PUBLIC_CHARTS_REQUEST } from 'services/actions/nodeBackend';
+import { GET_PUBLIC_CHARTS_SUCCESS } from 'services/actions/nodeBackend';
+import { GET_PUBLIC_CHARTS_FAILED } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -311,7 +315,103 @@ function datasetAdded(state = initial, action) {
   }
 }
 
+function chartCreated(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.CREATE_UPDATE_CHART_INITIAL:
+      return updateInitial(state);
+    case nodeActions.CREATE_UPDATE_CHART_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.CREATE_UPDATE_CHART_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.CREATE_UPDATE_CHART_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function chartResults(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_CHART_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_CHART_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_CHART_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_CHART_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function userCharts(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_USER_CHARTS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_USER_CHARTS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_USER_CHARTS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_USER_CHARTS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function chartDeleted(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.DELETE_CHART_INITIAL:
+      return updateInitial(state);
+    case nodeActions.DELETE_CHART_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.DELETE_CHART_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.DELETE_CHART_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function userDatasets(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_USER_DATASETS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_USER_DATASETS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_USER_DATASETS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_USER_DATASETS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function publicCharts(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_PUBLIC_CHARTS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_PUBLIC_CHARTS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_PUBLIC_CHARTS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_PUBLIC_CHARTS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  publicCharts,
+  userDatasets,
+  chartDeleted,
+  userCharts,
+  chartResults,
+  chartCreated,
   datasetAdded,
   usersTeam,
   userUpdated,

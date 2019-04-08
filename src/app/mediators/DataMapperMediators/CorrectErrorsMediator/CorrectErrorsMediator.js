@@ -14,9 +14,12 @@ import FileValidationMutation from 'mediators/DataMapperMediators/mutations/File
 /* utils */
 import get from 'lodash/get';
 import findIndex from 'lodash/findIndex';
-import { formatErrorCells } from './CorrectErrorsMediator.util';
-import * as actions from 'services/actions';
+import { formatErrorCells, checkIfErrors } from './CorrectErrorsMediator.util';
 import * as generalActions from 'services/actions/general';
+import {
+  formatManData,
+  formatOverviewData
+} from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
 
 const propTypes = {
   fileId: PropTypes.string,
@@ -41,12 +44,15 @@ class CorrectErrorsMediator extends React.Component {
       errorTableData: [],
       errorCells: [],
       errorMessages: {},
+      loadErrors: false,
       pageSize: 10,
       columnHeaders: [],
       page: 0,
       checkedRows: false,
       rowsDeleted: false,
-      errorsExists: false,
+      errorsExists: true,
+      // TODO: readjust this when we get info about errors existing in file from the backend when error_toggle = false
+      errorsChecked: false,
       ignoredErrors:
         props.stepData.errorData && props.stepData.errorData.ignoredErrors
           ? props.stepData.errorData.ignoredErrors
@@ -67,13 +73,12 @@ class CorrectErrorsMediator extends React.Component {
     this.changePage = this.changePage.bind(this);
     this.refetch = this.refetch.bind(this);
     this.findReplaceValues = this.findReplaceValues.bind(this);
-    this.resetFindReplace = this.resetFindReplace.bind(this);
     this.updateCell = this.updateCell.bind(this);
     this.checkRows = this.checkRows.bind(this);
     this.deleteRows = this.deleteRows.bind(this);
     this.afterErrorTableUpdate = this.afterErrorTableUpdate.bind(this);
     this.ignoreErrors = this.ignoreErrors.bind(this);
-    this.checkIfErrors = this.checkIfErrors.bind(this);
+    this.showErrors = this.showErrors.bind(this);
   }
 
   componentDidMount() {
@@ -81,7 +86,21 @@ class CorrectErrorsMediator extends React.Component {
   }
 
   handleValidationCompleted(response, error) {
-    if (response) this.getFileCellsErrors();
+    if (response) {
+      if (response) {
+        const overviewData = formatOverviewData(
+          response.fileValidationResults.summary,
+          response.fileValidationResults.foundList
+        );
+
+        const stepData = { ...this.props.stepData };
+        stepData.overviewData = overviewData;
+
+        this.props.dispatch(generalActions.saveStepDataRequest(stepData));
+      }
+
+      this.getFileCellsErrors();
+    }
     if (error) console.log('file validation error', error);
   }
 
@@ -151,10 +170,18 @@ class CorrectErrorsMediator extends React.Component {
           this.setState({ columnHeaders });
         }
 
-        const errorsExists = this.checkIfErrors(
-          results.error_data.error_messages,
-          this.state.ignoredErrors
-        );
+        // TODO: readjust this when we get info about errors existing in file from the backend when error_toggle = false
+        // const errorsExists = checkIfErrors(
+        //   results.error_data.error_messages,
+        //   this.state.ignoredErrors
+        // );
+
+        const rowCount =
+          command.error_toggle &&
+          (!results.error_data.error_messages ||
+            results.error_data.error_messages.length === 0)
+            ? 0
+            : results.total_amount;
 
         this.setState(
           {
@@ -162,41 +189,15 @@ class CorrectErrorsMediator extends React.Component {
             errorCells,
             errorMessages: results.error_data.error_messages,
             correctCommand: command,
-            rowCount: results.total_amount,
+            rowCount,
             loading: false,
-            errorsExists
+            // TODO: readjust this when we get info about errors existing in file from the backend when error_toggle = false
+            errorsExists: !this.state.errorsChecked
           },
           this.afterErrorTableUpdate
         );
       }
     }
-  }
-
-  checkIfErrors(errorMessages, ignoredErrors) {
-    // so we form this errorsExists variable according
-    // to the errors message that we get from duct
-    // and according to the ignored error array
-    let errorsExists = false;
-
-    for (let key in errorMessages) {
-      if (errorMessages.hasOwnProperty(key)) {
-        // so here we get the column name
-        // from the key in a weird way
-        // cause the data we retrieve is super
-        // weird
-        const colName = key.substring(key.indexOf('|') + 1);
-
-        // so if we find a key with a column name
-        // that isn't in the ignoredErrors array,
-        // we set errorsExists to true and break out of loop
-        if (ignoredErrors.indexOf(colName) === -1) {
-          errorsExists = true;
-          break;
-        }
-      }
-    }
-
-    return errorsExists;
   }
 
   afterErrorTableUpdate() {
@@ -221,18 +222,28 @@ class CorrectErrorsMediator extends React.Component {
     console.log('error while getting file cells and their errors: ', error);
   }
 
-  getFileCellsErrors(correctCommand = this.state.correctCommand) {
+  getFileCellsErrors(
+    correctCommand = this.state.correctCommand,
+    loadErrors = this.state.loadErrors
+  ) {
     // We will calculate the start position and end position for the
     // files rows, and we'll call the general fileCellsErrors
-    const startPos = this.state.pageSize * this.state.page;
-    const endPos = startPos + this.state.pageSize;
+    let page = 0;
+    let startPos = 0;
+    let endPos = 10;
+
+    if (correctCommand.error_toggle === loadErrors) {
+      startPos = this.state.pageSize * this.state.page;
+      endPos = startPos + this.state.pageSize;
+      page = this.state.page;
+    }
 
     // so here we will adjust the command for error corrections
     // so that we would retrieve the actual errors for cells
     // and the cell values in one go
     const command = { ...correctCommand };
 
-    command.error_toggle = true;
+    command.error_toggle = loadErrors;
     command.start_pos = startPos;
     command.end_pos = endPos;
 
@@ -242,7 +253,7 @@ class CorrectErrorsMediator extends React.Component {
       command: JSON.stringify(JSON.stringify(command))
     };
 
-    this.setState({ correctCommand: command, loading: true }, () =>
+    this.setState({ correctCommand: command, page, loading: true }, () =>
       FileErrorResultMutation.commit(
         this.props.relay.environment,
         input,
@@ -285,10 +296,12 @@ class CorrectErrorsMediator extends React.Component {
     command.filter_column_heading = header;
     command.find_value = findValue;
     command.filter_toggle = true;
+    command.error_toggle = false;
 
     if (replaceValue) {
       command.replace_value = replaceValue;
       command.replace_pressed = true;
+      command.filter_toggle = true;
     }
 
     // we also need to reset the page to the first one
@@ -296,17 +309,9 @@ class CorrectErrorsMediator extends React.Component {
     // initiated the find, they wouldn't end up in
     // a blank page cause the found values are
     // only made up of one page
-    this.setState({ page: 0 }, () => this.getFileCellsErrors(command));
-  }
-
-  // so we want to reset the find and replace
-  // table when another tab is entered
-  resetFindReplace() {
-    const correctCommand = { ...this.state.correctCommand };
-    correctCommand.filter_toggle = false;
-    correctCommand.replace_pressed = false;
-
-    this.setState({ correctCommand }, this.getFileCellsErrors);
+    this.setState({ page: 0, loadErrors: false }, () =>
+      this.getFileCellsErrors(command, false)
+    );
   }
 
   refetch() {
@@ -385,13 +390,16 @@ class CorrectErrorsMediator extends React.Component {
 
       // and we save it in the props
       const stepData = { ...props.stepData };
-      const errorsExists = this.checkIfErrors(
-        this.state.errorMessages,
-        ignoredErrors
-      );
+
+      // TODO: readjust this when we get info about errors existing in file from the backend when error_toggle = false
+      // const errorsExists = checkIfErrors(
+      //   this.state.errorMessages,
+      //   ignoredErrors
+      // );
 
       stepData.errorData = {
-        errorsExists,
+        // TODO: readjust this when we get info about errors existing in file from the backend when error_toggle = false
+        errorsExists: !prevState.errorsChecked,
         ignoredErrors: ignoredErrors
       };
 
@@ -401,9 +409,27 @@ class CorrectErrorsMediator extends React.Component {
     });
   }
 
+  // mainly used to load the error table data
+  showErrors(loadErrors) {
+    // we also reset the find and replace when error table is loaded
+    // or when the overview table is loaded
+    const correctCommand = { ...this.state.correctCommand };
+    correctCommand.filter_toggle = false;
+    correctCommand.replace_pressed = false;
+
+    let errorsChecked = false;
+    if (!this.state.errorsChecked && loadErrors) errorsChecked = true;
+
+    this.setState(
+      { correctCommand, loadErrors, errorsChecked },
+      this.getFileCellsErrors
+    );
+  }
+
   render() {
     return (
       <ErrorStep
+        showErrors={this.showErrors}
         ignoreErrors={this.ignoreErrors}
         ignoredErrors={this.state.ignoredErrors}
         loading={this.state.loading}
@@ -412,7 +438,6 @@ class CorrectErrorsMediator extends React.Component {
         deleteRows={this.deleteRows}
         checkRows={this.checkRows}
         forcePage={this.state.page}
-        resetFindReplace={this.resetFindReplace}
         pageCount={this.state.rowCount / this.state.pageSize}
         changePage={this.changePage}
         data={this.state.errorTableData}

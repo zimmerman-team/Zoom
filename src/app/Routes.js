@@ -4,10 +4,9 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import PageLoader from 'modules/common/pageloader/PageLoader';
 // always active
 
-import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePanel';
+import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePane';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
-import PublicChartLibraryModule from './modules/PublicChartLibrary/PublicChartLibraryModule';
 import ProfileSettingsModule from './modules/profilesettings/ProfileSettingsModule';
 
 // Modules lazy load
@@ -35,6 +34,10 @@ const AddUserMediator = lazy(() =>
 const CreateTeamMediator = lazy(() =>
   import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator')
 );
+const PublicDashMediator = lazy(() =>
+  import('mediators/DashboardMediators/PublicDashMediator')
+);
+
 const DashboardMediator = lazy(() =>
   import('mediators/DashboardMediators/DashboardMediator')
 );
@@ -80,6 +83,19 @@ const Routes = props => {
               <VisualizerModuleMediator
                 indicatorAggregations={props}
                 dropDownData={props}
+                auth0Client={props.auth0Client}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/public/:chart/:code/:tab"
+            render={() => (
+              <VisualizerModuleMediator
+                publicPage
+                indicatorAggregations={props}
+                dropDownData={props}
+                auth0Client={props.auth0Client}
               />
             )}
           />
@@ -153,7 +169,7 @@ const Routes = props => {
           />
           <Route
             path="/public/chart-library"
-            render={() => <PublicChartLibraryModule />}
+            render={() => <PublicDashMediator />}
           />
 
           <Route

@@ -37,8 +37,9 @@ const propTypes = {
       label: PropTypes.string
     })
   ),
+  border: PropTypes.bool,
   placeHolderText: PropTypes.string,
-  placeHolderNumber: PropTypes.string,
+  placeHolderNumber: PropTypes.number,
   reset: PropTypes.func,
   categorise: PropTypes.bool,
   search: PropTypes.bool,
@@ -49,11 +50,12 @@ const propTypes = {
 };
 
 const defaultProps = {
+  border: false,
   categorise: false,
   defaultAll: true,
   placeHolder: 'Has no indicators',
   placeHolderText: 'Has no indicators',
-  placeHolderNumber: '',
+  placeHolderNumber: undefined,
   reset: undefined,
   search: true,
   selectAll: false,
@@ -80,6 +82,7 @@ class ZoomSelect extends React.Component {
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.allCheck = this.allCheck.bind(this);
+    this.categorise = this.categorise.bind(this);
   }
 
   componentDidMount() {
@@ -89,6 +92,14 @@ class ZoomSelect extends React.Component {
     // with stuff already selected
     if (this.props.arraySelected) {
       this.allCheck();
+    }
+
+    if (
+      this.props.data &&
+      this.props.data.length > 0 &&
+      this.props.categorise
+    ) {
+      this.categorise();
     }
   }
 
@@ -108,33 +119,7 @@ class ZoomSelect extends React.Component {
         // IMPORTANT: the data needs to come already sorted
         // and ofcourse it also needs to come in as array of {label: '', value: ''}
         if (this.props.categorise) {
-          const regexLetter = /^[a-zA-Z]+$/;
-          const options = [];
-          // so here we define the first character of the category, depending on the first items
-          // first character, we also check if it is a letter, then we put it in letter category
-          // otherwise we put it under '#' category
-          let prevCat = regexLetter.test(this.props.data[0].label[0])
-            ? this.props.data[0].label[0].toUpperCase()
-            : '#';
-
-          options.push({ label: prevCat, value: 'category' });
-
-          // and now we loop and add all other categories along with the actual values
-          this.props.data.forEach(item => {
-            const category = regexLetter.test(item.label[0])
-              ? item.label[0].toUpperCase()
-              : '#';
-            // so if the previous category is not equals to the new category
-            // we push it in and set it to be the prevCategory
-            if (prevCat !== category) {
-              prevCat = category;
-              options.push({ label: prevCat, value: 'category' });
-            }
-
-            options.push(item);
-          });
-
-          this.setState({ options });
+          this.categorise();
         } else {
           this.setState({ options: this.props.data });
         }
@@ -194,14 +179,46 @@ class ZoomSelect extends React.Component {
   }
 
   allCheck() {
-    // so if an option is selected and 'selected all' is not checked
-    // we check it, as it is the functionality shown in the VD
-    if (this.props.arraySelected.length > 0)
-      this.setState({ allSelected: true });
-    else if (this.props.arraySelected.length === 0)
-      //  and if the selected array becomes 0 and the all selected was checked
-      //  we uncheck it
-      this.setState({ allSelected: false });
+    if (this.props.arraySelected) {
+      // so if an option is selected and 'selected all' is not checked
+      // we check it, as it is the functionality shown in the VD
+      if (this.props.arraySelected.length > 0)
+        this.setState({ allSelected: true });
+      else if (this.props.arraySelected.length === 0)
+        //  and if the selected array becomes 0 and the all selected was checked
+        //  we uncheck it
+        this.setState({ allSelected: false });
+    }
+  }
+
+  categorise() {
+    const regexLetter = /^[a-zA-Z]+$/;
+    const options = [];
+    // so here we define the first character of the category, depending on the first items
+    // first character, we also check if it is a letter, then we put it in letter category
+    // otherwise we put it under '#' category
+    let prevCat = regexLetter.test(this.props.data[0].label[0])
+      ? this.props.data[0].label[0].toUpperCase()
+      : '#';
+
+    options.push({ label: prevCat, value: 'category' });
+
+    // and now we loop and add all other categories along with the actual values
+    this.props.data.forEach(item => {
+      const category = regexLetter.test(item.label[0])
+        ? item.label[0].toUpperCase()
+        : '#';
+      // so if the previous category is not equals to the new category
+      // we push it in and set it to be the prevCategory
+      if (prevCat !== category) {
+        prevCat = category;
+        options.push({ label: prevCat, value: 'category' });
+      }
+
+      options.push(item);
+    });
+
+    this.setState({ options });
   }
 
   renderDropDownItem(item, index) {
@@ -245,6 +262,7 @@ class ZoomSelect extends React.Component {
       <ComponentBase
         style={this.props.disabled ? { pointerEvents: 'none' } : {}}
         ref={this.setWrapperRef}
+        compBorder={this.props.border}
       >
         <SelectHeader
           headerStyle={this.props.headerStyle}

@@ -4,7 +4,12 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 /* componenets */
 import { Link as _Link } from 'react-router-dom';
-import { IconButton, IconLabel, RemoveButton } from './GridListOption.styles';
+import {
+  IconButton,
+  IconLabel,
+  RemoveButton,
+  SortIconButton
+} from './GridListOption.styles';
 import SortbyDialog from '../../../../../../../components/Dialog/SortbyDialog/SortbyDialog';
 
 const sortByOptions = [
@@ -40,12 +45,12 @@ const GridListOption = props => {
     case props.isSort:
       return (
         <React.Fragment>
-          <IconButton
+          <SortIconButton
             onClick={props.setIsSortByOpen}
             visibility={props.visibility}
           >
             {props.icon}
-          </IconButton>
+          </SortIconButton>
           <SortbyDialog
             open={props.isSortByOpen}
             options={sortByOptions}
@@ -57,14 +62,16 @@ const GridListOption = props => {
         </React.Fragment>
       );
     default:
-      return (
-        <Link to={props.targetUrl} visibility={props.visibility}>
-          <IconButton>
-            {props.icon}
-            <IconLabel>{props.label}</IconLabel>
-          </IconButton>
-        </Link>
-      );
+      if (props.label)
+        return (
+          <Link to={props.targetUrl} visibility={props.visibility}>
+            <IconButton>
+              {props.icon}
+              <IconLabel>{props.label}</IconLabel>
+            </IconButton>
+          </Link>
+        );
+      return null;
   }
 };
 

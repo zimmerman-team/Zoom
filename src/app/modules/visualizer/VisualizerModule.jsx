@@ -4,13 +4,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
+
+/* consts */
+import paneTypes from '__consts__/PaneTypesConst';
+
 /* components */
-import GeoMap from 'components/GeoMap/GeoMap';
-import { ControlPanelContainer } from 'modules/visualizer/VisualizerModule.style';
-// import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
+
 import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';
 import VizContainer from 'modules/visualizer/sort/container/VizContainer';
-import VisualizerModule from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
 // import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
@@ -28,12 +29,18 @@ const propTypes = {
   sideBarOpen: PropTypes.bool,
   dropDownData: PropTypes.shape({}),
   indicators: PropTypes.arrayOf(PropTypes.shape({})),
+  dataPaneOpen: PropTypes.string,
+  chartType: PropTypes.string,
+  publicPage: PropTypes.bool,
   moduleMode: PropTypes.string
 };
 
 const defaultProps = {
   indicators: [],
+  publicPage: false,
+  dataPaneOpen: 'visualizer',
   dropDownData: {},
+  chartType: PropTypes.string,
   loggedIn: true
 };
 
@@ -67,8 +74,18 @@ class BuilderModule extends Component {
           }
         >
           {this.props.loading && <ProgressIcon />}
-          <VizSidebar dropDownData={this.props.dropDownData} />
+          {!this.props.publicPage && (
+            <VizSidebar
+              chartType={this.props.chartType}
+              code={this.props.code}
+              dropDownData={this.props.dropDownData}
+              display={this.props.dataPaneOpen === paneTypes.visualizer}
+            />
+          )}
           <VizContainer
+            publicPage={this.props.publicPage}
+            chartType={this.props.chartType}
+            outerHistory={this.props.outerHistory}
             indicators={this.props.indicators}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}

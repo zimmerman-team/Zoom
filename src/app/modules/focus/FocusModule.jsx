@@ -24,8 +24,8 @@ class FocusModule extends React.Component {
     sideBarOpen: true,
     indicators: [],
     latitude: 0.0236,
-    longitude: 37.9062,
-    zoom: 6
+    longitude: 37.9062
+    // zoom: 6
   };
 
   onClose = () => {
@@ -40,16 +40,34 @@ class FocusModule extends React.Component {
     const isNL = location.pathname.includes('NL');
     const isKE = location.pathname.includes('KE');
 
+    /* bounds are made with http://boundingbox.klokantech.com/ */
+    /* we can also use a generalized list of country bounds, the problem with those bounds is that they're too narrow, which in turns causes problems when zooming in/out*/
+    /* a possible solution could also be to device a way of dynamically calculating optimal bounds */
+
+    const boundsNL = [[0.2252, 50.2378], [10.756, 54.2068]];
+    const boundsKE = [[26.82, -7.15], [50.89, 7.57]];
+
     if (isNL) {
-      this.setState({ latitude: 52.1326, longitude: 5.2913, zoom: 7 });
+      this.setState({
+        latitude: 52.1326,
+        longitude: 5.2913,
+        zoom: 7,
+        bounds: boundsNL
+      });
     } else if (isKE) {
-      this.setState({ latitude: 0.0236, longitude: 37.9062, zoom: 6 });
+      this.setState({
+        latitude: 0.0236,
+        longitude: 37.9062,
+        zoom: 6,
+        bounds: boundsKE
+      });
     }
   };
 
   render = () => {
     const { indicators, ...otherProps } = this.props;
 
+    console.log(this.state.bounds);
     return (
       <React.Fragment>
         <ModuleContainer>
@@ -60,6 +78,7 @@ class FocusModule extends React.Component {
             latitude={this.state.latitude}
             longitude={this.state.longitude}
             zoom={this.state.zoom}
+            mapOptions={{ maxBounds: this.state.bounds }}
           />
           {this.props.dataPaneOpen !== paneTypes.none && (
             <DataPaneContainer>
@@ -69,7 +88,7 @@ class FocusModule extends React.Component {
               {(this.props.dataPaneOpen === paneTypes.privPane ||
                 this.props.dataPaneOpen === paneTypes.createChart ||
                 this.props.dataPaneOpen === paneTypes.convertData) && (
-                <NavPane {...otherProps} />
+                <NavPane />
               )}
             </DataPaneContainer>
           )}

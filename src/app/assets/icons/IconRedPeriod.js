@@ -5,11 +5,12 @@ const SvgIconRedPeriod = props => (
     style={{
       margin: 'auto'
     }}
+    fill="#FF0100"
     width={16}
     height={15}
     {...props}
   >
-    <g fill="#FF0100" fillRule="evenodd">
+    <g fillRule="evenodd">
       <path
         d="M15.82.029h-2.243V.61c0 .96-.76 1.743-1.697 1.743-.938 0-1.696-.783-1.696-1.743V.029H5.657V.61c0 .96-.76 1.743-1.697 1.743-.936 0-1.696-.782-1.696-1.743V.029L0 0v14.55H14.707l1.13-.003L15.82.03zm-1.114 13.363H1.132V4.096h13.575v9.296h-.001z"
         fillRule="nonzero"

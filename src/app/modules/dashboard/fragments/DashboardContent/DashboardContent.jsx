@@ -15,6 +15,7 @@ const FragmentBase = styled.div`
   max-width: 1024px;
   flex-direction: column;
   align-items: center;
+
   //outline: 1px solid crimson;
 `;
 
@@ -23,11 +24,13 @@ const propTypes = {
   visible: PropTypes.bool,
   /** contains data for generation of tab nav items and providing the tab content with the proper components */
   users: PropTypes.array,
+  loading: PropTypes.bool,
   teams: PropTypes.array
 };
 
 const defaultProps = {
   visible: true,
+  loading: false,
   loggedIn: true
 };
 
@@ -40,6 +43,9 @@ const DashboardContent = props => {
       <DashboardTabNavigator navItems={props.navItems} />
       {/** tab content */}
       <DashboardTabContent
+        loading={props.loading}
+        datasets={props.datasets}
+        charts={props.charts}
         users={props.users}
         teams={props.teams}
         isSortByOpen={props.isSortByOpen}

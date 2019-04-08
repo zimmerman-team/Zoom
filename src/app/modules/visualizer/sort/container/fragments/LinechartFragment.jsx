@@ -2,10 +2,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
-import { ResponsiveLine } from '@nivo/line';
-import { LinechartMockData } from './LinechartMockData';
+
+/* mock */
+// import { LinechartMockData } from './LinechartMockData';
+
+/* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
+import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
+import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
+import { ResponsiveLine } from '@nivo/line';
+
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
@@ -27,15 +33,30 @@ const Box = styled.div`
   outline: 1px solid gray;
 `;
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  indicatorData: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      color: PropTypes.string,
+      data: PropTypes.arrayOf(
+        PropTypes.shape({
+          x: PropTypes.string,
+          y: PropTypes.number
+        })
+      )
+    })
+  )
+};
+const defaultProps = {
+  indicatorData: []
+};
 
-const LinechartFragment = () => {
+const LinechartFragment = props => {
   return (
     <ComponentBase>
       <Box>
         <ResponsiveLine
-          data={LinechartMockData}
+          data={props.indicatorData}
           margin={{
             top: 50,
             right: 110,
@@ -84,7 +105,13 @@ const LinechartFragment = () => {
           legends={[]}
         />
       </Box>
-      <ChartLegends />
+      <ChartLegends data={props.indicatorData} />
+      <YearContainer>
+        <CustomYearSelector
+          selectedYear={props.selectedYear}
+          selectYear={props.selectYear}
+        />
+      </YearContainer>
     </ComponentBase>
   );
 };

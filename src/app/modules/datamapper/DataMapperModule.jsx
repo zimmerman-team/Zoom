@@ -159,7 +159,7 @@ class DataMapperModule extends React.Component {
           ToastsStore.error(
             <SimpleErrorText>
               {' '}
-              Please fix the errors before proceeding{' '}
+              Please make sure there are no errors before proceeding{' '}
             </SimpleErrorText>
           );
         } else {

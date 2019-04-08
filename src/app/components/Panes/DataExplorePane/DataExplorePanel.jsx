@@ -11,10 +11,11 @@ import IconBlueLocation from 'assets/icons/IconBlueLocation';
 import IconBluePeriod from 'assets/icons/IconBluePeriod';
 
 /* components */
+import ResetIcon from 'assets/icons/IconReset';
+import { Tooltip } from 'react-tippy';
 import ZoomSelect from '../../Select/ZoomSelect';
 import AccordionSelection from './components/AccordionSelection/AccordionSelection';
 import YearSelector from '../../YearSelector/YearSelector';
-import ResetIcon from 'assets/icons/IconReset';
 
 /* styles */
 import {
@@ -26,12 +27,12 @@ import {
   DropDownCont
 } from './DataExplorerPane.style';
 import SimpleToolTip from '../../ToolTips/SimpleToolTip/SimpleToolTip';
-import { Tooltip } from 'react-tippy';
 
 const propTypes = {
   selectedInd2: PropTypes.string,
   selectedInd1: PropTypes.string,
   regionAmount: PropTypes.number,
+  yearRange: PropTypes.arrayOf(PropTypes.number),
   indNames: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
@@ -89,6 +90,7 @@ const propTypes = {
   resetAll: PropTypes.func
 };
 const defaultProps = {
+  yearRange: '2003,2016',
   selectedInd2: undefined,
   selectedInd1: undefined,
   locationSelected: true,
@@ -118,7 +120,8 @@ class DataExplorePane extends React.Component {
     activeIndex: []
   };
 
-  renderHeader(label) {
+  /* fixme: Reports functions with three or more negation operations (! or !=). Such functions may be unnecessarily confusing */
+  renderHeader = label => {
     let active = false;
     let icon = '';
     switch (label) {
@@ -153,7 +156,7 @@ class DataExplorePane extends React.Component {
     }
 
     return <AccordionSelection icon={icon} label={label} active={active} />;
-  }
+  };
 
   render() {
     // console.log('this.props.indNames', this.props.indNames);
@@ -169,12 +172,13 @@ class DataExplorePane extends React.Component {
           <AccordionSection header={this.renderHeader('Datasource')}>
             <FilterContainer>
               <DropDownCont>
+                {/* fixme: this component is too deeply nested */}
                 <ZoomSelect
                   defaultAll={this.props.locationSelected}
                   selectAll
                   // reset={() => this.props.selectDataSource('reset')}
                   multiple
-                  placeHolderText={'Select datasource'}
+                  placeHolderText="Select datasource"
                   data={this.props.allFileSources}
                   arraySelected={this.props.selectedSources}
                   selectVal={this.props.selectDataSource}
@@ -198,12 +202,13 @@ class DataExplorePane extends React.Component {
                 />
               </DropDownCont>
               <DropDownCont>
+                {/* fixme: this component is too deeply nested */}
                 <ZoomSelect
                   defaultAll={this.props.locationSelected}
                   selectAll
                   reset={() => this.props.selectCountry('reset')}
                   multiple
-                  placeHolderText={'Select country'}
+                  placeHolderText="Select country"
                   placeHolderNumber={this.props.countries.length}
                   data={this.props.countries}
                   arraySelected={this.props.selectedCountryVal}
@@ -214,12 +219,16 @@ class DataExplorePane extends React.Component {
           </AccordionSection>
           <AccordionSection header={this.renderHeader('Time period')}>
             <FilterContainer>
-              <YearSelector selectYearRange={this.props.selectYearRange} />
+              <YearSelector
+                selectYearRange={this.props.selectYearRange}
+                yearRange={this.props.yearRange}
+              />
             </FilterContainer>
           </AccordionSection>
           <AccordionSection header={this.renderHeader('Indicators')}>
             <FilterContainer>
               <DropDownCont>
+                {/* fixme: this component is too deeply nested */}
                 <ZoomSelect
                   categorise
                   reset={() => this.props.selectInd1({ value: undefined })}
@@ -231,6 +240,7 @@ class DataExplorePane extends React.Component {
                 />
               </DropDownCont>
               <DropDownCont>
+                {/* fixme: this component is too deeply nested */}
                 <ZoomSelect
                   defaultAll={this.props.subInd1AllSelected}
                   selectAll
@@ -245,6 +255,7 @@ class DataExplorePane extends React.Component {
             </FilterContainer>
             <FilterContainer>
               <DropDownCont>
+                {/* fixme: this component is too deeply nested */}
                 <ZoomSelect
                   categorise
                   reset={() => this.props.selectInd2({ value: undefined })}
@@ -256,6 +267,7 @@ class DataExplorePane extends React.Component {
                 />
               </DropDownCont>
               <DropDownCont>
+                {/* fixme: this component is too deeply nested */}
                 <ZoomSelect
                   defaultAll={this.props.subInd2AllSelected}
                   selectAll

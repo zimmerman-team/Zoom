@@ -4,6 +4,9 @@ const config = require('../config/config');
 /* general */
 const general = require('./generalResponse');
 
+/* utils */
+const utils = require('../utils/general');
+
 const Chart = require('../models/Chart');
 const User = require('../models/User');
 
@@ -32,20 +35,19 @@ const ChartController = {
       author,
 
       description: 'Bobs description',
-      descriptionPlainText: 'Bobs descriptionPlainText',
 
       // so the type of chart
       type: 'Bob',
 
       /* indicators/ sub-indicators of chart */
-      items: [
+      indicatorItems: [
         {
           indicator: 'Bobs indicator',
-          sub_indicators: ['Bobs sub_indicators']
+          subIndicators: ['Bobs sub_indicators']
         }
       ],
 
-      dateRange: ['1990'],
+      yearRange: '1990,1991',
 
       // with what team is this chart associated
       team: 'Bobs team'
@@ -56,29 +58,69 @@ const ChartController = {
     res.json(chart);
   },
 
-  get: function(req, res) {
+  // gets one user or public chart
+  get: (req, res) => {
     const { chartId, authId } = req.query;
 
     User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
+      else if (!author) general.handleError(res, 'User not found', 404);
       else
-        Chart.findOne({ _id: chartId, author }, 'name', (chartError, chart) => {
-          if (chartError) general.handleError(res, chartError);
-          res.json(chart);
-        });
+        Chart.findOne({
+          $or: [
+            { _id: chartId, author, archived: false },
+            { _id: chartId, _public: true, archived: false }
+          ]
+        })
+          .populate('author')
+          .exec((chartError, chart) => {
+            if (chartError) general.handleError(res, chartError);
+            res.json(chart);
+          });
     });
   },
 
   // this basically validates the user and gets all public charts
-  getPublic: function(req, res) {
-    const { authId } = req.query;
-    User.findOne({ authId }).exec(userError => {
+  getPublic: (req, res) => {
+    const { authId, sortBy, pageSize, page, searchTitle } = req.query;
+    User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
-      else
-        Chart.findOne({ _public: true }, 'name', (chartError, chart) => {
-          if (chartError) general.handleError(res, chartError);
-          res.json(chart);
-        });
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else {
+        Chart.countDocuments(
+          {
+            _public: true,
+            archived: false,
+            name: { $regex: searchTitle, $options: 'i' }
+          },
+          (countError, count) => {
+            if (userError) general.handleError(res, countError);
+            const sort = utils.getDashboardSortBy(sortBy);
+            const pSize = parseInt(pageSize, 10);
+            const p = parseInt(page, 10);
+            Chart.find(
+              {
+                _public: true,
+                archived: false,
+                name: { $regex: searchTitle, $options: 'i' }
+              },
+              'created last_updated team type dataSources _id name _public'
+            )
+              .limit(pSize)
+              .skip(p * pSize)
+              .collation({ locale: 'en' })
+              .sort(sort)
+              .populate('author', 'username authId')
+              .exec((chartError, charts) => {
+                if (chartError) general.handleError(res, chartError);
+                res.json({
+                  count,
+                  charts
+                });
+              });
+          }
+        );
+      }
     });
   },
 
@@ -99,18 +141,39 @@ const ChartController = {
     });
   },
 
-  getAll: function(req, res) {
-    const { authId } = req.query;
+  // gets all user charts and team charts
+  getAll: (req, res) => {
+    const { authId, sortBy, searchTitle } = req.query;
     User.findOne({ authId }).exec((userError, author) => {
-      if (userError) {
-        general.handleError(res, userError);
-      } else if (!author) {
-        general.handleError(res, 'User not found', 404);
-      } else {
-        Chart.find({ author }, 'name', (chartError, chart) => {
-          if (chartError) general.handleError(res, chartError);
-          res.json(chart);
-        });
+      if (userError) general.handleError(res, userError);
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else {
+        const sort = utils.getDashboardSortBy(sortBy);
+
+        Chart.find(
+          {
+            $or: [
+              {
+                author,
+                archived: false,
+                name: { $regex: searchTitle, $options: 'i' }
+              },
+              {
+                team: author.team,
+                archived: false,
+                name: { $regex: searchTitle, $options: 'i' }
+              }
+            ]
+          },
+          'created last_updated team _public type dataSources _id name archived'
+        )
+          .collation({ locale: 'en' })
+          .sort(sort)
+          .populate('author', 'username authId')
+          .exec((chartError, chart) => {
+            if (chartError) general.handleError(res, chartError);
+            res.json(chart);
+          });
       }
     });
   },
@@ -132,28 +195,92 @@ const ChartController = {
     });
   },
 
-  create: function(user, data, res) {
-    // TODO: should be adjusted without the promises, or maybe with promises if
-    // TODO: it works and makes sense
-    /*
-     * Creates a new Chart, and generates the resulting data by querying OIPA
-     */
-    data.author = user;
+  updateCreate: (req, res) => {
+    const {
+      authId,
+      chartId,
+      name,
+      description,
+      type,
+      indicatorItems,
+      selectedSources,
+      yearRange,
+      selectedYear,
+      dataSources,
+      _public,
+      data,
+      team,
+      selectedCountryVal,
+      selectedRegionVal
+    } = req.body;
 
-    let viz = new Chart(data);
+    User.findOne({ authId }, (error, author) => {
+      if (error) general.handleError(res, error);
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else {
+        Chart.findOne({ _id: chartId }, (chartError, chart) => {
+          if (!chart) {
+            const chartz = new Chart({
+              name,
+              author,
+              dataSources,
+              description,
+              _public,
+              team,
+              data,
 
-    Chart.countForUser(user)
-      .then(count => {
-        if (count > config.MAX_CHARTS) {
-          throw new Error(`Maximum number of Charts reached`);
-        }
-      })
-      // .then(() => viz.saveAndPopulate())
-      // .then(viz => viz.refresh()) // TODO: integrity flag before refresh - 2016-02-12
-      .then(viz => viz.saveAndPopulate())
-      // response
-      .then(viz => res(null, viz)) // TODO: wrap socket.io to promises server-side - 2016-02-11
-      .catch(general.handleError.bind(null, res));
+              // so the type of chart
+              type,
+
+              /* indicators/ sub-indicators of chart */
+              indicatorItems,
+
+              selectedSources,
+              yearRange,
+
+              selectedYear,
+              selectedCountryVal,
+              selectedRegionVal
+            });
+
+            chartz.save(err => {
+              if (err) general.handleError(res, err);
+
+              res.json({ message: 'chart created', id: chartz._id });
+            });
+          } else if (author.equals(chart.author)) {
+            chart.name = name;
+            chart.author = author;
+
+            chart.description = description;
+            chart.dataSources = dataSources;
+
+            chart.data = data;
+
+            // so the type of chart
+            chart.type = type;
+            chart._public = _public;
+            chart.team = team;
+
+            /* indicators/ sub-indicators of chart */
+            chart.indicatorItems = indicatorItems;
+
+            chart.selectedSources = selectedSources;
+            chart.yearRange = yearRange;
+
+            chart.selectedYear = selectedYear;
+            chart.selectedCountryVal = selectedCountryVal;
+            chart.selectedRegionVal = selectedRegionVal;
+
+            chart.save(err => {
+              if (err) general.handleError(res, err);
+
+              res.json({ message: 'chart updated', id: chart._id });
+            });
+          } else general.handleError(res, 'Unauthorized', 401);
+        });
+      }
+    });
   },
 
   update: function(user, vizId, viz, res) {
@@ -172,18 +299,29 @@ const ChartController = {
       });
   },
 
-  delete: function(user, vizId, res) {
-    // TODO: should be adjusted without the promises, or maybe with promises if
-    // TODO: it works and makes sense
-    /*
-     * Permanently delete a Chart
-     */
+  // archives the chart
+  delete: (req, res) => {
+    const { authId, chartId } = req.body;
 
-    return Chart.deleteByUser(vizId, user)
-      .then(viz => res(null, viz))
-      .catch(error => {
-        general.handleError(res, error);
-      });
+    User.findOne({ authId }).exec((userError, author) => {
+      if (userError) general.handleError(res, userError);
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else {
+        Chart.findOne({ author, archived: false, _id: chartId }).exec(
+          (chartError, chart) => {
+            if (chartError) general.handleError(res, chartError);
+
+            chart.archived = true;
+
+            chart.save(err => {
+              if (err) general.handleError(res, err);
+
+              res.json({ message: 'chart archived', id: chart._id });
+            });
+          }
+        );
+      }
+    });
   },
 
   emptyTrash: function(user, res) {

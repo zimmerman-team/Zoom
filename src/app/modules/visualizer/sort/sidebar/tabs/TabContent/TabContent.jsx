@@ -44,7 +44,11 @@ class TabContent extends React.Component {
   // the mounted components should rerender themselves depending on the props
   // but they shouldn't be remounted!!!, which happeens when this get rendered
   shouldComponentUpdate(nextProps) {
-    return this.props.location.pathname !== nextProps.location.pathname;
+    return (
+      this.props.location.pathname !== nextProps.location.pathname ||
+      this.props.chart !== nextProps.chart ||
+      this.props.code !== nextProps.code
+    );
   }
 
   render() {
@@ -57,7 +61,7 @@ class TabContent extends React.Component {
                 selectAll={this.props.selectAll}
                 dropDownData={this.props.dropDownData}
                 key={shortid.generate()}
-                path={formPath(this.props.code, section.path)}
+                path={formPath(this.props.code, section.path, this.props.chart)}
                 component={section.component}
                 code={this.props.code}
               />

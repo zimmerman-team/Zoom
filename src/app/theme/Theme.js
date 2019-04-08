@@ -25,6 +25,7 @@ export default {
     zoomGreyEight: '#d8d8d8',
     zoomGreyNine: '#dcdcdc',
     zoomGreyTen: '#959595',
+    zoomGreyEleven: '#b4b4b4',
     zoomBlack: '#000000',
     colHeadColor: '#9b9b9b',
     errorCellColor: '#ff807f',

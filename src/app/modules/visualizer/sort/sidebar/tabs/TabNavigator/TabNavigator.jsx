@@ -26,12 +26,14 @@ const defaultProps = {};
 const TabNavigator = props => {
   return (
     <ComponentBase>
-      {props.navItems.map(item => (
+      {props.navItems.map((item, index) => (
         <TabNavigatorItem
+          chart={props.chart}
           key={item.path}
           code={props.code}
           path={item.path}
           icon={item.icon}
+          data-cy={`tab-${index}`}
         />
       ))}
     </ComponentBase>

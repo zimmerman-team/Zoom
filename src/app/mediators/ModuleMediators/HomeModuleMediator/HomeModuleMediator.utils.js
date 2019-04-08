@@ -41,6 +41,7 @@ export function formatCountryLayerData(indicators, indName) {
           indName,
           name: indicator.geolocationTag,
           iso2: indicator.geolocationIso2,
+          geolocationType: indicator.geolocationType,
           // we round it to two decimals
           value: Math.round(indicator.value),
           format: indicator.valueFormatType,
@@ -99,6 +100,7 @@ export function formatCountryCenterData(indicators, indName) {
           indName,
           value: Math.round(indicator.value),
           geolocationIso2: indicator.geolocationIso2,
+          geolocationType: indicator.geolocationType,
           maxValue,
           minValue,
           longitude: coord[0],

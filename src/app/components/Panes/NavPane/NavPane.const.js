@@ -8,7 +8,8 @@ export const startItems = [
   },
   {
     label: 'Convert data',
-    navTo: paneTypes.convertData
+    // navTo: paneTypes.convertData
+    navTo: '/mapper'
   },
   {
     label: 'Explore data',

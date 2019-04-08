@@ -83,7 +83,10 @@ class DashboardMediator extends React.Component {
       this.props.userDatasets.data
     )
       this.setState({
-        datasets: formatDatasets(this.props.userDatasets.data)
+        datasets: formatDatasets(
+          this.props.userDatasets.data,
+          this.props.history
+        )
       });
   }
 

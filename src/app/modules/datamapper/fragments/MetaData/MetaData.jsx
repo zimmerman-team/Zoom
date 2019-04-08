@@ -131,10 +131,8 @@ class MetaData extends React.Component {
       this.props.data.q3Text !== nextProps.data.q3Text ||
       this.props.data.q4Text !== nextProps.data.q4Text ||
       this.props.data.q51Text !== nextProps.data.q51Text
-    ) {
-      // console.log('SHOULDNT UPDATE');
+    )
       return false;
-    }
 
     // console.log('SHOULD UPDATE');
     // if any other field is being changed rerendering is ooke

@@ -131,6 +131,7 @@ class App extends React.Component {
               ...MetaDataMediator_dropDownData
               ...CorrectErrorsMediator_fileCorrection
               ...FocusModuleMediator_indicatorAggregations
+              ...DatasetMediator_metaData
             }
           `}
           variables={{}}

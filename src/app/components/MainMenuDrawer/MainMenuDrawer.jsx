@@ -41,17 +41,19 @@ class MainMenuDrawer extends React.Component {
         {data.map(
           item =>
             process.env.NODE_ENV === item.env && (
-              <SidebarNavListItem
+              <ZoomLink
+                to={item.path}
                 key={item.label}
-                data-cy={'sidebar-' + item.label}
-                type={item.type}
-                loggedIn={this.props.auth0Client.isAuthenticated()}
+                data-cy={`sidebar-${item.label}`}
               >
-                <ZoomLink to={item.path}>
+                <SidebarNavListItem
+                  type={item.type}
+                  loggedIn={this.props.auth0Client.isAuthenticated()}
+                >
                   <ListItemIcon>{item.icon}</ListItemIcon>
                   <ZoomListItemText primary={item.label} />
-                </ZoomLink>
-              </SidebarNavListItem>
+                </SidebarNavListItem>
+              </ZoomLink>
             )
         )}
       </React.Fragment>

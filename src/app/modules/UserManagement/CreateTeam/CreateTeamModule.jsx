@@ -10,7 +10,7 @@ import {
   SubmitButton,
   TableBox,
   TextField,
-  UsersTable,
+  UsersTable
 } from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
 
 import Pagination from 'components/Pagination/Pagination';
@@ -34,8 +34,8 @@ const propTypes = {
     PropTypes.shape({
       name: PropTypes.string,
       role: PropTypes.string,
-      id: PropTypes.string,
-    }),
+      id: PropTypes.string
+    })
   ),
   changePage: PropTypes.func,
   totalPages: PropTypes.number,
@@ -46,6 +46,8 @@ const propTypes = {
   changeSortBy: PropTypes.func,
   addRemoveAllUsers: PropTypes.func,
   selectedSortBy: PropTypes.string,
+  pageTitle: PropTypes.string,
+  buttonTxt: PropTypes.string
 };
 const defaultProps = {
   success: false,
@@ -66,12 +68,14 @@ const defaultProps = {
   changeSortBy: null,
   addRemoveAllUsers: null,
   selectedSortBy: 'name:1',
+  pageTitle: 'Create team',
+  buttonTxt: 'create team'
 };
 
 const CreateTeam = props => {
   const disableSubmit = props.name === '' || props.users.length === 0;
   return (
-    <ModuleFragment title="Create team">
+    <ModuleFragment title={props.pageTitle}>
       <CreateTeamForm onSubmit={props.submitForm}>
         {props.success && (
           <Message theme={{ color: 'green' }}>
@@ -119,7 +123,7 @@ const CreateTeam = props => {
               props.changeIsSortByOpen,
               props.setWrapperRef,
               props.changeSortBy,
-              props.selectedSortBy,
+              props.selectedSortBy
             )}
           />
           <Pagination
@@ -135,7 +139,7 @@ const CreateTeam = props => {
           html={<SimpleToolTip title="All the fields are required" />}
         >
           <SubmitButton type="submit" disabled={disableSubmit}>
-            create team
+            {props.buttonTxt}
           </SubmitButton>
         </Tooltip>
       </CreateTeamForm>

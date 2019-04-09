@@ -13,7 +13,7 @@ const ComponentBase = styled.div`
   justify-content: center;
   flex-direction: row;
   position: relative;
-  margin-top: 30px;
+  margin-top: 23px;
 `;
 
 const Box = styled.div`

@@ -1,7 +1,7 @@
 /* base */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import MapGL from 'react-map-gl';
+import MapGL, { LinearInterpolator } from 'react-map-gl';
 import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
 
@@ -19,12 +19,12 @@ import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
 import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import MapControls from 'components/GeoMap/components/MapControls/MapControls';
+import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 
 import MAP_STYLE from 'components/GeoMap/data/map-style-basic-v8';
 import {
   LegendContainer,
   MapContainer,
-  YearContainer,
   ControlsContainer
 } from './GeoMap.style';
 
@@ -35,6 +35,7 @@ const propTypes = {
   latitude: PropTypes.number,
   longitude: PropTypes.number,
   zoom: PropTypes.number,
+  /* todo: don't know about this focus object tbh, might refactor this */
   focus: PropTypes.shape({
     latitude: PropTypes.number,
     longitude: PropTypes.number,
@@ -43,7 +44,8 @@ const propTypes = {
   indicatorData: PropTypes.array,
   selectedYear: PropTypes.string,
   disableYear: PropTypes.bool,
-  selectYear: PropTypes.func
+  selectYear: PropTypes.func,
+  mapOptions: PropTypes.object
 };
 
 const defaultProps = {
@@ -51,7 +53,8 @@ const defaultProps = {
   // just show worldview when no lat long is specified
   latitude: 15,
   longitude: 0,
-  zoom: 2
+  zoom: 2,
+  mapOptions: {}
 };
 
 export class GeoMap extends Component {
@@ -72,8 +75,9 @@ export class GeoMap extends Component {
       viewport: {
         latitude: this.props.latitude,
         longitude: this.props.longitude,
-
-        zoom: this.props.zoom
+        zoom: this.props.zoom,
+        transitionInterpolator: new LinearInterpolator(),
+        transitionDuration: 1000
       },
       settings: {
         dragPan: true,
@@ -212,7 +216,7 @@ export class GeoMap extends Component {
     const { features } = event;
 
     const feature = features && features.find(f => f.layer.id === 'layer');
-    if (feature)
+    if (feature && feature.properties.geolocationType === 'country')
       this.props.outerHistory.push(`/country/${feature.properties.iso2}`);
   };
 
@@ -226,26 +230,67 @@ export class GeoMap extends Component {
     }
   };
 
-  handleZoomIn = () => {
-    this._updateViewport({ zoom: this.state.viewport.zoom + 1 });
-  };
+  handleZoomIn() {
+    this._updateViewport({
+      ...this.state.viewport,
+      zoom: this.state.viewport.zoom + 0.5
+    });
+  }
 
-  handleZoomOut = () => {
-    if (this.state.viewport.zoom <= this.state.settings.maxZoom) {
-      this._updateViewport({ zoom: this.state.viewport.zoom - 1 });
-    }
-  };
+  handleZoomOut() {
+    if (this.state.viewport.zoom >= this.state.settings.minZoom)
+      this._updateViewport({
+        ...this.state.viewport,
+        zoom:
+          this.state.viewport.zoom - 0.5 > this.state.settings.minZoom
+            ? this.state.viewport.zoom - 0.5
+            : this.state.settings.minZoom
+      });
+  }
 
   handleFullscreen() {
-    /*todo: add logic that utilizes fullscreen util of react-map-gl itself instead of a thirdparty library*/
+    const isInFullScreen = this.isInFullScreen();
+
+    const docElm = document.getElementById('home-geomap');
+    if (!isInFullScreen) {
+      if (docElm.requestFullscreen) {
+        docElm.requestFullscreen();
+      } else if (docElm.mozRequestFullScreen) {
+        docElm.mozRequestFullScreen();
+      } else if (docElm.webkitRequestFullScreen) {
+        docElm.webkitRequestFullScreen();
+      } else if (docElm.msRequestFullscreen) {
+        docElm.msRequestFullscreen();
+      }
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  }
+
+  isInFullScreen() {
+    return (
+      (document.fullscreenElement && document.fullscreenElement !== null) ||
+      (document.webkitFullscreenElement &&
+        document.webkitFullscreenElement !== null) ||
+      (document.mozFullScreenElement &&
+        document.mozFullScreenElement !== null) ||
+      (document.msFullscreenElement && document.msFullscreenElement !== null)
+    );
   }
 
   render() {
     const { viewport, settings, mapStyle, markerArray, legends } = this.state;
+
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
 
-      <MapContainer data-cy="geo-map-container">
+      <MapContainer data-cy="geo-map-container" id="home-geomap">
         <ControlsContainer>
           <MapControls
             onZoomIn={this.handleZoomIn}
@@ -279,10 +324,15 @@ export class GeoMap extends Component {
           onClick={this._onCountryClick}
           onLoad={this._handleMapLoaded}
           mapboxApiAccessToken={MAPBOX_TOKEN}
-          /*todo: refactor zooming functionality to facilitate both zooming by using the zoom controls and zooming by scrolling*/
+          mapOptions={this.props.mapOptions}
           ref={map => (this.mapRef = map)}
           attributionControl
-          reuseMaps
+          // bounds={ya}
+          // so commenting this out cause it causes the
+          // onHover to NOT receive features...
+          // dunno why though seems like just a bug in this react-map-gl library
+          // cause the on click does receive the features...
+          // reuseMaps
         >
           {/*So this is the layer tooltip, and we seperate it from the
               martker tooltip, cause its functionality as a tooltip is a bit different

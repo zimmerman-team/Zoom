@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import ContextPreview from 'components/chartcontext/ContextPreview/ContextPreview';
+import ContextPreview from 'components/ContextPreview/ContextPreview';
 import VizContainer from 'modules/visualizer/sort/container/VizContainer';
 import GeoMap from 'components/GeoMap/GeoMap';
 const wrapper = shallow(<VizContainer />);

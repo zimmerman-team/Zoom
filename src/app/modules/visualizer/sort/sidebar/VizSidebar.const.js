@@ -9,7 +9,7 @@ import IconPreview from 'assets/icons/toolpanel/IconPreview';
 import IconDownload from 'assets/icons/toolpanel/IconDownload';
 import IconDuplicate from 'assets/icons/toolpanel/IconDuplicate';
 import IconVisibility from 'assets/icons/toolpanel/IconVisibility';
-import ContextEditor from 'components/chartcontext/ContextEditor/ContextEditor';
+import ContextEditor from 'components/ContextEditor/ContextEditor';
 import VizPaneMediator from 'mediators/ComponentMediators/PaneMediators/VisPaneMediator/VizPaneMediator';
 
 const Path = '/visualizer/:chart/:code/';

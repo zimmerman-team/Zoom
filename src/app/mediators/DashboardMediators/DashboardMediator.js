@@ -228,6 +228,14 @@ class DashboardMediator extends React.Component {
   }
 
   render() {
+    const greetingName =
+      get(this.props.user, 'firstName', '') !== ''
+        ? `${get(this.props.user, 'firstName', '')} ${get(
+            this.props.user,
+            'lastName',
+            ''
+          )}`
+        : get(this.props.user, 'email', '');
     return (
       <DashboardModule
         loading={
@@ -251,7 +259,8 @@ class DashboardMediator extends React.Component {
         teams={formatTeamsTabData(
           this.state.teams,
           this.state.sort,
-          this.state.searchKeyword
+          this.state.searchKeyword,
+          this.state.users
         )}
         navItems={data(
           this.state.users,
@@ -259,7 +268,7 @@ class DashboardMediator extends React.Component {
           this.state.charts,
           this.state.datasets
         )}
-        greetingName={get(this.props.auth0Client.getProfile(), 'nickname', '')}
+        greetingName={greetingName}
       />
     );
   }

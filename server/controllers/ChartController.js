@@ -10,6 +10,56 @@ const utils = require('../utils/general');
 const Chart = require('../models/Chart');
 const User = require('../models/User');
 
+// TODO: Add this somewhere else, like in a util function
+// this will basically check the
+// db for already existing 'name' field
+// for the provided model
+// and will generate an incremented one
+// NOTE: Be careful with this - this is a recursive promise function
+// memory leaks might happen if misused
+// NOTE: This should work only with the non archived models
+// IMPORTANT: the model needs to have a name field and an archived field
+function genUniqueName(model, name, orgName = undefined, incr = 1) {
+  return new Promise((resolve, reject) => {
+    // so we use this if mainly for when a chart is edited
+    // if the same model name has been passed
+    // to this as the original models name(orgName)
+    // then we skip the incrementing cause nothing was changed
+    // and resolve it right away
+    // Sure it makes more sense to not even call this function
+    // if that would be the case, but there's
+    // less code if we do this approach
+    if (orgName === name) {
+      resolve(name);
+    } else {
+      model.findOne({ name, archived: false }, (duplError, duplModel) => {
+        if (duplModel) {
+          // this is the actual incrementing part
+          let generatedName = '';
+
+          if (incr === 1) generatedName = name.concat(` ${incr}`);
+          else {
+            generatedName = name
+              .substring(0, name.lastIndexOf(' '))
+              .concat(` ${incr}`);
+          }
+
+          // read whats above the if to understand why we pass undefined here
+          genUniqueName(model, generatedName, undefined, incr + 1)
+            .then(resName => resolve(resName))
+            .catch(error => {
+              reject(error);
+            });
+        } else if (duplError) {
+          reject(duplError);
+        } else {
+          resolve(name);
+        }
+      });
+    }
+  });
+}
+
 const ChartController = {
   // use this only if you have an empty database
   // and need a chart in it
@@ -221,65 +271,87 @@ const ChartController = {
       else {
         Chart.findOne({ _id: chartId }, (chartError, chart) => {
           if (!chart) {
-            const chartz = new Chart({
-              name,
-              author,
-              dataSources,
-              description,
-              _public,
-              team,
-              data,
-              descIntro,
+            genUniqueName(Chart, name)
+              .then(uniqueName => {
+                const chartz = new Chart({
+                  name: uniqueName,
+                  author,
+                  dataSources,
+                  description,
+                  _public,
+                  team,
+                  data,
+                  descIntro,
 
-              // so the type of chart
-              type,
+                  // so the type of chart
+                  type,
 
-              /* indicators/ sub-indicators of chart */
-              indicatorItems,
+                  /* indicators/ sub-indicators of chart */
+                  indicatorItems,
 
-              selectedSources,
-              yearRange,
+                  selectedSources,
+                  yearRange,
 
-              selectedYear,
-              selectedCountryVal,
-              selectedRegionVal
-            });
+                  selectedYear,
+                  selectedCountryVal,
+                  selectedRegionVal
+                });
 
-            chartz.save(err => {
-              if (err) general.handleError(res, err);
+                chartz.save(err => {
+                  if (err) general.handleError(res, err);
 
-              res.json({ message: 'chart created', id: chartz._id });
-            });
+                  res.json({
+                    message: 'chart created',
+                    id: chartz._id,
+                    name: chartz.name,
+                    chartType: type
+                  });
+                });
+              })
+              .catch(promiseErr => {
+                general.handleError(res, promiseErr);
+              });
           } else if (author.equals(chart.author)) {
-            chart.name = name;
-            chart.author = author;
+            genUniqueName(Chart, name, chart.name)
+              .then(uniqueName => {
+                chart.name = uniqueName;
+                chart.author = author;
 
-            chart.description = description;
-            chart.dataSources = dataSources;
+                chart.description = description;
+                chart.dataSources = dataSources;
 
-            chart.data = data;
-            chart.descIntro = descIntro;
+                chart.data = data;
+                chart.descIntro = descIntro;
 
-            // so the type of chart
-            chart.type = type;
-            chart._public = _public;
-            chart.team = team;
+                // so the type of chart
+                chart.type = type;
+                chart._public = _public;
+                chart.team = team;
 
-            /* indicators/ sub-indicators of chart */
-            chart.indicatorItems = indicatorItems;
+                /* indicators/ sub-indicators of chart */
+                chart.indicatorItems = indicatorItems;
 
-            chart.selectedSources = selectedSources;
-            chart.yearRange = yearRange;
+                chart.selectedSources = selectedSources;
+                chart.yearRange = yearRange;
 
-            chart.selectedYear = selectedYear;
-            chart.selectedCountryVal = selectedCountryVal;
-            chart.selectedRegionVal = selectedRegionVal;
+                chart.selectedYear = selectedYear;
+                chart.selectedCountryVal = selectedCountryVal;
+                chart.selectedRegionVal = selectedRegionVal;
 
-            chart.save(err => {
-              if (err) general.handleError(res, err);
+                chart.save(err => {
+                  if (err) general.handleError(res, err);
 
-              res.json({ message: 'chart updated', id: chart._id });
-            });
+                  res.json({
+                    message: 'chart updated',
+                    id: chart._id,
+                    name: chart.name,
+                    chartType: chart.type
+                  });
+                });
+              })
+              .catch(promiseErr => {
+                general.handleError(res, promiseErr);
+              });
           } else general.handleError(res, 'Unauthorized', 401);
         });
       }

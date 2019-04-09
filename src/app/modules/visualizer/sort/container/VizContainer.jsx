@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 import { Route, withRouter } from 'react-router';
 
-import ContextPreview from 'components/chartcontext/ContextPreview/ContextPreview';
+import ContextPreview from 'components/ContextPreview/ContextPreview';
 import BarchartFragment from 'modules/visualizer/sort/container/fragments/BarchartFragment';
 import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFragment';
 

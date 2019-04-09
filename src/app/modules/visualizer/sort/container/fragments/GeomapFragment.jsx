@@ -29,9 +29,6 @@ const ComponentBase = styled.div`
 const propTypes = {};
 const defaultProps = {};
 
-const boundsNL = [[0.2252, 50.2378], [10.756, 54.2068]];
-const boundsKE = [[26.82, -7.15], [50.89, 7.57]];
-
 class GeomapFragment extends React.Component {
   state = {
     zoom: 2,

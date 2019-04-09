@@ -22,8 +22,8 @@ const ComponentBase = styled.div`
   justify-items: center;
   justify-content: center;
   width: 100%;
-  background-color: #96dbfa;
   height: ${props => props.height};
+  flex-shrink: 0;
 `;
 
 const propTypes = {};

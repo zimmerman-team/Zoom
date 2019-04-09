@@ -22,7 +22,7 @@ const DescriptionEditor = styled(props => (
     rows={3}
     rowsMax={3}
     type="text"
-    value={props.defaultVal}
+    defaultValue={props.defaultVal}
     onChange={e => props.saveText(e.target.value)}
     {...props}
   />

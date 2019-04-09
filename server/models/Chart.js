@@ -13,6 +13,7 @@ const ChartSchema = new Schema(
     name: { type: String, default: 'Untitled', min: 1, max: 1000 },
     author: { type: Schema.Types.ObjectId, ref: User },
 
+    descIntro: { type: String, default: 'Untitled', min: 1, max: 10000 },
     description: { type: String, default: 'Untitled', min: 1, max: 10000 },
 
     // so the type of chart

@@ -33,6 +33,7 @@ const initialState = {
   selectedInd2: undefined,
   selectedCountryVal: [],
   desc: '',
+  descIntro: '',
   selectedSubInd1: [],
   selectedSubInd2: [],
   selectedRegionVal: []

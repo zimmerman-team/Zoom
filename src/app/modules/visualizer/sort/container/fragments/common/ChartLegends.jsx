@@ -19,22 +19,31 @@ const ComponentBase = styled.div`
   padding-top: 20px;
 `;
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      color: PropTypes.string,
+      data: PropTypes.arrayOf(
+        PropTypes.shape({
+          x: PropTypes.string,
+          y: PropTypes.number
+        })
+      )
+    })
+  )
+};
 
-const ChartLegends = () => {
+const defaultProps = {
+  data: []
+};
+
+const ChartLegends = props => {
   return (
     <ComponentBase>
-      <ChartLegendItem />
-      <ChartLegendItem />
-      <ChartLegendItem />
-      <ChartLegendItem />
-      <ChartLegendItem />
-      <ChartLegendItem />
-      <ChartLegendItem />
-      <ChartLegendItem />
-      <ChartLegendItem />
-      <ChartLegendItem />
+      {props.data.map(indicator => {
+        return <ChartLegendItem color={indicator.color} text={indicator.id} />;
+      })}
     </ComponentBase>
   );
 };

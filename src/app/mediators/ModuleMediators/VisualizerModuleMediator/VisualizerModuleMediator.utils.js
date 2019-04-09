@@ -2,6 +2,14 @@ import findIndex from 'lodash/findIndex';
 import { scaleQuantile } from 'd3-scale';
 import { range } from 'd3-array';
 
+const lineChartColors = [
+  'hsl(23, 70%, 50%)',
+  'hsl(137, 70%, 50%)',
+  'hsl(54, 70%, 50%)',
+  'hsl(20, 70%, 50%)',
+  'hsl(84, 70%, 50%)'
+];
+
 // Updates layer percentiles depending on the value
 export function updatePercentiles(featureCollection, accessor) {
   const { features } = featureCollection;
@@ -41,6 +49,7 @@ export function formatCountryLayerData(indicators, indName) {
           indName,
           name: indicator.geolocationTag,
           iso2: indicator.geolocationIso2,
+          geolocationType: indicator.geolocationType,
           // we round it to two decimals
           value: Math.round(indicator.value),
           format: indicator.valueFormatType,
@@ -99,6 +108,7 @@ export function formatCountryCenterData(indicators, indName) {
           indName,
           value: Math.round(indicator.value),
           geolocationIso2: indicator.geolocationIso2,
+          geolocationType: indicator.geolocationType,
           maxValue,
           minValue,
           longitude: coord[0],
@@ -238,4 +248,126 @@ export function formatDate(created) {
   return `Published on ${monthNames[date.getMonth()]} ${ordinal_suffix_of(
     date.getDate()
   )} ${date.getFullYear()}`;
+}
+
+export function formatGeoData(
+  indicators1,
+  selectedInd1,
+  indicators2,
+  selectedInd2
+) {
+  let longLatData = [];
+  let countryLayerData = {};
+
+  // so we check here if the retrieved data is long lat
+  // and then format it differently
+  // TODO: make this work differently, this is currently i quick and dirty fix
+  if (
+    indicators1[0] &&
+    indicators1[0].geolocationTag &&
+    indicators1[0].geolocationTag.indexOf(',') !== -1 &&
+    /\d/.test(indicators1[0].geolocationTag)
+  ) {
+    longLatData = formatLongLatData(indicators1, selectedInd1);
+  } else {
+    countryLayerData = formatCountryLayerData(indicators1, selectedInd1);
+  }
+
+  let countryCircleData = [];
+  // so we check here if the retrieved data is long lat
+  // and then format it differently
+  // TODO: make this work differently, this is currently i quick and dirty fix
+  if (
+    indicators2[0] &&
+    indicators2[0].geolocationTag &&
+    indicators2[0].geolocationTag.indexOf(',') !== -1 &&
+    /\d/.test(indicators2[0].geolocationTag)
+  ) {
+    longLatData = formatLongLatData(indicators2, selectedInd2);
+  } else {
+    countryCircleData = formatCountryCenterData(indicators2, selectedInd2);
+  }
+
+  const indicators = [];
+
+  if (countryLayerData.features && countryLayerData.features.length > 0) {
+    updatePercentiles(countryLayerData, f => f.properties.value);
+
+    indicators.push({
+      type: 'layer',
+      data: countryLayerData,
+      legendName: ` ${selectedInd1} `
+    });
+  }
+
+  if (countryCircleData.length > 0) {
+    indicators.push({
+      type: 'circle',
+      data: countryCircleData,
+      legendName: ` ${selectedInd2} `
+    });
+  }
+
+  if (longLatData.length > 0) {
+    indicators.push({
+      type: 'location',
+      data: longLatData,
+      legendName: `POI`
+    });
+  }
+
+  return indicators;
+}
+
+export function formatLineData(indicators) {
+  const indicatorData = [];
+
+  let colorInd = 0;
+  indicators.forEach((indicator, index) => {
+    const indicatorItem = [];
+    if (indicator.length > 0) {
+      const existInd = findIndex(indicatorData, existing => {
+        return indicator[0].indicatorName === existing.id;
+      });
+
+      let id = indicator[0].indicatorName;
+
+      // so we need this logic for when a person would
+      // plot two indicators with the same name
+      // as the id needs to be unique, we just add
+      // the index as a suffix
+      if (existInd !== -1) id = id.concat(` (${index})`);
+
+      indicatorData.push({
+        id,
+        color: lineChartColors[colorInd],
+        data: []
+      });
+
+      indicator.forEach(indItem => {
+        // yeah and cause we might receive data with the same geolocation name
+        // we add in the values for that geolocation so it wouldn't be repeated over and over
+        const existItemInd = findIndex(indicatorItem.data, existing => {
+          return indItem.geolocationTag === existing.geoName;
+        });
+
+        if (existItemInd === -1)
+          indicatorItem.push({
+            geoName: indItem.geolocationTag,
+            x:
+              indItem.geolocationIso2.length > 0
+                ? indItem.geolocationIso2
+                : indItem.geolocationTag,
+            y: Math.round(indItem.value)
+          });
+        else indicatorItem[existItemInd].y += Math.round(indItem.value);
+      });
+
+      if (colorInd + 1 < lineChartColors.length) colorInd += 1;
+
+      indicatorData[index].data = indicatorItem;
+    }
+  });
+
+  return indicatorData;
 }

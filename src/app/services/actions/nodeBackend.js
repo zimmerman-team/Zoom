@@ -94,6 +94,38 @@ export function addUserFailed(error) {
   };
 }
 
+export const DELETE_USER_INITIAL = 'DELETE_USER_INITIAL';
+export const DELETE_USER_REQUEST = 'DELETE_USER_REQUEST';
+export const DELETE_USER_SUCCESS = 'DELETE_USER_SUCCESS';
+export const DELETE_USER_FAILED = 'DELETE_USER_FAILED';
+
+export function deleteUserInitial() {
+  return {
+    type: DELETE_USER_INITIAL
+  };
+}
+
+export function deleteUserRequest(values) {
+  return {
+    type: DELETE_USER_REQUEST,
+    values
+  };
+}
+
+export function deleteUserSuccess(data) {
+  return {
+    type: DELETE_USER_SUCCESS,
+    data
+  };
+}
+
+export function deleteUserFailed(error) {
+  return {
+    type: DELETE_USER_FAILED,
+    error
+  };
+}
+
 export const UPDATE_USER_INITIAL = 'UPDATE_USER_INITIAL';
 export const UPDATE_USER_REQUEST = 'UPDATE_USER_REQUEST';
 export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
@@ -347,6 +379,70 @@ export function getUserDatasetsSuccess(data) {
 export function getUserDatasetsFailed(error) {
   return {
     type: GET_USER_DATASETS_FAILED,
+    error
+  };
+}
+
+export const GET_PUBLIC_CHARTS_INITIAL = 'GET_PUBLIC_CHARTS_INITIAL';
+export const GET_PUBLIC_CHARTS_REQUEST = 'GET_PUBLIC_CHARTS_REQUEST';
+export const GET_PUBLIC_CHARTS_SUCCESS = 'GET_PUBLIC_CHARTS_SUCCESS';
+export const GET_PUBLIC_CHARTS_FAILED = 'GET_PUBLIC_CHARTS_FAILED';
+
+export function getPublicChartsInitial() {
+  return {
+    type: GET_PUBLIC_CHARTS_INITIAL
+  };
+}
+
+export function getPublicChartsRequest(values) {
+  return {
+    type: GET_PUBLIC_CHARTS_REQUEST,
+    values
+  };
+}
+
+export function getPublicChartsSuccess(data) {
+  return {
+    type: GET_PUBLIC_CHARTS_SUCCESS,
+    data
+  };
+}
+
+export function getPublicChartsFailed(error) {
+  return {
+    type: GET_PUBLIC_CHARTS_FAILED,
+    error
+  };
+}
+
+export const UPDATE_DATASET_INITIAL = 'UPDATE_DATASET_INITIAL';
+export const UPDATE_DATASET_REQUEST = 'UPDATE_DATASET_REQUEST';
+export const UPDATE_DATASET_SUCCESS = 'UPDATE_DATASET_SUCCESS';
+export const UPDATE_DATASET_FAILED = 'UPDATE_DATASET_FAILED';
+
+export function updateDatasetInitial() {
+  return {
+    type: UPDATE_DATASET_INITIAL
+  };
+}
+
+export function updateDatasetRequest(values) {
+  return {
+    type: UPDATE_DATASET_REQUEST,
+    values
+  };
+}
+
+export function updateDatasetSuccess(data) {
+  return {
+    type: UPDATE_DATASET_SUCCESS,
+    data
+  };
+}
+
+export function updateDatasetFailed(error) {
+  return {
+    type: UPDATE_DATASET_FAILED,
     error
   };
 }

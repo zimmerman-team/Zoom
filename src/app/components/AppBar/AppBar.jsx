@@ -24,6 +24,8 @@ import {
   PaneButtonVar,
   PaneButtonText
 } from 'components/AppBar/AppBar.styles';
+import { ToastsStore } from 'react-toasts';
+import { SimpleErrorText } from 'components/sort/Misc';
 
 /* icons */
 import SvgIconPlus from 'assets/icons/IconPlus';
@@ -78,47 +80,68 @@ export class AppBar extends React.Component {
   }
 
   closeSave() {
-    this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
+    if (this.props.auth0Client.isAuthenticated()) {
+      this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
 
-    const profile = this.props.auth0Client.getProfile();
-    const dataSources = [];
+      const profile = this.props.auth0Client.getProfile();
+      const dataSources = [];
 
-    if (this.props.chartData.dataSource1)
-      dataSources.push(this.props.chartData.dataSource1);
+      if (this.props.chartData.dataSource1)
+        dataSources.push(this.props.chartData.dataSource1);
 
-    if (
-      this.props.chartData.dataSource2 &&
-      dataSources.indexOf(this.props.chartData.dataSource2) === -1
-    )
-      dataSources.push(this.props.chartData.dataSource2);
+      if (
+        this.props.chartData.dataSource2 &&
+        dataSources.indexOf(this.props.chartData.dataSource2) === -1
+      )
+        dataSources.push(this.props.chartData.dataSource2);
 
-    const chartData = {
-      authId: profile.sub,
-      dataSources,
-      _public: this.props.chartData._public,
-      team: this.props.chartData.team ? this.props.user.data.team : '',
-      chartId: this.props.chartData.chartId,
-      name: this.props.chartData.name,
-      description: this.props.chartData.desc,
-      type: this.props.paneData.chartType,
-      indicatorItems: [
-        {
-          indicator: this.props.chartData.selectedInd1,
-          subIndicators: this.props.chartData.selectedSubInd1
-        },
-        {
-          indicator: this.props.chartData.selectedInd2,
-          subIndicators: this.props.chartData.selectedSubInd2
-        }
-      ],
-      selectedSources: this.props.paneData.selectedSources,
-      yearRange: this.props.paneData.yearRange,
-      selectedYear: this.props.chartData.selectedYear,
-      selectedCountryVal: this.props.chartData.selectedCountryVal,
-      selectedRegionVal: this.props.chartData.selectedRegionVal
-    };
+      const chartData = {
+        authId: profile.sub,
+        dataSources,
+        _public: this.props.chartData._public,
+        team: this.props.chartData.team ? this.props.user.data.team : '',
+        chartId: this.props.chartData.chartId,
+        name: this.props.chartData.name,
+        description: this.props.chartData.desc,
+        type: this.props.paneData.chartType,
+        data: this.props.chartData.indicators,
+        indicatorItems: [
+          {
+            indicator: this.props.chartData.selectedInd1,
+            subIndicators: this.props.chartData.selectedSubInd1,
+            // we also need to save the all sub indicators
+            // for the datapanes default selections
+            // because usually subindicators are refetched
+            // when an indicator is selected
+            // and because we want to initially load in just the
+            // data from zoombackend, we don't want to be refetching
+            // anything
+            allSubIndicators: this.props.paneData.subIndicators1
+          },
+          {
+            indicator: this.props.chartData.selectedInd2,
+            subIndicators: this.props.chartData.selectedSubInd2,
+            // we also need to save the all sub indicators
+            // for the datapanes default selections
+            // because usually subindicators are refetched
+            // when an indicator is selected
+            // and because we want to initially load in just the
+            // data from zoombackend, we don't want to be refetching
+            // anything
+            allSubIndicators: this.props.paneData.subIndicators2
+          }
+        ],
+        selectedSources: this.props.paneData.selectedSources,
+        yearRange: this.props.paneData.yearRange,
+        selectedYear: this.props.chartData.selectedYear,
+        selectedCountryVal: this.props.chartData.selectedCountryVal,
+        selectedRegionVal: this.props.chartData.selectedRegionVal
+      };
 
-    this.props.dispatch(nodeActions.createUpdateChartRequest(chartData));
+      this.props.dispatch(nodeActions.createUpdateChartRequest(chartData));
+    } else {
+      ToastsStore.error(<SimpleErrorText> Unauthorized </SimpleErrorText>);
+    }
   }
 
   loadPaneButton() {
@@ -128,7 +151,10 @@ export class AppBar extends React.Component {
 
     if (this.props.auth0Client.isAuthenticated()) {
       if (this.props.dataPaneOpen === paneTypes.none) {
-        if (this.props.location.pathname.indexOf('/home') !== -1) {
+        if (
+          this.props.location.pathname.indexOf('/home') !== -1 ||
+          this.props.location.pathname.indexOf('/dashboard') !== -1
+        ) {
           paneType = paneTypes.privPane;
           buttonLabel = 'Create';
         } else if (this.props.location.pathname.indexOf('/visualizer') !== -1) {
@@ -165,6 +191,7 @@ export class AppBar extends React.Component {
 
     switch (true) {
       case this.props.location.pathname === '/home' ||
+        this.props.location.pathname.indexOf('/dashboard') !== -1 ||
         this.props.location.pathname === '/focus/NL' ||
         this.props.location.pathname === '/focus/nl' ||
         this.props.location.pathname === '/focus/KE' ||

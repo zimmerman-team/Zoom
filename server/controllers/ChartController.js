@@ -58,7 +58,7 @@ const ChartController = {
     res.json(chart);
   },
 
-  // gets one user chart
+  // gets one user or public chart
   get: (req, res) => {
     const { chartId, authId } = req.query;
 
@@ -66,7 +66,12 @@ const ChartController = {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
       else
-        Chart.findOne({ _id: chartId, author })
+        Chart.findOne({
+          $or: [
+            { _id: chartId, author, archived: false },
+            { _id: chartId, _public: true, archived: false }
+          ]
+        })
           .populate('author')
           .exec((chartError, chart) => {
             if (chartError) general.handleError(res, chartError);
@@ -76,15 +81,46 @@ const ChartController = {
   },
 
   // this basically validates the user and gets all public charts
-  getPublic: function(req, res) {
-    const { authId } = req.query;
-    User.findOne({ authId }).exec(userError => {
+  getPublic: (req, res) => {
+    const { authId, sortBy, pageSize, page, searchTitle } = req.query;
+    User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
-      else
-        Chart.findOne({ _public: true }, 'name', (chartError, chart) => {
-          if (chartError) general.handleError(res, chartError);
-          res.json(chart);
-        });
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else {
+        Chart.countDocuments(
+          {
+            _public: true,
+            archived: false,
+            name: { $regex: searchTitle, $options: 'i' }
+          },
+          (countError, count) => {
+            if (userError) general.handleError(res, countError);
+            const sort = utils.getDashboardSortBy(sortBy);
+            const pSize = parseInt(pageSize, 10);
+            const p = parseInt(page, 10);
+            Chart.find(
+              {
+                _public: true,
+                archived: false,
+                name: { $regex: searchTitle, $options: 'i' }
+              },
+              'created last_updated team type dataSources _id name _public'
+            )
+              .limit(pSize)
+              .skip(p * pSize)
+              .collation({ locale: 'en' })
+              .sort(sort)
+              .populate('author', 'username authId')
+              .exec((chartError, charts) => {
+                if (chartError) general.handleError(res, chartError);
+                res.json({
+                  count,
+                  charts
+                });
+              });
+          }
+        );
+      }
     });
   },
 
@@ -105,9 +141,9 @@ const ChartController = {
     });
   },
 
-  // gets all user charts
+  // gets all user charts and team charts
   getAll: (req, res) => {
-    const { authId, sortBy } = req.query;
+    const { authId, sortBy, searchTitle } = req.query;
     User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
@@ -115,12 +151,25 @@ const ChartController = {
         const sort = utils.getDashboardSortBy(sortBy);
 
         Chart.find(
-          { author, archived: false },
+          {
+            $or: [
+              {
+                author,
+                archived: false,
+                name: { $regex: searchTitle, $options: 'i' }
+              },
+              {
+                team: author.team,
+                archived: false,
+                name: { $regex: searchTitle, $options: 'i' }
+              }
+            ]
+          },
           'created last_updated team _public type dataSources _id name archived'
         )
           .collation({ locale: 'en' })
           .sort(sort)
-          .populate('author', 'username')
+          .populate('author', 'username authId')
           .exec((chartError, chart) => {
             if (chartError) general.handleError(res, chartError);
             res.json(chart);
@@ -159,6 +208,7 @@ const ChartController = {
       selectedYear,
       dataSources,
       _public,
+      data,
       team,
       selectedCountryVal,
       selectedRegionVal
@@ -177,6 +227,7 @@ const ChartController = {
               description,
               _public,
               team,
+              data,
 
               // so the type of chart
               type,
@@ -197,12 +248,14 @@ const ChartController = {
 
               res.json({ message: 'chart created', id: chartz._id });
             });
-          } else {
+          } else if (author.equals(chart.author)) {
             chart.name = name;
             chart.author = author;
 
             chart.description = description;
             chart.dataSources = dataSources;
+
+            chart.data = data;
 
             // so the type of chart
             chart.type = type;
@@ -224,7 +277,7 @@ const ChartController = {
 
               res.json({ message: 'chart updated', id: chart._id });
             });
-          }
+          } else general.handleError(res, 'Unauthorized', 401);
         });
       }
     });

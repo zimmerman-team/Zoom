@@ -52,13 +52,13 @@ class Header extends React.Component {
     showMoreData: false
   };
 
-  handleMouseEnter() {
+  handleMouseEnter = () => {
     this.setState({ showMoreData: true });
-  }
+  };
 
-  handleMouseLeave() {
+  handleMouseLeave = () => {
     this.setState({ showMoreData: false });
-  }
+  };
 
   render() {
     return (

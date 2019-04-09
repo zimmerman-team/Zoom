@@ -4,17 +4,26 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 import { createBrowserHistory } from 'history';
+import { connect } from 'react-redux';
 
+/* consts */
+import paneTypes from '__consts__/PaneTypesConst';
+
+/* components */
 import GridList from 'modules/dashboard/fragments/GridList/GridList';
 import GridListOptionsPane from 'modules/dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
+import NavPane from 'components/Panes/NavPane/NavPane';
+import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
+import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
 const ComponentBase = styled.div`
   display: flex;
   width: 100%;
   max-width: 1024px;
   justify-content: center;
-
   flex-direction: column;
+  border-top: 2px solid #cfcfcf;
+  //overflow: hidden;
 `;
 
 const Message = styled.div`
@@ -33,6 +42,7 @@ const propTypes = {
   tabContentName: PropTypes.string,
   charts: PropTypes.array,
   users: PropTypes.array,
+  loading: PropTypes.bool,
   teams: PropTypes.array
 };
 const defaultProps = {
@@ -40,6 +50,7 @@ const defaultProps = {
   data: [],
   users: [],
   teams: [],
+  loading: false,
   tabContentName: 'Charts'
 };
 
@@ -59,12 +70,12 @@ const DashboardTabContent = props => {
   if (currentURL.includes('users')) {
     targetData = props.users;
     targetUrl = '/add-user';
-    leftOptionLabel = 'add users';
+    leftOptionLabel = 'add user';
     tabContentName = 'Users';
   } else if (currentURL.includes('teams')) {
     targetData = props.teams;
     targetUrl = '/create-team';
-    leftOptionLabel = 'create users';
+    leftOptionLabel = 'create team';
     tabContentName = 'Teams';
   } else if (currentURL.includes('focus-pages')) {
     targetData = '';
@@ -77,7 +88,7 @@ const DashboardTabContent = props => {
     tabContentName = 'Data sets';
   } else if (currentURL.includes('charts')) {
     targetData = props.charts;
-    leftOptionLabel = 'add chart';
+    leftOptionLabel = undefined;
     tabContentName = 'Charts';
   } else if (currentURL.includes('trash')) {
     targetData = '';
@@ -86,7 +97,10 @@ const DashboardTabContent = props => {
     isRemoveOption = true;
   }
   return (
-    <ComponentBase>
+    <ComponentBase
+      style={props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}}
+    >
+      {props.loading && <ProgressIcon />}
       {isRemoveOption && (
         <GridListOptionsPane
           leftOptionLabel={leftOptionLabel}
@@ -104,6 +118,14 @@ const DashboardTabContent = props => {
 
       {targetData.length === 0 && (
         <Message>No item in {tabContentName}</Message>
+      )}
+
+      {(props.dataPaneOpen === paneTypes.privPane ||
+        props.dataPaneOpen === paneTypes.createChart ||
+        props.dataPaneOpen === paneTypes.convertData) && (
+        <DataPaneContainer>
+          <NavPane />
+        </DataPaneContainer>
       )}
 
       {targetData.length > 0 && (
@@ -131,4 +153,10 @@ const DashboardTabContent = props => {
 DashboardTabContent.propTypes = propTypes;
 DashboardTabContent.defaultProps = defaultProps;
 
-export default DashboardTabContent;
+const mapStateToProps = state => {
+  return {
+    dataPaneOpen: state.dataPaneOpen.open
+  };
+};
+
+export default connect(mapStateToProps)(DashboardTabContent);

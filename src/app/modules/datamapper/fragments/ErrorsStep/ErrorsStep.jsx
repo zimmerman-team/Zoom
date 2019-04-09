@@ -60,7 +60,7 @@ const propTypes = {
   pageCount: PropTypes.number,
   changePage: PropTypes.func,
   findReplaceValues: PropTypes.func,
-  resetFindReplace: PropTypes.func,
+  showErrors: PropTypes.func,
   loading: PropTypes.bool,
   checkRows: PropTypes.func,
   deleteRows: PropTypes.func,
@@ -78,7 +78,7 @@ const defaultProps = {
   pageCount: 100,
   changePage: undefined,
   findReplaceValues: undefined,
-  resetFindReplace: undefined,
+  showErrors: undefined,
   loading: false,
   checkRows: undefined,
   deleteRows: undefined,
@@ -105,7 +105,7 @@ class ErrorStep extends React.Component {
 
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
-    this.colorFoundReplaced = this.colorFoundReplaced.bind(this);
+    this.colorFoundReplace = this.colorFoundReplace.bind(this);
     this.handleCellClick = this.handleCellClick.bind(this);
   }
 
@@ -116,7 +116,8 @@ class ErrorStep extends React.Component {
   componentDidUpdate(prevProps) {
     if (
       !isEqual(this.props.data, prevProps.data) ||
-      !isEqual(this.props.ignoredErrors, prevProps.ignoredErrors)
+      !isEqual(this.props.ignoredErrors, prevProps.ignoredErrors) ||
+      !isEqual(this.props.errorCells, prevProps.errorCells)
     ) {
       this.setState(
         {
@@ -154,7 +155,7 @@ class ErrorStep extends React.Component {
     if (this.state.tab === 'findErrors' || this.state.tab === 'findReplace') {
       this.resetColors();
       this.colorErrors();
-      this.colorFoundReplaced();
+      this.colorFoundReplace();
     }
   }
 
@@ -177,7 +178,7 @@ class ErrorStep extends React.Component {
   // from where we can get the col index
   // and basically all rows in that retrieved table need to be colored
   // cause only rows where the value was found are actually shown
-  colorFoundReplaced() {
+  colorFoundReplace() {
     if (this.state.selectedHeader && this.state.tab === 'findReplace') {
       const colIndex =
         findIndex(this.state.columns, ['property', this.state.selectedHeader]) +
@@ -207,7 +208,7 @@ class ErrorStep extends React.Component {
 
   clickFindErrors() {
     if (this.state.tab !== 'findErrors') {
-      this.props.resetFindReplace();
+      this.props.showErrors(true);
       this.colorErrors();
       this.setState({ tab: 'findErrors', selectedHeader: undefined });
     }
@@ -215,7 +216,7 @@ class ErrorStep extends React.Component {
 
   clickOverview() {
     if (this.state.tab !== 'overview') {
-      this.props.resetFindReplace();
+      this.props.showErrors(false);
       this.resetColors();
       this.setState({ tab: 'overview', selectedHeader: undefined });
     }
@@ -223,7 +224,6 @@ class ErrorStep extends React.Component {
 
   clickFindReplace() {
     if (this.state.tab !== 'findReplace') {
-      this.colorErrors();
       this.setState({ tab: 'findReplace', dialogOpen: true });
     } else {
       this.setState({ dialogOpen: true });
@@ -293,7 +293,9 @@ class ErrorStep extends React.Component {
             findReplaceValues={this.props.findReplaceValues}
             columnHeaders={this.props.columnHeaders}
             saveSelectedHeader={value =>
-              this.setState({ selectedHeader: value })
+              this.setState({ selectedHeader: value }, () =>
+                this.changeColors()
+              )
             }
             open={this.state.dialogOpen}
             setWrapperRef={this.setWrapperRef}

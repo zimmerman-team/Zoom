@@ -23,9 +23,19 @@ export function formPath(code, pathz, chart) {
 export function getFocus(chartType) {
   switch (chartType) {
     case 'focusNL':
-      return { latitude: 52.1326, longitude: 5.2913, zoom: 7 };
+      return {
+        latitude: 52.1326,
+        longitude: 5.2913,
+        zoom: 7,
+        bounds: [[0.2252, 50.2378], [10.756, 54.2068]]
+      };
     case 'focusKE':
-      return { latitude: 0.0236, longitude: 37.9062, zoom: 6 };
+      return {
+        latitude: 0.0236,
+        longitude: 37.9062,
+        zoom: 6,
+        bounds: [[26.82, -7.15], [50.89, 7.57]]
+      };
     default:
       return { latitude: 15, longitude: 0, zoom: 2 };
   }

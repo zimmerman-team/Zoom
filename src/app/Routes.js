@@ -6,9 +6,8 @@ import PageLoader from 'modules/common/pageloader/PageLoader';
 
 import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePane';
 import LoginCallback from 'components/LoginCallback/LoginCallback';
-import DataMapperModule from 'modules/datamapper/DataMapperModule';
-import PublicChartLibraryModule from './modules/PublicChartLibrary/PublicChartLibraryModule';
 import ProfileSettingsModule from './modules/profilesettings/ProfileSettingsModule';
+import DataMapperModule from 'modules/datamapper/DataMapperModule';
 
 // Modules lazy load
 const CountryDetailMediator = lazy(() =>
@@ -32,18 +31,29 @@ const IatiDetailMediator = lazy(() =>
 const AddUserMediator = lazy(() =>
   import('mediators/ModuleMediators/AddUserMediator/AddUserMediator')
 );
+const EditUserMediator = lazy(() =>
+  import('mediators/ModuleMediators/EditUserMediator/EditUserMediator')
+);
 const CreateTeamMediator = lazy(() =>
   import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator')
 );
-const DashboardMediator = lazy(() =>
-  import('mediators/DashboardMediators/DashboardMediator')
+const PublicDashMediator = lazy(() =>
+  import('mediators/DashboardMediators/PublicDashMediator')
+);
+
+const DatasetMediator = lazy(() =>
+  import('mediators/ModuleMediators/DatasetMediator/DatasetMediator')
 );
 
 const About = lazy(() => import('modules/about/About'));
 
-const ManMappingStep = lazy(() =>
-  import('modules/datamapper/fragments/ManMappingStep/ManMappingStep')
+const DashboardMediator = lazy(() =>
+  import('mediators/DashboardMediators/DashboardMediator')
 );
+
+// const ManMappingStep = lazy(() =>
+//   import('modules/datamapper/fragments/ManMappingStep/ManMappingStep')
+// );
 
 // Routes
 const Routes = props => {
@@ -76,8 +86,25 @@ const Routes = props => {
           <Route
             exact
             path="/visualizer/:chart/:code/:tab"
+            render={() =>
+              props.auth0Client.isAuthenticated() ? (
+                <VisualizerModuleMediator
+                  indicatorAggregations={props}
+                  dropDownData={props}
+                  auth0Client={props.auth0Client}
+                />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+
+          <Route
+            exact
+            path="/public/:chart/:code/:tab"
             render={() => (
               <VisualizerModuleMediator
+                publicPage
                 indicatorAggregations={props}
                 dropDownData={props}
                 auth0Client={props.auth0Client}
@@ -103,6 +130,18 @@ const Routes = props => {
               props.auth0Client.isAuthenticated() &&
               props.auth0Client.isAdministrator() ? (
                 <AddUserMediator auth0Client={props.auth0Client} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/edit-user/:userId"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <EditUserMediator auth0Client={props.auth0Client} />
               ) : (
                 <Redirect to="/" />
               )
@@ -153,8 +192,23 @@ const Routes = props => {
             }
           />
           <Route
+            path="/dataset/:id"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <DatasetMediator
+                  dropDownData={props}
+                  auth0Client={props.auth0Client}
+                  metaData={props}
+                />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
             path="/public/chart-library"
-            render={() => <PublicChartLibraryModule />}
+            render={() => <PublicDashMediator />}
           />
 
           <Route
@@ -171,7 +225,7 @@ const Routes = props => {
           />
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />
-          <Route exact path="/step" render={() => <ManMappingStep />} />
+          {/*<Route exact path="/step" render={() => <ManMappingStep />} />*/}
         </Switch>
       </Suspense>
     </React.Fragment>

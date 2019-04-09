@@ -28,13 +28,13 @@ class ModuleFragment extends React.Component {
     showFragmentInfo: false
   };
 
-  handleMouseEnter() {
+  handleMouseEnter = () => {
     this.setState({ showFragmentInfo: true });
-  }
+  };
 
-  handleMouseLeave() {
+  handleMouseLeave = () => {
     this.setState({ showFragmentInfo: false });
-  }
+  };
 
   render() {
     return (

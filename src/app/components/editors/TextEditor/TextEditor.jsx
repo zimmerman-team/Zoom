@@ -11,6 +11,35 @@ import theme from 'theme/Theme';
  * @param {Object} customProperty - please describe component property
  */
 
+const ZoomQuill = styled(props => <ReactQuill {...props} />)`
+  && {
+    .ql-toolbar {
+      border-top-color: black;
+      border-top-width: 2px;
+      border-right: initial;
+      border-left: initial;
+    }
+    .ql-container {
+      border: initial;
+      border-bottom: initial !important;
+    }
+
+    .ql-editor {
+      &:before {
+        color: ${theme.color.zoomGreyOne};
+        font-family: ${theme.font.zoomFontFamOne};
+        font-size: 14px;
+        font-style: normal;
+      }
+      p {
+        font-family: ${theme.font.zoomFontFamTwo};
+        font-size: 14px;
+        color: ${theme.color.zoomGreyOne};
+      }
+    }
+  }
+`;
+
 const propTypes = {
   saveDesc: PropTypes.func,
   defaultVal: PropTypes.string,
@@ -19,7 +48,8 @@ const propTypes = {
 const defaultProps = {
   saveDesc: undefined,
   defaultVal: '',
-  data: []
+  data: [],
+  placeholder: '[ Insert body text here ]'
 };
 
 class TextEditor extends React.Component {
@@ -44,17 +74,13 @@ class TextEditor extends React.Component {
 
   render() {
     return (
-      <ReactQuill
-        // theme="snow"
-        // value={this.state.text}
-        // onChange={this.handleChange}
-
+      <ZoomQuill
         theme={this.state.theme}
         onChange={this.handleChange}
         value={this.state.editorHtml}
         modules={TextEditor.modules}
         formats={TextEditor.formats}
-        bounds={'.app'}
+        bounds=".app"
         placeholder={this.props.placeholder}
       />
     );
@@ -76,22 +102,25 @@ TextEditor.formats = [
   'bullet',
   'indent',
   'link',
-  'image',
-  'video'
+  'align',
+  'background',
+  'color'
 ];
 
 TextEditor.modules = {
   toolbar: [
-    [{ header: '1' }, { header: '2' }, { font: [] }],
-    [{ size: [] }],
+    // [{ header: '1' }, { header: '2' }, { font: [] }],
     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    [{ align: [] }],
+    [{ size: [] }],
+    [{ color: [] }, { background: [] }],
     [
       { list: 'ordered' },
       { list: 'bullet' },
       { indent: '-1' },
       { indent: '+1' }
     ],
-    ['link', 'image', 'video'],
+    ['link'],
     ['clean']
   ],
   clipboard: {

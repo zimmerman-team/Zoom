@@ -386,7 +386,53 @@ function userDatasets(state = initial, action) {
   }
 }
 
+function publicCharts(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_PUBLIC_CHARTS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_PUBLIC_CHARTS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_PUBLIC_CHARTS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_PUBLIC_CHARTS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function userDeleted(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.DELETE_USER_INITIAL:
+      return updateInitial(state);
+    case nodeActions.DELETE_USER_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.DELETE_USER_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.DELETE_USER_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+function datasetUpdated(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.UPDATE_DATASET_INITIAL:
+      return updateInitial(state);
+    case nodeActions.UPDATE_DATASET_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.UPDATE_DATASET_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.UPDATE_DATASET_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  datasetUpdated,
+  publicCharts,
   userDatasets,
   chartDeleted,
   userCharts,
@@ -407,7 +453,8 @@ const reducers = {
   manualMapData,
   countryExcerpt,
   countryActivities,
-  activityData
+  activityData,
+  userDeleted
 };
 
 export default reducers;

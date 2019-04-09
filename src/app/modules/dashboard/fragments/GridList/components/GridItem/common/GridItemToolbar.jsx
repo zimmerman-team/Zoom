@@ -18,26 +18,34 @@ const ComponentBase = styled.div`
 const GridItemToolbar = props => {
   return (
     <ComponentBase>
-      <GridItemToolbarTab
-        icon={<SvgIconEdit />}
-        indexTab="0"
-        handleClick={props.onEdit}
-      />
-      <GridItemToolbarTab
-        icon={<SvgIconList />}
-        indexTab="1"
-        handleClick={props.onView}
-      />
-      <GridItemToolbarTab
-        icon={<SvgIconDuplicate />}
-        indexTab="2"
-        handleClick={props.onDuplicate}
-      />
-      <GridItemToolbarTab
-        icon={<SvgIconDelete />}
-        indexTab="3"
-        handleClick={props.onDelete}
-      />
+      {props.onEdit && (
+        <GridItemToolbarTab
+          icon={<SvgIconEdit />}
+          indexTab="0"
+          handleClick={props.onEdit}
+        />
+      )}
+      {props.onView && (
+        <GridItemToolbarTab
+          icon={<SvgIconList />}
+          indexTab="1"
+          handleClick={props.onView}
+        />
+      )}
+      {props.onDuplicate && (
+        <GridItemToolbarTab
+          icon={<SvgIconDuplicate />}
+          indexTab="2"
+          handleClick={props.onDuplicate}
+        />
+      )}
+      {props.onDelete && (
+        <GridItemToolbarTab
+          icon={<SvgIconDelete />}
+          indexTab="3"
+          handleClick={props.onDelete}
+        />
+      )}
     </ComponentBase>
   );
 };

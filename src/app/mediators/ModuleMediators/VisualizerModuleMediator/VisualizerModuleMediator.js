@@ -4,13 +4,11 @@ import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
 import { withRouter } from 'react-router';
 import {
-  formatCountryCenterData,
-  formatCountryLayerData,
   formatCountryParam,
   formatDate,
-  formatLongLatData,
-  removeIds,
-  updatePercentiles
+  formatGeoData,
+  formatLineData,
+  removeIds
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 import PropTypes from 'prop-types';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
@@ -19,6 +17,7 @@ import { connect } from 'react-redux';
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
 import paneTypes from '__consts__/PaneTypesConst';
+import chartTypes from '__consts__/ChartConst';
 
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
@@ -63,6 +62,11 @@ const propTypes = {
       )
     })
   }),
+  chartResults: PropTypes.shape({}),
+  chartData: PropTypes.shape({}),
+  user: PropTypes.shape({}),
+  paneData: PropTypes.shape({}),
+  publicPage: PropTypes.bool,
   dropDownData: PropTypes.shape({
     allIndicators: PropTypes.shape({
       edges: PropTypes.arrayOf(
@@ -88,6 +92,11 @@ const propTypes = {
 
 const defaultProps = {
   dropDownData: {},
+  publicPage: false,
+  chartResults: {},
+  chartData: {},
+  user: {},
+  paneData: {},
   indicatorAggregations: {}
 };
 
@@ -115,11 +124,17 @@ class VisualizerModuleMediator extends Component {
 
     if (this.props.match.params.code !== 'vizID') {
       if (this.props.user)
-        this.props.dispatch(
-          nodeActions.getChartRequest({
-            authId: this.props.user.authId,
-            chartId: this.props.match.params.code
-          })
+        this.setState(
+          {
+            loading: true
+          },
+          () =>
+            this.props.dispatch(
+              nodeActions.getChartRequest({
+                authId: this.props.user.authId,
+                chartId: this.props.match.params.code
+              })
+            )
         );
     }
     // and we store this so it would be accessible to the visualizer mediator
@@ -152,33 +167,6 @@ class VisualizerModuleMediator extends Component {
       this.updateIndicators();
     }
 
-    if (
-      this.props.paneData.yearRange !== prevProps.paneData.yearRange &&
-      this.props.paneData.yearRange
-    ) {
-      const currStartYear = this.props.paneData.yearRange.substring(
-        0,
-        this.props.paneData.yearRange.indexOf(',')
-      );
-
-      if (prevProps.paneData.yearRange) {
-        const prevStartYear = prevProps.paneData.yearRange.substring(
-          0,
-          prevProps.paneData.yearRange.indexOf(',')
-        );
-
-        if (prevStartYear !== currStartYear) {
-          // this is the year selection for the geomaps/homepage timeline
-          this.selectYear(currStartYear);
-          this.updateIndicators();
-        }
-      } else {
-        // this is the year selection for the geomaps/homepage timeline
-        this.selectYear(currStartYear);
-        this.updateIndicators();
-      }
-    }
-
     // and we load in the chart data retrieved from the node backend
     if (
       !isEqual(this.props.chartResults, prevProps.chartResults) &&
@@ -198,6 +186,7 @@ class VisualizerModuleMediator extends Component {
         dataSources,
         _public,
         team,
+        data,
         created,
         yearRange
       } = this.props.chartResults;
@@ -205,10 +194,12 @@ class VisualizerModuleMediator extends Component {
       // we load up the redux chartData variable
       this.props.dispatch(
         actions.storeChartDataRequest({
+          changesMade: false,
           chartMounted: true,
           name,
           _public,
           team: team.length > 0,
+          indicators: data,
           chartId: _id,
           selectedYear,
           // TODO this will need to be redone after we implement the logic for infinite amounts of indicators
@@ -231,23 +222,36 @@ class VisualizerModuleMediator extends Component {
         actions.storePaneDataRequest({
           chartType: type,
           selectedSources,
+          subIndicators1: indicatorItems[0].allSubIndicators,
+          subIndicators2: indicatorItems[1].allSubIndicators,
           yearRange
         })
       );
+
+      this.setState({ loading: false });
     }
 
     // TODO redo this check properly
-    const { name, desc, _public, team, ...restChart } = this.props.chartData;
+    const {
+      name,
+      desc,
+      descIntro,
+      _public,
+      team,
+      ...restChart
+    } = this.props.chartData;
     const {
       name: prevName,
       desc: prevDesc,
+      descIntro: prevDescIntro,
       _public: prevPublc,
       team: prevTeam,
       ...prevRestChart
     } = prevProps.chartData;
     // so we refetch data when chartData changes
     // and we dont want to refetch data when only the name/description ofthe chart is changed
-    if (!isEqual(restChart, prevRestChart)) this.refetch();
+    if (!isEqual(restChart, prevRestChart) && restChart.changesMade)
+      this.refetch();
   }
 
   componentWillUnmount() {
@@ -263,7 +267,7 @@ class VisualizerModuleMediator extends Component {
       actions.storePaneDataRequest({
         chartType: '',
         selectedSources: [],
-        yearRange: '2003,2016',
+        yearRange: '1992,2018',
         subIndicators1: [],
         subIndicators2: []
       })
@@ -292,87 +296,39 @@ class VisualizerModuleMediator extends Component {
     // and we sort them
     subIndicators2 = sortBy(subIndicators2, ['label']);
 
-    let longLatData = [];
-    let countryLayerData = {};
+    let indicators = [];
 
-    // so we check here if the retrieved data is long lat
-    // and then format it differently
-    // TODO: make this work differently, this is currently i quick and dirty fix
-    if (
-      this.props.indicatorAggregations.indicators1[0] &&
-      this.props.indicatorAggregations.indicators1[0].geolocationTag &&
-      this.props.indicatorAggregations.indicators1[0].geolocationTag.indexOf(
-        ','
-      ) !== -1 &&
-      /\d/.test(this.props.indicatorAggregations.indicators1[0].geolocationTag)
-    ) {
-      longLatData = formatLongLatData(
-        this.props.indicatorAggregations.indicators1,
-        this.props.chartData.selectedInd1
-      );
-    } else {
-      countryLayerData = formatCountryLayerData(
-        this.props.indicatorAggregations.indicators1,
-        this.props.chartData.selectedInd1
-      );
+    switch (this.props.match.params.chart) {
+      case chartTypes.geoMap:
+        indicators = formatGeoData(
+          this.props.indicatorAggregations.indicators1,
+          this.props.chartData.selectedInd1,
+          this.props.indicatorAggregations.indicators2,
+          this.props.chartData.selectedInd2
+        );
+        break;
+      case chartTypes.lineChart:
+        indicators = formatLineData([
+          this.props.indicatorAggregations.indicators1,
+          this.props.indicatorAggregations.indicators2
+        ]);
+        break;
+      default:
+        indicators = [];
+        break;
     }
-
-    let countryCircleData = [];
-    // so we check here if the retrieved data is long lat
-    // and then format it differently
-    // TODO: make this work differently, this is currently i quick and dirty fix
-    if (
-      this.props.indicatorAggregations.indicators2[0] &&
-      this.props.indicatorAggregations.indicators2[0].geolocationTag &&
-      this.props.indicatorAggregations.indicators2[0].geolocationTag.indexOf(
-        ','
-      ) !== -1 &&
-      /\d/.test(this.props.indicatorAggregations.indicators2[0].geolocationTag)
-    ) {
-      longLatData = formatLongLatData(
-        this.props.indicatorAggregations.indicators2,
-        this.props.chartData.selectedInd2
-      );
-    } else {
-      countryCircleData = formatCountryCenterData(
-        this.props.indicatorAggregations.indicators2,
-        this.props.chartData.selectedInd2
-      );
-    }
-
-    const indicators = [];
-
-    if (countryLayerData.features && countryLayerData.features.length > 0) {
-      updatePercentiles(countryLayerData, f => f.properties.value);
-
-      indicators.push({
-        type: 'layer',
-        data: countryLayerData,
-        legendName: ` ${this.props.chartData.selectedInd1} `
-      });
-    }
-
-    if (countryCircleData.length > 0) {
-      indicators.push({
-        type: 'circle',
-        data: countryCircleData,
-        legendName: ` ${this.props.chartData.selectedInd2} `
-      });
-    }
-
-    if (longLatData.length > 0) {
-      indicators.push({
-        type: 'location',
-        data: longLatData,
-        legendName: `POI`
-      });
-    }
-
     // and we save the subindicator selection for the datapane
     this.props.dispatch(
       actions.storePaneDataRequest({
         subIndicators1,
         subIndicators2
+      })
+    );
+
+    // and we save the chart data
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        indicators
       })
     );
 
@@ -382,7 +338,7 @@ class VisualizerModuleMediator extends Component {
   refetch(
     ind1 = this.props.chartData.selectedInd1,
     ind2 = this.props.chartData.selectedInd2,
-    selectedYear = this.state.selectedYear,
+    selectedYear = this.props.chartData.selectedYear,
     subInd1 = this.props.chartData.selectedSubInd1,
     subInd2 = this.props.chartData.selectedSubInd2,
     countriesCodes = this.props.chartData.selectedCountryVal,
@@ -420,7 +376,8 @@ class VisualizerModuleMediator extends Component {
     // so we set the values for chart data
     this.props.dispatch(
       actions.storeChartDataRequest({
-        selectedYear: val
+        selectedYear: val,
+        changesMade: true
       })
     );
   }
@@ -428,13 +385,14 @@ class VisualizerModuleMediator extends Component {
   render() {
     return (
       <VisualizerModule
+        publicPage={this.props.publicPage}
         outerHistory={this.props.history}
         chartType={this.props.paneData.chartType}
         code={this.props.match.params.code}
         loading={this.state.loading}
         selectYear={this.selectYear}
         selectedYear={this.props.chartData.selectedYear}
-        indicators={this.state.indicators}
+        indicators={this.props.chartData.indicators}
         dropDownData={this.props.dropDownData}
       />
     );
@@ -472,6 +430,7 @@ export default createRefetchContainer(
           "indicatorName"
           "geolocationTag"
           "date"
+          "geolocationType"
           "geolocationIso2"
           "geolocationPolygons"
           "valueFormatType"
@@ -486,6 +445,7 @@ export default createRefetchContainer(
         indicatorName
         geolocationIso2
         geolocationTag
+        geolocationType
         geolocationPolygons
         valueFormatType
         date
@@ -496,6 +456,7 @@ export default createRefetchContainer(
           "indicatorName"
           "geolocationTag"
           "date"
+          "geolocationType"
           "geolocationIso2"
           "geolocationCenterLongLat"
           "valueFormatType"
@@ -510,6 +471,7 @@ export default createRefetchContainer(
         indicatorName
         geolocationIso2
         geolocationTag
+        geolocationType
         geolocationCenterLongLat
         valueFormatType
         date

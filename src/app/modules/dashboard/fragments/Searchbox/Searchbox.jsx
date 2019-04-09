@@ -35,6 +35,11 @@ const StyledTextField = styled(TextField)`
 `;
 
 class OutlinedInputAdornments extends React.Component {
+  onEnterPressed(e) {
+    if (e.keyCode === 13 && this.props.onEnterPressed)
+      this.props.onEnterPressed();
+  }
+
   render() {
     return (
       <StyledTextField
@@ -44,6 +49,7 @@ class OutlinedInputAdornments extends React.Component {
           /*todo: find out how to reset height of input adornment*/
           MuiInputAdornment: this.props.classes.MuiInputAdornment
         }}
+        onKeyDown={this.onEnterPressed.bind(this)}
         variant="outlined"
         type="search"
         InputProps={{

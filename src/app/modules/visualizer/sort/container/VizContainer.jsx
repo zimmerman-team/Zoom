@@ -9,9 +9,7 @@ import BarchartFragment from 'modules/visualizer/sort/container/fragments/Barcha
 import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFragment';
 
 import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment';
-import { PreviewTextContainer, ComponentBase, Box } from './VizContainer.style';
-import CustomYearSelector from 'components/GeoMap/GeoMap';
-import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
+import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
 
 /**
  * todo: Please write a short component description of what this component does

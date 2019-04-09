@@ -70,12 +70,12 @@ const DashboardTabContent = props => {
   if (currentURL.includes('users')) {
     targetData = props.users;
     targetUrl = '/add-user';
-    leftOptionLabel = 'add users';
+    leftOptionLabel = 'add user';
     tabContentName = 'Users';
   } else if (currentURL.includes('teams')) {
     targetData = props.teams;
     targetUrl = '/create-team';
-    leftOptionLabel = 'create users';
+    leftOptionLabel = 'create team';
     tabContentName = 'Teams';
   } else if (currentURL.includes('focus-pages')) {
     targetData = '';

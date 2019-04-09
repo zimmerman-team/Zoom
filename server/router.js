@@ -50,7 +50,7 @@ router.post('/updateUserByAdmin', UserController.updateUserByAdmin);
 
 router.post('/updateUsersTeam', UserController.updateUsersTeam);
 
-router.delete('/deleteUser', UserController.deleteUser);
+router.post('/deleteUser', UserController.deleteUser);
 
 /* -------------- USER CONTROLLER END ------------------------- */
 

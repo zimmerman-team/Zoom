@@ -2,6 +2,10 @@ import update from 'immutability-helper';
 import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
 import * as nodeActions from 'services/actions/nodeBackend';
+import { CREATE_DUPLICATE_CHART_INITIAL } from 'services/actions/nodeBackend';
+import { CREATE_DUPLICATE_CHART_REQUEST } from 'services/actions/nodeBackend';
+import { CREATE_DUPLICATE_CHART_SUCCESS } from 'services/actions/nodeBackend';
+import { CREATE_DUPLICATE_CHART_FAILED } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -429,8 +433,23 @@ function datasetUpdated(state = initial, action) {
       return state;
   }
 }
+function dupChartCreated(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.CREATE_DUPLICATE_CHART_INITIAL:
+      return updateInitial(state);
+    case nodeActions.CREATE_DUPLICATE_CHART_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.CREATE_DUPLICATE_CHART_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.CREATE_DUPLICATE_CHART_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
 
 const reducers = {
+  dupChartCreated,
   datasetUpdated,
   publicCharts,
   userDatasets,

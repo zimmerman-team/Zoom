@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
 import initialState from '__consts__/InitialChartDataConst';
 import paneTypes from '__consts__/PaneTypesConst';
 import chartTypes from '__consts__/ChartConst';
+import initialPaneState from '__consts__/InitialPaneDataConst';
 
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
@@ -66,6 +67,7 @@ const propTypes = {
   chartData: PropTypes.shape({}),
   user: PropTypes.shape({}),
   paneData: PropTypes.shape({}),
+  auth0Client: PropTypes.shape({}),
   publicPage: PropTypes.bool,
   dropDownData: PropTypes.shape({
     allIndicators: PropTypes.shape({
@@ -94,6 +96,7 @@ const defaultProps = {
   dropDownData: {},
   publicPage: false,
   chartResults: {},
+  auth0Client: {},
   chartData: {},
   user: {},
   paneData: {},
@@ -267,11 +270,7 @@ class VisualizerModuleMediator extends Component {
 
     this.props.dispatch(
       actions.storePaneDataRequest({
-        chartType: '',
-        selectedSources: [],
-        yearRange: '1992,2018',
-        subIndicators1: [],
-        subIndicators2: []
+        ...initialPaneState
       })
     );
 
@@ -392,6 +391,7 @@ class VisualizerModuleMediator extends Component {
         chartType={this.props.paneData.chartType}
         code={this.props.match.params.code}
         loading={this.state.loading}
+        auth0Client={this.props.auth0Client}
         selectYear={this.selectYear}
         selectedYear={this.props.chartData.selectedYear}
         indicators={this.props.chartData.indicators}
@@ -409,6 +409,7 @@ const mapStateToProps = state => {
     chartResults: state.chartResults.data,
     chartData: state.chartData.chartData,
     user: state.user.data,
+    dupChartCreated: state.dupChartCreated,
     paneData: state.paneData.paneData
   };
 };

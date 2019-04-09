@@ -1,6 +1,5 @@
 import React from 'react';
 import DownloadTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/DownloadTab';
-import DuplicatorTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/DuplicatorTab';
 import VisibilityTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/VisibilityTab';
 
 import IconFilter from 'assets/icons/toolpanel/IconFilter';
@@ -11,6 +10,7 @@ import IconDuplicate from 'assets/icons/toolpanel/IconDuplicate';
 import IconVisibility from 'assets/icons/toolpanel/IconVisibility';
 import ContextEditor from 'components/chartcontext/ContextEditor/ContextEditor';
 import VizPaneMediator from 'mediators/ComponentMediators/PaneMediators/VisPaneMediator/VizPaneMediator';
+import DuplicatorMediator from 'mediators/ComponentMediators/PaneMediators/DuplicatorMediator/DuplicatorMediator';
 
 const Path = '/visualizer/:chart/:code/';
 
@@ -43,7 +43,7 @@ export const data = {
     {
       label: 'duplicate',
       path: `${Path}duplicate`,
-      component: DuplicatorTab,
+      component: DuplicatorMediator,
       icon: <IconDuplicate />
     },
     {

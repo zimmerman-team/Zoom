@@ -1,0 +1,165 @@
+/* base */
+import React from 'react';
+import DuplicatorTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/DuplicatorTab';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
+/* actions */
+import * as actions from 'services/actions/general';
+import * as nodeActions from 'services/actions/nodeBackend';
+
+/* utils */
+import get from 'lodash/get';
+import isEqual from 'lodash/isEqual';
+
+/* consts */
+import initialPaneState from '__consts__/InitialPaneDataConst';
+import initialState from '__consts__/InitialChartDataConst';
+
+/* components */
+import { ToastsStore } from 'react-toasts';
+import { SimpleErrorText } from 'components/sort/Misc';
+import PropTypes from 'prop-types';
+
+const propTypes = {
+  auth0Client: PropTypes.shape({}),
+  chartData: PropTypes.shape({}),
+  paneData: PropTypes.shape({}),
+  user: PropTypes.shape({}),
+  dupChartCreated: PropTypes.shape({})
+};
+const defaultProps = {
+  auth0Client: {},
+  chartData: {},
+  paneData: {},
+  user: {},
+  dupChartCreated: {}
+};
+
+class DuplicatorMediator extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      editDupl: false
+    };
+
+    this.saveChart = this.saveChart.bind(this);
+    this.saveEdit = this.saveEdit.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      !isEqual(
+        this.props.dupChartCreated.data,
+        prevProps.dupChartCreated.data
+      ) &&
+      this.props.dupChartCreated.data &&
+      this.state.editDupl
+    ) {
+      window.location = `/visualizer/${get(
+        this.props.dupChartCreated,
+        'data.chartType'
+      )}/${get(this.props.dupChartCreated, 'data.id')}/edit`;
+    }
+  }
+
+  // TODO somehow make this funciton reusable cause the same one is used in AppBar.jsx
+  saveChart() {
+    if (this.props.auth0Client.isAuthenticated()) {
+      const profile = this.props.auth0Client.getProfile();
+      const dataSources = [];
+
+      if (this.props.chartData.dataSource1)
+        dataSources.push(this.props.chartData.dataSource1);
+
+      if (
+        this.props.chartData.dataSource2 &&
+        dataSources.indexOf(this.props.chartData.dataSource2) === -1
+      )
+        dataSources.push(this.props.chartData.dataSource2);
+
+      const chartData = {
+        authId: profile.sub,
+        dataSources,
+        _public: this.props.chartData._public,
+        team: this.props.chartData.team ? this.props.user.data.team : '',
+        chartId: this.props.chartData.chartId,
+        name: this.props.chartData.name,
+        description: this.props.chartData.desc,
+        descIntro: this.props.chartData.descIntro,
+        type: this.props.paneData.chartType,
+        data: this.props.chartData.indicators,
+        indicatorItems: [
+          {
+            indicator: this.props.chartData.selectedInd1,
+            subIndicators: this.props.chartData.selectedSubInd1,
+            // we also need to save the all sub indicators
+            // for the datapanes default selections
+            // because usually subindicators are refetched
+            // when an indicator is selected
+            // and because we want to initially load in just the
+            // data from zoombackend, we don't want to be refetching
+            // anything
+            allSubIndicators: this.props.paneData.subIndicators1
+          },
+          {
+            indicator: this.props.chartData.selectedInd2,
+            subIndicators: this.props.chartData.selectedSubInd2,
+            // we also need to save the all sub indicators
+            // for the datapanes default selections
+            // because usually subindicators are refetched
+            // when an indicator is selected
+            // and because we want to initially load in just the
+            // data from zoombackend, we don't want to be refetching
+            // anything
+            allSubIndicators: this.props.paneData.subIndicators2
+          }
+        ],
+        selectedSources: this.props.paneData.selectedSources,
+        yearRange: this.props.paneData.yearRange,
+        selectedYear: this.props.chartData.selectedYear,
+        selectedCountryVal: this.props.chartData.selectedCountryVal,
+        selectedRegionVal: this.props.chartData.selectedRegionVal
+      };
+
+      this.props.dispatch(nodeActions.createDuplicateChartRequest(chartData));
+    } else {
+      ToastsStore.error(<SimpleErrorText> Unauthorized </SimpleErrorText>);
+    }
+  }
+
+  saveEdit() {
+    this.setState(
+      {
+        editDupl: true
+      },
+      () => this.saveChart()
+    );
+  }
+
+  render() {
+    return (
+      <DuplicatorTab
+        handleSaveEdit={this.saveEdit}
+        handleDuplicate={this.saveChart}
+        duplName={get(this.props.dupChartCreated, 'data.name')}
+        duplID={get(this.props.dupChartCreated, 'data.id')}
+      />
+    );
+  }
+}
+
+DuplicatorMediator.propTypes = propTypes;
+DuplicatorMediator.defaultProps = defaultProps;
+
+const mapStateToProps = state => {
+  return {
+    chartData: state.chartData.chartData,
+    paneData: state.paneData.paneData,
+    user: state.user,
+    dupChartCreated: state.dupChartCreated
+  };
+};
+
+export default connect(mapStateToProps)(DuplicatorMediator);

@@ -37,6 +37,9 @@ const EditUserMediator = lazy(() =>
 const CreateTeamMediator = lazy(() =>
   import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator')
 );
+const EditTeamMediator = lazy(() =>
+  import('mediators/ModuleMediators/EditTeamMediator/EditTeamMediator')
+);
 const PublicDashMediator = lazy(() =>
   import('mediators/DashboardMediators/PublicDashMediator')
 );
@@ -154,6 +157,18 @@ const Routes = props => {
               props.auth0Client.isAuthenticated() &&
               props.auth0Client.isAdministrator() ? (
                 <CreateTeamMediator auth0Client={props.auth0Client} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/edit-team/:teamId"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <EditTeamMediator auth0Client={props.auth0Client} />
               ) : (
                 <Redirect to="/" />
               )

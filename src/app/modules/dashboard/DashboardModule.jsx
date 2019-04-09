@@ -7,6 +7,7 @@ import { ModuleContainer } from 'modules/dashboard/DashboardModule.styles';
 import DashboardContent from 'modules/dashboard/fragments/DashboardContent/DashboardContent';
 import DashboardHeader from './fragments/DashboardHeader/DashboardHeader';
 import Searchbox from 'modules/dashboard/fragments/Searchbox/Searchbox';
+import Pagination from 'components/Pagination/Pagination';
 
 const propTypes = {
   tabs: PropTypes.arrayOf(
@@ -27,7 +28,10 @@ const propTypes = {
   changeSearchKeyword: PropTypes.func,
   loading: PropTypes.bool,
   users: PropTypes.arrayOf(PropTypes.shape({})),
-  teams: PropTypes.arrayOf(PropTypes.shape({}))
+  teams: PropTypes.arrayOf(PropTypes.shape({})),
+  activeTab: PropTypes.string,
+  totalPages: PropTypes.number,
+  changePage: PropTypes.func
 };
 const defaultProps = {
   tabs: [],
@@ -42,12 +46,15 @@ const defaultProps = {
   setIsSortByOpen: null,
   changeSearchKeyword: null,
   users: [],
-  teams: []
+  teams: [],
+  activeTab: 'charts',
+  totalPages: 0,
+  changePage: null
 };
 
 const DashboardModule = ({
   loading,
-  tabs,
+  page,
   sort,
   users,
   datasets,
@@ -61,7 +68,9 @@ const DashboardModule = ({
   setWrapperRef,
   setIsSortByOpen,
   changeSearchKeyword,
-  navItems
+  navItems,
+  totalPages,
+  changePage
 }) => (
   <ModuleContainer>
     <DashboardHeader
@@ -90,6 +99,11 @@ const DashboardModule = ({
       activeTab={activeTab}
       sort={sort}
       navItems={navItems}
+    />
+    <Pagination
+      pageCount={totalPages}
+      changePage={changePage}
+      forcePage={page}
     />
   </ModuleContainer>
 );

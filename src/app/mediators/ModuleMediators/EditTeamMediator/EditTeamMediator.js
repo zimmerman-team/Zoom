@@ -1,16 +1,17 @@
 /* base */
 import React from 'react';
 import filter from 'lodash/filter';
-import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import connect from 'react-redux/es/connect/connect';
 
 /* actions */
-import { updateUsersTeamRequest } from 'services/sagas';
+import * as nodeActions from 'services/actions/nodeBackend';
 
 /* components */
 import CreateTeamModule from 'modules/UserManagement/CreateTeam/CreateTeamModule';
-import { formatUsersData } from './CreateTeamMediator.utils';
+import { formatUsersData } from '../CreateTeamMediator/CreateTeamMediator.utils';
 
-class CreateTeamMediator extends React.Component {
+class EditTeamMediator extends React.Component {
   state = {
     success: false,
     errorMessage: null,
@@ -19,14 +20,20 @@ class CreateTeamMediator extends React.Component {
     searchKeyword: '',
     users: [],
     allUsers: [],
-    paginatedUsers: [],
     sort: 'name',
     page: 0,
     totalPages: 0,
-    isSortByOpen: false
+    isSortByOpen: false,
+    initialGroupUsers: [],
+    paginatedUsers: []
   };
 
   componentDidMount = () => {
+    this.props.auth0Client.getGroup(this.props.match.params.teamId, this);
+    this.props.auth0Client.getGroupMembers(
+      this.props.match.params.teamId,
+      this
+    );
     this.getAllUsers(true);
     document.addEventListener('mousedown', this.handleClickOutside);
   };
@@ -137,31 +144,44 @@ class CreateTeamMediator extends React.Component {
 
   submitForm = e => {
     const team = this.state.name;
-    const users = this.state.users;
+    const usersToAdd = filter(this.state.users, user => {
+      return filter(this.state.initialGroupUsers, igu => igu !== user);
+    });
+    const usersToDelete = filter(this.state.initialGroupUsers, igu => {
+      return filter(this.state.users, user => user === igu);
+    });
 
     e.preventDefault();
     this.props.auth0Client
-      .addGroup(this.state.name, this.state.users, this)
+      .editGroup(
+        this.props.match.params.tab,
+        this.state.name,
+        usersToDelete,
+        usersToAdd,
+        this
+      )
       .then(() => {
         // and after everything has been succesfully done on auth0
         // we save the new user roles in zoombackend
-        this.props.dispatch(
-          updateUsersTeamRequest({
-            user: {
-              authId: this.props.auth0Client.getProfile().sub
-            },
-            team,
-            updateUsers: users.map(authId => {
-              return { authId };
-            })
-          })
-        );
+        // this.props.dispatch(
+        //   nodeActions.updateUsersTeamRequest({
+        //     user: {
+        //       authId: this.props.auth0Client.getProfile().sub
+        //     },
+        //     team,
+        //     updateUsers: users.map(authId => {
+        //       return { authId };
+        //     })
+        //   })
+        // );
       });
   };
 
   render() {
     return (
       <CreateTeamModule
+        pageTitle="Edit team"
+        buttonTxt="submit"
         users={this.state.users}
         name={this.state.name}
         userOptions={this.state.paginatedUsers}
@@ -191,4 +211,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(CreateTeamMediator);
+export default withRouter(connect(mapStateToProps)(EditTeamMediator));

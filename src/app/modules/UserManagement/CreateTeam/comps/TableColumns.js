@@ -11,8 +11,10 @@ import theme from 'theme/Theme';
 import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
 
 const sortByOptions = [
-  { label: 'Name (asc)', value: 'name:1' },
-  { label: 'Name (desc)', value: 'name:-1' }
+  { label: 'Name (asc)', value: 'name' },
+  { label: 'Name (desc)', value: '-name' },
+  { label: 'Role (asc)', value: 'role' },
+  { label: 'Role (desc)', value: '-role' }
 ];
 
 export default function getColumns(

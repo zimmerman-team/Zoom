@@ -2,14 +2,6 @@ import update from 'immutability-helper';
 import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
 import * as nodeActions from 'services/actions/nodeBackend';
-import { GET_PUBLIC_CHARTS_INITIAL } from 'services/actions/nodeBackend';
-import { GET_PUBLIC_CHARTS_REQUEST } from 'services/actions/nodeBackend';
-import { GET_PUBLIC_CHARTS_SUCCESS } from 'services/actions/nodeBackend';
-import { GET_PUBLIC_CHARTS_FAILED } from 'services/actions/nodeBackend';
-import { UPDATE_DATASET_INITIAL } from 'services/actions/nodeBackend';
-import { UPDATE_DATASET_REQUEST } from 'services/actions/nodeBackend';
-import { UPDATE_DATASET_SUCCESS } from 'services/actions/nodeBackend';
-import { UPDATE_DATASET_FAILED } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -409,6 +401,20 @@ function publicCharts(state = initial, action) {
   }
 }
 
+function userDeleted(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.DELETE_USER_INITIAL:
+      return updateInitial(state);
+    case nodeActions.DELETE_USER_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.DELETE_USER_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.DELETE_USER_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
 function datasetUpdated(state = initial, action) {
   switch (action.type) {
     case nodeActions.UPDATE_DATASET_INITIAL:
@@ -447,7 +453,8 @@ const reducers = {
   manualMapData,
   countryExcerpt,
   countryActivities,
-  activityData
+  activityData,
+  userDeleted
 };
 
 export default reducers;

@@ -186,6 +186,7 @@ class VisualizerModuleMediator extends Component {
         dataSources,
         _public,
         team,
+        descIntro,
         data,
         created,
         yearRange
@@ -201,6 +202,7 @@ class VisualizerModuleMediator extends Component {
           team: team.length > 0,
           indicators: data,
           chartId: _id,
+          descIntro,
           selectedYear,
           // TODO this will need to be redone after we implement the logic for infinite amounts of indicators
           selectedInd1: indicatorItems[0].indicator,
@@ -359,8 +361,8 @@ class VisualizerModuleMediator extends Component {
       indicator1: [ind1],
       indicator2: [ind2],
       countriesISO2,
-      singleInd1: ind1 ? ind1 : 'null',
-      singleInd2: ind2 ? ind2 : 'null',
+      singleInd1: ind1 || 'null',
+      singleInd2: ind2 || 'null',
       datePeriod: [selectedYear],
       subInd1: subInd1.length > 0 ? subInd1 : ['undefined'],
       subInd2: subInd2.length > 0 ? subInd2 : ['undefined']

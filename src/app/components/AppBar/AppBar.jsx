@@ -103,6 +103,7 @@ export class AppBar extends React.Component {
         chartId: this.props.chartData.chartId,
         name: this.props.chartData.name,
         description: this.props.chartData.desc,
+        descIntro: this.props.chartData.descIntro,
         type: this.props.paneData.chartType,
         data: this.props.chartData.indicators,
         indicatorItems: [

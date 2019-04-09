@@ -202,6 +202,7 @@ const ChartController = {
       name,
       description,
       type,
+      descIntro,
       indicatorItems,
       selectedSources,
       yearRange,
@@ -228,6 +229,7 @@ const ChartController = {
               _public,
               team,
               data,
+              descIntro,
 
               // so the type of chart
               type,
@@ -256,6 +258,7 @@ const ChartController = {
             chart.dataSources = dataSources;
 
             chart.data = data;
+            chart.descIntro = descIntro;
 
             // so the type of chart
             chart.type = type;

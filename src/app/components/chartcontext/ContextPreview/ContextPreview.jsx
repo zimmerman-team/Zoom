@@ -32,7 +32,11 @@ const ContextIntro = styled.div`
   max-width: 550px;
   //max-height: 70px;
   //overflow: hidden;
-  margin: 0;
+  margin: 0 auto;
+`;
+
+const IntroText = styled.div`
+  text-align: center;
 `;
 
 const ContextBody = styled.div`
@@ -61,7 +65,9 @@ const ContextPreview = props => {
       )}
       {props.show === 'descIntro' && (
         <ContextIntro>
-          <div className="ql-editor">{ReactHtmlParser(props.descIntro)}</div>
+          <div className="ql-editor">
+            <IntroText>{ReactHtmlParser(props.descIntro)}</IntroText>
+          </div>
         </ContextIntro>
       )}
       {props.show === 'descBody' && (

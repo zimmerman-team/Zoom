@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import LineChart2 from 'components/charts/recharts_linechart/LineChart';
 
 /* mock */
 // import { LinechartMockData } from './LinechartMockData';
@@ -52,9 +53,14 @@ const defaultProps = {
 };
 
 const LinechartFragment = props => {
+  console.log(props);
   return (
     <ComponentBase>
       <Box>
+        {/*<LineChart2
+          indicators={props.indicators}
+          data={props.aidsLineChartData}
+        />*/}
         <ResponsiveLine
           data={props.indicatorData}
           margin={{

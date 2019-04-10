@@ -32,11 +32,13 @@ const initialState = {
   selectedInd1: undefined,
   selectedInd2: undefined,
   selectedCountryVal: [],
+  selectedCountryLabels: [],
   desc: '',
   descIntro: '',
   selectedSubInd1: [],
   selectedSubInd2: [],
-  selectedRegionVal: []
+  selectedRegionVal: [],
+  selectedRegionLabels: []
 };
 
 export default initialState;

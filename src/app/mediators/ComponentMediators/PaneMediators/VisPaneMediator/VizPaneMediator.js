@@ -363,7 +363,7 @@ class VizPaneMediator extends React.Component {
         });
       } else {
         selectedCountryVal = [...this.props.chartData.selectedCountryVal];
-        selectedCountryLabels = [...this.state.selectedCountryLabels];
+        selectedCountryLabels = [...this.props.chartData.selectedCountryLabels];
         const countryIndex = selectedCountryVal.indexOf(item.value);
         if (countryIndex === -1) {
           // so if it doesn't exist we add it
@@ -401,7 +401,7 @@ class VizPaneMediator extends React.Component {
         });
       } else {
         selectedRegionVal = [...this.props.chartData.selectedRegionVal];
-        selectedRegionLabels = [...this.state.selectedRegionLabels];
+        selectedRegionLabels = [...this.props.chartData.selectedRegionLabels];
         const regionIndex = selectedRegionVal.indexOf(item.value);
 
         if (regionIndex === -1) {
@@ -463,7 +463,6 @@ class VizPaneMediator extends React.Component {
         subIndicators2: []
       })
     );
-    this.setState({ selectedRegionLabels: [], selectedCountryLabels: [] });
     this.changesMade();
   }
 
@@ -483,6 +482,7 @@ class VizPaneMediator extends React.Component {
   }
 
   render() {
+    console.log(this.props.chartData.selectedCountryLabels);
     return (
       <DataExplorePane
         allFileSources={this.state.allFileSources}

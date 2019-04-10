@@ -384,7 +384,6 @@ class VizPaneMediator extends React.Component {
         selectedCountryLabels
       })
     );
-    this.setState({ selectedCountryLabels }, this.refetch);
     this.changesMade();
   }
 
@@ -423,7 +422,7 @@ class VizPaneMediator extends React.Component {
         selectedRegionLabels
       })
     );
-    this.setState({ selectedRegionLabels });
+
     this.selectCountry(this.getCountriesByRegion(selectedRegionVal), true);
     this.changesMade();
   }
@@ -521,9 +520,9 @@ class VizPaneMediator extends React.Component {
         subIndicators2={this.props.paneData.subIndicators2}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.props.chartData.selectedCountryVal}
-        selectedCountryLabel={this.state.selectedCountryLabels}
+        selectedCountryLabel={this.props.chartData.selectedCountryLabels}
         selectedRegionVal={this.props.chartData.selectedRegionVal}
-        selectedRegionLabels={this.state.selectedRegionLabels}
+        selectedRegionLabels={this.props.chartData.selectedRegionLabels}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
         selectYearRange={this.selectYearRange}

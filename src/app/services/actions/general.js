@@ -15,8 +15,15 @@ export function dataPaneToggleDone(open) {
   };
 }
 
+export const SAVE_STEP_DATA_INITIAL = 'SAVE_STEP_DATA_INITIAL';
 export const SAVE_STEP_DATA_REQUEST = 'SAVE_STEP_DATA_REQUEST';
 export const SAVE_STEP_DATA_DONE = 'SAVE_STEP_DATA_DONE';
+
+export function saveStepDataInitial() {
+  return {
+    type: SAVE_STEP_DATA_INITIAL
+  };
+}
 
 export function saveStepDataRequest(data) {
   return {

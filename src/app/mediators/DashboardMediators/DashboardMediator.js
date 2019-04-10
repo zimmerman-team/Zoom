@@ -204,7 +204,7 @@ class DashboardMediator extends React.Component {
             );
           }
           break;
-        case 'datasets':
+        case 'data-sets':
           if (this.props.user) {
             this.props.dispatch(
               actions.getUserDatasetsRequest({

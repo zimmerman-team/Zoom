@@ -1,4 +1,4 @@
-export const options1 = [
+export const nonSurveyChoice = [
   {
     label: 'Yes',
     value: 'Yes'
@@ -6,94 +6,105 @@ export const options1 = [
   {
     label: 'No',
     value: 'No'
+  }
+];
+
+export const options1 = [
+  {
+    label: 'Yes',
+    value: '1'
+  },
+  {
+    label: 'No',
+    value: '0'
   }
 ];
 
 export const options2 = [
   {
     label: 'Yes',
-    value: 'Yes'
+    value: '1'
   },
   {
     label: 'No',
-    value: 'No'
+    value: '0'
   },
   {
     label: "Don't know",
-    value: "Don't know"
+    value: '2'
   }
 ];
 
 export const checkBoxOptions2 = [
   {
     label: 'Enumerators',
-    value: 'Enumerators'
+    value: '1'
   },
   {
     label: 'Colleagues',
-    value: 'Colleagues'
+    value: '2'
   },
   {
     label: 'Respondents',
-    value: 'Respondents'
+    value: '3'
   },
   {
     label: 'Representative group of respondents',
-    value: 'Representative group of respondents'
+    value: '4'
   }
 ];
 
 export const checkBoxOptions3 = [
   {
     label: 'Simple random samplimng',
-    value: 'Simple random samplimng'
+    value: '1'
   },
   {
     label: 'Stratified sampling',
-    value: 'Stratified sampling'
+    value: '2'
   },
   {
     label: 'Cluster sampling',
-    value: 'Cluster sampling'
+    value: '3'
   },
   {
     label: 'Systematic sampling',
-    value: 'Systematic sampling'
+    value: '4'
   },
   {
     label: 'Multistage sampling',
-    value: 'Multistage sampling'
+    value: '5'
   },
   {
     label: 'Other',
-    value: 'Other'
+    value: '0'
   }
 ];
 
 export const checkBoxOptions51 = [
   {
     label: 'Check for outliers',
-    value: 'Check for outliers'
+    value: '1'
   },
   {
     label: 'Delete rows/columns with missing data',
-    value: 'Delete rows/columns with missing data'
+    value: '2'
   },
   {
     label: 'Check of geodata',
-    value: 'Check of geodata'
+    value: '3'
   },
   {
     label: 'Check consistency datatype per column',
-    value: 'Check consistency datatype per column'
+    value: '4'
   },
   {
     label: 'Join, delimite or concatenate data',
-    value: 'Join, delimite or concatenate data'
+    value: '5'
   },
   {
     label: 'Other',
-    value: 'Other'
+    value: '0'
   }
 ];
 

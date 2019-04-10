@@ -311,6 +311,22 @@ class VisualizerModuleMediator extends Component {
           this.props.chartData.selectedInd2
         );
         break;
+      case chartTypes.focusKE:
+        indicators = formatGeoData(
+          this.props.indicatorAggregations.indicators1,
+          this.props.chartData.selectedInd1,
+          this.props.indicatorAggregations.indicators2,
+          this.props.chartData.selectedInd2
+        );
+        break;
+      case chartTypes.focusNL:
+        indicators = formatGeoData(
+          this.props.indicatorAggregations.indicators1,
+          this.props.chartData.selectedInd1,
+          this.props.indicatorAggregations.indicators2,
+          this.props.chartData.selectedInd2
+        );
+        break;
       case chartTypes.lineChart:
         indicators = formatLineData([
           this.props.indicatorAggregations.indicators1,

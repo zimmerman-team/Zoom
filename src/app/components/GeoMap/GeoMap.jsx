@@ -324,7 +324,7 @@ export class GeoMap extends Component {
           onClick={this._onCountryClick}
           onLoad={this._handleMapLoaded}
           mapboxApiAccessToken={MAPBOX_TOKEN}
-          mapOptions={this.props.mapOptions}
+          // mapOptions={this.props.mapOptions}
           ref={map => (this.mapRef = map)}
           attributionControl
           // bounds={ya}

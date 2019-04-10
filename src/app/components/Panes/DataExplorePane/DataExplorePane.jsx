@@ -6,8 +6,6 @@ import PropTypes from 'prop-types';
 import IconRedIndicators from 'assets/icons/IconRedIndicators';
 import IconRedLocation from 'assets/icons/IconRedLocation';
 import IconRedPeriod from 'assets/icons/IconRedPeriod';
-
-/* components */
 import ResetIcon from 'assets/icons/IconReset';
 
 /* styles */
@@ -16,9 +14,11 @@ import {
   ResetContainer,
   PanelAccordion
 } from './DataExplorerPane.style';
-import SimpleToolTip from '../../ToolTips/SimpleToolTip/SimpleToolTip';
+import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
-import ExpansionPanelContainer from 'components/Panes/DataExplorePane/components/ExpansionPanel/ExpansionPanelContainer';
+import ExpansionPanelContainer from './sort/ExpansionPanelContainer';
+import TimePeriodPanel from './panels/TimePeriodPanel/TimePeriodPanel';
+import DropdownMenuPanel from './panels/DropdownMenuPanel/DropdownMenuPanel';
 
 const propTypes = {
   selectedInd2: PropTypes.string,
@@ -124,121 +124,127 @@ class DataExplorePane extends React.Component {
           }
         >
           {/*TODO: Store props somewhere different to improve readablitity */}
+
           {/*DATASOURCE*/}
           <ExpansionPanelContainer
-            isDropdownSelect
             icon={<IconRedIndicators />}
             label="Datasource"
-            panelDetails={[
-              {
-                multiple: true,
-                selectAll: true,
-                placeHolderText: 'Select datasource',
-                placeHolderNumber: this.props.allFileSources.length,
-                selectDataSource: this.props.selectDataSource,
-                allFileSources: this.props.allFileSources,
-                defaultAll: this.props.locationSelected,
-                selectedSources: this.props.selectedSources,
-                reset: () => this.props.selectDataSource('reset')
-              }
-            ]}
             data-cy="nav-pane-item-datasource"
-          />
+          >
+            <DropdownMenuPanel
+              panelDetails={[
+                {
+                  multiple: true,
+                  selectAll: true,
+                  placeHolderText: 'Select datasource',
+                  placeHolderNumber: this.props.allFileSources.length,
+                  selectDataSource: this.props.selectDataSource,
+                  allFileSources: this.props.allFileSources,
+                  defaultAll: this.props.locationSelected,
+                  selectedSources: this.props.selectedSources,
+                  reset: () => this.props.selectDataSource('reset')
+                }
+              ]}
+            />
+          </ExpansionPanelContainer>
 
           {/*GEO LOCATION*/}
           <ExpansionPanelContainer
-            isDropdownSelect
-            multiple
-            selectAll
             icon={<IconRedLocation />}
             label="Geo location"
-            panelDetails={[
-              {
-                multiple: true,
-                selectAll: true,
-                placeHolderText: 'Select region',
-                placeHolderNumber: this.props.regions.length,
-                selectDataSource: this.props.selectRegion,
-                allFileSources: this.props.regions,
-                defaultAll: this.props.locationSelected,
-                selectedSources: this.props.selectedRegionVal,
-                reset: () => this.props.selectRegion('reset')
-              },
-              {
-                multiple: true,
-                selectAll: true,
-                placeHolderText: 'Select country',
-                placeHolderNumber: this.props.countries.length,
-                selectDataSource: this.props.selectCountry,
-                allFileSources: this.props.countries,
-                defaultAll: this.props.locationSelected,
-                selectedSources: this.props.selectedCountryVal,
-                reset: () => this.props.selectCountry('reset')
-              }
-            ]}
             data-cy="nav-pane-item-geo-location"
-          />
+          >
+            <DropdownMenuPanel
+              panelDetails={[
+                {
+                  multiple: true,
+                  selectAll: true,
+                  placeHolderText: 'Select region',
+                  placeHolderNumber: this.props.regions.length,
+                  selectDataSource: this.props.selectRegion,
+                  allFileSources: this.props.regions,
+                  defaultAll: this.props.locationSelected,
+                  selectedSources: this.props.selectedRegionVal,
+                  reset: () => this.props.selectRegion('reset')
+                },
+                {
+                  multiple: true,
+                  selectAll: true,
+                  placeHolderText: 'Select country',
+                  placeHolderNumber: this.props.countries.length,
+                  selectDataSource: this.props.selectCountry,
+                  allFileSources: this.props.countries,
+                  defaultAll: this.props.locationSelected,
+                  selectedSources: this.props.selectedCountryVal,
+                  reset: () => this.props.selectCountry('reset')
+                }
+              ]}
+            />
+          </ExpansionPanelContainer>
 
           {/*TIME PERIOD*/}
           <ExpansionPanelContainer
-            isYearSelect
             icon={<IconRedPeriod />}
             label="Time Period"
-            selectYearRange={this.props.selectYearRange}
-            yearRange={this.props.yearRange}
             data-cy="nav-pane-item-time-period"
-          />
+          >
+            <TimePeriodPanel
+              selectYearRange={this.props.selectYearRange}
+              yearRange={this.props.yearRange}
+            />
+          </ExpansionPanelContainer>
 
           {/*INDICATORS*/}
           <ExpansionPanelContainer
-            isDropdownSelect
-            categorise
             icon={<IconRedIndicators />}
             label="Indicators"
-            panelDetails={[
-              {
-                categorise: true,
-                placeHolderText: 'Select indicator',
-                placeHolderNumber: this.props.indNames.length,
-                selectDataSource: this.props.selectInd1,
-                allFileSources: this.props.indNames,
-                selectedSources: this.props.selectedInd1,
-                valueSelected: this.props.selectedInd1,
-                reset: () => this.props.selectInd1('reset')
-              },
-              {
-                categorise: true,
-                multiple: true,
-                selectAll: true,
-                placeHolderText: 'Select sub indicator',
-                selectDataSource: this.props.selectSubInd1,
-                defaultAll: this.props.subInd1AllSelected,
-                allFileSources: this.props.subIndicators1,
-                selectedSources: this.props.selectedSubInd1
-              },
-              {
-                categorise: true,
-                placeHolderText: 'Select indicator',
-                placeHolderNumber: this.props.indNames.length,
-                selectDataSource: this.props.selectInd2,
-                allFileSources: this.props.indNames,
-                selectedSources: this.props.selectedInd2,
-                valueSelected: this.props.selectedInd2,
-                reset: () => this.props.selectInd2('reset')
-              },
-              {
-                categorise: true,
-                multiple: true,
-                selectAll: true,
-                placeHolderText: 'Select sub indicator',
-                selectDataSource: this.props.selectSubInd2,
-                defaultAll: this.props.subInd2AllSelected,
-                allFileSources: this.props.subIndicators2,
-                selectedSources: this.props.selectedSubInd2
-              }
-            ]}
             data-cy="nav-pane-item-indicator"
-          />
+          >
+            <DropdownMenuPanel
+              panelDetails={[
+                {
+                  categorise: true,
+                  placeHolderText: 'Select indicator',
+                  placeHolderNumber: this.props.indNames.length,
+                  selectDataSource: this.props.selectInd1,
+                  allFileSources: this.props.indNames,
+                  selectedSources: this.props.selectedInd1,
+                  valueSelected: this.props.selectedInd1,
+                  reset: () => this.props.selectInd1('reset')
+                },
+                {
+                  categorise: true,
+                  multiple: true,
+                  selectAll: true,
+                  placeHolderText: 'Select sub indicator',
+                  selectDataSource: this.props.selectSubInd1,
+                  defaultAll: this.props.subInd1AllSelected,
+                  allFileSources: this.props.subIndicators1,
+                  selectedSources: this.props.selectedSubInd1
+                },
+                {
+                  categorise: true,
+                  placeHolderText: 'Select indicator',
+                  placeHolderNumber: this.props.indNames.length,
+                  selectDataSource: this.props.selectInd2,
+                  allFileSources: this.props.indNames,
+                  selectedSources: this.props.selectedInd2,
+                  valueSelected: this.props.selectedInd2,
+                  reset: () => this.props.selectInd2('reset')
+                },
+                {
+                  categorise: true,
+                  multiple: true,
+                  selectAll: true,
+                  placeHolderText: 'Select sub indicator',
+                  selectDataSource: this.props.selectSubInd2,
+                  defaultAll: this.props.subInd2AllSelected,
+                  allFileSources: this.props.subIndicators2,
+                  selectedSources: this.props.selectedSubInd2
+                }
+              ]}
+            />
+          </ExpansionPanelContainer>
         </PanelAccordion>
         <ResetContainer
           data-cy="data-explorer-panel-reset"

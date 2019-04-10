@@ -78,7 +78,7 @@ class FindReplace extends React.Component {
             <FieldContainer>
               <ZoomSelect
                 search={false}
-                placeHolder="Select column"
+                placeHolderText="Select column"
                 data={this.props.columnHeaders}
                 valueSelected={this.state.selectedHeader}
                 selectVal={this.handleSelectHeader}

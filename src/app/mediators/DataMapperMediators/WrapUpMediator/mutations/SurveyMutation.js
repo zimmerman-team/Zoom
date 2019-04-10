@@ -12,7 +12,6 @@ const mutation = graphql`
       staffTrained
       askSensitive
       selectRespondents
-      other
       howManyRespondents
       editSheet
       dataCleaningTechniques

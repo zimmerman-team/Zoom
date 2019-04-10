@@ -24,6 +24,7 @@ const ComponentBase = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: white;
+  box-shadow: 0 5px 7px rgba(0, 0, 0, 0.5);
 `;
 
 const ContextBody = styled.section`

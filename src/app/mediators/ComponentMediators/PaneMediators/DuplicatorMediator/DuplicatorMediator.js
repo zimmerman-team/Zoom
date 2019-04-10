@@ -41,7 +41,7 @@ class DuplicatorMediator extends React.Component {
     super(props);
 
     this.state = {
-      editDupl: false
+      duplId: undefined
     };
 
     this.saveChart = this.saveChart.bind(this);
@@ -55,17 +55,17 @@ class DuplicatorMediator extends React.Component {
         prevProps.dupChartCreated.data
       ) &&
       this.props.dupChartCreated.data &&
-      this.state.editDupl
+      this.state.duplId
     ) {
       window.location = `/visualizer/${get(
         this.props.dupChartCreated,
         'data.chartType'
-      )}/${get(this.props.dupChartCreated, 'data.id')}/edit`;
+      )}/${this.state.duplId}/edit`;
     }
   }
 
   // TODO somehow make this funciton reusable cause the same one is used in AppBar.jsx
-  saveChart() {
+  saveChart(chartId = 'vizID') {
     if (this.props.auth0Client.isAuthenticated()) {
       const profile = this.props.auth0Client.getProfile();
       const dataSources = [];
@@ -84,7 +84,7 @@ class DuplicatorMediator extends React.Component {
         dataSources,
         _public: this.props.chartData._public,
         team: this.props.chartData.team ? this.props.user.data.team : '',
-        chartId: this.props.chartData.chartId,
+        chartId,
         name: this.props.chartData.name,
         description: this.props.chartData.desc,
         descIntro: this.props.chartData.descIntro,
@@ -132,9 +132,9 @@ class DuplicatorMediator extends React.Component {
   saveEdit() {
     this.setState(
       {
-        editDupl: true
+        duplId: get(this.props.dupChartCreated, 'data.id')
       },
-      () => this.saveChart()
+      () => this.saveChart(this.props.chartData.chartId)
     );
   }
 

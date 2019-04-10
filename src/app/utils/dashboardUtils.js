@@ -55,7 +55,7 @@ export function formatTeamsTabData(data, sort, search) {
 }
 
 // formats chart data for the dashboard
-export function formatChartData(charts, userId, history, remove) {
+export function formatChartData(charts, userId, history, remove, duplicate) {
   // so basically when we have paginaton
   // the count will be returned as count and the
   // data will be in charts variable
@@ -79,7 +79,7 @@ export function formatChartData(charts, userId, history, remove) {
 
     let onEdit = undefined;
     let onView = undefined;
-    let onDuplicate = () => console.log('duplicate');
+    let onDuplicate = () => duplicate(chart._id);
     let onDelete = undefined;
 
     if (history && remove) {

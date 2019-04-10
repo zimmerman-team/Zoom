@@ -41,6 +41,7 @@ class DashboardMediator extends React.Component {
     };
 
     this.deleteChart = this.deleteChart.bind(this);
+    this.duplicateChart = this.duplicateChart.bind(this);
     this.onEnterPressed = this.onEnterPressed.bind(this);
     this.getAllUsers = this.getAllUsers.bind(this);
   }
@@ -72,7 +73,8 @@ class DashboardMediator extends React.Component {
           this.props.userCharts.data,
           this.props.user.authId,
           this.props.history,
-          this.deleteChart
+          this.deleteChart,
+          this.duplicateChart
         )
       });
 
@@ -87,6 +89,11 @@ class DashboardMediator extends React.Component {
           this.props.history
         )
       });
+
+    // so we want to reaload all charts when a chart is duplicated so it would
+    // show up in the dashboard
+    if (!isEqual(this.props.chartDuplicated, prevProps.chartDuplicated))
+      this.reloadData();
 
     // we re-load the users
     if (!isEqual(this.props.userDeleted, prevProps.userDeleted))
@@ -227,6 +234,15 @@ class DashboardMediator extends React.Component {
     );
   }
 
+  duplicateChart(chartId) {
+    this.props.dispatch(
+      actions.duplicateChartRequest({
+        authId: this.props.user.authId,
+        chartId
+      })
+    );
+  }
+
   render() {
     return (
       <DashboardModule
@@ -269,6 +285,7 @@ const mapStateToProps = state => {
   return {
     userDatasets: state.userDatasets,
     chartDeleted: state.userDeleted,
+    chartDuplicated: state.chartDuplicated,
     userDeleted: state.userDeleted,
     // yeah so actually these are the user and team charts
     userCharts: state.userCharts,

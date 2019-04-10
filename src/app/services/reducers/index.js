@@ -6,6 +6,7 @@ import { CREATE_DUPLICATE_CHART_INITIAL } from 'services/actions/nodeBackend';
 import { CREATE_DUPLICATE_CHART_REQUEST } from 'services/actions/nodeBackend';
 import { CREATE_DUPLICATE_CHART_SUCCESS } from 'services/actions/nodeBackend';
 import { CREATE_DUPLICATE_CHART_FAILED } from 'services/actions/nodeBackend';
+import { DUPLICATE_CHART_INITIAL } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -448,7 +449,23 @@ function dupChartCreated(state = initial, action) {
   }
 }
 
+function chartDuplicated(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.DUPLICATE_CHART_INITIAL:
+      return updateInitial(state);
+    case nodeActions.DUPLICATE_CHART_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.DUPLICATE_CHART_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.DUPLICATE_CHART_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  chartDuplicated,
   dupChartCreated,
   datasetUpdated,
   publicCharts,

@@ -46,7 +46,6 @@ const VizSidebar = props => {
       {props.loggedIn && (
         <TabNavigator
           code={props.code}
-          mediatorLoc={props.mediatorLoc}
           chart={props.chartType}
           navItems={props.data}
         />

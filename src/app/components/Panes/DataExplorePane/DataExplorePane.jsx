@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import IconRedIndicators from 'assets/icons/IconRedIndicators';
 import IconRedLocation from 'assets/icons/IconRedLocation';
 import IconRedPeriod from 'assets/icons/IconRedPeriod';
+import IconGraphStructure from 'assets/icons/data_explorer/IconGraphStructure';
 import ResetIcon from 'assets/icons/IconReset';
 
 /* styles */
@@ -19,6 +20,7 @@ import { Tooltip } from 'react-tippy';
 import ExpansionPanelContainer from './sort/ExpansionPanelContainer';
 import TimePeriodPanel from './panels/TimePeriodPanel/TimePeriodPanel';
 import DropdownMenuPanel from './panels/DropdownMenuPanel/DropdownMenuPanel';
+import GraphStructurePanel from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/GraphStructurePanel';
 
 const propTypes = {
   selectedInd2: PropTypes.string,
@@ -244,6 +246,14 @@ class DataExplorePane extends React.Component {
                 }
               ]}
             />
+          </ExpansionPanelContainer>
+
+          <ExpansionPanelContainer
+            icon={<IconGraphStructure />}
+            label="Graph structure"
+            data-cy="nav-pane-item-time-period"
+          >
+            <GraphStructurePanel />
           </ExpansionPanelContainer>
         </PanelAccordion>
         <ResetContainer

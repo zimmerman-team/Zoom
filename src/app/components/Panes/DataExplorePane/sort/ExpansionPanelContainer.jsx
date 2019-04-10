@@ -37,8 +37,6 @@ function ExpansionPanelContainer(props) {
         color: theme.color.aidsFondsRed
       };
 
-  console.log(headerStyle);
-
   return (
     <ComponentBase>
       <ExpansionPanel defaultExpanded onChange={() => setExpanded(!expanded)}>

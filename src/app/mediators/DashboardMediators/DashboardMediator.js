@@ -67,7 +67,8 @@ class DashboardMediator extends React.Component {
           this.props.userCharts.data,
           this.props.user.authId,
           this.props.history,
-          this.deleteChart
+          this.deleteChart,
+          this.duplicateChart
         )
       });
 
@@ -82,6 +83,11 @@ class DashboardMediator extends React.Component {
           this.props.history
         )
       });
+
+    // so we want to reaload all charts when a chart is duplicated so it would
+    // show up in the dashboard
+    if (!isEqual(this.props.chartDuplicated, prevProps.chartDuplicated))
+      this.reloadData();
 
     // we re-load the users
     if (!isEqual(this.props.userDeleted, prevProps.userDeleted))
@@ -153,6 +159,7 @@ class DashboardMediator extends React.Component {
       this.state.page,
       this.state.sort,
       this.state.searchKeyword,
+      this.state.users,
       this.editTeam,
       this.deleteTeam
     );
@@ -306,7 +313,24 @@ class DashboardMediator extends React.Component {
     );
   };
 
+  duplicateChart(chartId) {
+    this.props.dispatch(
+      actions.duplicateChartRequest({
+        authId: this.props.user.authId,
+        chartId
+      })
+    );
+  }
+
   render() {
+    const greetingName =
+      get(this.props.user, 'firstName', '') !== ''
+        ? `${get(this.props.user, 'firstName', '')} ${get(
+            this.props.user,
+            'lastName',
+            ''
+          )}`
+        : get(this.props.user, 'email', '');
     return (
       <DashboardModule
         loading={
@@ -335,9 +359,9 @@ class DashboardMediator extends React.Component {
           this.state.charts,
           this.state.datasets
         )}
-        greetingName={get(this.props.auth0Client.getProfile(), 'nickname', '')}
         totalPages={this.getViewPagesNumber()}
         changePage={this.changePage}
+        greetingName={greetingName}
       />
     );
   }
@@ -347,6 +371,7 @@ const mapStateToProps = state => {
   return {
     userDatasets: state.userDatasets,
     chartDeleted: state.userDeleted,
+    chartDuplicated: state.chartDuplicated,
     userDeleted: state.userDeleted,
     // yeah so actually these are the user and team charts
     userCharts: state.userCharts,

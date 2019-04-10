@@ -1,4 +1,5 @@
 import get from 'lodash/get';
+import find from 'lodash/find';
 import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
@@ -68,6 +69,7 @@ export function formatTeamsTabData(
   page,
   sort,
   search,
+  users,
   onEdit,
   onDelete
 ) {
@@ -80,7 +82,11 @@ export function formatTeamsTabData(
         id: d._id,
         title: get(d, 'name', ''),
         info: {
-          'Created by': get(values, '[1]', ''),
+          'Created by': get(
+            find(users, user => user.id === get(values, '[1]', '')),
+            'title',
+            ''
+          ),
           'Publication date': get(values, '[0]', ''),
           Organisations: ''
         },
@@ -114,7 +120,7 @@ export function formatTeamsTabData(
 }
 
 // formats chart data for the dashboard
-export function formatChartData(charts, userId, history, remove) {
+export function formatChartData(charts, userId, history, remove, duplicate) {
   // so basically when we have paginaton
   // the count will be returned as count and the
   // data will be in charts variable
@@ -138,7 +144,7 @@ export function formatChartData(charts, userId, history, remove) {
 
     let onEdit = undefined;
     let onView = undefined;
-    let onDuplicate = () => console.log('duplicate');
+    let onDuplicate = () => duplicate(chart._id);
     let onDelete = undefined;
 
     if (history && remove) {
@@ -157,7 +163,7 @@ export function formatChartData(charts, userId, history, remove) {
       id: chart._id,
       title: chart.name,
       info: {
-        Author: chart.author.username,
+        Author: `${chart.author.firstName} ${chart.author.lastName}`,
         'Publication date': chart.created.substring(
           0,
           chart.created.indexOf('T')

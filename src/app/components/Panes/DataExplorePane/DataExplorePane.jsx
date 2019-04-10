@@ -20,7 +20,7 @@ import { Tooltip } from 'react-tippy';
 import ExpansionPanelContainer from './sort/ExpansionPanelContainer';
 import TimePeriodPanel from './panels/TimePeriodPanel/TimePeriodPanel';
 import DropdownMenuPanel from './panels/DropdownMenuPanel/DropdownMenuPanel';
-import GraphStructurePanel from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/GraphStructurePanel';
+import GraphStructurePanel from './panels/GraphStructurePanel/GraphStructurePanel';
 
 const propTypes = {
   selectedInd2: PropTypes.string,

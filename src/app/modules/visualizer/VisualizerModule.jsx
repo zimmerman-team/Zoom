@@ -30,6 +30,7 @@ const propTypes = {
   dropDownData: PropTypes.shape({}),
   indicators: PropTypes.arrayOf(PropTypes.shape({})),
   dataPaneOpen: PropTypes.string,
+  auth0Client: PropTypes.shape({}),
   chartType: PropTypes.string,
   publicPage: PropTypes.bool,
   moduleMode: PropTypes.string
@@ -39,6 +40,7 @@ const defaultProps = {
   indicators: [],
   publicPage: false,
   dataPaneOpen: 'visualizer',
+  auth0Client: {},
   dropDownData: {},
   chartType: PropTypes.string,
   loggedIn: true
@@ -76,9 +78,11 @@ class BuilderModule extends Component {
           {this.props.loading && <ProgressIcon />}
           {!this.props.publicPage && (
             <VizSidebar
+              auth0Client={this.props.auth0Client}
               chartType={this.props.chartType}
               code={this.props.code}
               dropDownData={this.props.dropDownData}
+              outerHistory={this.props.outerHistory}
               display={this.props.dataPaneOpen === paneTypes.visualizer}
             />
           )}

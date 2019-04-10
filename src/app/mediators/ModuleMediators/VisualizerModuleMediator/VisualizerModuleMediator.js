@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
 import initialState from '__consts__/InitialChartDataConst';
 import paneTypes from '__consts__/PaneTypesConst';
 import chartTypes from '__consts__/ChartConst';
+import initialPaneState from '__consts__/InitialPaneDataConst';
 
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
@@ -66,6 +67,7 @@ const propTypes = {
   chartData: PropTypes.shape({}),
   user: PropTypes.shape({}),
   paneData: PropTypes.shape({}),
+  auth0Client: PropTypes.shape({}),
   publicPage: PropTypes.bool,
   dropDownData: PropTypes.shape({
     allIndicators: PropTypes.shape({
@@ -94,6 +96,7 @@ const defaultProps = {
   dropDownData: {},
   publicPage: false,
   chartResults: {},
+  auth0Client: {},
   chartData: {},
   user: {},
   paneData: {},
@@ -186,6 +189,7 @@ class VisualizerModuleMediator extends Component {
         dataSources,
         _public,
         team,
+        descIntro,
         data,
         created,
         yearRange
@@ -201,6 +205,7 @@ class VisualizerModuleMediator extends Component {
           team: team.length > 0,
           indicators: data,
           chartId: _id,
+          descIntro,
           selectedYear,
           // TODO this will need to be redone after we implement the logic for infinite amounts of indicators
           selectedInd1: indicatorItems[0].indicator,
@@ -265,18 +270,15 @@ class VisualizerModuleMediator extends Component {
 
     this.props.dispatch(
       actions.storePaneDataRequest({
-        allCountries: [],
-        allRegions: [],
-        chartType: '',
-        selectedSources: [],
-        yearRange: '1992,2018',
-        subIndicators1: [],
-        subIndicators2: []
+        ...initialPaneState
       })
     );
 
     // and we close the datapane
     this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
+
+    // We also reset the duplicate chart redux
+    this.props.dispatch(nodeActions.createDuplicateChartInitial());
   }
 
   updateIndicators() {
@@ -361,8 +363,8 @@ class VisualizerModuleMediator extends Component {
       indicator1: [ind1],
       indicator2: [ind2],
       countriesISO2,
-      singleInd1: ind1 ? ind1 : 'null',
-      singleInd2: ind2 ? ind2 : 'null',
+      singleInd1: ind1 || 'null',
+      singleInd2: ind2 || 'null',
       datePeriod: [selectedYear],
       subInd1: subInd1.length > 0 ? subInd1 : ['undefined'],
       subInd2: subInd2.length > 0 ? subInd2 : ['undefined']
@@ -392,6 +394,7 @@ class VisualizerModuleMediator extends Component {
         chartType={this.props.paneData.chartType}
         code={this.props.match.params.code}
         loading={this.state.loading}
+        auth0Client={this.props.auth0Client}
         selectYear={this.selectYear}
         selectedYear={this.props.chartData.selectedYear}
         indicators={this.props.chartData.indicators}
@@ -409,6 +412,7 @@ const mapStateToProps = state => {
     chartResults: state.chartResults.data,
     chartData: state.chartData.chartData,
     user: state.user.data,
+    dupChartCreated: state.dupChartCreated,
     paneData: state.paneData.paneData
   };
 };

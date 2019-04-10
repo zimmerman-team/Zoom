@@ -158,6 +158,23 @@ export function* getUserRequest(action) {
   }
 }
 
+export function* deleteUserRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'deleteUser',
+      values: { delId: action.values.userId }
+    });
+    yield put(nodeActions.deleteUserSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.deleteUserFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 export function* addUserRequest(action) {
   try {
     const response = yield call(api.nodeBackendPostRequest, {
@@ -328,8 +345,62 @@ export function* getPublicChartsRequest(action) {
   }
 }
 
+export function* updateDatasetRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'updateDataset',
+      values: action.values
+    });
+    yield put(nodeActions.updateDatasetSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.updateDatasetFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* createDuplicateChartRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'updateCreateChart',
+      values: action.values
+    });
+    yield put(nodeActions.createDuplicateChartSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.createDuplicateChartFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* duplicateChartRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'duplicateChart',
+      values: action.values
+    });
+    yield put(nodeActions.duplicateChartSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.duplicateChartFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('DUPLICATE_CHART_REQUEST', duplicateChartRequest),
+    takeLatest('CREATE_DUPLICATE_CHART_REQUEST', createDuplicateChartRequest),
+    takeLatest('UPDATE_DATASET_REQUEST', updateDatasetRequest),
     takeLatest('GET_PUBLIC_CHARTS_REQUEST', getPublicChartsRequest),
     takeLatest('GET_USER_DATASETS_REQUEST', getUserDatasetsRequest),
     takeLatest('DELETE_CHART_REQUEST', deleteChartRequest),
@@ -361,7 +432,8 @@ function* sagas() {
     takeLatest('FILE_SOURCE_REQUEST', fileSourceRequest),
     takeLatest('FILE_REQUEST', fileRequest),
     takeLatest('ACTIVITY_DATA_REQUEST', activityDataRequest),
-    takeLatest('COUNTRY_EXCERPT_REQUEST', countryExcerptRequest)
+    takeLatest('COUNTRY_EXCERPT_REQUEST', countryExcerptRequest),
+    takeLatest('DELETE_USER_REQUEST', deleteUserRequest)
   ];
 }
 

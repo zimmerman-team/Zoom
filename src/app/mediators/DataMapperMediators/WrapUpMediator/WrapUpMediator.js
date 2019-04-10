@@ -124,8 +124,8 @@ class WrapUpMediator extends React.Component {
     this.handleSourceCompleted = this.handleSourceCompleted.bind(this);
     this.handleSourceError = this.handleSourceError.bind(this);
     this.addDataSource = this.addDataSource.bind(this);
-    this.handleSurveyCompleted = this.handleMetaDataCompleted.bind(this);
-    this.handleSurveyError = this.handleMetaDataError.bind(this);
+    this.handleSurveyCompleted = this.handleSurveyCompleted.bind(this);
+    this.handleSurveyError = this.handleSurveyError.bind(this);
     this.addSurveyData = this.addSurveyData.bind(this);
     this.handleMetaDataCompleted = this.handleMetaDataCompleted.bind(this);
     this.handleMetaDataError = this.handleMetaDataError.bind(this);
@@ -152,8 +152,8 @@ class WrapUpMediator extends React.Component {
     }
   }
 
-  handleSourceCompleted(response) {
-    if (response) {
+  handleSourceCompleted(response, error) {
+    if (response)
       this.setState(
         {
           sourceId: response.fileSource.entryId,
@@ -161,7 +161,6 @@ class WrapUpMediator extends React.Component {
         },
         this.addMetaData
       );
-    }
   }
 
   handleSourceError(error) {
@@ -201,14 +200,13 @@ class WrapUpMediator extends React.Component {
 
   handleSurveyCompleted(response, error) {
     if (error) console.log('error adding survey data:', error);
-    if (response) {
+    if (response)
       this.setState(
         {
           surveyId: response.surveyData.id
         },
         this.afterSurvey
       );
-    }
   }
 
   afterSurvey() {
@@ -224,7 +222,7 @@ class WrapUpMediator extends React.Component {
   }
 
   addSurveyData() {
-    if (!this.props.wrapUpData && !this.props.wrapUpData.surveyId) {
+    if (!this.props.wrapUpData.surveyId) {
       const { metaData } = this.props;
 
       const selectRespondents = [];
@@ -238,7 +236,7 @@ class WrapUpMediator extends React.Component {
       metaData.q51.forEach(q => {
         // Cause currently we need to skip the other option
         // as the only accepted value is 'Other'
-        if (q.label !== 'Other') dataCleaningTechniques.push(q.value);
+        if (q.label !== 'Other') dataCleaningTechniques.push(q.value.trim());
       });
 
       const variables = {
@@ -251,7 +249,8 @@ class WrapUpMediator extends React.Component {
         askSensitive: metaData.q22,
         selectRespondents,
         other: 'Not needed field',
-        howManyRespondents: metaData.q4.value,
+        howManyRespondents:
+          metaData.q4.value.length > 0 ? metaData.q4.value : '0',
         editSheet: metaData.q5,
         dataCleaningTechniques
       };
@@ -263,19 +262,17 @@ class WrapUpMediator extends React.Component {
         this.handleSurveyCompleted,
         this.handleSurveyError
       );
-    } else {
-      this.setState({ surveyId: this.props.wrapUpData.surveyId }, () =>
-        this.addDataSource(this.props.metaData.dataSource.value)
+    } else
+      this.setState(
+        { surveyId: this.props.wrapUpData.surveyId },
+        this.afterSurvey
       );
-    }
   }
 
   handleMetaDataCompleted(response, error) {
     if (error) console.log('error uploading file:', error);
 
-    if (response) {
-      this.addMapping();
-    }
+    if (response) this.addMapping();
   }
 
   handleMetaDataError(error) {
@@ -326,6 +323,7 @@ class WrapUpMediator extends React.Component {
       // or we get more selections in the metadata step.
       // Location 2 is for the 'world' location
       location: '2',
+
       source: this.state.sourceId
         ? this.state.sourceId
         : this.props.metaData.dataSource.value,
@@ -370,7 +368,7 @@ class WrapUpMediator extends React.Component {
           name: this.props.metaData.title,
           dataSource:
             this.state.sourceName || this.props.metaData.dataSource.label,
-          team: 'none',
+          team: '',
           public: this.props.metaData.shared === 'Yes'
         })
       );

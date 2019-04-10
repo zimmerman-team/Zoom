@@ -12,96 +12,91 @@ export const data = [
     label: 'Home',
     path: `${pathPrefix}home`,
     icon: <IconHome />,
-    env: 'production'
+    env: 'production',
+    type: 'public'
   },
   {
     label: 'Home',
     path: `${pathPrefix}home`,
     icon: <IconHome />,
-    env: 'development'
+    env: 'development',
+    type: 'public'
   },
   {
     label: 'Country Detail',
     path: `${pathPrefix}country/ke`,
     icon: <IconCharts />,
-    env: 'development'
+    env: 'development',
+    type: 'private'
   },
   {
     label: 'IATI Detail',
     path: `${pathPrefix}iati`,
     icon: <IconCharts />,
-    env: 'development'
+    env: 'development',
+    atype: 'private'
   },
   {
     label: 'Datamapper',
     path: `${pathPrefix}mapper`,
     icon: <IconCharts />,
-    env: 'development'
+    env: 'development',
+    type: 'private'
   },
   {
     label: 'NL Focus',
     path: `${pathPrefix}focus/NL`,
     icon: <IconCharts />,
-    env: 'development'
+    env: 'development',
+    type: 'private'
   },
-  /*{
-    label: 'NL Focus',
-    path: `${pathPrefix}focus/NL`,
-    icon: <IconCharts />,
-    env: 'development'
-  },
-  {
-    label: 'KEN Focus',
-    path: `${pathPrefix}focus/KE`,
-    icon: <IconCharts />,
-    env: 'development'
-  },*/
   {
     label: 'Visualizer',
     path: `${pathPrefix}visualizer/geomap/vizID/edit`,
     icon: <IconCharts />,
-    env: 'development'
+    env: 'development',
+    type: 'private'
   },
   {
     label: 'Public Charts',
     path: `${pathPrefix}public/chart-library`,
     icon: <IconCharts />,
-    env: 'production'
+    env: 'production',
+    type: 'public'
   },
   {
     label: 'Public Charts',
     path: `${pathPrefix}public/chart-library`,
     icon: <IconCharts />,
-    env: 'development'
+    env: 'development',
+    type: 'public'
   },
   {
     label: 'Dashboard',
     path: `${pathPrefix}dashboard`,
     icon: <IconCharts />,
-    env: 'development'
+    env: 'development',
+    type: 'private'
   },
   {
     label: 'Dashboard',
     path: `${pathPrefix}dashboard`,
     icon: <IconCharts />,
-    env: 'production'
-  },
-  {
-    label: 'Dashboard users ',
-    path: `${pathPrefix}dashboard/users`,
-    icon: <IconCharts />,
-    env: 'development'
+    env: 'production',
+    type: 'private'
   },
   {
     label: 'About ZOOM',
     path: `${pathPrefix}about`,
     icon: <IconAbout />,
-    env: 'production'
+    env: 'production',
+    type: 'public'
   },
   {
     label: 'About ZOOM',
     path: `${pathPrefix}about`,
     icon: <IconAbout />,
-    env: 'development'
+    env: 'development',
+    type: 'public'
   }
 ];

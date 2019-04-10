@@ -19,28 +19,24 @@ import EditableTitle from 'components/chartcontext/common/EditableTitle';
 
 const ComponentBase = styled.div`
   width: 1024px;
-  height: 798px;
+  height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: white;
-`;
-
-/*todo: create re-usable Box component*/
-const Box = styled.div`
-  display: flex;
+  box-shadow: 0 5px 7px rgba(0, 0, 0, 0.5);
 `;
 
 const ContextBody = styled.section`
   width: 650px;
 `;
-const ContextFooter = styled.section``;
 
 const propTypes = {
-  author: PropTypes.string,
   authorName: PropTypes.string
 };
-const defaultProps = {};
+const defaultProps = {
+  authorName: 'empty'
+};
 
 class ContextEditor extends React.Component {
   shouldComponentUpdate() {

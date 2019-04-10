@@ -22,15 +22,12 @@ const ComponentBase = styled.div`
   justify-items: center;
   justify-content: center;
   width: 100%;
-  background-color: #96dbfa;
   height: ${props => props.height};
+  flex-shrink: 0;
 `;
 
 const propTypes = {};
 const defaultProps = {};
-
-const boundsNL = [[0.2252, 50.2378], [10.756, 54.2068]];
-const boundsKE = [[26.82, -7.15], [50.89, 7.57]];
 
 class GeomapFragment extends React.Component {
   state = {

@@ -1,6 +1,6 @@
 import axios from 'axios';
+import get from 'lodash/get';
 import auth0 from 'auth0-js';
-import postmark from 'postmark';
 import { nodeBackendGetRequest } from 'services/index';
 
 class Auth {
@@ -11,7 +11,8 @@ class Auth {
       clientID: process.env.REACT_APP_CLIENT_ID,
       redirectUri: `${process.env.REACT_APP_PROJECT_URL}/callback`,
       responseType: 'token id_token',
-      scope: 'openid profile'
+      scope:
+        'openid profile email user_metadata read:current_user update:current_user_metadata read:users_app_metadata update:users_app_metadata'
     });
 
     this.addUser = this.addUser.bind(this);
@@ -217,7 +218,7 @@ class Auth {
             .get(
               `${
                 process.env.REACT_APP_AUTH_DOMAIN
-              }/api/v2/users?include_totals=true&per_page=10&page=${page}&sort=${sort}&q=identities.connection:"Username-Password-Authentication"${search}&search_engine=v3`,
+              }/api/v2/users?include_totals=true&sort=${sort}&q=identities.connection:"Username-Password-Authentication"${search}&search_engine=v3`,
               {
                 headers: {
                   Authorization: `${response.data.token_type} ${
@@ -404,6 +405,56 @@ class Auth {
       });
   }
 
+  getUser(id, parent) {
+    axios
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
+        grant_type: 'client_credentials'
+      })
+      .then(res1 => {
+        axios
+          .get(`${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/users/${id}`, {
+            headers: {
+              Authorization: `${res1.data.token_type} ${res1.data.access_token}`
+            }
+          })
+          .then(res2 => {
+            if (res2.status === 200) {
+              parent.setState({
+                email: res2.data.email,
+                firstName: get(res2.data, 'user_metadata.firstName', ''),
+                lastName: get(res2.data, 'user_metadata.lastName', ''),
+                initialData: {
+                  email: res2.data.email,
+                  firstName: get(res2.data, 'user_metadata.firstName', ''),
+                  lastName: get(res2.data, 'user_metadata.lastName', '')
+                }
+              });
+            } else {
+              parent.setState({
+                success: false,
+                errorMessage: res2.data.statusText
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            parent.setState({
+              success: false,
+              errorMessage: error.response.data.message
+            });
+          });
+      })
+      .catch(error => {
+        parent.setState({
+          success: false,
+          errorMessage: error.response.data.message
+        });
+      });
+  }
+
   addUser(name, surname, email, group_id, role_id, parent) {
     const _this = this;
     axios
@@ -427,7 +478,11 @@ class Auth {
               family_name: surname,
               name: `${name} ${surname}`,
               nickname: name,
-              connection: 'Username-Password-Authentication'
+              connection: 'Username-Password-Authentication',
+              user_metadata: {
+                firstName: name,
+                lastName: surname
+              }
             },
             {
               headers: {
@@ -451,6 +506,109 @@ class Auth {
               });
               this.addUserToGroup(res2.data.user_id, group_id, parent);
               this.assignRoleToUser(res2.data.user_id, role_id, parent);
+            } else {
+              parent.setState({
+                success: false,
+                errorMessage: res2.data.statusText
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            parent.setState({
+              success: false,
+              errorMessage: error.response.data.message
+            });
+          });
+      })
+      .catch(error => {
+        parent.setState({
+          success: false,
+          errorMessage: error.response.data.message
+        });
+      });
+  }
+
+  deleteUser(id, parent, reduxNodeAction) {
+    axios
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
+        grant_type: 'client_credentials'
+      })
+      .then(res1 => {
+        axios
+          .delete(`${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/users/${id}`, {
+            headers: {
+              Authorization: `${res1.data.token_type} ${res1.data.access_token}`
+            }
+          })
+          .then(res2 => {
+            if (res2.status === 204) {
+              reduxNodeAction();
+              parent.setState({
+                success: true,
+                errorMessage: null
+              });
+            } else {
+              parent.setState({
+                success: false,
+                errorMessage: res2.data.statusText
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            parent.setState({
+              success: false,
+              errorMessage: error.response.data.message
+            });
+          });
+      })
+      .catch(error => {
+        parent.setState({
+          success: false,
+          errorMessage: error.response.data.message
+        });
+      });
+  }
+
+  editUser(id, name, surname, email, parent, reduxNodeAction) {
+    axios
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
+        grant_type: 'client_credentials'
+      })
+      .then(res1 => {
+        axios
+          .patch(
+            `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/users/${id}`,
+            {
+              email,
+              user_metadata: {
+                firstName: name,
+                lastName: surname
+              },
+              connection: 'Username-Password-Authentication'
+            },
+            {
+              headers: {
+                Authorization: `${res1.data.token_type} ${
+                  res1.data.access_token
+                }`
+              }
+            }
+          )
+          .then(res2 => {
+            if (res2.status === 200) {
+              reduxNodeAction();
+              parent.setState({
+                success: true,
+                errorMessage: null
+              });
             } else {
               parent.setState({
                 success: false,
@@ -514,7 +672,7 @@ class Auth {
       let mm =
         today.getMonth() + 1 < 10
           ? `0${today.getMonth() + 1}`
-          : today.getMonth() + 1; //January is 0
+          : today.getMonth() + 1; // January is 0
       let yyyy = today.getFullYear();
       today = `${dd}/${mm}/${yyyy}`;
       axios
@@ -528,7 +686,7 @@ class Auth {
           axios
             .post(
               `${process.env.REACT_APP_AE_API_URL}/groups`,
-              { name, description: `${today},${this.profile.name}` },
+              { name, description: `${today},${this.profile.sub}` },
               {
                 headers: {
                   Authorization: `${res1.data.token_type} ${

@@ -1,44 +1,12 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import ReactQuill from 'react-quill'; // ES6
-import 'react-quill/dist/quill.snow.css'; // ES
-import theme from 'theme/Theme';
+import ZimmermanQuill from 'components/ZimmermanQuill/ZimmermanQuil';
 
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
  */
-
-const ZoomQuill = styled(props => <ReactQuill {...props} />)`
-  && {
-    .ql-toolbar {
-      border-top-color: black;
-      border-top-width: 2px;
-      border-right: initial;
-      border-left: initial;
-    }
-    .ql-container {
-      border: initial;
-      border-bottom: initial !important;
-    }
-
-    .ql-editor {
-      &:before {
-        color: ${theme.color.zoomGreyOne};
-        font-family: ${theme.font.zoomFontFamOne};
-        font-size: 14px;
-        font-style: normal;
-      }
-      p {
-        font-family: ${theme.font.zoomFontFamTwo};
-        font-size: 14px;
-        color: ${theme.color.zoomGreyOne};
-      }
-    }
-  }
-`;
 
 const propTypes = {
   saveDesc: PropTypes.func,
@@ -48,39 +16,24 @@ const propTypes = {
 const defaultProps = {
   saveDesc: undefined,
   defaultVal: '',
-  data: [],
   placeholder: '[ Insert body text here ]'
 };
 
 class TextEditor extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editorHtml: props.defaultVal ? props.defaultVal : '',
-      theme: 'snow'
-    };
-    this.handleChange = this.handleChange.bind(this);
-  }
+  state = {
+    editorHtml: this.props.defaultVal ? this.props.defaultVal : ''
+  };
 
-  handleChange(html) {
+  handleChange = html => {
     this.props.saveDesc(html);
     this.setState({ editorHtml: html });
-  }
-
-  handleThemeChange(newTheme) {
-    if (newTheme === 'core') newTheme = null;
-    this.setState({ theme: newTheme });
-  }
+  };
 
   render() {
     return (
-      <ZoomQuill
-        theme={this.state.theme}
+      <ZimmermanQuill
         onChange={this.handleChange}
         value={this.state.editorHtml}
-        modules={TextEditor.modules}
-        formats={TextEditor.formats}
-        bounds=".app"
         placeholder={this.props.placeholder}
       />
     );
@@ -89,44 +42,5 @@ class TextEditor extends React.Component {
 
 TextEditor.propTypes = propTypes;
 TextEditor.defaultProps = defaultProps;
-TextEditor.formats = [
-  'header',
-  'font',
-  'size',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'indent',
-  'link',
-  'align',
-  'background',
-  'color'
-];
-
-TextEditor.modules = {
-  toolbar: [
-    // [{ header: '1' }, { header: '2' }, { font: [] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ align: [] }],
-    [{ size: [] }],
-    [{ color: [] }, { background: [] }],
-    [
-      { list: 'ordered' },
-      { list: 'bullet' },
-      { indent: '-1' },
-      { indent: '+1' }
-    ],
-    ['link'],
-    ['clean']
-  ],
-  clipboard: {
-    // toggle to add extra line breaks when pasting HTML:
-    matchVisual: false
-  }
-};
 
 export default TextEditor;

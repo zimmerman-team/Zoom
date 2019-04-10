@@ -4,14 +4,12 @@ import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 import { Route, withRouter } from 'react-router';
 
-import ContextPreview from 'components/chartcontext/ContextPreview/ContextPreview';
+import ContextPreview from 'components/ContextPreview/ContextPreview';
 import BarchartFragment from 'modules/visualizer/sort/container/fragments/BarchartFragment';
 import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFragment';
 
 import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment';
-import { PreviewTextContainer, ComponentBase, Box } from './VizContainer.style';
-import CustomYearSelector from 'components/GeoMap/GeoMap';
-import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
+import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
 
 /**
  * todo: Please write a short component description of what this component does

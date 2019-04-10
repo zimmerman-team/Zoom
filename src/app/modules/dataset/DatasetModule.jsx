@@ -51,7 +51,11 @@ class DatasetModule extends React.Component {
         </ModuleSection>
 
         <ModuleContent>
-          <MetaDataMediator alwaysSave dropDownData={this.props.dropDownData} />
+          <MetaDataMediator
+            dataSetEdit
+            alwaysSave
+            dropDownData={this.props.dropDownData}
+          />
         </ModuleContent>
 
         <ModuleSection>

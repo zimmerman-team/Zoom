@@ -1,4 +1,5 @@
 import get from 'lodash/get';
+import find from 'lodash/find';
 import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
@@ -29,7 +30,7 @@ export function formatUsersTabData(data, onEdit, onDelete) {
   });
 }
 
-export function formatTeamsTabData(data, sort, search) {
+export function formatTeamsTabData(data, sort, search, users) {
   const queriedData =
     search !== '' ? filter(data, d => d.name.indexOf(search) > -1) : data;
   const sortedData =
@@ -42,7 +43,11 @@ export function formatTeamsTabData(data, sort, search) {
       id: d._id,
       title: get(d, 'name', ''),
       info: {
-        'Created by': get(values, '[1]', ''),
+        'Created by': get(
+          find(users, user => user.id === get(values, '[1]', '')),
+          'title',
+          ''
+        ),
         'Publication date': get(values, '[0]', ''),
         Organisations: ''
       },
@@ -98,7 +103,7 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
       id: chart._id,
       title: chart.name,
       info: {
-        Author: chart.author.username,
+        Author: `${chart.author.firstName} ${chart.author.lastName}`,
         'Publication date': chart.created.substring(
           0,
           chart.created.indexOf('T')

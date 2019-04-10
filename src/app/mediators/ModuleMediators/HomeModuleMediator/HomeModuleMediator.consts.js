@@ -1,6 +1,9 @@
 export const initialState = {
   indicators: [],
-  selectedInd1: undefined,
+  selectedInd1:
+    process.env.NODE_ENV === 'development'
+      ? 'aids related deaths (unaids)'
+      : undefined,
   selectedInd2: undefined,
   subIndicators1: [],
   subIndicators2: [],

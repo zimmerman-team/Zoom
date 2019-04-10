@@ -227,16 +227,12 @@ class WrapUpMediator extends React.Component {
 
       const selectRespondents = [];
       metaData.q3.forEach(q => {
-        // Cause currently we need to skip the other option
-        // as the only accepted value is 'Other'
-        if (q.label !== 'Other') selectRespondents.push(q.value);
+        selectRespondents.push(q.value);
       });
 
       const dataCleaningTechniques = [];
       metaData.q51.forEach(q => {
-        // Cause currently we need to skip the other option
-        // as the only accepted value is 'Other'
-        if (q.label !== 'Other') dataCleaningTechniques.push(q.value.trim());
+        dataCleaningTechniques.push(q.value.trim());
       });
 
       const variables = {
@@ -248,12 +244,19 @@ class WrapUpMediator extends React.Component {
         staffTrained: metaData.q21,
         askSensitive: metaData.q22,
         selectRespondents,
-        other: 'Not needed field',
         howManyRespondents:
           metaData.q4.value.length > 0 ? metaData.q4.value : '0',
         editSheet: metaData.q5,
         dataCleaningTechniques
       };
+
+      // so if other choice has been selected, we add in the
+      // text value in other
+      if (dataCleaningTechniques.indexOf('0') !== -1)
+        variables.otherCleaningTechnique = metaData.q51Text;
+
+      if (selectRespondents.indexOf('0') !== -1)
+        variables.otherRespondent = metaData.q3Text;
 
       // and here we upload all the metadata for the file
       SurveyMutation.commit(

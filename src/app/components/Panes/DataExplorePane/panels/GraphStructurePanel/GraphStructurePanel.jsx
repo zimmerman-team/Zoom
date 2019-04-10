@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 import ZoomSelect from 'components/Select/ZoomSelect';
+import SimpleSelect from 'components/SimpleSelect/SimpleSelect';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -24,7 +25,7 @@ const FilterContainer = styled.div`
   justify-content: space-between;
   //outline: 1px solid green;
   width: 100%;
-  height: 40px;
+  min-height: 40px;
   margin-bottom: 10px;
 `;
 
@@ -62,7 +63,7 @@ const GraphStructurePanel = props => {
       {/* SECOND ROW /////////////////////////////////////////////////////// */}
       <FilterContainer>
         {/* X-AXIS */}
-        <DropdownFilter />
+        <SimpleSelect />
       </FilterContainer>
 
       {/* THIRD ROW //////////////////////////////////////////////////////// */}

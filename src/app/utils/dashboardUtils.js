@@ -25,7 +25,7 @@ export function formatTeamsTabData(data, sort, search) {
   const queriedData =
     search !== '' ? filter(data, d => d.name.indexOf(search) > -1) : data;
   const sortedData =
-    sort[0] === '-'
+    sort === 'name:-1'
       ? sortBy(queriedData, [sort]).reverse()
       : sortBy(queriedData, [sort]);
   return sortedData.map(d => {
@@ -47,8 +47,14 @@ export function formatTeamsTabData(data, sort, search) {
 }
 
 // formats chart data for the dashboard
-export function formatChartData(charts, history, remove) {
-  return charts.map(chart => {
+export function formatChartData(charts, userId, history, remove) {
+  // so basically when we have paginaton
+  // the count will be returned as count and the
+  // data will be in charts variable
+  // otherwise the charts will just be an array
+  const chartz = charts.charts ? charts.charts : charts;
+
+  return chartz.map(chart => {
     let shared = '';
     if (chart.team.length > 0) shared = shared.concat(chart.team);
     if (chart._public)
@@ -62,6 +68,23 @@ export function formatChartData(charts, history, remove) {
       if (index) dataSources = dataSources.concat(', ').concat(source);
       else dataSources = source;
     });
+
+    let onEdit = undefined;
+    let onView = undefined;
+    let onDuplicate = () => console.log('duplicate');
+    let onDelete = undefined;
+
+    if (history && remove) {
+      onView = () => history.push(`/public/${chart.type}/${chart._id}/preview`);
+
+      if (chart.author.authId === userId && remove) {
+        onEdit = () =>
+          history.push(`/visualizer/${chart.type}/${chart._id}/edit`);
+        onView = () =>
+          history.push(`/visualizer/${chart.type}/${chart._id}/preview`);
+        onDelete = () => remove(chart._id);
+      }
+    }
 
     return {
       id: chart._id,
@@ -80,11 +103,11 @@ export function formatChartData(charts, history, remove) {
         'Type of chart': chart.type,
         'Data sources': dataSources
       },
-      onEdit: () => history.push(`/visualizer/${chart.type}/${chart._id}/edit`),
-      onView: () =>
-        history.push(`/visualizer/${chart.type}/${chart._id}/preview`),
-      onDuplicate: () => console.log('duplicate'),
-      onDelete: () => remove(chart._id)
+      chartType: chart.type,
+      onEdit,
+      onView,
+      onDuplicate,
+      onDelete
     };
   });
 }

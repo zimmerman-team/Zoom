@@ -28,13 +28,21 @@ const Details = styled.span`
   font-family: ${theme.font.zoomFontFamTwo};
 `;
 
+const ContextIntro = styled.div`
+  max-width: 550px;
+  //max-height: 70px;
+  //overflow: hidden;
+  margin: 0;
+`;
+
 const ContextBody = styled.div`
   max-width: 550px;
   margin: 0;
 `;
 
 const propTypes = {
-  desc: PropTypes.string
+  desc: PropTypes.string,
+  show: PropTypes.string
 };
 const defaultProps = {
   desc: ''
@@ -43,15 +51,26 @@ const defaultProps = {
 const ContextPreview = props => {
   return (
     <ComponentBase>
-      <ContextHeader
-        title={props.title}
-        authorName={props.authorName}
-        createdDate={props.createdDate}
-        noBottom
-      />
-      <ContextBody>
-        <div className="ql-editor">{ReactHtmlParser(props.desc)}</div>
-      </ContextBody>
+      {props.show === 'descIntro' && (
+        <ContextHeader
+          title={props.title}
+          authorName={props.authorName}
+          createdDate={props.createdDate}
+          noBottom
+        />
+      )}
+      {props.show === 'descIntro' && (
+        <ContextIntro>
+          <div className="ql-editor">{ReactHtmlParser(props.descIntro)}</div>
+        </ContextIntro>
+      )}
+      {props.show === 'descBody' && (
+        <ContextBody>
+          <div className="ql-editor" data-cy="context-preview-body">
+            {ReactHtmlParser(props.desc)}
+          </div>
+        </ContextBody>
+      )}
     </ComponentBase>
   );
 };

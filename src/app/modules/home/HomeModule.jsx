@@ -87,9 +87,7 @@ export class HomeModule extends Component {
             <ExplorePanelMediator display={explorePaneVis} {...otherProps} />
             {(this.props.dataPaneOpen === paneTypes.privPane ||
               this.props.dataPaneOpen === paneTypes.createChart ||
-              this.props.dataPaneOpen === paneTypes.convertData) && (
-              <NavPane {...otherProps} />
-            )}
+              this.props.dataPaneOpen === paneTypes.convertData) && <NavPane />}
           </DataPaneContainer>
         </ModuleContainer>
       </React.Fragment>

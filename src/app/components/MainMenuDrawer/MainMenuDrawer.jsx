@@ -79,28 +79,7 @@ class MainMenuDrawer extends React.Component {
               </ListItemIcon>
               <ZoomListItemText primary="Close" />
             </SidebarClosButton>
-            <SidebarNavList>
-              {sideList}
-              {this.props.auth0Client &&
-                (this.props.auth0Client.isAuthenticated() &&
-                  this.props.auth0Client.isAdministrator() && (
-                    /*todo: this is duplicate code and should actually be covered in the consts*/
-                    <ZoomLink to="/dashboard">
-                      <SidebarNavListItem
-                        label="Dashboard"
-                        onClick={this.props.toggleSideBar}
-                        icon={<IconCharts />}
-                        button
-                        data-cy="sidebar-dashboard"
-                      >
-                        <ListItemIcon>
-                          <IconClose />
-                        </ListItemIcon>
-                        <ZoomListItemText primary="Close" />
-                      </SidebarNavListItem>
-                    </ZoomLink>
-                  ))}
-            </SidebarNavList>
+            <SidebarNavList>{sideList}</SidebarNavList>
           </div>
 
           <LoginBox>

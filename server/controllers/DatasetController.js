@@ -21,7 +21,7 @@ const DatasetApi = {
 
   // gets all datasets of the owner
   getOwnerDatasets: (req, res) => {
-    const { authId, sortBy } = req.query;
+    const { authId, sortBy, searchTitle } = req.query;
 
     User.findOne({ authId }, (error, author) => {
       if (error) general.handleError(res, error);
@@ -29,7 +29,7 @@ const DatasetApi = {
       else {
         const sort = utils.getDashboardSortBy(sortBy);
 
-        Dataset.find({ author })
+        Dataset.find({ author, name: { $regex: searchTitle, $options: 'i' } })
           .collation({ locale: 'en' })
           .sort(sort)
           .exec((setError, dataset) => {

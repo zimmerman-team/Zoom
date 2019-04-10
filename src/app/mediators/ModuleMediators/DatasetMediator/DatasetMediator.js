@@ -35,9 +35,11 @@ const surveyQuery = graphql`
           staffTrained
           askSensitive
           selectRespondents
+          otherRespondent
           howManyRespondents
           editSheet
           dataCleaningTechniques
+          otherCleaningTechnique
         }
       }
     }
@@ -65,9 +67,9 @@ const propTypes = {
 
 const defaultProps = {
   datasetUpdated: {},
-  stepMetaData: step1InitialData.metaData,
+  stepMetaData: { ...step1InitialData.metaData },
   stepData: {
-    metaData: step1InitialData.metaData
+    metaData: { ...step1InitialData.metaData }
   },
   dropDownData: {}
 };
@@ -176,10 +178,10 @@ class DatasetMediator extends React.Component {
               q5: actualSurveyData.editSheet,
               q51,
               // will be adjusted later on
-              q3Text: '',
+              q3Text: actualSurveyData.otherRespondent,
               q4Text: respondents ? '' : actualSurveyData.howManyRespondents,
               // will be adjusted later on
-              q51Text: ''
+              q51Text: actualSurveyData.otherCleaningTechnique
             };
 
             metaStepData = {
@@ -217,7 +219,6 @@ class DatasetMediator extends React.Component {
     if (
       !this.state.loadComponent &&
       !isEqual(this.props.stepData, prevProps.stepData) &&
-      prevProps.stepData.metaData &&
       this.props.stepData.metaData.title.length > 0
     )
       this.setState({ loadComponent: true });
@@ -228,9 +229,9 @@ class DatasetMediator extends React.Component {
       this.props.history.push('/dashboard/data-sets');
   }
 
-  componentWillMount() {
+  componentWillUnmount() {
     // and we reset the values in the reducer
-    this.saveStepData(step1InitialData.metaData);
+    this.props.dispatch(actions.saveStepDataInitial());
   }
 
   saveStepData(metaData) {
@@ -312,16 +313,12 @@ class DatasetMediator extends React.Component {
 
     const selectRespondents = [];
     metaData.q3.forEach(q => {
-      // Cause currently we need to skip the other option
-      // as the only accepted value is 'Other'
-      if (q.label !== 'Other') selectRespondents.push(q.value);
+      selectRespondents.push(q.value);
     });
 
     const dataCleaningTechniques = [];
     metaData.q51.forEach(q => {
-      // Cause currently we need to skip the other option
-      // as the only accepted value is 'Other'
-      if (q.label !== 'Other') dataCleaningTechniques.push(q.value.trim());
+      dataCleaningTechniques.push(q.value.trim());
     });
 
     const variables = {
@@ -334,11 +331,14 @@ class DatasetMediator extends React.Component {
       staffTrained: metaData.q21,
       askSensitive: metaData.q22,
       selectRespondents,
-      other: 'Not needed field',
+      otherRespondent:
+        selectRespondents.indexOf('0') !== -1 ? metaData.q3Text : '',
       howManyRespondents:
         metaData.q4.value.length > 0 ? metaData.q4.value : '0',
       editSheet: metaData.q5,
-      dataCleaningTechniques
+      dataCleaningTechniques,
+      otherCleaningTechnique:
+        dataCleaningTechniques.indexOf('0') !== -1 ? metaData.q51Text : ''
     };
 
     // and here we upload all the metadata for the file

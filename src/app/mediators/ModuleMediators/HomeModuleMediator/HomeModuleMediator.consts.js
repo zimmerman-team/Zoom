@@ -8,7 +8,9 @@ export const initialState = {
   subIndicators1: [],
   subIndicators2: [],
   selectedCountryVal: [],
+  selectedCountryLabel: [],
   selectedSubInd1: [],
   selectedSubInd2: [],
-  selectedRegionVal: []
+  selectedRegionVal: [],
+  selectedRegionLabels: []
 };

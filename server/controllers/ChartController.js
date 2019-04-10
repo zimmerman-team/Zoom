@@ -219,7 +219,7 @@ const ChartController = {
         )
           .collation({ locale: 'en' })
           .sort(sort)
-          .populate('author', 'username authId')
+          .populate('author', 'username authId firstName lastName')
           .exec((chartError, chart) => {
             if (chartError) general.handleError(res, chartError);
             res.json(chart);

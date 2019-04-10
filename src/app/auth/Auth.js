@@ -672,7 +672,7 @@ class Auth {
       let mm =
         today.getMonth() + 1 < 10
           ? `0${today.getMonth() + 1}`
-          : today.getMonth() + 1; //January is 0
+          : today.getMonth() + 1; // January is 0
       let yyyy = today.getFullYear();
       today = `${dd}/${mm}/${yyyy}`;
       axios
@@ -686,7 +686,7 @@ class Auth {
           axios
             .post(
               `${process.env.REACT_APP_AE_API_URL}/groups`,
-              { name, description: `${today},${this.profile.name}` },
+              { name, description: `${today},${this.profile.sub}` },
               {
                 headers: {
                   Authorization: `${res1.data.token_type} ${

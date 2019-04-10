@@ -446,3 +446,67 @@ export function updateDatasetFailed(error) {
     error
   };
 }
+
+export const CREATE_DUPLICATE_CHART_INITIAL = 'CREATE_DUPLICATE_CHART_INITIAL';
+export const CREATE_DUPLICATE_CHART_REQUEST = 'CREATE_DUPLICATE_CHART_REQUEST';
+export const CREATE_DUPLICATE_CHART_SUCCESS = 'CREATE_DUPLICATE_CHART_SUCCESS';
+export const CREATE_DUPLICATE_CHART_FAILED = 'CREATE_DUPLICATE_CHART_FAILED';
+
+export function createDuplicateChartInitial() {
+  return {
+    type: CREATE_DUPLICATE_CHART_INITIAL
+  };
+}
+
+export function createDuplicateChartRequest(values) {
+  return {
+    type: CREATE_DUPLICATE_CHART_REQUEST,
+    values
+  };
+}
+
+export function createDuplicateChartSuccess(data) {
+  return {
+    type: CREATE_DUPLICATE_CHART_SUCCESS,
+    data
+  };
+}
+
+export function createDuplicateChartFailed(error) {
+  return {
+    type: CREATE_DUPLICATE_CHART_FAILED,
+    error
+  };
+}
+
+export const DUPLICATE_CHART_INITIAL = 'DUPLICATE_CHART_INITIAL';
+export const DUPLICATE_CHART_REQUEST = 'DUPLICATE_CHART_REQUEST';
+export const DUPLICATE_CHART_SUCCESS = 'DUPLICATE_CHART_SUCCESS';
+export const DUPLICATE_CHART_FAILED = 'DUPLICATE_CHART_FAILED';
+
+export function duplicateChartInitial() {
+  return {
+    type: DUPLICATE_CHART_INITIAL
+  };
+}
+
+export function duplicateChartRequest(values) {
+  return {
+    type: DUPLICATE_CHART_REQUEST,
+    values
+  };
+}
+
+export function duplicateChartSuccess(data) {
+  return {
+    type: DUPLICATE_CHART_SUCCESS,
+    data
+  };
+}
+
+export function duplicateChartFailed(error) {
+  return {
+    type: DUPLICATE_CHART_FAILED,
+    error
+  };
+}

@@ -46,9 +46,17 @@ const ClickText = styled.span`
 `;
 
 const propTypes = {
-  handleClick: PropTypes.func
+  duplName: PropTypes.string,
+  duplID: PropTypes.string,
+  handleSaveEdit: PropTypes.func,
+  handleDuplicate: PropTypes.func
 };
-const defaultProps = {};
+const defaultProps = {
+  duplName: undefined,
+  duplID: undefined,
+  handleSaveEdit: null,
+  handleDuplicate: null
+};
 
 const DuplicatorTab = props => {
   return (
@@ -60,20 +68,25 @@ const DuplicatorTab = props => {
           label="Duplicate chart to dashboard"
           fontSize={14}
           width={225}
-          onClick={props.handleClick}
+          onClick={() => props.handleDuplicate()}
         />
       </Box>
 
       {/* todo: also create failure message */}
-      <Box>
-        <InformationText>
-          Succesfully duplicated Untttled chart 01 copy to your dashboard!
-        </InformationText>
-        <ClickText>Click here to edit this chart</ClickText>
-        <InformationText>
-          The current chart will be autosaved to your dashboard.
-        </InformationText>
-      </Box>
+
+      {props.duplName && props.duplID && (
+        <Box>
+          <InformationText>
+            Succesfully duplicated {props.duplName} copy to your dashboard!
+          </InformationText>
+          <ClickText onClick={() => props.handleSaveEdit()}>
+            Click here to edit this chart
+          </ClickText>
+          <InformationText>
+            The current chart will be autosaved to your dashboard.
+          </InformationText>
+        </Box>
+      )}
     </BaseTab>
   );
 };

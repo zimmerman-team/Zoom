@@ -25,6 +25,7 @@ export const DropDownLabel = styled.div`
 
 export const ComponentBase = styled.div`
   display: flex;
+  min-height: 41px;
   & button {
     border-style: none !important;
   }

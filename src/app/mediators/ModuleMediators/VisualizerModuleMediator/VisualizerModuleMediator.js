@@ -276,6 +276,9 @@ class VisualizerModuleMediator extends Component {
 
     // and we close the datapane
     this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
+
+    // We also reset the duplicate chart redux
+    this.props.dispatch(nodeActions.createDuplicateChartInitial());
   }
 
   updateIndicators() {

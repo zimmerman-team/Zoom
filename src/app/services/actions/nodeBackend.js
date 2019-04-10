@@ -478,3 +478,35 @@ export function createDuplicateChartFailed(error) {
     error
   };
 }
+
+export const DUPLICATE_CHART_INITIAL = 'DUPLICATE_CHART_INITIAL';
+export const DUPLICATE_CHART_REQUEST = 'DUPLICATE_CHART_REQUEST';
+export const DUPLICATE_CHART_SUCCESS = 'DUPLICATE_CHART_SUCCESS';
+export const DUPLICATE_CHART_FAILED = 'DUPLICATE_CHART_FAILED';
+
+export function duplicateChartInitial() {
+  return {
+    type: DUPLICATE_CHART_INITIAL
+  };
+}
+
+export function duplicateChartRequest(values) {
+  return {
+    type: DUPLICATE_CHART_REQUEST,
+    values
+  };
+}
+
+export function duplicateChartSuccess(data) {
+  return {
+    type: DUPLICATE_CHART_SUCCESS,
+    data
+  };
+}
+
+export function duplicateChartFailed(error) {
+  return {
+    type: DUPLICATE_CHART_FAILED,
+    error
+  };
+}

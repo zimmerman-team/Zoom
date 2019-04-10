@@ -31,6 +31,8 @@ router.get('/getTeamFeedCharts', ChartController.getTeamFeedCharts);
 
 router.post('/updateCreateChart', ChartController.updateCreate);
 
+router.post('/duplicateChart', ChartController.duplicateById);
+
 router.post('/updateChart', ChartController.update);
 
 router.post('/deleteChart', ChartController.delete);

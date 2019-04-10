@@ -358,6 +358,67 @@ const ChartController = {
     });
   },
 
+  duplicateById: (req, res) => {
+    const { authId, chartId } = req.body;
+
+    User.findOne({ authId }, (error, author) => {
+      if (error) general.handleError(res, error);
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else
+        Chart.findOne({ _id: chartId }, (chartError, chart) => {
+          if (chartError) general.handleError(res, chartError);
+          else if (!chart) general.handleError(res, 'Chart not found', 404);
+          else
+            genUniqueName(Chart, chart.name)
+              .then(uniqueName => {
+                // so we'll imply this logic now
+                // for the team just in case
+                // someone from another team would be able to duplicate
+                // this chart
+                const team = author.team === chart.team ? chart.team : '';
+
+                const chartz = new Chart({
+                  name: uniqueName,
+                  author,
+                  dataSources: chart.dataSources,
+                  description: chart.description,
+                  _public: chart._public,
+                  team,
+                  data: chart.data,
+                  descIntro: chart.descIntro,
+
+                  // so the type of chart
+                  type: chart.type,
+
+                  /* indicators/ sub-indicators of chart */
+                  indicatorItems: chart.indicatorItems,
+
+                  selectedSources: chart.selectedSources,
+                  yearRange: chart.yearRange,
+
+                  selectedYear: chart.selectedYear,
+                  selectedCountryVal: chart.selectedCountryVal,
+                  selectedRegionVal: chart.selectedRegionVal
+                });
+
+                chartz.save(err => {
+                  if (err) general.handleError(res, err);
+
+                  res.json({
+                    message: 'chart created',
+                    id: chartz._id,
+                    name: chartz.name,
+                    chartType: chartz.type
+                  });
+                });
+              })
+              .catch(promiseErr => {
+                general.handleError(res, promiseErr);
+              });
+        });
+    });
+  },
+
   update: function(user, vizId, viz, res) {
     // TODO: should be adjusted without the promises, or maybe with promises if
     // TODO: it works and makes sense

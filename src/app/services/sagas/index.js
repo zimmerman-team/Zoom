@@ -379,8 +379,26 @@ export function* createDuplicateChartRequest(action) {
   }
 }
 
+export function* duplicateChartRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'duplicateChart',
+      values: action.values
+    });
+    yield put(nodeActions.duplicateChartSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.duplicateChartFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('DUPLICATE_CHART_REQUEST', duplicateChartRequest),
     takeLatest('CREATE_DUPLICATE_CHART_REQUEST', createDuplicateChartRequest),
     takeLatest('UPDATE_DATASET_REQUEST', updateDatasetRequest),
     takeLatest('GET_PUBLIC_CHARTS_REQUEST', getPublicChartsRequest),

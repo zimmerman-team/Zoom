@@ -58,6 +58,7 @@ class TabContent extends React.Component {
           section =>
             section.component && (
               <PropsRoute
+                auth0Client={this.props.auth0Client}
                 selectAll={this.props.selectAll}
                 dropDownData={this.props.dropDownData}
                 key={shortid.generate()}

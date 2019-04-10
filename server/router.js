@@ -5,6 +5,7 @@ const router = express.Router();
 const ChartController = require('./controllers/ChartController');
 const UserController = require('./controllers/UserController');
 const DatasetController = require('./controllers/DatasetController');
+const EmailController = require('./controllers/EmailController');
 
 // so this should only be uncommented and used if you have
 // a clean database, and just need some data init
@@ -22,7 +23,7 @@ router.get('/getPublicCharts', ChartController.getPublic);
 // gets one public chart
 router.get('/getOnePublicChart', ChartController.getOnePublic);
 
-// gets all user charts
+// gets all user charts and team charts
 router.get('/getAllCharts', ChartController.getAll);
 
 // gets all team charts
@@ -68,5 +69,11 @@ router.post('/addNewDataset', DatasetController.addNewDataset);
 router.delete('/deleteDataset', DatasetController.deleteDataset);
 
 /* -------------- DATASET CONTROLLER END ------------------------- */
+
+/* -------------- EMAIL CONTROLLER START ----------------------- */
+
+router.get('/sendEmail', EmailController.sendMail);
+
+/* -------------- EMAIL CONTROLLER END ------------------------- */
 
 module.exports = router;

@@ -32,13 +32,12 @@ const propTypes = {
   panelDetails: PropTypes.arrayOf(
     PropTypes.shape({
       categorise: PropTypes.bool,
-      locationSelected: PropTypes.bool,
       allFileSources: PropTypes.array,
       selectedSources: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
       selectDataSource: PropTypes.func,
       multiple: PropTypes.bool,
       selectAll: PropTypes.bool,
-      defaultAll: PropTypes.array,
+      defaultAll: PropTypes.bool,
       placeHolderNumber: PropTypes.number,
       reset: PropTypes.func
     })
@@ -53,14 +52,13 @@ const defaultProps = {
   isDropdownSelect: false,
   panelDetails: [
     {
-      locationSelected: false,
       categorise: false,
       allFileSources: [],
       selectedSources: [],
       selectDataSource: undefined,
       multiple: false,
       selectAll: false,
-      defaultAll: [],
+      defaultAll: false,
       placeHolderNumber: undefined,
       reset: undefined
     }
@@ -78,7 +76,7 @@ const ExpansionPanelDetails = props => {
               categorise={detail.categorise}
               multiple={detail.multiple}
               selectAll={detail.selectAll}
-              defaultAll={detail.locationSelected}
+              defaultAll={detail.defaultAll}
               reset={detail.reset}
               placeHolderText={detail.placeHolderText}
               placeHolderNumber={detail.placeHolderNumber}

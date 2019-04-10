@@ -22,13 +22,12 @@ const propTypes = {
   panelDetails: PropTypes.arrayOf(
     PropTypes.shape({
       categorise: PropTypes.bool,
-      locationSelected: PropTypes.bool,
       allFileSources: PropTypes.array,
       selectedSources: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
       selectDataSource: PropTypes.func,
       multiple: PropTypes.bool,
       selectAll: PropTypes.bool,
-      defaultAll: PropTypes.array,
+      defaultAll: PropTypes.bool,
       placeHolderNumber: PropTypes.number,
       reset: PropTypes.func,
       valueSelected: PropTypes.array
@@ -44,14 +43,13 @@ const defaultProps = {
   isDropdownSelect: false,
   panelDetails: [
     {
-      locationSelected: false,
       categorise: false,
       allFileSources: [],
       selectedSources: [],
       selectDataSource: undefined,
       multiple: false,
       selectAll: false,
-      defaultAll: [],
+      defaultAll: false,
       placeHolderNumber: undefined,
       reset: undefined,
       valueSelected: []

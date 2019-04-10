@@ -22,9 +22,12 @@ const ChartSchema = new Schema(
     indicatorItems: [
       {
         indicator: String,
-        subIndicators: [String]
+        subIndicators: [String],
+        allSubIndicators: { type: [], default: [] }
       }
     ],
+
+    data: { type: [], default: [] },
 
     /* so this one is used for trash */
     archived: { type: Boolean, default: false },

@@ -29,6 +29,7 @@ export const ComponentBase = styled.div`
   & button {
     border-style: none !important;
   }
+  border: ${props => (props.compBorder ? '1px solid #d1d1d1' : 'none')};
 `;
 
 export const ResetContainer = styled.div`

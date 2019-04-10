@@ -1,5 +1,6 @@
 // TODO: expand configuration and autoformat on save
 module.exports = {
+  parser: 'babel-eslint',
   settings: {
     'import/resolver': {
       node: {
@@ -23,7 +24,7 @@ module.exports = {
     node: true,
     browser: true
   },
-  plugins: ['prettier', 'react-hooks'],
+  plugins: ['prettier', 'react', 'react-hooks'],
   rules: {
     'react/jsx-filename-extension': [0, { extensions: ['.js', '.jsx'] }],
     'react/jsx-no-duplicate-props': [
@@ -45,7 +46,7 @@ module.exports = {
       }
     ],
     'react/prop-types': 0,
-    'react/jsx-no-bind': false,
+    'react/jsx-no-bind': 0,
     'no-underscore-dangle': 0,
     'import/imports-first': ['warning', 'absolute-first'],
     'import/newline-after-import': 'warning',
@@ -57,6 +58,10 @@ module.exports = {
     'arrow-body-style': 0,
     'react/no-did-update-set-state': 0,
     'class-methods-use-this': 0,
-    'react-hooks/rules-of-hooks': 'error'
+    'prefer-destructuring': 0,
+    'no-useless-constructor': 1,
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+    'default-case': 0
   }
 };

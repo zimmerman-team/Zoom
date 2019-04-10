@@ -5,10 +5,12 @@ import connect from 'react-redux/es/connect/connect';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 import TextEditor from 'components/editors/TextEditor/TextEditor';
+import DescriptionEditor from 'components/chartcontext/common/DescriptionEditor';
 import ContextHeader from 'components/chartcontext/common/ContextHeader';
 
 /* actions */
 import * as actions from 'services/actions/general';
+import EditableTitle from 'components/chartcontext/common/EditableTitle';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -29,10 +31,15 @@ const Box = styled.div`
   display: flex;
 `;
 
-const ContextBody = styled.section``;
+const ContextBody = styled.section`
+  width: 650px;
+`;
 const ContextFooter = styled.section``;
 
-const propTypes = {};
+const propTypes = {
+  author: PropTypes.string,
+  authorName: PropTypes.string
+};
 const defaultProps = {};
 
 class ContextEditor extends React.Component {
@@ -52,8 +59,18 @@ class ContextEditor extends React.Component {
           createdDate={this.props.chartData.createdDate}
           authorName={this.props.chartData.authorName}
           title={this.props.chartData.name}
+          saveTitle={name =>
+            this.props.dispatch(actions.storeChartDataRequest({ name }))
+          }
+          edit
         />
         <ContextBody>
+          <DescriptionEditor
+            defaultVal={this.props.chartData.descIntro}
+            saveText={descIntro =>
+              this.props.dispatch(actions.storeChartDataRequest({ descIntro }))
+            }
+          />
           <TextEditor
             saveDesc={desc =>
               this.props.dispatch(actions.storeChartDataRequest({ desc }))

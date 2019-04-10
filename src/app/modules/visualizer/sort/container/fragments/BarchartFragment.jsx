@@ -2,10 +2,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
-import { ResponsiveBar } from '@nivo/bar';
+
+/* mock */
 import { BarchartMockData } from './BachartMockData';
+
+/* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
+import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
+import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
+import { ResponsiveBar } from '@nivo/bar';
+
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
@@ -112,6 +118,12 @@ const BarchartFragment = props => {
         />
       </Box>
       <ChartLegends />
+      <YearContainer>
+        <CustomYearSelector
+          selectedYear={props.selectedYear}
+          selectYear={props.selectYear}
+        />
+      </YearContainer>
     </ComponentBase>
   );
 };

@@ -99,6 +99,7 @@ class VizPaneMediator extends React.Component {
     this.selectDataSource = this.selectDataSource.bind(this);
     this.resetIndicators = this.resetIndicators.bind(this);
     this.selectYearRange = this.selectYearRange.bind(this);
+    this.changesMade = this.changesMade.bind(this);
   }
 
   componentDidMount() {
@@ -176,6 +177,8 @@ class VizPaneMediator extends React.Component {
           chartMounted: true
         })
       );
+
+    this.changesMade();
   }
 
   selectYearRange(value) {
@@ -194,6 +197,8 @@ class VizPaneMediator extends React.Component {
         yearRange
       })
     );
+
+    this.changesMade();
   }
 
   refetch(
@@ -255,6 +260,8 @@ class VizPaneMediator extends React.Component {
         subIndicators1: []
       })
     );
+
+    this.changesMade();
   }
 
   selectInd2(val) {
@@ -275,6 +282,8 @@ class VizPaneMediator extends React.Component {
         subIndicators2: []
       })
     );
+
+    this.changesMade();
   }
 
   selectSubInd1(item, array = false) {
@@ -304,6 +313,8 @@ class VizPaneMediator extends React.Component {
         selectedSubInd1
       })
     );
+
+    this.changesMade();
   }
 
   selectSubInd2(item, array = false) {
@@ -333,6 +344,8 @@ class VizPaneMediator extends React.Component {
         selectedSubInd2
       })
     );
+
+    this.changesMade();
   }
 
   selectCountry(item, array = false) {
@@ -361,6 +374,8 @@ class VizPaneMediator extends React.Component {
         selectedCountryVal
       })
     );
+
+    this.changesMade();
   }
 
   selectRegion(item, array = false) {
@@ -390,6 +405,8 @@ class VizPaneMediator extends React.Component {
         selectedRegionVal
       })
     );
+
+    this.changesMade();
   }
 
   resetAll() {
@@ -408,6 +425,23 @@ class VizPaneMediator extends React.Component {
         subIndicators2: []
       })
     );
+
+    this.changesMade();
+  }
+
+  // so this is used to indicate that some changes
+  // to the current datapane selections have been made
+  // thus it should control the indicator data loading
+  // so if no changes have been made the data will load
+  // from the zoombackend(if ofcourse a saved chart is loaded, for editing purposes)
+  // otherwise all the data comes from DUCT
+  changesMade() {
+    if (!this.props.chartData.changesMade)
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          changesMade: true
+        })
+      );
   }
 
   render() {
@@ -422,14 +456,20 @@ class VizPaneMediator extends React.Component {
         // okay so we use this variable to change the
         // to disable the geolocation dropdowns being defaultly selected
         locationSelected={!this.props.chartData.chartMounted}
-        subInd1AllSelected={isEqual(
-          this.props.chartData.selectedSubInd1,
-          initialState.selectedSubInd1
-        )}
-        subInd2AllSelected={isEqual(
-          this.props.chartData.selectedSubInd2,
-          initialState.selectedSubInd2
-        )}
+        subInd1AllSelected={
+          this.props.chartData.changesMade &&
+          isEqual(
+            this.props.chartData.selectedSubInd1,
+            initialState.selectedSubInd1
+          )
+        }
+        subInd2AllSelected={
+          this.props.chartData.changesMade &&
+          isEqual(
+            this.props.chartData.selectedSubInd2,
+            initialState.selectedSubInd2
+          )
+        }
         selectInd1={this.selectInd1}
         selectInd2={this.selectInd2}
         selectSubInd1={this.selectSubInd1}
@@ -442,7 +482,9 @@ class VizPaneMediator extends React.Component {
         subIndicators2={this.props.paneData.subIndicators2}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.props.chartData.selectedCountryVal}
+        selectedCountryLabels={this.props.paneData.selectedCountryLabels}
         selectedRegionVal={this.props.chartData.selectedRegionVal}
+        selectedRegionLabels={this.props.paneData.selectedRegionLabels}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
         selectYearRange={this.selectYearRange}

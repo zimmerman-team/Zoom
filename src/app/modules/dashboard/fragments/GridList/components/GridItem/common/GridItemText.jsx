@@ -5,7 +5,7 @@ import Theme from 'theme/Theme';
 
 const ComponentBase = styled.div`
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 7px;
 
   &:last-child {
     margin-bottom: initial;

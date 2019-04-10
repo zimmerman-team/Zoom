@@ -11,7 +11,6 @@ const ComponentBase = styled.header`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 15px;
 `;
 
 const propTypes = {

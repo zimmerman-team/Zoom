@@ -5,6 +5,7 @@ import ZoomButton from 'components/ZoomButton/ZoomButton';
 
 export const ComponentBase = styled.div`
   position: absolute;
+  z-index: 1;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   border-radius: 0;
   background-color: ${theme.color.aidsFondsWhite};

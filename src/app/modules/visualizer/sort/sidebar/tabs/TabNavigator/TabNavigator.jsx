@@ -16,6 +16,7 @@ const ComponentBase = styled.div`
   list-style: none;
   align-self: flex-end;
   width: 320px;
+  //box-shadow: 0 5px 7px rgba(0, 0, 0, 0.5);
 `;
 
 const propTypes = {

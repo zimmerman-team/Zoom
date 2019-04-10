@@ -161,8 +161,12 @@ class VizPaneMediator extends React.Component {
 
     this.setState({ selectedSources }, this.refetch);
 
-    // and ofcourse we reset the selected indicators
-    this.resetIndicators();
+    if (
+      process.env.NODE_ENV === 'development' &&
+      this.state.selectedSources.length > 0
+    )
+      this.resetIndicators();
+    else if (process.env.NODE_ENV !== 'development') this.resetIndicators();
 
     // and we store this so it would be accessible to the visualizer mediator
     this.props.dispatch(
@@ -445,6 +449,7 @@ class VizPaneMediator extends React.Component {
   }
 
   render() {
+    // console.log('this.props.chartData', this.props.chartData);
     return (
       <DataExplorePane
         allFileSources={this.state.allFileSources}

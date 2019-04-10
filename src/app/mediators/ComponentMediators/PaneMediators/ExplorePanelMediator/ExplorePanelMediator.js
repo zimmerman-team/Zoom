@@ -123,7 +123,6 @@ class ExplorePanelMediator extends React.Component {
 
   selectDataSource(item, array = false) {
     let selectedSources = [];
-    let allIndNames = [...this.state.allIndNames];
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
@@ -143,7 +142,8 @@ class ExplorePanelMediator extends React.Component {
       }
     }
 
-    this.setState({ selectedSources, allIndNames }, this.refetch);
+    this.setState({ selectedSources });
+    this.refetch(selectedSources);
   }
 
   selectYearRange(value) {
@@ -172,6 +172,11 @@ class ExplorePanelMediator extends React.Component {
       fileSource_Name_In
     };
 
+    const dontReset =
+      process.env.NODE_ENV === 'development' &&
+      this.state.selectedSources !== selectedSources &&
+      this.state.selectedSources.length === 0;
+
     fetchQuery(this.props.relay.environment, indicatorQuery, refetchVars).then(
       data => {
         let allIndNames = data.allIndicators.edges.map(indicator => {
@@ -180,15 +185,17 @@ class ExplorePanelMediator extends React.Component {
 
         allIndNames = sortBy(allIndNames, ['label']);
 
-        this.setState({ allIndNames }, this.resetIndicators);
+        this.setState({ allIndNames }, () => this.resetIndicators(dontReset));
       }
     );
   }
 
-  resetIndicators() {
-    // and we also deselect the indicators
-    this.props.selectInd1({ value: undefined });
-    this.props.selectInd2({ value: undefined });
+  resetIndicators(dontReset = false) {
+    if (!dontReset) {
+      // and we also deselect the indicators
+      this.props.selectInd1({ value: undefined });
+      this.props.selectInd2({ value: undefined });
+    }
   }
 
   render() {

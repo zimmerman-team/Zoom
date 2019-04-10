@@ -61,6 +61,13 @@ const propTypes = {
     })
   ),
   selectedCountryVal: PropTypes.arrayOf(PropTypes.string),
+  selectedCountryLabels: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string
+      })
+    )
+  ),
   selectedRegionVal: PropTypes.arrayOf(
     PropTypes.arrayOf(
       PropTypes.shape({
@@ -68,6 +75,10 @@ const propTypes = {
       })
     )
   ),
+  selectedRegionLabels: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array
+  ]),
   selectCountry: PropTypes.func,
   selectRegion: PropTypes.func,
   selectYearRange: PropTypes.func,
@@ -98,7 +109,9 @@ const defaultProps = {
   subIndicators1: [],
   subIndicators2: [],
   selectedCountryVal: [],
+  selectedCountryLabels: [],
   selectedRegionVal: [],
+  selectedRegionLabels: [],
   selectCountry: null,
   selectRegion: null,
   selectInd1: null,
@@ -144,6 +157,7 @@ class DataExplorePane extends React.Component {
                   allFileSources: this.props.allFileSources,
                   defaultAll: this.props.locationSelected,
                   selectedSources: this.props.selectedSources,
+                  valueSelected: this.props.selectedSources,
                   reset: () => this.props.selectDataSource('reset')
                 }
               ]}
@@ -167,6 +181,7 @@ class DataExplorePane extends React.Component {
                   allFileSources: this.props.regions,
                   defaultAll: this.props.locationSelected,
                   selectedSources: this.props.selectedRegionVal,
+                  valueSelected: this.props.selectedRegionLabels,
                   reset: () => this.props.selectRegion('reset')
                 },
                 {
@@ -178,6 +193,7 @@ class DataExplorePane extends React.Component {
                   allFileSources: this.props.countries,
                   defaultAll: this.props.locationSelected,
                   selectedSources: this.props.selectedCountryVal,
+                  valueSelected: this.props.selectedCountryLabel,
                   reset: () => this.props.selectCountry('reset')
                 }
               ]}

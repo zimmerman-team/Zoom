@@ -4,20 +4,13 @@ import * as actions from 'services/actions/general';
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
 import initialState from '__consts__/InitialChartDataConst';
+import initialPaneState from '__consts__/InitialPaneDataConst';
 
 const initial = {
   open: paneTypes.none,
   chartData: { ...initialState },
   paneData: {
-    allCountries: [],
-    allRegions: [],
-    chartType: '',
-    selectedSources: [],
-    yearRange: '1992,2018',
-    subIndicators1: [],
-    subIndicators2: [],
-    selectedRegionLabels: [],
-    selectedCountryLabels: []
+    ...initialPaneState
   },
   stepzData: {}
 };

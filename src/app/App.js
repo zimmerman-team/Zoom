@@ -11,6 +11,7 @@ import Analytics from 'react-router-ga';
 import * as nodeActions from 'services/actions/nodeBackend';
 
 /* utils */
+import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 
 // Routes
@@ -51,14 +52,11 @@ function fetchQuery(operation, variables) {
 
 class App extends React.Component {
   state = {
-    showSidebar: false,
-    authChanged: false,
-    checkingSession: true
+    showSidebar: false
   };
 
   componentDidMount = () => {
     if (window.location.pathname.indexOf('/callback') !== -1) {
-      this.setState({ checkingSession: false });
       return;
     }
     try {
@@ -69,7 +67,6 @@ class App extends React.Component {
         this.forceUpdate();
       });
     } catch (err) {}
-    this.setState({ checkingSession: false });
   };
 
   componentDidUpdate = prevProps => {
@@ -82,8 +79,18 @@ class App extends React.Component {
         // so we update the user
         this.props.dispatch(
           nodeActions.updateUserRequest({
+            firstName: get(
+              profile['https://auth.nyuki.io_user_metadata'],
+              'firstName',
+              ''
+            ),
+            lastName: get(
+              profile['https://auth.nyuki.io_user_metadata'],
+              'lastName',
+              ''
+            ),
             username: profile.nickname,
-            email: profile.name,
+            email: profile.email,
             authId: profile.sub
           })
         );
@@ -101,12 +108,20 @@ class App extends React.Component {
             this.props.dispatch(
               nodeActions.addUserRequest({
                 username: profile.nickname,
-                email: profile.name,
+                email: profile.email,
                 authId: profile.sub,
                 role,
                 avatar: profile.picture,
-                firstName: '',
-                lastName: '',
+                firstName: get(
+                  profile['https://auth.nyuki.io_user_metadata'],
+                  'firstName',
+                  ''
+                ),
+                lastName: get(
+                  profile['https://auth.nyuki.io_user_metadata'],
+                  'lastName',
+                  ''
+                ),
                 team: group
               })
             );
@@ -131,6 +146,7 @@ class App extends React.Component {
               ...MetaDataMediator_dropDownData
               ...CorrectErrorsMediator_fileCorrection
               ...FocusModuleMediator_indicatorAggregations
+              ...DatasetMediator_metaData
             }
           `}
           variables={{}}
@@ -146,7 +162,9 @@ class App extends React.Component {
                     />
                     <AppBar
                       toggleSideBar={() =>
-                        this.setState({ showSidebar: !this.state.showSidebar })
+                        this.setState({
+                          showSidebar: !this.state.showSidebar
+                        })
                       }
                       auth0Client={auth0Client}
                     />
@@ -154,7 +172,9 @@ class App extends React.Component {
                       auth0Client={auth0Client}
                       open={this.state.showSidebar}
                       toggleSideBar={() =>
-                        this.setState({ showSidebar: !this.state.showSidebar })
+                        this.setState({
+                          showSidebar: !this.state.showSidebar
+                        })
                       }
                     />
                     <Analytics id="UA-134931738-2">
@@ -163,9 +183,8 @@ class App extends React.Component {
                   </React.Fragment>
                 </Router>
               );
-            } else {
-              return <div>Loading</div>;
             }
+            return <div>Loading</div>;
           }}
         />
       </Grommet>

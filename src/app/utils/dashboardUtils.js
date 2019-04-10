@@ -1,27 +1,36 @@
 import get from 'lodash/get';
+import find from 'lodash/find';
 import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
+import isEmpty from 'lodash/isEmpty';
 
-export function formatUsersTabData(data) {
+export function formatUsersTabData(data, onEdit, onDelete) {
   return data.users.map(d => {
+    const title = !isEmpty(d.user_metadata)
+      ? `${get(d.user_metadata, 'firstName', '')} ${get(
+          d.user_metadata,
+          'lastName',
+          ''
+        )}`
+      : d.email;
     return {
+      title,
       id: d.user_id,
-      title: get(d, 'name', get(d, 'nickname', d.email)),
       info: {
         Role: get(d, 'app_metadata.authorization.roles[0]', ''),
         'Mapped data sets': 0,
         Charts: 0,
         Twitter: ''
       },
-      onEdit: () => console.log('edit'),
+      onEdit: () => onEdit(d.user_id),
       onView: () => console.log('view'),
       onDuplicate: () => console.log('duplicate'),
-      onDelete: () => console.log('archive')
+      onDelete: () => onDelete(d.user_id)
     };
   });
 }
 
-export function formatTeamsTabData(data, sort, search) {
+export function formatTeamsTabData(data, sort, search, users) {
   const queriedData =
     search !== '' ? filter(data, d => d.name.indexOf(search) > -1) : data;
   const sortedData =
@@ -34,7 +43,11 @@ export function formatTeamsTabData(data, sort, search) {
       id: d._id,
       title: get(d, 'name', ''),
       info: {
-        'Created by': get(values, '[1]', ''),
+        'Created by': get(
+          find(users, user => user.id === get(values, '[1]', '')),
+          'title',
+          ''
+        ),
         'Publication date': get(values, '[0]', ''),
         Organisations: ''
       },
@@ -47,7 +60,7 @@ export function formatTeamsTabData(data, sort, search) {
 }
 
 // formats chart data for the dashboard
-export function formatChartData(charts, userId, history, remove) {
+export function formatChartData(charts, userId, history, remove, duplicate) {
   // so basically when we have paginaton
   // the count will be returned as count and the
   // data will be in charts variable
@@ -71,7 +84,7 @@ export function formatChartData(charts, userId, history, remove) {
 
     let onEdit = undefined;
     let onView = undefined;
-    let onDuplicate = () => console.log('duplicate');
+    let onDuplicate = () => duplicate(chart._id);
     let onDelete = undefined;
 
     if (history && remove) {
@@ -90,7 +103,7 @@ export function formatChartData(charts, userId, history, remove) {
       id: chart._id,
       title: chart.name,
       info: {
-        Author: chart.author.username,
+        Author: `${chart.author.firstName} ${chart.author.lastName}`,
         'Publication date': chart.created.substring(
           0,
           chart.created.indexOf('T')
@@ -113,11 +126,13 @@ export function formatChartData(charts, userId, history, remove) {
 }
 
 // formats chart data for the dashboard
-export function formatDatasets(datasets) {
+export function formatDatasets(datasets, history) {
   return datasets.map(dataset => {
     let shared = '';
-    if (dataset.team.length > 0) shared = shared.concat(dataset.team);
-    if (dataset._public)
+    if (dataset.team.length > 0 && dataset.team !== 'none')
+      shared = shared.concat(dataset.team);
+
+    if (dataset.public)
       shared =
         shared.length > 0
           ? shared.concat(', ').concat('Public')
@@ -136,9 +151,7 @@ export function formatDatasets(datasets) {
         Shared: shared,
         'Data sources': dataset.dataSource
       },
-      onEdit: () => console.log('edit'),
-      onView: () => console.log('preview'),
-      onDuplicate: () => console.log('duplicate'),
+      onEdit: () => history.push(`/dataset/${dataset.datasetId}`),
       onDelete: () => console.log('delete')
     };
   });

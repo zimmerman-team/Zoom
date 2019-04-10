@@ -18,7 +18,6 @@ const Title = styled.h3`
   font-family: ${theme.font.zoomFontFamOne};
   font-size: 40px;
   line-height: 1;
-  //outline: 1px solid green;
   margin: 0;
   margin-bottom: 5px;
 `;
@@ -30,9 +29,13 @@ const Details = styled.span`
 
 const ContextIntro = styled.div`
   max-width: 550px;
-  //max-height: 70px;
-  //overflow: hidden;
-  margin: 0;
+  font-family: ${theme.font.zoomFontFamOne};
+  font-size: 16px;
+  color: ${theme.color.zoomBlack};
+  margin: 0 auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  text-align: left;
 `;
 
 const ContextBody = styled.div`
@@ -60,9 +63,7 @@ const ContextPreview = props => {
         />
       )}
       {props.show === 'descIntro' && (
-        <ContextIntro>
-          <div className="ql-editor">{ReactHtmlParser(props.descIntro)}</div>
-        </ContextIntro>
+        <ContextIntro>{props.descIntro}</ContextIntro>
       )}
       {props.show === 'descBody' && (
         <ContextBody>

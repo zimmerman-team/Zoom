@@ -87,9 +87,16 @@ const UserApi = {
       } else {
         if (err) general.handleError(res, err);
 
-        if (userFound.username !== user.username)
+        if (userFound.username !== user.username && user.username)
           userFound.username = user.username;
-        if (userFound.email !== user.email) userFound.email = user.email;
+        if (userFound.email !== user.email && user.email)
+          userFound.email = user.email;
+        if (userFound.firstName !== user.firstName && user.firstName)
+          userFound.firstName = user.firstName;
+        if (userFound.lastName !== user.lastName && user.lastName)
+          userFound.lastName = user.lastName;
+        if (userFound.team !== user.team && user.team)
+          userFound.team = user.team;
 
         userFound.save(error => {
           if (err) general.handleError(res, error);
@@ -181,20 +188,15 @@ const UserApi = {
   //     });
   // },
 
-  deleteUser: (user, delId, res) => {
+  deleteUser: (req, res) => {
+    const { delId } = req.query;
     // TODO: should be adjusted without the promises, or maybe with promises if
     // TODO: it works and makes sense
-    if (user.role === 'admin')
-      User.deleteOne({ authId: delId }, error => {
-        if (error) general.handleError(res, error);
+    User.deleteOne({ authId: delId }, error => {
+      if (error) general.handleError(res, error);
 
-        return res(null, 'user deleted');
-      });
-    else
-      general.handleError(res, {
-        name: 'no permission',
-        error: 'unauthorized'
-      });
+      return res.json({ message: 'user deleted' });
+    });
   }
 };
 

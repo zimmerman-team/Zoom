@@ -27,6 +27,10 @@ const PropsRoute = ({ component, ...rest }) => {
   );
 };
 
+const ComponentBase = styled.div`
+  box-shadow: 0 5px 7px rgba(0, 0, 0, 0.5);
+`;
+
 const propTypes = {
   data: PropTypes.array,
   code: PropTypes.string
@@ -58,6 +62,7 @@ class TabContent extends React.Component {
           section =>
             section.component && (
               <PropsRoute
+                auth0Client={this.props.auth0Client}
                 selectAll={this.props.selectAll}
                 dropDownData={this.props.dropDownData}
                 key={shortid.generate()}

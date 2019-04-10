@@ -31,6 +31,8 @@ router.get('/getTeamFeedCharts', ChartController.getTeamFeedCharts);
 
 router.post('/updateCreateChart', ChartController.updateCreate);
 
+router.post('/duplicateChart', ChartController.duplicateById);
+
 router.post('/updateChart', ChartController.update);
 
 router.post('/deleteChart', ChartController.delete);
@@ -50,7 +52,7 @@ router.post('/updateUserByAdmin', UserController.updateUserByAdmin);
 
 router.post('/updateUsersTeam', UserController.updateUsersTeam);
 
-router.delete('/deleteUser', UserController.deleteUser);
+router.post('/deleteUser', UserController.deleteUser);
 
 /* -------------- USER CONTROLLER END ------------------------- */
 
@@ -65,6 +67,8 @@ router.post('/updateTeam', DatasetController.updateTeam);
 router.post('/updatePublic', DatasetController.updatePublic);
 
 router.post('/addNewDataset', DatasetController.addNewDataset);
+
+router.post('/updateDataset', DatasetController.updateDataset);
 
 router.delete('/deleteDataset', DatasetController.deleteDataset);
 

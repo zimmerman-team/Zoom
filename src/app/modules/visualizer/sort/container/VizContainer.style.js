@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 export const ComponentBase = styled.div`
   background-color: white;
   width: 100vw;

@@ -443,7 +443,7 @@ class HomeModuleMediator extends Component {
     selectedRegionsVal,
     allCountries = this.props.paneData.allCountries
   ) {
-    let selectedCountryVal = [];
+    const selectedCountryVal = [];
 
     if (selectedRegionsVal && allCountries) {
       selectedRegionsVal.forEach(region =>

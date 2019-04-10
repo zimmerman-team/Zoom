@@ -5,7 +5,6 @@ import * as actions from 'services/actions/general';
 import paneTypes from '__consts__/PaneTypesConst';
 import initialState from '__consts__/InitialChartDataConst';
 import initialPaneState from '__consts__/InitialPaneDataConst';
-import { SAVE_STEP_DATA_INITIAL } from 'services/actions/general';
 
 const initial = {
   open: paneTypes.none,

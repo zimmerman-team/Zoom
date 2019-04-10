@@ -199,7 +199,7 @@ class MetaData extends React.Component {
               <ZoomSelect
                 search={false}
                 dropDownWidth={290}
-                placeHolder="Connect to Zoom data source"
+                placeHolderText="Connect to Zoom data source"
                 data={dataSourceOptions.concat(this.props.data.fileSources)}
                 valueSelected={this.props.data.dataSource.label}
                 selectVal={value =>
@@ -350,7 +350,7 @@ class MetaData extends React.Component {
               <ZoomSelect
                 dropDownWidth={290}
                 search={false}
-                placeHolder="Select or add number of respondents"
+                placeHolderText="Select or add number of respondents"
                 data={numberOptions}
                 valueSelected={this.props.data.q4.label}
                 selectVal={value =>

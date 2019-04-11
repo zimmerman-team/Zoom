@@ -1,6 +1,7 @@
 /* base */
 import React, { Component } from 'react';
-import MapGL from 'react-map-gl';
+import PropTypes from 'prop-types';
+import MapGL, { LinearInterpolator } from 'react-map-gl';
 import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
 
@@ -11,61 +12,113 @@ import findIndex from 'lodash/findIndex';
 import { generateLegends, generateMarkers } from './GeoMap.util';
 
 /* styles */
-import {
-  borderStyle,
-  dataLayer,
-  defaultMapStyle
-} from './components/map-style';
+import { borderStyle, dataLayer } from './components/map-style';
 
 /* components */
 import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
 import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import MapControls from 'components/GeoMap/components/MapControls/MapControls';
-import Fullscreen from 'react-full-screen';
+import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 
+import MAP_STYLE from 'components/GeoMap/data/map-style-basic-v8';
 import {
   LegendContainer,
   MapContainer,
-  YearContainer,
   ControlsContainer
 } from './GeoMap.style';
 
 const MAPBOX_TOKEN =
   'pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw';
 
+const propTypes = {
+  latitude: PropTypes.number,
+  longitude: PropTypes.number,
+  zoom: PropTypes.number,
+  /* todo: don't know about this focus object tbh, might refactor this */
+  focus: PropTypes.shape({
+    latitude: PropTypes.number,
+    longitude: PropTypes.number,
+    zoom: PropTypes.number
+  }),
+  indicatorData: PropTypes.array,
+  selectedYear: PropTypes.string,
+  disableYear: PropTypes.bool,
+  selectYear: PropTypes.func,
+  mapOptions: PropTypes.object
+};
+
+const defaultProps = {
+  disableYear: false,
+  // just show worldview when no lat long is specified
+  latitude: 15,
+  longitude: 0,
+  zoom: 2,
+  mapOptions: {}
+};
+
 export class GeoMap extends Component {
   constructor(props) {
     super(props);
 
+    this.defaultMapStyle = {
+      ...MAP_STYLE,
+      sources: { ...MAP_STYLE.sources },
+      layers: MAP_STYLE.layers.slice()
+    };
+
     this.state = {
-      mapStyle: fromJS(defaultMapStyle),
+      mapStyle: fromJS(this.defaultMapStyle),
       markerArray: [],
       legends: [],
       hoverLayerInfo: null,
       viewport: {
-        latitude: 15,
-        longitude: 0,
-        bearing: 0,
-        pitch: 0
+        latitude: this.props.latitude,
+        longitude: this.props.longitude,
+        zoom: this.props.zoom,
+        transitionInterpolator: new LinearInterpolator(),
+        transitionDuration: 1000
+      },
+      settings: {
+        dragPan: true,
+        dragRotate: false,
+        scrollZoom: true,
+        touchZoom: true,
+        touchRotate: false,
+        keyboard: true,
+        doubleClickZoom: false,
+        minZoom: this.props.zoom,
+        maxZoom: 20
       },
       hoverMarkerInfo: null,
-      values: [12, 16],
-      zoom: 2,
-      fullScreen: false
+      values: [12, 16]
     };
 
+    this._handleMapLoaded = this._handleMapLoaded.bind(this);
     this.setMarkerInfo = this.setMarkerInfo.bind(this);
-    this.zoomIn = this.zoomIn.bind(this);
-    this.zoomOut = this.zoomOut.bind(this);
-    this.fullScreen = this.fullScreen.bind(this);
+    this.handleZoomIn = this.handleZoomIn.bind(this);
+    this.handleZoomOut = this.handleZoomOut.bind(this);
+    this.handleFullscreen = this.handleFullscreen.bind(this);
   }
 
   componentDidUpdate(prevProps) {
-    // console.log(this.props.indicatorData);
     if (!isEqual(this.props.indicatorData, prevProps.indicatorData)) {
       this.updateMap(this.props.indicatorData);
     }
+
+    if (!isEqual(this.props.focus, prevProps.focus))
+      this.setState({
+        viewport: {
+          latitude: this.props.focus.latitude,
+          longitude: this.props.focus.longitude,
+
+          zoom: this.props.focus.zoom
+        }
+      });
+  }
+
+  componentWillUnmount() {
+    // so yeah because of annoying
   }
 
   updateMap(indicatorData) {
@@ -77,7 +130,7 @@ export class GeoMap extends Component {
     // cause it kind of makes sense for some cases
     const layers = find(indicatorData, ['type', 'layer']);
     if (layers) {
-      let mapStyle = defaultMapStyle;
+      let mapStyle = this.defaultMapStyle;
       const borderData = layers.borderData ? layers.borderData : layers.data;
 
       // here we need to push in the border line style seperately like this
@@ -104,11 +157,11 @@ export class GeoMap extends Component {
           fromJS({ type: 'geojson', data: borderData })
         );
       this.setState({ mapStyle });
-    } else if (!isEqual(this.state.mapStyle, fromJS(defaultMapStyle))) {
+    } else if (!isEqual(this.state.mapStyle, fromJS(this.defaultMapStyle))) {
       //Here we set the map back to default when no layer data has been passed in
       // And we need to remove the borderStyle cause it gets added there
       // and while its there, the map will not set itself to default
-      let mapStylez = defaultMapStyle;
+      let mapStylez = this.defaultMapStyle;
       const ind = findIndex(mapStylez.layers, ['id', 'outline']);
       mapStylez.layers.splice(ind, 1);
       this.setState({ mapStyle: fromJS(mapStylez) });
@@ -123,7 +176,7 @@ export class GeoMap extends Component {
     this.setState({ markerArray, legends });
   }
 
-  _onViewportChange = viewport => this.setState({ viewport });
+  _updateViewport = viewport => this.setState({ viewport });
 
   _setLayerInfo = event => {
     let hoverLayerInfo = null;
@@ -144,6 +197,7 @@ export class GeoMap extends Component {
   _showLayerInfo() {
     const { hoverLayerInfo, hoverMarkerInfo } = this.state;
     if (!hoverMarkerInfo) return layerInfo(hoverLayerInfo);
+
     return null;
   }
 
@@ -162,78 +216,144 @@ export class GeoMap extends Component {
     const { features } = event;
 
     const feature = features && features.find(f => f.layer.id === 'layer');
-    if (feature) this.props.history.push(`country/${feature.properties.iso2}`);
+    if (feature && feature.properties.geolocationType === 'country')
+      this.props.outerHistory.push(`/country/${feature.properties.iso2}`);
   };
 
-  zoomIn() {
-    // cause when its 25 it gets white
-    if (this.state.zoom < 25)
-      this.setState(prevState => {
-        return { zoom: prevState.zoom + 0.2 };
+  _handleMapLoaded = event => {
+    if (this.props.location.pathname === '/focus') {
+      this.setState({
+        settings: {
+          dragPan: false
+        }
       });
-  }
+    }
+  };
 
-  zoomOut() {
-    if (this.state.zoom > 1)
-      this.setState(prevState => {
-        return { zoom: prevState.zoom - 0.2 };
-      });
-  }
-
-  fullScreen() {
-    this.setState(prevState => {
-      return { fullScreen: !prevState.fullScreen };
+  handleZoomIn() {
+    this._updateViewport({
+      ...this.state.viewport,
+      zoom: this.state.viewport.zoom + 0.5
     });
   }
 
+  handleZoomOut() {
+    if (this.state.viewport.zoom >= this.state.settings.minZoom)
+      this._updateViewport({
+        ...this.state.viewport,
+        zoom:
+          this.state.viewport.zoom - 0.5 > this.state.settings.minZoom
+            ? this.state.viewport.zoom - 0.5
+            : this.state.settings.minZoom
+      });
+  }
+
+  handleFullscreen() {
+    const isInFullScreen = this.isInFullScreen();
+
+    const docElm = document.getElementById('home-geomap');
+    if (!isInFullScreen) {
+      if (docElm.requestFullscreen) {
+        docElm.requestFullscreen();
+      } else if (docElm.mozRequestFullScreen) {
+        docElm.mozRequestFullScreen();
+      } else if (docElm.webkitRequestFullScreen) {
+        docElm.webkitRequestFullScreen();
+      } else if (docElm.msRequestFullscreen) {
+        docElm.msRequestFullscreen();
+      }
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  }
+
+  isInFullScreen() {
+    return (
+      (document.fullscreenElement && document.fullscreenElement !== null) ||
+      (document.webkitFullscreenElement &&
+        document.webkitFullscreenElement !== null) ||
+      (document.mozFullScreenElement &&
+        document.mozFullScreenElement !== null) ||
+      (document.msFullscreenElement && document.msFullscreenElement !== null)
+    );
+  }
+
   render() {
-    const { viewport, mapStyle, markerArray, legends, fullScreen } = this.state;
+    const { viewport, settings, mapStyle, markerArray, legends } = this.state;
+
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
-      <Fullscreen enabled={fullScreen}>
-        <MapContainer>
-          <ControlsContainer>
-            <MapControls
-              zoomIn={this.zoomIn}
-              zoomOut={this.zoomOut}
-              fullScreen={this.fullScreen}
-            />
-          </ControlsContainer>
-          <MapGL
-            {...viewport}
-            scrollZoom={true}
-            width="100%"
-            height="100%"
-            mapStyle={mapStyle}
-            onViewportChange={this._onViewportChange}
-            onHover={this._setLayerInfo}
-            onClick={this._onCountryClick}
-            mapboxApiAccessToken={MAPBOX_TOKEN}
-            /*todo: refactor zooming functionality to facilitate both zooming by using the zoom controls and zooming by scrolling*/
-            // zoom={this.state.zoom}
-          >
-            {/*So this is the layer tooltip, and we seperate it from the
+
+      <MapContainer data-cy="geo-map-container" id="home-geomap">
+        <ControlsContainer>
+          <MapControls
+            onZoomIn={this.handleZoomIn}
+            onZoomOut={this.handleZoomOut}
+            onFullScreen={this.handleFullscreen}
+          />
+        </ControlsContainer>
+
+        <YearContainer
+          style={
+            this.props.disableYear
+              ? { pointerEvents: 'none', opacity: '0.4' }
+              : {}
+          }
+        >
+          <CustomYearSelector
+            selectedYear={this.props.selectedYear}
+            selectYear={this.props.selectYear}
+          />
+        </YearContainer>
+
+        <MapGL
+          {...viewport}
+          {...settings}
+          scrollZoom={true}
+          width="100%"
+          height="100%"
+          mapStyle={mapStyle}
+          onViewportChange={this._updateViewport}
+          onHover={this._setLayerInfo}
+          onClick={this._onCountryClick}
+          onLoad={this._handleMapLoaded}
+          mapboxApiAccessToken={MAPBOX_TOKEN}
+          // mapOptions={this.props.mapOptions}
+          ref={map => (this.mapRef = map)}
+          attributionControl
+          // bounds={ya}
+          // so commenting this out cause it causes the
+          // onHover to NOT receive features...
+          // dunno why though seems like just a bug in this react-map-gl library
+          // cause the on click does receive the features...
+          // reuseMaps
+        >
+          {/*So this is the layer tooltip, and we seperate it from the
               martker tooltip, cause its functionality as a tooltip is a bit different
               and also because we implement the layers a bit more differently
               than normal markers*/}
-            {this._showLayerInfo()}
+          {this._showLayerInfo()}
 
-            {this._showMarkerInfo()}
+          {this._showMarkerInfo()}
 
-            {markerArray}
+          {markerArray}
 
-            <LegendContainer>{legends}</LegendContainer>
-          </MapGL>
-          <YearContainer>
-            <CustomYearSelector
-              selectedYears={this.props.selectedYears}
-              selectYear={this.props.selectYear}
-            />
-          </YearContainer>
-        </MapContainer>
-      </Fullscreen>
+          {/*contains zoom in/out and fullscreen toggle*/}
+
+          <LegendContainer>{legends}</LegendContainer>
+        </MapGL>
+      </MapContainer>
     );
   }
 }
+
+GeoMap.propTypes = propTypes;
+GeoMap.defaultProps = defaultProps;
 
 export default withRouter(GeoMap);

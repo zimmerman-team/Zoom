@@ -13,9 +13,16 @@ export const ButtonContainer = styled.div`
   width: 26px;
   height: 26px;
   border-radius: 20px;
+
   background-color: ${theme.color.aidsFondsWhite};
   &:hover {
     background-color: ${theme.color.zoomGreyThree};
     cursor: pointer;
   }
+`;
+
+export const DisabledElement = styled.div`
+  user-select: none;
+  opacity: 0.5;
+  pointer-events: none;
 `;

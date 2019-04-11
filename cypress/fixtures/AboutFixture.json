@@ -1,0 +1,9 @@
+{
+  "IATIDetailBarChartMockData": {
+    "year": "2012",
+    "Budget": "17",
+    "BudgetColor": "theme.color.chartColorTwo",
+    "Spent": "169",
+    "SpentColor": "theme.color.chartColorThree"
+  }
+}

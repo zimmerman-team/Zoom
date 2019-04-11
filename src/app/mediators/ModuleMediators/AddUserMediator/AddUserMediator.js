@@ -5,66 +5,45 @@ import React from 'react';
 import AddUserModule from 'modules/UserManagement/AddUser/AddUserModule';
 
 class AddUserMediator extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    success: false,
+    errorMessage: null,
+    secondaryInfoMessage: null,
+    email: '',
+    lastName: '',
+    firstName: '',
+    userRole: { label: '', value: '', _id: '' },
+    organisation: { label: '', value: '', _id: '' },
+    userGroups: [],
+    userRoles: []
+  };
 
-    this.state = {
-      success: false,
-      errorMessage: null,
-      secondaryInfoMessage: null,
-      email: '',
-      lastName: '',
-      firstName: '',
-      userRole: { label: '', value: '', _id: '' },
-      organisation: { label: '', value: '', _id: '' },
-      userGroups: [],
-      userRoles: [],
-    };
-
-    this.submitForm = this.submitForm.bind(this);
-    this.changeEmail = this.changeEmail.bind(this);
-    this.changeLastName = this.changeLastName.bind(this);
-    this.changeUserRole = this.changeUserRole.bind(this);
-    this.changeFirstName = this.changeFirstName.bind(this);
-    this.changeOrganisation = this.changeOrganisation.bind(this);
-  }
-
-  componentDidMount() {
+  componentDidMount = () => {
     this.props.auth0Client.getUserGroups(this);
     this.props.auth0Client.getUserRoles(this);
-  }
+  };
 
-  changeFirstName(e) {
-    this.setState({
-      firstName: e.target.value,
-    });
-  }
+  changeFirstName = e => {
+    this.setState({ firstName: e.target.value });
+  };
 
-  changeLastName(e) {
-    this.setState({
-      lastName: e.target.value,
-    });
-  }
+  changeLastName = e => {
+    this.setState({ lastName: e.target.value });
+  };
 
-  changeEmail(e) {
-    this.setState({
-      email: e.target.value,
-    });
-  }
+  changeEmail = e => {
+    this.setState({ email: e.target.value });
+  };
 
-  changeUserRole(e) {
-    this.setState({
-      userRole: e.option,
-    });
-  }
+  changeUserRole = e => {
+    this.setState({ userRole: e });
+  };
 
-  changeOrganisation(e) {
-    this.setState({
-      organisation: e.option,
-    });
-  }
+  changeOrganisation = e => {
+    this.setState({ organisation: e });
+  };
 
-  submitForm(e) {
+  submitForm = e => {
     e.preventDefault();
     this.props.auth0Client.addUser(
       this.state.firstName,
@@ -72,9 +51,9 @@ class AddUserMediator extends React.Component {
       this.state.email,
       this.state.organisation._id,
       this.state.userRole._id,
-      this,
+      this
     );
-  }
+  };
 
   render() {
     return (

@@ -6,7 +6,7 @@ import {
   FragmentContent,
   FragmentDescription,
   FragmentHeader,
-  FragmentVisualisation,
+  FragmentVisualisation
 } from 'components/sort/Fragments';
 import { FragmentInfo, FragmentInfoButton } from './ModuleFragment.style';
 
@@ -16,25 +16,25 @@ const propTypes = {
   background: PropTypes.string,
   fragmentInfo: PropTypes.string,
   children: PropTypes.any,
-  showInfoButton: PropTypes.bool,
+  showInfoButton: PropTypes.bool
 };
 const defaultProps = {
   fragmentInfo: 'Lorem ipsum dolor simet empty module description.',
-  showInfoButton: false,
+  showInfoButton: false
 };
 
 class ModuleFragment extends React.Component {
   state = {
-    showFragmentInfo: false,
+    showFragmentInfo: false
   };
 
-  handleMouseEnter() {
+  handleMouseEnter = () => {
     this.setState({ showFragmentInfo: true });
-  }
+  };
 
-  handleMouseLeave() {
+  handleMouseLeave = () => {
     this.setState({ showFragmentInfo: false });
-  }
+  };
 
   render() {
     return (

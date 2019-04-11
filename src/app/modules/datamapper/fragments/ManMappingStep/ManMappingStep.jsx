@@ -1,11 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import connect from 'react-redux/es/connect/connect';
+
+/* actions */
+import * as generalActions from 'services/actions/general';
 
 /* mock */
 import { uploadInitialstate } from '__consts__/UploadMediatorConst';
 
 /* utils */
 import findIndex from 'lodash/findIndex';
+import filter from 'lodash/filter';
 import keys from 'lodash/keys';
 import pickBy from 'lodash/pickBy';
 
@@ -47,6 +52,7 @@ const propTypes = {
   ),
   emptyValue: PropTypes.bool,
   manMapEmptyFields: PropTypes.bool,
+  emptyFormat: PropTypes.bool,
   mapReqFields: PropTypes.arrayOf(PropTypes.string)
 };
 const defaultProps = {
@@ -54,6 +60,7 @@ const defaultProps = {
   modelOptions: uploadInitialstate.modelOptions,
   emptyValue: false,
   manMapEmptyFields: false,
+  emptyFormat: false,
   mapReqFields: []
 };
 
@@ -81,15 +88,21 @@ class ManMappingStep extends React.Component {
               <CellValue>{val.zoomModel}</CellValue>
             ) : (
               <ZoomSelect
+                disabledValues={this.props.disabledValues}
                 disabled={val.emptyFieldRow}
                 search={false}
                 headerStyle={{ fontSize: 12, height: 'unset' }}
                 arrowMargins="auto 22px auto 4px"
-                placeHolder="-None-"
+                placeHolderText="-None-"
                 data={this.props.modelOptions}
-                valueSelected={val.zoomModel}
+                valueSelected={val.zoomModelLabel}
                 selectVal={zoomModel =>
-                  this.selectDataType(zoomModel.value, val.fileType)
+                  this.selectDataType(
+                    zoomModel.value,
+                    val.fileType,
+                    val.zoomModel,
+                    zoomModel.label
+                  )
                 }
               />
             )}
@@ -105,6 +118,7 @@ class ManMappingStep extends React.Component {
               <CellValue>{val.label}</CellValue>
             ) : (
               <CellTextField
+                placeholder={this.generatePlaceholder(val)}
                 disabled={val.zoomModel !== '-None-' && !val.emptyFieldRow}
                 value={val.label}
                 onChange={e => this.changeLabel(e.target.value, val.fileType)}
@@ -120,17 +134,109 @@ class ManMappingStep extends React.Component {
     ];
 
     this.colorMissingRows = this.colorMissingRows.bind(this);
+    this.changeDisabledVal = this.changeDisabledVal.bind(this);
+    this.selectDataType = this.selectDataType.bind(this);
+    this.generatePlaceholder = this.generatePlaceholder.bind(this);
+    this.saveData = this.saveData.bind(this);
   }
 
   componentDidMount() {
-    // this should not be here, we only have this here for coloring to trigger
-    // but this and the coloring should be removed when we actually
-    // implement the proper man mapping userflow
-    this.setState({ data: this.props.data });
+    const data = this.props.data;
+
+    if (!this.props.disabledValues) {
+      // we ofcourse do this only initially
+      // so when the component mounts we check the data for any by default selected
+      // zoom models and disable them
+      const selectedModels = filter(data, item => {
+        return item.zoomModel !== '-None-';
+      });
+
+      selectedModels.forEach(model => {
+        this.selectDataType(
+          model.zoomModel,
+          model.fileType,
+          '-None-',
+          model.zoomModelLabel
+        );
+      });
+    }
+
+    // so this is only needed for the coloring to activate
+    this.setState({
+      data
+    });
   }
 
   componentDidUpdate() {
     this.colorMissingRows();
+  }
+
+  changeDisabledVal(value, prevVal) {
+    const disabledValues = this.props.disabledValues
+      ? this.props.disabledValues
+      : [];
+
+    // we disable the selected value
+    const prevIndex = disabledValues.indexOf(prevVal);
+
+    // so if a previous value is changed
+    // we remove the previous value and add the new one
+    if (prevIndex !== -1) {
+      disabledValues.splice(prevIndex, 1);
+    }
+
+    if (value !== 'filters' && value !== '-None-')
+      // and we push in the new value either way
+      disabledValues.push(value);
+
+    // logic to disable/enable relative values
+    if (value === 'Number Value' || value === 'Percentage Value') {
+      if (disabledValues.indexOf('Mixed Value') === -1)
+        disabledValues.push('Mixed Value');
+    } else if (prevVal === 'Number Value' || prevVal === 'Percentage Value') {
+      // so if neither number nor percantage value is selected
+      // in any other row, we can enable mixed value selection
+      if (
+        disabledValues.indexOf('Number Value') === -1 &&
+        disabledValues.indexOf('Percentage Value') === -1
+      ) {
+        const mixedInd = disabledValues.indexOf('Mixed Value');
+        if (mixedInd !== -1) disabledValues.splice(mixedInd, 1);
+      }
+    } else if (value === 'Mixed Value') {
+      if (disabledValues.indexOf('Number Value') === -1)
+        disabledValues.push('Number Value');
+
+      if (disabledValues.indexOf('Percentage Value') === -1)
+        disabledValues.push('Percentage Value');
+    } else if (prevVal === 'Mixed Value') {
+      const numbInd = disabledValues.indexOf('Number Value');
+      if (numbInd !== -1) disabledValues.splice(numbInd, 1);
+
+      const percInd = disabledValues.indexOf('Percentage Value');
+      if (percInd !== -1) disabledValues.splice(percInd, 1);
+    }
+
+    return disabledValues;
+  }
+
+  generatePlaceholder(row) {
+    // so we only generate placeholders
+    // for emptyFieldRows to inform the user about
+    // what needs to be inputed there
+    if (row.emptyFieldRow)
+      switch (row.zoomModel) {
+        case 'indicator':
+          return 'Please enter any text';
+        case 'geolocation':
+          return 'Please enter any country name example: "Lesotho", "Zimbabwe"';
+        case 'date':
+          return 'Please enter a year for your data set';
+        default:
+          return '';
+      }
+
+    return '';
   }
 
   // basically colors the background of newly added rows
@@ -163,7 +269,7 @@ class ManMappingStep extends React.Component {
     });
   }
 
-  selectDataType(zoomModel, fileType) {
+  selectDataType(zoomModel, fileType, prevModel, zoomModelLabel) {
     const { data } = this.props;
     const itemIndex = findIndex(data, ['fileType', fileType]);
 
@@ -177,22 +283,39 @@ class ManMappingStep extends React.Component {
       if (extraRowInd !== -1) data.splice(extraRowInd, 1);
     }
 
+    // so we want some values to only be selected once
+    // thust we will generate an array of disabled values using this
+    const disabledValues = this.changeDisabledVal(zoomModel, prevModel);
+
     data[itemIndex].zoomModel = zoomModel;
-    this.props.saveStepData(data, 5);
+    data[itemIndex].zoomModelLabel = zoomModelLabel;
+
+    // and we save the shared manMapData
+    const stepData = { ...this.props.stepData };
+    stepData.manMapData = data;
+    stepData.manMapDisabled = disabledValues;
+    this.props.dispatch(generalActions.saveStepDataRequest(stepData));
   }
 
   changeLabel(label, fileType) {
     const { data } = this.props;
     const itemIndex = findIndex(data, ['fileType', fileType]);
     data[itemIndex].label = label;
-    this.props.saveStepData(data, 5);
+    this.saveData(data);
   }
 
   lockInOut(fileType) {
     const { data } = this.props;
     const itemIndex = findIndex(data, ['fileType', fileType]);
     data[itemIndex].lockedIn = !data[itemIndex].lockedIn;
-    this.props.saveStepData(data, 5);
+    this.saveData(data);
+  }
+
+  saveData(data) {
+    // and we save the shared manMapData
+    const stepData = { ...this.props.stepData };
+    stepData.manMapData = data;
+    this.props.dispatch(generalActions.saveStepDataRequest(stepData));
   }
 
   render() {
@@ -201,8 +324,13 @@ class ManMappingStep extends React.Component {
         <ManMapTitle>Manual mapping</ManMapTitle>
         <Box>
           <ErrorLabel>
+            {this.props.emptyFormat
+              ? "*You have 'Mixed Value' selected as one of your files columns, you need to also select a 'value_format' column from your files columns"
+              : ' '}
+          </ErrorLabel>
+          <ErrorLabel>
             {this.props.emptyValue
-              ? '*Please select a value for one of your columns, your csv file\n' +
+              ? '*Please select at least one value for one of your columns, your csv file\n' +
                 '              needs to contain some numeric or percentile values'
               : ' '}
           </ErrorLabel>
@@ -223,4 +351,13 @@ class ManMappingStep extends React.Component {
 ManMappingStep.propTypes = propTypes;
 ManMappingStep.defaultProps = defaultProps;
 
-export default ManMappingStep;
+const mapStateToProps = state => {
+  return {
+    modelOptions: state.stepData.stepzData.uploadData.modelOptions,
+    data: state.stepData.stepzData.manMapData,
+    disabledValues: state.stepData.stepzData.manMapDisabled,
+    stepData: state.stepData.stepzData
+  };
+};
+
+export default connect(mapStateToProps)(ManMappingStep);

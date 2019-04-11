@@ -2,8 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import isEqual from 'lodash/isEqual';
-import get from 'lodash/get';
 
 /* actions */
 import * as syncActions from 'services/actions/sync';
@@ -21,8 +19,13 @@ import {
   Link,
   ErrorMessage,
   ErrorText
-} from './LoginForm.styles';
-import ForgetPassword from '../ForgetPassword/ForgetPassword';
+} from 'components/SideBar/comps/LoginForm/LoginForm.styles';
+import ForgetPassword from 'components/SideBar/comps/ForgetPassword/ForgetPassword';
+
+/* utils */
+import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 
 const propTypes = {
   loginStatusMessage: PropTypes.shape({
@@ -102,12 +105,20 @@ export class LoginForm extends React.Component {
   }
 
   render() {
+    const greetingName =
+      get(this.props.user, 'firstName', '') !== ''
+        ? `${get(this.props.user, 'firstName', '')} ${get(
+            this.props.user,
+            'lastName',
+            ''
+          )}`
+        : get(this.props.user, 'email', '');
     const textFieldTheme = {
       borderStyle: this.state.error ? 'solid' : 'none',
       borderColor: this.state.error ? theme.color.aidsFondsRed : 'none'
     };
     let headerText = this.props.auth0Client.isAuthenticated()
-      ? `Welcome ${get(this.props.auth0Client.getProfile(), 'nickname', '')}`
+      ? `Welcome ${greetingName}`
       : 'Sign in registered users';
     if (!this.props.auth0Client.isAuthenticated()) {
       headerText =
@@ -201,6 +212,7 @@ export class LoginForm extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    user: state.user.data,
     loginStatusMessage: state.loginStatusMessage.data,
     forgotPasswordEmailSent: state.forgotPasswordEmailSent.data
   };

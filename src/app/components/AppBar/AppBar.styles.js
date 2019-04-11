@@ -22,7 +22,6 @@ export const AidsFondLogo = styled(Image)`
 export const MenuButton = styled(Button)`
   padding: 0;
   margin-right: 25px;
-
   height: 24px;
 `;
 
@@ -39,4 +38,25 @@ export const PaneButtonText = styled.div`
   color: ${theme.color.aidsFondsRed};
   font-family: ${theme.font.zoomFontFamOne};
   font-size: 14px;
+`;
+
+export const PaneButContainer = styled.div`
+  margin-left: auto;
+  display: flex;
+`;
+
+export const PaneButtonTextVar = styled(PaneButtonText)`
+  margin-left: 0;
+`;
+
+export const PaneButtonVar = styled(PaneButton)`
+  border-radius: 10px;
+  padding: 0 5px;
+  margin-left: 12px;
+  background-color: ${theme.color.zoomGreyZero};
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${theme.color.zoomGreyOne};
+  }
 `;

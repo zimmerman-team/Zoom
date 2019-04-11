@@ -5,14 +5,24 @@ import {
   CheckBox,
   ErrorCell,
   ErrorColHeader,
+  IgnorHeaderLabel,
+  HeaderName,
+  IgnoreHeaderCheckBox,
   HeaderCheckBox
 } from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
 
 /* components */
 import CustomCheckBox from 'components/CustomCheckBox/CustomCheckBox';
+import Checkbox from 'components/Checkbox/CheckBox';
 
 // so yeah here the columns will need to be formatted according to the data
-export function formatColumns(tableData) {
+export function formatColumns(
+  tableData,
+  checkRows,
+  handleCellClick,
+  ignoreErrors,
+  ignoredErrors
+) {
   const columns = [];
 
   if (tableData.length > 0) {
@@ -21,15 +31,16 @@ export function formatColumns(tableData) {
     columns.push({
       property: 'id',
       header: (
-        <HeaderCheckBox>
-          <CustomCheckBox key={0} onChange={() => console.log('all checked')} />
+        <HeaderCheckBox key={0}>
+          <Checkbox key={0} onChange={checked => checkRows('all', checked)} />
         </HeaderCheckBox>
       ),
       render: val => (
         <CheckBox>
-          <CustomCheckBox
-            key={val.id}
-            onChange={() => console.log(`item ${val.id} checked`)}
+          <Checkbox
+            key={val.index}
+            checked={val.checked}
+            onChange={() => checkRows(val.index)}
           />
         </CheckBox>
       )
@@ -42,14 +53,42 @@ export function formatColumns(tableData) {
     // value, cause the first value indicates the first row
     // and each of its columns, similarly to how the table
     // takes in the data
-    Object.keys(row).forEach(key => {
+    Object.keys(row).forEach((key, index) => {
       // because it seems to be the same as the index
       // and i think its just extra generated stuff from graphql
-      if (key !== 'line no.')
+      if (key !== 'line no.' && key !== 'checked')
         columns.push({
           property: key,
-          header: <ErrorColHeader>{key}</ErrorColHeader>,
-          render: val => <ErrorCell>{val[key]}</ErrorCell>
+          header:
+            key === 'index' ? (
+              <ErrorColHeader key={`header-${index}`}>{key}</ErrorColHeader>
+            ) : (
+              <ErrorColHeader key={`header-${index}`}>
+                <HeaderName>{key}</HeaderName>
+                <IgnoreHeaderCheckBox
+                  key={`ignore-header-checkbox-${index}`}
+                  style={{ pointerEvents: 'none', opacity: '0.4' }}
+                >
+                  <Checkbox
+                    key={`checkbox-${index}`}
+                    checked={ignoredErrors.indexOf(key) !== -1}
+                    onChange={() => ignoreErrors(key)}
+                  />
+                  <IgnorHeaderLabel>Ignore errors</IgnorHeaderLabel>
+                </IgnoreHeaderCheckBox>
+              </ErrorColHeader>
+            ),
+          render: val => (
+            <ErrorCell
+              onClick={
+                key !== 'index'
+                  ? () => handleCellClick(val[key], key, val.index)
+                  : undefined
+              }
+            >
+              {val[key]}
+            </ErrorCell>
+          )
         });
     });
   }

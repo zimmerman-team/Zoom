@@ -4,22 +4,24 @@ import {
   ComponentBase,
   PointerContainer,
   LabelContainer,
+  Span
 } from 'components/Select/components/SelectHeader/SelectHeader.styles';
 
 import IconPointer from 'assets/icons/IconPointer';
 
 const propTypes = {
   headerStyle: PropTypes.object,
-  arrowMargins: PropTypes.string,
+  arrowMargins: PropTypes.string
 };
 const defaultProps = {
   headerStyle: {},
-  arrowMargins: null,
+  arrowMargins: null
 };
 
 const SelectHeader = props => (
   <ComponentBase
     data-name="selectHeader"
+    // data-cy="select-header"
     style={props.headerStyle ? props.headerStyle : ''}
     onClick={props.onClick}
   >
@@ -29,7 +31,14 @@ const SelectHeader = props => (
     >
       <IconPointer />
     </PointerContainer>
-    <LabelContainer>{props.label}</LabelContainer>
+    <LabelContainer>
+      {props.label}
+      {props.placeHolderNumber !== undefined ? (
+        <Span> ({props.placeHolderNumber})</Span>
+      ) : (
+        ''
+      )}
+    </LabelContainer>
   </ComponentBase>
 );
 

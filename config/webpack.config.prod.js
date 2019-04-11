@@ -22,7 +22,7 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const BrotliGzipPlugin = require('brotli-gzip-webpack-plugin');
-
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
 const publicPath = paths.servedPath;
@@ -243,6 +243,11 @@ module.exports = {
       // from the current package.
       PnpWebpackPlugin.moduleLoader(module),
     ],
+  },
+  serve: {
+    proxy: {
+      "/api": "http://localhost:4200"
+    }
   },
   module: {
     strictExportPresence: true,
@@ -506,7 +511,7 @@ module.exports = {
     // the HTML & assets that are part of the Webpack build.
     new WorkboxWebpackPlugin.GenerateSW({
       clientsClaim: true,
-      exclude: [/\.map$/, /asset-manifest\.json$/],
+      exclude: [/asset-manifest\.json$/],
       importWorkboxFrom: 'cdn',
       navigateFallback: publicUrl + '/index.html',
       navigateFallbackBlacklist: [
@@ -546,6 +551,7 @@ module.exports = {
         silent: true,
         formatter: typescriptFormatter,
       }),
+    new BundleAnalyzerPlugin()
   ].filter(Boolean),
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

@@ -1,34 +1,26 @@
 import styled from 'styled-components';
 
 export const MapContainer = styled.div`
-  height: 100vh;
-  //width: 100vw;
+  position: relative;
+  height: 100%;
 `;
 
 export const NavContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  padding: 10px;
-  width: 100vw;
   display: flex;
   justify-content: space-between;
+  width: 100vw;
+  padding: 10px;
 `;
 
 export const LegendContainer = styled.div`
-  position: absolute;
-  width: fit-content;
+  position: fixed;
   left: 10px;
   display: flex;
   flex-direction: column;
-`;
-
-export const YearContainer = styled.div`
-  position: fixed;
-  width: 98%;
-  bottom: 12px;
-  z-index: 2;
-  left: 1%;
+  width: fit-content;
 `;
 
 export const NavControlContainer = styled.div`
@@ -36,17 +28,17 @@ export const NavControlContainer = styled.div`
 `;
 
 export const CountyInfo = styled.div`
-  width: 200px;
   z-index: 100;
-  border-radius: 5px;
+  width: 200px;
   padding: 15px;
   font-size: 14px;
+  border-radius: 5px;
 `;
 
 export const ControlsContainer = styled.div`
-  position: fixed;
-  top: 54px;
-  right: 26px;
-  background-color: rgba(239, 239, 239, 0.72);
+  position: absolute;
+  top: 20px;
+  right: 20px;
   z-index: 1;
+  background-color: rgba(239, 239, 239, 0.72);
 `;

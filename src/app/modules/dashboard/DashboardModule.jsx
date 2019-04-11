@@ -3,20 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /* components */
-import {
-  ModuleContainer,
-  PageHeading,
-  HeaderIcon,
-  HeaderGreeting,
-  SearchBox,
-  ViewContainer,
-  NoItems
-} from 'modules/dashboard/DashboardModule.styles';
-import SvgIconUser from 'assets/icons/IconUser';
-import SvgIconSearch from 'assets/icons/IconSearch';
-import TabContainer from './fragments/TabContainer/TabContainer';
-import UsersTabView from './fragments/UsersTabView/UsersTabView';
-import TeamsTabView from './fragments/TeamsTabView/TeamsTabView';
+import { ModuleContainer } from 'modules/dashboard/DashboardModule.styles';
+import DashboardContent from 'modules/dashboard/fragments/DashboardContent/DashboardContent';
+import DashboardHeader from './fragments/DashboardHeader/DashboardHeader';
+import Searchbox from 'modules/dashboard/fragments/Searchbox/Searchbox';
+import Pagination from 'components/Pagination/Pagination';
 
 const propTypes = {
   tabs: PropTypes.arrayOf(
@@ -32,117 +23,88 @@ const propTypes = {
   isSortByOpen: PropTypes.bool,
   setWrapperRef: PropTypes.func,
   greetingName: PropTypes.string,
+  onEnterPressed: PropTypes.func,
   setIsSortByOpen: PropTypes.func,
   changeSearchKeyword: PropTypes.func,
+  loading: PropTypes.bool,
   users: PropTypes.arrayOf(PropTypes.shape({})),
-  teams: PropTypes.arrayOf(PropTypes.shape({}))
+  teams: PropTypes.arrayOf(PropTypes.shape({})),
+  activeTab: PropTypes.string,
+  totalPages: PropTypes.number,
+  changePage: PropTypes.func
 };
 const defaultProps = {
   tabs: [],
   sort: '',
   activeTab: '',
   greetingName: '',
+  loading: false,
   changeSortBy: null,
   setWrapperRef: null,
+  onEnterPressed: null,
   isSortByOpen: false,
   setIsSortByOpen: null,
   changeSearchKeyword: null,
   users: [],
-  teams: []
-};
-
-const getTabView = (
-  users,
-  teams,
-  tabs,
-  tab,
-  isSortByOpen,
-  setIsSortByOpen,
-  setWrapperRef,
-  sort,
-  changeSortBy
-) => {
-  switch (tab) {
-    case tabs[0].key:
-      return <NoItems>No items in {tabs[0].label}</NoItems>;
-    case tabs[1].key:
-      return <NoItems>No items in {tabs[1].label}</NoItems>;
-    case tabs[2].key:
-      return <NoItems>No items in {tabs[2].label}</NoItems>;
-    case tabs[3].key:
-      return (
-        <UsersTabView
-          sort={sort}
-          users={users}
-          changeSortBy={changeSortBy}
-          isSortByOpen={isSortByOpen}
-          setWrapperRef={setWrapperRef}
-          setIsSortByOpen={setIsSortByOpen}
-        />
-      );
-    case tabs[4].key:
-      return (
-        <TeamsTabView
-          sort={sort}
-          teams={teams}
-          changeSortBy={changeSortBy}
-          isSortByOpen={isSortByOpen}
-          setWrapperRef={setWrapperRef}
-          setIsSortByOpen={setIsSortByOpen}
-        />
-      );
-    case tabs[5].key:
-      return <NoItems>No items in {tabs[5].label}</NoItems>;
-    default:
-      return <NoItems>No items</NoItems>;
-  }
+  teams: [],
+  activeTab: 'charts',
+  totalPages: 0,
+  changePage: null
 };
 
 const DashboardModule = ({
-  tabs,
+  loading,
+  page,
   sort,
   users,
+  datasets,
+  charts,
   teams,
   activeTab,
   greetingName,
   isSortByOpen,
+  onEnterPressed,
   changeSortBy,
   setWrapperRef,
   setIsSortByOpen,
-  changeSearchKeyword
+  changeSearchKeyword,
+  navItems,
+  totalPages,
+  changePage
 }) => (
   <ModuleContainer>
-    <PageHeading>Zoom dashboard</PageHeading>
-    <HeaderIcon>
-      <SvgIconUser />
-    </HeaderIcon>
-    <HeaderGreeting>Welcome back {greetingName}</HeaderGreeting>
-    <SearchBox onChange={changeSearchKeyword} placeholder={<SvgIconSearch />} />
-    <TabContainer
-      tabs={tabs}
-      tabCounts={{
-        charts: 0,
-        'data-sets': 0,
-        'focus-pages': 0,
-        users: users.length,
-        teams: teams.length,
-        trash: 0
-      }}
-      activeTab={activeTab}
+    <DashboardHeader
+      userName={greetingName}
+      title="Zoom dashboard"
+      message="Welcome back"
     />
-    <ViewContainer>
-      {getTabView(
-        users,
-        teams,
-        tabs,
-        activeTab,
-        isSortByOpen,
-        setIsSortByOpen,
-        setWrapperRef,
-        sort,
-        changeSortBy
-      )}
-    </ViewContainer>
+
+    <Searchbox
+      inputChange={changeSearchKeyword}
+      onEnterPressed={onEnterPressed}
+    />
+
+    {/*todo: sorting logic must be refactored/fixed*/}
+    <DashboardContent
+      loading={loading}
+      onEnterPressed={onEnterPressed}
+      users={users}
+      charts={charts}
+      datasets={datasets}
+      teams={teams}
+      isSortByOpen={isSortByOpen}
+      changeSortBy={changeSortBy}
+      setWrapperRef={setWrapperRef}
+      setIsSortByOpen={setIsSortByOpen}
+      activeTab={activeTab}
+      sort={sort}
+      navItems={navItems}
+    />
+    <Pagination
+      pageCount={totalPages}
+      changePage={changePage}
+      forcePage={page}
+    />
   </ModuleContainer>
 );
 

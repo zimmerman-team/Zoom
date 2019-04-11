@@ -6,6 +6,10 @@ import PropTypes from 'prop-types';
 import { Box } from 'grommet';
 import FindReplace from 'modules/datamapper/fragments/ErrorsStep/components/FindReplace/FindReplace';
 import Pagination from 'components/Pagination/Pagination';
+import ZoomButton from 'components/ZoomButton/ZoomButton';
+import SimpleEditDialog from 'components/Dialog/SimpleEditDialog/SimpleEditDialog';
+import Divider from 'components/Dividers/Divider';
+import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
 /* utils */
 import { formatColumns } from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep.util';
@@ -19,11 +23,11 @@ import {
   ErrorTable,
   TabContainer,
   TabText,
+  ButtonContainer,
   TabDivider
 } from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
 
 import theme from 'theme/Theme';
-import Divider from 'components/Dividers/Divider';
 
 const propTypes = {
   data: PropTypes.arrayOf(
@@ -56,8 +60,14 @@ const propTypes = {
   pageCount: PropTypes.number,
   changePage: PropTypes.func,
   findReplaceValues: PropTypes.func,
-  resetFindReplace: PropTypes.func,
+  showErrors: PropTypes.func,
   loading: PropTypes.bool,
+  checkRows: PropTypes.func,
+  deleteRows: PropTypes.func,
+  checkedRows: PropTypes.bool,
+  updateCell: PropTypes.func,
+  ignoreErrors: PropTypes.func,
+  ignoredErrors: PropTypes.arrayOf(PropTypes.string),
   forcePage: PropTypes.number
 };
 
@@ -68,8 +78,14 @@ const defaultProps = {
   pageCount: 100,
   changePage: undefined,
   findReplaceValues: undefined,
-  resetFindReplace: undefined,
+  showErrors: undefined,
   loading: false,
+  checkRows: undefined,
+  deleteRows: undefined,
+  checkedRows: false,
+  updateCell: undefined,
+  ignoreErrors: undefined,
+  ignoredErrors: [],
   forcePage: 0
 };
 
@@ -82,12 +98,15 @@ class ErrorStep extends React.Component {
       dialogOpen: false,
       data: props.data,
       columns: [],
-      selectedHeader: undefined
+      selectedHeader: undefined,
+      cellDialogOpen: false,
+      clickedCellValues: {}
     };
 
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
-    this.colorFoundReplaced = this.colorFoundReplaced.bind(this);
+    this.colorFoundReplace = this.colorFoundReplace.bind(this);
+    this.handleCellClick = this.handleCellClick.bind(this);
   }
 
   componentDidMount() {
@@ -95,11 +114,21 @@ class ErrorStep extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!isEqual(this.props.data, prevProps.data)) {
+    if (
+      !isEqual(this.props.data, prevProps.data) ||
+      !isEqual(this.props.ignoredErrors, prevProps.ignoredErrors) ||
+      !isEqual(this.props.errorCells, prevProps.errorCells)
+    ) {
       this.setState(
         {
           data: this.props.data,
-          columns: formatColumns(this.props.data)
+          columns: formatColumns(
+            this.props.data,
+            this.props.checkRows,
+            this.handleCellClick,
+            this.props.ignoreErrors,
+            this.props.ignoredErrors
+          )
         },
         this.changeColors
       );
@@ -126,15 +155,20 @@ class ErrorStep extends React.Component {
     if (this.state.tab === 'findErrors' || this.state.tab === 'findReplace') {
       this.resetColors();
       this.colorErrors();
-      this.colorFoundReplaced();
+      this.colorFoundReplace();
     }
   }
 
   colorErrors() {
     this.props.errorCells.forEach(cell => {
-      document.querySelector(
-        `tbody tr:nth-child(${cell.row}) td:nth-child(${cell.col})`
-      ).style.backgroundColor = theme.color.errorCellColor;
+      // and we don't color the ignored columns
+      if (this.props.ignoredErrors.indexOf(cell.col) === -1) {
+        const colInd =
+          findIndex(this.state.columns, ['property', cell.col]) + 1;
+        document.querySelector(
+          `tbody tr:nth-child(${cell.row}) td:nth-child(${colInd})`
+        ).style.backgroundColor = theme.color.errorCellColor;
+      }
     });
   }
 
@@ -144,13 +178,11 @@ class ErrorStep extends React.Component {
   // from where we can get the col index
   // and basically all rows in that retrieved table need to be colored
   // cause only rows where the value was found are actually shown
-  colorFoundReplaced() {
+  colorFoundReplace() {
     if (this.state.selectedHeader && this.state.tab === 'findReplace') {
       const colIndex =
-        findIndex(this.props.columnHeaders, [
-          'label',
-          this.state.selectedHeader
-        ]) + 3;
+        findIndex(this.state.columns, ['property', this.state.selectedHeader]) +
+        1;
 
       const cells = document.querySelectorAll(
         `tbody td:nth-child(${colIndex}) > div > div`
@@ -176,7 +208,7 @@ class ErrorStep extends React.Component {
 
   clickFindErrors() {
     if (this.state.tab !== 'findErrors') {
-      this.props.resetFindReplace();
+      this.props.showErrors(true);
       this.colorErrors();
       this.setState({ tab: 'findErrors', selectedHeader: undefined });
     }
@@ -184,7 +216,7 @@ class ErrorStep extends React.Component {
 
   clickOverview() {
     if (this.state.tab !== 'overview') {
-      this.props.resetFindReplace();
+      this.props.showErrors(false);
       this.resetColors();
       this.setState({ tab: 'overview', selectedHeader: undefined });
     }
@@ -192,16 +224,34 @@ class ErrorStep extends React.Component {
 
   clickFindReplace() {
     if (this.state.tab !== 'findReplace') {
-      this.colorErrors();
       this.setState({ tab: 'findReplace', dialogOpen: true });
     } else {
       this.setState({ dialogOpen: true });
     }
   }
 
+  handleCellClick(text, colName, rowInd) {
+    this.setState({
+      cellDialogOpen: true,
+      clickedCellValues: { text, colName, rowInd }
+    });
+  }
+
   render() {
     return (
-      <ModuleContainer>
+      <ModuleContainer
+        style={
+          this.props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}
+        }
+      >
+        {this.props.loading && <ProgressIcon />}
+        <SimpleEditDialog
+          open={this.state.cellDialogOpen}
+          handleClose={() => this.setState({ cellDialogOpen: false })}
+          defaultText={this.state.clickedCellValues.text}
+          extraValues={this.state.clickedCellValues}
+          handleSave={this.props.updateCell}
+        />
         <ErrorTitle>Check & correct erorrs</ErrorTitle>
         <TabContainer>
           <TabText
@@ -243,12 +293,21 @@ class ErrorStep extends React.Component {
             findReplaceValues={this.props.findReplaceValues}
             columnHeaders={this.props.columnHeaders}
             saveSelectedHeader={value =>
-              this.setState({ selectedHeader: value })
+              this.setState({ selectedHeader: value }, () =>
+                this.changeColors()
+              )
             }
             open={this.state.dialogOpen}
             setWrapperRef={this.setWrapperRef}
           />
         </TabContainer>
+        <ButtonContainer>
+          {this.props.checkedRows && (
+            <ZoomButton plain onClick={() => this.props.deleteRows()}>
+              Delete rows
+            </ZoomButton>
+          )}
+        </ButtonContainer>
         <Box>
           <ErrorTable columns={this.state.columns} data={this.state.data} />
         </Box>

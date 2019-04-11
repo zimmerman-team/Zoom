@@ -8,8 +8,8 @@ export const ComponentBase = styled.div`
   font-weight: normal;
   font-size: 14px;
   color: ${theme.color.aidsFondsRed};
-  margin-right: auto;
-  height: 41px;
+  margin: auto auto auto 0;
+  height: fit-content;
   ::-webkit-input-placeholder {
     color: ${theme.color.aidsFondsRed};
   }
@@ -25,4 +25,8 @@ export const PointerContainer = styled.div`
 
 export const LabelContainer = styled.div`
   margin: auto 0;
+`;
+
+export const Span = styled.span`
+  font-family: ${theme.font.zoomFontFamTwo};
 `;

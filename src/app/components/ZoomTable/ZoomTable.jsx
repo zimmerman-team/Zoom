@@ -1,7 +1,7 @@
 /* base */
 import React from 'react';
 import styled from 'styled-components';
-import { Box, Button, Grommet, Text, Heading, Grid, DataTable } from 'grommet';
+import { DataTable } from 'grommet';
 import NoSsr from '@material-ui/core/NoSsr';
 import theme from 'theme/Theme';
 

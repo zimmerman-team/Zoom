@@ -1,6 +1,12 @@
 import update from 'immutability-helper';
 import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
+import * as nodeActions from 'services/actions/nodeBackend';
+import { CREATE_DUPLICATE_CHART_INITIAL } from 'services/actions/nodeBackend';
+import { CREATE_DUPLICATE_CHART_REQUEST } from 'services/actions/nodeBackend';
+import { CREATE_DUPLICATE_CHART_SUCCESS } from 'services/actions/nodeBackend';
+import { CREATE_DUPLICATE_CHART_FAILED } from 'services/actions/nodeBackend';
+import { DUPLICATE_CHART_INITIAL } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -250,7 +256,292 @@ function countryExcerpt(state = initial, action) {
   }
 }
 
+function allUserCharts(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.ALL_USER_CHARTS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.ALL_USER_CHARTS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.ALL_USER_CHARTS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.ALL_USER_CHARTS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function user(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_USER_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_USER_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_USER_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_USER_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function userAdded(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.ADD_USER_INITIAL:
+      return updateInitial(state);
+    case nodeActions.ADD_USER_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.ADD_USER_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.ADD_USER_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function userUpdated(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.UPDATE_USER_INITIAL:
+      return updateInitial(state);
+    case nodeActions.UPDATE_USER_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.UPDATE_USER_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.UPDATE_USER_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function usersTeam(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.UPDATE_USERS_TEAM_INITIAL:
+      return updateInitial(state);
+    case nodeActions.UPDATE_USERS_TEAM__REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.UPDATE_USERS_TEAM_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.UPDATE_USERS_TEAM_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function datasetAdded(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.ADD_NEW_DATASET_INITIAL:
+      return updateInitial(state);
+    case nodeActions.ADD_NEW_DATASET_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.ADD_NEW_DATASET_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.ADD_NEW_DATASET_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function chartCreated(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.CREATE_UPDATE_CHART_INITIAL:
+      return updateInitial(state);
+    case nodeActions.CREATE_UPDATE_CHART_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.CREATE_UPDATE_CHART_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.CREATE_UPDATE_CHART_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function chartResults(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_CHART_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_CHART_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_CHART_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_CHART_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function userCharts(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_USER_CHARTS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_USER_CHARTS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_USER_CHARTS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_USER_CHARTS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function chartDeleted(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.DELETE_CHART_INITIAL:
+      return updateInitial(state);
+    case nodeActions.DELETE_CHART_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.DELETE_CHART_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.DELETE_CHART_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function userDatasets(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_USER_DATASETS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_USER_DATASETS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_USER_DATASETS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_USER_DATASETS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function publicCharts(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_PUBLIC_CHARTS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_PUBLIC_CHARTS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_PUBLIC_CHARTS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_PUBLIC_CHARTS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function userDeleted(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.DELETE_USER_INITIAL:
+      return updateInitial(state);
+    case nodeActions.DELETE_USER_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.DELETE_USER_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.DELETE_USER_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function datasetUpdated(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.UPDATE_DATASET_INITIAL:
+      return updateInitial(state);
+    case nodeActions.UPDATE_DATASET_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.UPDATE_DATASET_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.UPDATE_DATASET_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function dupChartCreated(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.CREATE_DUPLICATE_CHART_INITIAL:
+      return updateInitial(state);
+    case nodeActions.CREATE_DUPLICATE_CHART_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.CREATE_DUPLICATE_CHART_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.CREATE_DUPLICATE_CHART_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function chartDuplicated(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.DUPLICATE_CHART_INITIAL:
+      return updateInitial(state);
+    case nodeActions.DUPLICATE_CHART_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.DUPLICATE_CHART_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.DUPLICATE_CHART_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function updateTeamAndUsersOfIt(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_INITIAL:
+      return updateInitial(state);
+    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT__REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function groupDeleted(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.DELETE_GROUP_INITIAL:
+      return updateInitial(state);
+    case nodeActions.DELETE_GROUP_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.DELETE_GROUP_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.DELETE_GROUP_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  chartDuplicated,
+  dupChartCreated,
+  datasetUpdated,
+  publicCharts,
+  userDatasets,
+  chartDeleted,
+  userCharts,
+  chartResults,
+  chartCreated,
+  datasetAdded,
+  usersTeam,
+  userUpdated,
+  userAdded,
+  user,
+  allUserCharts,
   upload,
   validate,
   columns,
@@ -262,7 +553,10 @@ const reducers = {
   countryActivities,
   activityData,
   countrySectors,
-  countryOrganisations
+  countryOrganisations,
+  updateTeamAndUsersOfIt,
+  groupDeleted,
+  userDeleted
 };
 
 export default reducers;

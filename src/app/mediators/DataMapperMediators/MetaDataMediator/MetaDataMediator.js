@@ -5,13 +5,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MetaData from 'modules/datamapper/fragments/MetaData/MetaData';
 import { createFragmentContainer, graphql } from 'react-relay';
+import { connect } from 'react-redux';
+
+/* actions */
+import * as actions from 'services/actions/general';
 
 /* utils */
 import findIndex from 'lodash/findIndex';
-import isEqual from 'lodash/isEqual';
+import sortBy from 'lodash/sortBy';
 
 /* consts */
-import { step1InitialData } from '__consts__/MetaDataStepConsts';
+import { step1InitialData } from '__consts__/DataMapperStepConsts';
 
 const propTypes = {
   dropDownData: PropTypes.shape({
@@ -25,8 +29,9 @@ const propTypes = {
       )
     })
   }),
+  dataSetEdit: PropTypes.bool,
   saveStepData: PropTypes.func,
-  data: PropTypes.shape({
+  stepData: PropTypes.shape({
     title: PropTypes.string,
     desc: PropTypes.string,
     tags: PropTypes.arrayOf(PropTypes.string),
@@ -68,6 +73,7 @@ const propTypes = {
     q3Text: PropTypes.string,
     q4Text: PropTypes.string,
     q51Text: PropTypes.string,
+    alwaysSave: PropTypes.bool,
     fileSources: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
@@ -79,8 +85,10 @@ const propTypes = {
 
 const defaultProps = {
   dropDownData: {},
+  alwaysSave: false,
+  dataSetEdit: false,
   saveStepData: undefined,
-  data: step1InitialData,
+  stepData: step1InitialData,
   environment: null
 };
 
@@ -89,12 +97,14 @@ class MetaDataMediator extends React.Component {
     super(props);
 
     this.state = {
-      data: props.data
+      dataLoaded: false,
+      data: props.stepData.metaData
+        ? props.stepData.metaData
+        : step1InitialData.metaData
     };
 
     this.simpleChange = this.simpleChange.bind(this);
     this.checkBoxChange = this.checkBoxChange.bind(this);
-    this.otherCheckBoxText = this.otherCheckBoxText.bind(this);
     this.dropDownChange = this.dropDownChange.bind(this);
     this.otherDropdownText = this.otherDropdownText.bind(this);
     this.onChipAdd = this.onChipAdd.bind(this);
@@ -102,15 +112,45 @@ class MetaDataMediator extends React.Component {
   }
 
   componentDidMount() {
-    const fileSources = this.props.dropDownData.allFileSources.edges.map(
-      node => {
-        return { label: node.node.name, value: node.node.entryId };
-      }
-    );
-    this.simpleChange(fileSources, 'fileSources');
+    if (!this.props.stepData.metaData) {
+      // so we set the initial state of the step data
+      const stepData = { ...this.props.stepData };
+      stepData.metaData = step1InitialData.metaData;
+      stepData.environment = this.props.relay.environment;
+      this.props.dispatch(actions.saveStepDataRequest(stepData));
+    }
 
-    if (!this.props.environment)
-      this.props.saveEnvironment(this.props.relay.environment);
+    let fileSources = this.props.dropDownData.allFileSources.edges.map(node => {
+      return { label: node.node.name, value: node.node.entryId };
+    });
+    fileSources = sortBy(fileSources, ['label']);
+    this.simpleChange(fileSources, 'fileSources');
+  }
+
+  componentDidUpdate(prevProps) {
+    // so we want the data to load only once from the props here.
+    // this is mainly used for the dataset metadata edit page
+    if (
+      prevProps.stepData.metaData &&
+      this.props.stepData.metaData &&
+      this.props.stepData.metaData.title !==
+        prevProps.stepData.metaData.title &&
+      !this.state.dataLoaded
+    ) {
+      this.setState({
+        dataLoaded: true,
+        data: this.props.stepData.metaData
+      });
+    }
+  }
+
+  // and we save the first steps data in redux
+  componentWillUnmount() {
+    if (!this.props.dataSetEdit) {
+      const stepData = { ...this.props.stepData };
+      stepData.metaData = this.state.data;
+      this.props.dispatch(actions.saveStepDataRequest(stepData));
+    }
   }
 
   onChipAdd(value) {
@@ -126,61 +166,42 @@ class MetaDataMediator extends React.Component {
   }
 
   simpleChange(value, question) {
-    this.setState(
-      prevState => {
-        const { data } = prevState;
-        data[question] = value;
-        return { data };
-      },
-      () => this.props.saveStepData(this.state.data, 1)
-    );
+    this.setState((prevState, props) => {
+      const data = { ...prevState.data };
+      data[question] = value;
+
+      // here we will only save data into props
+      // if its about one of the required fields
+      // or if its the dataset edit page where we will always save
+      if (
+        data.requiredFields.indexOf(question) !== -1 ||
+        this.props.alwaysSave
+      ) {
+        const stepData = { ...props.stepData };
+        stepData.metaData = data;
+        props.dispatch(actions.saveStepDataRequest(stepData));
+      }
+
+      return { data };
+    });
   }
 
-  // so for check box change we tweek the changing a little
-  // bit to encapsulate the 'other' logic
-  checkBoxChange(value, question, qText = false) {
+  checkBoxChange(value, question) {
     const check = this.state.data[question];
     const checkInd = findIndex(check, ['label', value]);
 
     if (checkInd === -1) {
       // so if a checked doesnt exist we add it
       // and if it does exist we remove it
-      let val = value;
-      // so if its other we gonna add the text as value for it
-      if (value.toLowerCase() === 'other' && qText) {
-        val = this.state.data[qText];
-      }
       check.push({
         label: value,
-        value: val
+        value
       });
     } else {
       check.splice(checkInd, 1);
     }
 
     this.simpleChange(check, question);
-  }
-
-  // so this will happen when the other text will be changed,
-  // and it will be a bit more than just
-  otherCheckBoxText(value, question, qText) {
-    const check = this.state.data[question];
-
-    const otherInd = findIndex(
-      check,
-      item => item.label.toLowerCase() === 'other'
-    );
-
-    // so if 'other' label exists in the selected checkboxes
-    // we add it the changed text value straight to the array
-    if (otherInd !== -1) {
-      check[otherInd].value = value;
-      this.simpleChange(check, question);
-    }
-
-    // otherwise it will be added when the checkbox is selected, but we still
-    // save the currently entered text
-    this.simpleChange(value, qText);
   }
 
   // for dropdown selection we'll also have a little tweek
@@ -240,10 +261,10 @@ class MetaDataMediator extends React.Component {
   render() {
     return (
       <MetaData
+        metaDataEmptyFields={this.props.metaDataEmptyFields}
         data={this.state.data}
         simpleChange={this.simpleChange}
         checkBoxChange={this.checkBoxChange}
-        otherCheckBoxText={this.otherCheckBoxText}
         dropDownChange={this.dropDownChange}
         otherDropdownText={this.otherDropdownText}
         onChipAdd={this.onChipAdd}
@@ -256,8 +277,14 @@ class MetaDataMediator extends React.Component {
 MetaDataMediator.propTypes = propTypes;
 MetaDataMediator.defaultProps = defaultProps;
 
+const mapStateToProps = state => {
+  return {
+    stepData: state.stepData.stepzData
+  };
+};
+
 export default createFragmentContainer(
-  MetaDataMediator,
+  connect(mapStateToProps)(MetaDataMediator),
   graphql`
     fragment MetaDataMediator_dropDownData on Query {
       allFileSources {

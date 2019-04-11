@@ -4,6 +4,18 @@
   ],
   "extends": [
     "stylelint-config-recommended",
-    "stylelint-config-styled-components"
-  ]
+    "stylelint-config-styled-components",
+    "stylelint-config-rational-order"
+  ],
+  "plugins": [
+    "stylelint-high-performance-animation",
+    "stylelint-z-index-value-constraint"
+  ],
+  "rules": {
+        "property-no-vendor-prefix": 1,
+    "plugin/z-index-value-constraint": {
+      "min": 1,
+      "max": 10
+    }
+  }
 }

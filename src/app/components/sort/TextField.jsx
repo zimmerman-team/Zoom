@@ -1,92 +1,72 @@
-/* base */
 import React from 'react';
-import styled from 'styled-components';
-
-import TextField from '@material-ui/core/TextField';
 import NoSsr from '@material-ui/core/NoSsr';
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import styled from 'styled-components';
 import theme from 'theme/Theme';
 
-export default styled(props => (
-  <NoSsr>
-    <TextField
-      id="standard-full-width"
-      placeholder="Placeholder"
-      fullWidth
-      margin="none"
-      InputProps={{
-        disableUnderline: true
-      }}
-      InputLabelProps={{
-        disableAnimation: true
-      }}
-      {...props}
-    />
-  </NoSsr>
+/* todo: read up https://stackoverflow.com/questions/52176177/how-to-override-textfield-of-floating-label-text-and-underline-color-in-material */
+
+const styles = theme => ({
+  error: {
+    background: 'yellow',
+    display: 'flex',
+    color: 'yellow'
+  }
+});
+
+const Container = styled(props => (
+  <TextField
+    id="standard-full-width"
+    fullWidth
+    margin="none"
+    label="Empty"
+    InputLabelProps={{
+      disableAnimation: true,
+      shrink: false
+    }}
+    InputProps={{
+      disableUnderline: true
+    }}
+    {...props}
+  />
 ))`
   && {
-    font-size: 14px;
-    color: black;
-    font-family: ${theme.font.zoomFontFamTwo};
-    margin: 0;
+    display: flex;
+    flex-direction: column;
 
-    &:before {
-      left: 0;
-      right: 0;
-      bottom: 0;
-      content: '\\00a0';
-      position: absolute;
-      transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-      border-bottom: 1px solid #9b9b9b;
-      pointer-events: none;
-    }
-
-    &:after {
-      left: 0;
-      right: 0;
-      bottom: 0;
-      content: '';
-      position: absolute;
-      transform: scaleX(0);
-      transition: transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-      border-bottom: 1px solid #303f9f;
-      pointer-events: none;
-    }
-
-    & [class*='MuiFormLabel-root'] {
+    label {
+      position: relative;
+      margin-bottom: 10px;
       color: ${theme.color.colHeadColor};
-      font-weight: 500;
-      font-size: 18px;
       font-family: ${theme.font.zoomFontFamOne};
+      font-size: 14px;
+      line-height: 1;
     }
 
-    & [class*='MuiInputLabel-focused'] {
-      color: ${theme.color.aidsFondsBlue};
-    }
-
-    & [class*='MuiInputBase-focused'] {
-      border-bottom: 1px solid ${theme.color.aidsFondsBlue};
+    textarea,
+    input {
+      color: ${theme.color.zoomBlack};
+      font-family: ${theme.font.zoomFontFamTwo};
+      font-size: 14px;
+      line-height: 1;
+      border-bottom: 1px solid ${theme.color.colHeadColor};
+      padding-bottom: 5px;
+      &:focus {
+        border-bottom: 1px solid ${theme.color.aidsFondsBlue};
+      }
     }
 
     & [class*='MuiInputLabel-error'] {
       color: ${theme.color.aidsFondsRed};
     }
-
-    & [class*='MuiPrivateTextarea-root'] {
-      padding-top: 10px;
-    }
-
-    & input,
-    textarea {
-      font-family: ${theme.font.zoomFontFamTwo};
-      font-size: 14px;
-    }
-
-    & input {
-      padding-top: 14px;
-    }
-
     & [class*='MuiInput-error'] {
-      border-bottom: 1px solid ${theme.color.aidsFondsRed};
+      input,
+      textarea {
+        border-bottom: 1px solid ${theme.color.aidsFondsRed};
+      }
     }
   }
 `;
+
+export default withStyles(styles)(Container);

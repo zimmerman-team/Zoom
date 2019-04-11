@@ -1,5 +1,12 @@
 import findIndex from 'lodash/findIndex';
 import find from 'lodash/find';
+import sortBy from 'lodash/sortBy';
+
+export const arrayOfValues = [
+  'Number Value',
+  'Percentage Value',
+  'Mixed Value'
+];
 
 //  Note this whole types and summary data is formed in a very very weird way
 // so there's lots seemingly weird stuff happening in this function
@@ -79,7 +86,7 @@ export function formatOverviewData(sumString, typesString) {
 }
 
 export function formatModelOptions(dataModelHeading) {
-  const modelOptions = [];
+  let modelOptions = [];
 
   // We push in the default label none
   modelOptions.push({
@@ -99,18 +106,32 @@ export function formatModelOptions(dataModelHeading) {
     value: 'Latitude'
   });
 
-  Object.keys(dataModelHeading.mapping_dict).map(key => {
-    // and now we push in the rest
+  // and because we have a bunch of different types of values
+  arrayOfValues.forEach(valName => {
     modelOptions.push({
-      label: key,
-      value: key
+      label: valName,
+      value: valName
     });
   });
+
+  Object.keys(dataModelHeading.mapping_dict).map(key => {
+    // so since we already pushed in the only available value selections
+    // with types/formats we don't need the default value and value_format
+    if (key !== 'value') {
+      // and now we push in the rest
+      modelOptions.push({
+        label: key.charAt(0).toUpperCase() + key.slice(1),
+        value: key
+      });
+    }
+  });
+
+  modelOptions = sortBy(modelOptions, ['label']);
 
   return modelOptions;
 }
 
-export function formatManData(typesString) {
+export function formatManData(typesString, modelOptions) {
   const manMapData = [];
 
   // so yeah the types we retrieve from the overview step contains the actual column headers
@@ -119,10 +140,14 @@ export function formatManData(typesString) {
 
   // yet again this is super weird data so we form it in a weird way.
   Object.keys(types).forEach(typeKey => {
+    const modelOption = find(modelOptions, ['value', types[typeKey][0]]);
+
     manMapData.push({
       lockedIn: false,
       fileType: types[typeKey][0],
-      zoomModel: '-None-',
+      // so if a file type exists as a model, it should be selected by default
+      zoomModel: modelOption ? types[typeKey][0] : '-None-',
+      zoomModelLabel: modelOption ? modelOption.label : '-None-',
       label: undefined,
       emptyFieldRow: false
     });

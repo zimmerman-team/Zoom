@@ -2,36 +2,38 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Cookies from 'universal-cookie';
+import { withRouter } from 'react-router';
+
+/* consts */
+import paneTypes from '__consts__/PaneTypesConst';
 
 /* components */
 import GeoMap from 'components/GeoMap/GeoMap';
-import {
-  ModuleContainer,
-  ControlPanelContainer
-} from 'modules/home/HomeModule.styles';
-import ExplorePanelMediator from 'mediators/ComponentMediators/ExplorePanelMediator/ExplorePanelMediator';
-// import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
+import { ModuleContainer } from 'modules/home/HomeModule.styles';
+import ExplorePanelMediator from 'mediators/ComponentMediators/PaneMediators/ExplorePanelMediator/ExplorePanelMediator';
+import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
+import NavPane from 'components/Panes/NavPane/NavPane';
+import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
+import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
 const propTypes = {
+  loading: PropTypes.bool,
   indicators: PropTypes.arrayOf(PropTypes.shape)
 };
 
 const defaultProps = {
+  loading: false,
   indicators: []
 };
 
 export class HomeModule extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dialogOpen: true,
-      sideBarOpen: false,
-      indicators: []
-    };
-
-    this.onClose = this.onClose.bind(this);
-    this.toggleSideBar = this.toggleSideBar.bind(this);
-  }
+  state = {
+    dialogOpen: true,
+    sideBarOpen: false,
+    indicators: [],
+    dialogShown: 'false'
+  };
 
   onClose = () => {
     this.setState({ dialogOpen: false });
@@ -41,28 +43,56 @@ export class HomeModule extends Component {
     this.setState({ sideBarOpen: true });
   };
 
-  render() {
+  componentDidMount = () => {
+    /* todo: the cookie logic is pretty rudimentary, suffices for now but should be optimised */
+    const cookies = new Cookies();
+    this.setState({ dialogShown: cookies.get('homeDialogShown') || 'false' });
+    let d = new Date();
+    d.setTime(d.getTime() + 1440 * 60 * 1000);
+    cookies.set('homeDialogShown', 'true', { path: '/', expires: d });
+  };
+
+  render = () => {
     const { indicators, ...otherProps } = this.props;
+
+    const paneContVis =
+      this.props.dataPaneOpen === paneTypes.none ? 'none' : 'unset';
+    const explorePaneVis =
+      this.props.dataPaneOpen === paneTypes.pubPane ? 'unset' : 'none';
 
     return (
       <React.Fragment>
-        <ModuleContainer>
-          {/*<BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />*/}
+        <ModuleContainer
+          style={
+            this.props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}
+          }
+        >
+          {this.props.loading && <ProgressIcon />}
+
+          {this.state.dialogShown === 'false' && (
+            <BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />
+          )}
 
           <GeoMap
+            outerHistory={this.props.history}
             indicatorData={indicators}
-            selectedYears={this.props.yearPeriod}
+            selectedYear={this.props.selectedYear}
             selectYear={this.props.selectYear}
+            latitude={15}
+            longitude={0}
+            zoom={2}
           />
-          {this.props.dataPaneOpen && (
-            <ControlPanelContainer>
-              <ExplorePanelMediator {...otherProps} />
-            </ControlPanelContainer>
-          )}
+
+          <DataPaneContainer display={paneContVis}>
+            <ExplorePanelMediator display={explorePaneVis} {...otherProps} />
+            {(this.props.dataPaneOpen === paneTypes.privPane ||
+              this.props.dataPaneOpen === paneTypes.createChart ||
+              this.props.dataPaneOpen === paneTypes.convertData) && <NavPane />}
+          </DataPaneContainer>
         </ModuleContainer>
       </React.Fragment>
     );
-  }
+  };
 }
 HomeModule.propTypes = propTypes;
 HomeModule.defaultProps = defaultProps;
@@ -73,4 +103,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(HomeModule);
+export default withRouter(connect(mapStateToProps)(HomeModule));

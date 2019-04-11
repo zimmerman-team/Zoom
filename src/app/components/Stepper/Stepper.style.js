@@ -22,41 +22,6 @@ export const ButtonContainer = styled(Box)`
   margin: 0 4px;
 `;
 
-export const Stepz = styled(Step)`
-  & [class*='MuiStepIcon-root'] {
-    color: ${theme.color.zoomGreyThree};
-    width: 21px;
-    height: 21px;
-  }
-
-  & [class*='MuiStepIcon-active'] {
-    color: ${theme.color.aidsFondsBlue} !important;
-  }
-
-  & [class*='MuiStepIcon-completed'] {
-    color: ${theme.color.aidsFondsBlue} !important;
-  }
-`;
-
-export const StepzLabel = styled(StepLabel)`
-  & span {
-    font-size: 14px;
-    font-family: ${theme.font.zoomFontFamOne} !important;
-  }
-
-  & [class*='MuiTypography-root'] {
-    margin-top: 12px !important;
-  }
-
-  & [class*='MuiStepLabel-active'] {
-    color: ${theme.color.aidsFondsBlue} !important;
-  }
-
-  & [class*='MuiStepLabel-completed'] {
-    color: ${theme.color.aidsFondsBlue} !important;
-  }
-`;
-
 export const StyledStepper = styled(Stepper)`
   margin-bottom: 26px;
   background-color: inherit !important;
@@ -86,5 +51,37 @@ export const materialStyles = uiTheme => ({
   },
   connectorLine: {
     transition: uiTheme.transitions.create('border-color')
-  }
+  },
+
+  stepLabel: {
+    fontSize: '14px',
+    fontFamily: theme.font.zoomFontFamOne,
+    color: theme.color.zoomGreyTen,
+    marginTop: '10px !important',
+    '&$stepLabelActive': {
+      color: theme.color.aidsFondsBlue
+    },
+    '&stepLabelCompleted': {
+      color: theme.color.aidsFondsBlue
+    }
+  },
+  stepLabelActive: {},
+  stepLabelCompleted: {},
+
+  stepIcon: {
+    color: theme.color.zoomGreyTen,
+    '&$stepIconCompleted': {
+      color: theme.color.aidsFondsBlue
+    },
+    '&$stepIconActive': {
+      color: theme.color.aidsFondsBlue
+    },
+    // fixme: not conform material-ui guidelines
+    '& text': {
+      fontFamily: theme.font.zoomFontFamOne
+    }
+  },
+  stepIconActive: {},
+  stepIconText: {},
+  stepIconCompleted: {}
 });

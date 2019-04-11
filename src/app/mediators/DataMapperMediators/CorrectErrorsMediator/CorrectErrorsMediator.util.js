@@ -11,34 +11,62 @@ export function formatErrorCells(
 ) {
   const errorCells = [];
 
-  Object.keys(errorData).forEach(key => {
-    let row = parseInt(key.substring(0, key.indexOf('|')), 10);
+  if (errorData) {
+    errorData.forEach(errorItem => {
+      Object.keys(errorItem).forEach(key => {
+        let row = parseInt(key.substring(0, key.indexOf('|')), 10);
 
-    const columnName = key.substring(key.indexOf('|') + 1);
+        const columnName = key.substring(key.indexOf('|') + 1);
 
-    // so we check the first data entry to get the
-    // column number according to the column name
-    // and this can work only with the first, cause everyt data
-    // entry has all the columns listed(at least should have)
-    // we also do +3 because we have two extra columns that we
-    // show in the table then there are columns in the file
-    // and extra one because yet again the column data starts from 0
-    // and in ui it starts from 1
-    const colIndex = columnHeaders.indexOf(columnName) + 3;
+        row = findIndex(data, ['line no.', row]) + 1;
 
-    row = findIndex(data, ['line no.', row]) + 1;
-
-    // so we also skip generating error cell data for replaced values
-    // as they are already replaced, but we get the error data from
-    // before they were replaced
-    if (row !== 0 && replacedColumn !== columnName) {
-      errorCells.push({
-        row,
-        col: colIndex,
-        message: errorData[key]
+        // so we also skip generating error cell data for replaced values
+        // as they are already replaced, but we get the error data from
+        // before they were replaced
+        if (row !== 0 && replacedColumn !== columnName) {
+          errorCells.push({
+            row,
+            col: columnName,
+            message: errorItem[key]
+          });
+        }
       });
-    }
-  });
+    });
+  }
 
   return errorCells;
+}
+
+export function checkIfErrors(errorMessages, ignoredErrors) {
+  // so we form this errorsExists variable according
+  // to the errors message that we get from duct
+  // and according to the ignored error array
+  let errorsExists = false;
+
+  if (errorMessages) {
+    // now we need to do this in an even weirder way
+    // cause the data retrieved was made even weirder than before...
+    for (let i = 0; i < errorMessages.length; i++) {
+      const errorMessage = errorMessages[i];
+
+      for (let key in errorMessage) {
+        if (errorMessage.hasOwnProperty(key)) {
+          // so here we get the column name
+          // from the key in a weird way
+          // cause the data we retrieve is super
+          // weird
+          const colName = key.substring(key.indexOf('|') + 1);
+
+          // so if we find a key with a column name
+          // that isn't in the ignoredErrors array,
+          // we set errorsExists to true and break out of loop
+          if (ignoredErrors.indexOf(colName) === -1) {
+            errorsExists = true;
+          }
+        }
+      }
+      if (errorsExists) break;
+    }
+  }
+  return errorsExists;
 }

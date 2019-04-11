@@ -9,11 +9,25 @@ export const ModuleContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 1024px;
+  margin: 0 auto;
+`;
+
+export const Header = styled.section`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
+
+export const Section = styled.section`
+  width: 100%;
 `;
 
 export const PageHeading = styled(_PageHeading)`
   font-size: 32px;
   margin-bottom: 15px;
+  line-height: 0.6;
 `;
 
 export const HeaderIcon = styled.div``;

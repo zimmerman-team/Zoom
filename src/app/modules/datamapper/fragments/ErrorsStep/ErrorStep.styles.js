@@ -27,12 +27,34 @@ export const CheckBox = styled(HeaderCheckBox)`
 `;
 
 export const ErrorCell = styled(CellValue)`
-  padding-left: 20px;
+  // padding-left: 20px;
   padding-right: 8px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const ErrorColHeader = styled(ColumnHeader)`
-  padding-left: 20px;
+  // padding-left: 20px;
+`;
+
+export const IgnoreHeaderCheckBox = styled(HeaderCheckBox)`
+  color: black;
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  margin: 5px auto 0 5px;
+  line-height: 24px;
+`;
+
+export const HeaderName = styled.div`
+  border-bottom: 2px solid ${theme.color.zoomGreyNine};
+`;
+
+export const IgnorHeaderLabel = styled(ColumnHeader)`
+  margin-left: 5px;
+  width: max-content;
+  font-size: 10px;
 `;
 
 export const ErrorTable = styled(ZoomTable)`
@@ -59,7 +81,7 @@ export const ErrorTable = styled(ZoomTable)`
 export const TabContainer = styled.div`
   display: flex;
   width: fit-content;
-  margin: 0 auto 14px auto;
+  margin: 0 auto;
 `;
 
 export const TabText = styled.div`
@@ -76,4 +98,9 @@ export const TabDivider = styled(TabText)`
   &:hover {
     cursor: unset;
   }
+`;
+
+export const ButtonContainer = styled.div`
+  height: 30px;
+  margin: 5px;
 `;

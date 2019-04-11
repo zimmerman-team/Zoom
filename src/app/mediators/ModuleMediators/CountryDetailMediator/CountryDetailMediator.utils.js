@@ -63,6 +63,12 @@ export function formatProjectData(activities) {
         activity,
         'aggregations.activity.budget_value',
         'Not Specified'
+      ).toLocaleString(
+        {},
+        {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2
+        }
       )}`
     });
   });
@@ -76,16 +82,23 @@ export function formatProjectData(activities) {
 */
 export function getProjectCountNCommitment(activities) {
   let commitment = 0;
+  const currency =
+    get(activities, '[0].aggregations.activity.commitment_currency', '') ===
+    null
+      ? get(activities, '[0].aggregations.activity.budget_currency', '')
+      : get(activities, '[0].aggregations.activity.commitment_currency', '');
   activities.forEach(activity => {
     commitment += get(activity, 'aggregations.activity.commitment_value', 0);
   });
   return {
     count: activities.length,
-    commitment: `${get(
-      activities,
-      '[0].aggregations.activity.commitment_currency',
-      ''
-    )} ${commitment}`
+    commitment: `${currency} ${commitment.toLocaleString(
+      {},
+      {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      }
+    )}`
   };
 }
 
@@ -128,24 +141,27 @@ export function formatBarChartInfoIndicators(
       const countryDataPoints = filter(countryData, ['indicatorName', name]);
       // const globalDataPoints = filter(globalData, ['indicatorName', name]);
 
-      let countryIndValue = 0;
-      countryDataPoints.forEach(point => {
-        countryIndValue += point.value;
-      });
-      total += countryIndValue;
+      if (countryDataPoints.length > 0) {
+        let countryIndValue = sortBy(countryDataPoints, ['date']).reverse()[0]
+          .value;
+        // countryDataPoints.forEach(point => {
+        //   countryIndValue += point.value;
+        // });
+        total += countryIndValue;
 
-      // let globalIndValue = 0;
-      // globalDataPoints.forEach(point => {
-      //   globalIndValue += point.value;
-      // });
+        // let globalIndValue = 0;
+        // globalDataPoints.forEach(point => {
+        //   globalIndValue += point.value;
+        // });
 
-      barChartData.push({
-        indicator: name,
-        [countryName]: countryIndValue,
-        CountryColor: theme.color.chartColorTwo
-        // Global: globalIndValue,
-        // GlobalColor: theme.color.chartColorThree
-      });
+        barChartData.push({
+          indicator: name,
+          [countryName]: countryIndValue,
+          CountryColor: theme.color.chartColorTwo
+          // Global: globalIndValue,
+          // GlobalColor: theme.color.chartColorThree
+        });
+      }
     }
   });
 

@@ -1,7 +1,10 @@
 export default {
   fontSize: {
     pageHeadingBig: '48px',
-    pageHeadingSmall: '32px'
+    pageHeadingSmall: '32px',
+    caption: '12px',
+    body2: '14px',
+    subTitle2: '14px'
   },
 
   color: {
@@ -26,19 +29,30 @@ export default {
     zoomGreyNine: '#dcdcdc',
     zoomGreyTen: '#959595',
     zoomGreyEleven: '#b4b4b4',
+    zoomGreyTwelf: '#d9d9d9',
     zoomBlack: '#000000',
     colHeadColor: '#9b9b9b',
     errorCellColor: '#ff807f',
     smallTextBlack: '#4a4a4a',
-    switchGreen: '#8ed59b'
+    switchGreen: '#8ed59b',
+
+    fontDarkSecondary: 'rgba(0, 0, 0, 0.55)',
+    baseGrey: '#757575',
+    greyLight25: '#b3b3b3',
+    greyLight50: '#efefef'
   },
   space: {},
   height: {},
   font: {
     zoomFontFamOne: 'FFMarkProAF-Bold',
-    zoomFontFamTwo: 'FFMarkProAF-Book'
+    zoomFontFamTwo: 'FFMarkProAF-Book',
+    zoomFontFamThree: 'FFMarkProAF-Medium'
   },
-  weight: {},
+  weight: {
+    bold: 700,
+    medium: 500,
+    book: 300
+  },
   shadow: {
     standard: '0 2px 4px rgba(0, 0, 0, 0.5)'
   },

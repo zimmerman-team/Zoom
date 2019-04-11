@@ -14,7 +14,7 @@ export default {
     chartColorTwo: '#5376F3',
     chartColorThree: '#AFE7F1',
     zoomYellow: '#f5a623',
-    zoomGreyZero: '#efefef',//grey-light-50
+    zoomGreyZero: '#efefef', //grey-light-50
     zoomGreyOne: '#818181', //grey-base
     zoomGreyTwo: '#4A4A4A', //grey-dark-15
     zoomGreyThree: '#a1a1a1',

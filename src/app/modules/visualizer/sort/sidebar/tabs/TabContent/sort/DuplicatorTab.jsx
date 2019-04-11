@@ -69,6 +69,7 @@ const DuplicatorTab = props => {
           fontSize={14}
           width={225}
           onClick={() => props.handleDuplicate()}
+          data-cy="duplicate-to-dashboard"
         />
       </Box>
 
@@ -79,7 +80,10 @@ const DuplicatorTab = props => {
           <InformationText>
             Succesfully duplicated {props.duplName} copy to your dashboard!
           </InformationText>
-          <ClickText onClick={() => props.handleSaveEdit()}>
+          <ClickText
+            onClick={() => props.handleSaveEdit()}
+            data-cy="edit-chart"
+          >
             Click here to edit this chart
           </ClickText>
           <InformationText>

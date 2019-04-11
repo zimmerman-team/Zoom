@@ -138,6 +138,7 @@ function VisibilityTab(props) {
             <ControlLabel
               control={
                 <Switch
+                  data-cy="publish-chart-to-public"
                   checked={props.chartData._public}
                   onChange={handleChange('_public')}
                   value="public"
@@ -156,6 +157,7 @@ function VisibilityTab(props) {
             <ControlLabel
               control={
                 <Switch
+                  data-cy="publish-chart-to-team"
                   checked={props.chartData.team}
                   onChange={handleChange('team')}
                   value="team"

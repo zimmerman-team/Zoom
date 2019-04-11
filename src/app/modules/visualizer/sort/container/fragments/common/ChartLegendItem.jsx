@@ -55,7 +55,7 @@ const ChartLegendItem = props => {
     <ComponentBase>
       <Box>
         <LegendColor color={props.color} />
-        <LegendLabel text={props.text} />
+        <LegendLabel text={props.text} data-cy="linechart-legenditem-text" />
       </Box>
       <FragmentInfoButton />
     </ComponentBase>

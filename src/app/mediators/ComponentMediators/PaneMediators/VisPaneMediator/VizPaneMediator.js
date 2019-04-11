@@ -100,6 +100,7 @@ class VizPaneMediator extends React.Component {
     this.resetIndicators = this.resetIndicators.bind(this);
     this.selectYearRange = this.selectYearRange.bind(this);
     this.changesMade = this.changesMade.bind(this);
+    this.getCountriesByRegion = this.getCountriesByRegion.bind(this);
   }
 
   componentDidMount() {
@@ -161,8 +162,12 @@ class VizPaneMediator extends React.Component {
 
     this.setState({ selectedSources }, this.refetch);
 
-    // and ofcourse we reset the selected indicators
-    this.resetIndicators();
+    if (
+      process.env.NODE_ENV === 'development' &&
+      this.state.selectedSources.length > 0
+    )
+      this.resetIndicators();
+    else if (process.env.NODE_ENV !== 'development') this.resetIndicators();
 
     // and we store this so it would be accessible to the visualizer mediator
     this.props.dispatch(
@@ -350,6 +355,7 @@ class VizPaneMediator extends React.Component {
 
   selectCountry(item, array = false) {
     let selectedCountryVal = [];
+    let selectedCountryLabels = [];
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
@@ -357,21 +363,29 @@ class VizPaneMediator extends React.Component {
       if (array) {
         item.forEach(it => {
           selectedCountryVal.push(it.value);
+          selectedCountryLabels.push(it.label);
         });
       } else {
         selectedCountryVal = [...this.props.chartData.selectedCountryVal];
+        selectedCountryLabels = [...this.props.chartData.selectedCountryLabels];
         const countryIndex = selectedCountryVal.indexOf(item.value);
-        if (countryIndex === -1)
+        if (countryIndex === -1) {
           // so if it doesn't exist we add it
           selectedCountryVal.push(item.value);
+          selectedCountryLabels.push(item.label);
+        }
         // if it does exist we remove it
-        else selectedCountryVal.splice(countryIndex, 1);
+        else {
+          selectedCountryVal.splice(countryIndex, 1);
+          selectedCountryLabels.splice(countryIndex, 1);
+        }
       }
     }
 
     this.props.dispatch(
       actions.storeChartDataRequest({
-        selectedCountryVal
+        selectedCountryVal,
+        selectedCountryLabels
       })
     );
 
@@ -380,6 +394,7 @@ class VizPaneMediator extends React.Component {
 
   selectRegion(item, array = false) {
     let selectedRegionVal = [];
+    let selectedRegionLabels = [];
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
@@ -387,26 +402,54 @@ class VizPaneMediator extends React.Component {
       if (array) {
         item.forEach(it => {
           selectedRegionVal.push(it.value);
+          selectedRegionLabels.push(it.label);
         });
       } else {
         selectedRegionVal = [...this.props.chartData.selectedRegionVal];
+        selectedRegionLabels = [...this.props.chartData.selectedRegionLabels];
         const regionIndex = selectedRegionVal.indexOf(item.value);
 
-        if (regionIndex === -1)
+        if (regionIndex === -1) {
           // so if it doesn't exist we add it
           selectedRegionVal.push(item.value);
-        // if it does exist we remove it
-        else selectedRegionVal.splice(regionIndex, 1);
+          selectedRegionLabels.push(item.label);
+        } else {
+          // if it does exist we remove it
+          selectedRegionVal.splice(regionIndex, 1);
+          selectedRegionLabels.splice(regionIndex, 1);
+        }
       }
     }
 
     this.props.dispatch(
       actions.storeChartDataRequest({
-        selectedRegionVal
+        selectedRegionVal,
+        selectedRegionLabels
       })
     );
 
+    this.selectCountry(this.getCountriesByRegion(selectedRegionVal), true);
     this.changesMade();
+  }
+
+  //Compares the selectedRegions with all the countries, to output only countries that are in that region.
+  getCountriesByRegion(
+    selectedRegionsVal,
+    allCountries = this.state.allCountries
+  ) {
+    const selectedCountryVal = [];
+    if (selectedRegionsVal && allCountries) {
+      selectedRegionsVal.forEach(region =>
+        region.forEach(country =>
+          allCountries.forEach(allCountry => {
+            if (country.iso2 === allCountry.value) {
+              selectedCountryVal.push(allCountry);
+            }
+          })
+        )
+      );
+    }
+    return selectedCountryVal;
   }
 
   resetAll() {
@@ -482,7 +525,9 @@ class VizPaneMediator extends React.Component {
         subIndicators2={this.props.paneData.subIndicators2}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.props.chartData.selectedCountryVal}
+        selectedCountryLabel={this.props.chartData.selectedCountryLabels}
         selectedRegionVal={this.props.chartData.selectedRegionVal}
+        selectedRegionLabels={this.props.chartData.selectedRegionLabels}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
         selectYearRange={this.selectYearRange}

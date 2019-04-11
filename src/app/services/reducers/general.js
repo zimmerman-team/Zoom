@@ -28,6 +28,8 @@ function dataPaneOpen(state = initial, action) {
 
 function stepData(state = initial, action) {
   switch (action.type) {
+    case actions.SAVE_STEP_DATA_INITIAL:
+      return update(state, { stepzData: { $set: {} } });
     case actions.SAVE_STEP_DATA_REQUEST:
       return update(state, { stepzData: { $set: { ...state.stepzData } } });
     case actions.SAVE_STEP_DATA_DONE:

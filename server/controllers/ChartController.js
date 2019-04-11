@@ -61,6 +61,10 @@ function genUniqueName(model, name, orgName = undefined, incr = 1) {
 }
 
 const ChartController = {
+  test: (req, res) => {
+    res.send('SUCCESS');
+  },
+
   // use this only if you have an empty database
   // and need a chart in it
   seedChart: function seedEvents(req, res) {

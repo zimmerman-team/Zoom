@@ -120,6 +120,15 @@ export function formatMapJson(mappingJson, mapData, fileId) {
     }
   });
 
+  // There's also some functionality needed for when
+  // a value has not been selected
+  // so yeah that happens here
+  if (mapJson.mapping_dict.value.length === 0) {
+    mapJson.extra_information.empty_entries.empty_value_format.value_format =
+      'Numeric';
+    mapJson.extra_information.empty_entries.empty_value = 0;
+  }
+
   // now filters and geolocation is also a required field
   // but the user does not need to have it in their file
   // if its not selected in the mapping we can just pass

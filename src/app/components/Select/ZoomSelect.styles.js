@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import theme from 'theme/Theme';
+
 export const DropDownItem = styled.li`
   padding: 6px 16px;
   width: 250px;
@@ -25,6 +26,7 @@ export const DropDownLabel = styled.div`
 
 export const ComponentBase = styled.div`
   display: flex;
+  min-height: 41px;
   & button {
     border-style: none !important;
   }

@@ -29,6 +29,7 @@ const propTypes = {
       )
     })
   }),
+  dataSetEdit: PropTypes.bool,
   saveStepData: PropTypes.func,
   stepData: PropTypes.shape({
     title: PropTypes.string,
@@ -85,6 +86,7 @@ const propTypes = {
 const defaultProps = {
   dropDownData: {},
   alwaysSave: false,
+  dataSetEdit: false,
   saveStepData: undefined,
   stepData: step1InitialData,
   environment: null
@@ -103,7 +105,6 @@ class MetaDataMediator extends React.Component {
 
     this.simpleChange = this.simpleChange.bind(this);
     this.checkBoxChange = this.checkBoxChange.bind(this);
-    this.otherCheckBoxText = this.otherCheckBoxText.bind(this);
     this.dropDownChange = this.dropDownChange.bind(this);
     this.otherDropdownText = this.otherDropdownText.bind(this);
     this.onChipAdd = this.onChipAdd.bind(this);
@@ -145,9 +146,11 @@ class MetaDataMediator extends React.Component {
 
   // and we save the first steps data in redux
   componentWillUnmount() {
-    const stepData = { ...this.props.stepData };
-    stepData.metaData = this.state.data;
-    this.props.dispatch(actions.saveStepDataRequest(stepData));
+    if (!this.props.dataSetEdit) {
+      const stepData = { ...this.props.stepData };
+      stepData.metaData = this.state.data;
+      this.props.dispatch(actions.saveStepDataRequest(stepData));
+    }
   }
 
   onChipAdd(value) {
@@ -183,51 +186,22 @@ class MetaDataMediator extends React.Component {
     });
   }
 
-  // so for check box change we tweek the changing a little
-  // bit to encapsulate the 'other' logic
-  checkBoxChange(value, question, qText = false) {
+  checkBoxChange(value, question) {
     const check = this.state.data[question];
     const checkInd = findIndex(check, ['label', value]);
 
     if (checkInd === -1) {
       // so if a checked doesnt exist we add it
       // and if it does exist we remove it
-      let val = value;
-      // so if its other we gonna add the text as value for it
-      if (value.toLowerCase() === 'other' && qText) {
-        val = this.state.data[qText];
-      }
       check.push({
         label: value,
-        value: val
+        value
       });
     } else {
       check.splice(checkInd, 1);
     }
 
     this.simpleChange(check, question);
-  }
-
-  // so this will happen when the other text will be changed,
-  // and it will be a bit more than just
-  otherCheckBoxText(value, question, qText) {
-    const check = this.state.data[question];
-
-    const otherInd = findIndex(
-      check,
-      item => item.label.toLowerCase() === 'other'
-    );
-
-    // so if 'other' label exists in the selected checkboxes
-    // we add it the changed text value straight to the array
-    if (otherInd !== -1) {
-      check[otherInd].value = value;
-      this.simpleChange(check, question);
-    }
-
-    // otherwise it will be added when the checkbox is selected, but we still
-    // save the currently entered text
-    this.simpleChange(value, qText);
   }
 
   // for dropdown selection we'll also have a little tweek
@@ -291,7 +265,6 @@ class MetaDataMediator extends React.Component {
         data={this.state.data}
         simpleChange={this.simpleChange}
         checkBoxChange={this.checkBoxChange}
-        otherCheckBoxText={this.otherCheckBoxText}
         dropDownChange={this.dropDownChange}
         otherDropdownText={this.otherDropdownText}
         onChipAdd={this.onChipAdd}

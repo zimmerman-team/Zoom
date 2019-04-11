@@ -37,6 +37,7 @@ import {
   numberOptions,
   dataSourceOptions
 } from './MetaData.consts';
+import { nonSurveyChoice } from 'modules/datamapper/fragments/MetaData/MetaData.consts';
 
 const propTypes = {
   /**
@@ -198,7 +199,7 @@ class MetaData extends React.Component {
               <ZoomSelect
                 search={false}
                 dropDownWidth={290}
-                placeHolder="Connect to Zoom data source"
+                placeHolderText="Connect to Zoom data source"
                 data={dataSourceOptions.concat(this.props.data.fileSources)}
                 valueSelected={this.props.data.dataSource.label}
                 selectVal={value =>
@@ -232,7 +233,7 @@ class MetaData extends React.Component {
             <RadioButtonGroup
               direction="column"
               value={this.props.data.shared}
-              options={options1}
+              options={nonSurveyChoice}
               onChange={value => this.props.simpleChange(value, 'shared')}
             />
           </Box>
@@ -246,7 +247,7 @@ class MetaData extends React.Component {
           <Box>
             <RadioButtonGroup
               direction="column"
-              options={options1}
+              options={nonSurveyChoice}
               value={this.props.data.surveyData}
               onChange={value => this.props.simpleChange(value, 'surveyData')}
             />
@@ -330,14 +331,12 @@ class MetaData extends React.Component {
           <CheckboxesGroup
             values={this.props.data.q3}
             options={checkBoxOptions3}
-            onChange={value => this.props.checkBoxChange(value, 'q3', 'q3Text')}
+            onChange={value => this.props.checkBoxChange(value, 'q3')}
           />
           <TextField
             label="If other, explain"
             defaultValue={this.props.data.q3Text}
-            onChange={e =>
-              this.props.otherCheckBoxText(e.target.value, 'q3', 'q3Text')
-            }
+            onChange={e => this.props.simpleChange(e.target.value, 'q3Text')}
           />
         </FieldContainer>
 
@@ -351,7 +350,7 @@ class MetaData extends React.Component {
               <ZoomSelect
                 dropDownWidth={290}
                 search={false}
-                placeHolder="Select or add number of respondents"
+                placeHolderText="Select or add number of respondents"
                 data={numberOptions}
                 valueSelected={this.props.data.q4.label}
                 selectVal={value =>
@@ -399,16 +398,12 @@ class MetaData extends React.Component {
           <CheckboxesGroup
             values={this.props.data.q51}
             options={checkBoxOptions51}
-            onChange={value =>
-              this.props.checkBoxChange(value, 'q51', 'q51Text')
-            }
+            onChange={value => this.props.checkBoxChange(value, 'q51')}
           />
           <TextField
             label="If other, explain"
             defaultValue={this.props.data.q51Text}
-            onChange={e =>
-              this.props.otherCheckBoxText(e.target.value, 'q51', 'q51Text')
-            }
+            onChange={e => this.props.simpleChange(e.target.value, 'q51Text')}
           />
         </FieldContainer>
       </ModuleContainer>

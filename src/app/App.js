@@ -75,25 +75,31 @@ class App extends React.Component {
 
     if (!isEqual(this.props.user, prevProps.user)) {
       if (this.props.user.data) {
-        const profile = auth0Client.getProfile();
         // so we update the user
-        this.props.dispatch(
-          nodeActions.updateUserRequest({
-            firstName: get(
-              profile['https://auth.nyuki.io_user_metadata'],
-              'firstName',
-              ''
-            ),
-            lastName: get(
-              profile['https://auth.nyuki.io_user_metadata'],
-              'lastName',
-              ''
-            ),
-            username: profile.nickname,
-            email: profile.email,
-            authId: profile.sub
-          })
-        );
+        auth0Client.getUserRole().then(role => {
+          auth0Client.getUserGroup().then(groups => {
+            const profile = auth0Client.getProfile();
+            this.props.dispatch(
+              nodeActions.updateUserRequest({
+                firstName: get(
+                  profile['https://auth.nyuki.io_user_metadata'],
+                  'firstName',
+                  ''
+                ),
+                lastName: get(
+                  profile['https://auth.nyuki.io_user_metadata'],
+                  'lastName',
+                  ''
+                ),
+                username: profile.nickname,
+                email: profile.email,
+                authId: profile.sub,
+                role,
+                teams: groups.map(g => g.name)
+              })
+            );
+          });
+        });
       } else if (this.props.user.error.status === 404) {
         // so if a user was not found in our zoom backend after signing in ^
         // we add it as a new user
@@ -101,7 +107,7 @@ class App extends React.Component {
         // but first we get them user roles and groups, cause they need to be retrieved
         // in a very weird way
         auth0Client.getUserRole().then(role => {
-          auth0Client.getUserGroup().then(group => {
+          auth0Client.getUserGroup().then(groups => {
             const profile = auth0Client.getProfile();
 
             // and we finally make the call to add the user
@@ -122,7 +128,7 @@ class App extends React.Component {
                   'lastName',
                   ''
                 ),
-                team: group
+                teams: groups.map(g => g.name)
               })
             );
           });

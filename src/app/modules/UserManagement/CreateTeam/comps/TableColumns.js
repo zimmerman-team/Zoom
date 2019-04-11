@@ -25,14 +25,18 @@ export default function getColumns(
   changeIsSortByOpen,
   setWrapperRef,
   onSortOptionClick,
-  selectedSortBy
+  selectedSortBy,
+  disableCheckbox = false
 ) {
   return [
     {
       property: 'id',
       header: (
         <UsersTableColHeader>
-          <Checkbox onChange={addRemoveAllSelectionsFunc} />
+          <Checkbox
+            onChange={addRemoveAllSelectionsFunc}
+            disabled={disableCheckbox}
+          />
         </UsersTableColHeader>
       ),
       render: val => (
@@ -40,6 +44,7 @@ export default function getColumns(
           <Checkbox
             id={val.id}
             name={val.name}
+            disabled={disableCheckbox}
             onChange={addRemoveSelectionFunc}
             checked={selectedValues.indexOf(val.id) !== -1}
           />

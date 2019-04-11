@@ -93,6 +93,10 @@ class DashboardMediator extends React.Component {
     if (!isEqual(this.props.userDeleted, prevProps.userDeleted))
       this.reloadData();
 
+    // we re-load the teams
+    if (!isEqual(this.props.teamDeleted, prevProps.teamDeleted))
+      this.reloadData();
+
     // set page to 0 when changing tab
     if (this.props.match.params.tab !== prevProps.match.params.tab) {
       this.setState({ page: 0 });
@@ -122,7 +126,8 @@ class DashboardMediator extends React.Component {
       this.state.sort,
       this.state.searchKeyword,
       this.editUser,
-      this.deleteUser
+      this.deleteUser,
+      this.viewUser
     );
     this.setState({
       users: result.users,
@@ -132,6 +137,10 @@ class DashboardMediator extends React.Component {
 
   editUser = userId => {
     this.props.history.push(`/edit-user/${userId}`);
+  };
+
+  viewUser = userId => {
+    this.props.history.push(`/view-user/${userId}`);
   };
 
   deleteUser = userId => {
@@ -153,15 +162,18 @@ class DashboardMediator extends React.Component {
   };
 
   setTeams = (rawData, initialLoad = true) => {
+    /* disable specific eslint rule cause state variables that are used are not updated in the setState */
+    /* eslint-disable react/no-access-state-in-setstate */
     const result = formatTeamsTabData(
       rawData,
       initialLoad,
       this.state.page,
       this.state.sort,
       this.state.searchKeyword,
-      this.state.users,
+      this.state.allUsers,
       this.editTeam,
-      this.deleteTeam
+      this.deleteTeam,
+      this.viewTeam
     );
     this.setState({
       teams: result.teams,
@@ -169,14 +181,18 @@ class DashboardMediator extends React.Component {
     });
   };
 
+  viewTeam = id => {
+    this.props.history.push(`/view-team/${id}`);
+  };
+
   editTeam = id => {
     this.props.history.push(`/edit-team/${id}`);
   };
 
-  deleteTeam = id => {
-    // this.props.auth0Client.deleteTeam(id, this, () =>
-    //   this.props.dispatch(actions.deleteTeamRequest({ id }))
-    // );
+  deleteTeam = (id, name) => {
+    this.props.auth0Client.deleteGroup(id, this, () =>
+      this.props.dispatch(actions.deleteGroupRequest({ name }))
+    );
   };
 
   setWrapperRef = node => {
@@ -375,7 +391,8 @@ const mapStateToProps = state => {
     userDeleted: state.userDeleted,
     // yeah so actually these are the user and team charts
     userCharts: state.userCharts,
-    user: state.user.data
+    user: state.user.data,
+    teamDeleted: state.groupDeleted
   };
 };
 

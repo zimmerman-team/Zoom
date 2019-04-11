@@ -152,6 +152,18 @@ const Routes = props => {
           />
           <Route
             exact
+            path="/view-user/:userId"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <EditUserMediator auth0Client={props.auth0Client} viewOnly />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            exact
             path="/create-team"
             render={() =>
               props.auth0Client.isAuthenticated() &&
@@ -169,6 +181,18 @@ const Routes = props => {
               props.auth0Client.isAuthenticated() &&
               props.auth0Client.isAdministrator() ? (
                 <EditTeamMediator auth0Client={props.auth0Client} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/view-team/:teamId"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <EditTeamMediator auth0Client={props.auth0Client} viewOnly />
               ) : (
                 <Redirect to="/" />
               )

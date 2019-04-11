@@ -7,6 +7,7 @@ export const ComponentBase = styled.div`
   height: inherit;
   background-color: ${theme.color.aidsFondsWhite};
   box-shadow: 0 5px 7px rgba(0, 0, 0, 0.5);
+  overflow: scroll;
 `;
 
 export const FilterTitle = styled.span`

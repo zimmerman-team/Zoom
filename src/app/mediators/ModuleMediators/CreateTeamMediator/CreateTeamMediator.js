@@ -4,7 +4,7 @@ import filter from 'lodash/filter';
 import { connect } from 'react-redux';
 
 /* actions */
-import { updateUsersTeamRequest } from 'services/sagas';
+import { updateUsersTeamRequest } from 'services/actions/nodeBackend';
 
 /* components */
 import CreateTeamModule from 'modules/UserManagement/CreateTeam/CreateTeamModule';
@@ -12,6 +12,7 @@ import { formatUsersData } from './CreateTeamMediator.utils';
 
 class CreateTeamMediator extends React.Component {
   state = {
+    loading: false,
     success: false,
     errorMessage: null,
     secondaryInfoMessage: null,
@@ -136,10 +137,12 @@ class CreateTeamMediator extends React.Component {
   };
 
   submitForm = e => {
+    e.preventDefault();
+    this.setState({ loading: true });
+
     const team = this.state.name;
     const users = this.state.users;
 
-    e.preventDefault();
     this.props.auth0Client
       .addGroup(this.state.name, this.state.users, this)
       .then(() => {
@@ -156,6 +159,7 @@ class CreateTeamMediator extends React.Component {
             })
           })
         );
+        this.setState({ loading: false });
       });
   };
 
@@ -169,6 +173,7 @@ class CreateTeamMediator extends React.Component {
         totalPages={this.state.totalPages}
         changeSearchKeyword={this.changeSearchKeyword}
         success={this.state.success}
+        loading={this.state.loading}
         secondaryInfoMessage={this.state.secondaryInfoMessage}
         errorMessage={this.state.errorMessage}
         addRemoveUser={this.addRemoveUser}

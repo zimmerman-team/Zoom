@@ -12,7 +12,8 @@ export function formatUsersTabData(
   sort,
   search,
   onEdit,
-  onDelete
+  onDelete,
+  onView
 ) {
   let allUsers = data;
 
@@ -35,7 +36,7 @@ export function formatUsersTabData(
           Twitter: ''
         },
         onEdit: () => onEdit(d.user_id),
-        onView: () => console.log('view'),
+        onView: () => onView(d.user_id),
         onDuplicate: () => console.log('duplicate'),
         onDelete: () => onDelete(d.user_id)
       };
@@ -71,7 +72,8 @@ export function formatTeamsTabData(
   search,
   users,
   onEdit,
-  onDelete
+  onDelete,
+  onView
 ) {
   let allTeams = data;
 
@@ -91,9 +93,9 @@ export function formatTeamsTabData(
           Organisations: ''
         },
         onEdit: () => onEdit(d._id),
-        onView: () => console.log('view'),
+        onView: () => onView(d._id),
         onDuplicate: () => console.log('duplicate'),
-        onDelete: () => onDelete(d._id)
+        onDelete: () => onDelete(d._id, get(d, 'name', ''))
       };
     });
   }

@@ -38,7 +38,8 @@ const propTypes = {
     regexp: PropTypes.instanceOf(RegExp)
   }),
   value: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  disabled: PropTypes.bool
 };
 
 const defaultProps = {
@@ -51,7 +52,8 @@ const defaultProps = {
     regexp: /^[a-z]/i
   },
   value: '',
-  onChange: null
+  onChange: null,
+  disabled: false
 };
 
 const InputField = props => {
@@ -68,6 +70,7 @@ const InputField = props => {
         value={props.value}
         onChange={props.onChange}
         type={props.type}
+        disabled={props.disabled}
       />
     </ZoomFormField>
   );

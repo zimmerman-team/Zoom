@@ -54,6 +54,10 @@ router.post('/updateUsersTeam', UserController.updateUsersTeam);
 
 router.post('/deleteUser', UserController.deleteUser);
 
+router.post('/updateTeamAndUsersOfIt', UserController.updateTeamAndUsersOfIt);
+
+router.post('/deleteTeam', UserController.deleteTeam);
+
 /* -------------- USER CONTROLLER END ------------------------- */
 
 /* -------------- DATASET CONTROLLER START ----------------------- */

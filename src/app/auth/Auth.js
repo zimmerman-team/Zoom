@@ -143,14 +143,13 @@ class Auth {
                 }
               )
               .then(response2 => {
-                localStorage.setItem('userGroup', response2.data[0].name);
+                localStorage.setItem('userGroup', response2.data);
                 if (that) {
                   that.setState({
-                    group: response2.data[0].name
+                    group: response2.data
                   });
                 }
-
-                resolve(response2.data[0].name);
+                resolve(response2.data);
               })
               .catch(error => {
                 reject(error);
@@ -435,7 +434,9 @@ class Auth {
           .then(res2 => {
             if (res2.status === 200) {
               parent.setState({
-                name: res2.data.name
+                name: res2.data.name,
+                oldTeamName: res2.data.name,
+                description: res2.data.description
               });
             } else {
               parent.setState({
@@ -504,7 +505,7 @@ class Auth {
       });
   }
 
-  editGroup(id, name, usersToDelete, usersToAdd, parent) {
+  editGroup(id, name, description, usersToDelete, usersToAdd, parent) {
     return new Promise(resolve => {
       axios
         .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
@@ -515,9 +516,9 @@ class Auth {
         })
         .then(res1 => {
           axios
-            .patch(
-              `${process.env.REACT_APP_AUTH_DOMAIN}/groups/${id}`,
-              { name },
+            .put(
+              `${process.env.REACT_APP_AE_API_URL}/groups/${id}`,
+              { name, description },
               {
                 headers: {
                   Authorization: `${res1.data.token_type} ${
@@ -528,16 +529,43 @@ class Auth {
             )
             .then(res2 => {
               if (res2.status === 200) {
-                this.deleteMultipleUsersFromGroup(
-                  res2.data._id,
-                  usersToDelete,
-                  {
-                    Authorization: `${res1.data.token_type} ${
-                      res1.data.access_token
-                    }`
-                  },
-                  parent
-                ).then(() => {
+                if (usersToDelete.length > 0) {
+                  this.deleteMultipleUsersFromGroup(
+                    res2.data._id,
+                    usersToDelete,
+                    {
+                      Authorization: `${res1.data.token_type} ${
+                        res1.data.access_token
+                      }`
+                    },
+                    parent
+                  ).then(() => {
+                    if (usersToAdd.length > 0) {
+                      this.addMultipleUsersToGroup(
+                        res2.data._id,
+                        usersToAdd,
+                        {
+                          Authorization: `${res1.data.token_type} ${
+                            res1.data.access_token
+                          }`
+                        },
+                        parent
+                      ).then(() => {
+                        resolve();
+                        parent.setState({
+                          success: true,
+                          errorMessage: null
+                        });
+                      });
+                    } else {
+                      resolve();
+                      parent.setState({
+                        success: true,
+                        errorMessage: null
+                      });
+                    }
+                  });
+                } else if (usersToAdd.length > 0) {
                   this.addMultipleUsersToGroup(
                     res2.data._id,
                     usersToAdd,
@@ -554,7 +582,13 @@ class Auth {
                       errorMessage: null
                     });
                   });
-                });
+                } else {
+                  resolve();
+                  parent.setState({
+                    success: true,
+                    errorMessage: null
+                  });
+                }
               } else {
                 parent.setState({
                   success: false,
@@ -844,8 +878,7 @@ class Auth {
       axios
         .delete(
           `${process.env.REACT_APP_AE_API_URL}/groups/${group_id}/members`,
-          users,
-          { headers }
+          { data: users, headers }
         )
         .then(res2 => {
           if (res2.status === 204) {
@@ -942,6 +975,51 @@ class Auth {
           });
         });
     });
+  }
+
+  deleteGroup(id, parent, reduxNodeAction) {
+    axios
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: 'urn:auth0-authz-api',
+        grant_type: 'client_credentials'
+      })
+      .then(res1 => {
+        axios
+          .delete(`${process.env.REACT_APP_AE_API_URL}/groups/${id}`, {
+            headers: {
+              Authorization: `${res1.data.token_type} ${res1.data.access_token}`
+            }
+          })
+          .then(res2 => {
+            if (res2.status === 204) {
+              reduxNodeAction();
+              parent.setState({
+                success: true,
+                errorMessage: null
+              });
+            } else {
+              parent.setState({
+                success: false,
+                errorMessage: res2.data.statusText
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            parent.setState({
+              success: false,
+              errorMessage: error.response.data.message
+            });
+          });
+      })
+      .catch(error => {
+        parent.setState({
+          success: false,
+          errorMessage: error.response.data.message
+        });
+      });
   }
 
   sendWelcomeEmail(userId, name, surname, email) {

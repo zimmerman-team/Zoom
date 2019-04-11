@@ -211,6 +211,21 @@ function activityData(state = initial, action) {
   }
 }
 
+function countryOrganisations(state = initial, action) {
+  switch (action.type) {
+    case oipaActions.COUNTRY_ORGANISATIONS_INITIAL:
+      return updateInitial(state);
+    case oipaActions.COUNTRY_ORGANISATIONS_REQUEST:
+      return updateRequest(state, action);
+    case oipaActions.COUNTRY_ORGANISATIONS_SUCCESS:
+      return updateSuccess(state, action);
+    case oipaActions.COUNTRY_ORGANISATIONS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 function countryExcerpt(state = initial, action) {
   switch (action.type) {
     case actions.COUNTRY_EXCERPT_INITIAL:
@@ -420,6 +435,7 @@ function userDeleted(state = initial, action) {
       return state;
   }
 }
+
 function datasetUpdated(state = initial, action) {
   switch (action.type) {
     case nodeActions.UPDATE_DATASET_INITIAL:
@@ -434,6 +450,7 @@ function datasetUpdated(state = initial, action) {
       return state;
   }
 }
+
 function dupChartCreated(state = initial, action) {
   switch (action.type) {
     case nodeActions.CREATE_DUPLICATE_CHART_INITIAL:
@@ -458,6 +475,36 @@ function chartDuplicated(state = initial, action) {
     case nodeActions.DUPLICATE_CHART_SUCCESS:
       return updateSuccess(state, action);
     case nodeActions.DUPLICATE_CHART_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function updateTeamAndUsersOfIt(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_INITIAL:
+      return updateInitial(state);
+    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT__REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function groupDeleted(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.DELETE_GROUP_INITIAL:
+      return updateInitial(state);
+    case nodeActions.DELETE_GROUP_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.DELETE_GROUP_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.DELETE_GROUP_FAILED:
       return updateFailed(state, action);
     default:
       return state;
@@ -490,6 +537,9 @@ const reducers = {
   countryExcerpt,
   countryActivities,
   activityData,
+  countryOrganisations,
+  updateTeamAndUsersOfIt,
+  groupDeleted,
   userDeleted
 };
 

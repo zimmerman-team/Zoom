@@ -62,6 +62,7 @@ module.exports = {
     'no-useless-constructor': 1,
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
-    'default-case': 0
+    'default-case': 0,
+    'import/prefer-default-export': 0
   }
 };

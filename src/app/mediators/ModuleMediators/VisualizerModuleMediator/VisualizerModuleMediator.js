@@ -4,9 +4,11 @@ import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
 import { withRouter } from 'react-router';
 import {
+  formatBarData,
   formatCountryParam,
   formatDate,
   formatGeoData,
+  formatKeys,
   formatLineData,
   removeIds
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
@@ -111,6 +113,7 @@ class VisualizerModuleMediator extends Component {
       selectedYear: this.props.chartData.selectedYear
         ? this.props.chartData.selectedYear
         : initialState.yearPeriod[0],
+      chartKeys: [],
       indicators: []
     };
 
@@ -233,7 +236,13 @@ class VisualizerModuleMediator extends Component {
         })
       );
 
-      this.setState({ loading: false });
+      this.setState({
+        loading: false,
+        chartKeys: formatKeys([
+          indicatorItems[0].indicator,
+          indicatorItems[1].indicator
+        ])
+      });
     }
 
     // TODO redo this check properly
@@ -301,6 +310,7 @@ class VisualizerModuleMediator extends Component {
     subIndicators2 = sortBy(subIndicators2, ['label']);
 
     let indicators = [];
+    let chartKeys = [];
 
     switch (this.props.match.params.chart) {
       case chartTypes.geoMap:
@@ -333,10 +343,21 @@ class VisualizerModuleMediator extends Component {
           this.props.indicatorAggregations.indicators2
         ]);
         break;
+      case chartTypes.barChart:
+        indicators = formatBarData([
+          this.props.indicatorAggregations.indicators1,
+          this.props.indicatorAggregations.indicators2
+        ]);
+        chartKeys = formatKeys([
+          this.props.chartData.selectedInd1,
+          this.props.chartData.selectedInd2
+        ]);
+        break;
       default:
         indicators = [];
         break;
     }
+
     // and we save the subindicator selection for the datapane
     this.props.dispatch(
       actions.storePaneDataRequest({
@@ -352,7 +373,7 @@ class VisualizerModuleMediator extends Component {
       })
     );
 
-    this.setState({ indicators });
+    this.setState({ indicators, chartKeys });
   }
 
   refetch(
@@ -405,6 +426,7 @@ class VisualizerModuleMediator extends Component {
   render() {
     return (
       <VisualizerModule
+        chartKeys={this.state.chartKeys}
         publicPage={this.props.publicPage}
         outerHistory={this.props.history}
         chartType={this.props.paneData.chartType}

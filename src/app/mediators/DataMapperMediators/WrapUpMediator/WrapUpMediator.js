@@ -152,6 +152,11 @@ class WrapUpMediator extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    // and we reset the values in the reducer
+    this.props.dispatch(generalActions.saveStepDataInitial());
+  }
+
   handleSourceCompleted(response, error) {
     if (response)
       this.setState(

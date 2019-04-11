@@ -41,6 +41,7 @@ const ChartSchema = new Schema(
 
     // with what team is this chart associated
     team: { type: String, default: '' },
+    teams: [{ type: String }],
 
     /* chart options */
     // axis: { type: String },

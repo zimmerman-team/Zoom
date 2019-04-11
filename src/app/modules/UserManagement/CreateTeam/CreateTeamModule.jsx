@@ -10,9 +10,10 @@ import {
   SubmitButton,
   TableBox,
   TextField,
-  UsersTable,
+  UsersTable
 } from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
 
+import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 import Pagination from 'components/Pagination/Pagination';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';
@@ -34,8 +35,8 @@ const propTypes = {
     PropTypes.shape({
       name: PropTypes.string,
       role: PropTypes.string,
-      id: PropTypes.string,
-    }),
+      id: PropTypes.string
+    })
   ),
   changePage: PropTypes.func,
   totalPages: PropTypes.number,
@@ -46,6 +47,11 @@ const propTypes = {
   changeSortBy: PropTypes.func,
   addRemoveAllUsers: PropTypes.func,
   selectedSortBy: PropTypes.string,
+  pageTitle: PropTypes.string,
+  buttonTxt: PropTypes.string,
+  successMessage: PropTypes.string,
+  disableSubmit: PropTypes.bool,
+  viewOnly: PropTypes.bool
 };
 const defaultProps = {
   success: false,
@@ -66,17 +72,24 @@ const defaultProps = {
   changeSortBy: null,
   addRemoveAllUsers: null,
   selectedSortBy: 'name:1',
+  pageTitle: 'Create team',
+  buttonTxt: 'create team',
+  successMessage: 'Team created successfully',
+  disableSubmit: undefined,
+  viewOnly: false
 };
 
 const CreateTeam = props => {
-  const disableSubmit = props.name === '' || props.users.length === 0;
+  const disableSubmit =
+    props.disableSubmit === undefined
+      ? props.name === '' || props.users.length === 0
+      : props.disableSubmit;
   return (
-    <ModuleFragment title="Create team">
+    <ModuleFragment title={props.pageTitle}>
+      {props.loading && <ProgressIcon />}
       <CreateTeamForm onSubmit={props.submitForm}>
         {props.success && (
-          <Message theme={{ color: 'green' }}>
-            Team created successfully
-          </Message>
+          <Message theme={{ color: 'green' }}>{props.successMessage}</Message>
         )}
         {!props.success && props.errorMessage && (
           <Message theme={{ color: theme.color.aidsFondsRed }}>
@@ -97,15 +110,20 @@ const CreateTeam = props => {
           validate={{ regexp: /^[a-z]/i }}
           value={props.name}
           onChange={props.changeName}
+          disabled={props.viewOnly}
         />
 
-        <Text color={theme.color.zoomGreyFive} size="15px">
-          Add team members
-        </Text>
-        <TextField
-          placeholder={<IconSearch />}
-          onChange={props.changeSearchKeyword}
-        />
+        {!props.viewOnly && (
+          <React.Fragment>
+            <Text color={theme.color.zoomGreyFive} size="15px">
+              Add team members
+            </Text>
+            <TextField
+              placeholder={<IconSearch />}
+              onChange={props.changeSearchKeyword}
+            />
+          </React.Fragment>
+        )}
 
         <TableBox>
           <UsersTable
@@ -120,6 +138,7 @@ const CreateTeam = props => {
               props.setWrapperRef,
               props.changeSortBy,
               props.selectedSortBy,
+              props.viewOnly
             )}
           />
           <Pagination
@@ -128,16 +147,18 @@ const CreateTeam = props => {
           />
         </TableBox>
 
-        <Tooltip
-          trigger="mouseenter"
-          position="bottom-start"
-          disabled={!disableSubmit}
-          html={<SimpleToolTip title="All the fields are required" />}
-        >
-          <SubmitButton type="submit" disabled={disableSubmit}>
-            create team
-          </SubmitButton>
-        </Tooltip>
+        {!props.viewOnly && (
+          <Tooltip
+            trigger="mouseenter"
+            position="bottom-start"
+            disabled={!disableSubmit}
+            html={<SimpleToolTip title="All the fields are required" />}
+          >
+            <SubmitButton type="submit" disabled={disableSubmit}>
+              {props.buttonTxt}
+            </SubmitButton>
+          </Tooltip>
+        )}
       </CreateTeamForm>
     </ModuleFragment>
   );

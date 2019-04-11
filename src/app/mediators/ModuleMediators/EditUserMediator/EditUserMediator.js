@@ -21,16 +21,10 @@ class EditUserMediator extends React.Component {
     email: '',
     lastName: '',
     firstName: ''
-    // userRole: { label: '', value: '', _id: '' },
-    // organisation: { label: '', value: '', _id: '' },
-    // userGroups: [],
-    // userRoles: []
   };
 
   componentDidMount = () => {
     this.props.auth0Client.getUser(this.props.match.params.userId, this);
-    // this.props.auth0Client.getUserGroups(this);
-    // this.props.auth0Client.getUserRoles(this);
   };
 
   changeFirstName = e => {
@@ -44,14 +38,6 @@ class EditUserMediator extends React.Component {
   changeEmail = e => {
     this.setState({ email: e.target.value });
   };
-
-  // changeUserRole = e => {
-  //   this.setState({ userRole: e });
-  // };
-
-  // changeOrganisation = e => {
-  //   this.setState({ organisation: e });
-  // };
 
   submitForm = e => {
     e.preventDefault();
@@ -86,24 +72,17 @@ class EditUserMediator extends React.Component {
   render() {
     return (
       <EditUserModule
+        viewOnly={this.props.viewOnly}
         email={this.state.email}
         success={this.state.success}
         secondaryInfoMessage={this.state.secondaryInfoMessage}
         errorMessage={this.state.errorMessage}
         lastName={this.state.lastName}
         firstName={this.state.firstName}
-        // userRole={this.state.userRole}
-        // organisation={this.state.organisation}
         changeEmail={this.changeEmail}
         changeLastName={this.changeLastName}
         changeFirstName={this.changeFirstName}
         submitForm={this.submitForm}
-        // roleSelected={this.state.userRole}
-        // changeUserRole={this.changeUserRole}
-        // orgSelected={this.state.organisation}
-        // changeOrganisation={this.changeOrganisation}
-        // orgOptions={this.state.userGroups}
-        // roleOptions={this.state.userRoles}
         dataIsChanged={this.checkIfDataHasChanged()}
       />
     );

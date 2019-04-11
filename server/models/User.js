@@ -9,7 +9,7 @@ const UserSchema = new Schema({
   avatar: { type: String, default: '' },
   firstName: { type: String, default: '', min: 1, max: 100 },
   lastName: { type: String, default: '', min: 1, max: 100 },
-  team: { type: String, default: 'none' }
+  teams: [{ type: String }]
 });
 
 module.exports = mongoose.model(' User', UserSchema);

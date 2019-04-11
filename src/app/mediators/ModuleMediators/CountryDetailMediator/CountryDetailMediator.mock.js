@@ -1,5 +1,5 @@
 const data = {
-  transParams: {
+  activityParams: {
     recipient_country: 'KE',
     page: 1,
     page_size: 400,
@@ -19,6 +19,12 @@ const data = {
     exsectionformat: 'raw',
     formatversion: 2,
     titles: 'Kenya'
+  },
+  transactionParams: {
+    group_by: 'sector',
+    aggregations: 'commitment,disbursement',
+    convert_to: 'eur',
+    reporting_organisation_identifier: 'NL-KVK-41207989'
   },
   countryCode: 'ke',
   // So currently these are the default indicators

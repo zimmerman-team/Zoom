@@ -26,25 +26,19 @@ import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardCont
 import paneTypes from '__consts__/PaneTypesConst';
 
 class DashboardMediator extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      users: [],
-      teams: [],
-      sort: 'name:1',
-      searchKeyword: '',
-      charts: [],
-      datasets: [],
-      loadUsers: false,
-      isSortByOpen: false
-    };
-
-    this.deleteChart = this.deleteChart.bind(this);
-    this.duplicateChart = this.duplicateChart.bind(this);
-    this.onEnterPressed = this.onEnterPressed.bind(this);
-    this.getAllUsers = this.getAllUsers.bind(this);
-  }
+  state = {
+    page: 0,
+    users: [],
+    teams: [],
+    sort: 'title',
+    searchKeyword: '',
+    charts: [],
+    datasets: [],
+    loadUsers: false,
+    isSortByOpen: false,
+    allUsers: [],
+    allTeams: []
+  };
 
   componentDidMount = () => {
     // also when this component loads we want to reset the pane
@@ -56,7 +50,7 @@ class DashboardMediator extends React.Component {
     document.addEventListener('mousedown', this.handleClickOutside);
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate = prevProps => {
     if (!isEqual(this.props.user, prevProps.user) && this.props.user)
       this.reloadData('all');
 
@@ -98,31 +92,46 @@ class DashboardMediator extends React.Component {
     // we re-load the users
     if (!isEqual(this.props.userDeleted, prevProps.userDeleted))
       this.reloadData();
-  }
 
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
-  }
+    // we re-load the teams
+    if (!isEqual(this.props.teamDeleted, prevProps.teamDeleted))
+      this.reloadData();
 
-  getAllUsers = () => {
-    this.setState({ loadUsers: true });
-    this.props.auth0Client
-      .getAllUsers(
-        this.setUsers,
-        this.state.page,
-        this.state.sort,
-        this.state.searchKeyword !== ''
-          ? ` AND (user_metadata.firstName:${
-              this.state.searchKeyword
-            } OR user_metadata.lastName:${this.state.searchKeyword})`
-          : ''
-      )
-      .then(() => this.setState({ loadUsers: false }));
+    // set page to 0 when changing tab
+    if (this.props.match.params.tab !== prevProps.match.params.tab) {
+      this.setState({ page: 0 });
+    }
   };
 
-  setUsers = data => {
+  componentWillUnmount = () => {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  };
+
+  getAllUsers = initialLoad => {
+    if (initialLoad) {
+      this.setState({ loadUsers: true });
+      this.props.auth0Client
+        .getAllUsers(this.setUsers)
+        .then(() => this.setState({ loadUsers: false }));
+    } else {
+      this.setUsers(this.state.allUsers, false);
+    }
+  };
+
+  setUsers = (rawData, initialLoad = true) => {
+    const result = formatUsersTabData(
+      rawData,
+      initialLoad,
+      this.state.page,
+      this.state.sort,
+      this.state.searchKeyword,
+      this.editUser,
+      this.deleteUser,
+      this.viewUser
+    );
     this.setState({
-      users: formatUsersTabData(data, this.editUser, this.deleteUser)
+      users: result.users,
+      allUsers: result.allUsers
     });
   };
 
@@ -130,9 +139,59 @@ class DashboardMediator extends React.Component {
     this.props.history.push(`/edit-user/${userId}`);
   };
 
+  viewUser = userId => {
+    this.props.history.push(`/view-user/${userId}`);
+  };
+
   deleteUser = userId => {
     this.props.auth0Client.deleteUser(userId, this, () =>
       this.props.dispatch(actions.deleteUserRequest({ userId }))
+    );
+  };
+
+  getAllTeams = initialLoad => {
+    if (initialLoad) {
+      this.setState({ loadUsers: true });
+      this.props.auth0Client.getUserGroups().then(res => {
+        this.setTeams(res, true);
+        this.setState({ loadUsers: false });
+      });
+    } else {
+      this.setTeams(this.state.allTeams, false);
+    }
+  };
+
+  setTeams = (rawData, initialLoad = true) => {
+    /* disable specific eslint rule cause state variables that are used are not updated in the setState */
+    /* eslint-disable react/no-access-state-in-setstate */
+    const result = formatTeamsTabData(
+      rawData,
+      initialLoad,
+      this.state.page,
+      this.state.sort,
+      this.state.searchKeyword,
+      this.state.allUsers,
+      this.editTeam,
+      this.deleteTeam,
+      this.viewTeam
+    );
+    this.setState({
+      teams: result.teams,
+      allTeams: result.allTeams
+    });
+  };
+
+  viewTeam = id => {
+    this.props.history.push(`/view-team/${id}`);
+  };
+
+  editTeam = id => {
+    this.props.history.push(`/edit-team/${id}`);
+  };
+
+  deleteTeam = (id, name) => {
+    this.props.auth0Client.deleteGroup(id, this, () =>
+      this.props.dispatch(actions.deleteGroupRequest({ name }))
     );
   };
 
@@ -152,7 +211,21 @@ class DashboardMediator extends React.Component {
         sort: e.target.id
       },
       () => {
-        this.reloadData('sort');
+        const initialLoad =
+          this.props.match.params.tab !== 'users' &&
+          this.props.match.params.tab !== 'teams';
+        this.reloadData('sort', initialLoad);
+      }
+    );
+  };
+
+  changePage = e => {
+    this.setState(
+      {
+        page: e.selected
+      },
+      () => {
+        this.reloadData('', false);
       }
     );
   };
@@ -164,14 +237,36 @@ class DashboardMediator extends React.Component {
   };
 
   changeSearchKeyword = e => {
-    this.setState({ searchKeyword: e.target.value });
+    this.setState({ searchKeyword: e.target.value }, () => {
+      if (this.state.searchKeyword === '') {
+        this.onEnterPressed();
+      }
+    });
   };
 
-  onEnterPressed() {
-    this.reloadData();
-  }
+  onEnterPressed = () => {
+    const initialLoad =
+      this.props.match.params.tab !== 'users' &&
+      this.props.match.params.tab !== 'teams';
+    this.reloadData('search', initialLoad);
+  };
 
-  reloadData = type => {
+  getViewPagesNumber = () => {
+    switch (this.props.match.params.tab) {
+      case 'charts':
+        return this.state.charts.length / 12;
+      case 'datasets':
+        return this.state.datasets.length / 12;
+      case 'users':
+        return this.state.allUsers.length / 12;
+      case 'teams':
+        return this.state.allTeams.length / 12;
+      default:
+        return 0;
+    }
+  };
+
+  reloadData = (type, initialLoad = true) => {
     if (type === 'all') {
       if (this.props.user) {
         this.props.dispatch(
@@ -188,8 +283,8 @@ class DashboardMediator extends React.Component {
             searchTitle: this.state.searchKeyword
           })
         );
-        this.getAllUsers();
-        this.props.auth0Client.getUserGroups(this, 'teams');
+        this.getAllUsers(initialLoad);
+        this.getAllTeams(initialLoad);
       }
     } else {
       switch (this.props.match.params.tab) {
@@ -216,23 +311,23 @@ class DashboardMediator extends React.Component {
           }
           break;
         case 'users':
-          this.getAllUsers();
+          this.getAllUsers(initialLoad);
           break;
         case 'teams':
-          this.props.auth0Client.getUserGroups(this, 'teams');
+          this.getAllTeams(initialLoad);
           break;
       }
     }
   };
 
-  deleteChart(chartId) {
+  deleteChart = chartId => {
     this.props.dispatch(
       actions.deleteChartRequest({
         authId: this.props.user.authId,
         chartId
       })
     );
-  }
+  };
 
   duplicateChart(chartId) {
     this.props.dispatch(
@@ -260,6 +355,7 @@ class DashboardMediator extends React.Component {
           this.state.loadUsers
         }
         // tabs={tabs}
+        page={this.state.page}
         sort={this.state.sort}
         users={this.state.users}
         datasets={this.state.datasets}
@@ -269,21 +365,18 @@ class DashboardMediator extends React.Component {
         setIsSortByOpen={this.setIsSortByOpen}
         isSortByOpen={this.state.isSortByOpen}
         onEnterPressed={this.onEnterPressed}
-        // activeTab={this.props.match.params.tab}
+        activeTab={this.props.match.params.tab}
         searchKeyword={this.state.searchKeyword}
         changeSearchKeyword={this.changeSearchKeyword}
-        teams={formatTeamsTabData(
-          this.state.teams,
-          this.state.sort,
-          this.state.searchKeyword,
-          this.state.users
-        )}
+        teams={this.state.teams}
         navItems={data(
-          this.state.users,
-          this.state.teams,
+          this.state.allUsers,
+          this.state.allTeams,
           this.state.charts,
           this.state.datasets
         )}
+        totalPages={this.getViewPagesNumber()}
+        changePage={this.changePage}
         greetingName={greetingName}
       />
     );
@@ -298,7 +391,8 @@ const mapStateToProps = state => {
     userDeleted: state.userDeleted,
     // yeah so actually these are the user and team charts
     userCharts: state.userCharts,
-    user: state.user.data
+    user: state.user.data,
+    teamDeleted: state.groupDeleted
   };
 };
 

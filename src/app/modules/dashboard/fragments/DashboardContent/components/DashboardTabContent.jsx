@@ -55,9 +55,6 @@ const defaultProps = {
 };
 
 const DashboardTabContent = props => {
-  const history = createBrowserHistory();
-  const currentURL = history.location.pathname;
-
   let targetData = [];
   let targetUrl = '';
   let leftOptionLabel = '';
@@ -65,37 +62,42 @@ const DashboardTabContent = props => {
   let tabContentName = true;
   let isRemoveOption = false;
 
-  //todo: switch will be more readable
-  //todo: check on exact path instead of includes: too vulnerable
-  if (currentURL.includes('users')) {
-    targetData = props.users;
-    targetUrl = '/add-user';
-    leftOptionLabel = 'add user';
-    tabContentName = 'Users';
-  } else if (currentURL.includes('teams')) {
-    targetData = props.teams;
-    targetUrl = '/create-team';
-    leftOptionLabel = 'create team';
-    tabContentName = 'Teams';
-  } else if (currentURL.includes('focus-pages')) {
-    targetData = '';
-    leftOptionLabel = 'add focus page';
-    tabContentName = 'Focus page';
-  } else if (currentURL.includes('data-sets')) {
-    targetData = props.datasets;
-    targetUrl = '/mapper';
-    leftOptionLabel = 'map data set';
-    tabContentName = 'Data sets';
-  } else if (currentURL.includes('charts')) {
-    targetData = props.charts;
-    leftOptionLabel = undefined;
-    tabContentName = 'Charts';
-  } else if (currentURL.includes('trash')) {
-    targetData = '';
-    tabContentName = 'Trash';
-    sortIsVisible = false;
-    isRemoveOption = true;
+  switch (props.activeTab) {
+    case 'charts':
+      targetData = props.charts;
+      leftOptionLabel = undefined;
+      tabContentName = 'Charts';
+      break;
+    case 'data-sets':
+      targetData = props.datasets;
+      targetUrl = '/mapper';
+      leftOptionLabel = 'map data set';
+      tabContentName = 'Data sets';
+      break;
+    case 'focus-pages':
+      targetData = [];
+      leftOptionLabel = 'add focus page';
+      tabContentName = 'Focus page';
+      break;
+    case 'users':
+      targetData = props.users;
+      targetUrl = '/add-user';
+      leftOptionLabel = 'add user';
+      tabContentName = 'Users';
+      break;
+    case 'teams':
+      targetData = props.teams;
+      targetUrl = '/create-team';
+      leftOptionLabel = 'create team';
+      tabContentName = 'Teams';
+      break;
+    case 'trash':
+      targetData = '';
+      tabContentName = 'Trash';
+      sortIsVisible = false;
+      isRemoveOption = true;
   }
+
   return (
     <ComponentBase
       style={props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}}

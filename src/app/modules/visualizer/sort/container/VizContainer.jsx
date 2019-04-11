@@ -35,11 +35,13 @@ const PropsRoute = ({ component, ...rest }) => {
 const propTypes = {
   chartType: PropTypes.string,
   publicPage: PropTypes.bool,
+  chartKeys: PropTypes.arrayOf(PropTypes.string),
   mode: PropTypes.bool
 };
 const defaultProps = {
   chartType: 'geomap',
   publicPage: false,
+  chartKeys: [],
   mode: location.pathname.includes('preview')
 };
 
@@ -106,6 +108,7 @@ class VizContainer extends React.Component {
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
             indicatorData={this.props.indicators}
+            chartKeys={this.props.chartKeys}
             path="/(visualizer|public)/barchart/:code/:tab"
             component={BarchartFragment}
             mode={this.state.preview}

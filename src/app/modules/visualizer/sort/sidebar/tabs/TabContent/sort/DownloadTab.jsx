@@ -49,17 +49,17 @@ const DownloadTab = () => {
       <ListContainer>
         <ItemContainer>
           <ItemIcon />
-          <DownloadItem>JSON</DownloadItem>
+          <DownloadItem data-cy="dowload-option-JSON">JSON</DownloadItem>
         </ItemContainer>
 
         <ItemContainer>
           <ItemIcon />
-          <DownloadItem>CSV</DownloadItem>
+          <DownloadItem data-cy="dowload-option-CSV">CSV</DownloadItem>
         </ItemContainer>
 
         <ItemContainer>
           <ItemIcon />
-          <DownloadItem>XML</DownloadItem>
+          <DownloadItem data-cy="dowload-option-XML">XML</DownloadItem>
         </ItemContainer>
       </ListContainer>
     </BaseTab>

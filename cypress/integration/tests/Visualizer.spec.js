@@ -18,6 +18,12 @@ function navigateToCreateGeo() {
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
 }
+function navigateToCreateLinechart() {
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="nav-pane-item-0"]').click();
+  cy.get('[data-cy="nav-pane-item-3"]').click();
+}
+
 describe('Create geo functionality', function() {
   it("Shouldn't be able to create geo when not logged in", function() {
     cy.visit('/');
@@ -49,6 +55,12 @@ describe('Create geo functionality', function() {
 });
 
 describe('Chartbuilder geomap chart fragment e2e', function() {
+  it('Should contain /geomap in the url', function() {
+    signIn();
+    navigateToCreateLinechart();
+    cy.url().should('include', '/visualizer/geomap');
+  });
+
   it('Should pass written text from the /context to /preview', function() {
     signIn();
     navigateToCreateGeo();
@@ -83,6 +95,9 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
       'aids related deaths'
     );
     cy.get('[data-cy=geomap-close-save-button]').click();
+    cy.visit('/visualizer/geomap/vizID/duplicate');
+    cy.get('[data-cy="duplicate-to-dashboard"]').click();
+    cy.get('[data-cy="edit-chart"]').click();
     // Fixme: Should check on the vizID in the url,
     // however on creating a chart, the vizID is not in the URL yet.
   });
@@ -106,4 +121,37 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     // Fixme: Should check on the vizID in the url,
     // however on creating a chart, the vizID is not in the URL yet.
   });
+});
+
+describe('Chartbuilder line chart fragment e2e', function() {
+  it('Should contain /linechart/ in the url', function() {
+    signIn();
+    navigateToCreateLinechart();
+    cy.url().should('include', '/visualizer/linechart');
+  });
+
+  it('Should display mapped data on the linechart', function() {
+    signIn();
+    navigateToCreateLinechart();
+    cy.contains('Select indicator').click();
+    cy.contains('aids related deaths (unaids)').click();
+    cy.get('[data-cy="linechart-legenditem-text"]').should(
+      'have.text',
+      'aids related deaths (unaids)'
+    );
+  });
+
+  // Fixme: functionality not yet built
+  // it('Should modify the graph structure', function() {
+  //   signIn();
+  //   navigateToCreateLinechart();
+  // });
+  //
+  // it('Should be saved as a linechart', function() {
+  //   signIn();
+  //   navigateToCreateLinechart();
+  //   cy.get('[data-cy=geomap-close-save-button]').click();
+  //   cy.get('[data-cy="duplicate-to-dashboard"]').click();
+  //   cy.get('[data-cy="edit-chart"]').click();
+  // });
 });

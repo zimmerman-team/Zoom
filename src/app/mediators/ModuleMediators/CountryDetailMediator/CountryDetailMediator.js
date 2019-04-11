@@ -113,47 +113,35 @@ const defaultProps = {
 };
 
 class CountryDetailMediator extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    activityParams: mock.activityParams,
+    wikiParams: mock.wikiParams,
+    transactionParams: mock.transactionParams,
+    projectInfo: {},
+    projectData: [],
+    countryOrgCommitments: [],
+    countryOrgDisbursements: [],
+    excerpts: ['', ''],
+    barChartIndicators: mock.barChartIndicators,
+    aidsEpIndicators: mock.lineChartInd.map(lci => lci.name),
+    aidsLineChartData: [],
+    countryName: '',
+    infoBarData: [],
+    projectSort: '-activity_budget_value',
+    isSortByOpen: false,
+    projectsLoading: false
+  };
 
-    this.state = {
-      activityParams: mock.activityParams,
-      wikiParams: mock.wikiParams,
-      transactionParams: mock.transactionParams,
-      projectInfo: {},
-      projectData: [],
-      excerpts: ['', ''],
-      barChartIndicators: mock.barChartIndicators,
-      countrySectors: [],
-      countryOrganisations: [],
-      aidsEpIndicators: mock.lineChartInd.map(lci => lci.name),
-      aidsLineChartData: [],
-      countryName: '',
-      infoBarData: [],
-      projectSort: mock.transParams.ordering,
-      isSortByOpen: false,
-      projectsLoading: false
-    };
-
-    this.changeSortBy = this.changeSortBy.bind(this);
-    this.setWrapperRef = this.setWrapperRef.bind(this);
-    this.setIsSortByOpen = this.setIsSortByOpen.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
-  }
-
-  componentDidMount() {
+  componentDidMount = () => {
     document.addEventListener('mousedown', this.handleClickOutside);
     // We get countries related activities here
     const activityParams = this.state.activityParams;
     activityParams.recipient_country = this.props.match.params.iso2.toUpperCase();
     this.props.dispatch(oipaActions.countryActivitiesRequest(activityParams));
 
-    // We get country sectors
+    // We get country participating orgs
     const transactionParams = this.state.transactionParams;
     transactionParams.recipient_country = this.props.match.params.iso2.toUpperCase();
-    this.props.dispatch(oipaActions.countrySectorsRequest(transactionParams));
-
-    // We get country participating orgs
     transactionParams.group_by = 'participating_organisation';
     this.props.dispatch(
       oipaActions.countryOrganisationsRequest(transactionParams)
@@ -162,9 +150,9 @@ class CountryDetailMediator extends React.Component {
     this.setState({ activityParams });
     // We get countries related indicator data here
     this.refetch();
-  }
+  };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate = prevProps => {
     // We format the loaded country activities here and save it in state
     if (
       !isEqual(
@@ -231,55 +219,48 @@ class CountryDetailMediator extends React.Component {
 
     // We format the loaded country sectors here and save it in state
     if (
-      !isEqual(this.props.countrySectors.data, prevProps.countrySectors.data)
-    ) {
-      const countrySectors = formatPieChartData(
-        get(this.props.countrySectors, 'data.results', []),
-        'sector.name',
-        'commitment'
-      );
-      this.setState({ countrySectors });
-    }
-
-    // We format the loaded country sectors here and save it in state
-    if (
       !isEqual(
         this.props.countryOrganisations.data,
         prevProps.countryOrganisations.data
       )
     ) {
-      const countryOrganisations = formatPieChartData(
+      const countryOrgCommitments = formatPieChartData(
         get(this.props.countryOrganisations, 'data.results', []),
         'participating_organisation',
         'commitment'
       );
-      this.setState({ countryOrganisations });
+      const countryOrgDisbursements = formatPieChartData(
+        get(this.props.countryOrganisations, 'data.results', []),
+        'participating_organisation',
+        'disbursement'
+      );
+      this.setState({ countryOrgCommitments, countryOrgDisbursements });
     }
-  }
+  };
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     document.removeEventListener('mousedown', this.handleClickOutside);
-  }
+  };
 
-  setIsSortByOpen() {
+  setIsSortByOpen = () => {
     this.setState(prevState => ({
       isSortByOpen: !prevState.isSortByOpen
     }));
-  }
+  };
 
-  setWrapperRef(node) {
+  setWrapperRef = node => {
     this.wrapperRef = node;
-  }
+  };
 
-  refetch() {
+  refetch = () => {
     this.props.relay.refetch({
       countryCode: [this.props.match.params.iso2.toLowerCase()],
       barChartIndicators: this.state.barChartIndicators,
       aidsEpIndicators: this.state.aidsEpIndicators
     });
-  }
+  };
 
-  changeSortBy(e) {
+  changeSortBy = e => {
     const value = e.target.id;
     this.setState(
       {
@@ -294,13 +275,13 @@ class CountryDetailMediator extends React.Component {
         );
       }
     );
-  }
+  };
 
-  handleClickOutside(event) {
+  handleClickOutside = event => {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.setState({ isSortByOpen: false });
     }
-  }
+  };
 
   render() {
     return (
@@ -312,8 +293,10 @@ class CountryDetailMediator extends React.Component {
         countryName={this.state.countryName}
         excerpts={this.state.excerpts}
         aidsEpIndicators={mock.lineChartInd}
-        countrySectors={this.state.countrySectors}
-        countryOrganisations={this.state.countryOrganisations}
+        countryOrganisations={{
+          commitment: this.state.countryOrgCommitments,
+          disbursement: this.state.countryOrgDisbursements
+        }}
         projectSort={this.state.projectSort}
         changeSortBy={this.changeSortBy}
         setWrapperRef={this.setWrapperRef}
@@ -329,7 +312,6 @@ const mapStateToProps = state => {
   return {
     excerpts: state.countryExcerpt,
     countryActivities: state.countryActivities,
-    countrySectors: state.countrySectors,
     countryOrganisations: state.countryOrganisations
   };
 };

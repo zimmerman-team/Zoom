@@ -256,22 +256,11 @@ export function formatLineChart2Data(indicatorData) {
 }
 
 export function formatPieChartData(data, groupByType, valueType) {
-  let colorInd = -1;
-  const colorArray = [
-    'hsl(172, 70%, 50%)',
-    'hsl(91, 70%, 50%)',
-    'hsl(313, 70%, 50%)',
-    'hsl(221, 70%, 50%)',
-    'hsl(48, 70%, 50%)'
-  ];
-
-  return data.map(d => {
-    colorInd += 1;
+  return filter(data, d => d[valueType] > 0).map(d => {
     return {
       id: get(d, groupByType, ''),
       value: d[valueType],
-      label: get(d, groupByType, ''),
-      color: colorArray[colorInd]
+      label: get(d, groupByType, '')
     };
   });
 }

@@ -1,29 +1,49 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 /* components */
 import Theme from 'theme/Theme';
-import {
-  FragmentHeader,
-  FragmentVisualisation
-} from 'components/sort/Fragments';
+import { FragmentVisualisation } from 'components/sort/Fragments';
 import { Element } from 'react-scroll/modules';
 import PieChart from 'components/charts/piechart/PieChart';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 
 /* mock */
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
-import { pieChartMockData } from '__mocks__/pieChartMock';
+
+/* utils */
+import get from 'lodash/get';
 
 const propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.shape({
+    commitment: PropTypes.arrayOf(PropTypes.shape({})),
+    disbursement: PropTypes.arrayOf(PropTypes.shape({}))
+  }),
+  countryName: PropTypes.string,
   background: PropTypes.string
 };
 const defaultProps = {
-  data: undefined,
+  data: {
+    commitment: [],
+    disbursement: []
+  },
+  countryName: '',
   background: Theme.color.aidsFondsWhite
 };
+
+const ChartContainer = styled.div`
+  width: 100%;
+`;
+
+const Title = styled.h3`
+  text-align: center;
+`;
+
+const NoDataText = styled.div`
+  text-align: center;
+`;
 
 const AidsfondsTransactions = props => {
   return (
@@ -31,12 +51,32 @@ const AidsfondsTransactions = props => {
       <ModuleFragment
         background={props.background}
         title={countryDetailMockData.fragments[5].title}
+        fragmentInfo={`${`${get(
+          props.countryName,
+          '[0]',
+          ''
+        ).toUpperCase()}${props.countryName.slice(1)}`}${
+          countryDetailMockData.fragments[5].description
+        }`}
         showInfoButton
       >
-        <FragmentHeader />
         <FragmentVisualisation direction="row">
-          <PieChart data={props.sectors} />
-          <PieChart data={props.organisations} />
+          <ChartContainer>
+            <Title>Commitments</Title>
+            {props.data.commitment.length > 0 ? (
+              <PieChart data={props.data.commitment} />
+            ) : (
+              <NoDataText>No data available</NoDataText>
+            )}
+          </ChartContainer>
+          <ChartContainer>
+            <Title>Disbursements</Title>
+            {props.data.commitment.length > 0 ? (
+              <PieChart data={props.data.disbursement} />
+            ) : (
+              <NoDataText>No data available</NoDataText>
+            )}
+          </ChartContainer>
         </FragmentVisualisation>
       </ModuleFragment>
     </Element>

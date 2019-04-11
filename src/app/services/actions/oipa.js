@@ -62,38 +62,6 @@ export function activityDataFailed(error) {
   };
 }
 
-export const COUNTRY_SECTORS_INITIAL = 'COUNTRY_SECTORS_INITIAL';
-export const COUNTRY_SECTORS_REQUEST = 'COUNTRY_SECTORS_REQUEST';
-export const COUNTRY_SECTORS_SUCCESS = 'COUNTRY_SECTORS_SUCCESS';
-export const COUNTRY_SECTORS_FAILED = 'COUNTRY_SECTORS_FAILED';
-
-export function countrySectorsInitial() {
-  return {
-    type: COUNTRY_SECTORS_INITIAL
-  };
-}
-
-export function countrySectorsRequest(values) {
-  return {
-    type: COUNTRY_SECTORS_REQUEST,
-    values: values
-  };
-}
-
-export function countrySectorsSuccess(data) {
-  return {
-    type: COUNTRY_SECTORS_SUCCESS,
-    data: data
-  };
-}
-
-export function countrySectorsFailed(error) {
-  return {
-    type: COUNTRY_SECTORS_FAILED,
-    error: error
-  };
-}
-
 export const COUNTRY_ORGANISATIONS_INITIAL = 'COUNTRY_ORGANISATIONS_INITIAL';
 export const COUNTRY_ORGANISATIONS_REQUEST = 'COUNTRY_ORGANISATIONS_REQUEST';
 export const COUNTRY_ORGANISATIONS_SUCCESS = 'COUNTRY_ORGANISATIONS_SUCCESS';

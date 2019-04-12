@@ -33,17 +33,23 @@ const Box = styled.div`
   outline: 1px solid gray;
 `;
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  indicatorData: PropTypes.arrayOf(PropTypes.shape({})),
+  chartKeys: PropTypes.arrayOf(PropTypes.string)
+};
+const defaultProps = {
+  indicatorData: [],
+  chartKeys: []
+};
 
 const BarchartFragment = props => {
   return (
     <ComponentBase>
       <Box>
         <ResponsiveBar
-          data={BarchartMockData}
-          keys={['hot dog', 'burger', 'sandwich', 'kebab', 'fries', 'donut']}
-          indexBy="country"
+          data={props.indicatorData}
+          keys={props.chartKeys}
+          indexBy="geolocation"
           margin={{
             top: 20,
             right: 0,
@@ -74,20 +80,20 @@ const BarchartFragment = props => {
               spacing: 10
             }
           ]}
-          fill={[
-            {
-              match: {
-                id: 'fries'
-              },
-              id: 'dots'
-            },
-            {
-              match: {
-                id: 'sandwich'
-              },
-              id: 'lines'
-            }
-          ]}
+          // fill={[
+          //   {
+          //     match: {
+          //       id: 'fries'
+          //     },
+          //     id: 'dots'
+          //   },
+          //   {
+          //     match: {
+          //       id: 'sandwich'
+          //     },
+          //     id: 'lines'
+          //   }
+          // ]}
           borderColor="inherit:darker(1.6)"
           axisTop={null}
           axisRight={null}

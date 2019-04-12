@@ -1,10 +1,11 @@
 /* base */
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
-import ZoomSelect from 'components/Select/ZoomSelect';
-import SimpleSelect from 'components/SimpleSelect/SimpleSelect';
+import SimpleSelect from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/SimpleSelect/SimpleSelect';
+import SimpleSwitch from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/SimpleSwitch/SimpleSwitch';
+
+import SimpleCheckbox from 'components/Checkbox/CheckBox';
+import ColorSelect from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/ColorSelect/ColorSelect';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -12,91 +13,81 @@ import SimpleSelect from 'components/SimpleSelect/SimpleSelect';
  */
 
 const ComponentBase = styled.div`
-  height: 375px;
-  width: 320px;
+  overflow: hidden;
   background-color: #efefef;
   display: flex;
   flex-direction: column;
+  padding: 18px;
+  padding-top: 8px;
 `;
 
 const FilterContainer = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  //outline: 1px solid green;
-  width: 100%;
-  min-height: 40px;
+  flex-shrink: 0;
   margin-bottom: 10px;
 `;
-
-const DropdownFilter = styled.div`
-  height: 40px;
-  width: 135px;
-  background-color: ${theme.color.aidsFondsWhite};
-`;
-const SwitchFilter = styled.div`
-  height: 17px;
-  width: 34px;
-  background-color: ${theme.color.aidsFondsWhite};
-`;
-const CheckboxFilter = styled.div`
-  height: 18px;
-  width: 18px;
-  background-color: ${theme.color.aidsFondsWhite};
-`;
-const PaletFilter = styled.div``;
 
 const propTypes = {};
 const defaultProps = {};
 
-const GraphStructurePanel = props => {
-  return (
-    <ComponentBase>
-      {/* FIRST ROW //////////////////////////////////////////////////////// */}
-      <FilterContainer>
-        {/* LEFT Y-AXIS */}
-        <DropdownFilter />
-        {/* RIGHT Y-AXIS */}
-        <DropdownFilter />
-      </FilterContainer>
+class GraphStructurePanel extends React.Component {
+  state = {
+    checked: true
+  };
 
-      {/* SECOND ROW /////////////////////////////////////////////////////// */}
-      <FilterContainer>
-        {/* X-AXIS */}
-        <SimpleSelect />
-      </FilterContainer>
+  render() {
+    return (
+      <ComponentBase>
+        {/* FIRST ROW //////////////////////////////////////////////////////// */}
+        <FilterContainer>
+          {/* LEFT Y-AXIS */}
+          <SimpleSelect
+            label="Left Y-axis"
+            onChange={() => console.log('changed')}
+          />
+          {/* RIGHT Y-AXIS */}
+          <SimpleSelect label="Right Y-axis" />
+        </FilterContainer>
 
-      {/* THIRD ROW //////////////////////////////////////////////////////// */}
-      <FilterContainer>
-        {/* AGGREGATE BY */}
-        <DropdownFilter />
-        {/* RANK BY */}
-        <DropdownFilter />
-      </FilterContainer>
+        {/* SECOND ROW /////////////////////////////////////////////////////// */}
+        <FilterContainer>
+          {/* X-AXIS */}
+          <SimpleSelect label="X-axis" />
+        </FilterContainer>
 
-      {/* FOURTH ROW /////////////////////////////////////////////////////// */}
-      <FilterContainer>
-        {/* STACKED VS GROUPED */}
-        <SwitchFilter />
-      </FilterContainer>
+        {/* THIRD ROW //////////////////////////////////////////////////////// */}
+        <FilterContainer>
+          {/* AGGREGATE BY */}
+          <SimpleSelect label="Aggregate by" />
+          {/* RANK BY */}
+          <SimpleSelect label="Rank by" />
+        </FilterContainer>
 
-      {/* FIFTH ROW //////////////////////////////////////////////////////// */}
-      <FilterContainer>
-        {/* VERTICAL VS HORIZONTAL */}
-        <SwitchFilter />
-      </FilterContainer>
+        {/* FOURTH ROW /////////////////////////////////////////////////////// */}
+        <FilterContainer>
+          {/* STACKED VS GROUPED */}
+          <SimpleSwitch option1="Stacked" option2="Grouped" />
+        </FilterContainer>
 
-      {/* SIXTH ROW //////////////////////////////////////////////////////// */}
-      <FilterContainer>
-        {/* ETC */}
-        <CheckboxFilter />
-      </FilterContainer>
+        {/* FIFTH ROW //////////////////////////////////////////////////////// */}
+        <FilterContainer>
+          {/* VERTICAL VS HORIZONTAL */}
+          <SimpleSwitch option1="Vertical" option2="Horizontal" />
+        </FilterContainer>
 
-      {/* SEVENT ROW /////////////////////////////////////////////////////// */}
-      <FilterContainer />
-    </ComponentBase>
-  );
-};
+        {/* SIXTH ROW //////////////////////////////////////////////////////// */}
+
+        {/* SEVENT ROW /////////////////////////////////////////////////////// */}
+
+        <FilterContainer>
+          {/* X-AXIS */}
+          <ColorSelect label="Color palet" />
+        </FilterContainer>
+      </ComponentBase>
+    );
+  }
+}
 
 GraphStructurePanel.propTypes = propTypes;
 GraphStructurePanel.defaultProps = defaultProps;

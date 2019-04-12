@@ -1,6 +1,5 @@
 import get from 'lodash/get';
 import find from 'lodash/find';
-import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
 import { paginate } from './genericUtils';
@@ -37,7 +36,6 @@ export function formatUsersTabData(
         },
         onEdit: () => onEdit(d.user_id),
         onView: () => onView(d.user_id),
-        onDuplicate: () => console.log('duplicate'),
         onDelete: () => onDelete(d.user_id)
       };
     });
@@ -94,7 +92,6 @@ export function formatTeamsTabData(
         },
         onEdit: () => onEdit(d._id),
         onView: () => onView(d._id),
-        onDuplicate: () => console.log('duplicate'),
         onDelete: () => onDelete(d._id, get(d, 'name', ''))
       };
     });

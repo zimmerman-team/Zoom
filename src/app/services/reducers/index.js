@@ -211,6 +211,21 @@ function activityData(state = initial, action) {
   }
 }
 
+function countryOrganisations(state = initial, action) {
+  switch (action.type) {
+    case oipaActions.COUNTRY_ORGANISATIONS_INITIAL:
+      return updateInitial(state);
+    case oipaActions.COUNTRY_ORGANISATIONS_REQUEST:
+      return updateRequest(state, action);
+    case oipaActions.COUNTRY_ORGANISATIONS_SUCCESS:
+      return updateSuccess(state, action);
+    case oipaActions.COUNTRY_ORGANISATIONS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 function countryExcerpt(state = initial, action) {
   switch (action.type) {
     case actions.COUNTRY_EXCERPT_INITIAL:
@@ -522,6 +537,7 @@ const reducers = {
   countryExcerpt,
   countryActivities,
   activityData,
+  countryOrganisations,
   updateTeamAndUsersOfIt,
   groupDeleted,
   userDeleted

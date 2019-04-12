@@ -112,6 +112,18 @@ export function* dataPaneToggleRequest(action) {
   yield put(generalActions.dataPaneToggleDone(action.open));
 }
 
+export function* countryOrganisationsRequest(action) {
+  try {
+    const response = yield call(
+      api.transactionsAggregationsRequest,
+      action.values
+    );
+    yield put(oipaActions.countryOrganisationsSuccess(response));
+  } catch (error) {
+    yield put(oipaActions.countryOrganisationsFailed(error));
+  }
+}
+
 export function* saveStepDataRequest(action) {
   yield put(generalActions.saveStepDataDone(action.data));
 }
@@ -467,6 +479,7 @@ function* sagas() {
     takeLatest('FILE_REQUEST', fileRequest),
     takeLatest('ACTIVITY_DATA_REQUEST', activityDataRequest),
     takeLatest('COUNTRY_EXCERPT_REQUEST', countryExcerptRequest),
+    takeLatest('COUNTRY_ORGANISATIONS_REQUEST', countryOrganisationsRequest),
     takeLatest('DELETE_USER_REQUEST', deleteUserRequest),
     takeLatest(
       'UPDATE_TEAM_AND_USERS_OF_IT__REQUEST',

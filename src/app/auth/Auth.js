@@ -943,16 +943,20 @@ class Auth {
                   name: '',
                   users: []
                 });
-                this.addMultipleUsersToGroup(
-                  res2.data._id,
-                  users,
-                  {
-                    Authorization: `${res1.data.token_type} ${
-                      res1.data.access_token
-                    }`
-                  },
-                  parent
-                ).then(() => resolve());
+                if (users.length > 0) {
+                  this.addMultipleUsersToGroup(
+                    res2.data._id,
+                    users,
+                    {
+                      Authorization: `${res1.data.token_type} ${
+                        res1.data.access_token
+                      }`
+                    },
+                    parent
+                  ).then(() => resolve());
+                } else {
+                  resolve();
+                }
               } else {
                 parent.setState({
                   success: false,
@@ -1031,13 +1035,19 @@ class Auth {
         grant_type: 'client_credentials'
       })
       .then(res1 => {
+        const redirectUrl = `${
+          process.env.REACT_APP_PROJECT_URL.includes('localhost')
+            ? process.env.REACT_APP_EXPRESS_BACKEND_BASE_URL
+            : process.env.REACT_APP_PROJECT_URL
+        }/api/redirectToHome`;
         axios
           .post(
             `${
               process.env.REACT_APP_AUTH_DOMAIN
             }/api/v2/tickets/password-change`,
             {
-              user_id: userId
+              user_id: userId,
+              result_url: redirectUrl
             },
             {
               headers: {

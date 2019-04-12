@@ -20,6 +20,9 @@ import theme from 'theme/Theme';
 /* mock */
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 
+/* utils */
+import get from 'lodash/get';
+
 // FRAGMENT 2: country info
 const propTypes = {
   excerpts: PropTypes.arrayOf(PropTypes.string),
@@ -43,7 +46,14 @@ const CountryInfo = props => {
   return (
     <Element name="Summary">
       <ModuleFragment>
-        <CountryName>Zoom in on {props.countryName}</CountryName>
+        <CountryName>
+          Zoom in on{' '}
+          {`${get(
+            props.countryName,
+            '[0]',
+            ''
+          ).toUpperCase()}${props.countryName.slice(1)}`}
+        </CountryName>
         <Box direction="row">
           <Box width="50%">
             <PageIntroInitial>{props.excerpts[0]}</PageIntroInitial>

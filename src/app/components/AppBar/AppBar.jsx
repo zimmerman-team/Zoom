@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Box } from 'grommet';
 import { Menu } from 'grommet-icons';
 import theme from 'theme/Theme';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 /* consts */
@@ -259,12 +259,14 @@ export class AppBar extends React.Component {
             onClick={this.props.toggleSideBar}
             data-cy="sidebar-toggle"
           />
-          <AidsFondLogo
-            a11yTitle="Aidsfonds logo"
-            fit="contain"
-            alignSelf="center"
-            src="https://zoom.aidsfonds.nl/static/b459aca02fec5b684d4a8fb3fe7b44a6.svg"
-          />
+          <Link to="/">
+            <AidsFondLogo
+              a11yTitle="Aidsfonds logo"
+              fit="contain"
+              alignSelf="center"
+              src="https://zoom.aidsfonds.nl/static/b459aca02fec5b684d4a8fb3fe7b44a6.svg"
+            />
+          </Link>
         </Box>
 
         {this.state.paneButton}

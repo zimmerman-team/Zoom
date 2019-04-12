@@ -124,4 +124,8 @@ router.get('/sendEmail', EmailController.sendMail);
 
 /* -------------- EMAIL CONTROLLER END ------------------------- */
 
+router.get('/redirectToHome', (req, res) => {
+  res.redirect(`${process.env.REACT_APP_PROJECT_URL}/home/#`);
+});
+
 module.exports = router;

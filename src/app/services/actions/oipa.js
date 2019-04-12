@@ -5,28 +5,28 @@ export const COUNTRY_ACTIVITIES_FAILED = 'COUNTRY_ACTIVITIES_FAILED';
 
 export function activitiesInitial() {
   return {
-    type: COUNTRY_ACTIVITIES_INITIAL,
+    type: COUNTRY_ACTIVITIES_INITIAL
   };
 }
 
 export function countryActivitiesRequest(values) {
   return {
     type: COUNTRY_ACTIVITIES_REQUEST,
-    values: values,
+    values: values
   };
 }
 
 export function countryActivitiesSuccess(data) {
   return {
     type: COUNTRY_ACTIVITIES_SUCCESS,
-    data: data,
+    data: data
   };
 }
 
 export function countryActivitiesFailed(error) {
   return {
     type: COUNTRY_ACTIVITIES_FAILED,
-    error: error,
+    error: error
   };
 }
 
@@ -37,27 +37,27 @@ export const ACTIVITY_DATA_FAILED = 'ACTIVITY_DATA_FAILED';
 
 export function activityDataInitial() {
   return {
-    type: ACTIVITY_DATA_INITIAL,
+    type: ACTIVITY_DATA_INITIAL
   };
 }
 
 export function activityDataRequest(values) {
   return {
     type: ACTIVITY_DATA_REQUEST,
-    values: values,
+    values: values
   };
 }
 
 export function activityDataSuccess(data) {
   return {
     type: ACTIVITY_DATA_SUCCESS,
-    data: data,
+    data: data
   };
 }
 
 export function activityDataFailed(error) {
   return {
     type: ACTIVITY_DATA_FAILED,
-    error: error,
+    error: error
   };
 }

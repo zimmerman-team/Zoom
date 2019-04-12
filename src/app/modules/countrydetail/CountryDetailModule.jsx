@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box } from 'grommet';
 import theme from 'theme/Theme';
+import { Helmet } from 'react-helmet';
 
 import CountryInfo from 'modules/countrydetail/fragments/CountryInfo/CountryInfo';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
@@ -89,6 +90,9 @@ const defaultProps = {
 const CountryDetailModule = props => {
   return (
     <ModuleContainer>
+      <Helmet>
+        <title>Zoom - Country detail</title>
+      </Helmet>
       {/* Fragment 1: Page navigation */}
       <PageNavigation />
 

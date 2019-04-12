@@ -15,6 +15,7 @@ import {
 } from 'modules/datamapper/DataMapperModule.util';
 import find from 'lodash/find';
 import { ToastsStore } from 'react-toasts';
+import { Helmet } from 'react-helmet';
 
 /* styles */
 import {
@@ -295,6 +296,9 @@ class DataMapperModule extends React.Component {
 
     return (
       <ModuleContainer>
+        <Helmet>
+          <title>Zoom - Datamapper</title>
+        </Helmet>
         <ModuleHeader>
           <Stepper
             step={this.state.step}

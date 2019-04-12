@@ -81,9 +81,7 @@ const defaultProps = {
 
 const CreateTeam = props => {
   const disableSubmit =
-    props.disableSubmit === undefined
-      ? props.name === '' || props.users.length === 0
-      : props.disableSubmit;
+    props.disableSubmit === undefined ? props.name === '' : props.disableSubmit;
   return (
     <ModuleFragment title={props.pageTitle}>
       {props.loading && <ProgressIcon />}

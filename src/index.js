@@ -8,7 +8,7 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import { routerMiddleware } from 'react-router-redux';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory as createHistory } from 'history';
 import createSagaMiddleware from 'redux-saga';
 
 import reducers from 'services/reducers';

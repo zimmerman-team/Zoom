@@ -370,6 +370,8 @@ class DashboardMediator extends React.Component {
         changeSearchKeyword={this.changeSearchKeyword}
         teams={this.state.teams}
         navItems={data(
+          this.props.auth0Client.isAdministrator(),
+          this.props.auth0Client.isSuperAdmin(),
           this.state.allUsers,
           this.state.allTeams,
           this.state.charts,

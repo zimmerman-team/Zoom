@@ -943,16 +943,20 @@ class Auth {
                   name: '',
                   users: []
                 });
-                this.addMultipleUsersToGroup(
-                  res2.data._id,
-                  users,
-                  {
-                    Authorization: `${res1.data.token_type} ${
-                      res1.data.access_token
-                    }`
-                  },
-                  parent
-                ).then(() => resolve());
+                if (users.length > 0) {
+                  this.addMultipleUsersToGroup(
+                    res2.data._id,
+                    users,
+                    {
+                      Authorization: `${res1.data.token_type} ${
+                        res1.data.access_token
+                      }`
+                    },
+                    parent
+                  ).then(() => resolve());
+                } else {
+                  resolve();
+                }
               } else {
                 parent.setState({
                   success: false,

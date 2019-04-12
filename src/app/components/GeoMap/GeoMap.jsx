@@ -233,7 +233,7 @@ export class GeoMap extends Component {
   handleZoomIn() {
     this._updateViewport({
       ...this.state.viewport,
-      zoom: this.state.viewport.zoom + 0.5
+      zoom: this.state.viewport.zoom + 0.1
     });
   }
 
@@ -242,8 +242,8 @@ export class GeoMap extends Component {
       this._updateViewport({
         ...this.state.viewport,
         zoom:
-          this.state.viewport.zoom - 0.5 > this.state.settings.minZoom
-            ? this.state.viewport.zoom - 0.5
+          this.state.viewport.zoom - 0.1 > this.state.settings.minZoom
+            ? this.state.viewport.zoom - 0.1
             : this.state.settings.minZoom
       });
   }

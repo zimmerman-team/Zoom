@@ -10,6 +10,7 @@ import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFr
 
 import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment';
 import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
+import DonutchartFragment from 'modules/visualizer/sort/container/fragments/DonutchartFragment';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -111,6 +112,17 @@ class VizContainer extends React.Component {
             chartKeys={this.props.chartKeys}
             path="/(visualizer|public)/barchart/:code/:tab"
             component={BarchartFragment}
+            mode={this.state.preview}
+          />
+
+          <PropsRoute
+            chartType={this.props.chartType}
+            selectYear={this.props.selectYear}
+            selectedYear={this.props.selectedYear}
+            indicatorData={this.props.indicators}
+            chartKeys={this.props.chartKeys}
+            path="/(visualizer|public)/donutchart/:code/:tab"
+            component={DonutchartFragment}
             mode={this.state.preview}
           />
         </React.Fragment>

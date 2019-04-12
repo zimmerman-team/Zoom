@@ -131,7 +131,7 @@ class DataExplorePane extends React.Component {
 
   render() {
     const history = createBrowserHistory();
-    const isLinechart = history.location.pathname.includes('linechart');
+    const isGeoMap = history.location.pathname.includes('geomap');
 
     return (
       <ComponentBase style={{ display: this.props.display }}>
@@ -268,15 +268,15 @@ class DataExplorePane extends React.Component {
             />
           </ExpansionPanelContainer>
 
-          {/*{isLinechart && (*/}
-          <ExpansionPanelContainer
-            icon={<IconGraphStructure />}
-            label="Graph structure"
-            data-cy="nav-pane-item-time-period"
-          >
-            <GraphStructurePanel />
-          </ExpansionPanelContainer>
-          {/*)}*/}
+          {!isGeoMap && (
+            <ExpansionPanelContainer
+              icon={<IconGraphStructure />}
+              label="Graph structure"
+              data-cy="nav-pane-item-time-period"
+            >
+              <GraphStructurePanel />
+            </ExpansionPanelContainer>
+          )}
         </PanelAccordion>
         <ResetContainer
           data-cy="data-explorer-panel-reset"

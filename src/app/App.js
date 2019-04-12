@@ -77,6 +77,12 @@ class App extends React.Component {
     showSidebar: false
   };
 
+  componentWillMount = () => {
+    if (window.location.href.includes('/home/#')) {
+      this.setState({ showSidebar: true });
+    }
+  };
+
   componentDidMount = () => {
     if (window.location.pathname.indexOf('/callback') !== -1) {
       return;

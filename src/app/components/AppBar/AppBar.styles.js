@@ -17,6 +17,10 @@ export const ComponentBase = styled(Box)`
 export const AidsFondLogo = styled(Image)`
   height: 25px;
   user-select: none;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const MenuButton = styled(Button)`

@@ -41,7 +41,7 @@ export const countryDetailMockData = {
     {
       id: 'Financials',
       title: 'Aidsfonds financial transactions',
-      description: []
+      description: ["'s partners commitments & disbursements"]
     },
     {
       id: 'Projects',

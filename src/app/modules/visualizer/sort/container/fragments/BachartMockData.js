@@ -1,6 +1,6 @@
 export const BarchartMockData = [
   {
-    country: 'AD',
+    geolocation: 'AD',
     'hot dog': 197,
     'hot dogColor': 'hsl(265, 70%, 50%)',
     burger: 50,
@@ -15,7 +15,7 @@ export const BarchartMockData = [
     donutColor: 'hsl(275, 70%, 50%)'
   },
   {
-    country: 'AE',
+    geolocation: 'AE',
     'hot dog': 108,
     'hot dogColor': 'hsl(200, 70%, 50%)',
     burger: 11,
@@ -30,7 +30,7 @@ export const BarchartMockData = [
     donutColor: 'hsl(91, 70%, 50%)'
   },
   {
-    country: 'AF',
+    geolocation: 'AF',
     'hot dog': 28,
     'hot dogColor': 'hsl(24, 70%, 50%)',
     burger: 34,
@@ -45,7 +45,7 @@ export const BarchartMockData = [
     donutColor: 'hsl(240, 70%, 50%)'
   },
   {
-    country: 'AG',
+    geolocation: 'AG',
     'hot dog': 15,
     'hot dogColor': 'hsl(283, 70%, 50%)',
     burger: 11,
@@ -60,7 +60,7 @@ export const BarchartMockData = [
     donutColor: 'hsl(154, 70%, 50%)'
   },
   {
-    country: 'AI',
+    geolocation: 'AI',
     'hot dog': 51,
     'hot dogColor': 'hsl(111, 70%, 50%)',
     burger: 137,
@@ -75,7 +75,7 @@ export const BarchartMockData = [
     donutColor: 'hsl(206, 70%, 50%)'
   },
   {
-    country: 'AL',
+    geolocation: 'AL',
     'hot dog': 115,
     'hot dogColor': 'hsl(238, 70%, 50%)',
     burger: 81,
@@ -90,7 +90,7 @@ export const BarchartMockData = [
     donutColor: 'hsl(110, 70%, 50%)'
   },
   {
-    country: 'AM',
+    geolocation: 'AM',
     'hot dog': 160,
     'hot dogColor': 'hsl(279, 70%, 50%)',
     burger: 182,

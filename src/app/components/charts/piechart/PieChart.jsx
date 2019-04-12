@@ -27,6 +27,7 @@ const PieChart = props => {
   return (
     <ComponentBase>
       <ResponsivePie
+        animate
         data={props.data}
         margin={{
           top: 40,
@@ -41,19 +42,31 @@ const PieChart = props => {
         colorBy="id"
         borderWidth={1}
         borderColor="inherit:darker(0.2)"
-        radialLabelsSkipAngle={10}
+        enableSlicesLabels={false}
+        radialLabelsSkipAngle={5}
         radialLabelsTextXOffset={6}
         radialLabelsTextColor="#333333"
-        radialLabelsLinkOffset={0}
         radialLabelsLinkDiagonalLength={16}
         radialLabelsLinkHorizontalLength={24}
         radialLabelsLinkStrokeWidth={1}
         radialLabelsLinkColor="inherit"
-        slicesLabelsSkipAngle={10}
-        slicesLabelsTextColor="#333333"
-        animate={true}
         motionStiffness={90}
         motionDamping={15}
+        radialLabel={item => {
+          if (item.label.length > 13) {
+            return `${item.label.substr(0, 13)}...`;
+          }
+          return item.label;
+        }}
+        tooltipFormat={l => {
+          return `EUR ${l.toLocaleString(
+            {},
+            {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2
+            }
+          )}`;
+        }}
         defs={[
           {
             id: 'dots',
@@ -74,57 +87,6 @@ const PieChart = props => {
             spacing: 10
           }
         ]}
-        fill={[
-          {
-            match: {
-              id: 'ruby'
-            },
-            id: 'dots'
-          },
-          {
-            match: {
-              id: 'c'
-            },
-            id: 'dots'
-          },
-          {
-            match: {
-              id: 'go'
-            },
-            id: 'dots'
-          },
-          {
-            match: {
-              id: 'python'
-            },
-            id: 'dots'
-          },
-          {
-            match: {
-              id: 'scala'
-            },
-            id: 'lines'
-          },
-          {
-            match: {
-              id: 'lisp'
-            },
-            id: 'lines'
-          },
-          {
-            match: {
-              id: 'elixir'
-            },
-            id: 'lines'
-          },
-          {
-            match: {
-              id: 'javascript'
-            },
-            id: 'lines'
-          }
-        ]}
-        legends={[]}
       />
     </ComponentBase>
   );

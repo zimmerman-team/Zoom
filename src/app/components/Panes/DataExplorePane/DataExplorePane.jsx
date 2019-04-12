@@ -1,6 +1,7 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { createBrowserHistory } from 'history';
 
 /* icons */
 import IconRedIndicators from 'assets/icons/IconRedIndicators';
@@ -129,6 +130,9 @@ class DataExplorePane extends React.Component {
   };
 
   render() {
+    const history = createBrowserHistory();
+    const isLinechart = history.location.pathname.includes('linechart');
+
     return (
       <ComponentBase style={{ display: this.props.display }}>
         <PanelAccordion
@@ -264,6 +268,7 @@ class DataExplorePane extends React.Component {
             />
           </ExpansionPanelContainer>
 
+          {/*{isLinechart && (*/}
           <ExpansionPanelContainer
             icon={<IconGraphStructure />}
             label="Graph structure"
@@ -271,6 +276,7 @@ class DataExplorePane extends React.Component {
           >
             <GraphStructurePanel />
           </ExpansionPanelContainer>
+          {/*)}*/}
         </PanelAccordion>
         <ResetContainer
           data-cy="data-explorer-panel-reset"

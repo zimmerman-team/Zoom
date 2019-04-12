@@ -68,7 +68,7 @@ const DashboardTabContent = props => {
       leftOptionLabel = undefined;
       tabContentName = 'Charts';
       break;
-    case 'datasets':
+    case 'data-sets':
       targetData = props.datasets;
       targetUrl = '/mapper';
       leftOptionLabel = 'map data set';

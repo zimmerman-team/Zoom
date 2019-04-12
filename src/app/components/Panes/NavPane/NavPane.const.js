@@ -33,11 +33,11 @@ export const createChartItems = [
   {
     label: 'Line chart',
     navTo: '/visualizer/linechart/vizID/edit'
-  } /*,
+  },
   {
     label: 'Bar chart',
-    navTo: '/create/barchart'
-  },
+    navTo: '/visualizer/barchart/vizID/edit'
+  } /*,
   {
     label: 'Table',
     navTo: '/create/table'

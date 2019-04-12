@@ -92,6 +92,14 @@ export function wikipediaExcerptRequest(values) {
   return handleRequest(wikiURL('/w/api.php'), formatJSON(values), 'get');
 }
 
+export function transactionsAggregationsRequest(values) {
+  return handleRequest(
+    oipaURL('/api/transactions/aggregations'),
+    formatJSON(values),
+    'get'
+  );
+}
+
 // NODE BACKEND CALL TYPES
 export function nodeBackendGetRequest(request) {
   return axios.get(`/api/${request.endpoint}`, {

@@ -8,9 +8,10 @@ import {
   formatCountryParam,
   formatDate,
   formatGeoData,
-  formatKeys,
+  formatBarChartKeys,
   formatLineData,
-  removeIds
+  removeIds,
+  formatLineChartKeys
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 import PropTypes from 'prop-types';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
@@ -238,7 +239,7 @@ class VisualizerModuleMediator extends Component {
 
       this.setState({
         loading: false,
-        chartKeys: formatKeys([
+        chartKeys: formatBarChartKeys([
           indicatorItems[0].indicator,
           indicatorItems[1].indicator
         ])
@@ -338,6 +339,10 @@ class VisualizerModuleMediator extends Component {
         );
         break;
       case chartTypes.lineChart:
+        chartKeys = formatLineChartKeys([
+          this.props.chartData.selectedInd1,
+          this.props.chartData.selectedInd2
+        ]);
         indicators = formatLineData([
           this.props.indicatorAggregations.indicators1,
           this.props.indicatorAggregations.indicators2
@@ -348,7 +353,7 @@ class VisualizerModuleMediator extends Component {
           this.props.indicatorAggregations.indicators1,
           this.props.indicatorAggregations.indicators2
         ]);
-        chartKeys = formatKeys([
+        chartKeys = formatBarChartKeys([
           this.props.chartData.selectedInd1,
           this.props.chartData.selectedInd2
         ]);

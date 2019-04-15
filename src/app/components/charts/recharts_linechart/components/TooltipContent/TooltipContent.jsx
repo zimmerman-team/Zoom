@@ -2,12 +2,14 @@
 import React from 'react';
 import { Container, Row, Title, Rect } from './TooltipContent.styles';
 
-const TooltipContent = ({ active, payload, label }) => {
+const TooltipContent = ({ active, payload, label, xAxisKey }) => {
   if (active && payload) {
+    const xAxisLabel = xAxisKey.charAt(0).toUpperCase() + xAxisKey.slice(1);
+
     return (
       <Container>
         <Title>
-          Year: <b>{label}</b>
+          {xAxisLabel}: <b>{label}</b>
         </Title>
         {payload.map(p => (
           <Row key={p.dataKey}>

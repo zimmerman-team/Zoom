@@ -36,7 +36,7 @@ const PropsRoute = ({ component, ...rest }) => {
 const propTypes = {
   chartType: PropTypes.string,
   publicPage: PropTypes.bool,
-  chartKeys: PropTypes.arrayOf(PropTypes.string),
+  chartKeys: PropTypes.array,
   mode: PropTypes.bool
 };
 const defaultProps = {
@@ -99,6 +99,7 @@ class VizContainer extends React.Component {
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
             indicatorData={this.props.indicators}
+            indicators={this.props.chartKeys}
             path="/(visualizer|public)/linechart/:code/:tab"
             component={LinechartFragment}
             mode={this.state.preview}

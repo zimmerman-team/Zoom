@@ -30,14 +30,13 @@ const propTypes = {
   loading: PropTypes.bool,
   users: PropTypes.arrayOf(PropTypes.shape({})),
   teams: PropTypes.arrayOf(PropTypes.shape({})),
-  activeTab: PropTypes.string,
+
   totalPages: PropTypes.number,
   changePage: PropTypes.func
 };
 const defaultProps = {
   tabs: [],
   sort: '',
-  activeTab: '',
   greetingName: '',
   loading: false,
   changeSortBy: null,

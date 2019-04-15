@@ -138,7 +138,7 @@ class HomeModuleMediator extends Component {
         allCountries: [],
         allRegions: [],
         selectedSources: [],
-        yearRange: '2003,2016',
+        yearRange: '1992,2018',
         subIndicators1: [],
         subIndicators2: []
       })
@@ -263,6 +263,10 @@ class HomeModuleMediator extends Component {
       regionCountriesCodes
     );
 
+    // so this variable basically controlls the filter param for data points
+    // that don't have/do have geolocationIso2 field
+    const iso2Undef = countriesISO2.indexOf('undefined') !== -1;
+
     const refetchVars = {
       indicator1: [ind1],
       indicator2: [ind2],
@@ -271,7 +275,8 @@ class HomeModuleMediator extends Component {
       singleInd2: ind2 ? ind2 : 'null',
       datePeriod: [selectedYear],
       subInd1: subInd1.length > 0 ? subInd1 : ['undefined'],
-      subInd2: subInd2.length > 0 ? subInd2 : ['undefined']
+      subInd2: subInd2.length > 0 ? subInd2 : ['undefined'],
+      OR_GeolocationIso2_Is_Null: iso2Undef
     };
 
     this.setState({
@@ -288,8 +293,12 @@ class HomeModuleMediator extends Component {
   selectInd1(val) {
     // So if a new batch of subindicators is retrieved
     // we reset the selected subindicator
+    // AND ALSO whenever an indicator is selected
+    // the year jumps to the most recent year of the
+    // indicators data point, so
     this.setState(
       {
+        selectedYear: val.firstYear,
         selectedInd1: val.value,
         subIndicators1: [],
         selectedSubInd1: []
@@ -301,8 +310,12 @@ class HomeModuleMediator extends Component {
   selectInd2(val) {
     // So if a new batch of subindicators is retrieved
     // we reset the selected subindicator
+    // AND ALSO whenever an indicator is selected
+    // the year jumps to the most recent year of the
+    // indicators data point, so
     this.setState(
       {
+        selectedYear: val.firstYear,
         selectedInd2: val.value,
         subIndicators2: [],
         selectedSubInd2: []
@@ -521,6 +534,7 @@ export default createRefetchContainer(
         countriesISO2: { type: "[String]", defaultValue: ["null"] }
         singleInd1: { type: "String", defaultValue: "null" }
         singleInd2: { type: "String", defaultValue: "null" }
+        OR_GeolocationIso2_Is_Null: { type: "Boolean", defaultValue: true }
       ) {
       indicators1: datapointsAggregation(
         groupBy: [
@@ -538,6 +552,7 @@ export default createRefetchContainer(
         indicatorName_In: $indicator1
         geolocationIso2_In: $countriesISO2
         filterName_In: $subInd1
+        OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
       ) {
         indicatorName
         geolocationIso2
@@ -564,6 +579,7 @@ export default createRefetchContainer(
         indicatorName_In: $indicator2
         geolocationIso2_In: $countriesISO2
         filterName_In: $subInd2
+        OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
       ) {
         indicatorName
         geolocationIso2
@@ -600,6 +616,7 @@ export default createRefetchContainer(
       $countriesISO2: [String]!
       $singleInd1: String!
       $singleInd2: String!
+      $OR_GeolocationIso2_Is_Null: Boolean!
     ) {
       ...HomeModuleMediator_indicatorAggregations
         @arguments(
@@ -611,6 +628,7 @@ export default createRefetchContainer(
           singleInd2: $singleInd2
           subInd1: $subInd1
           subInd2: $subInd2
+          OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
         )
     }
   `

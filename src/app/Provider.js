@@ -3,7 +3,6 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { routerMiddleware } from 'react-router-redux';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import createHistory from 'history/createBrowserHistory';
 import createSagaMiddleware from 'redux-saga';
 import { CookiesProvider } from 'react-cookie';
 

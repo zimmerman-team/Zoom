@@ -1,6 +1,7 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 /* components */
 import { ModuleContainer } from 'modules/dashboard/DashboardModule.styles';
@@ -73,6 +74,9 @@ const DashboardModule = ({
   changePage
 }) => (
   <ModuleContainer>
+    <Helmet>
+      <title>Zoom - Dashboard</title>
+    </Helmet>
     <DashboardHeader
       userName={greetingName}
       title="Zoom dashboard"

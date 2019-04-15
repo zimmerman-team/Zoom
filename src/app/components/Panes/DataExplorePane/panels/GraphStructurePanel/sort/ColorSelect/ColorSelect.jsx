@@ -21,11 +21,6 @@ import IconPointer from 'assets/icons/IconPointer';
  * @param {Object} customProperty - please describe component property
  */
 
-const ComponentBase = styled.div`
-  //margin-left: 10px;
-  //margin-right: 10px;
-`;
-
 const propTypes = {
   classes: PropTypes.object,
   label: PropTypes.string,
@@ -116,22 +111,6 @@ const ZimMenuItem = styled(props => <MenuItem {...props} />)`
       color: red;
     }
   }
-`;
-
-const Palet1 = styled.div`
-  height: 17px;
-  width: 85px;
-  background-color: blue;
-`;
-const Palet2 = styled.div`
-  height: 17px;
-  width: 85px;
-  background-color: #ff0000;
-`;
-const Palet3 = styled.div`
-  height: 17px;
-  width: 85px;
-  background-color: #008000;
 `;
 
 const PaletFragment = styled.div`

@@ -1,12 +1,13 @@
+/* Base */
 import React from 'react';
 import PropTypes from 'prop-types';
 import MUIDataTable from 'mui-datatables';
 import { MuiThemeProvider } from '@material-ui/core';
+
+/* components */
 import getTheme from './TableChart.styles';
 import tableDataMock from './TableData.mock';
 import tableColumnsMock from './TableColumns.mock';
-
-// TODO: Fix responsive styling issues
 
 // For a list of all options: https://github.com/gregnb/mui-datatables
 const options = {
@@ -18,14 +19,15 @@ const options = {
 
 const propTypes = {
   title: PropTypes.string,
-  data: PropTypes.object,
+  data: PropTypes.array,
   columns: PropTypes.object,
   options: PropTypes.object
 };
 const defaultProps = {
+  title: 'No title given',
   data: tableDataMock,
   columns: tableColumnsMock,
-  options: options
+  options
 };
 
 class TableChart extends React.Component {
@@ -33,7 +35,7 @@ class TableChart extends React.Component {
     return (
       <MuiThemeProvider theme={getTheme()}>
         <MUIDataTable
-          title="H6 Headline"
+          title={this.props.title}
           data={this.props.data}
           columns={this.props.columns}
           options={this.props.options}

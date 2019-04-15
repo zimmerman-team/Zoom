@@ -462,10 +462,10 @@ export function formatBarData(indicators) {
 }
 
 export function formatTableData(indicators) {
-  const data = {};
   const tableChartData = [];
   const tableChartColumns = [];
   const tableChartKeys = [];
+  let tableTitle = '';
 
   indicators.map((indicator, index) => {
     if (indicator.length > 0) {
@@ -480,6 +480,13 @@ export function formatTableData(indicators) {
       if (existInd !== -1) indName = indName.concat(` (${index})`);
 
       tableChartKeys.push(indName);
+      tableChartColumns.push(
+        { name: `Geolocation (${indicator[0].geolocationType})` },
+        { name: 'ISO2 codes' },
+        { name: `${indicator[0].valueFormatType}` },
+        { name: 'date' }
+      );
+      tableTitle = indicator[0].indicatorName;
 
       indicator.forEach(indItem => {
         // yeah and cause we might receive data with the same geolocation name
@@ -487,10 +494,7 @@ export function formatTableData(indicators) {
         const existItemInd = findIndex(tableChartData, existing => {
           return indItem.geolocationTag === existing.geoName;
         });
-
-        console.log(indicator);
-        console.log(indItem);
-        if (existItemInd === -1)
+        if (existItemInd === -1) {
           tableChartData.push([
             indItem.geolocationTag,
 
@@ -498,9 +502,11 @@ export function formatTableData(indicators) {
               ? indItem.geolocationIso2.toUpperCase()
               : indItem.geolocationTag,
 
-            Math.round(indItem.value)
+            Math.round(indItem.value),
+
+            indItem.date
           ]);
-        else if (tableChartData[existItemInd][indName] !== undefined)
+        } else if (tableChartData[existItemInd][indName] !== undefined)
           tableChartData[existItemInd][indName] += Math.round(indItem.value);
         else {
           tableChartData[existItemInd][indName] = Math.round(indItem.value);
@@ -508,6 +514,9 @@ export function formatTableData(indicators) {
       });
     }
   });
-
-  return tableChartData;
+  return {
+    title: tableTitle,
+    columns: tableChartColumns,
+    rows: tableChartData
+  };
 }

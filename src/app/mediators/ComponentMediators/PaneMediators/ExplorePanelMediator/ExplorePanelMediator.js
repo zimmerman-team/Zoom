@@ -107,7 +107,7 @@ class ExplorePanelMediator extends React.Component {
       allRegions = sortBy(allRegions, ['label']);
 
       // and we also push in a variable for undefined
-      allRegions.push({ label: 'undefined', value: [{ iso2: '' }] });
+      allRegions.push({ label: 'undefined', value: [{ iso2: 'undefined' }] });
 
       let allFileSources = this.props.dropDownData.allFileSources.edges.map(
         source => {

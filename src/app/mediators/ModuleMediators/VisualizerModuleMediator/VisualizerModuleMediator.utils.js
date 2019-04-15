@@ -411,7 +411,8 @@ export function formatBarData(indicators) {
   indicators.map((indicator, index) => {
     if (indicator.length > 0) {
       const existInd = barChartKeys.indexOf(indicator[0].indicatorName);
-
+      console.log('INDICATOR');
+      console.log(indicator);
       let indName = indicator[0].indicatorName;
 
       // so we need this logic for when a person would
@@ -421,6 +422,9 @@ export function formatBarData(indicators) {
       if (existInd !== -1) indName = indName.concat(` (${index})`);
 
       barChartKeys.push(indName);
+
+      console.log('BARCHARTKEY');
+      console.log(barChartKeys);
 
       indicator.forEach(indItem => {
         // yeah and cause we might receive data with the same geolocation name
@@ -455,4 +459,64 @@ export function formatBarData(indicators) {
   });
 
   return barChartData;
+}
+
+export function formatTableData(indicators) {
+  const tableChartData = [];
+  const tableChartColumns = [];
+  const tableChartKeys = [];
+  let tableTitle = '';
+
+  indicators.map((indicator, index) => {
+    if (indicator.length > 0) {
+      const existInd = tableChartKeys.indexOf(indicator[0].indicatorName);
+
+      let indName = indicator[0].indicatorName;
+
+      // so we need this logic for when a person would
+      // plot two indicators with the same name
+      // as the id needs to be unique, we just add
+      // the index as a suffix
+      if (existInd !== -1) indName = indName.concat(` (${index})`);
+
+      tableChartKeys.push(indName);
+      tableChartColumns.push(
+        { name: `Geolocation (${indicator[0].geolocationType})` },
+        { name: 'ISO2 codes' },
+        { name: `${indicator[0].valueFormatType}` },
+        { name: 'date' }
+      );
+      tableTitle = indicator[0].indicatorName;
+
+      indicator.forEach(indItem => {
+        // yeah and cause we might receive data with the same geolocation name
+        // we add in the values for that geolocation so it wouldn't be repeated over and over
+        const existItemInd = findIndex(tableChartData, existing => {
+          return indItem.geolocationTag === existing.geoName;
+        });
+        if (existItemInd === -1) {
+          tableChartData.push([
+            indItem.geolocationTag,
+
+            indItem.geolocationIso2.length > 0
+              ? indItem.geolocationIso2.toUpperCase()
+              : indItem.geolocationTag,
+
+            Math.round(indItem.value),
+
+            indItem.date
+          ]);
+        } else if (tableChartData[existItemInd][indName] !== undefined)
+          tableChartData[existItemInd][indName] += Math.round(indItem.value);
+        else {
+          tableChartData[existItemInd][indName] = Math.round(indItem.value);
+        }
+      });
+    }
+  });
+  return {
+    title: tableTitle,
+    columns: tableChartColumns,
+    rows: tableChartData
+  };
 }

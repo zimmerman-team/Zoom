@@ -11,7 +11,8 @@ import {
   formatBarChartKeys,
   formatLineData,
   removeIds,
-  formatLineChartKeys
+  formatLineChartKeys,
+  formatTableData
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 import PropTypes from 'prop-types';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
@@ -356,6 +357,12 @@ class VisualizerModuleMediator extends Component {
         chartKeys = formatBarChartKeys([
           this.props.chartData.selectedInd1,
           this.props.chartData.selectedInd2
+        ]);
+        break;
+      case chartTypes.tableChart:
+        indicators = formatTableData([
+          this.props.indicatorAggregations.indicators1,
+          this.props.indicatorAggregations.indicators2
         ]);
         break;
       default:

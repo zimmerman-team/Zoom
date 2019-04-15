@@ -10,6 +10,7 @@ import {
   formatGeoData,
   formatKeys,
   formatLineData,
+  formatTableData,
   removeIds
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 import PropTypes from 'prop-types';
@@ -351,6 +352,12 @@ class VisualizerModuleMediator extends Component {
         chartKeys = formatKeys([
           this.props.chartData.selectedInd1,
           this.props.chartData.selectedInd2
+        ]);
+        break;
+      case chartTypes.tableChart:
+        indicators = formatTableData([
+          this.props.indicatorAggregations.indicators1,
+          this.props.indicatorAggregations.indicators2
         ]);
         break;
       default:

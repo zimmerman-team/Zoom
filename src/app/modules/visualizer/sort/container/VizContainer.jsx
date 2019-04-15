@@ -9,6 +9,7 @@ import BarchartFragment from 'modules/visualizer/sort/container/fragments/Barcha
 import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFragment';
 
 import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment';
+import TablechartFragment from 'modules/visualizer/sort/container/fragments/TablechartFragment';
 import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
 import DonutchartFragment from 'modules/visualizer/sort/container/fragments/DonutchartFragment';
 
@@ -112,6 +113,16 @@ class VizContainer extends React.Component {
             chartKeys={this.props.chartKeys}
             path="/(visualizer|public)/barchart/:code/:tab"
             component={BarchartFragment}
+            mode={this.state.preview}
+          />
+          <PropsRoute
+            chartType={this.props.chartType}
+            selectYear={this.props.selectYear}
+            selectedYear={this.props.selectedYear}
+            indicatorData={this.props.indicators}
+            chartKeys={this.props.chartKeys}
+            path="/(visualizer|public)/tablechart/:code/:tab"
+            component={TablechartFragment}
             mode={this.state.preview}
           />
 

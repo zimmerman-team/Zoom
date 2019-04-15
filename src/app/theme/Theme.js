@@ -61,19 +61,5 @@ export default {
   icon: {},
   border: {
     dashboardTab: '2px solid #0000ff'
-  },
-  text: {
-    heading6: {},
-    body1: {},
-    body2: {
-      // color: this.color.zoomBlack,
-      // fontWeight: this.weight.book,
-      // fontFamily: this.font.zoomFontFamTwo,
-      // fontSize: this.fontSize.body2,
-      // letterSpacing: '0.5px',
-      // lineHeight: '22px'
-    },
-    subtitle1: {},
-    subtitle2: {}
   }
 };

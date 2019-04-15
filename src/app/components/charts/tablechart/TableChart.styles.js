@@ -1,70 +1,51 @@
 import { createMuiTheme } from '@material-ui/core';
 import Theme from '../../../theme/Theme';
 
+const body2 = {
+  color: Theme.color.zoomBlack,
+  fontFamily: Theme.font.zoomFontFamTwo,
+  fontWeight: Theme.weight.book,
+  fontSize: Theme.fontSize.body2,
+  letterSpacing: '0.5px',
+  lineHeight: '22px'
+};
+
+const h6 = {
+  color: Theme.color.zoomBlack,
+  fontFamily: Theme.font.zoomFontFamThree,
+  fontSize: '20px',
+  fontWeight: Theme.weight.medium,
+  letterSpacing: '0.5px',
+  lineHeight: '26px'
+};
+
+const caption = {
+  color: Theme.color.smallTextBlack,
+  fontFamily: Theme.font.zoomFontFamTwo,
+  fontSize: Theme.fontSize.caption,
+  fontWeight: Theme.weight.book,
+  letterSpacing: 0.2,
+  lineHeight: '14.4px'
+};
+
 export default () =>
   createMuiTheme({
     overrides: {
       MuiTypography: {
-        h6: {
-          // H6
-          // border: '1px red solid',
-          color: Theme.color.zoomBlack,
-          fontFamily: Theme.font.zoomFontFamThree,
-          fontSize: '20px',
-          fontWeight: Theme.weight.medium,
-          letterSpacing: '0.5px',
-          lineHeight: '26px'
-        },
-        subtitle1: {
-          //Body 2
-          // border: '1px blue solid',
-          color: Theme.color.zoomBlack,
-          fontFamily: Theme.font.zoomFontFamTwo,
-          fontWeight: Theme.weight.book,
-          fontSize: Theme.fontSize.body2,
-          letterSpacing: '0.5px',
-          lineHeight: '22px'
-        },
-        caption: {
-          color: Theme.color.smallTextBlack,
-          fontFamily: Theme.font.zoomFontFamTwo,
-          fontSize: Theme.fontSize.caption,
-          fontWeight: Theme.weight.book,
-          letterSpacing: 0.2,
-          lineHeight: '14.4px'
-        }
-      },
-      MUIDataTableHeadRow: {
-        root: {
-          borderTop: `1px solid ${Theme.color.zoomGreyThirteen}`
-        }
+        h6,
+        subtitle1: body2,
+        caption
       },
       MUIDataTableHeadCell: {
-        data: {
-          // CAPTION
-          // border: '1px red solid',
-          color: Theme.color.smallTextBlack,
-          fontFamily: Theme.font.zoomFontFamTwo,
-          fontSize: Theme.fontSize.caption,
-          fontWeight: Theme.weight.book,
-          letterSpacing: 0.2,
-          lineHeight: '14.4px'
-        },
+        data: caption,
         fixedHeader: {
-          // CAPTION
-          // border: '1px red solid',
-          color: Theme.color.smallTextBlack,
-          fontFamily: Theme.font.zoomFontFamTwo,
-          fontSize: Theme.fontSize.caption,
-          fontWeight: Theme.weight.book,
-          letterSpacing: 0.2,
-          lineHeight: '14.4px'
+          borderTop: `1px solid ${Theme.color.zoomGreyThirteen}`,
+          zIndex: 0
         }
       },
       MuiTableRow: {
         root: {
           '&:nth-child(even)': {
-            // border: '1px red solid',
             backgroundColor: Theme.color.zoomGreyZero,
             height: '51px'
           }
@@ -81,7 +62,6 @@ export default () =>
       MuiTableCell: {
         body: {
           //Body 2
-          // border: '1px red solid',
           border: 'none',
           color: Theme.color.zoomBlack,
           fontFamily: Theme.font.zoomFontFamTwo,
@@ -89,6 +69,11 @@ export default () =>
           fontWeight: Theme.weight.book,
           letterSpacing: '0.5px',
           lineHeight: '22px'
+        }
+      },
+      MuiTable: {
+        root: {
+          borderCollapse: 'separate'
         }
       },
       MUIDataTableSelectCell: {
@@ -99,29 +84,14 @@ export default () =>
         checked: {
           // border: '1px red solid',
           color: `${Theme.color.aidsFondsBlue}!important`
+        },
+        headerCell: {
+          borderTop: `1px solid ${Theme.color.zoomGreyThirteen}`
         }
       },
       MuiTablePagination: {
-        caption: {
-          // CAPTION
-          // border: '1px red solid',
-          color: Theme.color.smallTextBlack,
-          fontFamily: Theme.font.zoomFontFamTwo,
-          fontSize: Theme.fontSize.caption,
-          fontWeight: Theme.weight.book,
-          letterSpacing: 0.2,
-          lineHeight: '14.4px'
-        },
-        select: {
-          // CAPTION
-          // border: '1px red solid',
-          color: Theme.color.smallTextBlack,
-          fontFamily: Theme.font.zoomFontFamTwo,
-          fontSize: Theme.fontSize.caption,
-          fontWeight: Theme.weight.book,
-          letterSpacing: 0.2,
-          lineHeight: '14.4px'
-        }
+        caption,
+        select: caption
       },
       MUIDataTableToolbar: {
         icon: {
@@ -136,15 +106,7 @@ export default () =>
         }
       },
       MuiInput: {
-        input: {
-          //// border: '1px blue solid',
-          color: Theme.color.zoomBlack,
-          fontWeight: Theme.weight.book,
-          fontFamily: Theme.font.zoomFontFamTwo,
-          fontSize: Theme.fontSize.body2,
-          letterSpacing: '0.5px',
-          lineHeight: '22px'
-        },
+        input: body2,
         underline: {
           '&::after': {
             borderBottomColor: Theme.color.aidsFondsBlue
@@ -167,7 +129,6 @@ export default () =>
       MUIDataTableFilter: {
         title: {
           //Body 2
-          // border: '1px blue solid',
           color: Theme.color.zoomBlack,
           fontFamily: Theme.font.zoomFontFamOne,
           fontWeight: Theme.weight.bold,
@@ -178,7 +139,6 @@ export default () =>
         },
         resetLink: {
           //Body 2
-          // border: '1px blue solid',
           color: Theme.color.aidsFondsBlue,
           fontWeight: Theme.weight.book,
           fontFamily: Theme.font.zoomFontFamTwo,
@@ -186,79 +146,39 @@ export default () =>
           letterSpacing: '0.5px',
           lineHeight: '22px',
           textTransform: 'lowercase' // => fixme
-        },
-        selectFormControl: {
-          // border: '1px red solid'
         }
       },
       MuiInputLabel: {
-        formControl: {
-          // CAPTION
-          // border: '1px red solid',
-          color: Theme.color.smallTextBlack,
-          fontFamily: Theme.font.zoomFontFamTwo,
-          fontSize: Theme.fontSize.caption,
-          fontWeight: Theme.weight.book,
-          letterSpacing: 0.2,
-          lineHeight: '14.4px'
-        }
+        formControl: caption
       },
       MUIDataTableToolbarSelect: {
         root: {
           boxShadow: 'none',
           backgroundColor: Theme.color.zoomGreyZero
-          // height: '54px',
-          // paddingTop: '0px',
-          // paddingBottom: '0px'
         },
         title: {
           //Body 2
-          Theme: Theme.text.body2,
-          // border: '1px red solid',
+          color: Theme.color.zoomBlack,
+          fontFamily: Theme.font.zoomFontFamTwo,
+          fontWeight: Theme.weight.book,
+          fontSize: Theme.fontSize.body2,
+          letterSpacing: '0.5px',
+          lineHeight: '22px',
           textTransform: 'lowercase' // => fixme
         }
       },
       MUIDataTableViewCol: {
-        title: {
-          //Body 2
-          // border: '1px red solid',
-          color: Theme.color.zoomBlack,
-          fontWeight: Theme.weight.book,
-          fontFamily: Theme.font.zoomFontFamTwo,
-          fontSize: Theme.fontSize.body2,
-          letterSpacing: '0.5px',
-          lineHeight: '22px'
-        },
-        label: {
-          //Body 2
-          // border: '1px red solid',
-          color: Theme.color.zoomBlack,
-          fontWeight: Theme.weight.book,
-          fontFamily: Theme.font.zoomFontFamTwo,
-          fontSize: Theme.fontSize.body2,
-          letterSpacing: '0.5px',
-          lineHeight: '22px'
-        },
+        title: body2,
+        label: body2,
         checked: {
-          // border: '1px red solid',
           color: `${Theme.color.aidsFondsBlue}!important`
         },
         checkboxRoot: {
-          // border: '1px red solid',
           color: `${Theme.color.zoomGreyEleven}`
         }
       },
       MuiMenuItem: {
-        root: {
-          //Body 2
-          // border: '1px red solid',
-          color: Theme.color.zoomBlack,
-          fontWeight: Theme.weight.book,
-          fontFamily: Theme.font.zoomFontFamTwo,
-          fontSize: Theme.fontSize.body2,
-          letterSpacing: '0.5px',
-          lineHeight: '22px'
-        }
+        root: body2
       }
     }
   });

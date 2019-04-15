@@ -358,6 +358,7 @@ export default createRefetchContainer(
         countriesISO2: { type: "[String]", defaultValue: ["null"] }
         singleInd1: { type: "String", defaultValue: "null" }
         singleInd2: { type: "String", defaultValue: "null" }
+        OR_GeolocationIso2_Is_Null: { type: "Boolean", defaultValue: true }
       ) {
       indicators1: datapointsAggregation(
         groupBy: [
@@ -375,6 +376,7 @@ export default createRefetchContainer(
         indicatorName_In: $indicator1
         geolocationIso2_In: $countriesISO2
         filterName_In: $subInd1
+        OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
       ) {
         indicatorName
         geolocationIso2
@@ -401,6 +403,7 @@ export default createRefetchContainer(
         indicatorName_In: $indicator2
         geolocationIso2_In: $countriesISO2
         filterName_In: $subInd2
+        OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
       ) {
         indicatorName
         geolocationIso2
@@ -437,6 +440,7 @@ export default createRefetchContainer(
       $countriesISO2: [String]!
       $singleInd1: String!
       $singleInd2: String!
+      $OR_GeolocationIso2_Is_Null: Boolean!
     ) {
       ...FocusModuleMediator_indicatorAggregations
         @arguments(
@@ -448,6 +452,7 @@ export default createRefetchContainer(
           singleInd2: $singleInd2
           subInd1: $subInd1
           subInd2: $subInd2
+          OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
         )
     }
   `

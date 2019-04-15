@@ -57,6 +57,7 @@ const indicatorQuery = graphql`
       edges {
         node {
           name
+          firstDataYear
           fileSource {
             name
           }
@@ -230,7 +231,8 @@ class VizPaneMediator extends React.Component {
           return {
             label: indicator.node.name,
             value: indicator.node.name,
-            dataSource: indicator.node.fileSource.name
+            dataSource: indicator.node.fileSource.name,
+            firstYear: indicator.node.firstDataYear
           };
         });
 
@@ -249,15 +251,19 @@ class VizPaneMediator extends React.Component {
 
   selectInd1(val) {
     // so we set the values for chart data
+    // * AND ALSO whenever an indicator is selected
+    // the year jumps to the most recent year of the
+    // indicators data point, so
     this.props.dispatch(
       actions.storeChartDataRequest({
         selectedInd1: val.value,
         dataSource1: val.dataSource,
+        selectedYear: val.firstYear,
         selectedSubInd1: []
       })
     );
 
-    // and we also reset some values for the sub-indicator
+    // * and we also reset some values for the sub-indicator
     // dropdown as sub-indicators should change
     // whenever an indicator is changed
     this.props.dispatch(
@@ -271,15 +277,19 @@ class VizPaneMediator extends React.Component {
 
   selectInd2(val) {
     // so we set the values for chart data
+    // * AND ALSO whenever an indicator is selected
+    // the year jumps to the most recent year of the
+    // indicators data point, so
     this.props.dispatch(
       actions.storeChartDataRequest({
         selectedInd2: val.value,
         dataSource2: val.dataSource,
+        selectedYear: val.firstYear,
         selectedSubInd2: []
       })
     );
 
-    // and we also reset some values for the sub-indicator
+    // *and we also reset some values for the sub-indicator
     // dropdown as sub-indicators should change
     // whenever an indicator is changed
     this.props.dispatch(

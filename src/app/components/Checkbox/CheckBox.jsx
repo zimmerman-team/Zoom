@@ -37,7 +37,7 @@ const SimpleCheckbox = styled(props => (
       checkedIcon={IconChecked}
       {...props}
     />
-    <Label>etc</Label>
+    {/* <Label>etc</Label> */}
   </ComponentBase>
 ))`
   && {

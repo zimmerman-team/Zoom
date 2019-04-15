@@ -488,6 +488,8 @@ export function formatTableData(indicators) {
           return indItem.geolocationTag === existing.geoName;
         });
 
+        console.log(indicator);
+        console.log(indItem);
         if (existItemInd === -1)
           tableChartData.push([
             indItem.geolocationTag,

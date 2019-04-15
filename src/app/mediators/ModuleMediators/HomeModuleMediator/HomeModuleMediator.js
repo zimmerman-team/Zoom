@@ -138,7 +138,7 @@ class HomeModuleMediator extends Component {
         allCountries: [],
         allRegions: [],
         selectedSources: [],
-        yearRange: '2003,2016',
+        yearRange: '1992,2018',
         subIndicators1: [],
         subIndicators2: []
       })
@@ -288,8 +288,12 @@ class HomeModuleMediator extends Component {
   selectInd1(val) {
     // So if a new batch of subindicators is retrieved
     // we reset the selected subindicator
+    // AND ALSO whenever an indicator is selected
+    // the year jumps to the most recent year of the
+    // indicators data point, so
     this.setState(
       {
+        selectedYear: val.firstYear,
         selectedInd1: val.value,
         subIndicators1: [],
         selectedSubInd1: []
@@ -301,8 +305,12 @@ class HomeModuleMediator extends Component {
   selectInd2(val) {
     // So if a new batch of subindicators is retrieved
     // we reset the selected subindicator
+    // AND ALSO whenever an indicator is selected
+    // the year jumps to the most recent year of the
+    // indicators data point, so
     this.setState(
       {
+        selectedYear: val.firstYear,
         selectedInd2: val.value,
         subIndicators2: [],
         selectedSubInd2: []

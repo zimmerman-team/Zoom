@@ -31,7 +31,7 @@ const propTypes = {
   indicators: PropTypes.arrayOf(PropTypes.shape({})),
   dataPaneOpen: PropTypes.string,
   auth0Client: PropTypes.shape({}),
-  chartKeys: PropTypes.arrayOf(PropTypes.string),
+  chartKeys: PropTypes.array,
   chartType: PropTypes.string,
   publicPage: PropTypes.bool,
   moduleMode: PropTypes.string

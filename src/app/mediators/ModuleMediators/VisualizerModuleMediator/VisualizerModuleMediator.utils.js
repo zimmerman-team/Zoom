@@ -328,53 +328,72 @@ export function formatGeoData(
   return indicators;
 }
 
-export function formatLineData(indicators) {
-  const indicatorData = [];
+// may not be keys, but is formed in a similar way as keys would,
+// so yeah mainly used for line generation according to the selected indicators
+// and 'selectedInd' is passed in as a string array of currently selected indicators
+export function formatLineChartKeys(selectedInd) {
+  const chartKeys = [];
 
   let colorInd = 0;
-  indicators.forEach((indicator, index) => {
-    const indicatorItem = [];
-    if (indicator.length > 0) {
-      const existInd = findIndex(indicatorData, existing => {
-        return indicator[0].indicatorName === existing.id;
+  selectedInd.forEach((indName, index) => {
+    // this if is here so we dont push 'undefined' as a key
+    if (indName) {
+      let key = indName;
+
+      if (findIndex(chartKeys, ['name', indName]) !== -1)
+        key = indName.concat(` (${index})`);
+
+      chartKeys.push({
+        name: key,
+        color: lineChartColors[colorInd]
       });
 
-      let id = indicator[0].indicatorName;
+      if (colorInd + 1 < lineChartColors.length) colorInd += 1;
+    }
+  });
+
+  return chartKeys;
+}
+
+// *this is also formating the linechart by geolocation
+export function formatLineData(indicators) {
+  const indicatorData = [];
+  const indicatorNames = [];
+
+  indicators.forEach((indicator, index) => {
+    if (indicator.length > 0) {
+      const existInd = indicatorNames.indexOf(indicator[0].indicatorName);
+
+      let indName = indicator[0].indicatorName;
 
       // so we need this logic for when a person would
       // plot two indicators with the same name
       // as the id needs to be unique, we just add
       // the index as a suffix
-      if (existInd !== -1) id = id.concat(` (${index})`);
+      if (existInd !== -1) indName = indName.concat(` (${index})`);
 
-      indicatorData.push({
-        id,
-        color: lineChartColors[colorInd],
-        data: []
-      });
+      indicatorNames.push(indName);
 
       indicator.forEach(indItem => {
         // yeah and cause we might receive data with the same geolocation name
         // we add in the values for that geolocation so it wouldn't be repeated over and over
-        const existItemInd = findIndex(indicatorItem.data, existing => {
+        const existItemInd = findIndex(indicatorData, existing => {
           return indItem.geolocationTag === existing.geoName;
         });
 
         if (existItemInd === -1)
-          indicatorItem.push({
+          indicatorData.push({
             geoName: indItem.geolocationTag,
-            x:
-              indItem.geolocationIso2.length > 0
+            geolocation:
+              indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
                 ? indItem.geolocationIso2
                 : indItem.geolocationTag,
-            y: Math.round(indItem.value)
+            [indName]: Math.round(indItem.value)
           });
-        else indicatorItem[existItemInd].y += Math.round(indItem.value);
+        else if (indicatorData[existItemInd][indName] !== undefined)
+          indicatorData[existItemInd][indName] += Math.round(indItem.value);
+        else indicatorData[existItemInd][indName] = Math.round(indItem.value);
       });
-
-      if (colorInd + 1 < lineChartColors.length) colorInd += 1;
-
-      indicatorData[index].data = indicatorItem;
     }
   });
 
@@ -385,7 +404,8 @@ export function formatLineData(indicators) {
 // keys for certain types of charts(like bar chart)
 // according to the selected indicator
 // array passed into it
-export function formatKeys(selectedInd) {
+// *this is also formating the barchart by geolocation
+export function formatBarChartKeys(selectedInd) {
   const chartKeys = [];
 
   selectedInd.forEach((indName, index) => {
@@ -438,7 +458,7 @@ export function formatBarData(indicators) {
             geoName: indItem.geolocationTag,
 
             geolocation:
-              indItem.geolocationIso2.length > 0
+              indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
                 ? indItem.geolocationIso2.toUpperCase()
                 : indItem.geolocationTag,
 

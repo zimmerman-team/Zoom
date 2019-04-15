@@ -43,15 +43,44 @@ const defaultProps = {
 };
 
 const DonutchartFragment = props => {
-  console.log('indicatorData', props.indicatorData);
-  console.log('chartKeys', props.chartKeys);
-
   return (
     <ComponentBase>
       <Box>
         <ResponsivePie
           animate
-          data={props.indicatorData}
+          /* todo: currently indicator data is empty, needs to get data */
+          data={[
+            {
+              id: 'php',
+              label: 'php',
+              value: 89,
+              color: 'hsl(101, 70%, 50%)'
+            },
+            {
+              id: 'lisp',
+              label: 'lisp',
+              value: 507,
+              color: 'hsl(296, 70%, 50%)'
+            },
+            {
+              id: 'make',
+              label: 'make',
+              value: 542,
+              color: 'hsl(312, 70%, 50%)'
+            },
+            {
+              id: 'sass',
+              label: 'sass',
+              value: 160,
+              color: 'hsl(117, 70%, 50%)'
+            },
+            {
+              id: 'python',
+              label: 'python',
+              value: 592,
+              color: 'hsl(122, 70%, 50%)'
+            }
+          ]}
           keys={props.chartKeys}
           indexBy="geolocation"
           margin={{

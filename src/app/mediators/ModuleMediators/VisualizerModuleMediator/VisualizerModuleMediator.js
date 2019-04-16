@@ -11,8 +11,9 @@ import {
   formatBarChartKeys,
   formatLineData,
   removeIds,
-  formatLineChartKeys,
-  formatTableData
+  formatChartLegends,
+  formatTableData,
+  formatDonutData
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 import PropTypes from 'prop-types';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
@@ -345,10 +346,13 @@ class VisualizerModuleMediator extends Component {
         );
         break;
       case chartTypes.lineChart:
-        chartKeys = formatLineChartKeys([
-          this.props.chartData.selectedInd1,
-          this.props.chartData.selectedInd2
-        ]);
+        chartKeys = formatChartLegends(
+          [
+            this.props.chartData.selectedInd1,
+            this.props.chartData.selectedInd2
+          ],
+          chartTypes.lineChart
+        );
         indicators = formatLineData([
           this.props.indicatorAggregations.indicators1,
           this.props.indicatorAggregations.indicators2
@@ -369,6 +373,19 @@ class VisualizerModuleMediator extends Component {
           this.props.indicatorAggregations.indicators1,
           this.props.indicatorAggregations.indicators2
         ]);
+        break;
+      case chartTypes.donutChart:
+        indicators = formatDonutData([
+          this.props.indicatorAggregations.indicators1,
+          this.props.indicatorAggregations.indicators2
+        ]);
+        chartKeys = formatChartLegends(
+          [
+            this.props.chartData.selectedInd1,
+            this.props.chartData.selectedInd2
+          ],
+          chartTypes.donutChart
+        );
         break;
       default:
         indicators = [];

@@ -2,22 +2,8 @@ import findIndex from 'lodash/findIndex';
 import { scaleQuantile } from 'd3-scale';
 import { range } from 'd3-array';
 
-const lineChartColors = [
-  'hsl(23, 70%, 50%)',
-  'hsl(137, 70%, 50%)',
-  'hsl(54, 70%, 50%)',
-  'hsl(20, 70%, 50%)',
-  'hsl(84, 70%, 50%)'
-];
-
-const barChartColors = [
-  'hsl(265, 70%, 50%)',
-  'hsl(323, 70%, 50%)',
-  'hsl(144, 70%, 50%)',
-  'hsl(91, 70%, 50%)',
-  'hsl(28, 70%, 50%)',
-  'hsl(275, 70%, 50%)'
-];
+/* consts */
+import chartTypes, { chartColors } from '__consts__/ChartConst';
 
 // Updates layer percentiles depending on the value
 export function updatePercentiles(featureCollection, accessor) {
@@ -331,8 +317,21 @@ export function formatGeoData(
 // may not be keys, but is formed in a similar way as keys would,
 // so yeah mainly used for line generation according to the selected indicators
 // and 'selectedInd' is passed in as a string array of currently selected indicators
-export function formatLineChartKeys(selectedInd) {
+export function formatChartLegends(selectedInd, type) {
   const chartKeys = [];
+
+  let colors = [];
+
+  switch (type) {
+    case chartTypes.lineChart:
+      colors = chartColors.lineChartColors;
+      break;
+    case chartTypes.donutChart:
+      colors = chartColors.donutChartColors;
+      break;
+    default:
+      colors = [];
+  }
 
   let colorInd = 0;
   selectedInd.forEach((indName, index) => {
@@ -345,10 +344,10 @@ export function formatLineChartKeys(selectedInd) {
 
       chartKeys.push({
         name: key,
-        color: lineChartColors[colorInd]
+        color: colors[colorInd]
       });
 
-      if (colorInd + 1 < lineChartColors.length) colorInd += 1;
+      if (colorInd + 1 < colors.length) colorInd += 1;
     }
   });
 
@@ -431,8 +430,6 @@ export function formatBarData(indicators) {
   indicators.map((indicator, index) => {
     if (indicator.length > 0) {
       const existInd = barChartKeys.indexOf(indicator[0].indicatorName);
-      console.log('INDICATOR');
-      console.log(indicator);
       let indName = indicator[0].indicatorName;
 
       // so we need this logic for when a person would
@@ -442,9 +439,6 @@ export function formatBarData(indicators) {
       if (existInd !== -1) indName = indName.concat(` (${index})`);
 
       barChartKeys.push(indName);
-
-      console.log('BARCHARTKEY');
-      console.log(barChartKeys);
 
       indicator.forEach(indItem => {
         // yeah and cause we might receive data with the same geolocation name
@@ -463,18 +457,18 @@ export function formatBarData(indicators) {
                 : indItem.geolocationTag,
 
             [indName]: Math.round(indItem.value),
-            [`${indName}Color`]: barChartColors[colorInd]
+            [`${indName}Color`]: chartColors.barChartColors[colorInd]
           });
         else if (barChartData[existItemInd][indName] !== undefined)
           barChartData[existItemInd][indName] += Math.round(indItem.value);
         else {
           barChartData[existItemInd][indName] = Math.round(indItem.value);
           barChartData[existItemInd][`${indName}Color`] =
-            barChartColors[colorInd];
+            chartColors.barChartColors[colorInd];
         }
       });
 
-      if (colorInd + 1 < lineChartColors.length) colorInd += 1;
+      if (colorInd + 1 < chartColors.barChartColors.length) colorInd += 1;
     }
   });
 
@@ -539,4 +533,27 @@ export function formatTableData(indicators) {
     columns: tableChartColumns,
     rows: tableChartData
   };
+}
+
+export function formatDonutData(indicators) {
+  const chartData = [];
+  indicators.map((indicator, indIndex) => {
+    indicator.map(indItem => {
+      if (chartData[indIndex] === undefined) {
+        const colorInd =
+          indIndex < chartColors.donutChartColors.length
+            ? indIndex
+            : chartColors.donutChartColors.length - 1;
+
+        chartData.push({
+          id: indItem.indicatorName,
+          label: indItem.indicatorName,
+          value: indItem.value,
+          color: chartColors.donutChartColors[colorInd]
+        });
+      } else chartData[indIndex].value += indItem.value;
+    });
+  });
+
+  return chartData;
 }

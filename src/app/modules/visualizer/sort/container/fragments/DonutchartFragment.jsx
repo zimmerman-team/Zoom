@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-/* mock */
-import { BarchartMockData } from './BachartMockData';
+/* consts */
+import { chartColors } from '__consts__/ChartConst';
 
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
@@ -35,7 +35,12 @@ const Box = styled.div`
 
 const propTypes = {
   indicatorData: PropTypes.arrayOf(PropTypes.shape({})),
-  chartKeys: PropTypes.arrayOf(PropTypes.string)
+  chartKeys: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      color: PropTypes.string
+    })
+  )
 };
 const defaultProps = {
   indicatorData: [],
@@ -49,39 +54,7 @@ const DonutchartFragment = props => {
         <ResponsivePie
           animate
           /* todo: currently indicator data is empty, needs to get data */
-          data={[
-            {
-              id: 'php',
-              label: 'php',
-              value: 89,
-              color: 'hsl(101, 70%, 50%)'
-            },
-            {
-              id: 'lisp',
-              label: 'lisp',
-              value: 507,
-              color: 'hsl(296, 70%, 50%)'
-            },
-            {
-              id: 'make',
-              label: 'make',
-              value: 542,
-              color: 'hsl(312, 70%, 50%)'
-            },
-            {
-              id: 'sass',
-              label: 'sass',
-              value: 160,
-              color: 'hsl(117, 70%, 50%)'
-            },
-            {
-              id: 'python',
-              label: 'python',
-              value: 592,
-              color: 'hsl(122, 70%, 50%)'
-            }
-          ]}
-          keys={props.chartKeys}
+          data={props.indicatorData}
           indexBy="geolocation"
           margin={{
             top: 40,
@@ -92,7 +65,7 @@ const DonutchartFragment = props => {
           innerRadius={0.65}
           padAngle={0.7}
           cornerRadius={4}
-          colors="nivo"
+          colors={chartColors.donutChartColors}
           colorBy="id"
           borderWidth={1}
           borderColor="inherit:darker(0.2)"
@@ -143,7 +116,7 @@ const DonutchartFragment = props => {
           ]}
         />
       </Box>
-      <ChartLegends />
+      <ChartLegends data={props.chartKeys} />
       <YearContainer>
         <CustomYearSelector
           selectedYear={props.selectedYear}

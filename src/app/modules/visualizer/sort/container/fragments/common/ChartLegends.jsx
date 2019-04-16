@@ -22,14 +22,8 @@ const ComponentBase = styled.div`
 const propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
-      color: PropTypes.string,
-      data: PropTypes.arrayOf(
-        PropTypes.shape({
-          x: PropTypes.string,
-          y: PropTypes.number
-        })
-      )
+      name: PropTypes.string,
+      color: PropTypes.string
     })
   )
 };

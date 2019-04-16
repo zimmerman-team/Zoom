@@ -4,16 +4,13 @@ import * as actions from 'services/actions/general';
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
 import initialState from '__consts__/InitialChartDataConst';
+import initialPaneState from '__consts__/InitialPaneDataConst';
 
 const initial = {
   open: paneTypes.none,
   chartData: { ...initialState },
   paneData: {
-    chartType: '',
-    selectedSources: [],
-    yearRange: '1992,2018',
-    subIndicators1: [],
-    subIndicators2: []
+    ...initialPaneState
   },
   stepzData: {}
 };
@@ -31,6 +28,8 @@ function dataPaneOpen(state = initial, action) {
 
 function stepData(state = initial, action) {
   switch (action.type) {
+    case actions.SAVE_STEP_DATA_INITIAL:
+      return update(state, { stepzData: { $set: {} } });
     case actions.SAVE_STEP_DATA_REQUEST:
       return update(state, { stepzData: { $set: { ...state.stepzData } } });
     case actions.SAVE_STEP_DATA_DONE:

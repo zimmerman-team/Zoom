@@ -1,11 +1,47 @@
 const express = require('express');
 const router = express.Router();
 
+const jwt = require('express-jwt');
+const jwtAuthz = require('express-jwt-authz');
+const jwksRsa = require('jwks-rsa');
+
 /* controllers */
 const ChartController = require('./controllers/ChartController');
 const UserController = require('./controllers/UserController');
 const DatasetController = require('./controllers/DatasetController');
 const EmailController = require('./controllers/EmailController');
+
+// TODO this still needs to be set up properly currently getting some error when doing an axios call
+// Authentication middleware. When used, the
+// Access Token must exist and be verified against
+// the Auth0 JSON Web Key Set
+// const checkJwt = jwt({
+//   // Dynamically provide a signing key
+//   // based on the kid in the header and
+//   // the signing keys provided by the JWKS endpoint.
+//   secret: jwksRsa.expressJwtSecret({
+//     cache: true,
+//     rateLimit: true,
+//     jwksRequestsPerMinute: 200,
+//     jwksUri: `https://${
+//       process.env.REACT_APP_AUTH_CUSTOM_DOMAIN
+//     }/.well-known/jwks.json`
+//   }),
+//
+//   // Validate the audience and the issuer.
+//   audience: process.env.REACT_APP_CLIENT_ID,
+//   issuer: `${process.env.REACT_APP_AUTH_CUSTOM_DOMAIN}`,
+//   algorithms: ['RS256']
+// });
+
+// So this is how the call would be done on the frontend
+// axios
+//   .get('/api/getTest', {
+//     headers: {
+//       Authorization: `Bearer ${this.props.auth0Client.getIdToken()}`
+//     }
+//   })
+//   .then(result => console.log(result));
 
 // so this should only be uncommented and used if you have
 // a clean database, and just need some data init
@@ -14,6 +50,10 @@ const EmailController = require('./controllers/EmailController');
 // router.get('/seedChart', ChartController.seedChart);
 
 /* -------------- CHART CONTROLLER START ------------------------ */
+
+// This is the test endpoint for user authentication with auth0
+// router.get('/getTest', checkJwt, ChartController.test);
+
 // gets user chart with a specified chart id, and user id ofcourse
 router.get('/getChart', ChartController.get);
 
@@ -30,6 +70,8 @@ router.get('/getAllCharts', ChartController.getAll);
 router.get('/getTeamFeedCharts', ChartController.getTeamFeedCharts);
 
 router.post('/updateCreateChart', ChartController.updateCreate);
+
+router.post('/duplicateChart', ChartController.duplicateById);
 
 router.post('/updateChart', ChartController.update);
 
@@ -51,6 +93,10 @@ router.post('/updateUserByAdmin', UserController.updateUserByAdmin);
 router.post('/updateUsersTeam', UserController.updateUsersTeam);
 
 router.post('/deleteUser', UserController.deleteUser);
+
+router.post('/updateTeamAndUsersOfIt', UserController.updateTeamAndUsersOfIt);
+
+router.post('/deleteTeam', UserController.deleteTeam);
 
 /* -------------- USER CONTROLLER END ------------------------- */
 
@@ -77,5 +123,9 @@ router.delete('/deleteDataset', DatasetController.deleteDataset);
 router.get('/sendEmail', EmailController.sendMail);
 
 /* -------------- EMAIL CONTROLLER END ------------------------- */
+
+router.get('/redirectToHome', (req, res) => {
+  res.redirect(`${process.env.REACT_APP_PROJECT_URL}/home/#`);
+});
 
 module.exports = router;

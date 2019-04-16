@@ -2,11 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { matchPath } from 'react-router';
+import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
 
 import GeoMap from 'components/GeoMap/GeoMap';
-import theme from 'theme/Theme';
-import initialState from '__consts__/InitialChartDataConst';
 
 /* utils */
 import { getFocus } from 'modules/visualizer/VisualizerModule.utils';
@@ -22,15 +21,16 @@ const ComponentBase = styled.div`
   justify-items: center;
   justify-content: center;
   width: 100%;
-  background-color: #96dbfa;
   height: ${props => props.height};
+  flex-shrink: 0;
 `;
 
-const propTypes = {};
-const defaultProps = {};
-
-const boundsNL = [[0.2252, 50.2378], [10.756, 54.2068]];
-const boundsKE = [[26.82, -7.15], [50.89, 7.57]];
+const propTypes = {
+  saveViewport: PropTypes.func
+};
+const defaultProps = {
+  saveViewport: null
+};
 
 class GeomapFragment extends React.Component {
   state = {
@@ -81,6 +81,9 @@ class GeomapFragment extends React.Component {
     return (
       <ComponentBase height={mode ? '400px' : '100%'}>
         <GeoMap
+          chartMounted={this.props.chartMounted}
+          viewport={this.props.viewport}
+          saveViewport={this.props.saveViewport}
           focus={this.state.focus && this.state.focus}
           {...otherProps}
           mapOptions={{ maxBounds: this.state.bounds }}
@@ -93,4 +96,11 @@ class GeomapFragment extends React.Component {
 GeomapFragment.propTypes = propTypes;
 GeomapFragment.defaultProps = defaultProps;
 
-export default GeomapFragment;
+const mapStateToProps = state => {
+  return {
+    chartMounted: state.chartData.chartData.chartMounted,
+    viewport: state.chartData.chartData.specOptions
+  };
+};
+
+export default connect(mapStateToProps)(withRouter(GeomapFragment));

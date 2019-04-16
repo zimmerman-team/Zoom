@@ -31,28 +31,7 @@ const propTypes = {
   changeLastName: PropTypes.func,
   changeFirstName: PropTypes.func,
   submitForm: PropTypes.func,
-  roleSelected: PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.string
-  }),
-  orgSelected: PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.string
-  })
-  // changeUserRole: PropTypes.func,
-  // changeOrganisation: PropTypes.func,
-  // orgOptions: PropTypes.arrayOf(
-  //   PropTypes.shape({
-  //     label: PropTypes.string,
-  //     value: PropTypes.string
-  //   })
-  // ),
-  // roleOptions: PropTypes.arrayOf(
-  //   PropTypes.shape({
-  //     label: PropTypes.string,
-  //     value: PropTypes.string
-  //   })
-  // )
+  viewOnly: PropTypes.bool
 };
 const defaultProps = {
   email: '',
@@ -65,12 +44,7 @@ const defaultProps = {
   changeLastName: null,
   changeFirstName: null,
   submitForm: null,
-  roleSelected: { label: '', value: '', _id: '' },
-  // changeUserRole: null,
-  orgSelected: { label: '', value: '', _id: '' }
-  // changeOrganisation: null,
-  // roleOptions: userManagementMockData.roleOptions,
-  // orgOptions: userManagementMockData.orgOptions
+  viewOnly: false
 };
 
 const EditUserModule = props => {
@@ -79,15 +53,13 @@ const EditUserModule = props => {
     props.lastName === '' ||
     props.email === '' ||
     !props.dataIsChanged;
-  // props.orgSelected._id === '' ||
-  // props.roleSelected._id === '';
 
   const tooltipText = props.dataIsChanged
     ? 'All the fields are required.'
     : 'No changed detected.';
 
   return (
-    <ModuleFragment title="Edit user">
+    <ModuleFragment title={props.viewOnly ? 'View user' : 'Edit user'}>
       <EditUserForm onSubmit={props.submitForm}>
         {/* first name field */}
         <InputField
@@ -98,6 +70,7 @@ const EditUserModule = props => {
           validate={{ regexp: /^[a-z]/i }}
           value={props.firstName}
           onChange={props.changeFirstName}
+          disabled={props.viewOnly}
         />
 
         {/* last name field */}
@@ -109,6 +82,7 @@ const EditUserModule = props => {
           validate={{ regexp: /^[a-z]/i }}
           value={props.lastName}
           onChange={props.changeLastName}
+          disabled={props.viewOnly}
         />
 
         {/* email field */}
@@ -120,53 +94,26 @@ const EditUserModule = props => {
           type="email"
           value={props.email}
           onChange={props.changeEmail}
+          disabled={props.viewOnly}
         />
 
-        {/* <Container>
-          // user role dropdown
-          <DropDownContainer>
-            <DropDownLabel>User role</DropDownLabel>
-            <ZoomSelect
-              border
-              search={false}
-              dropDownWidth={280}
-              placeHolderText="Select user role"
-              data={props.roleOptions}
-              selectVal={props.changeUserRole}
-              valueSelected={props.roleSelected.label}
-            />
-          </DropDownContainer>
-
-          //organisation dropdown
-          <DropDownContainer>
-            <DropDownLabel>Select organisation</DropDownLabel>
-            <ZoomSelect
-              border
-              search={false}
-              dropDownWidth={280}
-              placeHolderText="Select organisation"
-              data={props.orgOptions}
-              selectVal={props.changeOrganisation}
-              valueSelected={props.orgSelected.label}
-            />
-          </DropDownContainer>
-        </Container> */}
-
-        <Tooltip
-          trigger="mouseenter"
-          position="bottom-start"
-          disabled={!disableSubmit}
-          html={<SimpleToolTip title={tooltipText} />}
-        >
-          <ZoomButton
-            type="submit"
-            disabled={disableSubmit}
-            fontSize={14}
-            width={160}
+        {!props.viewOnly && (
+          <Tooltip
+            trigger="mouseenter"
+            position="bottom-start"
+            disabled={!disableSubmit}
+            html={<SimpleToolTip title={tooltipText} />}
           >
-            Submit
-          </ZoomButton>
-        </Tooltip>
+            <ZoomButton
+              type="submit"
+              disabled={disableSubmit}
+              fontSize={14}
+              width={160}
+            >
+              Submit
+            </ZoomButton>
+          </Tooltip>
+        )}
 
         {/* todo: replace grommet based button with material ui based button */}
         {/* <React.Fragment>

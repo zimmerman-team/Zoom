@@ -12,12 +12,11 @@ import theme from 'theme/Theme';
 const ComponentBase = styled.div`
   display: flex;
   flex-direction: column;
-  //align-items: center;
-  //justify-content:;
-  //padding-top: ;
+
   width: 320px;
   height: calc(100vh - 40px);
   background-color: white;
+  box-shadow: 0 5px 7px rgba(0, 0, 0, 0.5);
 `;
 
 const propTypes = {

@@ -10,8 +10,7 @@ import styled from 'styled-components';
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
-import { ResponsiveLine } from '@nivo/line';
-
+import LineChart from 'components/charts/recharts_linechart/LineChart';
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
@@ -34,6 +33,12 @@ const Box = styled.div`
 `;
 
 const propTypes = {
+  indicators: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      color: PropTypes.string
+    })
+  ),
   indicatorData: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -48,6 +53,7 @@ const propTypes = {
   )
 };
 const defaultProps = {
+  indicators: [],
   indicatorData: []
 };
 
@@ -55,57 +61,13 @@ const LinechartFragment = props => {
   return (
     <ComponentBase>
       <Box>
-        <ResponsiveLine
+        <LineChart
+          indicators={props.indicators}
           data={props.indicatorData}
-          margin={{
-            top: 50,
-            right: 110,
-            bottom: 50,
-            left: 60
-          }}
-          xScale={{
-            type: 'point'
-          }}
-          yScale={{
-            type: 'linear',
-            stacked: true,
-            min: 'auto',
-            max: 'auto'
-          }}
-          axisTop={null}
-          axisRight={null}
-          axisBottom={{
-            orient: 'bottom',
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: '',
-            legendOffset: 36,
-            legendPosition: 'middle'
-          }}
-          axisLeft={{
-            orient: 'left',
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: '',
-            legendOffset: -40,
-            legendPosition: 'middle'
-          }}
-          dotSize={10}
-          dotColor="inherit:darker(0.3)"
-          dotBorderWidth={2}
-          dotBorderColor="#ffffff"
-          enableDotLabel
-          dotLabel="y"
-          dotLabelYOffset={-12}
-          animate
-          motionStiffness={90}
-          motionDamping={15}
-          legends={[]}
+          xAxisKey="geolocation"
         />
       </Box>
-      <ChartLegends data={props.indicatorData} />
+      <ChartLegends data={props.indicators} />
       <YearContainer>
         <CustomYearSelector
           selectedYear={props.selectedYear}

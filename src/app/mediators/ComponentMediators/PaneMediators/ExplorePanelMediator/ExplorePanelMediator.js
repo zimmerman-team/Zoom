@@ -4,6 +4,10 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { fetchQuery } from 'relay-runtime';
 import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePane';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+/* acitons */
+import * as actions from 'services/actions/general';
 
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
@@ -11,6 +15,7 @@ import initialState from '__consts__/InitialChartDataConst';
 /* helpers */
 import sortBy from 'lodash/sortBy';
 import isEqual from 'lodash/isEqual';
+
 import { yearStrToArray } from 'utils/genericUtils';
 // import findIndex from 'lodash/findIndex';
 
@@ -54,6 +59,7 @@ const indicatorQuery = graphql`
       edges {
         node {
           name
+          firstDataYear
         }
       }
     }
@@ -87,31 +93,38 @@ class ExplorePanelMediator extends React.Component {
   componentDidMount() {
     if (this.props.dropDownData) {
       let allCountries = this.props.dropDownData.allCountries.edges.map(
-        indicator => {
-          return { label: indicator.node.name, value: indicator.node.iso2 };
+        country => {
+          return { label: country.node.name, value: country.node.iso2 };
         }
       );
 
       allCountries = sortBy(allCountries, ['label']);
 
-      let allRegions = this.props.dropDownData.allRegions.edges.map(
-        indicator => {
-          return { label: indicator.node.name, value: indicator.node.country };
-        }
-      );
+      let allRegions = this.props.dropDownData.allRegions.edges.map(region => {
+        return { label: region.node.name, value: region.node.country };
+      });
 
       allRegions = sortBy(allRegions, ['label']);
 
       // and we also push in a variable for undefined
-      allRegions.push({ label: 'undefined', value: [{ iso2: '' }] });
+      allRegions.push({ label: 'undefined', value: [{ iso2: 'undefined' }] });
 
       let allFileSources = this.props.dropDownData.allFileSources.edges.map(
-        indicator => {
-          return { label: indicator.node.name, value: indicator.node.name };
+        source => {
+          return {
+            label: source.node.name,
+            value: source.node.name
+          };
         }
       );
 
       allFileSources = sortBy(allFileSources, ['label']);
+
+      this.props.dispatch(
+        actions.storePaneDataRequest({
+          allCountries
+        })
+      );
 
       this.setState({
         allFileSources,
@@ -123,7 +136,6 @@ class ExplorePanelMediator extends React.Component {
 
   selectDataSource(item, array = false) {
     let selectedSources = [];
-    let allIndNames = [...this.state.allIndNames];
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
@@ -143,7 +155,8 @@ class ExplorePanelMediator extends React.Component {
       }
     }
 
-    this.setState({ selectedSources, allIndNames }, this.refetch);
+    this.setState({ selectedSources });
+    this.refetch(selectedSources);
   }
 
   selectYearRange(value) {
@@ -172,23 +185,34 @@ class ExplorePanelMediator extends React.Component {
       fileSource_Name_In
     };
 
+    const dontReset =
+      process.env.NODE_ENV === 'development' &&
+      this.state.selectedSources !== selectedSources &&
+      this.state.selectedSources.length === 0;
+
     fetchQuery(this.props.relay.environment, indicatorQuery, refetchVars).then(
       data => {
         let allIndNames = data.allIndicators.edges.map(indicator => {
-          return { label: indicator.node.name, value: indicator.node.name };
+          return {
+            label: indicator.node.name,
+            value: indicator.node.name,
+            firstYear: indicator.node.firstDataYear
+          };
         });
 
         allIndNames = sortBy(allIndNames, ['label']);
 
-        this.setState({ allIndNames }, this.resetIndicators);
+        this.setState({ allIndNames }, () => this.resetIndicators(dontReset));
       }
     );
   }
 
-  resetIndicators() {
-    // and we also deselect the indicators
-    this.props.selectInd1({ value: undefined });
-    this.props.selectInd2({ value: undefined });
+  resetIndicators(dontReset = false) {
+    if (!dontReset) {
+      // and we also deselect the indicators
+      this.props.selectInd1({ value: undefined });
+      this.props.selectInd2({ value: undefined });
+    }
   }
 
   render() {
@@ -214,7 +238,7 @@ ExplorePanelMediator.propTypes = propTypes;
 ExplorePanelMediator.defaultProps = defaultProps;
 
 export default createFragmentContainer(
-  ExplorePanelMediator,
+  connect(null)(ExplorePanelMediator),
   graphql`
     fragment ExplorePanelMediator_dropDownData on Query {
       allCountries {

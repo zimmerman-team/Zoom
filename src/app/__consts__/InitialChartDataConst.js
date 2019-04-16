@@ -29,13 +29,25 @@ const initialState = {
   indicators: [],
   dataSource1: undefined,
   dataSource2: undefined,
-  selectedInd1: undefined,
+  selectedInd1:
+    process.env.NODE_ENV === 'development'
+      ? 'aids related deaths (unaids)'
+      : undefined,
   selectedInd2: undefined,
   selectedCountryVal: [],
+  selectedCountryLabels: [],
   desc: '',
+  descIntro: '',
   selectedSubInd1: [],
   selectedSubInd2: [],
-  selectedRegionVal: []
+  selectedRegionVal: [],
+  selectedRegionLabels: [],
+  // this is the variable for saving
+  // specific chart options
+  // like the graph structure options
+  // for linechart/barchart
+  // or the viewport for geocharts
+  specOptions: {}
 };
 
 export default initialState;

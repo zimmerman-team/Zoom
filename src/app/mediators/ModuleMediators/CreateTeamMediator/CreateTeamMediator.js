@@ -4,128 +4,119 @@ import filter from 'lodash/filter';
 import { connect } from 'react-redux';
 
 /* actions */
-import * as nodeActions from 'services/actions/nodeBackend';
+import { updateUsersTeamRequest } from 'services/actions/nodeBackend';
 
 /* components */
 import CreateTeamModule from 'modules/UserManagement/CreateTeam/CreateTeamModule';
 import { formatUsersData } from './CreateTeamMediator.utils';
-import { updateUsersTeamRequest } from 'services/sagas';
 
 class CreateTeamMediator extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    loading: false,
+    success: false,
+    errorMessage: null,
+    secondaryInfoMessage: null,
+    name: '',
+    searchKeyword: '',
+    users: [],
+    allUsers: [],
+    paginatedUsers: [],
+    sort: 'name',
+    page: 0,
+    totalPages: 0,
+    isSortByOpen: false
+  };
 
-    this.state = {
-      success: false,
-      errorMessage: null,
-      secondaryInfoMessage: null,
-      name: '',
-      searchKeyword: '',
-      users: [],
-      allUsers: [],
-      sort: 'name:1',
-      page: 0,
-      totalPages: 0,
-      isSortByOpen: false
-    };
-
-    this.setUsers = this.setUsers.bind(this);
-    this.submitForm = this.submitForm.bind(this);
-    this.changePage = this.changePage.bind(this);
-    this.changeName = this.changeName.bind(this);
-    this.getAllUsers = this.getAllUsers.bind(this);
-    this.changeSortBy = this.changeSortBy.bind(this);
-    this.addRemoveUser = this.addRemoveUser.bind(this);
-    this.setWrapperRef = this.setWrapperRef.bind(this);
-    this.addRemoveAllUsers = this.addRemoveAllUsers.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
-    this.changeIsSortByOpen = this.changeIsSortByOpen.bind(this);
-    this.changeSearchKeyword = this.changeSearchKeyword.bind(this);
-  }
-
-  componentDidMount() {
-    this.getAllUsers();
+  componentDidMount = () => {
+    this.getAllUsers(true);
     document.addEventListener('mousedown', this.handleClickOutside);
-  }
+  };
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     document.removeEventListener('mousedown', this.handleClickOutside);
-  }
+  };
 
-  getAllUsers() {
-    this.props.auth0Client.getAllUsers(
-      this.setUsers,
+  getAllUsers = initialLoad => {
+    if (initialLoad) {
+      this.props.auth0Client.getAllUsers(this.setUsers);
+    } else {
+      this.setUsers(this.state.allUsers, false);
+    }
+  };
+
+  setUsers = (data, initialLoad = true) => {
+    const result = formatUsersData(
+      data,
+      initialLoad,
       this.state.page,
       this.state.sort,
-      this.state.searchKeyword !== ''
-        ? ` AND name:${this.state.searchKeyword}*`
-        : ''
+      this.state.searchKeyword
     );
-  }
+    this.setState(prevState => ({
+      allUsers: result.allUsers,
+      paginatedUsers: result.paginatedUsers,
+      totalPages: initialLoad
+        ? Math.ceil(data.users.length / 10)
+        : prevState.totalPages
+    }));
+  };
 
-  setUsers(data) {
-    this.setState({
-      allUsers: formatUsersData(data),
-      totalPages: Math.ceil(data.total / 10)
-    });
-  }
-
-  setWrapperRef(node) {
+  setWrapperRef = node => {
     this.wrapperRef = node;
-  }
+  };
 
-  handleClickOutside(event) {
+  handleClickOutside = event => {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.setState({ isSortByOpen: false });
     }
-  }
+  };
 
-  changeName(e) {
+  changeName = e => {
     this.setState({
       name: e.target.value
     });
-  }
+  };
 
-  changePage(e) {
+  changePage = e => {
     this.setState(
       {
         page: e.selected
       },
       () => {
-        this.getAllUsers();
+        this.getAllUsers(false);
       }
     );
-  }
+  };
 
-  changeSearchKeyword(e) {
+  changeSearchKeyword = e => {
     this.setState(
       {
         searchKeyword: e.target.value
       },
       () => {
-        this.getAllUsers();
+        this.getAllUsers(false);
       }
     );
-  }
+  };
 
-  changeSortBy(e) {
+  changeSortBy = e => {
     this.setState(
       {
         sort: e.target.id
       },
       () => {
-        this.getAllUsers();
+        this.getAllUsers(false);
       }
     );
-  }
+  };
 
-  changeIsSortByOpen() {
+  changeIsSortByOpen = () => {
     this.setState(prevState => ({
       isSortByOpen: !prevState.isSortByOpen
     }));
-  }
+  };
 
-  addRemoveUser(e) {
+  addRemoveUser = e => {
     let values = this.state.users;
     if (!e.target.checked) {
       values = filter(values, v => v !== e.target.id);
@@ -133,9 +124,9 @@ class CreateTeamMediator extends React.Component {
       values.push(e.target.id);
     }
     this.setState({ users: values });
-  }
+  };
 
-  addRemoveAllUsers(e) {
+  addRemoveAllUsers = e => {
     let values = [];
     if (e.target.checked) {
       values = this.state.allUsers.map(user => {
@@ -143,20 +134,22 @@ class CreateTeamMediator extends React.Component {
       });
     }
     this.setState({ users: values });
-  }
+  };
 
-  submitForm(e) {
+  submitForm = e => {
+    e.preventDefault();
+    this.setState({ loading: true });
+
     const team = this.state.name;
     const users = this.state.users;
 
-    e.preventDefault();
     this.props.auth0Client
       .addGroup(this.state.name, this.state.users, this)
       .then(() => {
         // and after everything has been succesfully done on auth0
         // we save the new user roles in zoombackend
         this.props.dispatch(
-          nodeActions.updateUsersTeamRequest({
+          updateUsersTeamRequest({
             user: {
               authId: this.props.auth0Client.getProfile().sub
             },
@@ -166,19 +159,21 @@ class CreateTeamMediator extends React.Component {
             })
           })
         );
+        this.setState({ loading: false });
       });
-  }
+  };
 
   render() {
     return (
       <CreateTeamModule
         users={this.state.users}
         name={this.state.name}
-        userOptions={this.state.allUsers}
+        userOptions={this.state.paginatedUsers}
         changeName={this.changeName}
         totalPages={this.state.totalPages}
         changeSearchKeyword={this.changeSearchKeyword}
         success={this.state.success}
+        loading={this.state.loading}
         secondaryInfoMessage={this.state.secondaryInfoMessage}
         errorMessage={this.state.errorMessage}
         addRemoveUser={this.addRemoveUser}

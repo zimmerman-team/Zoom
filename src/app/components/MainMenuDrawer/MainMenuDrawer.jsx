@@ -11,14 +11,13 @@ import { data } from './TempDrawer.const';
 import IconCharts from 'assets/icons/IconCharts';
 import LoginForm from 'components/SideBar/comps/LoginForm/LoginForm';
 import {
-  SidebarNavListItem,
   SidebarClosButton,
   SidebarNavList,
   ZoomLink,
   ZoomListItemText,
   LoginBox
 } from './TempDrawer.style';
-
+import SidebarNavListItem from './common/SidebarNavListItem';
 const propTypes = {
   open: PropTypes.bool,
   toggleSideBar: PropTypes.func,
@@ -42,17 +41,19 @@ class MainMenuDrawer extends React.Component {
         {data.map(
           item =>
             process.env.NODE_ENV === item.env && (
-              <SidebarNavListItem
-                button
+              <ZoomLink
+                to={item.path}
                 key={item.label}
-                data-cy={'sidebar-' + item.label}
-                disableRipple
+                data-cy={`sidebar-${item.label}`}
               >
-                <ZoomLink to={item.path}>
+                <SidebarNavListItem
+                  type={item.type}
+                  loggedIn={this.props.auth0Client.isAuthenticated()}
+                >
                   <ListItemIcon>{item.icon}</ListItemIcon>
                   <ZoomListItemText primary={item.label} />
-                </ZoomLink>
-              </SidebarNavListItem>
+                </SidebarNavListItem>
+              </ZoomLink>
             )
         )}
       </React.Fragment>

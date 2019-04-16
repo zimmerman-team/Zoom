@@ -121,6 +121,7 @@ class VisualizerModuleMediator extends Component {
 
     this.refetch = this.refetch.bind(this);
     this.selectYear = this.selectYear.bind(this);
+    this.saveViewport = this.saveViewport.bind(this);
   }
 
   componentDidMount() {
@@ -196,6 +197,7 @@ class VisualizerModuleMediator extends Component {
         team,
         descIntro,
         data,
+        specOptions,
         created,
         yearRange
       } = this.props.chartResults;
@@ -223,7 +225,8 @@ class VisualizerModuleMediator extends Component {
           dataSource2: dataSources[1],
           authorName: author.username,
           createdDate: formatDate(created),
-          selectedRegionVal: removeIds(selectedRegionVal)
+          selectedRegionVal: removeIds(selectedRegionVal),
+          specOptions
         })
       );
 
@@ -254,6 +257,7 @@ class VisualizerModuleMediator extends Component {
       descIntro,
       _public,
       team,
+      specOptions,
       ...restChart
     } = this.props.chartData;
     const {
@@ -262,6 +266,7 @@ class VisualizerModuleMediator extends Component {
       descIntro: prevDescIntro,
       _public: prevPublc,
       team: prevTeam,
+      specOptions: prevSpecOptions,
       ...prevRestChart
     } = prevProps.chartData;
     // so we refetch data when chartData changes
@@ -440,9 +445,18 @@ class VisualizerModuleMediator extends Component {
     );
   }
 
+  saveViewport(viewPort) {
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        specOptions: viewPort
+      })
+    );
+  }
+
   render() {
     return (
       <VisualizerModule
+        saveViewport={this.saveViewport}
         chartKeys={this.state.chartKeys}
         publicPage={this.props.publicPage}
         outerHistory={this.props.history}

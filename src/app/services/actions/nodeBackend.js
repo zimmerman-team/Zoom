@@ -126,6 +126,38 @@ export function deleteUserFailed(error) {
   };
 }
 
+export const DELETE_GROUP_INITIAL = 'DELETE_GROUP_INITIAL';
+export const DELETE_GROUP_REQUEST = 'DELETE_GROUP_REQUEST';
+export const DELETE_GROUP_SUCCESS = 'DELETE_GROUP_SUCCESS';
+export const DELETE_GROUP_FAILED = 'DELETE_GROUP_FAILED';
+
+export function deleteGroupInitial() {
+  return {
+    type: DELETE_GROUP_INITIAL
+  };
+}
+
+export function deleteGroupRequest(values) {
+  return {
+    type: DELETE_GROUP_REQUEST,
+    values
+  };
+}
+
+export function deleteGroupSuccess(data) {
+  return {
+    type: DELETE_GROUP_SUCCESS,
+    data
+  };
+}
+
+export function deleteGroupFailed(error) {
+  return {
+    type: DELETE_GROUP_FAILED,
+    error
+  };
+}
+
 export const UPDATE_USER_INITIAL = 'UPDATE_USER_INITIAL';
 export const UPDATE_USER_REQUEST = 'UPDATE_USER_REQUEST';
 export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
@@ -187,6 +219,42 @@ export function updateUsersTeamSuccess(data) {
 export function updateUsersTeamFailed(error) {
   return {
     type: UPDATE_USERS_TEAM_FAILED,
+    error
+  };
+}
+
+export const UPDATE_TEAM_AND_USERS_OF_IT_INITIAL =
+  'UPDATE_TEAM_AND_USERS_OF_IT_INITIAL';
+export const UPDATE_TEAM_AND_USERS_OF_IT__REQUEST =
+  'UPDATE_TEAM_AND_USERS_OF_IT__REQUEST';
+export const UPDATE_TEAM_AND_USERS_OF_IT_SUCCESS =
+  'UPDATE_TEAM_AND_USERS_OF_IT_SUCCESS';
+export const UPDATE_TEAM_AND_USERS_OF_IT_FAILED =
+  'UPDATE_TEAM_AND_USERS_OF_IT_FAILED';
+
+export function updateTeamAndUsersOfItInitial() {
+  return {
+    type: UPDATE_TEAM_AND_USERS_OF_IT_INITIAL
+  };
+}
+
+export function updateTeamAndUsersOfItRequest(values) {
+  return {
+    type: UPDATE_TEAM_AND_USERS_OF_IT__REQUEST,
+    values
+  };
+}
+
+export function updateTeamAndUsersOfItSuccess(data) {
+  return {
+    type: UPDATE_TEAM_AND_USERS_OF_IT_SUCCESS,
+    data
+  };
+}
+
+export function updateTeamAndUsersOfItFailed(error) {
+  return {
+    type: UPDATE_TEAM_AND_USERS_OF_IT_FAILED,
     error
   };
 }
@@ -443,6 +511,70 @@ export function updateDatasetSuccess(data) {
 export function updateDatasetFailed(error) {
   return {
     type: UPDATE_DATASET_FAILED,
+    error
+  };
+}
+
+export const CREATE_DUPLICATE_CHART_INITIAL = 'CREATE_DUPLICATE_CHART_INITIAL';
+export const CREATE_DUPLICATE_CHART_REQUEST = 'CREATE_DUPLICATE_CHART_REQUEST';
+export const CREATE_DUPLICATE_CHART_SUCCESS = 'CREATE_DUPLICATE_CHART_SUCCESS';
+export const CREATE_DUPLICATE_CHART_FAILED = 'CREATE_DUPLICATE_CHART_FAILED';
+
+export function createDuplicateChartInitial() {
+  return {
+    type: CREATE_DUPLICATE_CHART_INITIAL
+  };
+}
+
+export function createDuplicateChartRequest(values) {
+  return {
+    type: CREATE_DUPLICATE_CHART_REQUEST,
+    values
+  };
+}
+
+export function createDuplicateChartSuccess(data) {
+  return {
+    type: CREATE_DUPLICATE_CHART_SUCCESS,
+    data
+  };
+}
+
+export function createDuplicateChartFailed(error) {
+  return {
+    type: CREATE_DUPLICATE_CHART_FAILED,
+    error
+  };
+}
+
+export const DUPLICATE_CHART_INITIAL = 'DUPLICATE_CHART_INITIAL';
+export const DUPLICATE_CHART_REQUEST = 'DUPLICATE_CHART_REQUEST';
+export const DUPLICATE_CHART_SUCCESS = 'DUPLICATE_CHART_SUCCESS';
+export const DUPLICATE_CHART_FAILED = 'DUPLICATE_CHART_FAILED';
+
+export function duplicateChartInitial() {
+  return {
+    type: DUPLICATE_CHART_INITIAL
+  };
+}
+
+export function duplicateChartRequest(values) {
+  return {
+    type: DUPLICATE_CHART_REQUEST,
+    values
+  };
+}
+
+export function duplicateChartSuccess(data) {
+  return {
+    type: DUPLICATE_CHART_SUCCESS,
+    data
+  };
+}
+
+export function duplicateChartFailed(error) {
+  return {
+    type: DUPLICATE_CHART_FAILED,
     error
   };
 }

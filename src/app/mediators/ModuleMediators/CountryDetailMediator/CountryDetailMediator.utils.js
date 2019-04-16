@@ -255,6 +255,16 @@ export function formatLineChart2Data(indicatorData) {
   return lineChartData;
 }
 
+export function formatPieChartData(data, groupByType, valueType) {
+  return filter(data, d => d[valueType] > 0).map(d => {
+    return {
+      id: get(d, groupByType, ''),
+      value: d[valueType],
+      label: get(d, groupByType, '')
+    };
+  });
+}
+
 export function titleCase(str) {
   const splitStr = str.toLowerCase().split(' ');
   for (let i = 0; i < splitStr.length; i++) {

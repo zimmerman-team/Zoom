@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Box } from 'grommet';
 import { Menu } from 'grommet-icons';
 import theme from 'theme/Theme';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 /* consts */
@@ -79,6 +79,7 @@ export class AppBar extends React.Component {
     }
   }
 
+  // TODO somehow make this funciton reusable cause the same one is used in DuplicatorMediator.js
   closeSave() {
     if (this.props.auth0Client.isAuthenticated()) {
       this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
@@ -103,6 +104,7 @@ export class AppBar extends React.Component {
         chartId: this.props.chartData.chartId,
         name: this.props.chartData.name,
         description: this.props.chartData.desc,
+        descIntro: this.props.chartData.descIntro,
         type: this.props.paneData.chartType,
         data: this.props.chartData.indicators,
         indicatorItems: [
@@ -135,7 +137,8 @@ export class AppBar extends React.Component {
         yearRange: this.props.paneData.yearRange,
         selectedYear: this.props.chartData.selectedYear,
         selectedCountryVal: this.props.chartData.selectedCountryVal,
-        selectedRegionVal: this.props.chartData.selectedRegionVal
+        selectedRegionVal: this.props.chartData.selectedRegionVal,
+        specOptions: this.props.chartData.specOptions
       };
 
       this.props.dispatch(nodeActions.createUpdateChartRequest(chartData));
@@ -257,12 +260,14 @@ export class AppBar extends React.Component {
             onClick={this.props.toggleSideBar}
             data-cy="sidebar-toggle"
           />
-          <AidsFondLogo
-            a11yTitle="Aidsfonds logo"
-            fit="contain"
-            alignSelf="center"
-            src="https://zoom.aidsfonds.nl/static/b459aca02fec5b684d4a8fb3fe7b44a6.svg"
-          />
+          <Link to="/">
+            <AidsFondLogo
+              a11yTitle="Aidsfonds logo"
+              fit="contain"
+              alignSelf="center"
+              src="https://zoom.aidsfonds.nl/static/b459aca02fec5b684d4a8fb3fe7b44a6.svg"
+            />
+          </Link>
         </Box>
 
         {this.state.paneButton}

@@ -37,6 +37,9 @@ const EditUserMediator = lazy(() =>
 const CreateTeamMediator = lazy(() =>
   import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator')
 );
+const EditTeamMediator = lazy(() =>
+  import('mediators/ModuleMediators/EditTeamMediator/EditTeamMediator')
+);
 const PublicDashMediator = lazy(() =>
   import('mediators/DashboardMediators/PublicDashMediator')
 );
@@ -149,11 +152,47 @@ const Routes = props => {
           />
           <Route
             exact
+            path="/view-user/:userId"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <EditUserMediator auth0Client={props.auth0Client} viewOnly />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            exact
             path="/create-team"
             render={() =>
               props.auth0Client.isAuthenticated() &&
               props.auth0Client.isAdministrator() ? (
                 <CreateTeamMediator auth0Client={props.auth0Client} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/edit-team/:teamId"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <EditTeamMediator auth0Client={props.auth0Client} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/view-team/:teamId"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <EditTeamMediator auth0Client={props.auth0Client} viewOnly />
               ) : (
                 <Redirect to="/" />
               )
@@ -167,8 +206,7 @@ const Routes = props => {
           <Route
             path="/dashboard/:tab"
             render={() =>
-              props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
+              props.auth0Client.isAuthenticated() ? (
                 <DashboardMediator auth0Client={props.auth0Client} />
               ) : (
                 <Redirect to="/" />

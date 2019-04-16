@@ -9,6 +9,7 @@ const DatasetSchema = new Schema(
     author: { type: 'ObjectId', ref: 'User' },
     name: { type: String, min: 1 },
     team: { type: String, default: '' },
+    teams: [{ type: String }],
     public: { type: Boolean, default: false },
     dataSource: { type: String, required: true }
   },

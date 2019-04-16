@@ -1,6 +1,8 @@
 import axios from 'axios';
-import get from 'lodash/get';
 import auth0 from 'auth0-js';
+import get from 'lodash/get';
+import some from 'lodash/some';
+import filter from 'lodash/filter';
 import { nodeBackendGetRequest } from 'services/index';
 
 class Auth {
@@ -12,7 +14,7 @@ class Auth {
       redirectUri: `${process.env.REACT_APP_PROJECT_URL}/callback`,
       responseType: 'token id_token',
       scope:
-        'openid profile email user_metadata read:current_user update:current_user_metadata read:users_app_metadata update:users_app_metadata'
+        'openid profile email user_metadata read:current_user update:current_user_metadata read:users_app_metadata update:users_app_metadata read:groups update:groups'
     });
 
     this.addUser = this.addUser.bind(this);
@@ -22,6 +24,7 @@ class Auth {
     this.getUserGroup = this.getUserGroup.bind(this);
     this.signIn = this.signIn.bind(this);
     this.signOut = this.signOut.bind(this);
+    this.getUserRole = this.getUserRole.bind(this);
   }
 
   /* Current user actions */
@@ -82,7 +85,12 @@ class Auth {
 
   isAdministrator() {
     const userRole = localStorage.getItem('userRole');
-    return userRole === 'Administrator';
+    return userRole === 'Administrator' || userRole === 'Super admin';
+  }
+
+  isSuperAdmin() {
+    const userRole = localStorage.getItem('userRole');
+    return userRole === 'Super admin';
   }
 
   silentAuth() {
@@ -143,14 +151,16 @@ class Auth {
                 }
               )
               .then(response2 => {
-                localStorage.setItem('userGroup', response2.data[0].name);
+                localStorage.setItem(
+                  'userGroup',
+                  JSON.stringify(response2.data)
+                );
                 if (that) {
                   that.setState({
-                    group: response2.data[0].name
+                    group: response2.data
                   });
                 }
-
-                resolve(response2.data[0].name);
+                resolve(response2.data);
               })
               .catch(error => {
                 reject(error);
@@ -161,6 +171,9 @@ class Auth {
           });
       });
     }
+    return new Promise((resolve, reject) => {
+      resolve(JSON.parse(localStorage.getItem('userGroup')));
+    });
   }
 
   getUserRole() {
@@ -200,87 +213,152 @@ class Auth {
           });
       });
     }
+    return new Promise((resolve, reject) => {
+      resolve(localStorage.getItem('userRole'));
+    });
   }
 
   /* User management actions */
 
-  getAllUsers(stateAction = null, page = 0, sort, search) {
-    return new Promise(resolve => {
-      axios
-        .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
-          client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
-          client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-          audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
-          grant_type: 'client_credentials'
-        })
-        .then(response => {
+  getAllUsers(stateAction = null) {
+    return this.getUserRole().then(currentUserRole => {
+      return this.getUserGroup().then(currentUserGroups => {
+        return new Promise(resolve => {
           axios
-            .get(
-              `${
-                process.env.REACT_APP_AUTH_DOMAIN
-              }/api/v2/users?include_totals=true&sort=${sort}&q=identities.connection:"Username-Password-Authentication"${search}&search_engine=v3`,
-              {
-                headers: {
-                  Authorization: `${response.data.token_type} ${
-                    response.data.access_token
-                  }`
-                }
-              }
-            )
-            .then(response2 => {
-              if (stateAction) {
-                stateAction(response2.data);
-              }
-              resolve();
+            .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+              client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+              client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+              audience: `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/`,
+              grant_type: 'client_credentials'
+            })
+            .then(response => {
+              axios
+                .get(
+                  `${
+                    process.env.REACT_APP_AUTH_DOMAIN
+                  }/api/v2/users?include_totals=true&q=identities.connection:"Username-Password-Authentication"`,
+                  {
+                    headers: {
+                      Authorization: `${response.data.token_type} ${
+                        response.data.access_token
+                      }`
+                    }
+                  }
+                )
+                .then(response2 => {
+                  let result = response2.data.users;
+                  if (currentUserRole !== 'Super admin') {
+                    result = filter(response2.data.users, d => {
+                      let pass = false;
+                      const dUserGroups = get(
+                        d,
+                        'app_metadata.authorization.groups',
+                        []
+                      );
+                      for (let a = 0; a < dUserGroups.length; a++) {
+                        for (
+                          let b = 0;
+                          b < get(currentUserGroups, 'length', 0);
+                          b++
+                        ) {
+                          if (currentUserGroups[b].name === dUserGroups[a]) {
+                            pass = true;
+                            break;
+                          }
+                        }
+                        if (pass) break;
+                      }
+                      return pass;
+                    });
+                  }
+                  if (stateAction) {
+                    stateAction({ users: result });
+                  }
+                  resolve();
+                })
+                .catch(error => {
+                  console.error(error);
+                });
             })
             .catch(error => {
               console.error(error);
             });
-        })
-        .catch(error => {
-          console.error(error);
         });
+      });
     });
   }
 
   getUserGroups(that = null, stateVar = 'userGroups') {
-    axios
-      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
-        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
-        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-        audience: 'urn:auth0-authz-api',
-        grant_type: 'client_credentials'
-      })
-      .then(response => {
-        axios
-          .get(`${process.env.REACT_APP_AE_API_URL}/groups`, {
-            headers: {
-              Authorization: `${response.data.token_type} ${
-                response.data.access_token
-              }`
-            }
-          })
-          .then(response2 => {
-            // console.log(response2);
-            if (that) {
-              that.setState({
-                [stateVar]: response2.data.groups.map(g => {
-                  return {
-                    ...g,
-                    label: g.name,
-                    value: g._id
-                  };
+    return this.getUserRole().then(currentUserRole => {
+      return this.getUserGroup().then(currentUserGroups => {
+        return new Promise(resolve => {
+          axios
+            .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+              client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+              client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+              audience: 'urn:auth0-authz-api',
+              grant_type: 'client_credentials'
+            })
+            .then(response => {
+              axios
+                .get(`${process.env.REACT_APP_AE_API_URL}/groups`, {
+                  headers: {
+                    Authorization: `${response.data.token_type} ${
+                      response.data.access_token
+                    }`
+                  }
                 })
-              });
-            }
-          })
-          .catch(error => {
-            console.error(error);
-          });
-      })
-      .catch(error => {
-        console.error(error);
+                .then(response2 => {
+                  let result = response2.data.groups;
+                  if (currentUserRole !== 'Super admin') {
+                    result = filter(response2.data.groups, g => {
+                      let pass = false;
+
+                      for (
+                        let b = 0;
+                        b < get(currentUserGroups, 'length', 0);
+                        b++
+                      ) {
+                        if (currentUserGroups[b].name === g.name) {
+                          pass = true;
+                          break;
+                        }
+                      }
+                      return pass;
+                    });
+                  }
+                  if (that) {
+                    that.setState({
+                      [stateVar]: result.map(g => {
+                        return {
+                          ...g,
+                          label: g.name,
+                          value: g._id
+                        };
+                      })
+                    });
+                  } else {
+                    resolve(
+                      result.map(g => {
+                        return {
+                          ...g,
+                          label: g.name,
+                          value: g._id
+                        };
+                      })
+                    );
+                  }
+                })
+                .catch(error => {
+                  console.error(error);
+                });
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        });
       });
+    });
   }
 
   getUserRoles(that = null) {
@@ -304,7 +382,10 @@ class Auth {
             // console.log(response2);
             if (that) {
               that.setState({
-                userRoles: response2.data.roles.map(g => {
+                userRoles: filter(
+                  response2.data.roles,
+                  r => r.name !== 'Super admin'
+                ).map(g => {
                   return {
                     ...g,
                     label: g.name,
@@ -403,6 +484,203 @@ class Auth {
             'Something went wrong with assigning role or organisation. Please try again later.'
         });
       });
+  }
+
+  getGroup(id, parent) {
+    axios
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: 'urn:auth0-authz-api',
+        grant_type: 'client_credentials'
+      })
+      .then(res1 => {
+        axios
+          .get(`${process.env.REACT_APP_AE_API_URL}/groups/${id}`, {
+            headers: {
+              Authorization: `${res1.data.token_type} ${res1.data.access_token}`
+            }
+          })
+          .then(res2 => {
+            if (res2.status === 200) {
+              parent.setState({
+                name: res2.data.name,
+                oldTeamName: res2.data.name,
+                description: res2.data.description
+              });
+            } else {
+              parent.setState({
+                success: false,
+                errorMessage: res2.data.statusText
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            parent.setState({
+              success: false,
+              errorMessage: error.response.data.message
+            });
+          });
+      })
+      .catch(error => {
+        parent.setState({
+          success: false,
+          errorMessage: error.response.data.message
+        });
+      });
+  }
+
+  getGroupMembers(id, parent) {
+    axios
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: 'urn:auth0-authz-api',
+        grant_type: 'client_credentials'
+      })
+      .then(res1 => {
+        axios
+          .get(`${process.env.REACT_APP_AE_API_URL}/groups/${id}/members`, {
+            headers: {
+              Authorization: `${res1.data.token_type} ${res1.data.access_token}`
+            }
+          })
+          .then(res2 => {
+            if (res2.status === 200) {
+              parent.setState({
+                initialGroupUsers: res2.data.users,
+                users: res2.data.users.map(u => u.user_id)
+              });
+            } else {
+              parent.setState({
+                success: false,
+                errorMessage: res2.data.statusText
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            parent.setState({
+              success: false,
+              errorMessage: error.response.data.message
+            });
+          });
+      })
+      .catch(error => {
+        parent.setState({
+          success: false,
+          errorMessage: error.response.data.message
+        });
+      });
+  }
+
+  editGroup(id, name, description, usersToDelete, usersToAdd, parent) {
+    return new Promise(resolve => {
+      axios
+        .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+          client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+          client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+          audience: 'urn:auth0-authz-api',
+          grant_type: 'client_credentials'
+        })
+        .then(res1 => {
+          axios
+            .put(
+              `${process.env.REACT_APP_AE_API_URL}/groups/${id}`,
+              { name, description },
+              {
+                headers: {
+                  Authorization: `${res1.data.token_type} ${
+                    res1.data.access_token
+                  }`
+                }
+              }
+            )
+            .then(res2 => {
+              if (res2.status === 200) {
+                if (usersToDelete.length > 0) {
+                  this.deleteMultipleUsersFromGroup(
+                    res2.data._id,
+                    usersToDelete,
+                    {
+                      Authorization: `${res1.data.token_type} ${
+                        res1.data.access_token
+                      }`
+                    },
+                    parent
+                  ).then(() => {
+                    if (usersToAdd.length > 0) {
+                      this.addMultipleUsersToGroup(
+                        res2.data._id,
+                        usersToAdd,
+                        {
+                          Authorization: `${res1.data.token_type} ${
+                            res1.data.access_token
+                          }`
+                        },
+                        parent
+                      ).then(() => {
+                        resolve();
+                        parent.setState({
+                          success: true,
+                          errorMessage: null
+                        });
+                      });
+                    } else {
+                      resolve();
+                      parent.setState({
+                        success: true,
+                        errorMessage: null
+                      });
+                    }
+                  });
+                } else if (usersToAdd.length > 0) {
+                  this.addMultipleUsersToGroup(
+                    res2.data._id,
+                    usersToAdd,
+                    {
+                      Authorization: `${res1.data.token_type} ${
+                        res1.data.access_token
+                      }`
+                    },
+                    parent
+                  ).then(() => {
+                    resolve();
+                    parent.setState({
+                      success: true,
+                      errorMessage: null
+                    });
+                  });
+                } else {
+                  resolve();
+                  parent.setState({
+                    success: true,
+                    errorMessage: null
+                  });
+                }
+              } else {
+                parent.setState({
+                  success: false,
+                  errorMessage: res2.data.statusText
+                });
+              }
+            })
+            .catch(error => {
+              console.log(error);
+              parent.setState({
+                success: false,
+                errorMessage: error.response.data.message
+              });
+            });
+        })
+        .catch(error => {
+          parent.setState({
+            success: false,
+            errorMessage: error.response.data.message
+          });
+        });
+    });
   }
 
   getUser(id, parent) {
@@ -665,6 +943,38 @@ class Auth {
     });
   }
 
+  deleteMultipleUsersFromGroup(group_id, users, headers, parent) {
+    return new Promise(resolve => {
+      axios
+        .delete(
+          `${process.env.REACT_APP_AE_API_URL}/groups/${group_id}/members`,
+          { data: users, headers }
+        )
+        .then(res2 => {
+          if (res2.status === 204) {
+            parent.setState({
+              success: true,
+              secondaryInfoMessage: null
+            });
+
+            resolve();
+          } else {
+            parent.setState({
+              success: false,
+              secondaryInfoMessage: res2.data.statusText
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          parent.setState({
+            success: false,
+            secondaryInfoMessage: error.response.data.message
+          });
+        });
+    });
+  }
+
   addGroup(name, users, parent) {
     return new Promise(resolve => {
       let today = new Date();
@@ -672,7 +982,7 @@ class Auth {
       let mm =
         today.getMonth() + 1 < 10
           ? `0${today.getMonth() + 1}`
-          : today.getMonth() + 1; //January is 0
+          : today.getMonth() + 1; // January is 0
       let yyyy = today.getFullYear();
       today = `${dd}/${mm}/${yyyy}`;
       axios
@@ -686,7 +996,7 @@ class Auth {
           axios
             .post(
               `${process.env.REACT_APP_AE_API_URL}/groups`,
-              { name, description: `${today},${this.profile.name}` },
+              { name, description: `${today},${this.profile.sub}` },
               {
                 headers: {
                   Authorization: `${res1.data.token_type} ${
@@ -703,16 +1013,20 @@ class Auth {
                   name: '',
                   users: []
                 });
-                this.addMultipleUsersToGroup(
-                  res2.data._id,
-                  users,
-                  {
-                    Authorization: `${res1.data.token_type} ${
-                      res1.data.access_token
-                    }`
-                  },
-                  parent
-                ).then(() => resolve());
+                if (users.length > 0) {
+                  this.addMultipleUsersToGroup(
+                    res2.data._id,
+                    users,
+                    {
+                      Authorization: `${res1.data.token_type} ${
+                        res1.data.access_token
+                      }`
+                    },
+                    parent
+                  ).then(() => resolve());
+                } else {
+                  resolve();
+                }
               } else {
                 parent.setState({
                   success: false,
@@ -737,6 +1051,51 @@ class Auth {
     });
   }
 
+  deleteGroup(id, parent, reduxNodeAction) {
+    axios
+      .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+        client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+        audience: 'urn:auth0-authz-api',
+        grant_type: 'client_credentials'
+      })
+      .then(res1 => {
+        axios
+          .delete(`${process.env.REACT_APP_AE_API_URL}/groups/${id}`, {
+            headers: {
+              Authorization: `${res1.data.token_type} ${res1.data.access_token}`
+            }
+          })
+          .then(res2 => {
+            if (res2.status === 204) {
+              reduxNodeAction();
+              parent.setState({
+                success: true,
+                errorMessage: null
+              });
+            } else {
+              parent.setState({
+                success: false,
+                errorMessage: res2.data.statusText
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            parent.setState({
+              success: false,
+              errorMessage: error.response.data.message
+            });
+          });
+      })
+      .catch(error => {
+        parent.setState({
+          success: false,
+          errorMessage: error.response.data.message
+        });
+      });
+  }
+
   sendWelcomeEmail(userId, name, surname, email) {
     axios
       .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
@@ -746,13 +1105,19 @@ class Auth {
         grant_type: 'client_credentials'
       })
       .then(res1 => {
+        const redirectUrl = `${
+          process.env.REACT_APP_PROJECT_URL.includes('localhost')
+            ? process.env.REACT_APP_EXPRESS_BACKEND_BASE_URL
+            : process.env.REACT_APP_PROJECT_URL
+        }/api/redirectToHome`;
         axios
           .post(
             `${
               process.env.REACT_APP_AUTH_DOMAIN
             }/api/v2/tickets/password-change`,
             {
-              user_id: userId
+              user_id: userId,
+              result_url: redirectUrl
             },
             {
               headers: {

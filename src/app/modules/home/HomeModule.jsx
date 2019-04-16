@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import Cookies from 'universal-cookie';
 import { withRouter } from 'react-router';
 
+import { Helmet } from 'react-helmet';
+
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
 
@@ -62,6 +64,9 @@ export class HomeModule extends Component {
 
     return (
       <React.Fragment>
+        <Helmet>
+          <title>Zoom - Home</title>
+        </Helmet>
         <ModuleContainer
           style={
             this.props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}

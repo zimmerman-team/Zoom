@@ -13,8 +13,8 @@ import {
 import SortbyDialog from '../../../../../../../components/Dialog/SortbyDialog/SortbyDialog';
 
 const sortByOptions = [
-  { label: 'Name (asc)', value: 'name:1' },
-  { label: 'Name (desc)', value: 'name:-1' }
+  { label: 'Name (asc)', value: 'title' },
+  { label: 'Name (desc)', value: '-title' }
 ];
 
 const propTypes = {

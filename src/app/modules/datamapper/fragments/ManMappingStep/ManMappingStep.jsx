@@ -93,7 +93,7 @@ class ManMappingStep extends React.Component {
                 search={false}
                 headerStyle={{ fontSize: 12, height: 'unset' }}
                 arrowMargins="auto 22px auto 4px"
-                placeHolder="-None-"
+                placeHolderText="-None-"
                 data={this.props.modelOptions}
                 valueSelected={val.zoomModelLabel}
                 selectVal={zoomModel =>
@@ -152,7 +152,12 @@ class ManMappingStep extends React.Component {
       });
 
       selectedModels.forEach(model => {
-        this.selectDataType(model.zoomModel, model.fileType, '-None-');
+        this.selectDataType(
+          model.zoomModel,
+          model.fileType,
+          '-None-',
+          model.zoomModelLabel
+        );
       });
     }
 

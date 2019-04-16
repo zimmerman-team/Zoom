@@ -41,10 +41,13 @@ const propTypes = {
     longitude: PropTypes.number,
     zoom: PropTypes.number
   }),
+  viewport: PropTypes.shape({}),
+  chartMounted: PropTypes.bool,
   indicatorData: PropTypes.array,
   selectedYear: PropTypes.string,
   disableYear: PropTypes.bool,
   selectYear: PropTypes.func,
+  saveViewport: PropTypes.func,
   mapOptions: PropTypes.object
 };
 
@@ -53,7 +56,10 @@ const defaultProps = {
   // just show worldview when no lat long is specified
   latitude: 15,
   longitude: 0,
+  viewport: {},
+  chartMounted: false,
   zoom: 2,
+  saveViewport: null,
   mapOptions: {}
 };
 
@@ -106,7 +112,10 @@ export class GeoMap extends Component {
       this.updateMap(this.props.indicatorData);
     }
 
-    if (!isEqual(this.props.focus, prevProps.focus))
+    if (
+      !isEqual(this.props.focus, prevProps.focus) &&
+      (this.props.viewport.zoom === undefined || !this.props.chartMounted)
+    ) {
       this.setState({
         viewport: {
           latitude: this.props.focus.latitude,
@@ -115,6 +124,17 @@ export class GeoMap extends Component {
           zoom: this.props.focus.zoom
         }
       });
+    }
+
+    if (
+      this.props.chartMounted !== prevProps.chartMounted &&
+      this.props.chartMounted &&
+      this.props.viewport.zoom !== undefined
+    ) {
+      this.setState({
+        viewport: this.props.viewport
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -176,7 +196,18 @@ export class GeoMap extends Component {
     this.setState({ markerArray, legends });
   }
 
-  _updateViewport = viewport => this.setState({ viewport });
+  setMarkerInfo(indicator) {
+    this.setState({
+      hoverMarkerInfo: indicator
+    });
+  }
+
+  _updateViewport = viewport => {
+    this.setState({ viewport });
+
+    if (this.props.chartMounted && this.props.saveViewport)
+      this.props.saveViewport(viewport);
+  };
 
   _setLayerInfo = event => {
     let hoverLayerInfo = null;
@@ -199,12 +230,6 @@ export class GeoMap extends Component {
     if (!hoverMarkerInfo) return layerInfo(hoverLayerInfo);
 
     return null;
-  }
-
-  setMarkerInfo(indicator) {
-    this.setState({
-      hoverMarkerInfo: indicator
-    });
   }
 
   _showMarkerInfo() {
@@ -233,7 +258,7 @@ export class GeoMap extends Component {
   handleZoomIn() {
     this._updateViewport({
       ...this.state.viewport,
-      zoom: this.state.viewport.zoom + 0.5
+      zoom: this.state.viewport.zoom + 0.1
     });
   }
 
@@ -242,8 +267,8 @@ export class GeoMap extends Component {
       this._updateViewport({
         ...this.state.viewport,
         zoom:
-          this.state.viewport.zoom - 0.5 > this.state.settings.minZoom
-            ? this.state.viewport.zoom - 0.5
+          this.state.viewport.zoom - 0.1 > this.state.settings.minZoom
+            ? this.state.viewport.zoom - 0.1
             : this.state.settings.minZoom
       });
   }
@@ -324,7 +349,7 @@ export class GeoMap extends Component {
           onClick={this._onCountryClick}
           onLoad={this._handleMapLoaded}
           mapboxApiAccessToken={MAPBOX_TOKEN}
-          mapOptions={this.props.mapOptions}
+          // mapOptions={this.props.mapOptions}
           ref={map => (this.mapRef = map)}
           attributionControl
           // bounds={ya}

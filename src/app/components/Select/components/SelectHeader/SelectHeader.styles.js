@@ -8,8 +8,8 @@ export const ComponentBase = styled.div`
   font-weight: normal;
   font-size: 14px;
   color: ${theme.color.aidsFondsRed};
-  margin-right: auto;
-  height: 41px;
+  margin: auto auto auto 0;
+  height: fit-content;
   ::-webkit-input-placeholder {
     color: ${theme.color.aidsFondsRed};
   }

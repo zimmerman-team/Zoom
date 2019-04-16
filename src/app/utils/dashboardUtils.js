@@ -1,61 +1,125 @@
 import get from 'lodash/get';
-import sortBy from 'lodash/sortBy';
+import find from 'lodash/find';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
+import { paginate } from './genericUtils';
 
-export function formatUsersTabData(data, onEdit, onDelete) {
-  return data.users.map(d => {
-    const title = !isEmpty(d.user_metadata)
-      ? `${get(d.user_metadata, 'firstName', '')} ${get(
-          d.user_metadata,
-          'lastName',
-          ''
-        )}`
-      : d.email;
-    return {
-      title,
-      id: d.user_id,
-      info: {
-        Role: get(d, 'app_metadata.authorization.roles[0]', ''),
-        'Mapped data sets': 0,
-        Charts: 0,
-        Twitter: ''
-      },
-      onEdit: () => onEdit(d.user_id),
-      onView: () => console.log('view'),
-      onDuplicate: () => console.log('duplicate'),
-      onDelete: () => onDelete(d.user_id)
-    };
-  });
+export function formatUsersTabData(
+  data,
+  initialLoad,
+  page,
+  sort,
+  search,
+  onEdit,
+  onDelete,
+  onView
+) {
+  let allUsers = data;
+
+  if (initialLoad) {
+    allUsers = data.users.map(d => {
+      const title = !isEmpty(d.user_metadata)
+        ? `${get(d.user_metadata, 'firstName', '')} ${get(
+            d.user_metadata,
+            'lastName',
+            ''
+          )}`
+        : d.email;
+      return {
+        title,
+        id: d.user_id,
+        info: {
+          Role: get(d, 'app_metadata.authorization.roles[0]', ''),
+          'Mapped data sets': 0,
+          Charts: 0,
+          Twitter: ''
+        },
+        onEdit: () => onEdit(d.user_id),
+        onView: () => onView(d.user_id),
+        onDelete: () => onDelete(d.user_id)
+      };
+    });
+  }
+
+  let paginatedUsers = [];
+
+  if (search !== '') {
+    paginatedUsers = filter(allUsers, item => {
+      return item.title.toLowerCase().indexOf(search.toLowerCase()) > -1;
+    });
+  } else {
+    paginatedUsers = allUsers;
+  }
+
+  paginatedUsers = paginate(
+    paginatedUsers,
+    12,
+    page,
+    sort[0] === '-' ? sort.slice(1) : sort,
+    sort[0] === '-'
+  );
+
+  return { allUsers, users: paginatedUsers };
 }
 
-export function formatTeamsTabData(data, sort, search) {
-  const queriedData =
-    search !== '' ? filter(data, d => d.name.indexOf(search) > -1) : data;
-  const sortedData =
-    sort === 'name:-1'
-      ? sortBy(queriedData, [sort]).reverse()
-      : sortBy(queriedData, [sort]);
-  return sortedData.map(d => {
-    const values = get(d, 'description', '').split(',');
-    return {
-      id: d._id,
-      title: get(d, 'name', ''),
-      info: {
-        'Created by': get(values, '[1]', ''),
-        'Publication date': get(values, '[0]', ''),
-        Organisations: ''
-      },
-      onEdit: () => console.log('edit'),
-      onView: () => console.log('view'),
-      onDuplicate: () => console.log('duplicate'),
-      onDelete: () => console.log('archive')
-    };
-  });
+export function formatTeamsTabData(
+  data,
+  initialLoad,
+  page,
+  sort,
+  search,
+  users,
+  onEdit,
+  onDelete,
+  onView
+) {
+  let allTeams = data;
+
+  if (initialLoad) {
+    allTeams = data.map(d => {
+      const values = get(d, 'description', '').split(',');
+      return {
+        id: d._id,
+        title: get(d, 'name', ''),
+        info: {
+          'Created by': get(
+            find(users, user => user.id === get(values, '[1]', '')),
+            'title',
+            ''
+          ),
+          'Publication date': get(values, '[0]', ''),
+          Organisations: ''
+        },
+        onEdit: () => onEdit(d._id),
+        onView: () => onView(d._id),
+        onDelete: () => onDelete(d._id, get(d, 'name', ''))
+      };
+    });
+  }
+
+  let paginatedTeams = [];
+
+  if (search !== '') {
+    paginatedTeams = filter(allTeams, item => {
+      return item.title.toLowerCase().indexOf(search.toLowerCase()) > -1;
+    });
+  } else {
+    paginatedTeams = allTeams;
+  }
+
+  paginatedTeams = paginate(
+    paginatedTeams,
+    12,
+    page,
+    sort[0] === '-' ? sort.slice(1) : sort,
+    sort[0] === '-'
+  );
+
+  return { allTeams, teams: paginatedTeams };
 }
 
 // formats chart data for the dashboard
-export function formatChartData(charts, userId, history, remove) {
+export function formatChartData(charts, userId, history, remove, duplicate) {
   // so basically when we have paginaton
   // the count will be returned as count and the
   // data will be in charts variable
@@ -79,7 +143,7 @@ export function formatChartData(charts, userId, history, remove) {
 
     let onEdit = undefined;
     let onView = undefined;
-    let onDuplicate = () => console.log('duplicate');
+    let onDuplicate = () => duplicate(chart._id);
     let onDelete = undefined;
 
     if (history && remove) {
@@ -98,7 +162,7 @@ export function formatChartData(charts, userId, history, remove) {
       id: chart._id,
       title: chart.name,
       info: {
-        Author: chart.author.username,
+        Author: `${chart.author.firstName} ${chart.author.lastName}`,
         'Publication date': chart.created.substring(
           0,
           chart.created.indexOf('T')

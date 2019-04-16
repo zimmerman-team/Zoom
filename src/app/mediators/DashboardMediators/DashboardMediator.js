@@ -388,7 +388,7 @@ class DashboardMediator extends React.Component {
 const mapStateToProps = state => {
   return {
     userDatasets: state.userDatasets,
-    chartDeleted: state.userDeleted,
+    chartDeleted: state.chartDeleted,
     chartDuplicated: state.chartDuplicated,
     userDeleted: state.userDeleted,
     // yeah so actually these are the user and team charts

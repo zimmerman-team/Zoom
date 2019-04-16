@@ -41,7 +41,13 @@ const initialState = {
   selectedSubInd1: [],
   selectedSubInd2: [],
   selectedRegionVal: [],
-  selectedRegionLabels: []
+  selectedRegionLabels: [],
+  // this is the variable for saving
+  // specific chart options
+  // like the graph structure options
+  // for linechart/barchart
+  // or the viewport for geocharts
+  specOptions: {}
 };
 
 export default initialState;

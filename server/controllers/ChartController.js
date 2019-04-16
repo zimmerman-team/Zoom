@@ -265,6 +265,7 @@ const ChartController = {
       _public,
       data,
       team,
+      specOptions,
       selectedCountryVal,
       selectedRegionVal
     } = req.body;
@@ -298,7 +299,8 @@ const ChartController = {
 
                   selectedYear,
                   selectedCountryVal,
-                  selectedRegionVal
+                  selectedRegionVal,
+                  specOptions
                 });
 
                 chartz.save(err => {
@@ -341,6 +343,7 @@ const ChartController = {
                 chart.selectedYear = selectedYear;
                 chart.selectedCountryVal = selectedCountryVal;
                 chart.selectedRegionVal = selectedRegionVal;
+                chart.specOptions = specOptions;
 
                 chart.save(err => {
                   if (err) general.handleError(res, err);

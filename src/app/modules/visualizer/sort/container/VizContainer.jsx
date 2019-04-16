@@ -38,12 +38,14 @@ const propTypes = {
   chartType: PropTypes.string,
   publicPage: PropTypes.bool,
   chartKeys: PropTypes.array,
+  saveViewport: PropTypes.func,
   mode: PropTypes.bool
 };
 const defaultProps = {
   chartType: 'geomap',
   publicPage: false,
   chartKeys: [],
+  saveViewport: null,
   mode: location.pathname.includes('preview')
 };
 
@@ -90,6 +92,7 @@ class VizContainer extends React.Component {
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
             indicatorData={this.props.indicators}
+            saveViewport={this.props.saveViewport}
             path="/(visualizer|public)/(geomap|focusKE|focusNL)/:code/:tab"
             component={GeomapFragment}
             mode={this.state.preview}

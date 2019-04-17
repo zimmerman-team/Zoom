@@ -19,9 +19,16 @@ export function checkEmptyFields(manMapData, mapReqFields) {
       ) {
         emptyFields.push(field);
       }
-    } else if (!find(manMapData, ['zoomModel', field])) {
-      emptyFields.push(field);
-    }
+    } else if (field === 'geolocation') {
+      // some extra logic so that geolocation would not be required
+      // when mapping longitude and latitude, cause these are already
+      // geolocations
+      if (
+        !find(manMapData, ['zoomModel', 'Longitude']) &&
+        !find(manMapData, ['zoomModel', 'Latitude'])
+      )
+        emptyFields.push(field);
+    } else if (!find(manMapData, ['zoomModel', field])) emptyFields.push(field);
   });
 
   return emptyFields;

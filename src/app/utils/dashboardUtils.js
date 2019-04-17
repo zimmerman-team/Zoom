@@ -146,10 +146,12 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
     let onDuplicate = () => duplicate(chart._id);
     let onDelete = undefined;
 
+    const owner = chart.author && chart.author.authId === userId;
+
     if (history && remove) {
       onView = () => history.push(`/public/${chart.type}/${chart._id}/preview`);
 
-      if (chart.author.authId === userId && remove) {
+      if (owner && remove) {
         onEdit = () =>
           history.push(`/visualizer/${chart.type}/${chart._id}/edit`);
         onView = () =>
@@ -158,11 +160,17 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
       }
     }
 
+    let author = '';
+
+    if (chart.author)
+      author = `${chart.author.firstName} ${chart.author.lastName}`;
+
     return {
       id: chart._id,
       title: chart.name,
+      owner,
       info: {
-        Author: `${chart.author.firstName} ${chart.author.lastName}`,
+        Author: author,
         'Publication date': chart.created.substring(
           0,
           chart.created.indexOf('T')

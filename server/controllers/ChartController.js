@@ -264,7 +264,7 @@ const ChartController = {
       dataSources,
       _public,
       data,
-      team,
+      teams,
       specOptions,
       selectedCountryVal,
       selectedRegionVal
@@ -284,7 +284,7 @@ const ChartController = {
                   dataSources,
                   description,
                   _public,
-                  team,
+                  teams,
                   data,
                   descIntro,
 
@@ -332,7 +332,7 @@ const ChartController = {
                 // so the type of chart
                 chart.type = type;
                 chart._public = _public;
-                chart.team = team;
+                chart.teams = teams;
 
                 /* indicators/ sub-indicators of chart */
                 chart.indicatorItems = indicatorItems;

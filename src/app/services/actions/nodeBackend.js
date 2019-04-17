@@ -578,3 +578,35 @@ export function duplicateChartFailed(error) {
     error
   };
 }
+
+export const DELETE_DATASET_INITIAL = 'DELETE_DATASET_INITIAL';
+export const DELETE_DATASET_REQUEST = 'DELETE_DATASET_REQUEST';
+export const DELETE_DATASET_SUCCESS = 'DELETE_DATASET_SUCCESS';
+export const DELETE_DATASET_FAILED = 'DELETE_DATASET_FAILED';
+
+export function deleteDatasetInitial() {
+  return {
+    type: DELETE_DATASET_INITIAL
+  };
+}
+
+export function deleteDatasetRequest(values) {
+  return {
+    type: DELETE_DATASET_REQUEST,
+    values
+  };
+}
+
+export function deleteDatasetSuccess(data) {
+  return {
+    type: DELETE_DATASET_SUCCESS,
+    data
+  };
+}
+
+export function deleteDatasetFailed(error) {
+  return {
+    type: DELETE_DATASET_FAILED,
+    error
+  };
+}

@@ -6,9 +6,11 @@ import styled from 'styled-components';
 /* consts */
 import { chartColors } from '__consts__/ChartConst';
 
+/* styles */
+import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
+
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
-import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import { ResponsivePie } from '@nivo/pie';
 
@@ -21,7 +23,6 @@ const ComponentBase = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
   align-items: center;
   justify-content: center;
   background-color: white;
@@ -117,12 +118,12 @@ const DonutchartFragment = props => {
         />
       </Box>
       <ChartLegends data={props.chartKeys} />
-      <YearContainer>
+      <LineYearContainer>
         <CustomYearSelector
           selectedYear={props.selectedYear}
           selectYear={props.selectYear}
         />
-      </YearContainer>
+      </LineYearContainer>
     </ComponentBase>
   );
 };

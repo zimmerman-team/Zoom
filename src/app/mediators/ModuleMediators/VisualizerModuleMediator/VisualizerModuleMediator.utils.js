@@ -557,3 +557,16 @@ export function formatDonutData(indicators) {
 
   return chartData;
 }
+
+export function getChartKeys(chartType, indicators) {
+  switch (chartType) {
+    case chartTypes.lineChart:
+      return formatChartLegends(indicators, chartTypes.lineChart);
+    case chartTypes.barChart:
+      return formatBarChartKeys(indicators);
+    case chartTypes.donutChart:
+      return formatChartLegends(indicators, chartTypes.donutChart);
+    default:
+      return [];
+  }
+}

@@ -183,6 +183,7 @@ class App extends React.Component {
                   ...CorrectErrorsMediator_fileCorrection
                   ...FocusModuleMediator_indicatorAggregations
                   ...DatasetMediator_metaData
+                  ...DashboardMediator_Indicator
                 }
               `}
               variables={{}}

@@ -25,6 +25,12 @@ const SwitchLabel = styled.span`
   font-size: 11px;
   font-family: ${theme.font.zoomFontFamTwo};
   color: #9b9b9b;
+  min-width: 45px;
+  overflow: hidden;
+  &:last-child {
+    // note: let's not make a habit out of tweaking the position of element with transforms
+    transform: translateX(-13px);
+  }
 `;
 
 const styles = props => ({
@@ -57,14 +63,14 @@ const styles = props => ({
   iOSIcon: {
     width: 14,
     height: 14
-  },
-  iOSIconChecked: {
-    // boxShadow: materialTheme.shadows[1]
   }
 });
 
 const ZimSwitch = styled(props => <Switch disableRipple {...props} />)`
   && {
+    transform: translateX(-10px);
+
+    //outline: solid green;
     & [class*='MuiSwitch-root'] {
       outline: 1px solid yellowgreen;
     }

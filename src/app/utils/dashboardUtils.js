@@ -192,7 +192,7 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
   });
 }
 
-// formats chart data for the dashboard
+// formats datasets for the dashboard
 export function formatDatasets(datasets, history) {
   return datasets.map(dataset => {
     let shared = '';
@@ -208,6 +208,11 @@ export function formatDatasets(datasets, history) {
     return {
       id: dataset.datasetId,
       title: dataset.name,
+      // so owner here is true
+      // because the datasets
+      // loaded into the dashboard are only the
+      // authors datasets === owners
+      owner: true,
       info: {
         'Publication date': dataset.created
           ? dataset.created.substring(0, dataset.created.indexOf('T'))

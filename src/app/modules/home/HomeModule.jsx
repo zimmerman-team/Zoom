@@ -58,9 +58,9 @@ export class HomeModule extends Component {
     const { indicators, ...otherProps } = this.props;
 
     const paneContVis =
-      this.props.dataPaneOpen === paneTypes.none ? 'none' : 'unset';
+      this.props.dataPaneOpen === paneTypes.none ? 'none' : 'block';
     const explorePaneVis =
-      this.props.dataPaneOpen === paneTypes.pubPane ? 'unset' : 'none';
+      this.props.dataPaneOpen === paneTypes.pubPane ? 'block' : 'none';
 
     return (
       <React.Fragment>

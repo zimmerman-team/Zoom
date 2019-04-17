@@ -5,6 +5,7 @@ const initialState = {
   subIndicators1: [],
   subIndicators2: [],
   selectedRegionLabels: [],
+  indOptions: [],
   selectedCountryLabels: []
 };
 

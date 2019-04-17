@@ -250,6 +250,20 @@ class VizPaneMediator extends React.Component {
   }
 
   selectInd1(val) {
+    let indOptions = [];
+
+    // if()
+    // if(this.props.paneData.indOptions.indexOf())
+
+    // * and we also reset some values for the sub-indicator
+    // dropdown as sub-indicators should change
+    // whenever an indicator is changed
+    this.props.dispatch(
+      actions.storePaneDataRequest({
+        subIndicators1: []
+      })
+    );
+
     // so we set the values for chart data
     // * AND ALSO whenever an indicator is selected
     // the year jumps to the most recent year of the
@@ -260,15 +274,6 @@ class VizPaneMediator extends React.Component {
         dataSource1: val.dataSource,
         selectedYear: val.firstYear,
         selectedSubInd1: []
-      })
-    );
-
-    // * and we also reset some values for the sub-indicator
-    // dropdown as sub-indicators should change
-    // whenever an indicator is changed
-    this.props.dispatch(
-      actions.storePaneDataRequest({
-        subIndicators1: []
       })
     );
 

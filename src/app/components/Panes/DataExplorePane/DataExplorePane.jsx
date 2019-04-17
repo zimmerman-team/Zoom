@@ -131,7 +131,11 @@ class DataExplorePane extends React.Component {
 
   render() {
     const history = createBrowserHistory();
-    const isGeoMap = history.location.pathname.includes('geomap');
+    const isGeoMap =
+      history.location.pathname.includes('geomap') ||
+      history.location.pathname.includes('focusNL') ||
+      history.location.pathname.includes('focusKE') ||
+      history.location.pathname.includes('home');
 
     return (
       <ComponentBase style={{ display: this.props.display }}>

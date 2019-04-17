@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const ComponentBase = styled.div`
   background-color: white;
   width: 100vw;
-  height: calc(100vh - 40px);
+  min-height: calc(100vh - 40px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,4 +22,8 @@ export const Box = styled.div`
 
 export const PreviewTextContainer = styled.div`
   display: ${props => props.mode};
+`;
+
+export const LineYearContainer = styled.div`
+  width: calc(100% - 40px);
 `;

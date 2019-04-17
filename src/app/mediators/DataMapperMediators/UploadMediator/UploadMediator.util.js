@@ -106,6 +106,13 @@ export function formatModelOptions(dataModelHeading) {
     value: 'Latitude'
   });
 
+  // We push in the comment type seperately as we want it
+  // to have a different label
+  modelOptions.push({
+    label: 'Legend',
+    value: 'comment'
+  });
+
   // and because we have a bunch of different types of values
   arrayOfValues.forEach(valName => {
     modelOptions.push({
@@ -117,7 +124,7 @@ export function formatModelOptions(dataModelHeading) {
   Object.keys(dataModelHeading.mapping_dict).map(key => {
     // so since we already pushed in the only available value selections
     // with types/formats we don't need the default value and value_format
-    if (key !== 'value') {
+    if (key !== 'value' && key !== 'comment') {
       // and now we push in the rest
       modelOptions.push({
         label: key.charAt(0).toUpperCase() + key.slice(1),

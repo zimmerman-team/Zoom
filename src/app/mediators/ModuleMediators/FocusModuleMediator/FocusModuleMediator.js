@@ -367,6 +367,7 @@ export default createRefetchContainer(
           "date"
           "geolocationType"
           "geolocationIso2"
+          "comment"
           "geolocationPolygons"
           "valueFormatType"
         ]
@@ -380,6 +381,7 @@ export default createRefetchContainer(
       ) {
         indicatorName
         geolocationIso2
+        comment
         geolocationTag
         geolocationType
         geolocationPolygons
@@ -394,6 +396,7 @@ export default createRefetchContainer(
           "date"
           "geolocationType"
           "geolocationIso2"
+          "comment"
           "geolocationCenterLongLat"
           "valueFormatType"
         ]
@@ -407,6 +410,7 @@ export default createRefetchContainer(
       ) {
         indicatorName
         geolocationIso2
+        comment
         geolocationTag
         geolocationType
         geolocationCenterLongLat

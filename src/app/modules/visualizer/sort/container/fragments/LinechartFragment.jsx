@@ -8,9 +8,11 @@ import styled from 'styled-components';
 
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
-import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import LineChart from 'components/charts/recharts_linechart/LineChart';
+
+/* styles */
+import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
@@ -20,7 +22,6 @@ const ComponentBase = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
   align-items: center;
   justify-content: center;
   background-color: white;
@@ -68,12 +69,12 @@ const LinechartFragment = props => {
         />
       </Box>
       <ChartLegends data={props.indicators} />
-      <YearContainer>
+      <LineYearContainer>
         <CustomYearSelector
           selectedYear={props.selectedYear}
           selectYear={props.selectYear}
         />
-      </YearContainer>
+      </LineYearContainer>
     </ComponentBase>
   );
 };

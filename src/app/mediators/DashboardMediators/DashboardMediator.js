@@ -3,6 +3,10 @@ import React from 'react';
 // import { matchPath } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { createFragmentContainer, graphql } from 'react-relay';
+
+/* mutations */
+import DeleteFileMutation from 'mediators/DashboardMediators/mutations/DeleteFile';
 
 /* actions */
 import * as actions from 'services/actions/nodeBackend';
@@ -82,7 +86,8 @@ class DashboardMediator extends React.Component {
       this.setState({
         datasets: formatDatasets(
           this.props.userDatasets.data,
-          this.props.history
+          this.props.history,
+          this.deleteDataset
         )
       });
 
@@ -97,6 +102,10 @@ class DashboardMediator extends React.Component {
 
     // we re-load the teams
     if (!isEqual(this.props.teamDeleted, prevProps.teamDeleted))
+      this.reloadData();
+
+    // we re-load the datasets
+    if (!isEqual(this.props.datasetDeleted, prevProps.datasetDeleted))
       this.reloadData();
 
     // set page to 0 when changing tab
@@ -340,6 +349,30 @@ class DashboardMediator extends React.Component {
     );
   }
 
+  deleteDataset = datasetId => {
+    this.props.dispatch(
+      actions.deleteDatasetRequest({
+        authId: this.props.user.authId,
+        datasetId
+      })
+    );
+
+    DeleteFileMutation.commit(
+      this.props.relay.environment,
+      datasetId,
+      this.handleFileDeleteCompleted,
+      this.handleFileDeleteError
+    );
+  };
+
+  handleFileDeleteCompleted(response, error) {
+    if (error) console.log('Error deleting file', error);
+  }
+
+  handleFileDeleteError(error) {
+    if (error) console.log('Error deleting file', error);
+  }
+
   render() {
     const greetingName =
       get(this.props.user, 'firstName', '') !== ''
@@ -389,6 +422,7 @@ class DashboardMediator extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    datasetDeleted: state.datasetDeleted,
     userDatasets: state.userDatasets,
     chartDeleted: state.chartDeleted,
     chartDuplicated: state.chartDuplicated,
@@ -402,4 +436,19 @@ const mapStateToProps = state => {
 
 // this is the correct syntax for routing to NOT mess up when using both
 // withRouter and connect
-export default withRouter(connect(mapStateToProps)(DashboardMediator));
+// note this graphql is set up here only because we need that graphql
+// environment for the mutation TODO: find a proper solution
+export default createFragmentContainer(
+  withRouter(connect(mapStateToProps)(DashboardMediator)),
+  graphql`
+    fragment DashboardMediator_Indicator on Query {
+      allIndicators(first: 1) {
+        edges {
+          node {
+            name
+          }
+        }
+      }
+    }
+  `
+);

@@ -6,6 +6,7 @@ import { withRouter } from 'react-router';
 
 /* utils */
 import map from 'lodash/map';
+import { formPath } from 'modules/dashboard/fragments/GridList/components/GridItem/GridItem.util';
 
 /* components...*/
 import GridItemText from './common/GridItemText';
@@ -34,12 +35,13 @@ const defaultProps = {
 };
 
 const GridItem = props => {
-  const chartTab = props.match.params.tab === 'charts';
   const [isHovered, setIsHovered] = React.useState(false);
-  const path =
-    chartTab && props.owner
-      ? `/visualizer/${props.chartType}/${props.id}/edit`
-      : `/public/${props.chartType}/${props.id}/preview`;
+  const path = formPath(
+    props.match.params.tab,
+    props.owner,
+    props.id,
+    props.chartType
+  );
 
   function handleMouseEnter() {
     setIsHovered(true);
@@ -50,7 +52,11 @@ const GridItem = props => {
   }
 
   function handleClick(e) {
-    props.withoptions && !chartTab ? e.preventDefault() : '';
+    props.withoptions &&
+    props.match.params.tab !== 'charts' &&
+    props.match.params.tab !== 'data-sets'
+      ? e.preventDefault()
+      : '';
   }
 
   return (

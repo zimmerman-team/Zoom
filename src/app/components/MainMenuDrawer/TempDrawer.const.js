@@ -8,6 +8,8 @@ import IconAbout from 'assets/icons/IconAbout';
 
 const pathPrefix = '/';
 export const data = [
+  //////////////////////////////////////////////////////////////////////////////
+  // HOME
   {
     label: 'Home',
     path: `${pathPrefix}home`,
@@ -22,6 +24,8 @@ export const data = [
     env: 'development',
     type: 'public'
   },
+  //////////////////////////////////////////////////////////////////////////////
+  // COUNTRY DETAIL
   {
     label: 'Country Detail',
     path: `${pathPrefix}country/ke`,
@@ -29,6 +33,8 @@ export const data = [
     env: 'development',
     type: 'private'
   },
+  //////////////////////////////////////////////////////////////////////////////
+  // IATI DETAIL
   {
     label: 'IATI Detail',
     path: `${pathPrefix}iati`,
@@ -36,6 +42,8 @@ export const data = [
     env: 'development',
     atype: 'private'
   },
+  //////////////////////////////////////////////////////////////////////////////
+  // DATA MAPPER
   {
     label: 'Datamapper',
     path: `${pathPrefix}mapper`,
@@ -43,13 +51,8 @@ export const data = [
     env: 'development',
     type: 'private'
   },
-  {
-    label: 'NL Focus',
-    path: `${pathPrefix}focus/NL`,
-    icon: <IconCharts />,
-    env: 'development',
-    type: 'private'
-  },
+  //////////////////////////////////////////////////////////////////////////////
+  // HOME
   {
     label: 'Visualizer',
     path: `${pathPrefix}visualizer/geomap/vizID/edit`,
@@ -57,20 +60,8 @@ export const data = [
     env: 'development',
     type: 'private'
   },
-  {
-    label: 'Public Charts',
-    path: `${pathPrefix}public/chart-library`,
-    icon: <IconCharts />,
-    env: 'production',
-    type: 'public'
-  },
-  {
-    label: 'Public Charts',
-    path: `${pathPrefix}public/chart-library`,
-    icon: <IconCharts />,
-    env: 'development',
-    type: 'public'
-  },
+  //////////////////////////////////////////////////////////////////////////////
+  // DASHBOARD
   {
     label: 'Dashboard',
     path: `${pathPrefix}dashboard`,
@@ -85,6 +76,24 @@ export const data = [
     env: 'production',
     type: 'private'
   },
+  //////////////////////////////////////////////////////////////////////////////
+  // PUBLIC CHARTS
+  {
+    label: 'Public Charts',
+    path: `${pathPrefix}public/chart-library`,
+    icon: <IconCharts />,
+    env: 'production',
+    type: 'public'
+  },
+  {
+    label: 'Public Charts',
+    path: `${pathPrefix}public/chart-library`,
+    icon: <IconCharts />,
+    env: 'development',
+    type: 'public'
+  },
+  //////////////////////////////////////////////////////////////////////////////
+  // ABOUT
   {
     label: 'About ZOOM',
     path: `${pathPrefix}about`,

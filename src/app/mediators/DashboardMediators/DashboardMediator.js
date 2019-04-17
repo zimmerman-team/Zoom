@@ -60,8 +60,9 @@ class DashboardMediator extends React.Component {
     // we format the charts
     if (
       !isEqual(this.props.userCharts, prevProps.userCharts) &&
-      this.props.userCharts.data
-    )
+      this.props.userCharts.data &&
+      this.props.user
+    ) {
       this.setState({
         charts: formatChartData(
           this.props.userCharts.data,
@@ -71,6 +72,7 @@ class DashboardMediator extends React.Component {
           this.duplicateChart
         )
       });
+    }
 
     // we format the datasets
     if (

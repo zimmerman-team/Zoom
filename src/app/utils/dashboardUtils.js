@@ -193,7 +193,7 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
 }
 
 // formats datasets for the dashboard
-export function formatDatasets(datasets, history) {
+export function formatDatasets(datasets, history, remove) {
   return datasets.map(dataset => {
     let shared = '';
     if (dataset.team.length > 0 && dataset.team !== 'none')
@@ -224,7 +224,7 @@ export function formatDatasets(datasets, history) {
         'Data sources': dataset.dataSource
       },
       onEdit: () => history.push(`/dataset/${dataset.datasetId}`),
-      onDelete: () => console.log('delete')
+      onDelete: () => remove(dataset.datasetId)
     };
   });
 }

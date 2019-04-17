@@ -7,6 +7,9 @@ import { CREATE_DUPLICATE_CHART_REQUEST } from 'services/actions/nodeBackend';
 import { CREATE_DUPLICATE_CHART_SUCCESS } from 'services/actions/nodeBackend';
 import { CREATE_DUPLICATE_CHART_FAILED } from 'services/actions/nodeBackend';
 import { DUPLICATE_CHART_INITIAL } from 'services/actions/nodeBackend';
+import { DELETE_DATASET_INITIAL } from 'services/actions/nodeBackend';
+import { DELETE_DATASET_REQUEST } from 'services/actions/nodeBackend';
+import { DELETE_DATASET_SUCCESS } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -511,7 +514,23 @@ function groupDeleted(state = initial, action) {
   }
 }
 
+function datasetDeleted(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.DELETE_DATASET_INITIAL:
+      return updateInitial(state);
+    case nodeActions.DELETE_DATASET_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.DELETE_DATASET_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.DELETE_DATASET_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  datasetDeleted,
   chartDuplicated,
   dupChartCreated,
   datasetUpdated,

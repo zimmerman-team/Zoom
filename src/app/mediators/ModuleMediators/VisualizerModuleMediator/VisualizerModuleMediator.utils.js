@@ -307,7 +307,7 @@ export function formatGeoData(
     indicators.push({
       type: 'location',
       data: longLatData,
-      legendName: `POI`
+      legendName: `POI: ${longLatData[0].indName}`
     });
   }
 

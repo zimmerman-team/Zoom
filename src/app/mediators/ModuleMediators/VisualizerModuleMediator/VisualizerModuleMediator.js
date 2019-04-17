@@ -13,7 +13,8 @@ import {
   removeIds,
   formatChartLegends,
   formatTableData,
-  formatDonutData
+  formatDonutData,
+  getChartKeys
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 import PropTypes from 'prop-types';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
@@ -244,7 +245,7 @@ class VisualizerModuleMediator extends Component {
 
       this.setState({
         loading: false,
-        chartKeys: formatBarChartKeys([
+        chartKeys: getChartKeys(type, [
           indicatorItems[0].indicator,
           indicatorItems[1].indicator
         ])

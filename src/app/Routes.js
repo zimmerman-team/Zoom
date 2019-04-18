@@ -254,12 +254,6 @@ const Routes = props => {
             render={() => <PublicDashMediator />}
           />
 
-          <Route
-            exact
-            path="/public/chart-library/:id/:charttype"
-            // todo: render to appropriate chart pages
-          />
-
           {/*todo: remove on PR*/}
           <Route
             exact

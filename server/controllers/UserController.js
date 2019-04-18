@@ -241,13 +241,23 @@ const UserApi = {
   // },
 
   deleteUser: (req, res) => {
-    const { delId } = req.query;
-    // TODO: should be adjusted without the promises, or maybe with promises if
-    // TODO: it works and makes sense
-    User.deleteOne({ authId: delId }, error => {
-      if (error) general.handleError(res, error);
+    const { delId, authId } = req.query;
 
-      return res.json({ message: 'user deleted' });
+    User.findOne({ authId }, (adminErr, adminUser) => {
+      if (adminErr) general.handleError(res, adminErr);
+      else if (!adminUser)
+        general.handleError(res, 'Admin user not found', 404);
+      else if (
+        adminUser.role === 'Administrator' ||
+        adminUser.role === 'Super admin'
+      )
+        User.deleteOne({ authId: delId }, error => {
+          if (error) general.handleError(res, error);
+          else res.json({ message: 'user deleted' });
+        });
+      else {
+        general.handleError(res, 'Unauthorized', 401);
+      }
     });
   },
 

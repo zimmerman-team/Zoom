@@ -29,23 +29,11 @@ const defaultProps = {
 };
 
 class CustomYearSelector extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      numArray: [],
-      mouseDown: false,
-      selectedYear: props.selectedYear
-    };
-
-    this.handleMouseEnter = this.handleMouseEnter.bind(this);
-    this.handleMouseDown = this.handleMouseDown.bind(this);
-    this.handleMouseUp = this.handleMouseUp.bind(this);
-    this.renderYearLabels = this.renderYearLabels.bind(this);
-    this.setWrapperRef = this.setWrapperRef.bind(this);
-    this.handleMoveOutside = this.handleMoveOutside.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-  }
+  state = {
+    numArray: [],
+    mouseDown: false,
+    selectedYear: this.props.selectedYear
+  };
 
   componentDidMount() {
     // we will use this to detect if the 'mouse dragg' has exited the component
@@ -72,42 +60,42 @@ class CustomYearSelector extends React.Component {
   /**
    * Set the wrapper ref
    */
-  setWrapperRef(node) {
+  setWrapperRef = node => {
     this.wrapperRef = node;
-  }
+  };
 
   /**
    * Alert if clicked on outside of element
    */
-  handleMoveOutside(event) {
+  handleMoveOutside = event => {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.handleMouseUp();
     }
-  }
+  };
 
-  handleMouseEnter(number) {
+  handleMouseEnter = number => {
     if (this.state.mouseDown) {
       this.setState({ selectedYear: number });
     }
-  }
+  };
 
-  handleMouseDown() {
+  handleMouseDown = () => {
     this.setState({ mouseDown: true });
-  }
+  };
 
-  handleMouseUp() {
+  handleMouseUp = () => {
     if (this.state.mouseDown) {
       this.setState({ mouseDown: false });
       this.props.selectYear(this.state.selectedYear);
     }
-  }
+  };
 
-  handleClick(number) {
+  handleClick = number => {
     this.setState({ selectedYear: number });
     this.props.selectYear(number);
-  }
+  };
 
-  renderYearLabels(number, index) {
+  renderYearLabels = (number, index) => {
     let yearLabels = '';
 
     if (this.state.selectedYear === number)
@@ -133,7 +121,7 @@ class CustomYearSelector extends React.Component {
       );
 
     return yearLabels;
-  }
+  };
 
   render() {
     return (

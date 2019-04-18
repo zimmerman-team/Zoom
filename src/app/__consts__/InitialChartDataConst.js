@@ -33,6 +33,16 @@ const initialState = {
   selectedYear: '2005',
   _public: false,
   team: false,
+  chartKeys:
+    process.env.NODE_ENV === 'development'
+      ? [
+          {
+            color: 'hsl(23, 70%, 50%)',
+            name: 'aids related deaths (unaids)',
+            orientation: 'left'
+          }
+        ]
+      : [],
   // this is the actual data loaded into the chart
   indicators: [],
   dataSource1: undefined,

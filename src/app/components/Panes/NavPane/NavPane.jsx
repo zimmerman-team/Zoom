@@ -27,7 +27,7 @@ import {
 
 /* todo: re-assess logic in this component, seems somewhat convoluted */
 
-class NavPane extends React.PureComponent {
+class NavPane extends React.Component {
   state = {
     pane: this.props.dataPaneOpen,
     userRole: 'Regular user'
@@ -38,14 +38,19 @@ class NavPane extends React.PureComponent {
       this.props.auth0Client
         .getUserRole()
         .then(role => this.setState({ userRole: role }));
+
+      console.log('auth0CLient is available');
     } else {
       console.log('auth0Client not available, figure it out');
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.dataPaneOpen !== prevProps.dataPaneOpen)
+    console.log('did update');
+
+    if (this.props.dataPaneOpen !== prevProps.dataPaneOpen) {
       this.setState({ pane: this.props.dataPaneOpen });
+    }
   }
 
   clickStartPaneItem = item => {
@@ -63,6 +68,7 @@ class NavPane extends React.PureComponent {
 
   renderPaneItems = () => {
     // console.log('pane type is: ', this.state.pane);
+    console.log('do rendering of renderPaneItems');
     switch (this.state.pane) {
       case paneTypes.privPane:
         return (

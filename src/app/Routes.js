@@ -64,10 +64,6 @@ const DashboardMediator = lazy(() =>
 
 // Routes
 const Routes = props => {
-  // console.log(props.auth0Client);
-  // console.log(props.auth0Client.getUserRole(this));
-
-  props.auth0Client.getUserRole().then(role => console.log(role));
   return (
     <React.Fragment>
       <Suspense fallback={<PageLoader />}>
@@ -81,6 +77,7 @@ const Routes = props => {
               <HomeModuleMediator
                 indicatorAggregations={props}
                 dropDownData={props}
+                auth0Client={props.auth0Client}
               />
             )}
           />

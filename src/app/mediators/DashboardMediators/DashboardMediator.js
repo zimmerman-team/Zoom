@@ -156,7 +156,9 @@ class DashboardMediator extends React.Component {
 
   deleteUser = userId => {
     this.props.auth0Client.deleteUser(userId, this, () =>
-      this.props.dispatch(actions.deleteUserRequest({ userId }))
+      this.props.dispatch(
+        actions.deleteUserRequest({ userId, authId: this.props.user.authId })
+      )
     );
   };
 

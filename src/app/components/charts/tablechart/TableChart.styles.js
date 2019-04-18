@@ -86,7 +86,8 @@ export default () =>
           color: `${Theme.color.aidsFondsBlue}!important`
         },
         headerCell: {
-          borderTop: `1px solid ${Theme.color.zoomGreyThirteen}`
+          borderTop: `1px solid ${Theme.color.zoomGreyThirteen}`,
+          zIndex: 0
         }
       },
       MuiTablePagination: {
@@ -154,7 +155,8 @@ export default () =>
       MUIDataTableToolbarSelect: {
         root: {
           boxShadow: 'none',
-          backgroundColor: Theme.color.zoomGreyZero
+          backgroundColor: Theme.color.zoomGreyZero,
+          zIndex: 0
         },
         title: {
           //Body 2

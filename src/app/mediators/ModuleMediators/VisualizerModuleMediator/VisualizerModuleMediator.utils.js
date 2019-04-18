@@ -482,6 +482,8 @@ export function formatTableData(indicators) {
   const tableChartKeys = [];
   let tableTitle = '';
 
+  console.log(indicators);
+
   indicators.map((indicator, index) => {
     if (indicator.length > 0) {
       const existInd = tableChartKeys.indexOf(indicator[0].indicatorName);
@@ -510,16 +512,28 @@ export function formatTableData(indicators) {
           return indItem.geolocationTag === existing.geoName;
         });
         if (existItemInd === -1) {
-          tableChartData.push([
-            indItem.geolocationTag,
 
-            indItem.geolocationIso2.length > 0
-              ? indItem.geolocationIso2.toUpperCase()
+          tableChartData.push([
+            //Geo
+            indItem.geolocationTag === null || indItem.geolocationTag.length <= 0
+              ? "N/A"
               : indItem.geolocationTag,
 
-            Math.round(indItem.value),
+            //iso2
+            indItem.geolocationIso2 === null || indItem.geolocationIso2.length <= 0
+              ? "N/A"
+              : indItem.geolocationIso2.toUpperCase(),
 
-            indItem.date
+            //value
+            indItem.value === null
+              ? "N/A"
+              : Math.round(indItem.value),
+
+            //date
+            indItem.date === null || indItem.date.length <= 0
+              ? "N/A"
+              : indItem.date,
+
           ]);
         } else if (tableChartData[existItemInd][indName] !== undefined)
           tableChartData[existItemInd][indName] += Math.round(indItem.value);

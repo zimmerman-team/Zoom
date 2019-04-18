@@ -25,8 +25,8 @@ const propTypes = {
 };
 const defaultProps = {
   title: 'No title given',
-  data: tableDataMock,
-  columns: tableColumnsMock,
+  data: [],
+  columns: [],
   options
 };
 

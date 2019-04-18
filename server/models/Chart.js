@@ -57,7 +57,8 @@ const ChartSchema = new Schema(
 
     selectedYear: String,
     selectedCountryVal: [String],
-    selectedRegionVal: [[]]
+    selectedRegionVal: [[]],
+    specOptions: { type: Map, default: {} }
   },
   {
     timestamps: { createdAt: 'created', updatedAt: 'last_updated' }

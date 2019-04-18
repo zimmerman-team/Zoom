@@ -6,9 +6,11 @@ import styled from 'styled-components';
 /* mock */
 import { BarchartMockData } from './BachartMockData';
 
+/* styles */
+import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
+
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
-import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import { ResponsiveBar } from '@nivo/bar';
 
@@ -124,12 +126,12 @@ const BarchartFragment = props => {
         />
       </Box>
       <ChartLegends />
-      <YearContainer>
+      <LineYearContainer>
         <CustomYearSelector
           selectedYear={props.selectedYear}
           selectYear={props.selectYear}
         />
-      </YearContainer>
+      </LineYearContainer>
     </ComponentBase>
   );
 };

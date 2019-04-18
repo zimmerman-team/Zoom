@@ -26,6 +26,7 @@ import GraphStructurePanel from './panels/GraphStructurePanel/GraphStructurePane
 const propTypes = {
   selectedInd2: PropTypes.string,
   selectedInd1: PropTypes.string,
+  chartKeys: PropTypes.arrayOf(PropTypes.shape({})),
   regionAmount: PropTypes.number,
   indNames: PropTypes.arrayOf(
     PropTypes.shape({
@@ -81,6 +82,7 @@ const propTypes = {
     PropTypes.array
   ]),
   selectCountry: PropTypes.func,
+  handleAxisSwitch: PropTypes.func,
   selectRegion: PropTypes.func,
   selectYearRange: PropTypes.func,
   yearRange: PropTypes.array,
@@ -99,9 +101,11 @@ const propTypes = {
 const defaultProps = {
   selectedInd2: undefined,
   selectedInd1: undefined,
+  handleAxisSwitch: null,
   locationSelected: true,
   subInd1AllSelected: true,
   subInd2AllSelected: true,
+  chartKeys: [],
   selectYearRange: undefined,
   yearRange: [2003, 2016],
   indNames: [],
@@ -131,7 +135,11 @@ class DataExplorePane extends React.Component {
 
   render() {
     const history = createBrowserHistory();
-    const isGeoMap = history.location.pathname.includes('geomap');
+    const isGeoMap =
+      history.location.pathname.includes('geomap') ||
+      history.location.pathname.includes('focusNL') ||
+      history.location.pathname.includes('focusKE') ||
+      history.location.pathname.includes('home');
 
     return (
       <ComponentBase style={{ display: this.props.display }}>
@@ -223,6 +231,8 @@ class DataExplorePane extends React.Component {
             data-cy="nav-pane-item-indicator"
           >
             <DropdownMenuPanel
+              handleAxisSwitch={this.props.handleAxisSwitch}
+              chartKeys={this.props.chartKeys}
               panelDetails={[
                 {
                   categorise: true,
@@ -235,6 +245,8 @@ class DataExplorePane extends React.Component {
                   reset: () => this.props.selectInd1('reset')
                 },
                 {
+                  indicator: this.props.selectedInd1,
+                  subIndicator: true,
                   categorise: true,
                   multiple: true,
                   selectAll: true,
@@ -255,6 +267,8 @@ class DataExplorePane extends React.Component {
                   reset: () => this.props.selectInd2('reset')
                 },
                 {
+                  indicator: this.props.selectedInd2,
+                  subIndicator: true,
                   categorise: true,
                   multiple: true,
                   selectAll: true,

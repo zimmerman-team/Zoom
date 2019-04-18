@@ -11,7 +11,9 @@ import DataMapperModule from 'modules/datamapper/DataMapperModule';
 
 // Modules lazy load
 const CountryDetailMediator = lazy(() =>
-  import('mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator')
+  import(
+    'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator'
+  )
 );
 const HomeModuleMediator = lazy(() =>
   import('mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator')
@@ -22,7 +24,9 @@ const FocusModuleMediator = lazy(() =>
 );
 
 const VisualizerModuleMediator = lazy(() =>
-  import('mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator')
+  import(
+    'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator'
+  )
 );
 
 const IatiDetailMediator = lazy(() =>
@@ -60,6 +64,10 @@ const DashboardMediator = lazy(() =>
 
 // Routes
 const Routes = props => {
+  // console.log(props.auth0Client);
+  // console.log(props.auth0Client.getUserRole(this));
+
+  props.auth0Client.getUserRole().then(role => console.log(role));
   return (
     <React.Fragment>
       <Suspense fallback={<PageLoader />}>

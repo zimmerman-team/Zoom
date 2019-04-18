@@ -2,22 +2,8 @@ import findIndex from 'lodash/findIndex';
 import { scaleQuantile } from 'd3-scale';
 import { range } from 'd3-array';
 
-const lineChartColors = [
-  'hsl(23, 70%, 50%)',
-  'hsl(137, 70%, 50%)',
-  'hsl(54, 70%, 50%)',
-  'hsl(20, 70%, 50%)',
-  'hsl(84, 70%, 50%)'
-];
-
-const barChartColors = [
-  'hsl(265, 70%, 50%)',
-  'hsl(323, 70%, 50%)',
-  'hsl(144, 70%, 50%)',
-  'hsl(91, 70%, 50%)',
-  'hsl(28, 70%, 50%)',
-  'hsl(275, 70%, 50%)'
-];
+/* consts */
+import chartTypes, { chartColors } from '__consts__/ChartConst';
 
 // Updates layer percentiles depending on the value
 export function updatePercentiles(featureCollection, accessor) {
@@ -198,7 +184,7 @@ export function formatLongLatData(indicators, indName) {
           indName,
           longitude: long,
           latitude: lat,
-          name: indicator.geolocationTag,
+          name: indicator.comment || indicator.geolocationTag,
           format: indicator.valueFormatType,
           value: Math.round(indicator.value)
         });
@@ -321,60 +307,93 @@ export function formatGeoData(
     indicators.push({
       type: 'location',
       data: longLatData,
-      legendName: `POI`
+      legendName: `POI: ${longLatData[0].indName}`
     });
   }
 
   return indicators;
 }
 
-export function formatLineData(indicators) {
-  const indicatorData = [];
+// may not be keys, but is formed in a similar way as keys would,
+// so yeah mainly used for line generation according to the selected indicators
+// and 'selectedInd' is passed in as a string array of currently selected indicators
+export function formatChartLegends(selectedInd, type) {
+  const chartKeys = [];
+
+  let colors = [];
+
+  switch (type) {
+    case chartTypes.lineChart:
+      colors = chartColors.lineChartColors;
+      break;
+    case chartTypes.donutChart:
+      colors = chartColors.donutChartColors;
+      break;
+    default:
+      colors = [];
+  }
 
   let colorInd = 0;
-  indicators.forEach((indicator, index) => {
-    const indicatorItem = [];
-    if (indicator.length > 0) {
-      const existInd = findIndex(indicatorData, existing => {
-        return indicator[0].indicatorName === existing.id;
+  selectedInd.forEach((indName, index) => {
+    // this if is here so we dont push 'undefined' as a key
+    if (indName) {
+      let key = indName;
+
+      if (findIndex(chartKeys, ['name', indName]) !== -1)
+        key = indName.concat(` (${index})`);
+
+      chartKeys.push({
+        name: key,
+        color: colors[colorInd],
+        orientation: 'left'
       });
 
-      let id = indicator[0].indicatorName;
+      if (colorInd + 1 < colors.length) colorInd += 1;
+    }
+  });
+
+  return chartKeys;
+}
+
+// *this is also formating the linechart by geolocation
+export function formatLineData(indicators) {
+  const indicatorData = [];
+  const indicatorNames = [];
+
+  indicators.forEach((indicator, index) => {
+    if (indicator.length > 0) {
+      const existInd = indicatorNames.indexOf(indicator[0].indicatorName);
+
+      let indName = indicator[0].indicatorName;
 
       // so we need this logic for when a person would
       // plot two indicators with the same name
       // as the id needs to be unique, we just add
       // the index as a suffix
-      if (existInd !== -1) id = id.concat(` (${index})`);
+      if (existInd !== -1) indName = indName.concat(` (${index})`);
 
-      indicatorData.push({
-        id,
-        color: lineChartColors[colorInd],
-        data: []
-      });
+      indicatorNames.push(indName);
 
       indicator.forEach(indItem => {
         // yeah and cause we might receive data with the same geolocation name
         // we add in the values for that geolocation so it wouldn't be repeated over and over
-        const existItemInd = findIndex(indicatorItem.data, existing => {
+        const existItemInd = findIndex(indicatorData, existing => {
           return indItem.geolocationTag === existing.geoName;
         });
 
         if (existItemInd === -1)
-          indicatorItem.push({
+          indicatorData.push({
             geoName: indItem.geolocationTag,
-            x:
-              indItem.geolocationIso2.length > 0
+            geolocation:
+              indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
                 ? indItem.geolocationIso2
                 : indItem.geolocationTag,
-            y: Math.round(indItem.value)
+            [indName]: Math.round(indItem.value)
           });
-        else indicatorItem[existItemInd].y += Math.round(indItem.value);
+        else if (indicatorData[existItemInd][indName] !== undefined)
+          indicatorData[existItemInd][indName] += Math.round(indItem.value);
+        else indicatorData[existItemInd][indName] = Math.round(indItem.value);
       });
-
-      if (colorInd + 1 < lineChartColors.length) colorInd += 1;
-
-      indicatorData[index].data = indicatorItem;
     }
   });
 
@@ -385,7 +404,8 @@ export function formatLineData(indicators) {
 // keys for certain types of charts(like bar chart)
 // according to the selected indicator
 // array passed into it
-export function formatKeys(selectedInd) {
+// *this is also formating the barchart by geolocation
+export function formatBarChartKeys(selectedInd) {
   const chartKeys = [];
 
   selectedInd.forEach((indName, index) => {
@@ -411,8 +431,6 @@ export function formatBarData(indicators) {
   indicators.map((indicator, index) => {
     if (indicator.length > 0) {
       const existInd = barChartKeys.indexOf(indicator[0].indicatorName);
-      console.log('INDICATOR');
-      console.log(indicator);
       let indName = indicator[0].indicatorName;
 
       // so we need this logic for when a person would
@@ -422,9 +440,6 @@ export function formatBarData(indicators) {
       if (existInd !== -1) indName = indName.concat(` (${index})`);
 
       barChartKeys.push(indName);
-
-      console.log('BARCHARTKEY');
-      console.log(barChartKeys);
 
       indicator.forEach(indItem => {
         // yeah and cause we might receive data with the same geolocation name
@@ -438,23 +453,23 @@ export function formatBarData(indicators) {
             geoName: indItem.geolocationTag,
 
             geolocation:
-              indItem.geolocationIso2.length > 0
+              indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
                 ? indItem.geolocationIso2.toUpperCase()
                 : indItem.geolocationTag,
 
             [indName]: Math.round(indItem.value),
-            [`${indName}Color`]: barChartColors[colorInd]
+            [`${indName}Color`]: chartColors.barChartColors[colorInd]
           });
         else if (barChartData[existItemInd][indName] !== undefined)
           barChartData[existItemInd][indName] += Math.round(indItem.value);
         else {
           barChartData[existItemInd][indName] = Math.round(indItem.value);
           barChartData[existItemInd][`${indName}Color`] =
-            barChartColors[colorInd];
+            chartColors.barChartColors[colorInd];
         }
       });
 
-      if (colorInd + 1 < lineChartColors.length) colorInd += 1;
+      if (colorInd + 1 < chartColors.barChartColors.length) colorInd += 1;
     }
   });
 
@@ -519,4 +534,40 @@ export function formatTableData(indicators) {
     columns: tableChartColumns,
     rows: tableChartData
   };
+}
+
+export function formatDonutData(indicators) {
+  const chartData = [];
+  indicators.map((indicator, indIndex) => {
+    indicator.map(indItem => {
+      if (chartData[indIndex] === undefined) {
+        const colorInd =
+          indIndex < chartColors.donutChartColors.length
+            ? indIndex
+            : chartColors.donutChartColors.length - 1;
+
+        chartData.push({
+          id: indItem.indicatorName,
+          label: indItem.indicatorName,
+          value: indItem.value,
+          color: chartColors.donutChartColors[colorInd]
+        });
+      } else chartData[indIndex].value += indItem.value;
+    });
+  });
+
+  return chartData;
+}
+
+export function getChartKeys(chartType, indicators) {
+  switch (chartType) {
+    case chartTypes.lineChart:
+      return formatChartLegends(indicators, chartTypes.lineChart);
+    case chartTypes.barChart:
+      return formatBarChartKeys(indicators);
+    case chartTypes.donutChart:
+      return formatChartLegends(indicators, chartTypes.donutChart);
+    default:
+      return [];
+  }
 }

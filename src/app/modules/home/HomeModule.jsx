@@ -58,9 +58,9 @@ export class HomeModule extends Component {
     const { indicators, ...otherProps } = this.props;
 
     const paneContVis =
-      this.props.dataPaneOpen === paneTypes.none ? 'none' : 'unset';
+      this.props.dataPaneOpen === paneTypes.none ? 'none' : 'block';
     const explorePaneVis =
-      this.props.dataPaneOpen === paneTypes.pubPane ? 'unset' : 'none';
+      this.props.dataPaneOpen === paneTypes.pubPane ? 'block' : 'none';
 
     return (
       <React.Fragment>
@@ -92,7 +92,9 @@ export class HomeModule extends Component {
             <ExplorePanelMediator display={explorePaneVis} {...otherProps} />
             {(this.props.dataPaneOpen === paneTypes.privPane ||
               this.props.dataPaneOpen === paneTypes.createChart ||
-              this.props.dataPaneOpen === paneTypes.convertData) && <NavPane />}
+              this.props.dataPaneOpen === paneTypes.convertData) && (
+              <NavPane auth0Client={this.props.auth0Client} />
+            )}
           </DataPaneContainer>
         </ModuleContainer>
       </React.Fragment>

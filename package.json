@@ -233,9 +233,11 @@
     "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.3.1",
+    "webpack-lighthouse-plugin": "^1.0.5",
     "webpack-manifest-plugin": "2.0.4",
     "webpack-merge": "^4.2.1",
     "webpack-visualizer-plugin": "^0.1.11",
+    "webpackbar": "^3.1.5",
     "workbox-webpack-plugin": "4.2.0"
   },
   "importSort": {

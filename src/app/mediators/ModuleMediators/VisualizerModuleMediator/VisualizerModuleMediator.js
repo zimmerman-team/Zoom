@@ -69,6 +69,7 @@ const propTypes = {
       )
     })
   }),
+  publicChart: PropTypes.shape({}),
   chartResults: PropTypes.shape({}),
   chartData: PropTypes.shape({}),
   user: PropTypes.shape({}),
@@ -102,6 +103,7 @@ const defaultProps = {
   dropDownData: {},
   publicPage: false,
   chartResults: {},
+  publicChart: {},
   auth0Client: {},
   chartData: {},
   user: {},
@@ -122,6 +124,8 @@ class VisualizerModuleMediator extends Component {
     this.refetch = this.refetch.bind(this);
     this.selectYear = this.selectYear.bind(this);
     this.saveViewport = this.saveViewport.bind(this);
+    this.loadChartData = this.loadChartData.bind(this);
+    this.storeChartToRedux = this.storeChartToRedux.bind(this);
   }
 
   componentDidMount() {
@@ -131,21 +135,13 @@ class VisualizerModuleMediator extends Component {
     // we also want to reset the previously created/updated chart
     this.props.dispatch(nodeActions.createUpdateChartInitial());
 
-    if (this.props.match.params.code !== 'vizID') {
-      if (this.props.user)
-        this.setState(
-          {
-            loading: true
-          },
-          () =>
-            this.props.dispatch(
-              nodeActions.getChartRequest({
-                authId: this.props.user.authId,
-                chartId: this.props.match.params.code
-              })
-            )
-        );
-    }
+    if (this.props.match.params.code !== 'vizID')
+      this.setState(
+        {
+          loading: true
+        },
+        this.loadChartData
+      );
     // and we store this so it would be accessible to the visualizer mediator
     else
       this.props.dispatch(
@@ -157,14 +153,7 @@ class VisualizerModuleMediator extends Component {
 
   componentDidUpdate(prevProps) {
     if (!isEqual(this.props.user, prevProps.user) && this.props.user) {
-      if (this.props.match.params.code !== 'vizID') {
-        this.props.dispatch(
-          nodeActions.getChartRequest({
-            authId: this.props.user.authId,
-            chartId: this.props.match.params.code
-          })
-        );
-      }
+      this.loadChartData();
     }
 
     if (
@@ -180,75 +169,8 @@ class VisualizerModuleMediator extends Component {
     if (
       !isEqual(this.props.chartResults, prevProps.chartResults) &&
       this.props.chartResults
-    ) {
-      const {
-        _id,
-        name,
-        selectedYear,
-        indicatorItems,
-        selectedCountryVal,
-        description,
-        selectedRegionVal,
-        type,
-        selectedSources,
-        author,
-        dataSources,
-        _public,
-        team,
-        descIntro,
-        data,
-        specOptions,
-        created,
-        yearRange
-      } = this.props.chartResults;
-
-      // we load up the redux chartData variable
-      this.props.dispatch(
-        actions.storeChartDataRequest({
-          changesMade: false,
-          chartMounted: true,
-          name,
-          _public,
-          team: team.length > 0,
-          indicators: data,
-          chartId: _id,
-          descIntro,
-          selectedYear,
-          // TODO this will need to be redone after we implement the logic for infinite amounts of indicators
-          selectedInd1: indicatorItems[0].indicator,
-          selectedInd2: indicatorItems[1].indicator,
-          selectedCountryVal,
-          desc: description,
-          selectedSubInd1: indicatorItems[0].subIndicators,
-          selectedSubInd2: indicatorItems[1].subIndicators,
-          dataSource1: dataSources[0],
-          dataSource2: dataSources[1],
-          authorName: author.username,
-          createdDate: formatDate(created),
-          selectedRegionVal: removeIds(selectedRegionVal),
-          chartKeys: getChartKeys(type, [
-            indicatorItems[0].indicator,
-            indicatorItems[1].indicator
-          ]),
-          specOptions
-        })
-      );
-
-      // we load up the redux paneData variable
-      this.props.dispatch(
-        actions.storePaneDataRequest({
-          chartType: type,
-          selectedSources,
-          subIndicators1: indicatorItems[0].allSubIndicators,
-          subIndicators2: indicatorItems[1].allSubIndicators,
-          yearRange
-        })
-      );
-
-      this.setState({
-        loading: false
-      });
-    }
+    )
+      this.storeChartToRedux();
 
     // TODO redo this check properly
     const {
@@ -468,6 +390,93 @@ class VisualizerModuleMediator extends Component {
         specOptions: viewPort
       })
     );
+  }
+
+  loadChartData() {
+    if (this.props.publicPage) {
+      this.props.dispatch(
+        nodeActions.getPublicChartRequest({
+          chartId: this.props.match.params.code
+        })
+      );
+    } else if (this.props.match.params.code !== 'vizID' && this.props.user) {
+      this.props.dispatch(
+        nodeActions.getChartRequest({
+          authId: this.props.user.authId,
+          chartId: this.props.match.params.code
+        })
+      );
+    }
+  }
+
+  storeChartToRedux(results) {
+    const {
+      _id,
+      name,
+      selectedYear,
+      indicatorItems,
+      selectedCountryVal,
+      description,
+      selectedRegionVal,
+      type,
+      selectedSources,
+      author,
+      dataSources,
+      _public,
+      team,
+      descIntro,
+      data,
+      specOptions,
+      created,
+      yearRange
+    } = this.props.chartResults;
+
+    // we load up the redux chartData variable
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        changesMade: false,
+        chartMounted: true,
+        name,
+        _public,
+        team: team.length > 0,
+        indicators: data,
+        chartId: _id,
+        descIntro,
+        selectedYear,
+        // TODO this will need to be redone after we implement the logic for infinite amounts of indicators
+        selectedInd1: indicatorItems[0].indicator,
+        selectedInd2: indicatorItems[1].indicator,
+        selectedCountryVal,
+        desc: description,
+        selectedSubInd1: indicatorItems[0].subIndicators,
+        selectedSubInd2: indicatorItems[1].subIndicators,
+        dataSource1: dataSources[0],
+        dataSource2: dataSources[1],
+        authorName: author.username,
+        createdDate: formatDate(created),
+        selectedRegionVal: removeIds(selectedRegionVal),
+        chartKeys: getChartKeys(type, [
+          indicatorItems[0].indicator,
+          indicatorItems[1].indicator
+        ]),
+        specOptions
+      })
+    );
+
+    // we load up the redux paneData variable
+    this.props.dispatch(
+      actions.storePaneDataRequest({
+        chartType: type,
+        selectedSources,
+        subIndicators1: indicatorItems[0].allSubIndicators,
+        subIndicators2: indicatorItems[1].allSubIndicators,
+        yearRange
+      })
+    );
+
+    this.setState({
+      loading: false
+    });
   }
 
   render() {

@@ -355,6 +355,22 @@ export function getChartFailed(error) {
   };
 }
 
+export const GET_PUBLIC_CHART_INITIAL = 'GET_PUBLIC_CHART_INITIAL';
+export const GET_PUBLIC_CHART_REQUEST = 'GET_PUBLIC_CHART_REQUEST';
+
+export function getPublicChartInitial() {
+  return {
+    type: GET_PUBLIC_CHART_INITIAL
+  };
+}
+
+export function getPublicChartRequest(values) {
+  return {
+    type: GET_PUBLIC_CHART_REQUEST,
+    values
+  };
+}
+
 export const GET_USER_CHARTS_INITIAL = 'GET_USER_CHARTS_INITIAL';
 export const GET_USER_CHARTS_REQUEST = 'GET_USER_CHARTS_REQUEST';
 export const GET_USER_CHARTS_SUCCESS = 'GET_USER_CHARTS_SUCCESS';

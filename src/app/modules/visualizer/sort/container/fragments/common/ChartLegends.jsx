@@ -22,14 +22,8 @@ const ComponentBase = styled.div`
 const propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
-      color: PropTypes.string,
-      data: PropTypes.arrayOf(
-        PropTypes.shape({
-          x: PropTypes.string,
-          y: PropTypes.number
-        })
-      )
+      name: PropTypes.string,
+      color: PropTypes.string
     })
   )
 };
@@ -41,11 +35,11 @@ const defaultProps = {
 const ChartLegends = props => {
   return (
     <ComponentBase>
-      {props.data.map((indicator, index) => {
+      {props.data.map(indicator => {
         return (
           <ChartLegendItem
             color={indicator.color}
-            text={indicator.id}
+            text={indicator.name}
             data-cy="linechart-legenditem-text"
           />
         );

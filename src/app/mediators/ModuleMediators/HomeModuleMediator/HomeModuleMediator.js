@@ -9,7 +9,6 @@ import {
   updatePercentiles,
   formatLongLatData
 } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
-import { formatYearParam } from 'utils/genericUtils';
 import HomeModule from 'modules/home/HomeModule';
 import PropTypes from 'prop-types';
 
@@ -236,7 +235,7 @@ class HomeModuleMediator extends Component {
       indicators.push({
         type: 'location',
         data: longLatData,
-        legendName: `POI`
+        legendName: `POI: ${longLatData[0].indName}`
       });
     }
 
@@ -507,6 +506,7 @@ class HomeModuleMediator extends Component {
         selectedCountryLabel={this.state.selectedCountryLabel}
         resetAll={this.resetAll}
         selectedYear={this.state.selectedYear}
+        auth0Client={this.props.auth0Client}
       />
     );
   }
@@ -543,6 +543,7 @@ export default createRefetchContainer(
           "date"
           "geolocationType"
           "geolocationIso2"
+          "comment"
           "geolocationPolygons"
           "valueFormatType"
         ]
@@ -556,6 +557,7 @@ export default createRefetchContainer(
       ) {
         indicatorName
         geolocationIso2
+        comment
         geolocationTag
         geolocationType
         geolocationPolygons
@@ -570,6 +572,7 @@ export default createRefetchContainer(
           "date"
           "geolocationType"
           "geolocationIso2"
+          "comment"
           "geolocationCenterLongLat"
           "valueFormatType"
         ]
@@ -583,6 +586,7 @@ export default createRefetchContainer(
       ) {
         indicatorName
         geolocationIso2
+        comment
         geolocationTag
         geolocationType
         geolocationCenterLongLat

@@ -264,7 +264,8 @@ const ChartController = {
       dataSources,
       _public,
       data,
-      team,
+      teams,
+      specOptions,
       selectedCountryVal,
       selectedRegionVal
     } = req.body;
@@ -283,7 +284,7 @@ const ChartController = {
                   dataSources,
                   description,
                   _public,
-                  team,
+                  teams,
                   data,
                   descIntro,
 
@@ -298,7 +299,8 @@ const ChartController = {
 
                   selectedYear,
                   selectedCountryVal,
-                  selectedRegionVal
+                  selectedRegionVal,
+                  specOptions
                 });
 
                 chartz.save(err => {
@@ -330,7 +332,7 @@ const ChartController = {
                 // so the type of chart
                 chart.type = type;
                 chart._public = _public;
-                chart.team = team;
+                chart.teams = teams;
 
                 /* indicators/ sub-indicators of chart */
                 chart.indicatorItems = indicatorItems;
@@ -341,6 +343,7 @@ const ChartController = {
                 chart.selectedYear = selectedYear;
                 chart.selectedCountryVal = selectedCountryVal;
                 chart.selectedRegionVal = selectedRegionVal;
+                chart.specOptions = specOptions;
 
                 chart.save(err => {
                   if (err) general.handleError(res, err);

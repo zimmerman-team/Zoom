@@ -8,10 +8,13 @@ import {
   formatCountryParam,
   formatDate,
   formatGeoData,
-  formatKeys,
+  formatBarChartKeys,
   formatLineData,
+  removeIds,
+  formatChartLegends,
   formatTableData,
-  removeIds
+  formatDonutData,
+  getChartKeys
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 import PropTypes from 'prop-types';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
@@ -113,13 +116,12 @@ class VisualizerModuleMediator extends Component {
       loading: false,
       selectedYear: this.props.chartData.selectedYear
         ? this.props.chartData.selectedYear
-        : initialState.yearPeriod[0],
-      chartKeys: [],
-      indicators: []
+        : initialState.yearPeriod[0]
     };
 
     this.refetch = this.refetch.bind(this);
     this.selectYear = this.selectYear.bind(this);
+    this.saveViewport = this.saveViewport.bind(this);
   }
 
   componentDidMount() {
@@ -195,6 +197,7 @@ class VisualizerModuleMediator extends Component {
         team,
         descIntro,
         data,
+        specOptions,
         created,
         yearRange
       } = this.props.chartResults;
@@ -222,7 +225,12 @@ class VisualizerModuleMediator extends Component {
           dataSource2: dataSources[1],
           authorName: author.username,
           createdDate: formatDate(created),
-          selectedRegionVal: removeIds(selectedRegionVal)
+          selectedRegionVal: removeIds(selectedRegionVal),
+          chartKeys: getChartKeys(type, [
+            indicatorItems[0].indicator,
+            indicatorItems[1].indicator
+          ]),
+          specOptions
         })
       );
 
@@ -238,11 +246,7 @@ class VisualizerModuleMediator extends Component {
       );
 
       this.setState({
-        loading: false,
-        chartKeys: formatKeys([
-          indicatorItems[0].indicator,
-          indicatorItems[1].indicator
-        ])
+        loading: false
       });
     }
 
@@ -253,6 +257,8 @@ class VisualizerModuleMediator extends Component {
       descIntro,
       _public,
       team,
+      specOptions,
+      chartKeys,
       ...restChart
     } = this.props.chartData;
     const {
@@ -261,6 +267,8 @@ class VisualizerModuleMediator extends Component {
       descIntro: prevDescIntro,
       _public: prevPublc,
       team: prevTeam,
+      specOptions: prevSpecOptions,
+      chartKeys: prevchartKeys,
       ...prevRestChart
     } = prevProps.chartData;
     // so we refetch data when chartData changes
@@ -339,6 +347,13 @@ class VisualizerModuleMediator extends Component {
         );
         break;
       case chartTypes.lineChart:
+        chartKeys = formatChartLegends(
+          [
+            this.props.chartData.selectedInd1,
+            this.props.chartData.selectedInd2
+          ],
+          chartTypes.lineChart
+        );
         indicators = formatLineData([
           this.props.indicatorAggregations.indicators1,
           this.props.indicatorAggregations.indicators2
@@ -349,7 +364,7 @@ class VisualizerModuleMediator extends Component {
           this.props.indicatorAggregations.indicators1,
           this.props.indicatorAggregations.indicators2
         ]);
-        chartKeys = formatKeys([
+        chartKeys = formatBarChartKeys([
           this.props.chartData.selectedInd1,
           this.props.chartData.selectedInd2
         ]);
@@ -359,6 +374,19 @@ class VisualizerModuleMediator extends Component {
           this.props.indicatorAggregations.indicators1,
           this.props.indicatorAggregations.indicators2
         ]);
+        break;
+      case chartTypes.donutChart:
+        indicators = formatDonutData([
+          this.props.indicatorAggregations.indicators1,
+          this.props.indicatorAggregations.indicators2
+        ]);
+        chartKeys = formatChartLegends(
+          [
+            this.props.chartData.selectedInd1,
+            this.props.chartData.selectedInd2
+          ],
+          chartTypes.donutChart
+        );
         break;
       default:
         indicators = [];
@@ -376,11 +404,10 @@ class VisualizerModuleMediator extends Component {
     // and we save the chart data
     this.props.dispatch(
       actions.storeChartDataRequest({
+        chartKeys,
         indicators
       })
     );
-
-    this.setState({ indicators, chartKeys });
   }
 
   refetch(
@@ -435,10 +462,19 @@ class VisualizerModuleMediator extends Component {
     );
   }
 
+  saveViewport(viewPort) {
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        specOptions: viewPort
+      })
+    );
+  }
+
   render() {
     return (
       <VisualizerModule
-        chartKeys={this.state.chartKeys}
+        saveViewport={this.saveViewport}
+        chartKeys={this.props.chartData.chartKeys}
         publicPage={this.props.publicPage}
         outerHistory={this.props.history}
         chartType={this.props.paneData.chartType}
@@ -489,6 +525,7 @@ export default createRefetchContainer(
           "date"
           "geolocationType"
           "geolocationIso2"
+          "comment"
           "geolocationPolygons"
           "valueFormatType"
         ]
@@ -502,6 +539,7 @@ export default createRefetchContainer(
       ) {
         indicatorName
         geolocationIso2
+        comment
         geolocationTag
         geolocationType
         geolocationPolygons
@@ -516,6 +554,7 @@ export default createRefetchContainer(
           "date"
           "geolocationType"
           "geolocationIso2"
+          "comment"
           "geolocationCenterLongLat"
           "valueFormatType"
         ]
@@ -529,6 +568,7 @@ export default createRefetchContainer(
       ) {
         indicatorName
         geolocationIso2
+        comment
         geolocationTag
         geolocationType
         geolocationCenterLongLat

@@ -100,7 +100,7 @@ export class AppBar extends React.Component {
         authId: profile.sub,
         dataSources,
         _public: this.props.chartData._public,
-        team: this.props.chartData.team ? this.props.user.data.team : '',
+        teams: this.props.chartData.team ? this.props.user.data.teams : '',
         chartId: this.props.chartData.chartId,
         name: this.props.chartData.name,
         description: this.props.chartData.desc,
@@ -137,7 +137,8 @@ export class AppBar extends React.Component {
         yearRange: this.props.paneData.yearRange,
         selectedYear: this.props.chartData.selectedYear,
         selectedCountryVal: this.props.chartData.selectedCountryVal,
-        selectedRegionVal: this.props.chartData.selectedRegionVal
+        selectedRegionVal: this.props.chartData.selectedRegionVal,
+        specOptions: this.props.chartData.specOptions
       };
 
       this.props.dispatch(nodeActions.createUpdateChartRequest(chartData));

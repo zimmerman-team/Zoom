@@ -70,7 +70,7 @@ class EditTeamMediator extends React.Component {
       allUsers: result.allUsers,
       paginatedUsers: result.paginatedUsers,
       totalPages: initialLoad
-        ? Math.ceil(data.total / 10)
+        ? Math.ceil(data.users.length / 10)
         : prevState.totalPages
     }));
   };

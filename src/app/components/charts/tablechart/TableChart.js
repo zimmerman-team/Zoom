@@ -14,7 +14,8 @@ const options = {
   filter: true,
   filterType: 'dropdown',
   responsive: 'scroll',
-  fixedHeader: true
+  fixedHeader: true,
+  rowsPerPage: 100,
 };
 
 const propTypes = {

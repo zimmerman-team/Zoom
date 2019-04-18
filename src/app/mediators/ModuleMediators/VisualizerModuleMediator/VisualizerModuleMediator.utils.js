@@ -477,14 +477,20 @@ export function formatBarData(indicators) {
 }
 
 export function formatTableData(indicators) {
-  const tableChartData = [];
   const tableChartColumns = [];
-  const tableChartKeys = [];
-  let tableTitle = '';
+  tableChartColumns.push(
+    { name: `Geolocation` },
+    { name: 'Date' },
+    { name: `Measure Value` },
+    { name: 'Indicator' },
+    { name: 'Unit of measure' },
+    { name: 'ISO2 codes' },
+  );
 
-  console.log(indicators);
+  const tableChartData = [];
 
   indicators.map((indicator, index) => {
+    const tableChartKeys = [];
     if (indicator.length > 0) {
       const existInd = tableChartKeys.indexOf(indicator[0].indicatorName);
 
@@ -495,15 +501,7 @@ export function formatTableData(indicators) {
       // as the id needs to be unique, we just add
       // the index as a suffix
       if (existInd !== -1) indName = indName.concat(` (${index})`);
-
       tableChartKeys.push(indName);
-      tableChartColumns.push(
-        { name: `Geolocation (${indicator[0].geolocationType})` },
-        { name: 'ISO2 codes' },
-        { name: `${indicator[0].valueFormatType}` },
-        { name: 'date' }
-      );
-      tableTitle = indicator[0].indicatorName;
 
       indicator.forEach(indItem => {
         // yeah and cause we might receive data with the same geolocation name
@@ -514,25 +512,31 @@ export function formatTableData(indicators) {
         if (existItemInd === -1) {
 
           tableChartData.push([
-            //Geo
+            //Geolocation
             indItem.geolocationTag === null || indItem.geolocationTag.length <= 0
               ? "N/A"
               : indItem.geolocationTag,
 
-            //iso2
-            indItem.geolocationIso2 === null || indItem.geolocationIso2.length <= 0
+            //Date
+            indItem.date === null || indItem.date.length <= 0
               ? "N/A"
-              : indItem.geolocationIso2.toUpperCase(),
+              : indItem.date,
 
-            //value
+            //Measure Value
             indItem.value === null
               ? "N/A"
               : Math.round(indItem.value),
 
-            //date
-            indItem.date === null || indItem.date.length <= 0
+            //Indicator
+            indItem.indicatorName,
+
+            //Unit of measure
+            indItem.valueFormatType,
+
+            //ISO2 codes
+            indItem.geolocationIso2 === null || indItem.geolocationIso2.length <= 0
               ? "N/A"
-              : indItem.date,
+              : indItem.geolocationIso2.toUpperCase(),
 
           ]);
         } else if (tableChartData[existItemInd][indName] !== undefined)
@@ -544,10 +548,10 @@ export function formatTableData(indicators) {
     }
   });
   return {
-    title: tableTitle,
+    title: "",
     columns: tableChartColumns,
     rows: tableChartData
-  };
+  }
 }
 
 export function formatDonutData(indicators) {

@@ -507,6 +507,7 @@ class HomeModuleMediator extends Component {
         selectedCountryLabel={this.state.selectedCountryLabel}
         resetAll={this.resetAll}
         selectedYear={this.state.selectedYear}
+        auth0Client={this.props.auth0Client}
       />
     );
   }

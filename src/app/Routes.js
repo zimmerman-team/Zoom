@@ -64,8 +64,10 @@ const DashboardMediator = lazy(() =>
 
 // Routes
 const Routes = props => {
-  console.log(props.auth0Client);
-  // console.log(props.auth0Client.getUserRole());
+  // console.log(props.auth0Client);
+  // console.log(props.auth0Client.getUserRole(this));
+
+  props.auth0Client.getUserRole().then(role => console.log(role));
   return (
     <React.Fragment>
       <Suspense fallback={<PageLoader />}>

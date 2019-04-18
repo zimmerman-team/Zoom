@@ -25,23 +25,16 @@ import {
 } from './NavPane.style';
 
 class NavPane extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      pane: props.dataPaneOpen
-    };
-
-    this.renderPaneItems = this.renderPaneItems.bind(this);
-    this.clickStartPaneItem = this.clickStartPaneItem.bind(this);
-  }
+  state = {
+    pane: this.props.dataPaneOpen
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.dataPaneOpen !== prevProps.dataPaneOpen)
       this.setState({ pane: this.props.dataPaneOpen });
   }
 
-  clickStartPaneItem(item) {
+  clickStartPaneItem = item => {
     this.props.dispatch(actions.dataPaneToggleRequest(item.navTo));
     // so basically we will have some different logic for the
     // 'explore data' section when the user is in their dashboard
@@ -52,10 +45,11 @@ class NavPane extends React.Component {
       item.navTo === paneTypes.pubPane
     )
       this.props.history.push('/home');
-  }
+  };
 
-  renderPaneItems() {
-    if (this.state.pane === paneTypes.privPane)
+  /* @amtmolecule todo: re-assess logic in this component, seems somewhat convoluted */
+  renderPaneItems = () => {
+    if (this.state.pane === paneTypes.privPane) {
       return startItems.map((item, index) => {
         const datacy = `nav-pane-item-${index}`;
 
@@ -82,6 +76,7 @@ class NavPane extends React.Component {
           </NavPaneItem>
         );
       });
+    }
 
     const data =
       this.state.pane === paneTypes.createChart
@@ -99,7 +94,7 @@ class NavPane extends React.Component {
         </NavPaneItem>
       );
     });
-  }
+  };
 
   render() {
     return <ComponentBase>{this.renderPaneItems()}</ComponentBase>;

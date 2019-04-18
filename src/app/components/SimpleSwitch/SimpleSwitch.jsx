@@ -14,7 +14,7 @@ import theme from 'theme/Theme';
  */
 
 const ComponentBase = styled.div`
-  width: 175px;
+  width: 100%;
   height: 20px;
   overflow: hidden;
   display: flex;
@@ -108,21 +108,26 @@ const ZimSwitch = styled(props => <Switch disableRipple {...props} />)`
 
 const propTypes = {
   classes: PropTypes.object,
+  onSwitch: PropTypes.func,
+  defaultCheck: PropTypes.bool,
   option1: PropTypes.string,
   option2: PropTypes.string
 };
 const defaultProps = {
   option1: 'empty 1',
+  defaultCheck: false,
+  onSwitch: null,
   option2: 'empty 2'
 };
 
 class SimpleSwitch extends React.Component {
   state = {
-    checked: true
+    checked: this.props.defaultCheck
   };
 
   handleChange = name => event => {
     this.setState({ [name]: event.target.checked });
+    this.props.onSwitch && this.props.onSwitch(event.target.checked);
   };
 
   render() {
@@ -138,7 +143,7 @@ class SimpleSwitch extends React.Component {
             iconChecked: classes.iOSIconChecked,
             checked: classes.iOSChecked
           }}
-          checked={this.state.checkedB}
+          checked={this.state.checked}
           onChange={this.handleChange('checked')}
           value="checked"
         />

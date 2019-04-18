@@ -9,7 +9,6 @@ import {
   updatePercentiles,
   formatLongLatData
 } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
-import { formatYearParam } from 'utils/genericUtils';
 import HomeModule from 'modules/home/HomeModule';
 import PropTypes from 'prop-types';
 

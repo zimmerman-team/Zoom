@@ -2,9 +2,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import SimpleSelect from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/SimpleSelect/SimpleSelect';
-import SimpleSwitch from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/SimpleSwitch/SimpleSwitch';
+import SimpleSwitch from 'components/SimpleSwitch/SimpleSwitch';
 
-import SimpleCheckbox from 'components/Checkbox/CheckBox';
 import ColorSelect from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/ColorSelect/ColorSelect';
 
 /**

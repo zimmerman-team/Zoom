@@ -44,11 +44,31 @@ const data = {
     'coverage of people receiving art'
   ],
   lineChartInd: [
-    { name: 'new hiv infections', color: 'hsl(172, 70%, 50%)' },
-    { name: 'aids-related deaths', color: 'hsl(91, 70%, 50%)' },
-    { name: 'people living with hiv', color: 'hsl(313, 70%, 50%)' },
-    { name: 'children living with hiv', color: 'hsl(221, 70%, 50%)' },
-    { name: 'coverage of people receiving art', color: 'hsl(48, 70%, 50%)' }
+    {
+      name: 'new hiv infections',
+      color: 'hsl(172, 70%, 50%)',
+      orientation: 'left'
+    },
+    {
+      name: 'aids-related deaths',
+      color: 'hsl(91, 70%, 50%)',
+      orientation: 'left'
+    },
+    {
+      name: 'people living with hiv',
+      color: 'hsl(313, 70%, 50%)',
+      orientation: 'right'
+    },
+    {
+      name: 'children living with hiv',
+      color: 'hsl(221, 70%, 50%)',
+      orientation: 'right'
+    },
+    {
+      name: 'coverage of people receiving art',
+      color: 'hsl(48, 70%, 50%)',
+      orientation: 'right'
+    }
   ]
 };
 

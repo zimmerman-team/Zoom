@@ -344,7 +344,8 @@ export function formatChartLegends(selectedInd, type) {
 
       chartKeys.push({
         name: key,
-        color: colors[colorInd]
+        color: colors[colorInd],
+        orientation: 'left'
       });
 
       if (colorInd + 1 < colors.length) colorInd += 1;

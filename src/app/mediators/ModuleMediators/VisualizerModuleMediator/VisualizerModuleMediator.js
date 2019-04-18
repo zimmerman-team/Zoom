@@ -116,9 +116,7 @@ class VisualizerModuleMediator extends Component {
       loading: false,
       selectedYear: this.props.chartData.selectedYear
         ? this.props.chartData.selectedYear
-        : initialState.yearPeriod[0],
-      chartKeys: [],
-      indicators: []
+        : initialState.yearPeriod[0]
     };
 
     this.refetch = this.refetch.bind(this);
@@ -228,6 +226,10 @@ class VisualizerModuleMediator extends Component {
           authorName: author.username,
           createdDate: formatDate(created),
           selectedRegionVal: removeIds(selectedRegionVal),
+          chartKeys: getChartKeys(type, [
+            indicatorItems[0].indicator,
+            indicatorItems[1].indicator
+          ]),
           specOptions
         })
       );
@@ -244,11 +246,7 @@ class VisualizerModuleMediator extends Component {
       );
 
       this.setState({
-        loading: false,
-        chartKeys: getChartKeys(type, [
-          indicatorItems[0].indicator,
-          indicatorItems[1].indicator
-        ])
+        loading: false
       });
     }
 
@@ -260,6 +258,7 @@ class VisualizerModuleMediator extends Component {
       _public,
       team,
       specOptions,
+      chartKeys,
       ...restChart
     } = this.props.chartData;
     const {
@@ -269,6 +268,7 @@ class VisualizerModuleMediator extends Component {
       _public: prevPublc,
       team: prevTeam,
       specOptions: prevSpecOptions,
+      chartKeys: prevchartKeys,
       ...prevRestChart
     } = prevProps.chartData;
     // so we refetch data when chartData changes
@@ -404,11 +404,10 @@ class VisualizerModuleMediator extends Component {
     // and we save the chart data
     this.props.dispatch(
       actions.storeChartDataRequest({
+        chartKeys,
         indicators
       })
     );
-
-    this.setState({ indicators, chartKeys });
   }
 
   refetch(
@@ -475,7 +474,7 @@ class VisualizerModuleMediator extends Component {
     return (
       <VisualizerModule
         saveViewport={this.saveViewport}
-        chartKeys={this.state.chartKeys}
+        chartKeys={this.props.chartData.chartKeys}
         publicPage={this.props.publicPage}
         outerHistory={this.props.history}
         chartType={this.props.paneData.chartType}

@@ -41,7 +41,7 @@ const LineChart = ({ data, indicators, xAxisKey }) => {
           content={<TooltipContent xAxisKey={xAxisKey} />}
           cursor={{ stroke: 'grey', strokeWidth: 1 }}
         />
-        {indicators.map((indicator, index) => (
+        {indicators.map(indicator => (
           <Line
             type="monotone"
             strokeWidth={2}
@@ -60,7 +60,7 @@ const LineChart = ({ data, indicators, xAxisKey }) => {
             }}
             dataKey={indicator.name}
             stroke={indicator.color}
-            yAxisId={index > 1 ? 'right' : 'left'}
+            yAxisId={indicator.orientation}
           />
         ))}
       </ReLineChart>

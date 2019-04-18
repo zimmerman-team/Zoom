@@ -73,7 +73,7 @@ class DashboardMediator extends React.Component {
           this.props.user.authId,
           this.props.history,
           this.deleteChart,
-          this.duplicateChart
+          this.duplicateChart.bind(this)
         )
       });
     }
@@ -340,15 +340,6 @@ class DashboardMediator extends React.Component {
     );
   };
 
-  duplicateChart(chartId) {
-    this.props.dispatch(
-      actions.duplicateChartRequest({
-        authId: this.props.user.authId,
-        chartId
-      })
-    );
-  }
-
   deleteDataset = datasetId => {
     this.props.dispatch(
       actions.deleteDatasetRequest({
@@ -371,6 +362,15 @@ class DashboardMediator extends React.Component {
 
   handleFileDeleteError(error) {
     if (error) console.log('Error deleting file', error);
+  }
+
+  duplicateChart(chartId) {
+    this.props.dispatch(
+      actions.duplicateChartRequest({
+        authId: this.props.user.authId,
+        chartId
+      })
+    );
   }
 
   render() {

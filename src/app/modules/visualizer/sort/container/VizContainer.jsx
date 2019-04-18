@@ -71,6 +71,9 @@ class VizContainer extends React.Component {
         mode={
           this.state.preview || this.props.publicPage ? 'initial' : 'center'
         }
+        style={{
+          width: this.props.display ? 'calc(100vw - 320px)' : '100vw'
+        }}
       >
         <PreviewTextContainer
           mode={this.state.preview || this.props.publicPage ? 'flex' : 'none'}

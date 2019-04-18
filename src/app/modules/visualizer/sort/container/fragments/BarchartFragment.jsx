@@ -30,7 +30,8 @@ const ComponentBase = styled.div`
 `;
 
 const Box = styled.div`
-  width: 1024px;
+  width: 100%;
+  max-width: 1024px;
   height: 500px;
   outline: 1px solid gray;
 `;

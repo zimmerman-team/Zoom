@@ -484,7 +484,7 @@ export function formatTableData(indicators) {
     { name: `Measure Value` },
     { name: 'Indicator' },
     { name: 'Unit of measure' },
-    { name: 'ISO2 codes' },
+    { name: 'ISO2 codes' }
   );
 
   const tableChartData = [];
@@ -518,19 +518,18 @@ export function formatTableData(indicators) {
         if (existItemInd === -1) {
           tableChartData.push([
             //Geolocation
-            indItem.geolocationTag === null || indItem.geolocationTag.length <= 0
-              ? "N/A"
+            indItem.geolocationTag === null ||
+            indItem.geolocationTag.length <= 0
+              ? 'N/A'
               : indItem.geolocationTag,
 
             //Date
             indItem.date === null || indItem.date.length <= 0
-              ? "N/A"
+              ? 'N/A'
               : indItem.date,
 
             //Measure Value
-            indItem.value === null
-              ? "N/A"
-              : Math.round(indItem.value),
+            indItem.value === null ? 'N/A' : Math.round(indItem.value),
 
             //Indicator
             indItem.indicatorName,
@@ -539,10 +538,10 @@ export function formatTableData(indicators) {
             indItem.valueFormatType,
 
             //ISO2 codes
-            indItem.geolocationIso2 === null || indItem.geolocationIso2.length <= 0
-              ? "N/A"
-              : indItem.geolocationIso2.toUpperCase(),
-
+            indItem.geolocationIso2 === null ||
+            indItem.geolocationIso2.length <= 0
+              ? 'N/A'
+              : indItem.geolocationIso2.toUpperCase()
           ]);
         } else if (tableChartData[existItemInd][indName] !== undefined)
           tableChartData[existItemInd][indName] += Math.round(indItem.value);
@@ -556,10 +555,10 @@ export function formatTableData(indicators) {
     /* TODO: would be good to load in all the indicator names as the title
         as right now you're just loading in the last formated indicator name
         as the title*/
-    title: "",
+    title: '',
     columns: tableChartColumns,
     rows: tableChartData
-  }
+  };
 }
 
 export function formatDonutData(indicators) {

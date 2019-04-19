@@ -112,7 +112,7 @@ const ChartController = {
     res.json(chart);
   },
 
-  // gets one user or public chart
+  // gets one user chart
   get: (req, res) => {
     const { chartId, authId } = req.query;
 
@@ -120,79 +120,65 @@ const ChartController = {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
       else
-        Chart.findOne({
-          $or: [
-            { _id: chartId, author, archived: false },
-            { _id: chartId, _public: true, archived: false }
-          ]
-        })
+        Chart.findOne({ _id: chartId, author, archived: false })
           .populate('author')
           .exec((chartError, chart) => {
             if (chartError) general.handleError(res, chartError);
-            res.json(chart);
+            else if (!chart) general.handleError(res, 'chart not found', 404);
+            else res.json(chart);
           });
     });
   },
 
+  // gets one public chart
+  getOnePublic: (req, res) => {
+    const { chartId } = req.query;
+
+    Chart.findOne({ _id: chartId, _public: true, archived: false })
+      .populate('author')
+      .exec((chartError, chart) => {
+        if (chartError) general.handleError(res, chartError);
+        else if (!chart) general.handleError(res, 'chart not found', 404);
+        else res.json(chart);
+      });
+  },
+
   // this basically validates the user and gets all public charts
   getPublic: (req, res) => {
-    const { authId, sortBy, pageSize, page, searchTitle } = req.query;
-    User.findOne({ authId }).exec((userError, author) => {
-      if (userError) general.handleError(res, userError);
-      else if (!author) general.handleError(res, 'User not found', 404);
-      else {
-        Chart.countDocuments(
+    const { sortBy, pageSize, page, searchTitle } = req.query;
+    Chart.countDocuments(
+      {
+        _public: true,
+        archived: false,
+        name: { $regex: searchTitle, $options: 'i' }
+      },
+      (countError, count) => {
+        if (countError) general.handleError(res, countError);
+        const sort = utils.getDashboardSortBy(sortBy);
+        const pSize = parseInt(pageSize, 10);
+        const p = parseInt(page, 10);
+        Chart.find(
           {
             _public: true,
             archived: false,
             name: { $regex: searchTitle, $options: 'i' }
           },
-          (countError, count) => {
-            if (userError) general.handleError(res, countError);
-            const sort = utils.getDashboardSortBy(sortBy);
-            const pSize = parseInt(pageSize, 10);
-            const p = parseInt(page, 10);
-            Chart.find(
-              {
-                _public: true,
-                archived: false,
-                name: { $regex: searchTitle, $options: 'i' }
-              },
-              'created last_updated team type dataSources _id name _public'
-            )
-              .limit(pSize)
-              .skip(p * pSize)
-              .collation({ locale: 'en' })
-              .sort(sort)
-              .populate('author', 'username authId')
-              .exec((chartError, charts) => {
-                if (chartError) general.handleError(res, chartError);
-                res.json({
-                  count,
-                  charts
-                });
-              });
-          }
-        );
-      }
-    });
-  },
-
-  // this basically validates the user and gets all public charts
-  getOnePublic: function(req, res) {
-    const { chartId, authId } = req.query;
-    User.findOne({ authId }).exec(userError => {
-      if (userError) general.handleError(res, userError);
-      else
-        Chart.findOne(
-          { _id: chartId, _public: true },
-          'name',
-          (chartError, chart) => {
+          'created last_updated team type dataSources _id name _public'
+        )
+          .limit(pSize)
+          .skip(p * pSize)
+          .collation({ locale: 'en' })
+          .sort(sort)
+          .populate('author', 'username authId')
+          .exec((chartError, charts) => {
             if (chartError) general.handleError(res, chartError);
-            res.json(chart);
-          }
-        );
-    });
+            res.json({
+              count,
+              charts
+            });
+          });
+      }
+    );
   },
 
   // gets all user charts and team charts

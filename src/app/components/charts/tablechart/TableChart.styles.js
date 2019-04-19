@@ -31,7 +31,7 @@ const caption = {
 export default () =>
   createMuiTheme({
     overrides: {
-        MuiTypography: {
+      MuiTypography: {
         h6,
         subtitle1: body2,
         caption

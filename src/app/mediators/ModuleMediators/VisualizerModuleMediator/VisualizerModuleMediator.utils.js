@@ -486,36 +486,20 @@ export function formatTableData(indicators) {
     { name: 'Unit of measure' },
     { name: 'ISO2 codes' }
   );
-
   const tableChartData = [];
+  const tableChartKeys = [];
 
   indicators.map((indicator, index) => {
-    const tableChartKeys = [];
     if (indicator.length > 0) {
+
+      //Forming of the keys with its indicator name
       const existInd = tableChartKeys.indexOf(indicator[0].indicatorName);
-
       let indName = indicator[0].indicatorName;
-
-      // so we need this logic for when a person would
-      // plot two indicators with the same name
-      // as the id needs to be unique, we just add
-      // the index as a suffix
+      //If its the same indicator name add suffix to the key => [foo (0), foo (1)]
       if (existInd !== -1) indName = indName.concat(` (${index})`);
       tableChartKeys.push(indName);
 
       indicator.forEach(indItem => {
-        // yeah and cause we might receive data with the same geolocation name
-        // we add in the values for that geolocation so it wouldn't be repeated over and over
-        /* TODO: this 'existItemInd' logic should be removed entirely from this
-            formating function as it doesn't actually do anything
-            because of the way that the tableChartData is formed
-            and because i think(#Morty) the values shouldn't be added up
-            when shown in this table chart*/
-        const existItemInd = findIndex(tableChartData, existing => {
-          return indItem.geolocationTag === existing.geoName;
-        });
-
-        if (existItemInd === -1) {
           tableChartData.push([
             //Geolocation
             indItem.geolocationTag === null ||
@@ -543,19 +527,15 @@ export function formatTableData(indicators) {
               ? 'N/A'
               : indItem.geolocationIso2.toUpperCase()
           ]);
-        } else if (tableChartData[existItemInd][indName] !== undefined)
-          tableChartData[existItemInd][indName] += Math.round(indItem.value);
-        else {
-          tableChartData[existItemInd][indName] = Math.round(indItem.value);
-        }
       });
     }
   });
   return {
-    /* TODO: would be good to load in all the indicator names as the title
-        as right now you're just loading in the last formated indicator name
-        as the title*/
-    title: '',
+    //TODO: Do we still need this title with the indicatorNames in the table,
+    //      looks fugly when 2 long ind names are selected.
+    //      =>
+    //      if we don't need the title do we still need the keys?
+    title: tableChartKeys.join(', '),
     columns: tableChartColumns,
     rows: tableChartData
   };

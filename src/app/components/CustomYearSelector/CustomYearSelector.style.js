@@ -148,5 +148,6 @@ export const YearContainer = styled.div`
 `;
 
 export const VizYearContainer = styled.div`
- width: 100%
+ width: 100%;
+ padding-bottom: 32px;
 `;

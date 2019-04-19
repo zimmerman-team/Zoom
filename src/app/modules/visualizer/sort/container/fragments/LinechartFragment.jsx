@@ -12,7 +12,7 @@ import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector
 import LineChart from 'components/charts/recharts_linechart/LineChart';
 
 /* styles */
-import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
+import { FragmentBase } from '../VizContainer.style';
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
@@ -60,7 +60,7 @@ const defaultProps = {
 
 const LinechartFragment = props => {
   return (
-    <ComponentBase>
+    <FragmentBase>
       <Box>
         <LineChart
           indicators={props.indicators}
@@ -75,7 +75,7 @@ const LinechartFragment = props => {
       {/*selectYear={props.selectYear}*/}
       {/*/>*/}
       {/*</LineYearContainer>*/}
-    </ComponentBase>
+    </FragmentBase>
   );
 };
 

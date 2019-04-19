@@ -7,12 +7,12 @@ import styled from 'styled-components';
 import { chartColors } from '__consts__/ChartConst';
 
 /* styles */
-import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
 
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import { ResponsivePie } from '@nivo/pie';
+import { FragmentBase } from '../VizContainer.style';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -50,7 +50,7 @@ const defaultProps = {
 
 const DonutchartFragment = props => {
   return (
-    <ComponentBase>
+    <FragmentBase>
       <Box>
         <ResponsivePie
           animate
@@ -124,7 +124,7 @@ const DonutchartFragment = props => {
       {/*selectYear={props.selectYear}*/}
       {/*/>*/}
       {/*</LineYearContainer>*/}
-    </ComponentBase>
+    </FragmentBase>
   );
 };
 

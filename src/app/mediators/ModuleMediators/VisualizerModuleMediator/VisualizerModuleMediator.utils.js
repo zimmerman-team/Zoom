@@ -506,9 +506,15 @@ export function formatTableData(indicators) {
       indicator.forEach(indItem => {
         // yeah and cause we might receive data with the same geolocation name
         // we add in the values for that geolocation so it wouldn't be repeated over and over
+        /* TODO: this 'existItemInd' logic should be removed entirely from this
+            formating function as it doesn't actually do anything
+            because of the way that the tableChartData is formed
+            and because i think(#Morty) the values shouldn't be added up
+            when shown in this table chart*/
         const existItemInd = findIndex(tableChartData, existing => {
           return indItem.geolocationTag === existing.geoName;
         });
+
         if (existItemInd === -1) {
           tableChartData.push([
             //Geo
@@ -540,6 +546,9 @@ export function formatTableData(indicators) {
     }
   });
   return {
+    /* TODO: would be good to load in all the indicator names as the title
+        as right now you're just loading in the last formated indicator name
+        as the title*/
     title: tableTitle,
     columns: tableChartColumns,
     rows: tableChartData

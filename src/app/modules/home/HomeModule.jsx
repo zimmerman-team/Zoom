@@ -101,6 +101,8 @@ export class HomeModule extends Component {
             style={
               this.props.disableYear
                 ? { pointerEvents: 'none', opacity: '0.4' }
+                : {} && this.props.dataPaneOpen !== paneTypes.none
+                ? { width: 'calc(100% - 360px)' }
                 : {}
             }
           >

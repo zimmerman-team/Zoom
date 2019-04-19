@@ -143,7 +143,9 @@ export const YearContainer = styled.div`
   //fixme: When Nico's design gets implemented...
   width: calc(100% - 40px);
   bottom: 40px;
-  left: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  //left: 20px;
   //left: 1%;
 `;
 

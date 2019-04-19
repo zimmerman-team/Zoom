@@ -13,7 +13,12 @@ import TablechartFragment from 'modules/visualizer/sort/container/fragments/Tabl
 import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
 import DonutchartFragment from 'modules/visualizer/sort/container/fragments/DonutchartFragment';
 import CustomYearSelector from '../../../../components/CustomYearSelector/CustomYearSelector';
-import { VizYearContainer } from '../../../../components/CustomYearSelector/CustomYearSelector.style';
+import {
+  GeomapYearContainer,
+  VizYearContainer
+} from '../../../../components/CustomYearSelector/CustomYearSelector.style';
+import paneTypes from '../../../../__consts__/PaneTypesConst';
+// import { VizYearContainer } from '../../../../components/CustomYearSelector/CustomYearSelector.style';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -146,18 +151,36 @@ class VizContainer extends React.Component {
             mode={this.state.preview}
           />
 
-          <VizYearContainer
-            style={
-              this.props.disableYear
-                ? { pointerEvents: 'none', opacity: '0.4' }
-                : {}
-            }
-          >
-            <CustomYearSelector
-              selectedYear={this.props.selectedYear}
-              selectYear={this.props.selectYear}
-            />
-          </VizYearContainer>
+          {/*todo: Refactor i know you dont like this kinda stuff jim.*/}
+          {this.props.chartType === 'geomap' ? (
+            <GeomapYearContainer
+              style={
+                this.props.disableYear
+                  ? { pointerEvents: 'none', opacity: '0.4' }
+                  : {} && this.props.dataPaneOpen !== paneTypes.none
+                  ? { width: 'calc(100% - 360px)' }
+                  : {}
+              }
+            >
+              <CustomYearSelector
+                selectedYear={this.props.selectedYear}
+                selectYear={this.props.selectYear}
+              />
+            </GeomapYearContainer>
+          ) : (
+            <VizYearContainer
+              style={
+                this.props.disableYear
+                  ? { pointerEvents: 'none', opacity: '0.4' }
+                  : {}
+              }
+            >
+              <CustomYearSelector
+                selectedYear={this.props.selectedYear}
+                selectYear={this.props.selectYear}
+              />
+            </VizYearContainer>
+          )}
         </React.Fragment>
         <PreviewTextContainer mode={this.state.preview ? 'flex' : 'none'}>
           <ContextPreview

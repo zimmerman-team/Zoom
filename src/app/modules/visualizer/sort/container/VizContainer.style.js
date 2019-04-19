@@ -36,7 +36,7 @@ export const FragmentBase = styled.div`
   width: 100%;
   height: calc(100% - 32px);
   height: -moz-calc(100% - 32px);
-    height: -webkit-calc(100% - 32px);
+  height: -webkit-calc(100% - 32px);
  
   align-items: center;
   justify-content: center;

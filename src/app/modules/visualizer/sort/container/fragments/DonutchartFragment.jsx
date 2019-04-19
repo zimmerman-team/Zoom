@@ -118,12 +118,12 @@ const DonutchartFragment = props => {
         />
       </Box>
       <ChartLegends data={props.chartKeys} />
-      <LineYearContainer>
-        <CustomYearSelector
-          selectedYear={props.selectedYear}
-          selectYear={props.selectYear}
-        />
-      </LineYearContainer>
+      {/*<LineYearContainer>*/}
+      {/*<CustomYearSelector*/}
+      {/*selectedYear={props.selectedYear}*/}
+      {/*selectYear={props.selectYear}*/}
+      {/*/>*/}
+      {/*</LineYearContainer>*/}
     </ComponentBase>
   );
 };

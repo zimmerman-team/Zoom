@@ -127,12 +127,12 @@ const BarchartFragment = props => {
         />
       </Box>
       <ChartLegends />
-      <LineYearContainer>
-        <CustomYearSelector
-          selectedYear={props.selectedYear}
-          selectYear={props.selectYear}
-        />
-      </LineYearContainer>
+      {/*<LineYearContainer>*/}
+      {/*<CustomYearSelector*/}
+      {/*selectedYear={props.selectedYear}*/}
+      {/*selectYear={props.selectYear}*/}
+      {/*/>*/}
+      {/*</LineYearContainer>*/}
     </ComponentBase>
   );
 };

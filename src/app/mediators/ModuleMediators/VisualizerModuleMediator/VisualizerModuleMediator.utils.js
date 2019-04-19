@@ -482,8 +482,6 @@ export function formatTableData(indicators) {
   const tableChartKeys = [];
   let tableTitle = '';
 
-  console.log(indicators);
-
   indicators.map((indicator, index) => {
     if (indicator.length > 0) {
       const existInd = tableChartKeys.indexOf(indicator[0].indicatorName);

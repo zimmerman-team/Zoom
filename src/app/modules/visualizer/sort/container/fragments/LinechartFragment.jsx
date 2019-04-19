@@ -69,12 +69,12 @@ const LinechartFragment = props => {
         />
       </Box>
       <ChartLegends data={props.indicators} />
-      <LineYearContainer>
-        <CustomYearSelector
-          selectedYear={props.selectedYear}
-          selectYear={props.selectYear}
-        />
-      </LineYearContainer>
+      {/*<LineYearContainer>*/}
+      {/*<CustomYearSelector*/}
+      {/*selectedYear={props.selectedYear}*/}
+      {/*selectYear={props.selectYear}*/}
+      {/*/>*/}
+      {/*</LineYearContainer>*/}
     </ComponentBase>
   );
 };

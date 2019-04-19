@@ -6,18 +6,34 @@ export const ComponentBase = styled.div`
   display: flex;
   background-color: rgba(255, 255, 255, 0.78);
 `;
+export const Text = styled.div`
+  width: 24px;
+`;
 
 export const YearLabel = styled.div`
+  //fixme: When Nico's design gets implemented...
+  //max-width: 32px;
+  //min-width: 32px;
+  
   font-size: 10px;
   font-family: ${theme.font.zoomFontFamOne};
   color: ${theme.color.smallTextBlack};
   padding: 14px 0;
   line-height: 12px;
+  display: flex;
+  justify-content: center;
   flex-grow: 1;
   text-align: center;
 
   &:hover {
     cursor: pointer;
+  }
+  &:first-child {
+    padding-left: 24px;
+  }
+  
+  &:last-child {
+    padding-right: 24px;
   }
 
   user-select: none;
@@ -32,7 +48,7 @@ export const SelectedYearLabel = styled(YearLabel)`
   background-color: ${theme.color.aidsFondsBlue};
   color: ${theme.color.aidsFondsWhite};
   &:first-child {
-    background-color: #000;4
+    background-color: #000;
   }
   
   &:active {
@@ -49,8 +65,7 @@ export const StartControl = styled(YearLabel)`
   flex-grow: 0;
 
   position: relative;
-  padding-left: 0.5%;
-  margin-right: 0.5%;
+  padding-left: 24px;
 
   &:before {
     border-left: 12px solid ${theme.color.aidsFondsRed};
@@ -125,8 +140,13 @@ export const EndControl = styled(YearLabel)`
 export const YearContainer = styled.div`
   position: absolute;
   z-index: 2;
+  //fixme: When Nico's design gets implemented...
   width: calc(100% - 40px);
   bottom: 40px;
   left: 20px;
   //left: 1%;
+`;
+
+export const VizYearContainer = styled.div`
+ width: 100%
 `;

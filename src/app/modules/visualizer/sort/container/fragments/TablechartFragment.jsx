@@ -16,12 +16,12 @@ const TablechartFragment = props => {
         data={props.indicatorData.rows}
         columns={props.indicatorData.columns}
       />
-      <YearContainer>
-        <CustomYearSelector
-          selectedYear={props.selectedYear}
-          selectYear={props.selectYear}
-        />
-      </YearContainer>
+      {/*<YearContainer>*/}
+      {/*<CustomYearSelector*/}
+      {/*selectedYear={props.selectedYear}*/}
+      {/*selectYear={props.selectYear}*/}
+      {/*/>*/}
+      {/*</YearContainer>*/}
     </ComponentBase>
   );
 };

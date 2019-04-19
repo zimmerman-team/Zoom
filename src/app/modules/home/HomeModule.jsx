@@ -18,6 +18,9 @@ import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContai
 import NavPane from 'components/Panes/NavPane/NavPane';
 import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
+import VizContainer from '../visualizer/VisualizerModule';
+import { YearContainer } from '../../components/CustomYearSelector/CustomYearSelector.style';
+import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 
 const propTypes = {
   loading: PropTypes.bool,
@@ -69,8 +72,14 @@ export class HomeModule extends Component {
         </Helmet>
         <ModuleContainer
           style={
-            this.props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}
+            //todo: without nesting..
+            this.props.loading
+              ? { pointerEvents: 'none', opacity: '0.4' }
+              : {} && this.props.dataPaneOpen !== paneTypes.none
+              ? { width: 'calc(100vw - 320px)' }
+              : { width: '100vw' }
           }
+          display={this.props.dataPaneOpen === paneTypes.visualizer}
         >
           {this.props.loading && <ProgressIcon />}
 
@@ -87,6 +96,19 @@ export class HomeModule extends Component {
             longitude={0}
             zoom={2}
           />
+
+          <YearContainer
+            style={
+              this.props.disableYear
+                ? { pointerEvents: 'none', opacity: '0.4' }
+                : {}
+            }
+          >
+            <CustomYearSelector
+              selectedYear={this.props.selectedYear}
+              selectYear={this.props.selectYear}
+            />
+          </YearContainer>
 
           <DataPaneContainer display={paneContVis}>
             <ExplorePanelMediator display={explorePaneVis} {...otherProps} />

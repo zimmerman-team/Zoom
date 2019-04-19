@@ -12,6 +12,8 @@ import LinechartFragment from 'modules/visualizer/sort/container/fragments/Linec
 import TablechartFragment from 'modules/visualizer/sort/container/fragments/TablechartFragment';
 import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
 import DonutchartFragment from 'modules/visualizer/sort/container/fragments/DonutchartFragment';
+import CustomYearSelector from '../../../../components/CustomYearSelector/CustomYearSelector';
+import { VizYearContainer } from '../../../../components/CustomYearSelector/CustomYearSelector.style';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -143,6 +145,19 @@ class VizContainer extends React.Component {
             component={DonutchartFragment}
             mode={this.state.preview}
           />
+
+          <VizYearContainer
+            style={
+              this.props.disableYear
+                ? { pointerEvents: 'none', opacity: '0.4' }
+                : {}
+            }
+          >
+            <CustomYearSelector
+              selectedYear={this.props.selectedYear}
+              selectYear={this.props.selectYear}
+            />
+          </VizYearContainer>
         </React.Fragment>
         <PreviewTextContainer mode={this.state.preview ? 'flex' : 'none'}>
           <ContextPreview

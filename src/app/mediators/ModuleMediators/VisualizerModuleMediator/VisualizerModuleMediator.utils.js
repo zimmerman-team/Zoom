@@ -487,55 +487,41 @@ export function formatTableData(indicators) {
     { name: 'ISO2 codes' }
   );
   const tableChartData = [];
-  const tableChartKeys = [];
 
-  indicators.map((indicator, index) => {
+  indicators.forEach(indicator => {
     if (indicator.length > 0) {
-
-      //Forming of the keys with its indicator name
-      const existInd = tableChartKeys.indexOf(indicator[0].indicatorName);
-      let indName = indicator[0].indicatorName;
-      //If its the same indicator name add suffix to the key => [foo (0), foo (1)]
-      if (existInd !== -1) indName = indName.concat(` (${index})`);
-      tableChartKeys.push(indName);
-
       indicator.forEach(indItem => {
-          tableChartData.push([
-            //Geolocation
-            indItem.geolocationTag === null ||
-            indItem.geolocationTag.length <= 0
-              ? 'N/A'
-              : indItem.geolocationTag,
+        tableChartData.push([
+          //Geolocation
+          indItem.geolocationTag === null || indItem.geolocationTag.length <= 0
+            ? 'N/A'
+            : indItem.geolocationTag,
 
-            //Date
-            indItem.date === null || indItem.date.length <= 0
-              ? 'N/A'
-              : indItem.date,
+          //Date
+          indItem.date === null || indItem.date.length <= 0
+            ? 'N/A'
+            : indItem.date,
 
-            //Measure Value
-            indItem.value === null ? 'N/A' : Math.round(indItem.value),
+          //Measure Value
+          indItem.value === null ? 'N/A' : Math.round(indItem.value),
 
-            //Indicator
-            indItem.indicatorName,
+          //Indicator
+          indItem.indicatorName,
 
-            //Unit of measure
-            indItem.valueFormatType,
+          //Unit of measure
+          indItem.valueFormatType,
 
-            //ISO2 codes
-            indItem.geolocationIso2 === null ||
-            indItem.geolocationIso2.length <= 0
-              ? 'N/A'
-              : indItem.geolocationIso2.toUpperCase()
-          ]);
+          //ISO2 codes
+          indItem.geolocationIso2 === null ||
+          indItem.geolocationIso2.length <= 0
+            ? 'N/A'
+            : indItem.geolocationIso2.toUpperCase()
+        ]);
       });
     }
   });
   return {
-    //TODO: Do we still need this title with the indicatorNames in the table,
-    //      looks fugly when 2 long ind names are selected.
-    //      =>
-    //      if we don't need the title do we still need the keys?
-    title: tableChartKeys.join(', '),
+    title: '',
     columns: tableChartColumns,
     rows: tableChartData
   };

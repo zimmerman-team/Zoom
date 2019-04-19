@@ -7,13 +7,13 @@ import styled from 'styled-components';
 import { BarchartMockData } from './BachartMockData';
 
 /* styles */
-import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
+// import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
 
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import { ResponsiveBar } from '@nivo/bar';
-
+import { FragmentBase } from '../VizContainer.style';
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
@@ -47,7 +47,7 @@ const defaultProps = {
 
 const BarchartFragment = props => {
   return (
-    <ComponentBase>
+    <FragmentBase>
       <Box>
         <ResponsiveBar
           data={props.indicatorData}
@@ -133,7 +133,7 @@ const BarchartFragment = props => {
       {/*selectYear={props.selectYear}*/}
       {/*/>*/}
       {/*</LineYearContainer>*/}
-    </ComponentBase>
+    </FragmentBase>
   );
 };
 

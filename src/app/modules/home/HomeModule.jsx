@@ -18,9 +18,8 @@ import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContai
 import NavPane from 'components/Panes/NavPane/NavPane';
 import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
-import VizContainer from '../visualizer/VisualizerModule';
-import { GeomapYearContainer } from '../../components/CustomYearSelector/CustomYearSelector.style';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
+import { GeomapYearContainer } from '../../components/CustomYearSelector/CustomYearSelector.style';
 
 const propTypes = {
   loading: PropTypes.bool,
@@ -101,8 +100,6 @@ export class HomeModule extends Component {
             style={
               this.props.disableYear
                 ? { pointerEvents: 'none', opacity: '0.4' }
-                : {} && this.props.dataPaneOpen !== paneTypes.none
-                ? { width: 'calc(100% - 360px)' }
                 : {}
             }
           >

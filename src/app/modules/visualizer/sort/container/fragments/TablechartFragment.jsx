@@ -1,6 +1,5 @@
 /* base */
 import React from 'react';
-import styled from 'styled-components';
 
 /* components */
 import TableChart from '../../../../../components/charts/tablechart/TableChart';

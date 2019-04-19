@@ -12,13 +12,12 @@ export const Text = styled.div`
 
 export const YearLabel = styled.div`
   //fixme: When Nico's design gets implemented...
-  //max-width: 32px;
-  //min-width: 32px;
-  
+  max-width: 32px;
+  min-width: 32px;
   font-size: 10px;
   font-family: ${theme.font.zoomFontFamOne};
   color: ${theme.color.smallTextBlack};
-  padding: 14px 0;
+  padding: 10px 0;
   line-height: 12px;
   display: flex;
   justify-content: center;
@@ -139,15 +138,15 @@ export const EndControl = styled(YearLabel)`
 
 export const GeomapYearContainer = styled.div`
   position: absolute;
-  z-index: 2;
+  //z-index: 2;
   //fixme: When Nico's design gets implemented...
-  width: calc(100% - 40px);
+  //width: calc(100% - 40px);
   bottom: 40px;
-  padding-left: 20px;
-  padding-right: 20px;
+  //padding-left: 20px;
+  //padding-right: 20px;
 `;
 
 export const VizYearContainer = styled.div`
- width: 100%;
+ //width: 100%;
  padding-bottom: 32px;
 `;

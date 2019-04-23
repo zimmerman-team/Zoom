@@ -13,9 +13,9 @@ const propTypes = {
         label: PropTypes.string,
         info: PropTypes.oneOfType([
           PropTypes.string,
-          PropTypes.arrayOf([PropTypes.string]),
-        ]),
-      }),
+          PropTypes.arrayOf([PropTypes.string])
+        ])
+      })
     ),
     title: PropTypes.string,
     detail: PropTypes.arrayOf(
@@ -23,9 +23,9 @@ const propTypes = {
         label: PropTypes.string,
         info: PropTypes.oneOfType([
           PropTypes.string,
-          PropTypes.arrayOf([PropTypes.string]),
-        ]),
-      }),
+          PropTypes.arrayOf([PropTypes.string])
+        ])
+      })
     ),
     totalBudget: PropTypes.number,
     budgets: PropTypes.arrayOf(
@@ -34,8 +34,8 @@ const propTypes = {
         Budget: PropTypes.number,
         BudgetColor: PropTypes.string,
         Spent: PropTypes.number,
-        SpentColor: PropTypes.string,
-      }),
+        SpentColor: PropTypes.string
+      })
     ),
     sectors: PropTypes.shape({
       name: PropTypes.string,
@@ -44,11 +44,11 @@ const propTypes = {
         PropTypes.shape({
           name: PropTypes.string,
           color: PropTypes.string,
-          loc: PropTypes.number,
-        }),
-      ),
-    }),
-  }),
+          loc: PropTypes.number
+        })
+      )
+    })
+  })
 };
 const defaultProps = {
   data: {
@@ -57,8 +57,8 @@ const defaultProps = {
     detail: [],
     totalBudget: 0,
     budgets: [],
-    sectors: {},
-  },
+    sectors: {}
+  }
 };
 
 const IatiDetail = props => {

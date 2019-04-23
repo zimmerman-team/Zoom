@@ -14,7 +14,8 @@ const options = {
   filter: true,
   filterType: 'dropdown',
   responsive: 'scroll',
-  fixedHeader: true
+  fixedHeader: true,
+  rowsPerPage: 100
 };
 
 const propTypes = {
@@ -25,8 +26,8 @@ const propTypes = {
 };
 const defaultProps = {
   title: 'No title given',
-  data: tableDataMock,
-  columns: tableColumnsMock,
+  data: [],
+  columns: [],
   options
 };
 

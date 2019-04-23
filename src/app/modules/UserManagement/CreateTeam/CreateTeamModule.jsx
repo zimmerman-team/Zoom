@@ -10,7 +10,7 @@ import {
   SubmitButton,
   TableBox,
   TextField,
-  UsersTable,
+  UsersTable
 } from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
 
 import Pagination from 'components/Pagination/Pagination';
@@ -34,8 +34,8 @@ const propTypes = {
     PropTypes.shape({
       name: PropTypes.string,
       role: PropTypes.string,
-      id: PropTypes.string,
-    }),
+      id: PropTypes.string
+    })
   ),
   changePage: PropTypes.func,
   totalPages: PropTypes.number,
@@ -45,7 +45,7 @@ const propTypes = {
   setWrapperRef: PropTypes.func,
   changeSortBy: PropTypes.func,
   addRemoveAllUsers: PropTypes.func,
-  selectedSortBy: PropTypes.string,
+  selectedSortBy: PropTypes.string
 };
 const defaultProps = {
   success: false,
@@ -65,7 +65,7 @@ const defaultProps = {
   setWrapperRef: null,
   changeSortBy: null,
   addRemoveAllUsers: null,
-  selectedSortBy: 'name:1',
+  selectedSortBy: 'name:1'
 };
 
 const CreateTeam = props => {
@@ -119,7 +119,7 @@ const CreateTeam = props => {
               props.changeIsSortByOpen,
               props.setWrapperRef,
               props.changeSortBy,
-              props.selectedSortBy,
+              props.selectedSortBy
             )}
           />
           <Pagination

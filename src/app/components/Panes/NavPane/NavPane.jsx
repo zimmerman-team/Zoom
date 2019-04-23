@@ -11,11 +11,7 @@ import * as actions from 'services/actions/general';
 
 /* icons */
 import SvgIconPointer from 'assets/icons/IconPointer';
-import {
-  startItems,
-  createChartItems,
-  convertDataItems
-} from './NavPane.const';
+import { createChartItems, convertDataItems } from './NavPane.const';
 
 /* styles */
 import {
@@ -29,25 +25,10 @@ import {
 
 class NavPane extends React.Component {
   state = {
-    pane: this.props.dataPaneOpen,
-    userRole: 'Regular user'
+    pane: this.props.dataPaneOpen
   };
 
-  componentWillMount() {
-    if (this.props.auth0Client) {
-      this.props.auth0Client
-        .getUserRole()
-        .then(role => this.setState({ userRole: role }));
-
-      console.log('auth0CLient is available');
-    } else {
-      console.log('auth0Client not available, figure it out');
-    }
-  }
-
   componentDidUpdate(prevProps) {
-    console.log('did update');
-
     if (this.props.dataPaneOpen !== prevProps.dataPaneOpen) {
       this.setState({ pane: this.props.dataPaneOpen });
     }
@@ -67,8 +48,6 @@ class NavPane extends React.Component {
   };
 
   renderPaneItems = () => {
-    // console.log('pane type is: ', this.state.pane);
-    console.log('do rendering of renderPaneItems');
     switch (this.state.pane) {
       case paneTypes.privPane:
         return (
@@ -84,7 +63,7 @@ class NavPane extends React.Component {
               <ItemLabel>Create chart</ItemLabel>
             </NavPaneItem>
 
-            {this.state.userRole != 'Regular user' && (
+            {this.props.user.role != 'Regular user' && (
               <NavPaneItem to="/mapper" data-cy="nav-pane-item-1">
                 <ItemIcon>
                   <SvgIconPointer />
@@ -141,7 +120,8 @@ class NavPane extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    dataPaneOpen: state.dataPaneOpen.open
+    dataPaneOpen: state.dataPaneOpen.open,
+    user: state.user.data
   };
 };
 

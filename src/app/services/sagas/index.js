@@ -442,8 +442,44 @@ export function* deleteTeamRequest(action) {
   }
 }
 
+export function* deleteDatasetRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendDeleteRequest, {
+      endpoint: 'deleteDataset',
+      values: action.values
+    });
+    yield put(nodeActions.deleteDatasetSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.deleteDatasetFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* getPublicChartRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getOnePublicChart',
+      values: action.values
+    });
+    yield put(nodeActions.getChartSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.getChartFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('GET_PUBLIC_CHART_REQUEST', getPublicChartRequest),
+    takeLatest('DELETE_DATASET_REQUEST', deleteDatasetRequest),
     takeLatest('DUPLICATE_CHART_REQUEST', duplicateChartRequest),
     takeLatest('CREATE_DUPLICATE_CHART_REQUEST', createDuplicateChartRequest),
     takeLatest('UPDATE_DATASET_REQUEST', updateDatasetRequest),

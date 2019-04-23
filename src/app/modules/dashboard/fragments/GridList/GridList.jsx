@@ -23,6 +23,7 @@ const GridList = ({ items, withoptions }) => (
       <GridItem
         id={item.id}
         withoptions={withoptions}
+        owner={item.owner}
         key={shortid.generate()}
         chartType={item.chartType}
         title={item.title}

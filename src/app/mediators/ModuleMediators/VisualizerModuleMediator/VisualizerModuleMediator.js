@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
+import VisualizerModule from 'modules/visualizer/VisualizerModule';
+
+/* utils */
 import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
-import { withRouter } from 'react-router';
 import {
   formatBarData,
   formatCountryParam,
@@ -16,15 +21,14 @@ import {
   formatDonutData,
   getChartKeys
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
-import PropTypes from 'prop-types';
-import VisualizerModule from 'modules/visualizer/VisualizerModule';
-import { connect } from 'react-redux';
 
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
 import paneTypes from '__consts__/PaneTypesConst';
 import chartTypes from '__consts__/ChartConst';
 import initialPaneState from '__consts__/InitialPaneDataConst';
+import { colorSet1 } from '__consts__/PaneConst';
+import graphKeys from '__consts__/GraphStructKeyConst';
 
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
@@ -142,13 +146,31 @@ class VisualizerModuleMediator extends Component {
         },
         this.loadChartData
       );
-    // and we store this so it would be accessible to the visualizer mediator
-    else
+    else {
+      // and we store the chart type so it would be accessible to the visualizer mediator
       this.props.dispatch(
         actions.storePaneDataRequest({
           chartType: this.props.match.params.chart
         })
       );
+      if (chartTypes.lineChart === this.props.match.params.chart)
+        // we also store the initial values for the linecharts
+        // graphstructure pane
+        // so yeah yAxis should initially be numbers
+        // and xAxis should initially be the categories
+        // and the color pallet should be the first color
+        // set from the consts
+        this.props.dispatch(
+          actions.storeChartDataRequest({
+            specOptions: {
+              [graphKeys.leftYAxis]: 'number',
+              [graphKeys.rightYAxis]: 'number',
+              [graphKeys.xAxis]: 'category',
+              [graphKeys.colorPallet]: colorSet1
+            }
+          })
+        );
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -156,13 +178,34 @@ class VisualizerModuleMediator extends Component {
       this.loadChartData();
     }
 
+    // we format indicators when the indicator data changes
     if (
       !isEqual(
         this.props.indicatorAggregations,
         prevProps.indicatorAggregations
       )
-    ) {
+    )
       this.updateIndicators();
+
+    // we update the key data with the colors
+    /* TODO: update the bar data correctly without
+        initiating a change in the saved data */
+    if (
+      !isEqual(
+        this.props.chartData.specOptions[graphKeys.colorPallet],
+        prevProps.chartData.specOptions[graphKeys.colorPallet]
+      )
+    ) {
+      const chartKeys = formatChartLegends(
+        [this.props.chartData.selectedInd1, this.props.chartData.selectedInd2],
+        this.props.chartData.specOptions[graphKeys.colorPallet]
+      );
+
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          chartKeys
+        })
+      );
     }
 
     // and we load in the chart data retrieved from the node backend
@@ -274,7 +317,7 @@ class VisualizerModuleMediator extends Component {
             this.props.chartData.selectedInd1,
             this.props.chartData.selectedInd2
           ],
-          chartTypes.lineChart
+          this.props.chartData.specOptions[graphKeys.colorPallet]
         );
         indicators = formatLineData([
           this.props.indicatorAggregations.indicators1,
@@ -282,10 +325,13 @@ class VisualizerModuleMediator extends Component {
         ]);
         break;
       case chartTypes.barChart:
-        indicators = formatBarData([
-          this.props.indicatorAggregations.indicators1,
-          this.props.indicatorAggregations.indicators2
-        ]);
+        indicators = formatBarData(
+          [
+            this.props.indicatorAggregations.indicators1,
+            this.props.indicatorAggregations.indicators2
+          ],
+          this.props.chartData.specOptions[graphKeys.colorPallet]
+        );
         chartKeys = formatBarChartKeys([
           this.props.chartData.selectedInd1,
           this.props.chartData.selectedInd2
@@ -298,16 +344,19 @@ class VisualizerModuleMediator extends Component {
         ]);
         break;
       case chartTypes.donutChart:
-        indicators = formatDonutData([
-          this.props.indicatorAggregations.indicators1,
-          this.props.indicatorAggregations.indicators2
-        ]);
+        indicators = formatDonutData(
+          [
+            this.props.indicatorAggregations.indicators1,
+            this.props.indicatorAggregations.indicators2
+          ],
+          this.props.chartData.specOptions[graphKeys.colorPallet]
+        );
         chartKeys = formatChartLegends(
           [
             this.props.chartData.selectedInd1,
             this.props.chartData.selectedInd2
           ],
-          chartTypes.donutChart
+          this.props.chartData.specOptions[graphKeys.colorPallet]
         );
         break;
       default:
@@ -409,7 +458,7 @@ class VisualizerModuleMediator extends Component {
     }
   }
 
-  storeChartToRedux(results) {
+  storeChartToRedux() {
     const {
       _id,
       name,
@@ -455,10 +504,11 @@ class VisualizerModuleMediator extends Component {
         authorName: author.username,
         createdDate: formatDate(created),
         selectedRegionVal: removeIds(selectedRegionVal),
-        chartKeys: getChartKeys(type, [
-          indicatorItems[0].indicator,
-          indicatorItems[1].indicator
-        ]),
+        chartKeys: getChartKeys(
+          type,
+          [indicatorItems[0].indicator, indicatorItems[1].indicator],
+          specOptions[graphKeys.colorPallet]
+        ),
         specOptions
       })
     );

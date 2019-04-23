@@ -136,6 +136,15 @@ jobs:
       - run: yarn add cypress
       - run: yarn cy:record
 
+  cypress_test:
+      docker:
+        - image: cypress/browsers:chrome67
+      working_directory: ~/zoom-v2-ui
+      steps:
+        - attach_workspace:
+            at: ~/zoom-v2-ui
+        - run: yarn e2e
+
 # WORKFLOWS
 workflows:
   version: 2
@@ -145,6 +154,9 @@ workflows:
       - build_deploy:
           requires:
             - checkout_repo
-      - test_e2e:
+      - cypress_test:
           requires:
             - build_deploy
+#      - test_e2e:
+#          requires:
+#            - build_deploy

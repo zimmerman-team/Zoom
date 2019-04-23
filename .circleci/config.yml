@@ -147,4 +147,4 @@ workflows:
             - checkout_repo
       - test_e2e:
           requires:
-            - build_&_deploy
+            - build_deploy

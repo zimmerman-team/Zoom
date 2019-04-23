@@ -129,7 +129,6 @@ class NavPane extends React.PureComponent {
   };
 
   render() {
-    console.log('render');
     return <ComponentBase>{this.renderPaneItems()}</ComponentBase>;
   }
 }

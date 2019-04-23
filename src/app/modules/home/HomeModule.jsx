@@ -19,7 +19,7 @@ import NavPane from 'components/Panes/NavPane/NavPane';
 import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
-import { GeomapYearContainer } from '../../components/CustomYearSelector/CustomYearSelector.style';
+import { YearContainer } from '../../components/CustomYearSelector/CustomYearSelector.style';
 
 const propTypes = {
   loading: PropTypes.bool,
@@ -96,7 +96,7 @@ export class HomeModule extends Component {
             zoom={2}
           />
 
-          <GeomapYearContainer
+          <YearContainer
             style={
               this.props.disableYear
                 ? { pointerEvents: 'none', opacity: '0.4' }
@@ -107,7 +107,7 @@ export class HomeModule extends Component {
               selectedYear={this.props.selectedYear}
               selectYear={this.props.selectYear}
             />
-          </GeomapYearContainer>
+          </YearContainer>
 
           <DataPaneContainer display={paneContVis}>
             <ExplorePanelMediator display={explorePaneVis} {...otherProps} />

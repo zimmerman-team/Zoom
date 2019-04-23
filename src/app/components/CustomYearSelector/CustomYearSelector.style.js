@@ -11,7 +11,6 @@ export const Text = styled.div`
 `;
 
 export const YearLabel = styled.div`
-  //fixme: When Nico's design gets implemented...
   max-width: 32px;
   min-width: 32px;
   font-size: 10px;
@@ -44,7 +43,7 @@ export const YearLabel = styled.div`
 `;
 
 export const SelectedYearLabel = styled(YearLabel)`
-  background-color: ${theme.color.aidsFondsBlue};
+  background-color: ${theme.color.aidsFondsRed};
   color: ${theme.color.aidsFondsWhite};
   &:first-child {
     background-color: #000;
@@ -136,17 +135,8 @@ export const EndControl = styled(YearLabel)`
   }
 `;
 
-export const GeomapYearContainer = styled.div`
+export const YearContainer = styled.div`
   position: absolute;
   bottom: 40px;
-  //fixme: When Nico's design gets implemented...
-  //z-index: 2;
-  //width: calc(100% - 40px);
-  //padding-left: 20px;
-  //padding-right: 20px;
-`;
-
-export const VizYearContainer = styled.div`
- padding-bottom: 32px;
- //width: 100%;
+  z-index: 10;
 `;

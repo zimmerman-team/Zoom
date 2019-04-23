@@ -105,6 +105,7 @@ class VizPaneMediator extends React.Component {
     this.changesMade = this.changesMade.bind(this);
     this.getCountriesByRegion = this.getCountriesByRegion.bind(this);
     this.handleAxisSwitch = this.handleAxisSwitch.bind(this);
+    this.saveGraphOption = this.saveGraphOption.bind(this);
   }
 
   componentDidMount() {
@@ -520,6 +521,18 @@ class VizPaneMediator extends React.Component {
     }
   }
 
+  saveGraphOption(value, key) {
+    const specOptions = { ...this.props.chartData.specOptions };
+
+    specOptions[key] = value;
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        specOptions
+      })
+    );
+  }
+
   render() {
     return (
       <DataExplorePane
@@ -527,6 +540,8 @@ class VizPaneMediator extends React.Component {
           this.props.paneData.chartType === chartTypes.lineChart &&
           this.handleAxisSwitch
         }
+        specOptions={this.props.chartData.specOptions}
+        saveGraphOption={this.saveGraphOption}
         allFileSources={this.state.allFileSources}
         selectDataSource={this.selectDataSource}
         selectedSources={this.state.selectedSources}

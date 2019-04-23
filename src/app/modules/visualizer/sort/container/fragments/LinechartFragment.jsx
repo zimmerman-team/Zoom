@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 
 /* mock */
 // import { LinechartMockData } from './LinechartMockData';
@@ -26,6 +27,7 @@ const propTypes = {
       color: PropTypes.string
     })
   ),
+  specOptions: PropTypes.shape({}),
   indicatorData: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -41,6 +43,7 @@ const propTypes = {
 };
 const defaultProps = {
   indicators: [],
+  specOptions: {},
   indicatorData: []
 };
 
@@ -52,15 +55,10 @@ const LinechartFragment = props => {
           indicators={props.indicators}
           data={props.indicatorData}
           xAxisKey="geolocation"
+          specOptions={props.specOptions}
         />
       </Box>
       <ChartLegends data={props.indicators} />
-      {/*<LineYearContainer>*/}
-      {/*<CustomYearSelector*/}
-      {/*selectedYear={props.selectedYear}*/}
-      {/*selectYear={props.selectYear}*/}
-      {/*/>*/}
-      {/*</LineYearContainer>*/}
     </FragmentBase>
   );
 };
@@ -68,4 +66,10 @@ const LinechartFragment = props => {
 LinechartFragment.propTypes = propTypes;
 LinechartFragment.defaultProps = defaultProps;
 
-export default LinechartFragment;
+const mapStateToProps = state => {
+  return {
+    specOptions: state.chartData.chartData.specOptions
+  };
+};
+
+export default connect(mapStateToProps)(LinechartFragment);

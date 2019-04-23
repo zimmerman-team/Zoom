@@ -2,9 +2,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 
 /* consts */
-import { chartColors } from '__consts__/ChartConst';
+import graphKeys from '__consts__/GraphStructKeyConst';
+
+/* styles */
+//import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
+
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import { ResponsivePie } from '@nivo/pie';
@@ -20,6 +25,7 @@ const Box = styled.div`
 
 const propTypes = {
   indicatorData: PropTypes.arrayOf(PropTypes.shape({})),
+  donutColors: PropTypes.arrayOf(PropTypes.string),
   chartKeys: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
@@ -29,6 +35,7 @@ const propTypes = {
 };
 const defaultProps = {
   indicatorData: [],
+  donutColors: [],
   chartKeys: []
 };
 
@@ -50,7 +57,7 @@ const DonutchartFragment = props => {
           innerRadius={0.65}
           padAngle={0.7}
           cornerRadius={4}
-          colors={chartColors.donutChartColors}
+          colors={props.donutColors}
           colorBy="id"
           borderWidth={1}
           borderColor="inherit:darker(0.2)"
@@ -109,4 +116,10 @@ const DonutchartFragment = props => {
 DonutchartFragment.propTypes = propTypes;
 DonutchartFragment.defaultProps = defaultProps;
 
-export default DonutchartFragment;
+const mapStateToProps = state => {
+  return {
+    donutColors: state.chartData.chartData.specOptions[graphKeys.colorPallet]
+  };
+};
+
+export default connect(mapStateToProps)(DonutchartFragment);

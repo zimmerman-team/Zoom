@@ -18,4 +18,8 @@ describe('About page E2E test', function() {
   it('Click link should redirect to Aidsfonds website', function() {
     cy.get('[data-cy="about-link-to-web"]').click();
   });
+
+  it('Makes a visual snapshot of the current state', function() {
+    cy.percySnapshot('About page test');
+  });
 });

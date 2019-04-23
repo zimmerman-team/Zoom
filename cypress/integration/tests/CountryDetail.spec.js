@@ -27,4 +27,7 @@ context('Country detail page', () => {
       cy.queryByText(name).should('exist');
     });
   });
+  it('Makes a visual snapshot of the current state', function() {
+    cy.percySnapshot('Country detail page test');
+  });
 });

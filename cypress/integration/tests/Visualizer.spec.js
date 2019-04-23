@@ -72,4 +72,8 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
   // it('Should publish the chart to public zoom library', function() {});
   //
   // it('Should publish the chart to the team', function() {});
+
+  it('Makes a visual snapshot of the current state', function() {
+    cy.percySnapshot('Visualizer page test');
+  });
 });

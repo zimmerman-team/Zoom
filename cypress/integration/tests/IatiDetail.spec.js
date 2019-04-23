@@ -73,4 +73,8 @@ context('IATI activity page', () => {
     cy.queryByText(data.Sectors.Values[2]).should('exist');
     cy.queryByText(data.Sectors.Values[3]).should('exist');
   });
+
+  it('Makes a visual snapshot of the current state', function() {
+    cy.percySnapshot('IATI Detail page test');
+  });
 });

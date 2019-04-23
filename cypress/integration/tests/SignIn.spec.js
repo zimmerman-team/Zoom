@@ -25,4 +25,8 @@ context('Sign in', () => {
     cy.get('[data-cy=sidebar-toggle]').click();
     cy.get('[data-cy=sidebar-logout-button]').contains('Sign out');
   });
+
+  it('Makes a visual snapshot of the current state', function() {
+    cy.percySnapshot('Sign in test');
+  });
 });

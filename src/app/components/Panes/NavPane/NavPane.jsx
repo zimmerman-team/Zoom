@@ -135,7 +135,6 @@ class NavPane extends React.Component {
   };
 
   render() {
-    console.log('render');
     return <ComponentBase>{this.renderPaneItems()}</ComponentBase>;
   }
 }

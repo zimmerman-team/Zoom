@@ -3,7 +3,7 @@ import { fromJS } from 'immutable';
 export const colorStops = [[0, '#FFFFFF'], [8, '#0900FF']];
 
 // For more information on data-driven styles, see https://www.mapbox.com/help/gl-dds-ref/
-export const dataLayer = fromJS({
+export const dataLayer = {
   id: 'layer',
   source: 'layer',
   type: 'fill',
@@ -15,7 +15,7 @@ export const dataLayer = fromJS({
     },
     'fill-opacity': 0.68
   }
-});
+};
 
 // This is used for borders
 export const borderStyle = {

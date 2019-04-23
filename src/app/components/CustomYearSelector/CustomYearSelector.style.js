@@ -45,9 +45,9 @@ export const YearLabel = styled.div`
 export const SelectedYearLabel = styled(YearLabel)`
   background-color: ${theme.color.aidsFondsRed};
   color: ${theme.color.aidsFondsWhite};
-  &:first-child {
-    background-color: #000;
-  }
+  //&:first-child {
+  //  background-color: #000;
+  //}
   
   &:active {
     cursor: grabbing;

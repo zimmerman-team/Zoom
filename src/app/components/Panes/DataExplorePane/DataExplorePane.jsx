@@ -88,6 +88,7 @@ const propTypes = {
   yearRange: PropTypes.array,
   selectInd1: PropTypes.func,
   selectInd2: PropTypes.func,
+  specOptions: PropTypes.shape({}),
   selectedSubInd1: PropTypes.arrayOf(PropTypes.string),
   selectedSubInd2: PropTypes.arrayOf(PropTypes.string),
   selectSubInd1: PropTypes.func,
@@ -95,16 +96,19 @@ const propTypes = {
   subInd1AllSelected: PropTypes.bool,
   subInd2AllSelected: PropTypes.bool,
   locationSelected: PropTypes.bool,
+  saveGraphOption: PropTypes.func,
   resetAll: PropTypes.func
 };
 
 const defaultProps = {
   selectedInd2: undefined,
   selectedInd1: undefined,
+  saveGraphOption: null,
   handleAxisSwitch: null,
   locationSelected: true,
   subInd1AllSelected: true,
   subInd2AllSelected: true,
+  specOptions: {},
   chartKeys: [],
   selectYearRange: undefined,
   yearRange: [2003, 2016],
@@ -288,7 +292,10 @@ class DataExplorePane extends React.Component {
               label="Graph structure"
               data-cy="nav-pane-item-time-period"
             >
-              <GraphStructurePanel />
+              <GraphStructurePanel
+                specOptions={this.props.specOptions}
+                saveGraphOption={this.props.saveGraphOption}
+              />
             </ExpansionPanelContainer>
           )}
         </PanelAccordion>

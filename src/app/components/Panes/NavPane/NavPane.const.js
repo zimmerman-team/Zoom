@@ -41,6 +41,10 @@ export const createChartItems = [
   {
     label: 'Table chart',
     navTo: '/visualizer/tablechart/vizID/edit'
+  },
+  {
+    label: 'Donut chart',
+    navTo: '/visualizer/donutchart/vizID/edit'
   }
 ];
 

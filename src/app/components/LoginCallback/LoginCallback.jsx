@@ -10,7 +10,7 @@ class Callback extends Component {
       this.props.dispatch(
         nodeActions.getUserRequest({ authId: results.idTokenPayload.sub })
       );
-      this.props.history.replace('/home');
+      this.props.history.replace('/dashboard/charts');
     });
   }
 

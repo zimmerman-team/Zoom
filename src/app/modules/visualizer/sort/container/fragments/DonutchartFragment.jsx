@@ -2,13 +2,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 
-/* mock */
-import { BarchartMockData } from './BachartMockData';
+/* consts */
+import graphKeys from '__consts__/GraphStructKeyConst';
+
+/* styles */
+import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
 
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
-import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import { ResponsivePie } from '@nivo/pie';
 
@@ -21,7 +24,6 @@ const ComponentBase = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
   align-items: center;
   justify-content: center;
   background-color: white;
@@ -35,10 +37,17 @@ const Box = styled.div`
 
 const propTypes = {
   indicatorData: PropTypes.arrayOf(PropTypes.shape({})),
-  chartKeys: PropTypes.arrayOf(PropTypes.string)
+  donutColors: PropTypes.arrayOf(PropTypes.string),
+  chartKeys: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      color: PropTypes.string
+    })
+  )
 };
 const defaultProps = {
   indicatorData: [],
+  donutColors: [],
   chartKeys: []
 };
 
@@ -49,39 +58,7 @@ const DonutchartFragment = props => {
         <ResponsivePie
           animate
           /* todo: currently indicator data is empty, needs to get data */
-          data={[
-            {
-              id: 'php',
-              label: 'php',
-              value: 89,
-              color: 'hsl(101, 70%, 50%)'
-            },
-            {
-              id: 'lisp',
-              label: 'lisp',
-              value: 507,
-              color: 'hsl(296, 70%, 50%)'
-            },
-            {
-              id: 'make',
-              label: 'make',
-              value: 542,
-              color: 'hsl(312, 70%, 50%)'
-            },
-            {
-              id: 'sass',
-              label: 'sass',
-              value: 160,
-              color: 'hsl(117, 70%, 50%)'
-            },
-            {
-              id: 'python',
-              label: 'python',
-              value: 592,
-              color: 'hsl(122, 70%, 50%)'
-            }
-          ]}
-          keys={props.chartKeys}
+          data={props.indicatorData}
           indexBy="geolocation"
           margin={{
             top: 40,
@@ -92,7 +69,7 @@ const DonutchartFragment = props => {
           innerRadius={0.65}
           padAngle={0.7}
           cornerRadius={4}
-          colors="nivo"
+          colors={props.donutColors}
           colorBy="id"
           borderWidth={1}
           borderColor="inherit:darker(0.2)"
@@ -143,13 +120,13 @@ const DonutchartFragment = props => {
           ]}
         />
       </Box>
-      <ChartLegends />
-      <YearContainer>
+      <ChartLegends data={props.chartKeys} />
+      <LineYearContainer>
         <CustomYearSelector
           selectedYear={props.selectedYear}
           selectYear={props.selectYear}
         />
-      </YearContainer>
+      </LineYearContainer>
     </ComponentBase>
   );
 };
@@ -157,4 +134,10 @@ const DonutchartFragment = props => {
 DonutchartFragment.propTypes = propTypes;
 DonutchartFragment.defaultProps = defaultProps;
 
-export default DonutchartFragment;
+const mapStateToProps = state => {
+  return {
+    donutColors: state.chartData.chartData.specOptions[graphKeys.colorPallet]
+  };
+};
+
+export default connect(mapStateToProps)(DonutchartFragment);

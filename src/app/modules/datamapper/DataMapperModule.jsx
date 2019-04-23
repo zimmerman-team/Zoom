@@ -61,6 +61,11 @@ class DataMapperModule extends React.Component {
     this.nextDisabled = this.nextDisabled.bind(this);
   }
 
+  componentWillUnmount() {
+    // and we reset the values in the reducer
+    this.props.dispatch(actions.saveStepDataInitial());
+  }
+
   // basically checks if next button should be disabled
   // depending on the current step
   nextDisabled() {

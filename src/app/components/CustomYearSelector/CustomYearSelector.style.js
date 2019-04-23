@@ -29,7 +29,7 @@ export const YearLabel = styled.div`
   &:first-child {
     padding-left: 24px;
   }
-  
+
   &:last-child {
     padding-right: 24px;
   }
@@ -48,13 +48,12 @@ export const SelectedYearLabel = styled(YearLabel)`
   //&:first-child {
   //  background-color: #000;
   //}
-  
+
   &:active {
     cursor: grabbing;
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
   }
-  
 `;
 
 export const StartControl = styled(YearLabel)`

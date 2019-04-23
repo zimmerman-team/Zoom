@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const ComponentBase = styled.div`
   background-color: white;
 
-  width: calc(100vw - 320px);
+  //width: calc(100vw - 320px);
   height: calc(100vh - 40px);
   display: flex;
   flex-direction: column;
@@ -28,4 +28,17 @@ export const PreviewTextContainer = styled.div`
 
 export const LineYearContainer = styled.div`
   width: calc(100% - 40px);
+`;
+
+export const FragmentBase = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100% - 32px);
+  height: -moz-calc(100% - 32px);
+  height: -webkit-calc(100% - 32px);
+ 
+  align-items: center;
+  justify-content: center;
+  background-color: white;
 `;

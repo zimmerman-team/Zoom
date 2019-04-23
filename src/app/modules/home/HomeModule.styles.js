@@ -14,6 +14,6 @@ export const DropDownContainer = styled.div`
 `;
 
 export const ModuleContainer = styled(Box)`
-  width: 100vw;
   height: calc(100vh - 40px);
+  align-items: center;
 `;

@@ -67,14 +67,10 @@ export class GeoMap extends Component {
   constructor(props) {
     super(props);
 
-    this.defaultMapStyle = {
-      ...MAP_STYLE,
-      sources: { ...MAP_STYLE.sources },
-      layers: MAP_STYLE.layers.slice()
-    };
-
     this.state = {
-      mapStyle: fromJS(this.defaultMapStyle),
+      mapStyle: {
+        ...MAP_STYLE
+      },
       markerArray: [],
       legends: [],
       hoverLayerInfo: null,
@@ -148,43 +144,22 @@ export class GeoMap extends Component {
     // markers
     // Note: the layer will also use a different tooltip than the markers
     // cause it kind of makes sense for some cases
+    const mapStyle = {
+      ...MAP_STYLE
+    };
     const layers = find(indicatorData, ['type', 'layer']);
     if (layers) {
-      let mapStyle = this.defaultMapStyle;
       const borderData = layers.borderData ? layers.borderData : layers.data;
 
-      // here we need to push in the border line style seperately like this
-      // so that it would work and load properly with the layers
-      // this may not be the best approach, but its the one that actually works
-      // we also only push the borderStyle once.
+      mapStyle.sources.layer = { type: 'geojson', data: layers.data };
+      mapStyle.sources.outline = { type: 'geojson', data: borderData };
+
       if (!find(mapStyle.layers, ['id', 'outline'])) {
         mapStyle.layers.push(borderStyle);
       }
-
-      //then we continue working with the normal fromJS  variable
-      mapStyle = fromJS(mapStyle);
-      mapStyle = mapStyle
-        // Add geojson layer source to map
-        .setIn(
-          ['sources', 'layer'],
-          fromJS({ type: 'geojson', data: layers.data })
-        )
-        // Add point layer to map
-        .set('layers', mapStyle.get('layers').push(dataLayer))
-        // Add geojson border source to map
-        .setIn(
-          ['sources', 'outline'],
-          fromJS({ type: 'geojson', data: borderData })
-        );
-      this.setState({ mapStyle });
-    } else if (!isEqual(this.state.mapStyle, fromJS(this.defaultMapStyle))) {
-      //Here we set the map back to default when no layer data has been passed in
-      // And we need to remove the borderStyle cause it gets added there
-      // and while its there, the map will not set itself to default
-      let mapStylez = this.defaultMapStyle;
-      const ind = findIndex(mapStylez.layers, ['id', 'outline']);
-      mapStylez.layers.splice(ind, 1);
-      this.setState({ mapStyle: fromJS(mapStylez) });
+      if (!find(mapStyle.layers, ['id', 'layer'])) {
+        mapStyle.layers.push(dataLayer);
+      }
     }
 
     // and all of the generic markers that can be just put in the map, like separate components
@@ -193,7 +168,7 @@ export class GeoMap extends Component {
     // and in a similar way we generate legends
     const legends = generateLegends(indicatorData);
 
-    this.setState({ markerArray, legends });
+    this.setState({ markerArray, legends, mapStyle });
   }
 
   setMarkerInfo(indicator) {
@@ -324,18 +299,18 @@ export class GeoMap extends Component {
           />
         </ControlsContainer>
 
-        <YearContainer
-          style={
-            this.props.disableYear
-              ? { pointerEvents: 'none', opacity: '0.4' }
-              : {}
-          }
-        >
-          <CustomYearSelector
-            selectedYear={this.props.selectedYear}
-            selectYear={this.props.selectYear}
-          />
-        </YearContainer>
+        {/*<YearContainer*/}
+        {/*style={*/}
+        {/*this.props.disableYear*/}
+        {/*? { pointerEvents: 'none', opacity: '0.4' }*/}
+        {/*: {}*/}
+        {/*}*/}
+        {/*>*/}
+        {/*<CustomYearSelector*/}
+        {/*selectedYear={this.props.selectedYear}*/}
+        {/*selectYear={this.props.selectYear}*/}
+        {/*/>*/}
+        {/*</YearContainer>*/}
 
         <MapGL
           {...viewport}

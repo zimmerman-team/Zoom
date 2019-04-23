@@ -12,6 +12,7 @@ import {
   ComponentBase,
   YearLabel,
   SelectedYearLabel,
+  Text,
   StartControl,
   EndControl
 } from './CustomYearSelector.style';
@@ -95,6 +96,13 @@ class CustomYearSelector extends React.Component {
     this.props.selectYear(number);
   };
 
+  formatYearLabels(number) {
+    if (number == this.props.min || number == this.props.max) {
+      return number;
+    }
+    return String(number).slice(-2);
+  }
+
   renderYearLabels = (number, index) => {
     let yearLabels = '';
 
@@ -105,7 +113,7 @@ class CustomYearSelector extends React.Component {
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
-          {number}
+          <Text>{this.formatYearLabels(number)}</Text>
         </SelectedYearLabel>
       );
     else
@@ -116,7 +124,7 @@ class CustomYearSelector extends React.Component {
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
-          {number}
+          <Text>{this.formatYearLabels(number)}</Text>
         </YearLabel>
       );
 

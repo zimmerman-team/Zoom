@@ -63,4 +63,8 @@ describe('Home page geo map filters', function() {
     cy.get('[data-cy="geo-map-container"]').click();
     cy.get('[data-cy="data-explorer-panel-reset"]').click();
   });
+
+  it('Makes a visual snapshot of the current state', function() {
+    cy.percySnapshot('Home page test');
+  });
 });

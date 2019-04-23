@@ -92,7 +92,7 @@
     "e2e:chrome": "cypress run --browser chrome",
     "e2e:record": "cypress run --record --key d2ad6432-35fe-48a4-b5bf-8a98c4f8289a",
     "e2e:record:parallel": "cypress run --record --parallel",
-    "cy:open": "cypress open",
+    "cy:open": "percy exec -- cypress open",
     "relay": "relay-compiler --src ./src --schema ./data/schema.json --extensions js jsx"
   },
   "husky": {

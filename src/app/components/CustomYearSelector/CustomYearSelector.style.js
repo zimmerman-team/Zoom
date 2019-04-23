@@ -138,15 +138,15 @@ export const EndControl = styled(YearLabel)`
 
 export const GeomapYearContainer = styled.div`
   position: absolute;
-  //z-index: 2;
-  //fixme: When Nico's design gets implemented...
-  //width: calc(100% - 40px);
   bottom: 40px;
+  //fixme: When Nico's design gets implemented...
+  //z-index: 2;
+  //width: calc(100% - 40px);
   //padding-left: 20px;
   //padding-right: 20px;
 `;
 
 export const VizYearContainer = styled.div`
- //width: 100%;
  padding-bottom: 32px;
+ //width: 100%;
 `;

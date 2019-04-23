@@ -3,7 +3,8 @@ import { scaleQuantile } from 'd3-scale';
 import { range } from 'd3-array';
 
 /* consts */
-import chartTypes, { chartColors } from '__consts__/ChartConst';
+import chartTypes from '__consts__/ChartConst';
+import { colorSet1 } from '__consts__/PaneConst';
 
 // Updates layer percentiles depending on the value
 export function updatePercentiles(featureCollection, accessor) {
@@ -317,21 +318,8 @@ export function formatGeoData(
 // may not be keys, but is formed in a similar way as keys would,
 // so yeah mainly used for line generation according to the selected indicators
 // and 'selectedInd' is passed in as a string array of currently selected indicators
-export function formatChartLegends(selectedInd, type) {
+export function formatChartLegends(selectedInd, colors = colorSet1) {
   const chartKeys = [];
-
-  let colors = [];
-
-  switch (type) {
-    case chartTypes.lineChart:
-      colors = chartColors.lineChartColors;
-      break;
-    case chartTypes.donutChart:
-      colors = chartColors.donutChartColors;
-      break;
-    default:
-      colors = [];
-  }
 
   let colorInd = 0;
   selectedInd.forEach((indName, index) => {
@@ -374,7 +362,7 @@ export function formatLineData(indicators) {
 
       indicatorNames.push(indName);
 
-      indicator.forEach(indItem => {
+      indicator.forEach((indItem, index) => {
         // yeah and cause we might receive data with the same geolocation name
         // we add in the values for that geolocation so it wouldn't be repeated over and over
         const existItemInd = findIndex(indicatorData, existing => {
@@ -423,7 +411,7 @@ export function formatBarChartKeys(selectedInd) {
   return chartKeys;
 }
 
-export function formatBarData(indicators) {
+export function formatBarData(indicators, colors = colorSet1) {
   const barChartData = [];
   const barChartKeys = [];
 
@@ -458,18 +446,17 @@ export function formatBarData(indicators) {
                 : indItem.geolocationTag,
 
             [indName]: Math.round(indItem.value),
-            [`${indName}Color`]: chartColors.barChartColors[colorInd]
+            [`${indName}Color`]: colors[colorInd]
           });
         else if (barChartData[existItemInd][indName] !== undefined)
           barChartData[existItemInd][indName] += Math.round(indItem.value);
         else {
           barChartData[existItemInd][indName] = Math.round(indItem.value);
-          barChartData[existItemInd][`${indName}Color`] =
-            chartColors.barChartColors[colorInd];
+          barChartData[existItemInd][`${indName}Color`] = colors[colorInd];
         }
       });
 
-      if (colorInd + 1 < chartColors.barChartColors.length) colorInd += 1;
+      if (colorInd + 1 < colors.length) colorInd += 1;
     }
   });
 
@@ -477,80 +464,69 @@ export function formatBarData(indicators) {
 }
 
 export function formatTableData(indicators) {
-  const tableChartData = [];
   const tableChartColumns = [];
-  const tableChartKeys = [];
-  let tableTitle = '';
+  tableChartColumns.push(
+    { name: `Geolocation` },
+    { name: 'Date' },
+    { name: `Measure Value` },
+    { name: 'Indicator' },
+    { name: 'Unit of measure' },
+    { name: 'ISO2 codes' }
+  );
+  const tableChartData = [];
 
-  indicators.map((indicator, index) => {
+  indicators.forEach(indicator => {
     if (indicator.length > 0) {
-      const existInd = tableChartKeys.indexOf(indicator[0].indicatorName);
-
-      let indName = indicator[0].indicatorName;
-
-      // so we need this logic for when a person would
-      // plot two indicators with the same name
-      // as the id needs to be unique, we just add
-      // the index as a suffix
-      if (existInd !== -1) indName = indName.concat(` (${index})`);
-
-      tableChartKeys.push(indName);
-      tableChartColumns.push(
-        { name: `Geolocation (${indicator[0].geolocationType})` },
-        { name: 'ISO2 codes' },
-        { name: `${indicator[0].valueFormatType}` },
-        { name: 'date' }
-      );
-      tableTitle = indicator[0].indicatorName;
-
       indicator.forEach(indItem => {
-        // yeah and cause we might receive data with the same geolocation name
-        // we add in the values for that geolocation so it wouldn't be repeated over and over
-        const existItemInd = findIndex(tableChartData, existing => {
-          return indItem.geolocationTag === existing.geoName;
-        });
-        if (existItemInd === -1) {
-          tableChartData.push([
-            indItem.geolocationTag,
+        tableChartData.push([
+          //Geolocation
+          indItem.geolocationTag === null || indItem.geolocationTag.length <= 0
+            ? 'N/A'
+            : indItem.geolocationTag,
 
-            indItem.geolocationIso2.length > 0
-              ? indItem.geolocationIso2.toUpperCase()
-              : indItem.geolocationTag,
+          //Date
+          indItem.date === null || indItem.date.length <= 0
+            ? 'N/A'
+            : indItem.date,
 
-            Math.round(indItem.value),
+          //Measure Value
+          indItem.value === null ? 'N/A' : Math.round(indItem.value),
 
-            indItem.date
-          ]);
-        } else if (tableChartData[existItemInd][indName] !== undefined)
-          tableChartData[existItemInd][indName] += Math.round(indItem.value);
-        else {
-          tableChartData[existItemInd][indName] = Math.round(indItem.value);
-        }
+          //Indicator
+          indItem.indicatorName,
+
+          //Unit of measure
+          indItem.valueFormatType,
+
+          //ISO2 codes
+          indItem.geolocationIso2 === null ||
+          indItem.geolocationIso2.length <= 0
+            ? 'N/A'
+            : indItem.geolocationIso2.toUpperCase()
+        ]);
       });
     }
   });
   return {
-    title: tableTitle,
+    title: '',
     columns: tableChartColumns,
     rows: tableChartData
   };
 }
 
-export function formatDonutData(indicators) {
+export function formatDonutData(indicators, colors = colorSet1) {
   const chartData = [];
   indicators.map((indicator, indIndex) => {
     indicator.map(indItem => {
       if (chartData[indIndex] === undefined) {
         const colorInd =
-          indIndex < chartColors.donutChartColors.length
-            ? indIndex
-            : chartColors.donutChartColors.length - 1;
+          indIndex < colors.length ? indIndex : colors.length - 1;
 
         chartData.push({
           id: indItem.indicatorName,
           label: indItem.indicatorName,
           value: indItem.value,
-          color: chartColors.donutChartColors[colorInd]
+          color: colors[colorInd]
         });
       } else chartData[indIndex].value += indItem.value;
     });
@@ -559,14 +535,14 @@ export function formatDonutData(indicators) {
   return chartData;
 }
 
-export function getChartKeys(chartType, indicators) {
+export function getChartKeys(chartType, indicators, colors = colorSet1) {
   switch (chartType) {
     case chartTypes.lineChart:
-      return formatChartLegends(indicators, chartTypes.lineChart);
+      return formatChartLegends(indicators, colors);
     case chartTypes.barChart:
       return formatBarChartKeys(indicators);
     case chartTypes.donutChart:
-      return formatChartLegends(indicators, chartTypes.donutChart);
+      return formatChartLegends(indicators, colors);
     default:
       return [];
   }

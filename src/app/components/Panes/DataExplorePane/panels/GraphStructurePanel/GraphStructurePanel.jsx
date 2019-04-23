@@ -1,12 +1,23 @@
 /* base */
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+
+/* components */
+import ColorSelect from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/ColorSelect/ColorSelect';
 import SimpleSelect from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/SimpleSelect/SimpleSelect';
 import SimpleSwitch from 'components/SimpleSwitch/SimpleSwitch';
 
-import ColorSelect from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/ColorSelect/ColorSelect';
+/* consts */
+import graphKeys from '__consts__/GraphStructKeyConst';
+import {
+  axisOptions,
+  aggrOptions,
+  rankOptions
+} from './GraphStructurePanel.const';
 
 /**
+ *
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
  */
@@ -27,8 +38,14 @@ const FilterContainer = styled.div`
   margin-bottom: 10px;
 `;
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  specOptions: PropTypes.shape({}),
+  saveGraphOption: PropTypes.func
+};
+const defaultProps = {
+  specOptions: {},
+  saveGraphOption: null
+};
 
 class GraphStructurePanel extends React.Component {
   state = {
@@ -43,24 +60,39 @@ class GraphStructurePanel extends React.Component {
           {/* LEFT Y-AXIS */}
           <SimpleSelect
             label="Left Y-axis"
-            onChange={() => console.log('changed')}
+            selectKey={graphKeys.leftYAxis}
+            options={axisOptions}
+            defValue={this.props.specOptions[graphKeys.leftYAxis]}
+            onChange={this.props.saveGraphOption}
           />
           {/* RIGHT Y-AXIS */}
-          <SimpleSelect label="Right Y-axis" />
+          <SimpleSelect
+            label="Right Y-axis"
+            selectKey={graphKeys.rightYAxis}
+            options={axisOptions}
+            defValue={this.props.specOptions[graphKeys.rightYAxis]}
+            onChange={this.props.saveGraphOption}
+          />
         </FilterContainer>
 
         {/* SECOND ROW /////////////////////////////////////////////////////// */}
         <FilterContainer>
           {/* X-AXIS */}
-          <SimpleSelect label="X-axis" />
+          <SimpleSelect
+            label="X-axis"
+            selectKey={graphKeys.xAxis}
+            defValue={this.props.specOptions[graphKeys.xAxis]}
+            options={axisOptions}
+            onChange={this.props.saveGraphOption}
+          />
         </FilterContainer>
 
         {/* THIRD ROW //////////////////////////////////////////////////////// */}
         <FilterContainer>
           {/* AGGREGATE BY */}
-          <SimpleSelect label="Aggregate by" />
+          <SimpleSelect label="Aggregate by" options={aggrOptions} />
           {/* RANK BY */}
-          <SimpleSelect label="Rank by" />
+          <SimpleSelect label="Rank by" options={rankOptions} />
         </FilterContainer>
 
         {/* FOURTH ROW /////////////////////////////////////////////////////// */}
@@ -81,7 +113,12 @@ class GraphStructurePanel extends React.Component {
 
         <FilterContainer>
           {/* X-AXIS */}
-          <ColorSelect label="Color palet" />
+          <ColorSelect
+            label="Color palet"
+            selectKey={graphKeys.colorPallet}
+            defValue={this.props.specOptions[graphKeys.colorPallet]}
+            onChange={this.props.saveGraphOption}
+          />
         </FilterContainer>
       </ComponentBase>
     );

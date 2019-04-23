@@ -126,7 +126,7 @@ jobs:
               ssh "$SSH_USER"@"$SSH_HOST_DEV" "cd ~/zoom-v2-ui/; git pull; yarn install; echo '"$SSH_DEV_PASS"' | sudo -S service supervisor restart"
             fi
 
-  test_e2e:
+  cypress_test:
     docker:
       - image: cypress/browsers:chrome67
     working_directory: ~/zoom-v2-ui
@@ -134,16 +134,31 @@ jobs:
       - attach_workspace:
           at: ~/zoom-v2-ui
       - run: yarn add cypress
-      - run: yarn cy:record
+      - run:
+          command: yarn start
+          background: true
+      - run: yarn e2e
 
-  cypress_test:
-      docker:
-        - image: cypress/browsers:chrome67
-      working_directory: ~/zoom-v2-ui
-      steps:
-        - attach_workspace:
-            at: ~/zoom-v2-ui
-        - run: yarn e2e
+#  cypress_test:
+#      docker:
+#        - image: cypress/browsers:chrome67
+#      working_directory: ~/zoom-v2-ui
+#      steps:
+#        - attach_workspace:
+#            at: ~/zoom-v2-ui
+#        # find cache from previous build,
+#        # it should have same dependencies installed from package.json checksum
+#        - restore_cache:
+#            keys:
+#              - cache-{{ .Branch }}-{{ checksum "package.json" }}
+#        # run verify and then save cache.
+#        # this ensures that the Cypress verified status is cached too
+#        - save_cache:
+#          key: cache-{{ .Branch }}-{{ checksum "package.json" }}
+#          paths:
+#            - ~/.cache
+#        - run: yarn cy:verify
+#        - run: yarn e2e
 
 # WORKFLOWS
 workflows:

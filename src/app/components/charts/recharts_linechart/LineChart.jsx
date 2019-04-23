@@ -2,6 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/* consts */
+import graphKeys from '__consts__/GraphStructKeyConst';
+
 /* components */
 import {
   ResponsiveContainer,
@@ -15,13 +18,15 @@ import {
 import TooltipContent from './components/TooltipContent/TooltipContent';
 
 const propTypes = {
+  specOptions: PropTypes.shape({}),
   xAxisKey: PropTypes.string
 };
 const defaultProps = {
+  specOptions: {},
   xAxisKey: 'year'
 };
 
-const LineChart = ({ data, indicators, xAxisKey }) => {
+const LineChart = ({ data, indicators, xAxisKey, specOptions }) => {
   return (
     <ResponsiveContainer>
       <ReLineChart
@@ -29,13 +34,24 @@ const LineChart = ({ data, indicators, xAxisKey }) => {
         margin={{ top: 30, right: 0, left: 0, bottom: 0 }}
       >
         <CartesianGrid />
-        <XAxis dataKey={xAxisKey} interval={0} tick={{ fontSize: 10 }} />
-        <YAxis yAxisId="left" tickCount={10} tick={{ fontSize: 10 }} />
+        <XAxis
+          dataKey={xAxisKey}
+          type={specOptions[graphKeys.xAxis]}
+          interval={0}
+          tick={{ fontSize: 10 }}
+        />
+        <YAxis
+          yAxisId="left"
+          type={specOptions[graphKeys.leftYAxis]}
+          tickCount={10}
+          tick={{ fontSize: 10 }}
+        />
         <YAxis
           tickCount={10}
           yAxisId="right"
           orientation="right"
           tick={{ fontSize: 10 }}
+          type={specOptions[graphKeys.rightYAxis]}
         />
         <Tooltip
           content={<TooltipContent xAxisKey={xAxisKey} />}

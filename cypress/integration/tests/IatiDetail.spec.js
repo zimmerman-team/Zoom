@@ -7,6 +7,7 @@ context('IATI activity page', () => {
   });
   it('Visit IATI activity page', () => {
     cy.visit('/');
+    cy.percySnapshot('IATI Detail');
     cy.get('[data-cy=sidebar-toggle]').click();
     cy.get('[data-cy=sidebar-iati]').click();
     cy.wait(1000);
@@ -72,9 +73,5 @@ context('IATI activity page', () => {
     cy.queryByText(data.Sectors.Values[1]).should('exist');
     cy.queryByText(data.Sectors.Values[2]).should('exist');
     cy.queryByText(data.Sectors.Values[3]).should('exist');
-  });
-
-  it('Makes a visual snapshot of the current state', function() {
-    cy.percySnapshot('IATI Detail page test');
   });
 });

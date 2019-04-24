@@ -7,7 +7,7 @@ context('Country detail page', () => {
   });
   it('Visit Country detail page', () => {
     cy.visit('/');
-    cy.percySnapshot();
+    cy.percySnapshot("Country detail");
     cy.on('uncaught:exception', (err, runnable) => {
       // returning false here prevents Cypress from
       // failing the test
@@ -26,8 +26,5 @@ context('Country detail page', () => {
     data.NavigationFields.map(name => {
       cy.queryByText(name).should('exist');
     });
-  });
-  it('Makes a visual snapshot of the current state', function() {
-    cy.percySnapshot('Country detail page test');
   });
 });

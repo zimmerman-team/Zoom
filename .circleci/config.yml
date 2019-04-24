@@ -137,7 +137,6 @@ jobs:
       - run: yarn start
       - run: yarn e2e
 
-
 #  cypress_test:
 #      docker:
 #        - image: cypress/browsers:chrome67

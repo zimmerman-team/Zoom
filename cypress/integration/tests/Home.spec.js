@@ -1,6 +1,7 @@
 describe('Home page map controls', function() {
   it('Visit Home page ', function() {
     cy.visit('/');
+    cy.percySnapshot('Home page');
   });
 
   it('Goes in and out of fullscreen', function() {
@@ -62,9 +63,5 @@ describe('Home page geo map filters', function() {
   it('Resets values', function() {
     cy.get('[data-cy="geo-map-container"]').click();
     cy.get('[data-cy="data-explorer-panel-reset"]').click();
-  });
-
-  it('Makes a visual snapshot of the current state', function() {
-    cy.percySnapshot('Home page test');
   });
 });

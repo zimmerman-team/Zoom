@@ -26,10 +26,6 @@ describe('Visiting all pages through navigation from home', () => {
     cy.url().should('include', '/about');
     cy.get('h2').should('contain', 'About zoom');
   });
-
-  it('Makes a visual snapshot of the current state', () => {
-    cy.percySnapshot('About page test');
-  });
 });
 
 describe('Visiting all pages using url ', () => {

@@ -135,6 +135,7 @@ jobs:
           at: ~/zoom-v2-ui
       - run: yarn add cypress --ignore-engines
       - run: export "CYPRESS_backendUrl=https://duct.zoom.dev.nyuki.io"
+      - run: export "REACT_APP_CYPRESS_baseUrl=http://localhost:3000"
       - run:
           command: yarn start
           background: true

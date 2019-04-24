@@ -53,6 +53,8 @@ const defaultProps = {
 };
 
 const DropdownMenuPanel = props => {
+  // console.log('panelDetails', props.panelDetails);
+
   return (
     <React.Fragment>
       {props.panelDetails.map((detail, index) => {

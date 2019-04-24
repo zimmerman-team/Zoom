@@ -36,7 +36,7 @@ const Box = styled.div`
 `;
 
 const propTypes = {
-  indicators: PropTypes.arrayOf(
+  chartKeys: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
       color: PropTypes.string
@@ -57,7 +57,7 @@ const propTypes = {
   )
 };
 const defaultProps = {
-  indicators: [],
+  chartKeys: [],
   specOptions: {},
   indicatorData: []
 };
@@ -67,13 +67,13 @@ const LinechartFragment = props => {
     <ComponentBase>
       <Box>
         <LineChart
-          indicators={props.indicators}
+          chartKeys={props.chartKeys}
           data={props.indicatorData}
           xAxisKey="geolocation"
           specOptions={props.specOptions}
         />
       </Box>
-      <ChartLegends data={props.indicators} />
+      <ChartLegends data={props.chartKeys} />
       <LineYearContainer>
         <CustomYearSelector
           selectedYear={props.selectedYear}

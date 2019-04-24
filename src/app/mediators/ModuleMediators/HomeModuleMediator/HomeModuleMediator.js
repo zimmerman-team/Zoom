@@ -211,12 +211,12 @@ class HomeModuleMediator extends Component {
       );
     }
 
-    const indicators = [];
+    const data = [];
 
     if (countryLayerData.features && countryLayerData.features.length > 0) {
       updatePercentiles(countryLayerData, f => f.properties.value);
 
-      indicators.push({
+      data.push({
         type: 'layer',
         data: countryLayerData,
         legendName: ` ${this.state.selectedInd1} `
@@ -224,7 +224,7 @@ class HomeModuleMediator extends Component {
     }
 
     if (countryCircleData.length > 0) {
-      indicators.push({
+      data.push({
         type: 'circle',
         data: countryCircleData,
         legendName: ` ${this.state.selectedInd2} `
@@ -232,7 +232,7 @@ class HomeModuleMediator extends Component {
     }
 
     if (longLatData.length > 0) {
-      indicators.push({
+      data.push({
         type: 'location',
         data: longLatData,
         legendName: `POI: ${longLatData[0].indName}`
@@ -240,7 +240,7 @@ class HomeModuleMediator extends Component {
     }
 
     this.setState({
-      indicators,
+      data,
       subIndicators1,
       subIndicators2
     });
@@ -485,7 +485,7 @@ class HomeModuleMediator extends Component {
     return (
       <HomeModule
         loading={this.state.loading}
-        indicators={this.state.indicators}
+        data={this.state.data}
         dropDownData={this.props.dropDownData}
         selectInd1={this.selectInd1}
         selectInd2={this.selectInd2}

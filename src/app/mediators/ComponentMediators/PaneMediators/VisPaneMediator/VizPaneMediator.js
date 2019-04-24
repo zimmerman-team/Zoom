@@ -12,7 +12,6 @@ import * as actions from 'services/actions/general';
 /* helpers */
 import sortBy from 'lodash/sortBy';
 import findIndex from 'lodash/findIndex';
-import isEqual from 'lodash/isEqual';
 import { yearStrToArray } from 'utils/genericUtils';
 
 /* consts */
@@ -91,10 +90,8 @@ class VizPaneMediator extends React.Component {
       allRegions: []
     };
 
-    this.selectInd1 = this.selectInd1.bind(this);
-    this.selectInd2 = this.selectInd2.bind(this);
-    this.selectSubInd1 = this.selectSubInd1.bind(this);
-    this.selectSubInd2 = this.selectSubInd2.bind(this);
+    this.selectInd = this.selectInd.bind(this);
+    this.selectSubInd = this.selectSubInd.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
     this.selectRegion = this.selectRegion.bind(this);
     this.resetAll = this.resetAll.bind(this);
@@ -249,118 +246,72 @@ class VizPaneMediator extends React.Component {
 
   resetIndicators() {
     // and we also deselect the indicators
-    this.selectInd1({ value: undefined });
-    this.selectInd2({ value: undefined });
+    this.selectInd({ value: 'reset' });
   }
 
-  selectInd1(val) {
-    // * and we also reset some values for the sub-indicator
-    // dropdown as sub-indicators should change
-    // whenever an indicator is changed
-    this.props.dispatch(
-      actions.storePaneDataRequest({
-        subIndicators1: []
-      })
-    );
+  selectInd(val, index) {
+    const selectedInd = [...this.props.chartData.selectedInd];
 
-    // so we set the values for chart data
-    // * AND ALSO whenever an indicator is selected
-    // the year jumps to the most recent year of the
-    // indicators data point, so
-    this.props.dispatch(
-      actions.storeChartDataRequest({
-        selectedInd1: val.value,
-        dataSource1: val.dataSource,
-        selectedYear: val.firstYear,
-        selectedSubInd1: []
-      })
-    );
+    selectedInd[index].indicator = val.value;
+    selectedInd[index].dataSource = val.dataSource;
+    selectedInd[index].selectedSubInd = [];
+    selectedInd[index].subIndicators = [];
+
+    if (val === 'reset') {
+      selectedInd[index].indicator = undefined;
+      selectedInd[index].dataSource = undefined;
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          selectedInd
+        })
+      );
+    } else {
+      // so we set the values for chart data
+      // * AND ALSO whenever an indicator is selected
+      // the year jumps to the most recent year of the
+      // indicators data point, so
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          selectedInd,
+          selectedYear: val.firstYear
+        })
+      );
+    }
 
     this.changesMade();
   }
 
-  selectInd2(val) {
-    // so we set the values for chart data
-    // * AND ALSO whenever an indicator is selected
-    // the year jumps to the most recent year of the
-    // indicators data point, so
-    this.props.dispatch(
-      actions.storeChartDataRequest({
-        selectedInd2: val.value,
-        dataSource2: val.dataSource,
-        selectedYear: val.firstYear,
-        selectedSubInd2: []
-      })
-    );
-
-    // *and we also reset some values for the sub-indicator
-    // dropdown as sub-indicators should change
-    // whenever an indicator is changed
-    this.props.dispatch(
-      actions.storePaneDataRequest({
-        subIndicators2: []
-      })
-    );
-
-    this.changesMade();
-  }
-
-  selectSubInd1(item, array = false) {
-    let selectedSubInd1 = [];
+  selectSubInd(item, array = false, index) {
+    const selectedInd = [...this.props.chartData.selectedInd];
+    let selectedSubInd = [
+      ...this.props.chartData.selectedInd[index].selectedSubInd
+    ];
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
     if (item !== 'reset') {
       if (array) {
         item.forEach(it => {
-          selectedSubInd1.push(it.value);
+          selectedSubInd.push(it.value);
         });
       } else {
-        selectedSubInd1 = [...this.props.chartData.selectedSubInd1];
-        const subIndicatorIndex = selectedSubInd1.indexOf(item.value);
+        const subIndicatorIndex = selectedSubInd.indexOf(item.value);
         if (subIndicatorIndex === -1)
           // so if it doesn't exist we add it
-          selectedSubInd1.push(item.value);
+          selectedSubInd.push(item.value);
         // if it does exist we remove it
-        else selectedSubInd1.splice(subIndicatorIndex, 1);
+        else selectedSubInd.splice(subIndicatorIndex, 1);
       }
+    } else {
+      selectedSubInd = [];
     }
+
+    selectedInd[index].selectedSubInd = selectedSubInd;
 
     // so we set the values for chart data
     this.props.dispatch(
       actions.storeChartDataRequest({
-        selectedSubInd1
-      })
-    );
-
-    this.changesMade();
-  }
-
-  selectSubInd2(item, array = false) {
-    let selectedSubInd2 = [];
-
-    // so we set up this logic for select/deselect all logic
-    // if all is selected all of the options will be passed in
-    if (item !== 'reset') {
-      if (array) {
-        item.forEach(it => {
-          selectedSubInd2.push(it.value);
-        });
-      } else {
-        selectedSubInd2 = [...this.props.chartData.selectedSubInd2];
-        const subIndicatorIndex = selectedSubInd2.indexOf(item.value);
-        if (subIndicatorIndex === -1)
-          // so if it doesn't exist we add it
-          selectedSubInd2.push(item.value);
-        // if it does exist we remove it
-        else selectedSubInd2.splice(subIndicatorIndex, 1);
-      }
-    }
-
-    // so we set the values for chart data
-    this.props.dispatch(
-      actions.storeChartDataRequest({
-        selectedSubInd2
+        selectedInd
       })
     );
 
@@ -473,16 +424,6 @@ class VizPaneMediator extends React.Component {
       })
     );
 
-    // and we also reset some values for the sub-indicator
-    // dropdown as sub-indicators should change
-    // whenever an indicator is changed
-    this.props.dispatch(
-      actions.storePaneDataRequest({
-        subIndicators1: [],
-        subIndicators2: []
-      })
-    );
-
     this.changesMade();
   }
 
@@ -551,31 +492,11 @@ class VizPaneMediator extends React.Component {
         // okay so we use this variable to change the
         // to disable the geolocation dropdowns being defaultly selected
         locationSelected={!this.props.chartData.chartMounted}
-        subInd1AllSelected={
-          this.props.chartData.changesMade &&
-          isEqual(
-            this.props.chartData.selectedSubInd1,
-            initialState.selectedSubInd1
-          )
-        }
-        subInd2AllSelected={
-          this.props.chartData.changesMade &&
-          isEqual(
-            this.props.chartData.selectedSubInd2,
-            initialState.selectedSubInd2
-          )
-        }
+        changesMade={this.props.chartData.changesMade}
+        selectedInd={this.props.chartData.selectedInd}
         chartKeys={this.props.chartData.chartKeys}
-        selectInd1={this.selectInd1}
-        selectInd2={this.selectInd2}
-        selectSubInd1={this.selectSubInd1}
-        selectSubInd2={this.selectSubInd2}
-        selectedInd1={this.props.chartData.selectedInd1}
-        selectedInd2={this.props.chartData.selectedInd2}
-        selectedSubInd1={this.props.chartData.selectedSubInd1}
-        selectedSubInd2={this.props.chartData.selectedSubInd2}
-        subIndicators1={this.props.paneData.subIndicators1}
-        subIndicators2={this.props.paneData.subIndicators2}
+        selectInd={this.selectInd}
+        selectSubInd={this.selectSubInd}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.props.chartData.selectedCountryVal}
         selectedCountryLabel={this.props.chartData.selectedCountryLabels}

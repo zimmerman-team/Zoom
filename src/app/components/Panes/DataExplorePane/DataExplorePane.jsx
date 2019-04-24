@@ -3,6 +3,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { createBrowserHistory } from 'history';
 
+/* consts */
+import initialState from '__consts__/InitialChartDataConst';
+
+/* utils */
+import isEqual from 'lodash/isEqual';
+
 /* icons */
 import IconRedIndicators from 'assets/icons/IconRedIndicators';
 import IconRedLocation from 'assets/icons/IconRedLocation';
@@ -24,10 +30,22 @@ import DropdownMenuPanel from './panels/DropdownMenuPanel/DropdownMenuPanel';
 import GraphStructurePanel from './panels/GraphStructurePanel/GraphStructurePanel';
 
 const propTypes = {
-  selectedInd2: PropTypes.string,
-  selectedInd1: PropTypes.string,
+  selectedInd: PropTypes.arrayOf(
+    PropTypes.shape({
+      indicator: PropTypes.string,
+      subIndicators: PropTypes.arrayOf(
+        PropTypes.shape({
+          label: PropTypes.string,
+          value: PropTypes.string
+        })
+      ),
+      dataSource: PropTypes.string,
+      selectedSubInd: PropTypes.arrayOf(PropTypes.string)
+    })
+  ),
   chartKeys: PropTypes.arrayOf(PropTypes.shape({})),
   regionAmount: PropTypes.number,
+  changesMade: PropTypes.bool,
   indNames: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
@@ -48,18 +66,6 @@ const propTypes = {
           iso2: PropTypes.string
         })
       )
-    })
-  ),
-  subIndicators1: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.string
-    })
-  ),
-  subIndicators2: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.string
     })
   ),
   selectedCountryVal: PropTypes.arrayOf(PropTypes.string),
@@ -86,13 +92,9 @@ const propTypes = {
   selectRegion: PropTypes.func,
   selectYearRange: PropTypes.func,
   yearRange: PropTypes.array,
-  selectInd1: PropTypes.func,
-  selectInd2: PropTypes.func,
+  selectInd: PropTypes.func,
   specOptions: PropTypes.shape({}),
-  selectedSubInd1: PropTypes.arrayOf(PropTypes.string),
-  selectedSubInd2: PropTypes.arrayOf(PropTypes.string),
-  selectSubInd1: PropTypes.func,
-  selectSubInd2: PropTypes.func,
+  selectSubInd: PropTypes.func,
   subInd1AllSelected: PropTypes.bool,
   subInd2AllSelected: PropTypes.bool,
   locationSelected: PropTypes.bool,
@@ -101,13 +103,13 @@ const propTypes = {
 };
 
 const defaultProps = {
-  selectedInd2: undefined,
-  selectedInd1: undefined,
+  selectedInd: [],
   saveGraphOption: null,
   handleAxisSwitch: null,
   locationSelected: true,
   subInd1AllSelected: true,
   subInd2AllSelected: true,
+  changesMade: true,
   specOptions: {},
   chartKeys: [],
   selectYearRange: undefined,
@@ -115,20 +117,14 @@ const defaultProps = {
   indNames: [],
   countries: [],
   regions: [],
-  subIndicators1: [],
-  subIndicators2: [],
   selectedCountryVal: [],
   selectedCountryLabels: [],
   selectedRegionVal: [],
   selectedRegionLabels: [],
   selectCountry: null,
   selectRegion: null,
-  selectInd1: null,
-  selectInd2: null,
-  selectedSubInd1: [],
-  selectedSubInd2: [],
-  selectSubInd1: null,
-  selectSubInd2: null,
+  selectInd: null,
+  selectSubInd: null,
   resetAll: null
 };
 
@@ -137,7 +133,49 @@ class DataExplorePane extends React.Component {
     activeIndex: []
   };
 
+  generateIndicatorPanels() {
+    const indPanels = [];
+
+    this.props.selectedInd.forEach((indItem, index) => {
+      // we push in the indicator dropdown data
+      indPanels.push({
+        categorise: true,
+        placeHolderText: 'Select indicator',
+        placeHolderNumber: this.props.indNames.length,
+        selectDataSource: val => this.props.selectInd(val, index),
+        allFileSources: this.props.indNames,
+        selectedSources: indItem.indicator,
+        valueSelected: indItem.indicator,
+        reset: () => this.props.selectInd('reset')
+      });
+
+      // and we push in the sub-indicator dropdown data
+      indPanels.push({
+        indicator: indItem.indicator,
+        subIndicator: true,
+        categorise: true,
+        multiple: true,
+        selectAll: true,
+        placeHolderText: 'Select sub indicator',
+        selectDataSource: (val, isArray) =>
+          this.props.selectSubInd(val, isArray, index),
+        defaultAll:
+          this.props.changesMade && indItem.selectedSubInd.length === 0,
+        allFileSources: indItem.subIndicators,
+        selectedSources: indItem.selectedSubInd
+      });
+    });
+
+    return indPanels;
+  }
+
   render() {
+    /* TODO: put this in the state so that it wouldn't
+        everytime when unneeded changes are made
+        right now there some referencing bs happening
+        so can't catch the did update prop change*/
+    const indPanels = this.generateIndicatorPanels();
+
     const history = createBrowserHistory();
     const isGeoMap =
       history.location.pathname.includes('geomap') ||
@@ -237,52 +275,7 @@ class DataExplorePane extends React.Component {
             <DropdownMenuPanel
               handleAxisSwitch={this.props.handleAxisSwitch}
               chartKeys={this.props.chartKeys}
-              panelDetails={[
-                {
-                  categorise: true,
-                  placeHolderText: 'Select indicator',
-                  placeHolderNumber: this.props.indNames.length,
-                  selectDataSource: this.props.selectInd1,
-                  allFileSources: this.props.indNames,
-                  selectedSources: this.props.selectedInd1,
-                  valueSelected: this.props.selectedInd1,
-                  reset: () => this.props.selectInd1('reset')
-                },
-                {
-                  indicator: this.props.selectedInd1,
-                  subIndicator: true,
-                  categorise: true,
-                  multiple: true,
-                  selectAll: true,
-                  placeHolderText: 'Select sub indicator',
-                  selectDataSource: this.props.selectSubInd1,
-                  defaultAll: this.props.subInd1AllSelected,
-                  allFileSources: this.props.subIndicators1,
-                  selectedSources: this.props.selectedSubInd1
-                },
-                {
-                  categorise: true,
-                  placeHolderText: 'Select indicator',
-                  placeHolderNumber: this.props.indNames.length,
-                  selectDataSource: this.props.selectInd2,
-                  allFileSources: this.props.indNames,
-                  selectedSources: this.props.selectedInd2,
-                  valueSelected: this.props.selectedInd2,
-                  reset: () => this.props.selectInd2('reset')
-                },
-                {
-                  indicator: this.props.selectedInd2,
-                  subIndicator: true,
-                  categorise: true,
-                  multiple: true,
-                  selectAll: true,
-                  placeHolderText: 'Select sub indicator',
-                  selectDataSource: this.props.selectSubInd2,
-                  defaultAll: this.props.subInd2AllSelected,
-                  allFileSources: this.props.subIndicators2,
-                  selectedSources: this.props.selectedSubInd2
-                }
-              ]}
+              panelDetails={indPanels}
             />
           </ExpansionPanelContainer>
 

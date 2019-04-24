@@ -149,6 +149,7 @@ class VizContainer extends React.Component {
 
           <YearContainer>
             <CustomYearSelector
+              backgroundColor="transparent"
               selectedYear={this.props.selectedYear}
               selectYear={this.props.selectYear}
             />

@@ -2,27 +2,35 @@ import styled from 'styled-components';
 
 import theme from 'theme/Theme';
 
+//Yearcontainer => ComponentBase => YearLabel(s)
+export const YearContainer = styled.div`
+  position: relative;
+  bottom: 56px;
+  padding-left: 24px;
+  padding-right: 24px;
+  width: 100%;
+ 
+  //MAX-WIDTH => width alle yearlabels optellen
+`;
+
 export const ComponentBase = styled.div`
   display: flex;
-  background-color: rgba(255, 255, 255, 0.78);
-`;
-export const Text = styled.div`
-  width: 24px;
+  background-color: ${props => props.backgroundColor};
+  justify-content: center;
 `;
 
 export const YearLabel = styled.div`
-  max-width: 32px;
-  min-width: 32px;
-  font-size: 10px;
-  font-family: ${theme.font.zoomFontFamOne};
-  color: ${theme.color.smallTextBlack};
-  padding: 10px 0;
-  line-height: 12px;
   display: flex;
   justify-content: center;
   flex-grow: 1;
-  text-align: center;
-
+  max-width: 32px;
+  font-size: 10px;
+  font-family: ${theme.font.zoomFontFamOne};
+  color: ${theme.color.smallTextBlack};
+  
+  padding: 10px 0;
+  line-height: 12px;
+  
   &:hover {
     cursor: pointer;
   }
@@ -40,6 +48,10 @@ export const YearLabel = styled.div`
   -webkit-touch-callout: none;
   -o-user-select: none;
   -moz-user-select: none;
+`;
+
+export const Text = styled.div`
+  //width: 24px;
 `;
 
 export const SelectedYearLabel = styled(YearLabel)`
@@ -134,8 +146,3 @@ export const EndControl = styled(YearLabel)`
   }
 `;
 
-export const YearContainer = styled.div`
-  position: absolute;
-  bottom: 40px;
-  z-index: 10;
-`;

@@ -1,6 +1,7 @@
 /* base */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Theme from 'theme/Theme';
 import { connect } from 'react-redux';
 import Cookies from 'universal-cookie';
 import { withRouter } from 'react-router';
@@ -104,6 +105,7 @@ export class HomeModule extends Component {
             }
           >
             <CustomYearSelector
+              backgroundColor={Theme.color.aidsFondsWhiteOpacity}
               selectedYear={this.props.selectedYear}
               selectYear={this.props.selectYear}
             />

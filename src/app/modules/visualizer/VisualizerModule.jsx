@@ -31,8 +31,10 @@ const propTypes = {
   indicators: PropTypes.arrayOf(PropTypes.shape({})),
   dataPaneOpen: PropTypes.string,
   auth0Client: PropTypes.shape({}),
+  chartKeys: PropTypes.array,
   chartType: PropTypes.string,
   publicPage: PropTypes.bool,
+  saveViewport: PropTypes.func,
   moduleMode: PropTypes.string
 };
 
@@ -40,9 +42,11 @@ const defaultProps = {
   indicators: [],
   publicPage: false,
   dataPaneOpen: 'visualizer',
+  chartKeys: [],
   auth0Client: {},
   dropDownData: {},
   chartType: PropTypes.string,
+  saveViewport: null,
   loggedIn: true
 };
 
@@ -87,6 +91,8 @@ class BuilderModule extends Component {
             />
           )}
           <VizContainer
+            saveViewport={this.props.saveViewport}
+            chartKeys={this.props.chartKeys}
             publicPage={this.props.publicPage}
             chartType={this.props.chartType}
             outerHistory={this.props.outerHistory}

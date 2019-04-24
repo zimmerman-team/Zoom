@@ -9,7 +9,9 @@ import BarchartFragment from 'modules/visualizer/sort/container/fragments/Barcha
 import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFragment';
 
 import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment';
+import TablechartFragment from 'modules/visualizer/sort/container/fragments/TablechartFragment';
 import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
+import DonutchartFragment from 'modules/visualizer/sort/container/fragments/DonutchartFragment';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -35,11 +37,15 @@ const PropsRoute = ({ component, ...rest }) => {
 const propTypes = {
   chartType: PropTypes.string,
   publicPage: PropTypes.bool,
+  chartKeys: PropTypes.array,
+  saveViewport: PropTypes.func,
   mode: PropTypes.bool
 };
 const defaultProps = {
   chartType: 'geomap',
   publicPage: false,
+  chartKeys: [],
+  saveViewport: null,
   mode: location.pathname.includes('preview')
 };
 
@@ -86,6 +92,7 @@ class VizContainer extends React.Component {
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
             indicatorData={this.props.indicators}
+            saveViewport={this.props.saveViewport}
             path="/(visualizer|public)/(geomap|focusKE|focusNL)/:code/:tab"
             component={GeomapFragment}
             mode={this.state.preview}
@@ -96,6 +103,7 @@ class VizContainer extends React.Component {
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
             indicatorData={this.props.indicators}
+            indicators={this.props.chartKeys}
             path="/(visualizer|public)/linechart/:code/:tab"
             component={LinechartFragment}
             mode={this.state.preview}
@@ -106,8 +114,30 @@ class VizContainer extends React.Component {
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
             indicatorData={this.props.indicators}
+            chartKeys={this.props.chartKeys}
             path="/(visualizer|public)/barchart/:code/:tab"
             component={BarchartFragment}
+            mode={this.state.preview}
+          />
+          <PropsRoute
+            chartType={this.props.chartType}
+            selectYear={this.props.selectYear}
+            selectedYear={this.props.selectedYear}
+            indicatorData={this.props.indicators}
+            chartKeys={this.props.chartKeys}
+            path="/(visualizer|public)/tablechart/:code/:tab"
+            component={TablechartFragment}
+            mode={this.state.preview}
+          />
+
+          <PropsRoute
+            chartType={this.props.chartType}
+            selectYear={this.props.selectYear}
+            selectedYear={this.props.selectedYear}
+            indicatorData={this.props.indicators}
+            chartKeys={this.props.chartKeys}
+            path="/(visualizer|public)/donutchart/:code/:tab"
+            component={DonutchartFragment}
             mode={this.state.preview}
           />
         </React.Fragment>

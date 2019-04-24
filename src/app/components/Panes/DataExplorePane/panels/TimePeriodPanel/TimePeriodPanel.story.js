@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import GraphStructurePanel from 'components/Panes/DataExplorePane/common/sort/GraphStructurePanel/GraphStructurePanel';
+import TimePeriodPanel from './TimePeriodPanel';
 
-storiesOf('Components', module).add('GraphStructurePanel', () => (
-  <GraphStructurePanel />
+storiesOf('Components', module).add('TimePeriodPanel', () => (
+  <TimePeriodPanel />
 ));

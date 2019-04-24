@@ -11,7 +11,9 @@ import DataMapperModule from 'modules/datamapper/DataMapperModule';
 
 // Modules lazy load
 const CountryDetailMediator = lazy(() =>
-  import('mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator')
+  import(
+    'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator'
+  )
 );
 const HomeModuleMediator = lazy(() =>
   import('mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator')
@@ -22,7 +24,9 @@ const FocusModuleMediator = lazy(() =>
 );
 
 const VisualizerModuleMediator = lazy(() =>
-  import('mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator')
+  import(
+    'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator'
+  )
 );
 
 const IatiDetailMediator = lazy(() =>
@@ -36,6 +40,9 @@ const EditUserMediator = lazy(() =>
 );
 const CreateTeamMediator = lazy(() =>
   import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator')
+);
+const EditTeamMediator = lazy(() =>
+  import('mediators/ModuleMediators/EditTeamMediator/EditTeamMediator')
 );
 const PublicDashMediator = lazy(() =>
   import('mediators/DashboardMediators/PublicDashMediator')
@@ -70,6 +77,7 @@ const Routes = props => {
               <HomeModuleMediator
                 indicatorAggregations={props}
                 dropDownData={props}
+                auth0Client={props.auth0Client}
               />
             )}
           />
@@ -149,11 +157,47 @@ const Routes = props => {
           />
           <Route
             exact
+            path="/view-user/:userId"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <EditUserMediator auth0Client={props.auth0Client} viewOnly />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            exact
             path="/create-team"
             render={() =>
               props.auth0Client.isAuthenticated() &&
               props.auth0Client.isAdministrator() ? (
                 <CreateTeamMediator auth0Client={props.auth0Client} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/edit-team/:teamId"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <EditTeamMediator auth0Client={props.auth0Client} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/view-team/:teamId"
+            render={() =>
+              props.auth0Client.isAuthenticated() &&
+              props.auth0Client.isAdministrator() ? (
+                <EditTeamMediator auth0Client={props.auth0Client} viewOnly />
               ) : (
                 <Redirect to="/" />
               )
@@ -167,8 +211,7 @@ const Routes = props => {
           <Route
             path="/dashboard/:tab"
             render={() =>
-              props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
+              props.auth0Client.isAuthenticated() ? (
                 <DashboardMediator auth0Client={props.auth0Client} />
               ) : (
                 <Redirect to="/" />
@@ -209,12 +252,6 @@ const Routes = props => {
           <Route
             path="/public/chart-library"
             render={() => <PublicDashMediator />}
-          />
-
-          <Route
-            exact
-            path="/public/chart-library/:id/:charttype"
-            // todo: render to appropriate chart pages
           />
 
           {/*todo: remove on PR*/}

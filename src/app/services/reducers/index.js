@@ -7,6 +7,9 @@ import { CREATE_DUPLICATE_CHART_REQUEST } from 'services/actions/nodeBackend';
 import { CREATE_DUPLICATE_CHART_SUCCESS } from 'services/actions/nodeBackend';
 import { CREATE_DUPLICATE_CHART_FAILED } from 'services/actions/nodeBackend';
 import { DUPLICATE_CHART_INITIAL } from 'services/actions/nodeBackend';
+import { DELETE_DATASET_INITIAL } from 'services/actions/nodeBackend';
+import { DELETE_DATASET_REQUEST } from 'services/actions/nodeBackend';
+import { DELETE_DATASET_SUCCESS } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -205,6 +208,21 @@ function activityData(state = initial, action) {
     case oipaActions.ACTIVITY_DATA_SUCCESS:
       return updateSuccess(state, action);
     case oipaActions.ACTIVITY_DATA_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function countryOrganisations(state = initial, action) {
+  switch (action.type) {
+    case oipaActions.COUNTRY_ORGANISATIONS_INITIAL:
+      return updateInitial(state);
+    case oipaActions.COUNTRY_ORGANISATIONS_REQUEST:
+      return updateRequest(state, action);
+    case oipaActions.COUNTRY_ORGANISATIONS_SUCCESS:
+      return updateSuccess(state, action);
+    case oipaActions.COUNTRY_ORGANISATIONS_FAILED:
       return updateFailed(state, action);
     default:
       return state;
@@ -420,6 +438,7 @@ function userDeleted(state = initial, action) {
       return state;
   }
 }
+
 function datasetUpdated(state = initial, action) {
   switch (action.type) {
     case nodeActions.UPDATE_DATASET_INITIAL:
@@ -434,6 +453,7 @@ function datasetUpdated(state = initial, action) {
       return state;
   }
 }
+
 function dupChartCreated(state = initial, action) {
   switch (action.type) {
     case nodeActions.CREATE_DUPLICATE_CHART_INITIAL:
@@ -464,7 +484,53 @@ function chartDuplicated(state = initial, action) {
   }
 }
 
+function updateTeamAndUsersOfIt(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_INITIAL:
+      return updateInitial(state);
+    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT__REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function groupDeleted(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.DELETE_GROUP_INITIAL:
+      return updateInitial(state);
+    case nodeActions.DELETE_GROUP_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.DELETE_GROUP_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.DELETE_GROUP_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function datasetDeleted(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.DELETE_DATASET_INITIAL:
+      return updateInitial(state);
+    case nodeActions.DELETE_DATASET_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.DELETE_DATASET_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.DELETE_DATASET_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  datasetDeleted,
   chartDuplicated,
   dupChartCreated,
   datasetUpdated,
@@ -490,6 +556,9 @@ const reducers = {
   countryExcerpt,
   countryActivities,
   activityData,
+  countryOrganisations,
+  updateTeamAndUsersOfIt,
+  groupDeleted,
   userDeleted
 };
 

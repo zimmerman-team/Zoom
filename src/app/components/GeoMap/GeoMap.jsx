@@ -41,10 +41,13 @@ const propTypes = {
     longitude: PropTypes.number,
     zoom: PropTypes.number
   }),
+  viewport: PropTypes.shape({}),
+  chartMounted: PropTypes.bool,
   indicatorData: PropTypes.array,
   selectedYear: PropTypes.string,
   disableYear: PropTypes.bool,
   selectYear: PropTypes.func,
+  saveViewport: PropTypes.func,
   mapOptions: PropTypes.object
 };
 
@@ -53,7 +56,10 @@ const defaultProps = {
   // just show worldview when no lat long is specified
   latitude: 15,
   longitude: 0,
+  viewport: {},
+  chartMounted: false,
   zoom: 2,
+  saveViewport: null,
   mapOptions: {}
 };
 
@@ -61,14 +67,10 @@ export class GeoMap extends Component {
   constructor(props) {
     super(props);
 
-    this.defaultMapStyle = {
-      ...MAP_STYLE,
-      sources: { ...MAP_STYLE.sources },
-      layers: MAP_STYLE.layers.slice()
-    };
-
     this.state = {
-      mapStyle: fromJS(this.defaultMapStyle),
+      mapStyle: {
+        ...MAP_STYLE
+      },
       markerArray: [],
       legends: [],
       hoverLayerInfo: null,
@@ -106,7 +108,10 @@ export class GeoMap extends Component {
       this.updateMap(this.props.indicatorData);
     }
 
-    if (!isEqual(this.props.focus, prevProps.focus))
+    if (
+      !isEqual(this.props.focus, prevProps.focus) &&
+      (this.props.viewport.zoom === undefined || !this.props.chartMounted)
+    ) {
       this.setState({
         viewport: {
           latitude: this.props.focus.latitude,
@@ -115,6 +120,17 @@ export class GeoMap extends Component {
           zoom: this.props.focus.zoom
         }
       });
+    }
+
+    if (
+      this.props.chartMounted !== prevProps.chartMounted &&
+      this.props.chartMounted &&
+      this.props.viewport.zoom !== undefined
+    ) {
+      this.setState({
+        viewport: this.props.viewport
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -128,43 +144,22 @@ export class GeoMap extends Component {
     // markers
     // Note: the layer will also use a different tooltip than the markers
     // cause it kind of makes sense for some cases
+    const mapStyle = {
+      ...MAP_STYLE
+    };
     const layers = find(indicatorData, ['type', 'layer']);
     if (layers) {
-      let mapStyle = this.defaultMapStyle;
       const borderData = layers.borderData ? layers.borderData : layers.data;
 
-      // here we need to push in the border line style seperately like this
-      // so that it would work and load properly with the layers
-      // this may not be the best approach, but its the one that actually works
-      // we also only push the borderStyle once.
+      mapStyle.sources.layer = { type: 'geojson', data: layers.data };
+      mapStyle.sources.outline = { type: 'geojson', data: borderData };
+
       if (!find(mapStyle.layers, ['id', 'outline'])) {
         mapStyle.layers.push(borderStyle);
       }
-
-      //then we continue working with the normal fromJS  variable
-      mapStyle = fromJS(mapStyle);
-      mapStyle = mapStyle
-        // Add geojson layer source to map
-        .setIn(
-          ['sources', 'layer'],
-          fromJS({ type: 'geojson', data: layers.data })
-        )
-        // Add point layer to map
-        .set('layers', mapStyle.get('layers').push(dataLayer))
-        // Add geojson border source to map
-        .setIn(
-          ['sources', 'outline'],
-          fromJS({ type: 'geojson', data: borderData })
-        );
-      this.setState({ mapStyle });
-    } else if (!isEqual(this.state.mapStyle, fromJS(this.defaultMapStyle))) {
-      //Here we set the map back to default when no layer data has been passed in
-      // And we need to remove the borderStyle cause it gets added there
-      // and while its there, the map will not set itself to default
-      let mapStylez = this.defaultMapStyle;
-      const ind = findIndex(mapStylez.layers, ['id', 'outline']);
-      mapStylez.layers.splice(ind, 1);
-      this.setState({ mapStyle: fromJS(mapStylez) });
+      if (!find(mapStyle.layers, ['id', 'layer'])) {
+        mapStyle.layers.push(dataLayer);
+      }
     }
 
     // and all of the generic markers that can be just put in the map, like separate components
@@ -173,10 +168,21 @@ export class GeoMap extends Component {
     // and in a similar way we generate legends
     const legends = generateLegends(indicatorData);
 
-    this.setState({ markerArray, legends });
+    this.setState({ markerArray, legends, mapStyle });
   }
 
-  _updateViewport = viewport => this.setState({ viewport });
+  setMarkerInfo(indicator) {
+    this.setState({
+      hoverMarkerInfo: indicator
+    });
+  }
+
+  _updateViewport = viewport => {
+    this.setState({ viewport });
+
+    if (this.props.chartMounted && this.props.saveViewport)
+      this.props.saveViewport(viewport);
+  };
 
   _setLayerInfo = event => {
     let hoverLayerInfo = null;
@@ -199,12 +205,6 @@ export class GeoMap extends Component {
     if (!hoverMarkerInfo) return layerInfo(hoverLayerInfo);
 
     return null;
-  }
-
-  setMarkerInfo(indicator) {
-    this.setState({
-      hoverMarkerInfo: indicator
-    });
   }
 
   _showMarkerInfo() {
@@ -233,7 +233,7 @@ export class GeoMap extends Component {
   handleZoomIn() {
     this._updateViewport({
       ...this.state.viewport,
-      zoom: this.state.viewport.zoom + 0.5
+      zoom: this.state.viewport.zoom + 0.1
     });
   }
 
@@ -242,8 +242,8 @@ export class GeoMap extends Component {
       this._updateViewport({
         ...this.state.viewport,
         zoom:
-          this.state.viewport.zoom - 0.5 > this.state.settings.minZoom
-            ? this.state.viewport.zoom - 0.5
+          this.state.viewport.zoom - 0.1 > this.state.settings.minZoom
+            ? this.state.viewport.zoom - 0.1
             : this.state.settings.minZoom
       });
   }

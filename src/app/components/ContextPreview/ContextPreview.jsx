@@ -63,7 +63,9 @@ const ContextPreview = props => {
         />
       )}
       {props.show === 'descIntro' && (
-        <ContextIntro>{props.descIntro}</ContextIntro>
+        <ContextIntro data-cy="context-preview-intro">
+          {props.descIntro}
+        </ContextIntro>
       )}
       {props.show === 'descBody' && (
         <ContextBody>

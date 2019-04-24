@@ -1,24 +1,34 @@
 import React, { Component } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
+import VisualizerModule from 'modules/visualizer/VisualizerModule';
+
+/* utils */
 import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
-import { withRouter } from 'react-router';
 import {
+  formatBarData,
   formatCountryParam,
   formatDate,
   formatGeoData,
+  formatBarChartKeys,
   formatLineData,
-  removeIds
+  removeIds,
+  formatChartLegends,
+  formatTableData,
+  formatDonutData,
+  getChartKeys
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
-import PropTypes from 'prop-types';
-import VisualizerModule from 'modules/visualizer/VisualizerModule';
-import { connect } from 'react-redux';
 
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
 import paneTypes from '__consts__/PaneTypesConst';
 import chartTypes from '__consts__/ChartConst';
 import initialPaneState from '__consts__/InitialPaneDataConst';
+import { colorSet1 } from '__consts__/PaneConst';
+import graphKeys from '__consts__/GraphStructKeyConst';
 
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
@@ -63,6 +73,7 @@ const propTypes = {
       )
     })
   }),
+  publicChart: PropTypes.shape({}),
   chartResults: PropTypes.shape({}),
   chartData: PropTypes.shape({}),
   user: PropTypes.shape({}),
@@ -96,6 +107,7 @@ const defaultProps = {
   dropDownData: {},
   publicPage: false,
   chartResults: {},
+  publicChart: {},
   auth0Client: {},
   chartData: {},
   user: {},
@@ -110,12 +122,14 @@ class VisualizerModuleMediator extends Component {
       loading: false,
       selectedYear: this.props.chartData.selectedYear
         ? this.props.chartData.selectedYear
-        : initialState.yearPeriod[0],
-      indicators: []
+        : initialState.yearPeriod[0]
     };
 
     this.refetch = this.refetch.bind(this);
     this.selectYear = this.selectYear.bind(this);
+    this.saveViewport = this.saveViewport.bind(this);
+    this.loadChartData = this.loadChartData.bind(this);
+    this.storeChartToRedux = this.storeChartToRedux.bind(this);
   }
 
   componentDidMount() {
@@ -125,116 +139,81 @@ class VisualizerModuleMediator extends Component {
     // we also want to reset the previously created/updated chart
     this.props.dispatch(nodeActions.createUpdateChartInitial());
 
-    if (this.props.match.params.code !== 'vizID') {
-      if (this.props.user)
-        this.setState(
-          {
-            loading: true
-          },
-          () =>
-            this.props.dispatch(
-              nodeActions.getChartRequest({
-                authId: this.props.user.authId,
-                chartId: this.props.match.params.code
-              })
-            )
-        );
-    }
-    // and we store this so it would be accessible to the visualizer mediator
-    else
+    if (this.props.match.params.code !== 'vizID')
+      this.setState(
+        {
+          loading: true
+        },
+        this.loadChartData
+      );
+    else {
+      // and we store the chart type so it would be accessible to the visualizer mediator
       this.props.dispatch(
         actions.storePaneDataRequest({
           chartType: this.props.match.params.chart
         })
       );
+      if (chartTypes.lineChart === this.props.match.params.chart)
+        // we also store the initial values for the linecharts
+        // graphstructure pane
+        // so yeah yAxis should initially be numbers
+        // and xAxis should initially be the categories
+        // and the color pallet should be the first color
+        // set from the consts
+        this.props.dispatch(
+          actions.storeChartDataRequest({
+            specOptions: {
+              [graphKeys.leftYAxis]: 'number',
+              [graphKeys.rightYAxis]: 'number',
+              [graphKeys.xAxis]: 'category',
+              [graphKeys.colorPallet]: colorSet1
+            }
+          })
+        );
+    }
   }
 
   componentDidUpdate(prevProps) {
     if (!isEqual(this.props.user, prevProps.user) && this.props.user) {
-      if (this.props.match.params.code !== 'vizID') {
-        this.props.dispatch(
-          nodeActions.getChartRequest({
-            authId: this.props.user.authId,
-            chartId: this.props.match.params.code
-          })
-        );
-      }
+      this.loadChartData();
     }
 
+    // we format indicators when the indicator data changes
     if (
       !isEqual(
         this.props.indicatorAggregations,
         prevProps.indicatorAggregations
       )
-    ) {
+    )
       this.updateIndicators();
+
+    // we update the key data with the colors
+    /* TODO: update the bar data correctly without
+        initiating a change in the saved data */
+    if (
+      !isEqual(
+        this.props.chartData.specOptions[graphKeys.colorPallet],
+        prevProps.chartData.specOptions[graphKeys.colorPallet]
+      )
+    ) {
+      const chartKeys = formatChartLegends(
+        [this.props.chartData.selectedInd1, this.props.chartData.selectedInd2],
+        this.props.chartData.specOptions[graphKeys.colorPallet]
+      );
+
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          chartKeys
+        })
+      );
     }
 
     // and we load in the chart data retrieved from the node backend
     if (
       !isEqual(this.props.chartResults, prevProps.chartResults) &&
       this.props.chartResults
-    ) {
-      const {
-        _id,
-        name,
-        selectedYear,
-        indicatorItems,
-        selectedCountryVal,
-        description,
-        selectedRegionVal,
-        type,
-        selectedSources,
-        author,
-        dataSources,
-        _public,
-        team,
-        descIntro,
-        data,
-        created,
-        yearRange
-      } = this.props.chartResults;
-
-      // we load up the redux chartData variable
-      this.props.dispatch(
-        actions.storeChartDataRequest({
-          changesMade: false,
-          chartMounted: true,
-          name,
-          _public,
-          team: team.length > 0,
-          indicators: data,
-          chartId: _id,
-          descIntro,
-          selectedYear,
-          // TODO this will need to be redone after we implement the logic for infinite amounts of indicators
-          selectedInd1: indicatorItems[0].indicator,
-          selectedInd2: indicatorItems[1].indicator,
-          selectedCountryVal,
-          desc: description,
-          selectedSubInd1: indicatorItems[0].subIndicators,
-          selectedSubInd2: indicatorItems[1].subIndicators,
-          dataSource1: dataSources[0],
-          dataSource2: dataSources[1],
-          authorName: author.username,
-          createdDate: formatDate(created),
-          selectedRegionVal: removeIds(selectedRegionVal)
-        })
-      );
-
-      // we load up the redux paneData variable
-      this.props.dispatch(
-        actions.storePaneDataRequest({
-          chartType: type,
-          selectedSources,
-          subIndicators1: indicatorItems[0].allSubIndicators,
-          subIndicators2: indicatorItems[1].allSubIndicators,
-          yearRange
-        })
-      );
-
-      this.setState({ loading: false });
-    }
+    )
+      this.storeChartToRedux();
 
     // TODO redo this check properly
     const {
@@ -243,6 +222,8 @@ class VisualizerModuleMediator extends Component {
       descIntro,
       _public,
       team,
+      specOptions,
+      chartKeys,
       ...restChart
     } = this.props.chartData;
     const {
@@ -251,6 +232,8 @@ class VisualizerModuleMediator extends Component {
       descIntro: prevDescIntro,
       _public: prevPublc,
       team: prevTeam,
+      specOptions: prevSpecOptions,
+      chartKeys: prevchartKeys,
       ...prevRestChart
     } = prevProps.chartData;
     // so we refetch data when chartData changes
@@ -301,6 +284,7 @@ class VisualizerModuleMediator extends Component {
     subIndicators2 = sortBy(subIndicators2, ['label']);
 
     let indicators = [];
+    let chartKeys = [];
 
     switch (this.props.match.params.chart) {
       case chartTypes.geoMap:
@@ -328,15 +312,58 @@ class VisualizerModuleMediator extends Component {
         );
         break;
       case chartTypes.lineChart:
+        chartKeys = formatChartLegends(
+          [
+            this.props.chartData.selectedInd1,
+            this.props.chartData.selectedInd2
+          ],
+          this.props.chartData.specOptions[graphKeys.colorPallet]
+        );
         indicators = formatLineData([
           this.props.indicatorAggregations.indicators1,
           this.props.indicatorAggregations.indicators2
         ]);
         break;
+      case chartTypes.barChart:
+        indicators = formatBarData(
+          [
+            this.props.indicatorAggregations.indicators1,
+            this.props.indicatorAggregations.indicators2
+          ],
+          this.props.chartData.specOptions[graphKeys.colorPallet]
+        );
+        chartKeys = formatBarChartKeys([
+          this.props.chartData.selectedInd1,
+          this.props.chartData.selectedInd2
+        ]);
+        break;
+      case chartTypes.tableChart:
+        indicators = formatTableData([
+          this.props.indicatorAggregations.indicators1,
+          this.props.indicatorAggregations.indicators2
+        ]);
+        break;
+      case chartTypes.donutChart:
+        indicators = formatDonutData(
+          [
+            this.props.indicatorAggregations.indicators1,
+            this.props.indicatorAggregations.indicators2
+          ],
+          this.props.chartData.specOptions[graphKeys.colorPallet]
+        );
+        chartKeys = formatChartLegends(
+          [
+            this.props.chartData.selectedInd1,
+            this.props.chartData.selectedInd2
+          ],
+          this.props.chartData.specOptions[graphKeys.colorPallet]
+        );
+        break;
       default:
         indicators = [];
         break;
     }
+
     // and we save the subindicator selection for the datapane
     this.props.dispatch(
       actions.storePaneDataRequest({
@@ -348,11 +375,10 @@ class VisualizerModuleMediator extends Component {
     // and we save the chart data
     this.props.dispatch(
       actions.storeChartDataRequest({
+        chartKeys,
         indicators
       })
     );
-
-    this.setState({ indicators });
   }
 
   refetch(
@@ -375,6 +401,10 @@ class VisualizerModuleMediator extends Component {
       regionCountriesCodes
     );
 
+    // so this variable basically controlls the filter param for data points
+    // that don't have/do have geolocationIso2 field
+    const iso2Undef = countriesISO2.indexOf('undefined') !== -1;
+
     const refetchVars = {
       indicator1: [ind1],
       indicator2: [ind2],
@@ -383,7 +413,8 @@ class VisualizerModuleMediator extends Component {
       singleInd2: ind2 || 'null',
       datePeriod: [selectedYear],
       subInd1: subInd1.length > 0 ? subInd1 : ['undefined'],
-      subInd2: subInd2.length > 0 ? subInd2 : ['undefined']
+      subInd2: subInd2.length > 0 ? subInd2 : ['undefined'],
+      OR_GeolocationIso2_Is_Null: iso2Undef
     };
 
     this.props.relay.refetch(refetchVars, null, () =>
@@ -402,9 +433,107 @@ class VisualizerModuleMediator extends Component {
     );
   }
 
+  saveViewport(viewPort) {
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        specOptions: viewPort
+      })
+    );
+  }
+
+  loadChartData() {
+    if (this.props.publicPage) {
+      this.props.dispatch(
+        nodeActions.getPublicChartRequest({
+          chartId: this.props.match.params.code
+        })
+      );
+    } else if (this.props.match.params.code !== 'vizID' && this.props.user) {
+      this.props.dispatch(
+        nodeActions.getChartRequest({
+          authId: this.props.user.authId,
+          chartId: this.props.match.params.code
+        })
+      );
+    }
+  }
+
+  storeChartToRedux() {
+    const {
+      _id,
+      name,
+      selectedYear,
+      indicatorItems,
+      selectedCountryVal,
+      description,
+      selectedRegionVal,
+      type,
+      selectedSources,
+      author,
+      dataSources,
+      _public,
+      team,
+      descIntro,
+      data,
+      specOptions,
+      created,
+      yearRange
+    } = this.props.chartResults;
+
+    // we load up the redux chartData variable
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        changesMade: false,
+        chartMounted: true,
+        name,
+        _public,
+        team: team.length > 0,
+        indicators: data,
+        chartId: _id,
+        descIntro,
+        selectedYear,
+        // TODO this will need to be redone after we implement the logic for infinite amounts of indicators
+        selectedInd1: indicatorItems[0].indicator,
+        selectedInd2: indicatorItems[1].indicator,
+        selectedCountryVal,
+        desc: description,
+        selectedSubInd1: indicatorItems[0].subIndicators,
+        selectedSubInd2: indicatorItems[1].subIndicators,
+        dataSource1: dataSources[0],
+        dataSource2: dataSources[1],
+        authorName: author.username,
+        createdDate: formatDate(created),
+        selectedRegionVal: removeIds(selectedRegionVal),
+        chartKeys: getChartKeys(
+          type,
+          [indicatorItems[0].indicator, indicatorItems[1].indicator],
+          specOptions[graphKeys.colorPallet]
+        ),
+        specOptions
+      })
+    );
+
+    // we load up the redux paneData variable
+    this.props.dispatch(
+      actions.storePaneDataRequest({
+        chartType: type,
+        selectedSources,
+        subIndicators1: indicatorItems[0].allSubIndicators,
+        subIndicators2: indicatorItems[1].allSubIndicators,
+        yearRange
+      })
+    );
+
+    this.setState({
+      loading: false
+    });
+  }
+
   render() {
     return (
       <VisualizerModule
+        saveViewport={this.saveViewport}
+        chartKeys={this.props.chartData.chartKeys}
         publicPage={this.props.publicPage}
         outerHistory={this.props.history}
         chartType={this.props.paneData.chartType}
@@ -446,6 +575,7 @@ export default createRefetchContainer(
         countriesISO2: { type: "[String]", defaultValue: ["null"] }
         singleInd1: { type: "String", defaultValue: "null" }
         singleInd2: { type: "String", defaultValue: "null" }
+        OR_GeolocationIso2_Is_Null: { type: "Boolean", defaultValue: true }
       ) {
       indicators1: datapointsAggregation(
         groupBy: [
@@ -454,6 +584,7 @@ export default createRefetchContainer(
           "date"
           "geolocationType"
           "geolocationIso2"
+          "comment"
           "geolocationPolygons"
           "valueFormatType"
         ]
@@ -463,9 +594,11 @@ export default createRefetchContainer(
         indicatorName_In: $indicator1
         geolocationIso2_In: $countriesISO2
         filterName_In: $subInd1
+        OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
       ) {
         indicatorName
         geolocationIso2
+        comment
         geolocationTag
         geolocationType
         geolocationPolygons
@@ -480,6 +613,7 @@ export default createRefetchContainer(
           "date"
           "geolocationType"
           "geolocationIso2"
+          "comment"
           "geolocationCenterLongLat"
           "valueFormatType"
         ]
@@ -489,9 +623,11 @@ export default createRefetchContainer(
         indicatorName_In: $indicator2
         geolocationIso2_In: $countriesISO2
         filterName_In: $subInd2
+        OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
       ) {
         indicatorName
         geolocationIso2
+        comment
         geolocationTag
         geolocationType
         geolocationCenterLongLat
@@ -525,6 +661,7 @@ export default createRefetchContainer(
       $countriesISO2: [String]!
       $singleInd1: String!
       $singleInd2: String!
+      $OR_GeolocationIso2_Is_Null: Boolean!
     ) {
       ...VisualizerModuleMediator_indicatorAggregations
         @arguments(
@@ -536,6 +673,7 @@ export default createRefetchContainer(
           singleInd2: $singleInd2
           subInd1: $subInd1
           subInd2: $subInd2
+          OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
         )
     }
   `

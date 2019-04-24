@@ -120,7 +120,8 @@ class DuplicatorMediator extends React.Component {
         yearRange: this.props.paneData.yearRange,
         selectedYear: this.props.chartData.selectedYear,
         selectedCountryVal: this.props.chartData.selectedCountryVal,
-        selectedRegionVal: this.props.chartData.selectedRegionVal
+        selectedRegionVal: this.props.chartData.selectedRegionVal,
+        specOptions: this.props.chartData.specOptions
       };
 
       this.props.dispatch(nodeActions.createDuplicateChartRequest(chartData));

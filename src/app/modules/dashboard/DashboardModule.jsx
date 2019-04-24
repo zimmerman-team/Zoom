@@ -1,12 +1,14 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 /* components */
 import { ModuleContainer } from 'modules/dashboard/DashboardModule.styles';
 import DashboardContent from 'modules/dashboard/fragments/DashboardContent/DashboardContent';
 import DashboardHeader from './fragments/DashboardHeader/DashboardHeader';
 import Searchbox from 'modules/dashboard/fragments/Searchbox/Searchbox';
+import Pagination from 'components/Pagination/Pagination';
 
 const propTypes = {
   tabs: PropTypes.arrayOf(
@@ -27,12 +29,14 @@ const propTypes = {
   changeSearchKeyword: PropTypes.func,
   loading: PropTypes.bool,
   users: PropTypes.arrayOf(PropTypes.shape({})),
-  teams: PropTypes.arrayOf(PropTypes.shape({}))
+  teams: PropTypes.arrayOf(PropTypes.shape({})),
+
+  totalPages: PropTypes.number,
+  changePage: PropTypes.func
 };
 const defaultProps = {
   tabs: [],
   sort: '',
-  activeTab: '',
   greetingName: '',
   loading: false,
   changeSortBy: null,
@@ -42,12 +46,15 @@ const defaultProps = {
   setIsSortByOpen: null,
   changeSearchKeyword: null,
   users: [],
-  teams: []
+  teams: [],
+  activeTab: 'charts',
+  totalPages: 0,
+  changePage: null
 };
 
 const DashboardModule = ({
   loading,
-  tabs,
+  page,
   sort,
   users,
   datasets,
@@ -61,9 +68,14 @@ const DashboardModule = ({
   setWrapperRef,
   setIsSortByOpen,
   changeSearchKeyword,
-  navItems
+  navItems,
+  totalPages,
+  changePage
 }) => (
   <ModuleContainer>
+    <Helmet>
+      <title>Zoom - Dashboard</title>
+    </Helmet>
     <DashboardHeader
       userName={greetingName}
       title="Zoom dashboard"
@@ -90,6 +102,11 @@ const DashboardModule = ({
       activeTab={activeTab}
       sort={sort}
       navItems={navItems}
+    />
+    <Pagination
+      pageCount={totalPages}
+      changePage={changePage}
+      forcePage={page}
     />
   </ModuleContainer>
 );

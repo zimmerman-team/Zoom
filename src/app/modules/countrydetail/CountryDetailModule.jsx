@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box } from 'grommet';
 import theme from 'theme/Theme';
+import { Helmet } from 'react-helmet';
 
 import CountryInfo from 'modules/countrydetail/fragments/CountryInfo/CountryInfo';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
@@ -86,54 +87,59 @@ const defaultProps = {
   isSortByOpen: false
 };
 
-class CountryDetailModule extends React.Component {
-  render() {
-    return (
-      <ModuleContainer>
-        {/* Fragment 1: Page navigation */}
-        <PageNavigation />
+const CountryDetailModule = props => {
+  return (
+    <ModuleContainer>
+      <Helmet>
+        <title>Zoom - Country detail</title>
+      </Helmet>
+      {/* Fragment 1: Page navigation */}
+      <PageNavigation />
 
-        {/* Fragment 2: Country info */}
-        <CountryInfo
-          infoBarData={this.props.infoBarData}
-          countryName={this.props.countryName}
-          excerpts={this.props.excerpts}
-        />
+      {/* Fragment 2: Country info */}
+      <CountryInfo
+        infoBarData={props.infoBarData}
+        countryName={props.countryName}
+        excerpts={props.excerpts}
+      />
 
-        {/* Fragment 2: aids epidemic */}
-        <AidsEpidemic
-          background={theme.color.zoomGreyZero}
-          indicators={this.props.aidsEpIndicators}
-          aidsLineChartData={this.props.aidsLineChartData}
-        />
+      {/* Fragment 2: aids epidemic */}
+      <AidsEpidemic
+        background={theme.color.zoomGreyZero}
+        indicators={props.aidsEpIndicators}
+        aidsLineChartData={props.aidsLineChartData}
+      />
 
-        {/* Fragment 3: economic indicators */}
-        <EconomicIndicators />
+      {/* Fragment 3: economic indicators */}
+      <EconomicIndicators />
 
-        {/* Fragment 4: civic space */}
-        <CivicSpace background={theme.color.zoomGreyZero} />
+      {/* Fragment 4: civic space */}
+      <CivicSpace background={theme.color.zoomGreyZero} />
 
-        {/* Fragment 5: human rights */}
-        <HumanRights />
+      {/* Fragment 5: human rights */}
+      <HumanRights />
 
-        {/* Fragment 5: aidsfonds financial transactions */}
-        <AidsfondsTransactions background={theme.color.zoomGreyZero} />
+      {/* Fragment 5: aidsfonds financial transactions */}
+      <AidsfondsTransactions
+        background={theme.color.zoomGreyZero}
+        data={props.countryOrganisations}
+        countryName={props.countryName}
+      />
 
-        {/* Fragment 5: Projects */}
-        <Projects
-          projectData={this.props.projectData}
-          projectInfo={this.props.projectInfo}
-          projectsLoading={this.props.projectsLoading}
-          sort={this.props.projectSort}
-          changeSortBy={this.props.changeSortBy}
-          setWrapperRef={this.props.setWrapperRef}
-          setIsSortByOpen={this.props.setIsSortByOpen}
-          isSortByOpen={this.props.isSortByOpen}
-        />
-      </ModuleContainer>
-    );
-  }
-}
+      {/* Fragment 5: Projects */}
+      <Projects
+        projectData={props.projectData}
+        projectInfo={props.projectInfo}
+        projectsLoading={props.projectsLoading}
+        sort={props.projectSort}
+        changeSortBy={props.changeSortBy}
+        setWrapperRef={props.setWrapperRef}
+        setIsSortByOpen={props.setIsSortByOpen}
+        isSortByOpen={props.isSortByOpen}
+      />
+    </ModuleContainer>
+  );
+};
 
 CountryDetailModule.propTypes = propTypes;
 CountryDetailModule.defaultProps = defaultProps;

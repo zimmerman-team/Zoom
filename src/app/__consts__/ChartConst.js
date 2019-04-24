@@ -3,7 +3,9 @@ const chartTypes = {
   focusKE: 'focusKE',
   focusNL: 'focusNL',
   lineChart: 'linechart',
-  barChart: 'barchart'
+  barChart: 'barchart',
+  tableChart: 'tablechart',
+  donutChart: 'donutchart'
 };
 
 export default chartTypes;

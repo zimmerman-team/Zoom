@@ -44,20 +44,39 @@ const initialState = {
         ]
       : [],
   // this is the actual data loaded into the chart
-  indicators: [],
-  dataSource1: undefined,
-  dataSource2: undefined,
-  selectedInd1:
-    process.env.NODE_ENV === 'development'
-      ? 'aids related deaths (unaids)'
-      : undefined,
-  selectedInd2: undefined,
+  data: [],
+  // so this array will basically store the data
+  // about the selected indicators and their sub-indicators
+  // and the indicator associated dataSource
+  selectedInd: [
+    {
+      indicator:
+        process.env.NODE_ENV === 'development'
+          ? 'aids related deaths (unaids)'
+          : undefined,
+      // so these are all of the sub-indicators
+      // of the selected indicator
+      subIndicators: [],
+      // so this is the dataSource
+      // of the selected indicator
+      dataSource: undefined,
+      selectedSubInd: []
+    },
+    {
+      indicator: undefined,
+      // so these are all of the sub-indicators
+      // of the selected indicator
+      subIndicators: [],
+      // so this is the dataSource
+      // of the selected indicator
+      dataSource: undefined,
+      selectedSubInd: []
+    }
+  ],
   selectedCountryVal: [],
   selectedCountryLabels: [],
   desc: '',
   descIntro: '',
-  selectedSubInd1: [],
-  selectedSubInd2: [],
   selectedRegionVal: [],
   selectedRegionLabels: [],
   // this is the variable for saving

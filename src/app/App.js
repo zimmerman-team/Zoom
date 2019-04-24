@@ -1,11 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 // import { Provider } from 'react-redux';
+import JssProvider from 'react-jss/lib/JssProvider';
+import { createGenerateClassName } from '@material-ui/core/styles';
 import { BrowserRouter as Router, withRouter } from 'react-router-dom';
 import { graphql, QueryRenderer } from 'react-relay';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import auth0Client from 'auth/Auth';
 import Analytics from 'react-router-ga';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
@@ -21,6 +24,20 @@ import { ZoomTheme } from 'styles/ZoomTheme';
 
 /* global app components */
 import AppBar from 'components/AppBar/AppBar';
+
+const theme = createMuiTheme({
+  /*transitions: {
+    // So we have `transition: none;` everywhere
+    create: () => 'none'
+  },*/
+  props: {
+    // Name of the component ⚛️
+    MuiButtonBase: {
+      // The properties to apply
+      disableRipple: true // No more ripple, on the whole application 💣!
+    }
+  }
+});
 
 import {
   ToastsContainer,
@@ -50,9 +67,20 @@ function fetchQuery(operation, variables) {
   });
 }
 
+const generateClassName = createGenerateClassName({
+  dangerouslyUseGlobalCSS: true,
+  productionPrefix: 'production'
+});
+
 class App extends React.Component {
   state = {
     showSidebar: false
+  };
+
+  componentWillMount = () => {
+    if (window.location.href.includes('/home/#')) {
+      this.setState({ showSidebar: true });
+    }
   };
 
   componentDidMount = () => {
@@ -75,25 +103,31 @@ class App extends React.Component {
 
     if (!isEqual(this.props.user, prevProps.user)) {
       if (this.props.user.data) {
-        const profile = auth0Client.getProfile();
         // so we update the user
-        this.props.dispatch(
-          nodeActions.updateUserRequest({
-            firstName: get(
-              profile['https://auth.nyuki.io_user_metadata'],
-              'firstName',
-              ''
-            ),
-            lastName: get(
-              profile['https://auth.nyuki.io_user_metadata'],
-              'lastName',
-              ''
-            ),
-            username: profile.nickname,
-            email: profile.email,
-            authId: profile.sub
-          })
-        );
+        auth0Client.getUserRole().then(role => {
+          auth0Client.getUserGroup().then(groups => {
+            const profile = auth0Client.getProfile();
+            this.props.dispatch(
+              nodeActions.updateUserRequest({
+                firstName: get(
+                  profile['https://auth.nyuki.io_user_metadata'],
+                  'firstName',
+                  ''
+                ),
+                lastName: get(
+                  profile['https://auth.nyuki.io_user_metadata'],
+                  'lastName',
+                  ''
+                ),
+                username: profile.nickname,
+                email: profile.email,
+                authId: profile.sub,
+                role,
+                teams: groups.map(g => g.name)
+              })
+            );
+          });
+        });
       } else if (this.props.user.error.status === 404) {
         // so if a user was not found in our zoom backend after signing in ^
         // we add it as a new user
@@ -101,7 +135,7 @@ class App extends React.Component {
         // but first we get them user roles and groups, cause they need to be retrieved
         // in a very weird way
         auth0Client.getUserRole().then(role => {
-          auth0Client.getUserGroup().then(group => {
+          auth0Client.getUserGroup().then(groups => {
             const profile = auth0Client.getProfile();
 
             // and we finally make the call to add the user
@@ -122,7 +156,7 @@ class App extends React.Component {
                   'lastName',
                   ''
                 ),
-                team: group
+                teams: groups.map(g => g.name)
               })
             );
           });
@@ -133,61 +167,66 @@ class App extends React.Component {
 
   render = () => {
     return (
-      <Grommet theme={ZoomTheme}>
-        <QueryRenderer
-          environment={modernEnvironment}
-          query={graphql`
-            query AppQuery {
-              ...ExplorePanelMediator_dropDownData
-              ...VizPaneMediator_dropDownData
-              ...HomeModuleMediator_indicatorAggregations
-              ...VisualizerModuleMediator_indicatorAggregations
-              ...CountryDetailMediator_indicatorAggregations
-              ...MetaDataMediator_dropDownData
-              ...CorrectErrorsMediator_fileCorrection
-              ...FocusModuleMediator_indicatorAggregations
-              ...DatasetMediator_metaData
-            }
-          `}
-          variables={{}}
-          render={({ error, props }) => {
-            if (props) {
-              return (
-                <Router>
-                  <React.Fragment>
-                    {/* todo: replace toasts with material-ui snackbar https://material-ui.com/demos/snackbars/ */}
-                    <ToastsContainer
-                      store={ToastsStore}
-                      position={ToastsContainerPosition.TOP_CENTER}
-                    />
-                    <AppBar
-                      toggleSideBar={() =>
-                        this.setState({
-                          showSidebar: !this.state.showSidebar
-                        })
-                      }
-                      auth0Client={auth0Client}
-                    />
-                    <MainMenuDrawer
-                      auth0Client={auth0Client}
-                      open={this.state.showSidebar}
-                      toggleSideBar={() =>
-                        this.setState({
-                          showSidebar: !this.state.showSidebar
-                        })
-                      }
-                    />
-                    <Analytics id="UA-134931738-2">
-                      <Routes {...props} auth0Client={auth0Client} />
-                    </Analytics>
-                  </React.Fragment>
-                </Router>
-              );
-            }
-            return <div>Loading</div>;
-          }}
-        />
-      </Grommet>
+      <JssProvider generateClassName={generateClassName}>
+        <MuiThemeProvider theme={theme}>
+          <Grommet theme={ZoomTheme}>
+            <QueryRenderer
+              environment={modernEnvironment}
+              query={graphql`
+                query AppQuery {
+                  ...ExplorePanelMediator_dropDownData
+                  ...VizPaneMediator_dropDownData
+                  ...HomeModuleMediator_indicatorAggregations
+                  ...VisualizerModuleMediator_indicatorAggregations
+                  ...CountryDetailMediator_indicatorAggregations
+                  ...MetaDataMediator_dropDownData
+                  ...CorrectErrorsMediator_fileCorrection
+                  ...FocusModuleMediator_indicatorAggregations
+                  ...DatasetMediator_metaData
+                  ...DashboardMediator_Indicator
+                }
+              `}
+              variables={{}}
+              render={({ error, props }) => {
+                if (props) {
+                  return (
+                    <Router>
+                      <React.Fragment>
+                        {/* todo: replace toasts with material-ui snackbar https://material-ui.com/demos/snackbars/ */}
+                        <ToastsContainer
+                          store={ToastsStore}
+                          position={ToastsContainerPosition.TOP_CENTER}
+                        />
+                        <AppBar
+                          toggleSideBar={() =>
+                            this.setState({
+                              showSidebar: !this.state.showSidebar
+                            })
+                          }
+                          auth0Client={auth0Client}
+                        />
+                        <MainMenuDrawer
+                          auth0Client={auth0Client}
+                          open={this.state.showSidebar}
+                          toggleSideBar={() =>
+                            this.setState({
+                              showSidebar: !this.state.showSidebar
+                            })
+                          }
+                        />
+                        <Analytics id="UA-134931738-2">
+                          <Routes {...props} auth0Client={auth0Client} />
+                        </Analytics>
+                      </React.Fragment>
+                    </Router>
+                  );
+                }
+                return <div>Loading</div>;
+              }}
+            />
+          </Grommet>
+        </MuiThemeProvider>
+      </JssProvider>
     );
   };
 }

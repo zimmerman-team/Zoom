@@ -15,6 +15,7 @@ import {
 } from 'modules/datamapper/DataMapperModule.util';
 import find from 'lodash/find';
 import { ToastsStore } from 'react-toasts';
+import { Helmet } from 'react-helmet';
 
 /* styles */
 import {
@@ -44,7 +45,7 @@ class DataMapperModule extends React.Component {
       // if they don't select or dont have these fields
       // the manual mapping will have to be adjusted
       // for the to be able to populate/fill them
-      mapReqFields: ['indicator', 'date', 'value', 'geolocation'],
+      mapReqFields: ['indicator', 'date', 'geolocation'],
 
       manMapEmptyValue: false,
       manMapEmptyFields: false,
@@ -58,6 +59,11 @@ class DataMapperModule extends React.Component {
     this.nextStep = this.nextStep.bind(this);
     this.prevStep = this.prevStep.bind(this);
     this.nextDisabled = this.nextDisabled.bind(this);
+  }
+
+  componentWillUnmount() {
+    // and we reset the values in the reducer
+    this.props.dispatch(actions.saveStepDataInitial());
   }
 
   // basically checks if next button should be disabled
@@ -295,6 +301,9 @@ class DataMapperModule extends React.Component {
 
     return (
       <ModuleContainer>
+        <Helmet>
+          <title>Zoom - Datamapper</title>
+        </Helmet>
         <ModuleHeader>
           <Stepper
             step={this.state.step}

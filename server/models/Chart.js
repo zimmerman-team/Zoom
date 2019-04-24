@@ -41,6 +41,7 @@ const ChartSchema = new Schema(
 
     // with what team is this chart associated
     team: { type: String, default: '' },
+    teams: [{ type: String }],
 
     /* chart options */
     // axis: { type: String },
@@ -56,7 +57,8 @@ const ChartSchema = new Schema(
 
     selectedYear: String,
     selectedCountryVal: [String],
-    selectedRegionVal: [[]]
+    selectedRegionVal: [[]],
+    specOptions: { type: Map, default: {} }
   },
   {
     timestamps: { createdAt: 'created', updatedAt: 'last_updated' }

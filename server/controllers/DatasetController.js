@@ -145,18 +145,19 @@ const DatasetApi = {
     });
   },
 
-  deleteDataset: function(author, datasetId, res) {
-    // TODO: should be adjusted without the promises, or maybe with promises if
-    // TODO: it works and makes sense
-    if (author.role === 'admin')
-      Dataset.deleteOne({ author, datasetId }, error => {
-        general.handleError(res, error);
-      });
-    else
-      general.handleError(res, {
-        name: 'no permission',
-        error: 'unauthorized'
-      });
+  deleteDataset: (req, res) => {
+    const { authId, datasetId } = req.query;
+
+    User.findOne({ authId }, (error, author) => {
+      if (error) general.handleError(res, error);
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else if (author.role === 'Super admin' || author.role === 'Administrator')
+        Dataset.deleteOne({ author, datasetId }, datasetErr => {
+          if (datasetErr) general.handleError(res, datasetErr);
+          else res.json({ message: 'dataset deleted' });
+        });
+      else general.handleError(res, 'Unauthorized', 401);
+    });
   }
 };
 

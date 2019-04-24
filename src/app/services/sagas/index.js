@@ -112,6 +112,18 @@ export function* dataPaneToggleRequest(action) {
   yield put(generalActions.dataPaneToggleDone(action.open));
 }
 
+export function* countryOrganisationsRequest(action) {
+  try {
+    const response = yield call(
+      api.transactionsAggregationsRequest,
+      action.values
+    );
+    yield put(oipaActions.countryOrganisationsSuccess(response));
+  } catch (error) {
+    yield put(oipaActions.countryOrganisationsFailed(error));
+  }
+}
+
 export function* saveStepDataRequest(action) {
   yield put(generalActions.saveStepDataDone(action.data));
 }
@@ -396,8 +408,78 @@ export function* duplicateChartRequest(action) {
   }
 }
 
+export function* updateTeamAndUsersOfItRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'updateTeamAndUsersOfIt',
+      values: action.values
+    });
+    yield put(nodeActions.updateTeamAndUsersOfItSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.updateTeamAndUsersOfItFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* deleteTeamRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'deleteTeam',
+      values: action.values
+    });
+    yield put(nodeActions.deleteGroupSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.deleteGroupFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* deleteDatasetRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendDeleteRequest, {
+      endpoint: 'deleteDataset',
+      values: action.values
+    });
+    yield put(nodeActions.deleteDatasetSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.deleteDatasetFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* getPublicChartRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getOnePublicChart',
+      values: action.values
+    });
+    yield put(nodeActions.getChartSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.getChartFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('GET_PUBLIC_CHART_REQUEST', getPublicChartRequest),
+    takeLatest('DELETE_DATASET_REQUEST', deleteDatasetRequest),
     takeLatest('DUPLICATE_CHART_REQUEST', duplicateChartRequest),
     takeLatest('CREATE_DUPLICATE_CHART_REQUEST', createDuplicateChartRequest),
     takeLatest('UPDATE_DATASET_REQUEST', updateDatasetRequest),
@@ -433,7 +515,13 @@ function* sagas() {
     takeLatest('FILE_REQUEST', fileRequest),
     takeLatest('ACTIVITY_DATA_REQUEST', activityDataRequest),
     takeLatest('COUNTRY_EXCERPT_REQUEST', countryExcerptRequest),
-    takeLatest('DELETE_USER_REQUEST', deleteUserRequest)
+    takeLatest('COUNTRY_ORGANISATIONS_REQUEST', countryOrganisationsRequest),
+    takeLatest('DELETE_USER_REQUEST', deleteUserRequest),
+    takeLatest(
+      'UPDATE_TEAM_AND_USERS_OF_IT__REQUEST',
+      updateTeamAndUsersOfItRequest
+    ),
+    takeLatest('DELETE_GROUP_REQUEST', deleteTeamRequest)
   ];
 }
 

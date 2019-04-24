@@ -33,11 +33,7 @@ const useStyles = makeStyles(() => ({
       '& + $iOSBar': {
         backgroundColor: themes.color.switchGreen
       }
-    } /*,
-    transition: materialTheme.transitions.create('transform', {
-      duration: materialTheme.transitions.duration.shortest,
-      easing: materialTheme.transitions.easing.sharp
-    })*/
+    }
   },
   iOSChecked: {
     transform: 'translateX(10px)',
@@ -138,6 +134,7 @@ function VisibilityTab(props) {
             <ControlLabel
               control={
                 <Switch
+                  data-cy="publish-chart-to-public"
                   checked={props.chartData._public}
                   onChange={handleChange('_public')}
                   value="public"
@@ -156,6 +153,7 @@ function VisibilityTab(props) {
             <ControlLabel
               control={
                 <Switch
+                  data-cy="publish-chart-to-team"
                   checked={props.chartData.team}
                   onChange={handleChange('team')}
                   value="team"

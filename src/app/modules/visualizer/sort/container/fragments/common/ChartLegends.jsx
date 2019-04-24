@@ -22,14 +22,8 @@ const ComponentBase = styled.div`
 const propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
-      color: PropTypes.string,
-      data: PropTypes.arrayOf(
-        PropTypes.shape({
-          x: PropTypes.string,
-          y: PropTypes.number
-        })
-      )
+      name: PropTypes.string,
+      color: PropTypes.string
     })
   )
 };
@@ -42,7 +36,13 @@ const ChartLegends = props => {
   return (
     <ComponentBase>
       {props.data.map(indicator => {
-        return <ChartLegendItem color={indicator.color} text={indicator.id} />;
+        return (
+          <ChartLegendItem
+            color={indicator.color}
+            text={indicator.name}
+            data-cy="linechart-legenditem-text"
+          />
+        );
       })}
     </ComponentBase>
   );

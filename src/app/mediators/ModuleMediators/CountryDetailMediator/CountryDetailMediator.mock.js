@@ -1,5 +1,5 @@
 const data = {
-  transParams: {
+  activityParams: {
     recipient_country: 'KE',
     page: 1,
     page_size: 400,
@@ -20,6 +20,12 @@ const data = {
     formatversion: 2,
     titles: 'Kenya'
   },
+  transactionParams: {
+    group_by: 'sector',
+    aggregations: 'commitment,disbursement',
+    convert_to: 'eur',
+    reporting_organisation_identifier: 'NL-KVK-41207989'
+  },
   countryCode: 'ke',
   // So currently these are the default indicators
   // that are gonna be used for all country details
@@ -38,11 +44,31 @@ const data = {
     'coverage of people receiving art'
   ],
   lineChartInd: [
-    { name: 'new hiv infections', color: 'hsl(172, 70%, 50%)' },
-    { name: 'aids-related deaths', color: 'hsl(91, 70%, 50%)' },
-    { name: 'people living with hiv', color: 'hsl(313, 70%, 50%)' },
-    { name: 'children living with hiv', color: 'hsl(221, 70%, 50%)' },
-    { name: 'coverage of people receiving art', color: 'hsl(48, 70%, 50%)' }
+    {
+      name: 'new hiv infections',
+      color: 'hsl(172, 70%, 50%)',
+      orientation: 'left'
+    },
+    {
+      name: 'aids-related deaths',
+      color: 'hsl(91, 70%, 50%)',
+      orientation: 'left'
+    },
+    {
+      name: 'people living with hiv',
+      color: 'hsl(313, 70%, 50%)',
+      orientation: 'right'
+    },
+    {
+      name: 'children living with hiv',
+      color: 'hsl(221, 70%, 50%)',
+      orientation: 'right'
+    },
+    {
+      name: 'coverage of people receiving art',
+      color: 'hsl(48, 70%, 50%)',
+      orientation: 'right'
+    }
   ]
 };
 

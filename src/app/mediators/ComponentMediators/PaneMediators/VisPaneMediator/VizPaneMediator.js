@@ -11,11 +11,13 @@ import * as actions from 'services/actions/general';
 
 /* helpers */
 import sortBy from 'lodash/sortBy';
+import findIndex from 'lodash/findIndex';
 import isEqual from 'lodash/isEqual';
 import { yearStrToArray } from 'utils/genericUtils';
 
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
+import chartTypes from '__consts__/ChartConst';
 
 const propTypes = {
   dropDownData: PropTypes.shape({
@@ -57,6 +59,7 @@ const indicatorQuery = graphql`
       edges {
         node {
           name
+          firstDataYear
           fileSource {
             name
           }
@@ -101,6 +104,8 @@ class VizPaneMediator extends React.Component {
     this.selectYearRange = this.selectYearRange.bind(this);
     this.changesMade = this.changesMade.bind(this);
     this.getCountriesByRegion = this.getCountriesByRegion.bind(this);
+    this.handleAxisSwitch = this.handleAxisSwitch.bind(this);
+    this.saveGraphOption = this.saveGraphOption.bind(this);
   }
 
   componentDidMount() {
@@ -119,7 +124,7 @@ class VizPaneMediator extends React.Component {
     allRegions = sortBy(allRegions, ['label']);
 
     // and we also push in a variable for undefined
-    allRegions.push({ label: 'undefined', value: [{ iso2: '' }] });
+    allRegions.push({ label: 'undefined', value: [{ iso2: 'undefined' }] });
 
     let allFileSources = this.props.dropDownData.allFileSources.edges.map(
       indicator => {
@@ -230,7 +235,8 @@ class VizPaneMediator extends React.Component {
           return {
             label: indicator.node.name,
             value: indicator.node.name,
-            dataSource: indicator.node.fileSource.name
+            dataSource: indicator.node.fileSource.name,
+            firstYear: indicator.node.firstDataYear
           };
         });
 
@@ -248,16 +254,7 @@ class VizPaneMediator extends React.Component {
   }
 
   selectInd1(val) {
-    // so we set the values for chart data
-    this.props.dispatch(
-      actions.storeChartDataRequest({
-        selectedInd1: val.value,
-        dataSource1: val.dataSource,
-        selectedSubInd1: []
-      })
-    );
-
-    // and we also reset some values for the sub-indicator
+    // * and we also reset some values for the sub-indicator
     // dropdown as sub-indicators should change
     // whenever an indicator is changed
     this.props.dispatch(
@@ -266,20 +263,37 @@ class VizPaneMediator extends React.Component {
       })
     );
 
+    // so we set the values for chart data
+    // * AND ALSO whenever an indicator is selected
+    // the year jumps to the most recent year of the
+    // indicators data point, so
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        selectedInd1: val.value,
+        dataSource1: val.dataSource,
+        selectedYear: val.firstYear,
+        selectedSubInd1: []
+      })
+    );
+
     this.changesMade();
   }
 
   selectInd2(val) {
     // so we set the values for chart data
+    // * AND ALSO whenever an indicator is selected
+    // the year jumps to the most recent year of the
+    // indicators data point, so
     this.props.dispatch(
       actions.storeChartDataRequest({
         selectedInd2: val.value,
         dataSource2: val.dataSource,
+        selectedYear: val.firstYear,
         selectedSubInd2: []
       })
     );
 
-    // and we also reset some values for the sub-indicator
+    // *and we also reset some values for the sub-indicator
     // dropdown as sub-indicators should change
     // whenever an indicator is changed
     this.props.dispatch(
@@ -487,9 +501,47 @@ class VizPaneMediator extends React.Component {
       );
   }
 
+  // so this mainly controls the data for the linechart
+  // cause you can switch the Y-axis of the data/indicator thats being shown
+  handleAxisSwitch(checked, indicator) {
+    // so if checked is false this the left axis will be selected
+    // for this indicator otherwise its the right
+    if (indicator) {
+      const { chartKeys } = this.props.chartData;
+
+      const indIndex = findIndex(chartKeys, ['name', indicator]);
+
+      chartKeys[indIndex].orientation = checked ? 'right' : 'left';
+
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          chartKeys
+        })
+      );
+    }
+  }
+
+  saveGraphOption(value, key) {
+    const specOptions = { ...this.props.chartData.specOptions };
+
+    specOptions[key] = value;
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        specOptions
+      })
+    );
+  }
+
   render() {
     return (
       <DataExplorePane
+        handleAxisSwitch={
+          this.props.paneData.chartType === chartTypes.lineChart &&
+          this.handleAxisSwitch
+        }
+        specOptions={this.props.chartData.specOptions}
+        saveGraphOption={this.saveGraphOption}
         allFileSources={this.state.allFileSources}
         selectDataSource={this.selectDataSource}
         selectedSources={this.state.selectedSources}
@@ -513,6 +565,7 @@ class VizPaneMediator extends React.Component {
             initialState.selectedSubInd2
           )
         }
+        chartKeys={this.props.chartData.chartKeys}
         selectInd1={this.selectInd1}
         selectInd2={this.selectInd2}
         selectSubInd1={this.selectSubInd1}

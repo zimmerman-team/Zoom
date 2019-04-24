@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
-import { PageHeading } from 'modules/dashboard/DashboardModule.styles';
+import { ModuleTitle } from 'modules/dashboard/DashboardModule.styles';
 import UserGreeting from 'modules/dashboard/fragments/DashboardHeader/component/UserGreeting/UserGreeting';
 
 const ComponentBase = styled.header`
@@ -27,7 +27,7 @@ const defaultProps = {
 const DashboardHeader = props => {
   return (
     <ComponentBase>
-      <PageHeading>{props.title}</PageHeading>
+      <ModuleTitle>{props.title}</ModuleTitle>
       <UserGreeting message={props.message} user={props.userName} />
     </ComponentBase>
   );

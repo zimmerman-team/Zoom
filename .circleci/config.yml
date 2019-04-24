@@ -133,7 +133,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/zoom-v2-ui
-      - run: yarn add cypress
+      - run: yarn add cypress --ignore-engines
       - run: yarn e2e
 
 

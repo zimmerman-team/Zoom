@@ -2,15 +2,11 @@ import styled from 'styled-components';
 
 import theme from 'theme/Theme';
 
-//Yearcontainer => ComponentBase => YearLabel(s)
 export const YearContainer = styled.div`
   position: relative;
   bottom: 56px;
-  padding-left: 24px;
-  padding-right: 24px;
   width: 100%;
- 
-  //MAX-WIDTH => width alle yearlabels optellen
+  max-width: 1000px;
 `;
 
 export const ComponentBase = styled.div`

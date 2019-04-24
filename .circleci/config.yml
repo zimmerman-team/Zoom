@@ -134,29 +134,18 @@ jobs:
       - attach_workspace:
           at: ~/zoom-v2-ui
       - run: yarn add cypress --ignore-engines
+      #     - run: export "CYPRESS_backendUrl=https://duct.zoom.dev.nyuki.io"
+      #        Shouldn't be necessary, already in env variables of CI
+#      - run: export "CYPRESS_baseUrl=http://localhost:3000"
+      #        So the issue im dealing with right now is that it cannot resolve all the generated graphql files.
+      #             # Running yarn relay => needs watchman => watchman needs python lib => sudo is not recognized => apt-get install sudo??????? => this seems totally unnecessary, see build_deploy
+      #             # FOR TOMORROW: DIVE DEEP INTO BUILD_DEPLOY AND LOOK WHICH SERVER IT DEPLOYS TO AND TRY TO USE THAT SERVER TO RUN CY ON
+      #        This is already done in the build_deploy job => is this needed?
+      #        We need to boot server, cypress needs it to run its tests on.
+      - run: ./scripts/install-watchman.sh
+      - run: yarn relay
       - run: yarn start
       - run: yarn e2e
-
-#  cypress_test:
-#      docker:
-#        - image: cypress/browsers:chrome67
-#      working_directory: ~/zoom-v2-ui
-#      steps:
-#        - attach_workspace:
-#            at: ~/zoom-v2-ui
-#        # find cache from previous build,
-#        # it should have same dependencies installed from package.json checksum
-#        - restore_cache:
-#            keys:
-#              - cache-{{ .Branch }}-{{ checksum "package.json" }}
-#        # run verify and then save cache.
-#        # this ensures that the Cypress verified status is cached too
-#        - save_cache:
-#          key: cache-{{ .Branch }}-{{ checksum "package.json" }}
-#          paths:
-#            - ~/.cache
-#        - run: yarn cy:verify
-#        - run: yarn e2e
 
 # WORKFLOWS
 workflows:

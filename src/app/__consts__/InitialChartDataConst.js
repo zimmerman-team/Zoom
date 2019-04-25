@@ -70,7 +70,8 @@ const initialState = {
       subIndicators: [],
       // so this is the dataSource
       // of the selected indicator
-      dataSource: undefined,
+      dataSource:
+        process.env.NODE_ENV === 'development' ? 'UNAIDS 2018' : undefined,
       selectedSubInd: []
     },
     {

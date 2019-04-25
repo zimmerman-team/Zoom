@@ -187,6 +187,7 @@ class DataExplorePane extends React.Component {
             data-cy="nav-pane-item-geo-location"
           >
             <DropdownMenuPanel
+              data-cy="dropdown-geolocation"
               panelDetails={[
                 {
                   multiple: true,
@@ -225,6 +226,7 @@ class DataExplorePane extends React.Component {
             <TimePeriodPanel
               selectYearRange={this.props.selectYearRange}
               yearRange={this.props.yearRange}
+              data-cy="slider-time-period"
             />
           </ExpansionPanelContainer>
 

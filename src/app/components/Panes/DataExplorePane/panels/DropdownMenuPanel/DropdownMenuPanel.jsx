@@ -69,6 +69,7 @@ const DropdownMenuPanel = props => {
           // FIXME: creating a key for this listItem messes up the indicator results.
           <DropDownCont key={index}>
             <ZoomSelect
+              data-cy={`datapane-select-${index}`}
               categorise={detail.categorise}
               multiple={detail.multiple}
               selectAll={detail.selectAll}

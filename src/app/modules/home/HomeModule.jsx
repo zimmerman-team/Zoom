@@ -72,12 +72,12 @@ export class HomeModule extends Component {
         </Helmet>
         <ModuleContainer
           style={
-            //todo: without nesting..
-            this.props.loading
-              ? { pointerEvents: 'none', opacity: '0.4' }
-              : {} && this.props.dataPaneOpen !== paneTypes.none
-              ? { width: 'calc(100vw - 320px)' }
-              : { width: '100vw' }
+            this.props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}
+          }
+          width={
+            this.props.dataPaneOpen !== paneTypes.none
+              ? 'calc(100vw - 320px)'
+              : '100vw'
           }
           display={this.props.dataPaneOpen === paneTypes.visualizer}
         >

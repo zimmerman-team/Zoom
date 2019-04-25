@@ -5,13 +5,13 @@ import theme from 'theme/Theme';
 export const YearContainer = styled.div`
   position: relative;
   bottom: 56px;
-  width: 100%;
+  width: calc(100% - 48px);
   max-width: 1000px;
 `;
 
 export const ComponentBase = styled.div`
   display: flex;
-  background-color: ${props => props.backgroundColor};
+  background-color: ${theme.color.aidsFondsWhiteOpacity};
   justify-content: center;
 `;
 

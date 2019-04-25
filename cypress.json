@@ -1,5 +1,5 @@
 {
-  "baseUrl": "https://app.zoom.dev.nyuki.io",
+  "baseUrl": "http://localhost:3000",
   "chromeWebSecurity": false,
   "viewportWidth": 1680,
   "viewportHeight": 954,

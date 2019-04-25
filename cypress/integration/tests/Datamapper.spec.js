@@ -1,3 +1,19 @@
+function signOut() {
+  cy.clearCookies();
+  cy.clearLocalStorage();
+}
+function signIn() {
+  cy.visit('/');
+  cy.wait(1000);
+  cy.get('[data-cy="dialog-overlay"]').click();
+  signOut();
+  cy.get('[data-cy=sidebar-toggle]').click();
+  cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
+  cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
+  cy.get('[data-cy=sidebar-login-button]').click();
+  cy.wait(6000);
+}
+
 const firstStepVal = {
   title: 'Metadata title',
   desc: 'Metadata Description',
@@ -184,8 +200,9 @@ describe('Datamapper e2e tests', function() {
   }
 
   it('Go to datamapper', function() {
+    signIn();
     cy.visit('/mapper');
-    cy.percySnapshot('Datamapper page');
+
   });
 
   it('Page should contain first steps title', function() {
@@ -347,7 +364,7 @@ describe('Datamapper e2e tests', function() {
 
     cy.upload_file(fileName, fileType, fileInput);
 
-    cy.wait(4000);
+    cy.wait(20000);
 
     // So the step should show the uploaded file
     cy.contains(fileName);

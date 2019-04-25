@@ -69,8 +69,14 @@ class DuplicatorMediator extends React.Component {
     if (this.props.auth0Client.isAuthenticated()) {
       const profile = this.props.auth0Client.getProfile();
 
-      const dataSources = this.props.chartData.selectedInd.map(indData => {
-        return indData.dataSource;
+      const dataSources = [];
+
+      this.props.chartData.selectedInd.forEach(indData => {
+        if (
+          dataSources.indexOf(indData.dataSource) === -1 &&
+          indData.dataSource
+        )
+          dataSources.push(indData.dataSource);
       });
 
       const chartData = {
@@ -83,7 +89,7 @@ class DuplicatorMediator extends React.Component {
         description: this.props.chartData.desc,
         descIntro: this.props.chartData.descIntro,
         type: this.props.paneData.chartType,
-        data: this.props.chartData.indicators,
+        data: this.props.chartData.data,
         indicatorItems: this.props.chartData.selectedInd.map(indData => {
           return {
             indicator: indData.indicator,

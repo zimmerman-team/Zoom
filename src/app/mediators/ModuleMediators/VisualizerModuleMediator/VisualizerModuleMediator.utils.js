@@ -321,7 +321,7 @@ export function formatGeoData(indAggregations) {
 // may not be keys, but is formed in a similar way as keys would,
 // so yeah mainly used for line generation according to the selected indicators
 // and 'selectedInd' is passed in as a string array of currently selected indicators
-export function formatChartLegends(selectedInd, colors = colorSet1) {
+export function formatChartLegends(selectedInd, colors = colorSet1, currKeys) {
   const chartKeys = [];
 
   let colorInd = 0;
@@ -333,10 +333,15 @@ export function formatChartLegends(selectedInd, colors = colorSet1) {
       if (findIndex(chartKeys, ['name', indName]) !== -1)
         key = indName.concat(` (${index})`);
 
+      const orientation =
+        currKeys.length > 0 && currKeys[index]
+          ? currKeys[index].orientation
+          : 'left';
+
       chartKeys.push({
         name: key,
         color: colors[colorInd],
-        orientation: 'left'
+        orientation
       });
 
       if (colorInd + 1 < colors.length) colorInd += 1;
@@ -350,6 +355,8 @@ export function formatChartLegends(selectedInd, colors = colorSet1) {
 export function formatLineData(indicators) {
   const indicatorData = [];
   const indicatorNames = [];
+
+  console.log('indicators', indicators);
 
   indicators.forEach((indicator, index) => {
     if (indicator.length > 0) {
@@ -538,14 +545,19 @@ export function formatDonutData(indicators, colors = colorSet1) {
   return chartData;
 }
 
-export function getChartKeys(chartType, indicators, colors = colorSet1) {
+export function getChartKeys(
+  chartType,
+  indicators,
+  colors = colorSet1,
+  currKeys
+) {
   switch (chartType) {
     case chartTypes.lineChart:
-      return formatChartLegends(indicators, colors);
+      return formatChartLegends(indicators, colors, currKeys);
     case chartTypes.barChart:
       return formatBarChartKeys(indicators);
     case chartTypes.donutChart:
-      return formatChartLegends(indicators, colors);
+      return formatChartLegends(indicators, colors, currKeys);
     default:
       return [];
   }

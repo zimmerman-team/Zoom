@@ -209,13 +209,14 @@ class VisualizerModuleMediator extends Component {
         prevProps.chartData.specOptions[graphKeys.colorPallet]
       )
     ) {
-      const selectedIndNames = this.props.chartData.slectedInd.map(indItem => {
+      const selectedIndNames = this.props.chartData.selectedInd.map(indItem => {
         return indItem.indicator;
       });
 
       const chartKeys = formatChartLegends(
         selectedIndNames,
-        this.props.chartData.specOptions[graphKeys.colorPallet]
+        this.props.chartData.specOptions[graphKeys.colorPallet],
+        this.props.chartData.chartKeys
       );
 
       this.props.dispatch(
@@ -253,6 +254,7 @@ class VisualizerModuleMediator extends Component {
       chartKeys: prevchartKeys,
       ...prevRestChart
     } = prevProps.chartData;
+
     // so we refetch data when chartData changes
     // and we dont want to refetch data when only the name/description ofthe chart is changed
     /* TODO: optimize the speed of the application by NOT calling this refetch
@@ -321,7 +323,8 @@ class VisualizerModuleMediator extends Component {
       case chartTypes.lineChart:
         chartKeys = formatChartLegends(
           selectedIndNames,
-          this.props.chartData.specOptions[graphKeys.colorPallet]
+          this.props.chartData.specOptions[graphKeys.colorPallet],
+          this.props.chartData.chartKeys
         );
         data = formatLineData(aggregationData);
         break;
@@ -342,7 +345,8 @@ class VisualizerModuleMediator extends Component {
         );
         chartKeys = formatChartLegends(
           selectedIndNames,
-          this.props.chartData.specOptions[graphKeys.colorPallet]
+          this.props.chartData.specOptions[graphKeys.colorPallet],
+          this.props.chartData.chartKeys
         );
         break;
       default:
@@ -388,16 +392,18 @@ class VisualizerModuleMediator extends Component {
         everytime one indicators data is called, though the whole flow of
         data formatting/saving would need to be changed*/
 
-    this.setState({
-      loading: true
-    });
+    if (this.props.chartData.selectedInd.length > 0)
+      this.setState({
+        loading: true
+      });
 
     const indicatorData = [];
 
     this.props.chartData.selectedInd.forEach((indItem, index) => {
       const indicator = indItem.indicator;
 
-      const subInds = indItem.selectedSubInd;
+      const subInds =
+        indItem.selectedSubInd.length > 0 ? indItem.selectedSubInd : ['null'];
 
       // We forming the param for countries from the selected countries of a region
       // and single selected countries
@@ -502,7 +508,10 @@ class VisualizerModuleMediator extends Component {
       yearRange
     } = this.props.chartResults;
 
+    const selectedIndNames = [];
+
     const selectedInd = indicatorItems.map((indItem, index) => {
+      selectedIndNames.push(indItem.indicator);
       return {
         indicator: indItem.indicator,
         subIndicators: indItem.allSubIndicators,
@@ -531,8 +540,9 @@ class VisualizerModuleMediator extends Component {
         selectedRegionVal: removeIds(selectedRegionVal),
         chartKeys: getChartKeys(
           type,
-          [indicatorItems[0].indicator, indicatorItems[1].indicator],
-          specOptions[graphKeys.colorPallet]
+          selectedIndNames,
+          specOptions[graphKeys.colorPallet],
+          []
         ),
         specOptions
       })

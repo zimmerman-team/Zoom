@@ -15,7 +15,7 @@ import findIndex from 'lodash/findIndex';
 import { yearStrToArray } from 'utils/genericUtils';
 
 /* consts */
-import initialState from '__consts__/InitialChartDataConst';
+import initialState, { initIndItem } from '__consts__/InitialChartDataConst';
 import chartTypes from '__consts__/ChartConst';
 
 const propTypes = {
@@ -103,6 +103,8 @@ class VizPaneMediator extends React.Component {
     this.getCountriesByRegion = this.getCountriesByRegion.bind(this);
     this.handleAxisSwitch = this.handleAxisSwitch.bind(this);
     this.saveGraphOption = this.saveGraphOption.bind(this);
+    this.addIndicator = this.addIndicator.bind(this);
+    this.removeIndicator = this.removeIndicator.bind(this);
   }
 
   componentDidMount() {
@@ -246,67 +248,108 @@ class VizPaneMediator extends React.Component {
 
   resetIndicators() {
     // and we also deselect the indicators
-    this.selectInd({ value: 'reset' });
+    this.selectInd('resetAll');
   }
 
   selectInd(val, index) {
-    const selectedInd = [...this.props.chartData.selectedInd];
+    let selectedInd = [];
 
-    selectedInd[index].indicator = val.value;
-    selectedInd[index].dataSource = val.dataSource;
-    selectedInd[index].selectedSubInd = [];
-    selectedInd[index].subIndicators = [];
+    // so because javascript is stupid and in this particular
+    // case even when using ... the object is still referencing to
+    // this.props.chartData.selectedInd and thus is not extensible
+    // we gonna clone this array object
+    this.props.chartData.selectedInd.forEach(indItem => {
+      selectedInd.push({
+        indicator: indItem.indicator,
+        subIndicators: indItem.subIndicators,
+        dataSource: indItem.dataSource,
+        selectedSubInd: [...indItem.selectedSubInd]
+      });
+    });
 
-    if (val === 'reset') {
-      selectedInd[index].indicator = undefined;
-      selectedInd[index].dataSource = undefined;
+    if (val === 'resetAll') {
       this.props.dispatch(
         actions.storeChartDataRequest({
-          selectedInd
+          selectedInd: selectedInd.map((indItem, ind) => {
+            if (ind === 0 && process.env.NODE_ENV === 'development') {
+              return {
+                ...initIndItem,
+                indicator: 'aids related deaths (unaids)'
+              };
+            }
+            return {
+              ...initIndItem
+            };
+          })
         })
       );
     } else {
-      // so we set the values for chart data
-      // * AND ALSO whenever an indicator is selected
-      // the year jumps to the most recent year of the
-      // indicators data point, so
-      this.props.dispatch(
-        actions.storeChartDataRequest({
-          selectedInd,
-          selectedYear: val.firstYear
-        })
-      );
+      selectedInd[index].indicator = val.value;
+      selectedInd[index].dataSource = val.dataSource;
+      selectedInd[index].selectedSubInd = [];
+      selectedInd[index].subIndicators = [];
+
+      if (val === 'reset') {
+        selectedInd[index].indicator = undefined;
+        selectedInd[index].dataSource = undefined;
+        this.props.dispatch(
+          actions.storeChartDataRequest({
+            selectedInd
+          })
+        );
+      } else {
+        // so we set the values for chart data
+        // * AND ALSO whenever an indicator is selected
+        // the year jumps to the most recent year of the
+        // indicators data point, so
+        this.props.dispatch(
+          actions.storeChartDataRequest({
+            selectedInd,
+            selectedYear: val.firstYear
+          })
+        );
+      }
     }
 
     this.changesMade();
   }
 
   selectSubInd(item, array = false, index) {
-    const selectedInd = [...this.props.chartData.selectedInd];
-    let selectedSubInd = [
-      ...this.props.chartData.selectedInd[index].selectedSubInd
-    ];
+    const selectedInd = [];
+
+    // so because javascript is stupid and in this particular
+    // case even when using ... the object is still referencing to
+    // this.props.chartData.selectedInd and thus is not extensible
+    // we gonna clone this array object
+    this.props.chartData.selectedInd.forEach(indItem => {
+      selectedInd.push({
+        indicator: indItem.indicator,
+        subIndicators: indItem.subIndicators,
+        dataSource: indItem.dataSource,
+        selectedSubInd: [...indItem.selectedSubInd]
+      });
+    });
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
     if (item !== 'reset') {
       if (array) {
         item.forEach(it => {
-          selectedSubInd.push(it.value);
+          selectedInd[index].selectedSubInd.push(it.value);
         });
       } else {
-        const subIndicatorIndex = selectedSubInd.indexOf(item.value);
+        const subIndicatorIndex = selectedInd[index].selectedSubInd.indexOf(
+          item.value
+        );
         if (subIndicatorIndex === -1)
           // so if it doesn't exist we add it
-          selectedSubInd.push(item.value);
+          selectedInd[index].selectedSubInd.push(item.value);
         // if it does exist we remove it
-        else selectedSubInd.splice(subIndicatorIndex, 1);
+        else selectedInd[index].selectedSubInd.splice(subIndicatorIndex, 1);
       }
     } else {
-      selectedSubInd = [];
+      selectedInd[index].selectedSubInd = [];
     }
-
-    selectedInd[index].selectedSubInd = selectedSubInd;
 
     // so we set the values for chart data
     this.props.dispatch(
@@ -417,6 +460,34 @@ class VizPaneMediator extends React.Component {
     return selectedCountryVal;
   }
 
+  addIndicator() {
+    const selectedInd = [...this.props.chartData.selectedInd];
+
+    selectedInd.push(initIndItem);
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        selectedInd
+      })
+    );
+
+    this.changesMade();
+  }
+
+  removeIndicator(index) {
+    const selectedInd = [...this.props.chartData.selectedInd];
+
+    selectedInd.splice(index, 1);
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        selectedInd
+      })
+    );
+
+    this.changesMade();
+  }
+
   resetAll() {
     this.props.dispatch(
       actions.storeChartDataRequest({
@@ -481,6 +552,11 @@ class VizPaneMediator extends React.Component {
           this.props.paneData.chartType === chartTypes.lineChart &&
           this.handleAxisSwitch
         }
+        multipleInd={
+          this.props.paneData.chartType !== chartTypes.geoMap &&
+          this.props.paneData.chartType !== chartTypes.focusNL &&
+          this.props.paneData.chartType !== chartTypes.focusKE
+        }
         specOptions={this.props.chartData.specOptions}
         saveGraphOption={this.saveGraphOption}
         allFileSources={this.state.allFileSources}
@@ -495,6 +571,8 @@ class VizPaneMediator extends React.Component {
         changesMade={this.props.chartData.changesMade}
         selectedInd={this.props.chartData.selectedInd}
         chartKeys={this.props.chartData.chartKeys}
+        addIndicator={this.addIndicator}
+        removeIndicator={this.removeIndicator}
         selectInd={this.selectInd}
         selectSubInd={this.selectSubInd}
         selectCountry={this.selectCountry}

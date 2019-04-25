@@ -14,6 +14,17 @@ today = mm + '/' + dd + '/' + yyyy;
 // const currentYear = now.getFullYear();
 // const yearBefore = currentYear - 15;
 
+export const initIndItem = {
+  indicator: undefined,
+  // so these are all of the sub-indicators
+  // of the selected indicator
+  subIndicators: [],
+  // so this is the dataSource
+  // of the selected indicator
+  dataSource: undefined,
+  selectedSubInd: []
+};
+
 const initialState = {
   // so this variable is mainly used to control
   // the loading of data from zoombackend or DUCT

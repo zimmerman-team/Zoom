@@ -97,7 +97,10 @@ const propTypes = {
   selectSubInd: PropTypes.func,
   subInd1AllSelected: PropTypes.bool,
   subInd2AllSelected: PropTypes.bool,
+  addIndicator: PropTypes.func,
+  removeIndicator: PropTypes.func,
   locationSelected: PropTypes.bool,
+  multipleInd: PropTypes.bool,
   saveGraphOption: PropTypes.func,
   resetAll: PropTypes.func
 };
@@ -106,10 +109,13 @@ const defaultProps = {
   selectedInd: [],
   saveGraphOption: null,
   handleAxisSwitch: null,
+  removeIndicator: null,
   locationSelected: true,
   subInd1AllSelected: true,
   subInd2AllSelected: true,
+  multipleInd: false,
   changesMade: true,
+  addIndicator: null,
   specOptions: {},
   chartKeys: [],
   selectYearRange: undefined,
@@ -137,8 +143,16 @@ class DataExplorePane extends React.Component {
     const indPanels = [];
 
     this.props.selectedInd.forEach((indItem, index) => {
+      let labelNumb = index + 1 + '';
+
+      labelNumb = labelNumb.length > 1 ? labelNumb : '0'.concat(labelNumb);
+
       // we push in the indicator dropdown data
       indPanels.push({
+        sectionRemove: this.props.multipleInd,
+        removeIndicator: () => this.props.removeIndicator(index),
+        indicator: true,
+        indicatorLabel: `Indicator ${labelNumb}`,
         categorise: true,
         placeHolderText: 'Select indicator',
         placeHolderNumber: this.props.indNames.length,
@@ -146,11 +160,14 @@ class DataExplorePane extends React.Component {
         allFileSources: this.props.indNames,
         selectedSources: indItem.indicator,
         valueSelected: indItem.indicator,
-        reset: () => this.props.selectInd('reset')
+        reset: () => this.props.selectInd('reset', index)
       });
 
       // and we push in the sub-indicator dropdown data
       indPanels.push({
+        addIndicator: this.props.addIndicator,
+        sectionAdd:
+          index === this.props.selectedInd.length - 1 && this.props.multipleInd,
         indicator: indItem.indicator,
         subIndicator: true,
         categorise: true,

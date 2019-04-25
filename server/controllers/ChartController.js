@@ -1,3 +1,4 @@
+const fs = require('fs');
 /* consts */
 const config = require('../config/config');
 
@@ -125,7 +126,19 @@ const ChartController = {
           .exec((chartError, chart) => {
             if (chartError) general.handleError(res, chartError);
             else if (!chart) general.handleError(res, 'chart not found', 404);
-            else res.json(chart);
+            else if (chart.dataFileUrl) {
+              fs.readFile(chart.dataFileUrl, 'utf8', (dataErr, data) => {
+                if (dataErr) general.handleError(res, dataErr);
+                else
+                  res.send({
+                    chart,
+                    data: JSON.parse(data)
+                  });
+              });
+            } else
+              res.send({
+                chart
+              });
           });
     });
   },
@@ -139,7 +152,19 @@ const ChartController = {
       .exec((chartError, chart) => {
         if (chartError) general.handleError(res, chartError);
         else if (!chart) general.handleError(res, 'chart not found', 404);
-        else res.json(chart);
+        else if (chart.dataFileUrl) {
+          fs.readFile(chart.dataFileUrl, 'utf8', (dataErr, data) => {
+            if (dataErr) general.handleError(res, dataErr);
+            else
+              res.send({
+                chart,
+                data: JSON.parse(data)
+              });
+          });
+        } else
+          res.send({
+            chart
+          });
       });
   },
 
@@ -271,7 +296,6 @@ const ChartController = {
                   description,
                   _public,
                   teams,
-                  data,
                   descIntro,
 
                   // so the type of chart
@@ -290,14 +314,30 @@ const ChartController = {
                 });
 
                 chartz.save(err => {
-                  if (err) general.handleError(res, err);
-
-                  res.json({
-                    message: 'chart created',
-                    id: chartz._id,
-                    name: chartz.name,
-                    chartType: type
-                  });
+                  if (err) {
+                    console.log('saving this biggo gives error', err);
+                    general.handleError(res, err);
+                  } else {
+                    const fileUrl = `server/data/chartData${chartz.id}.txt`;
+                    fs.writeFile(fileUrl, JSON.stringify(data), fileError => {
+                      if (fileError) {
+                        console.log('fileError', fileError);
+                        general.handleError(res, fileError);
+                      } else {
+                        chartz.dataFileUrl = fileUrl;
+                        chartz.save(urlSavErr => {
+                          if (urlSavErr) general.handleError(res, urlSavErr);
+                          else
+                            res.json({
+                              message: 'chart created',
+                              id: chartz._id,
+                              name: chartz.name,
+                              chartType: type
+                            });
+                        });
+                      }
+                    });
+                  }
                 });
               })
               .catch(promiseErr => {
@@ -306,44 +346,51 @@ const ChartController = {
           } else if (author.equals(chart.author)) {
             genUniqueName(Chart, name, chart.name)
               .then(uniqueName => {
-                chart.name = uniqueName;
-                chart.author = author;
+                const fileUrl = `server/data/chartData${chart.id}.txt`;
+                fs.writeFile(fileUrl, JSON.stringify(data), fileError => {
+                  if (fileError) {
+                    general.handleError(res, fileError);
+                  } else {
+                    chart.name = uniqueName;
+                    chart.author = author;
 
-                chart.description = description;
-                chart.dataSources = dataSources;
+                    chart.description = description;
+                    chart.dataSources = dataSources;
 
-                chart.data = data;
-                chart.descIntro = descIntro;
+                    chart.dataFileUrl = fileUrl;
+                    chart.descIntro = descIntro;
 
-                // so the type of chart
-                chart.type = type;
-                chart._public = _public;
-                chart.teams = teams;
+                    // so the type of chart
+                    chart.type = type;
+                    chart._public = _public;
+                    chart.teams = teams;
 
-                /* indicators/ sub-indicators of chart */
-                chart.indicatorItems = indicatorItems;
+                    /* indicators/ sub-indicators of chart */
+                    chart.indicatorItems = indicatorItems;
 
-                chart.selectedSources = selectedSources;
-                chart.yearRange = yearRange;
+                    chart.selectedSources = selectedSources;
+                    chart.yearRange = yearRange;
 
-                chart.selectedYear = selectedYear;
-                chart.selectedCountryVal = selectedCountryVal;
-                chart.selectedRegionVal = selectedRegionVal;
-                chart.specOptions = specOptions;
+                    chart.selectedYear = selectedYear;
+                    chart.selectedCountryVal = selectedCountryVal;
+                    chart.selectedRegionVal = selectedRegionVal;
+                    chart.specOptions = specOptions;
 
-                chart.save(err => {
-                  if (err) general.handleError(res, err);
-
-                  res.json({
-                    message: 'chart updated',
-                    id: chart._id,
-                    name: chart.name,
-                    chartType: chart.type
-                  });
+                    chart.save(err2 => {
+                      if (err2) general.handleError(res, err2);
+                      else
+                        res.json({
+                          message: 'chart updated',
+                          id: chart._id,
+                          name: chart.name,
+                          chartType: chart.type
+                        });
+                    });
+                  }
                 });
               })
-              .catch(promiseErr => {
-                general.handleError(res, promiseErr);
+              .catch(promiseErr2 => {
+                general.handleError(res, promiseErr2);
               });
           } else general.handleError(res, 'Unauthorized', 401);
         });

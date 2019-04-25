@@ -474,21 +474,20 @@ class VisualizerModuleMediator extends Component {
       _public,
       team,
       descIntro,
-      data,
       specOptions,
       created,
       yearRange
-    } = this.props.chartResults;
+    } = this.props.chartResults.chart;
 
     // we load up the redux chartData variable
     this.props.dispatch(
       actions.storeChartDataRequest({
-        changesMade: false,
+        changesMade: this.props.chartResults.data === undefined,
         chartMounted: true,
         name,
         _public,
         team: team.length > 0,
-        indicators: data,
+        indicators: this.props.chartResults.data || [],
         chartId: _id,
         descIntro,
         selectedYear,

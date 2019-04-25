@@ -28,7 +28,7 @@ const ChartSchema = new Schema(
       }
     ],
 
-    data: { type: [], default: [] },
+    dataFileUrl: String,
 
     /* so this one is used for trash */
     archived: { type: Boolean, default: false },

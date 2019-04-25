@@ -502,11 +502,10 @@ class VisualizerModuleMediator extends Component {
       _public,
       team,
       descIntro,
-      data,
       specOptions,
       created,
       yearRange
-    } = this.props.chartResults;
+    } = this.props.chartResults.chart;
 
     const selectedIndNames = [];
 
@@ -523,12 +522,12 @@ class VisualizerModuleMediator extends Component {
     // we load up the redux chartData variable
     this.props.dispatch(
       actions.storeChartDataRequest({
-        changesMade: false,
+        changesMade: this.props.chartResults.data === undefined,
         chartMounted: true,
         name,
         _public,
         team: team.length > 0,
-        data,
+        data: this.props.chartResults.data || [],
         chartId: _id,
         descIntro,
         selectedYear,

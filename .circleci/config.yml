@@ -141,13 +141,13 @@ workflows:
   version: 2
   test_build_deploy:
     jobs:
-#      - checkout_repo
-#      - build_deploy:
-#          requires:
-#            - checkout_repo
-      - cypress_test
-#          requires:
-#            - build_deploy
+      - checkout_repo
+      - build_deploy:
+          requires:
+            - checkout_repo
+      - cypress_test:
+          requires:
+            - build_deploy
 #      - test_e2e:
 #          requires:
 #            - build_deploy

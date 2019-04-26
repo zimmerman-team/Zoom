@@ -91,7 +91,7 @@ class VizContainer extends React.Component {
             outerHistory={this.props.outerHistory}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
-            indicatorData={this.props.indicators}
+            indicatorData={this.props.data}
             saveViewport={this.props.saveViewport}
             path="/(visualizer|public)/(geomap|focusKE|focusNL)/:code/:tab"
             component={GeomapFragment}
@@ -102,8 +102,8 @@ class VizContainer extends React.Component {
             chartType={this.props.chartType}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
-            indicatorData={this.props.indicators}
-            indicators={this.props.chartKeys}
+            indicatorData={this.props.data}
+            chartKeys={this.props.chartKeys}
             path="/(visualizer|public)/linechart/:code/:tab"
             component={LinechartFragment}
             mode={this.state.preview}
@@ -113,7 +113,7 @@ class VizContainer extends React.Component {
             chartType={this.props.chartType}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
-            indicatorData={this.props.indicators}
+            indicatorData={this.props.data}
             chartKeys={this.props.chartKeys}
             path="/(visualizer|public)/barchart/:code/:tab"
             component={BarchartFragment}
@@ -123,7 +123,7 @@ class VizContainer extends React.Component {
             chartType={this.props.chartType}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
-            indicatorData={this.props.indicators}
+            indicatorData={this.props.data}
             chartKeys={this.props.chartKeys}
             path="/(visualizer|public)/tablechart/:code/:tab"
             component={TablechartFragment}
@@ -134,7 +134,7 @@ class VizContainer extends React.Component {
             chartType={this.props.chartType}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
-            indicatorData={this.props.indicators}
+            indicatorData={this.props.data}
             chartKeys={this.props.chartKeys}
             path="/(visualizer|public)/donutchart/:code/:tab"
             component={DonutchartFragment}

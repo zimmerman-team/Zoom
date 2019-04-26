@@ -26,7 +26,7 @@ const defaultProps = {
   xAxisKey: 'year'
 };
 
-const LineChart = ({ data, indicators, xAxisKey, specOptions }) => {
+const LineChart = ({ data, chartKeys, xAxisKey, specOptions }) => {
   return (
     <ResponsiveContainer>
       <ReLineChart
@@ -57,26 +57,26 @@ const LineChart = ({ data, indicators, xAxisKey, specOptions }) => {
           content={<TooltipContent xAxisKey={xAxisKey} />}
           cursor={{ stroke: 'grey', strokeWidth: 1 }}
         />
-        {indicators.map(indicator => (
+        {chartKeys.map(chartKey => (
           <Line
             type="monotone"
             strokeWidth={2}
-            key={indicator.name}
+            key={chartKey.name}
             dot={{
               r: 4,
               strokeWidth: 1,
               stroke: '#fff',
-              fill: indicator.color
+              fill: chartKey.color
             }}
             activeDot={{
               r: 4,
               strokeWidth: 2,
               stroke: '#fff',
-              fill: indicator.color
+              fill: chartKey.color
             }}
-            dataKey={indicator.name}
-            stroke={indicator.color}
-            yAxisId={indicator.orientation}
+            dataKey={chartKey.name}
+            stroke={chartKey.color}
+            yAxisId={chartKey.orientation}
           />
         ))}
       </ReLineChart>

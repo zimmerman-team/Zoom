@@ -44,8 +44,4 @@ export const ResetContainer = styled.div`
 export const DropDownCont = styled.div`
   background-color: ${theme.color.aidsFondsWhite};
   margin: 6px 20px 6px 18px;
-
-  &&:nth-child(3) {
-    margin-top: 30px;
-  }
 `;

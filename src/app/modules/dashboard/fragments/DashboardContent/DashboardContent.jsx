@@ -24,6 +24,7 @@ const propTypes = {
   visible: PropTypes.bool,
   /** contains data for generation of tab nav items and providing the tab content with the proper components */
   users: PropTypes.array,
+  trashCharts: PropTypes.array,
   loading: PropTypes.bool,
   teams: PropTypes.array
 };
@@ -31,6 +32,7 @@ const propTypes = {
 const defaultProps = {
   visible: true,
   loading: false,
+  trashCharts: [],
   loggedIn: true
 };
 
@@ -40,7 +42,10 @@ const DashboardContent = props => {
   return (
     <FragmentBase>
       {/** tab navigator */}
-      <DashboardTabNavigator navItems={props.navItems} />
+      <DashboardTabNavigator
+        navItems={props.navItems}
+        trashCount={props.trashCharts.length}
+      />
       {/** tab content */}
       <DashboardTabContent
         loading={props.loading}
@@ -48,6 +53,7 @@ const DashboardContent = props => {
         charts={props.charts}
         users={props.users}
         teams={props.teams}
+        trashCharts={props.trashCharts}
         isSortByOpen={props.isSortByOpen}
         changeSortBy={props.changeSortBy}
         setWrapperRef={props.setWrapperRef}

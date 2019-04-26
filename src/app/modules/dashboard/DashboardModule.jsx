@@ -23,6 +23,7 @@ const propTypes = {
   changeSortBy: PropTypes.func,
   isSortByOpen: PropTypes.bool,
   setWrapperRef: PropTypes.func,
+  trashCharts: PropTypes.array,
   greetingName: PropTypes.string,
   onEnterPressed: PropTypes.func,
   setIsSortByOpen: PropTypes.func,
@@ -47,6 +48,7 @@ const defaultProps = {
   changeSearchKeyword: null,
   users: [],
   teams: [],
+  trashCharts: [],
   activeTab: 'charts',
   totalPages: 0,
   changePage: null
@@ -58,6 +60,7 @@ const DashboardModule = ({
   sort,
   users,
   datasets,
+  trashCharts,
   charts,
   teams,
   activeTab,
@@ -94,6 +97,7 @@ const DashboardModule = ({
       users={users}
       charts={charts}
       datasets={datasets}
+      trashCharts={trashCharts}
       teams={teams}
       isSortByOpen={isSortByOpen}
       changeSortBy={changeSortBy}

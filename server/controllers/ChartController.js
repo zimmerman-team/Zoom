@@ -206,30 +206,37 @@ const ChartController = {
     );
   },
 
-  // gets all user charts and team charts
+  // gets all user charts and team charts or archived charts of the user
   getAll: (req, res) => {
-    const { authId, sortBy, searchTitle } = req.query;
+    const { authId, sortBy, searchTitle, archived } = req.query;
     User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
       else {
         const sort = utils.getDashboardSortBy(sortBy);
 
+        const query = archived
+          ? {
+              author,
+              archived: true
+            }
+          : {
+              $or: [
+                {
+                  author,
+                  archived: false,
+                  name: { $regex: searchTitle, $options: 'i' }
+                },
+                {
+                  team: author.team,
+                  archived: false,
+                  name: { $regex: searchTitle, $options: 'i' }
+                }
+              ]
+            };
+
         Chart.find(
-          {
-            $or: [
-              {
-                author,
-                archived: false,
-                name: { $regex: searchTitle, $options: 'i' }
-              },
-              {
-                team: author.team,
-                archived: false,
-                name: { $regex: searchTitle, $options: 'i' }
-              }
-            ]
-          },
+          query,
           'created last_updated team _public type dataSources _id name archived'
         )
           .collation({ locale: 'en' })
@@ -500,21 +507,28 @@ const ChartController = {
     });
   },
 
-  emptyTrash: function(user, res) {
-    // TODO: should be adjusted without the promises, or maybe with promises if
-    // TODO: it works and makes sense
-    /*
-     * Delete all archived visualisations
-     */
+  emptyTrash: (user, res) => {
+    const { authId, chartId } = req.body;
 
-    return Chart.remove({
-      author: user._id,
-      archived: true
-    })
-      .then(viz => res(null))
-      .catch(error => {
-        general.handleError(res, error);
-      });
+    User.findOne({ authId }).exec((userError, author) => {
+      if (userError) general.handleError(res, userError);
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else {
+        Chart.findOne({ author, archived: false, _id: chartId }).exec(
+          (chartError, chart) => {
+            if (chartError) general.handleError(res, chartError);
+
+            chart.archived = true;
+
+            chart.save(err => {
+              if (err) general.handleError(res, err);
+
+              res.json({ message: 'chart archived', id: chart._id });
+            });
+          }
+        );
+      }
+    });
   },
 
   updateAndRefresh: function(user, vizId, viz, res) {

@@ -529,7 +529,23 @@ function datasetDeleted(state = initial, action) {
   }
 }
 
+function archivedCharts(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.ALL_ARCHIVED_CHARTS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.ALL_ARCHIVED_CHARTS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.ALL_ARCHIVED_CHARTS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.ALL_ARCHIVED_CHARTS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  archivedCharts,
   datasetDeleted,
   chartDuplicated,
   dupChartCreated,

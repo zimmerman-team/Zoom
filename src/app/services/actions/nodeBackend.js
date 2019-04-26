@@ -626,3 +626,35 @@ export function deleteDatasetFailed(error) {
     error
   };
 }
+
+export const ALL_ARCHIVED_CHARTS_INITIAL = 'ALL_ARCHIVED_CHARTS_INITIAL';
+export const ALL_ARCHIVED_CHARTS_REQUEST = 'ALL_ARCHIVED_CHARTS_REQUEST';
+export const ALL_ARCHIVED_CHARTS_SUCCESS = 'ALL_ARCHIVED_CHARTS_SUCCESS';
+export const ALL_ARCHIVED_CHARTS_FAILED = 'ALL_ARCHIVED_CHARTS_FAILED';
+
+export function allArchivedChartsInitial() {
+  return {
+    type: ALL_ARCHIVED_CHARTS_INITIAL
+  };
+}
+
+export function allArchivedChartsRequest(values) {
+  return {
+    type: ALL_ARCHIVED_CHARTS_REQUEST,
+    values
+  };
+}
+
+export function allArchivedChartsSuccess(data) {
+  return {
+    type: ALL_ARCHIVED_CHARTS_SUCCESS,
+    data
+  };
+}
+
+export function allArchivedChartsFailed(error) {
+  return {
+    type: ALL_ARCHIVED_CHARTS_FAILED,
+    error
+  };
+}

@@ -476,8 +476,26 @@ export function* getPublicChartRequest(action) {
   }
 }
 
+export function* allArchivedChartsRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getAllCharts',
+      values: action.values
+    });
+    yield put(nodeActions.allArchivedChartsSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.allArchivedChartsFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('ALL_ARCHIVED_CHARTS_REQUEST', allArchivedChartsRequest),
     takeLatest('GET_PUBLIC_CHART_REQUEST', getPublicChartRequest),
     takeLatest('DELETE_DATASET_REQUEST', deleteDatasetRequest),
     takeLatest('DUPLICATE_CHART_REQUEST', duplicateChartRequest),

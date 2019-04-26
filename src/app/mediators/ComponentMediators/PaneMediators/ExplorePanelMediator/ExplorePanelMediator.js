@@ -210,8 +210,7 @@ class ExplorePanelMediator extends React.Component {
   resetIndicators(dontReset = false) {
     if (!dontReset) {
       // and we also deselect the indicators
-      this.props.selectInd1({ value: undefined });
-      this.props.selectInd2({ value: undefined });
+      this.props.selectInd('resetAll');
     }
   }
 

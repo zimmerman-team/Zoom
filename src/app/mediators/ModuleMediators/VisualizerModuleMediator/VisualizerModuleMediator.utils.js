@@ -246,79 +246,82 @@ export function formatDate(created) {
   )} ${date.getFullYear()}`;
 }
 
-export function formatGeoData(
-  indicators1,
-  selectedInd1,
-  indicators2,
-  selectedInd2
-) {
+export function formatGeoData(indAggregations) {
   let longLatData = [];
   let countryLayerData = {};
-
-  // so we check here if the retrieved data is long lat
-  // and then format it differently
-  // TODO: make this work differently, this is currently i quick and dirty fix
-  if (
-    indicators1[0] &&
-    indicators1[0].geolocationTag &&
-    indicators1[0].geolocationTag.indexOf(',') !== -1 &&
-    /\d/.test(indicators1[0].geolocationTag)
-  ) {
-    longLatData = formatLongLatData(indicators1, selectedInd1);
-  } else {
-    countryLayerData = formatCountryLayerData(indicators1, selectedInd1);
-  }
-
+  const geomapData = [];
   let countryCircleData = [];
-  // so we check here if the retrieved data is long lat
-  // and then format it differently
-  // TODO: make this work differently, this is currently i quick and dirty fix
-  if (
-    indicators2[0] &&
-    indicators2[0].geolocationTag &&
-    indicators2[0].geolocationTag.indexOf(',') !== -1 &&
-    /\d/.test(indicators2[0].geolocationTag)
-  ) {
-    longLatData = formatLongLatData(indicators2, selectedInd2);
-  } else {
-    countryCircleData = formatCountryCenterData(indicators2, selectedInd2);
-  }
 
-  const indicators = [];
+  indAggregations.forEach((aggregation, index) => {
+    if (aggregation && aggregation[0]) {
+      const indName = aggregation[0].indicatorName;
 
-  if (countryLayerData.features && countryLayerData.features.length > 0) {
-    updatePercentiles(countryLayerData, f => f.properties.value);
+      // so we check here if the retrieved data is long lat
+      // and then format it differently
+      // TODO: make this work differently, this is currently i quick and dirty fix
+      if (
+        aggregation[0] &&
+        aggregation[0].geolocationTag &&
+        aggregation[0].geolocationTag.indexOf(',') !== -1 &&
+        /\d/.test(aggregation[0].geolocationTag)
+      ) {
+        // so if the tag contains some numbers divided by a comma
+        // that means that its a long/lat aggregation
+        // and it then overrides the other legend types on the geomap
+        longLatData = formatLongLatData(aggregation, indName);
 
-    indicators.push({
-      type: 'layer',
-      data: countryLayerData,
-      legendName: ` ${selectedInd1} `
-    });
-  }
+        // and we push them into the indicatorData array for the geomap
+        if (longLatData.length > 0) {
+          geomapData.push({
+            type: 'location',
+            data: longLatData,
+            legendName: `POI: ${indName}`
+          });
+        }
+      } else if (index === 0) {
+        // so for the first indicator aggregation on the geomap
+        // we form the layers
+        countryLayerData = formatCountryLayerData(aggregation, indName);
 
-  if (countryCircleData.length > 0) {
-    indicators.push({
-      type: 'circle',
-      data: countryCircleData,
-      legendName: ` ${selectedInd2} `
-    });
-  }
+        // and we push them into the indicatorData array for the geomap
+        if (countryLayerData.features && countryLayerData.features.length > 0) {
+          updatePercentiles(countryLayerData, f => f.properties.value);
 
-  if (longLatData.length > 0) {
-    indicators.push({
-      type: 'location',
-      data: longLatData,
-      legendName: `POI: ${longLatData[0].indName}`
-    });
-  }
+          geomapData.push({
+            type: 'layer',
+            data: countryLayerData,
+            legendName: ` ${indName} `
+          });
+        }
+      } else if (index === 1) {
+        // and for the second indicator aggregation on the geomap
+        // we format the center data
+        countryCircleData = formatCountryCenterData(aggregation, indName);
 
-  return indicators;
+        // and we push in the circle data for the indicatorData array for the geomap
+        if (countryCircleData.length > 0) {
+          geomapData.push({
+            type: 'circle',
+            data: countryCircleData,
+            legendName: ` ${indName} `
+          });
+        }
+      }
+      // else {
+      //   // here we'll format mainly the long/lat data
+      //   // when this functionality for the geomap will
+      //   // be addressed
+      // }
+    }
+  });
+
+  return geomapData;
 }
 
 // may not be keys, but is formed in a similar way as keys would,
 // so yeah mainly used for line generation according to the selected indicators
 // and 'selectedInd' is passed in as a string array of currently selected indicators
-export function formatChartLegends(selectedInd, colors = colorSet1) {
+export function formatChartLegends(selectedInd, colors = colorSet1, currKeys) {
   const chartKeys = [];
 
   let colorInd = 0;
@@ -330,10 +333,15 @@ export function formatChartLegends(selectedInd, colors = colorSet1) {
       if (findIndex(chartKeys, ['name', indName]) !== -1)
         key = indName.concat(` (${index})`);
 
+      const orientation =
+        currKeys.length > 0 && currKeys[index]
+          ? currKeys[index].orientation
+          : 'left';
+
       chartKeys.push({
         name: key,
         color: colors[colorInd],
-        orientation: 'left'
+        orientation
       });
 
       if (colorInd + 1 < colors.length) colorInd += 1;
@@ -347,6 +355,8 @@ export function formatChartLegends(selectedInd, colors = colorSet1) {
 export function formatLineData(indicators) {
   const indicatorData = [];
   const indicatorNames = [];
+
+  console.log('indicators', indicators);
 
   indicators.forEach((indicator, index) => {
     if (indicator.length > 0) {
@@ -535,14 +545,19 @@ export function formatDonutData(indicators, colors = colorSet1) {
   return chartData;
 }
 
-export function getChartKeys(chartType, indicators, colors = colorSet1) {
+export function getChartKeys(
+  chartType,
+  indicators,
+  colors = colorSet1,
+  currKeys
+) {
   switch (chartType) {
     case chartTypes.lineChart:
-      return formatChartLegends(indicators, colors);
+      return formatChartLegends(indicators, colors, currKeys);
     case chartTypes.barChart:
       return formatBarChartKeys(indicators);
     case chartTypes.donutChart:
-      return formatChartLegends(indicators, colors);
+      return formatChartLegends(indicators, colors, currKeys);
     default:
       return [];
   }

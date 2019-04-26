@@ -24,11 +24,10 @@ const ModuleBase = styled.div`
 `;
 
 const propTypes = {
-  // indicators: PropTypes.arrayOf(PropTypes.shape),
   loggedIn: PropTypes.bool,
   sideBarOpen: PropTypes.bool,
   dropDownData: PropTypes.shape({}),
-  indicators: PropTypes.arrayOf(PropTypes.shape({})),
+  data: PropTypes.arrayOf(PropTypes.shape({})),
   dataPaneOpen: PropTypes.string,
   auth0Client: PropTypes.shape({}),
   chartKeys: PropTypes.array,
@@ -39,7 +38,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  indicators: [],
+  data: [],
   publicPage: false,
   dataPaneOpen: 'visualizer',
   chartKeys: [],
@@ -56,7 +55,7 @@ class BuilderModule extends Component {
     this.state = {
       dialogOpen: true,
       sideBarOpen: false,
-      indicators: []
+      data: []
     };
 
     this.onClose = this.onClose.bind(this);
@@ -87,7 +86,7 @@ class BuilderModule extends Component {
             publicPage={this.props.publicPage}
             chartType={this.props.chartType}
             outerHistory={this.props.outerHistory}
-            indicators={this.props.indicators}
+            data={this.props.data}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
             display={this.props.dataPaneOpen === paneTypes.visualizer}

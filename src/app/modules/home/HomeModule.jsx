@@ -24,19 +24,19 @@ import { YearContainer } from '../../components/CustomYearSelector/CustomYearSel
 
 const propTypes = {
   loading: PropTypes.bool,
-  indicators: PropTypes.arrayOf(PropTypes.shape)
+  data: PropTypes.arrayOf(PropTypes.shape)
 };
 
 const defaultProps = {
   loading: false,
-  indicators: []
+  data: []
 };
 
 export class HomeModule extends Component {
   state = {
     dialogOpen: true,
     sideBarOpen: false,
-    indicators: [],
+    data: [],
     dialogShown: 'false'
   };
 
@@ -58,7 +58,7 @@ export class HomeModule extends Component {
   };
 
   render = () => {
-    const { indicators, ...otherProps } = this.props;
+    const { data, ...otherProps } = this.props;
 
     const paneContVis =
       this.props.dataPaneOpen === paneTypes.none ? 'none' : 'block';
@@ -89,7 +89,7 @@ export class HomeModule extends Component {
 
           <GeoMap
             outerHistory={this.props.history}
-            indicatorData={indicators}
+            indicatorData={data}
             selectedYear={this.props.selectedYear}
             selectYear={this.props.selectYear}
             latitude={15}

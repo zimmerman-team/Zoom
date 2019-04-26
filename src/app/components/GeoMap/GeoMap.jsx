@@ -6,7 +6,6 @@ import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
 
 /* utils */
-import { fromJS } from 'immutable';
 import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
 import { generateLegends, generateMarkers } from './GeoMap.util';
@@ -160,6 +159,19 @@ export class GeoMap extends Component {
       if (!find(mapStyle.layers, ['id', 'layer'])) {
         mapStyle.layers.push(dataLayer);
       }
+    } else {
+      // so if no layers are loaded we want to make sure that
+      // there are no layers and no borders in that mapstyle of ours
+      // cause of stupid referencing the MAP_STYLE object has the
+      // layers pushed, whilst it shouldn't
+
+      const borderInd = findIndex(mapStyle.layers, ['id', 'outline']);
+
+      if (borderInd !== -1) mapStyle.layers.splice(borderInd, 1);
+
+      const layerInd = findIndex(mapStyle.layers, ['id', 'layer']);
+
+      if (layerInd !== -1) mapStyle.layers.splice(layerInd, 1);
     }
 
     // and all of the generic markers that can be just put in the map, like separate components

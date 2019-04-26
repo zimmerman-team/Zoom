@@ -9,25 +9,10 @@ import { connect } from 'react-redux';
 
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
-import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import LineChart from 'components/charts/recharts_linechart/LineChart';
 
 /* styles */
-import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
-
-/**
- * todo: Please write a short component description of what this component does
- * @param {Object} customProperty - please describe component property
- */
-
-const ComponentBase = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-`;
+import { FragmentBase } from '../VizContainer.style';
 
 const Box = styled.div`
   width: 1024px;
@@ -64,7 +49,7 @@ const defaultProps = {
 
 const LinechartFragment = props => {
   return (
-    <ComponentBase>
+    <FragmentBase>
       <Box>
         <LineChart
           chartKeys={props.chartKeys}
@@ -74,13 +59,7 @@ const LinechartFragment = props => {
         />
       </Box>
       <ChartLegends data={props.chartKeys} />
-      <LineYearContainer>
-        <CustomYearSelector
-          selectedYear={props.selectedYear}
-          selectYear={props.selectYear}
-        />
-      </LineYearContainer>
-    </ComponentBase>
+    </FragmentBase>
   );
 };
 

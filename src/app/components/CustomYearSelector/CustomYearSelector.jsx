@@ -12,6 +12,7 @@ import {
   ComponentBase,
   YearLabel,
   SelectedYearLabel,
+  Text,
   StartControl,
   EndControl
 } from './CustomYearSelector.style';
@@ -19,13 +20,17 @@ import {
 const propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
-  selectedYear: PropTypes.string
+  selectedYear: PropTypes.string,
+
+  backgroundColor: PropTypes.string
 };
 
 const defaultProps = {
   min: 1990,
   max: 2019,
-  selectedYear: parseInt(initialState.yearPeriod[0], 10)
+  selectedYear: parseInt(initialState.yearPeriod[0], 10),
+
+  backgroundColor: 'transparent'
 };
 
 class CustomYearSelector extends React.Component {
@@ -95,6 +100,13 @@ class CustomYearSelector extends React.Component {
     this.props.selectYear(number);
   };
 
+  formatYearLabels(number) {
+    if (number == this.props.min || number == this.props.max) {
+      return number;
+    }
+    return String(number).slice(-2);
+  }
+
   renderYearLabels = (number, index) => {
     let yearLabels = '';
 
@@ -105,7 +117,7 @@ class CustomYearSelector extends React.Component {
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
-          {number}
+          <Text>{this.formatYearLabels(number)}</Text>
         </SelectedYearLabel>
       );
     else
@@ -116,7 +128,7 @@ class CustomYearSelector extends React.Component {
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
-          {number}
+          <Text>{this.formatYearLabels(number)}</Text>
         </YearLabel>
       );
 
@@ -125,7 +137,10 @@ class CustomYearSelector extends React.Component {
 
   render() {
     return (
-      <ComponentBase ref={this.setWrapperRef}>
+      <ComponentBase
+        ref={this.setWrapperRef}
+        backgroundColor={this.props.backgroundColor}
+      >
         {this.state.numArray.map(this.renderYearLabels)}
       </ComponentBase>
     );

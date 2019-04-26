@@ -72,8 +72,6 @@ class BuilderModule extends Component {
   };
 
   render() {
-    console.log(this.props.dataPaneOpen);
-
     return (
       <Router>
         <ModuleBase

@@ -42,14 +42,16 @@ const propTypes = {
   publicPage: PropTypes.bool,
   chartKeys: PropTypes.array,
   saveViewport: PropTypes.func,
-  mode: PropTypes.bool
+  mode: PropTypes.bool,
+  context: PropTypes.bool
 };
 const defaultProps = {
   chartType: 'geomap',
   publicPage: false,
   chartKeys: [],
   saveViewport: null,
-  mode: location.pathname.includes('preview')
+  mode: location.pathname.includes('preview'),
+  context: location.pathname.includes('context')
 };
 
 class VizContainer extends React.Component {
@@ -60,11 +62,15 @@ class VizContainer extends React.Component {
   componentDidMount() {
     // need an initial set here, because those default props, don't actually set
     // the state correctly
-    this.setState({ preview: location.pathname.includes('preview') });
+    this.setState({
+      preview: location.pathname.includes('preview'),
+      context: location.pathname.includes('context')
+    });
 
     this.props.history.listen((location, action) => {
       const mode = location.pathname.includes('preview');
-      this.setState({ preview: mode });
+      const context = location.pathname.includes('context');
+      this.setState({ preview: mode, context });
     });
   }
 
@@ -75,7 +81,10 @@ class VizContainer extends React.Component {
           this.state.preview || this.props.publicPage ? 'initial' : 'center'
         }
         style={{
-          width: this.props.display ? 'calc(100vw - 320px)' : '100vw'
+          width:
+            !this.state.context && !this.state.preview && this.props.display
+              ? 'calc(100vw - 320px)'
+              : '100vw'
         }}
       >
         <PreviewTextContainer
@@ -147,9 +156,8 @@ class VizContainer extends React.Component {
             mode={this.state.preview}
           />
 
-          <YearContainer>
+          <YearContainer bottom="24px">
             <CustomYearSelector
-              backgroundColor="transparent"
               selectedYear={this.props.selectedYear}
               selectYear={this.props.selectYear}
             />

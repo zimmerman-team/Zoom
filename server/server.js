@@ -23,7 +23,7 @@ mongoose
 // (optional) only made for logging and
 // bodyParser, parses the request body to be a readable json format
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-app.use(bodyParser.json({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({ limit: '2gb', extended: true }));
 app.use(cors());
 
 // append /api for our http requests

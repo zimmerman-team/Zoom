@@ -1,5 +1,5 @@
 export const initialState = {
-  indicators: [],
+  data: [],
   selectedInd1:
     process.env.NODE_ENV === 'development'
       ? 'aids related deaths (unaids)'

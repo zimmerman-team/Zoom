@@ -6,31 +6,16 @@ import styled from 'styled-components';
 /* mock */
 import { BarchartMockData } from './BachartMockData';
 
-/* styles */
-import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
-
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
-import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import { ResponsiveBar } from '@nivo/bar';
 
-/**
- * todo: Please write a short component description of what this component does
- * @param {Object} customProperty - please describe component property
- */
-
-const ComponentBase = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-`;
+/* styles */
+import { FragmentBase } from '../VizContainer.style';
 
 const Box = styled.div`
-  width: 1024px;
+  width: 100%;
+  max-width: 1024px;
   height: 500px;
   outline: 1px solid gray;
 `;
@@ -46,7 +31,7 @@ const defaultProps = {
 
 const BarchartFragment = props => {
   return (
-    <ComponentBase>
+    <FragmentBase>
       <Box>
         <ResponsiveBar
           data={props.indicatorData}
@@ -126,13 +111,7 @@ const BarchartFragment = props => {
         />
       </Box>
       <ChartLegends />
-      <LineYearContainer>
-        <CustomYearSelector
-          selectedYear={props.selectedYear}
-          selectYear={props.selectYear}
-        />
-      </LineYearContainer>
-    </ComponentBase>
+    </FragmentBase>
   );
 };
 

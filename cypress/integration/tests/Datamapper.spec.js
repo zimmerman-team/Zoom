@@ -348,10 +348,10 @@ describe('Datamapper e2e tests', function() {
   it('Try progressing after uploading incorrect file', function() {
     const fileName = 'IncorrectFile.txt';
     const fileType = 'text/plain';
-    const fileInput = '[data-cy="input"]';
+    const fileInput = 'input[type=file]';
 
     cy.upload_file(fileName, fileType, fileInput);
-
+    cy.wait(10000);
     cy.contains('next').click();
     cy.wait(1000);
     cy.get('[class*=Headings__BaseHeading]').should('contain', 'Upload CSV');
@@ -360,14 +360,12 @@ describe('Datamapper e2e tests', function() {
   it('Check upload correct file and progress to the next step', function() {
     const fileName = 'CypressSample.csv';
     const fileType = 'text/csv';
-    const fileInput = '[data-cy="input"]';
+    const fileInput = 'input[type=file]';
 
     cy.upload_file(fileName, fileType, fileInput);
-
-    cy.wait(20000);
-
+    cy.wait(10000);
     // So the step should show the uploaded file
-    // cy.contains(fileName);
+    cy.contains(fileName);
 
     cy.contains('next').click();
     cy.wait(1000);

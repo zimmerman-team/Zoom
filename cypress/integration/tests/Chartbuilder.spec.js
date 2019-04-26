@@ -2,7 +2,6 @@ function signOut() {
   cy.clearCookies();
   cy.clearLocalStorage();
 }
-
 function signIn() {
   cy.visit('/');
   cy.wait(1000);
@@ -28,6 +27,13 @@ function navigateToCreateLinechart() {
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-3"]').click();
+}
+function navigateToTablechart() {
+  cy.visit('/home');
+  cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="nav-pane-item-0"]').click();
+  cy.get('[data-cy="nav-pane-item-5"]').click();
 }
 
 describe('Create geo functionality', function() {
@@ -70,7 +76,6 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
   });
 
   it('Should pass written text from the /context to /preview', function() {
-    navigateToCreateGeo();
     // Fixme: Change to proper url or simultate click of the button.
     cy.visit('/visualizer/geomap/vizID/context');
     cy.get('textarea')
@@ -153,4 +158,18 @@ describe('Chartbuilder line chart fragment e2e', function() {
   //   cy.get('[data-cy="duplicate-to-dashboard"]').click();
   //   cy.get('[data-cy="edit-chart"]').click();
   // });
+});
+
+describe('Chartbuilder table chart fragment e2e', function() {
+  it('Should contain /tablechart in the url', function() {
+    navigateToTablechart();
+    cy.url().should('include', '/visualizer/tablechart');
+  });
+
+  it('Should display aids related deaths in the year 1990', function() {
+    cy.contains('Select indicator').click();
+    cy.contains('aids related deaths').click();
+    // cy.get('#MUIDataTableBodyRow-1 > :nth-child(7)').contains("aids related deaths");
+    //todo
+  });
 });

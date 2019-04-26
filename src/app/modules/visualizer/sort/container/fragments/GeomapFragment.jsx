@@ -18,6 +18,10 @@ const ComponentBase = styled.div`
   width: 100%;
   height: ${props => props.height};
   flex-shrink: 0;
+
+  position: relative;
+  top: 16px;
+  z-index: 0;
 `;
 
 const propTypes = {

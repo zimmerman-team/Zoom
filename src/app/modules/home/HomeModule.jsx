@@ -103,6 +103,7 @@ export class HomeModule extends Component {
                 ? { pointerEvents: 'none', opacity: '0.4' }
                 : {}
             }
+            bottom="56px"
           >
             <CustomYearSelector
               backgroundColor={Theme.color.aidsFondsWhiteOpacity}

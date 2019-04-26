@@ -4,7 +4,7 @@ import theme from 'theme/Theme';
 
 export const YearContainer = styled.div`
   position: relative;
-  bottom: 56px;
+  bottom: ${props => props.bottom};
   width: calc(100% - 48px);
   max-width: 1000px;
 `;

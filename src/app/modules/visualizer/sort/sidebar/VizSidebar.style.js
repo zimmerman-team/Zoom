@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const ComponentBase = styled.div`
-  //position: fixed;
-  //right: 0;
+  position: fixed;
+  right: 0;
   //top: 40px;
   width: 320px;
   flex-shrink: 0;

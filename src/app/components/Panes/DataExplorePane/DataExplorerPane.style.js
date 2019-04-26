@@ -8,6 +8,7 @@ export const ComponentBase = styled.div`
   background-color: ${theme.color.aidsFondsWhite};
   box-shadow: 0 5px 7px rgba(0, 0, 0, 0.5);
   overflow: scroll;
+  z-index: 8;
 `;
 
 export const FilterTitle = styled.span`

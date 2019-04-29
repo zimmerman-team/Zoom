@@ -35,6 +35,27 @@ function navigateToTablechart() {
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-5"]').click();
 }
+function navigateToBarchart() {
+  cy.visit('/home');
+  cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="nav-pane-item-0"]').click();
+  cy.get('[data-cy="nav-pane-item-4"]').click();
+}
+function navigateToCountryFocusKenya() {
+  cy.visit('/home');
+  cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="nav-pane-item-0"]').click();
+  cy.get('[data-cy="nav-pane-item-1"]').click();
+}
+function navigateToCountryFocusNetherlands() {
+  cy.visit('/home');
+  cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="nav-pane-item-0"]').click();
+  cy.get('[data-cy="nav-pane-item-2"]').click();
+}
 
 describe('Create geo functionality', function() {
   it("Shouldn't be able to create geo when not logged in", function() {
@@ -184,3 +205,30 @@ describe('Chartbuilder table chart fragment e2e', function() {
     cy.get("tbody>tr").should("contain", "Sorry, no matching records found");
   });
 });
+
+describe('Chartbuilder bar chart fragment e2e', function() {
+  it('Should contain /barchart in the url', function() {
+    signIn();
+    navigateToBarchart();
+    cy.url().should('include', '/visualizer/barchart');
+  });
+
+  //TODO: Check on chartlegends when implemented
+});
+
+describe('Chartbuilder country focus Kenya fragment e2e', function() {
+  it('Should contain /focusKE in the url', function() {
+    signIn();
+    navigateToCountryFocusKenya();
+    cy.url().should('include', '/visualizer/focusKE');
+  });
+});
+
+describe('Chartbuilder country focus Netherlands fragment e2e', function() {
+  it('Should contain /focusNL in the url', function() {
+    signIn();
+    navigateToCountryFocusNetherlands();
+    cy.url().should('include', '/visualizer/focusNL');
+  });
+});
+

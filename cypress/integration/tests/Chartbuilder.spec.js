@@ -97,29 +97,25 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
       'aids related deaths (unaids)'
     );
   });
+  // TODO: Implement this test.
+  // it('Should "save" the chart to the dashboard', function() {
+  //   navigateToCreateGeo();
+  //   cy.get('[data-cy="legendLayer-label"]').should(
+  //     'contain',
+  //     'aids related deaths'
+  //   );
+  //   cy.get('[data-cy=geomap-close-save-button]').click();
+  //   cy.visit('/visualizer/geomap/vizID/duplicate');
+  //   cy.get('[data-cy="duplicate-to-dashboard"]').click();
+  // });
 
-  it('Should "save" the chart to the dashboard', function() {
-    navigateToCreateGeo();
-    cy.get('[data-cy="legendLayer-label"]').should(
-      'contain',
-      'aids related deaths'
-    );
-    cy.get('[data-cy=geomap-close-save-button]').click();
-    cy.visit('/visualizer/geomap/vizID/duplicate');
-    cy.get('[data-cy="duplicate-to-dashboard"]').click();
-    // Fixme: Duplicate to dashboard broken
-    cy.get('[data-cy="edit-chart"]').click();
-    // Fixme: Should check on the vizID in the url,
-    // however on creating a chart, the vizID is not in the URL yet.
-  });
-
+  //TODO: Implement when functionality has been implemented.
   it('Should be able to download to csv/xml/json ', function() {
     navigateToCreateGeo();
     cy.visit('/visualizer/geomap/vizID/download');
     cy.get('[data-cy="dowload-option-JSON"]').click();
     cy.get('[data-cy="dowload-option-CSV"]').click();
     cy.get('[data-cy="dowload-option-XML"]').click();
-    // Fixme: Do something (dont know expected behaviour yet
   });
 
   it('Should publish the chart to public zoom library', function() {
@@ -127,8 +123,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     cy.visit('/visualizer/geomap/vizID/visibility');
     cy.get('[data-cy="publish-chart-to-public"]').click();
     cy.visit('/public/chart-library');
-    // Fixme: Should check on the vizID in the url,
-    // however on creating a chart, the vizID is not in the URL yet.
+    // Fixme: Should check on the vizID in the url, however on creating a chart, the vizID is not in the URL yet.
   });
 });
 
@@ -144,32 +139,48 @@ describe('Chartbuilder line chart fragment e2e', function() {
     cy.contains('aids related deaths (unaids)').click();
     cy.get('[data-cy="aids related deaths (unaids)"]');
   });
-
-  // Fixme: functionality not yet built
-  // it('Should modify the graph structure', function() {
-  //   signIn();
-  //   navigateToCreateLinechart();
-  // });
-  //
-  // it('Should be saved as a linechart', function() {
-  //   signIn();
-  //   navigateToCreateLinechart();
-  //   cy.get('[data-cy=geomap-close-save-button]').click();
-  //   cy.get('[data-cy="duplicate-to-dashboard"]').click();
-  //   cy.get('[data-cy="edit-chart"]').click();
-  // });
 });
 
 describe('Chartbuilder table chart fragment e2e', function() {
   it('Should contain /tablechart in the url', function() {
+    signIn();
     navigateToTablechart();
     cy.url().should('include', '/visualizer/tablechart');
   });
 
   it('Should display aids related deaths in the year 1990', function() {
-    cy.contains('Select indicator').click();
-    cy.contains('aids related deaths').click();
-    // cy.get('#MUIDataTableBodyRow-1 > :nth-child(7)').contains("aids related deaths");
-    //todo
+    cy.get('[data-cy="year-1990"]').click();
+    cy.wait(1000);
+    cy.get('#MUIDataTableBodyRow-2 > :nth-child(5)').should("contain", "1990");
+    cy.get('#MUIDataTableBodyRow-2 > :nth-child(9)').should("contain", "aids related deaths (unaids)");
+  });
+
+  it('Should sort on Geolocation', function() {
+    cy.get(":nth-child(2) > .MUIDataTableHeadCell-toolButton > .MUIDataTableHeadCell-data").click();
+    cy.get('tbody>tr').first().should("contain", "zimbabwe")
+  });
+
+  it('Should only display Kenya data when searching "kenya"', function() {
+    cy.get('[aria-label="Search"]').click();
+    cy.get(".MuiInputBase-root > .MuiInputBase-input").type("kenya");
+    cy.get("tbody>tr").should("contain", "kenya");
+  });
+
+  it('Should be able to delete Kenya data from table', function() {
+    cy.get("tbody>tr").within(() => {
+      cy.get('input[type="checkbox"]').click();
+    });
+    cy.get('[aria-label="Delete Selected Rows"]').click();
+    cy.get("tbody>tr").should("contain", "Sorry, no matching records found");
+
+    cy.get('[aria-label="Search"]').click();
+    cy.get('.MUIDataTableSearch-main').within(() => {
+      cy.get('[type="button"]').click();
+    });
+  });
+
+  it('Resetting all values should leave a empty datatable', function() {
+    cy.get('[data-cy="data-explorer-panel-reset"]').click();
+    cy.get("tbody>tr").should("contain", "Sorry, no matching records found");
   });
 });

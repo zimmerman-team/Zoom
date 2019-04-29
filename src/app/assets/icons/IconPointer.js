@@ -4,6 +4,7 @@ const SvgIconPointer = props => (
   <svg
     style={{
       margin: 'auto',
+      fill: "#ff0100"
     }}
     width={13}
     height={11}
@@ -16,7 +17,7 @@ const SvgIconPointer = props => (
       />
     </defs>
     <use
-      fill="#ff0100"
+      // fill="#ff0100"
       xlinkHref="#icon_pointer_svg__a"
       transform="rotate(90 654.5 -586)"
     />

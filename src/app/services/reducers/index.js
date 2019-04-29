@@ -544,7 +544,23 @@ function archivedCharts(state = initial, action) {
   }
 }
 
+function chartTrashEmpty(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.EMPTY_CHART_TRASH_INITIAL:
+      return updateInitial(state);
+    case nodeActions.EMPTY_CHART_TRASH_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.EMPTY_CHART_TRASH_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.EMPTY_CHART_TRASH_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  chartTrashEmpty,
   archivedCharts,
   datasetDeleted,
   chartDuplicated,

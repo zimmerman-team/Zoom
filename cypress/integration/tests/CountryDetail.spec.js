@@ -7,7 +7,7 @@ context('Country detail page', () => {
   });
   it('Visit Country detail page', () => {
     cy.visit('/');
-    cy.percySnapshot("Country detail");
+    cy.percySnapshot('Country detail');
     cy.on('uncaught:exception', (err, runnable) => {
       // returning false here prevents Cypress from
       // failing the test

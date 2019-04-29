@@ -316,6 +316,7 @@ class DataExplorePane extends React.Component {
           onClick={() => this.props.resetAll()}
         >
           <Tooltip
+            data-cy="reset-all"
             html={<SimpleToolTip title="Reset" />}
             position="top"
             trigger="mouseenter"

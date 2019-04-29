@@ -48,5 +48,4 @@ describe('Visiting all pages using url ', () => {
     cy.visit('/component');
     cy.visit('/banana');
   });
-
 });

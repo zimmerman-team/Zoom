@@ -133,8 +133,14 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/zoom-v2-ui
-      - run: yarn add cypress
-      - run: yarn cy:record
+      # --ignore-engines is a temporarily fix for the module codacy-coverage not having updated their node version....
+      - run: yarn add cypress --ignore-engines
+      # setting this env var to only test on dev server when deployed. => fixme: should probably checkout => test(local) => build_deploy
+      - run:
+          name: Set CYPRESS_baseUrl
+          command: |
+            echo 'export CYPRESS_baseUrl="$CYPRESS_BASEURL"' >> $BASH_ENV
+      - run: yarn e2e
 
 # WORKFLOWS
 workflows:
@@ -145,6 +151,7 @@ workflows:
       - build_deploy:
           requires:
             - checkout_repo
+# TODO: Uncomment when all tests are fixed
 #      - test_e2e:
 #          requires:
-#            - build_&_deploy
+#            - build_deploy

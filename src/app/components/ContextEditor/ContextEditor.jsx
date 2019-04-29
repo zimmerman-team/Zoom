@@ -25,6 +25,11 @@ const ComponentBase = styled.div`
   align-items: center;
   background-color: white;
   box-shadow: 0 5px 7px rgba(0, 0, 0, 0.5);
+
+  position: absolute;
+  right: 0;
+  top: 40px;
+  z-index: 3;
 `;
 
 const ContextBody = styled.section`

@@ -10,8 +10,11 @@ import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFr
 
 import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment';
 import TablechartFragment from 'modules/visualizer/sort/container/fragments/TablechartFragment';
-import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
 import DonutchartFragment from 'modules/visualizer/sort/container/fragments/DonutchartFragment';
+import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
+import CustomYearSelector from '../../../../components/CustomYearSelector/CustomYearSelector';
+import { YearContainer } from '../../../../components/CustomYearSelector/CustomYearSelector.style';
+import paneTypes from '../../../../__consts__/PaneTypesConst';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -39,14 +42,16 @@ const propTypes = {
   publicPage: PropTypes.bool,
   chartKeys: PropTypes.array,
   saveViewport: PropTypes.func,
-  mode: PropTypes.bool
+  mode: PropTypes.bool,
+  context: PropTypes.bool
 };
 const defaultProps = {
   chartType: 'geomap',
   publicPage: false,
   chartKeys: [],
   saveViewport: null,
-  mode: location.pathname.includes('preview')
+  mode: location.pathname.includes('preview'),
+  context: location.pathname.includes('context')
 };
 
 class VizContainer extends React.Component {
@@ -57,11 +62,15 @@ class VizContainer extends React.Component {
   componentDidMount() {
     // need an initial set here, because those default props, don't actually set
     // the state correctly
-    this.setState({ preview: location.pathname.includes('preview') });
+    this.setState({
+      preview: location.pathname.includes('preview'),
+      context: location.pathname.includes('context')
+    });
 
     this.props.history.listen((location, action) => {
       const mode = location.pathname.includes('preview');
-      this.setState({ preview: mode });
+      const context = location.pathname.includes('context');
+      this.setState({ preview: mode, context });
     });
   }
 
@@ -71,6 +80,12 @@ class VizContainer extends React.Component {
         mode={
           this.state.preview || this.props.publicPage ? 'initial' : 'center'
         }
+        style={{
+          width:
+            !this.state.context && !this.state.preview && this.props.display
+              ? 'calc(100vw - 320px)'
+              : '100vw'
+        }}
       >
         <PreviewTextContainer
           mode={this.state.preview || this.props.publicPage ? 'flex' : 'none'}
@@ -140,6 +155,13 @@ class VizContainer extends React.Component {
             component={DonutchartFragment}
             mode={this.state.preview}
           />
+
+          <YearContainer bottom="24px">
+            <CustomYearSelector
+              selectedYear={this.props.selectedYear}
+              selectYear={this.props.selectYear}
+            />
+          </YearContainer>
         </React.Fragment>
         <PreviewTextContainer mode={this.state.preview ? 'flex' : 'none'}>
           <ContextPreview

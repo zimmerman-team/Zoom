@@ -311,18 +311,18 @@ export class GeoMap extends Component {
           />
         </ControlsContainer>
 
-        <YearContainer
-          style={
-            this.props.disableYear
-              ? { pointerEvents: 'none', opacity: '0.4' }
-              : {}
-          }
-        >
-          <CustomYearSelector
-            selectedYear={this.props.selectedYear}
-            selectYear={this.props.selectYear}
-          />
-        </YearContainer>
+        {/*<YearContainer*/}
+        {/*style={*/}
+        {/*this.props.disableYear*/}
+        {/*? { pointerEvents: 'none', opacity: '0.4' }*/}
+        {/*: {}*/}
+        {/*}*/}
+        {/*>*/}
+        {/*<CustomYearSelector*/}
+        {/*selectedYear={this.props.selectedYear}*/}
+        {/*selectYear={this.props.selectYear}*/}
+        {/*/>*/}
+        {/*</YearContainer>*/}
 
         <MapGL
           {...viewport}

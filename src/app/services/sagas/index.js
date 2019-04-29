@@ -493,8 +493,26 @@ export function* allArchivedChartsRequest(action) {
   }
 }
 
+export function* emptyChartTrashRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendDeleteRequest, {
+      endpoint: 'emptyChartTrash',
+      values: action.values
+    });
+    yield put(nodeActions.emptyChartTrashSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.emptyChartTrashFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('EMPTY_CHART_TRASH_REQUEST', emptyChartTrashRequest),
     takeLatest('ALL_ARCHIVED_CHARTS_REQUEST', allArchivedChartsRequest),
     takeLatest('GET_PUBLIC_CHART_REQUEST', getPublicChartRequest),
     takeLatest('DELETE_DATASET_REQUEST', deleteDatasetRequest),

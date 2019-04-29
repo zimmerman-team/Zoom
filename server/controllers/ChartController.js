@@ -507,26 +507,18 @@ const ChartController = {
     });
   },
 
-  emptyTrash: (user, res) => {
-    const { authId, chartId } = req.body;
+  // deletes all of users archived charts
+  emptyTrash: (req, res) => {
+    const { authId } = req.query;
 
     User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
       else {
-        Chart.findOne({ author, archived: false, _id: chartId }).exec(
-          (chartError, chart) => {
-            if (chartError) general.handleError(res, chartError);
-
-            chart.archived = true;
-
-            chart.save(err => {
-              if (err) general.handleError(res, err);
-
-              res.json({ message: 'chart archived', id: chart._id });
-            });
-          }
-        );
+        Chart.deleteMany({ author, archived: true }).exec(delErr => {
+          if (delErr) general.handleError(res, delErr);
+          else res.json({ message: 'chart trash emptied!' });
+        });
       }
     });
   },

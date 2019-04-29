@@ -658,3 +658,35 @@ export function allArchivedChartsFailed(error) {
     error
   };
 }
+
+export const EMPTY_CHART_TRASH_INITIAL = 'EMPTY_CHART_TRASH_INITIAL';
+export const EMPTY_CHART_TRASH_REQUEST = 'EMPTY_CHART_TRASH_REQUEST';
+export const EMPTY_CHART_TRASH_SUCCESS = 'EMPTY_CHART_TRASH_SUCCESS';
+export const EMPTY_CHART_TRASH_FAILED = 'EMPTY_CHART_TRASH_FAILED';
+
+export function emptyChartTrashInitial() {
+  return {
+    type: EMPTY_CHART_TRASH_INITIAL
+  };
+}
+
+export function emptyChartTrashRequest(values) {
+  return {
+    type: EMPTY_CHART_TRASH_REQUEST,
+    values
+  };
+}
+
+export function emptyChartTrashSuccess(data) {
+  return {
+    type: EMPTY_CHART_TRASH_SUCCESS,
+    data
+  };
+}
+
+export function emptyChartTrashFailed(error) {
+  return {
+    type: EMPTY_CHART_TRASH_FAILED,
+    error
+  };
+}

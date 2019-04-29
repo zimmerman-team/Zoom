@@ -42,6 +42,7 @@ const propTypes = {
   charts: PropTypes.array,
   users: PropTypes.array,
   trashCharts: PropTypes.array,
+  removeAll: PropTypes.func,
   loading: PropTypes.bool,
   teams: PropTypes.array
 };
@@ -49,6 +50,7 @@ const defaultProps = {
   charts: [],
   data: [],
   users: [],
+  removeAll: null,
   trashCharts: [],
   teams: [],
   loading: false,
@@ -134,6 +136,7 @@ const DashboardTabContent = props => {
       {targetData.length > 0 && (
         <Box>
           <GridListOptionsPane
+            removeAll={props.removeAll}
             leftOptionLabel={leftOptionLabel}
             sortIsVisible={sortIsVisible}
             isRemoveOption={isRemoveOption}

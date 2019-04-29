@@ -185,6 +185,7 @@ describe('Datamapper e2e tests', function() {
 
   it('Go to datamapper', function() {
     cy.visit('/mapper');
+    cy.percySnapshot('Datamapper page');
   });
 
   it('Page should contain first steps title', function() {

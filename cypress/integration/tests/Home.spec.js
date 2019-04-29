@@ -1,6 +1,7 @@
 describe('Home page map controls', function() {
   it('Visit Home page ', function() {
     cy.visit('/');
+    cy.percySnapshot('Home page');
   });
 
   it('Goes in and out of fullscreen', function() {

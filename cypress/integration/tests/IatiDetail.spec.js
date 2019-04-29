@@ -7,6 +7,7 @@ context('IATI activity page', () => {
   });
   it('Visit IATI activity page', () => {
     cy.visit('/');
+    cy.percySnapshot('IATI Detail');
     cy.get('[data-cy=sidebar-toggle]').click();
     cy.get('[data-cy=sidebar-iati]').click();
     cy.wait(1000);

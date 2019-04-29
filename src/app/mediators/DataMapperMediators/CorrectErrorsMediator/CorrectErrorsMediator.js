@@ -45,6 +45,7 @@ class CorrectErrorsMediator extends React.Component {
       errorCells: [],
       errorMessages: {},
       loadErrors: false,
+      allChecked: false,
       pageSize: 10,
       columnHeaders: [],
       page: 0,
@@ -146,7 +147,24 @@ class CorrectErrorsMediator extends React.Component {
           JSON.parse(response.fileErrorCorrection.result)
         );
 
-        const errorTableData = JSON.parse(results.data_table);
+        const errorTableData = JSON.parse(results.data_table).map(row => {
+          // so we want this logic, so that when we load new data into the view
+          // the previously checked rows would still be checked
+          const checkInd = findIndex(this.state.errorTableData, [
+            'index',
+            row.index
+          ]);
+
+          const checked =
+            checkInd !== -1
+              ? this.state.errorTableData[checkInd].checked
+              : false;
+
+          return {
+            ...row,
+            checked
+          };
+        });
 
         let repCol = null;
         if (command.replace_pressed && command.filter_column_heading)
@@ -337,18 +355,22 @@ class CorrectErrorsMediator extends React.Component {
 
   checkRows(index, checked) {
     this.setState(prevState => {
-      const errorTableData = [...prevState.errorTableData];
+      let errorTableData = [];
+
       let checkedRows = false;
       if (index === 'all') {
         // so if all is checked === true, it means that all rows are checked
         // and viceversa unchecked so we can set the checked rows thingy here
         checkedRows = checked;
 
-        errorTableData.map(row => {
-          row.checked = checked;
-          return row;
+        errorTableData = prevState.errorTableData.map(row => {
+          return {
+            ...row,
+            checked
+          };
         });
       } else {
+        errorTableData = [...prevState.errorTableData];
         const actualInd = findIndex(errorTableData, ['index', index]);
         errorTableData[actualInd].checked = !errorTableData[actualInd].checked;
         checkedRows = findIndex(errorTableData, ['checked', true]) !== -1;

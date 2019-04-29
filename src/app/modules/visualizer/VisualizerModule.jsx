@@ -18,8 +18,8 @@ import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
 const ModuleBase = styled.div`
   display: flex;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: calc(100vh - 40px);
   position: relative;
 `;
 
@@ -79,16 +79,7 @@ class BuilderModule extends Component {
           }
         >
           {this.props.loading && <ProgressIcon />}
-          {!this.props.publicPage && (
-            <VizSidebar
-              auth0Client={this.props.auth0Client}
-              chartType={this.props.chartType}
-              code={this.props.code}
-              dropDownData={this.props.dropDownData}
-              outerHistory={this.props.outerHistory}
-              display={this.props.dataPaneOpen === paneTypes.visualizer}
-            />
-          )}
+
           <VizContainer
             saveViewport={this.props.saveViewport}
             chartKeys={this.props.chartKeys}
@@ -98,7 +89,20 @@ class BuilderModule extends Component {
             data={this.props.data}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
+            display={this.props.dataPaneOpen === paneTypes.visualizer}
           />
+
+          {!this.props.publicPage && (
+            <VizSidebar
+              auth0Client={this.props.auth0Client}
+              chartType={this.props.chartType}
+              code={this.props.code}
+              dropDownData={this.props.dropDownData}
+              outerHistory={this.props.outerHistory}
+              /* todo: convoluted logic, refactor */
+              display={this.props.dataPaneOpen === paneTypes.visualizer}
+            />
+          )}
         </ModuleBase>
       </Router>
     );

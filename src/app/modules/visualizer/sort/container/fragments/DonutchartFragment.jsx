@@ -8,26 +8,14 @@ import { connect } from 'react-redux';
 import graphKeys from '__consts__/GraphStructKeyConst';
 
 /* styles */
-import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
+//import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
 
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
-import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import { ResponsivePie } from '@nivo/pie';
 
-/**
- * todo: Please write a short component description of what this component does
- * @param {Object} customProperty - please describe component property
- */
-
-const ComponentBase = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-`;
+/* styles */
+import { FragmentBase } from '../VizContainer.style';
 
 const Box = styled.div`
   width: 1024px;
@@ -53,7 +41,7 @@ const defaultProps = {
 
 const DonutchartFragment = props => {
   return (
-    <ComponentBase>
+    <FragmentBase>
       <Box>
         <ResponsivePie
           animate
@@ -121,13 +109,7 @@ const DonutchartFragment = props => {
         />
       </Box>
       <ChartLegends data={props.chartKeys} />
-      <LineYearContainer>
-        <CustomYearSelector
-          selectedYear={props.selectedYear}
-          selectYear={props.selectYear}
-        />
-      </LineYearContainer>
-    </ComponentBase>
+    </FragmentBase>
   );
 };
 

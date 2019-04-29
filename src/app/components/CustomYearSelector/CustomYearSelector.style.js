@@ -2,22 +2,40 @@ import styled from 'styled-components';
 
 import theme from 'theme/Theme';
 
+export const YearContainer = styled.div`
+  position: relative;
+  bottom: ${props => props.bottom};
+  width: calc(100% - 48px);
+  max-width: 1000px;
+`;
+
 export const ComponentBase = styled.div`
   display: flex;
-  background-color: rgba(255, 255, 255, 0.78);
+  background-color: ${theme.color.aidsFondsWhiteOpacity};
+  justify-content: center;
 `;
 
 export const YearLabel = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+  max-width: 32px;
   font-size: 10px;
   font-family: ${theme.font.zoomFontFamOne};
   color: ${theme.color.smallTextBlack};
-  padding: 14px 0;
+  
+  padding: 10px 0;
   line-height: 12px;
-  flex-grow: 1;
-  text-align: center;
-
+  
   &:hover {
     cursor: pointer;
+  }
+  &:first-child {
+    padding-left: 24px;
+  }
+
+  &:last-child {
+    padding-right: 24px;
   }
 
   user-select: none;
@@ -28,19 +46,22 @@ export const YearLabel = styled.div`
   -moz-user-select: none;
 `;
 
+export const Text = styled.div`
+  //width: 24px;
+`;
+
 export const SelectedYearLabel = styled(YearLabel)`
-  background-color: ${theme.color.aidsFondsBlue};
+  background-color: ${theme.color.aidsFondsRed};
   color: ${theme.color.aidsFondsWhite};
-  &:first-child {
-    background-color: #000;4
-  }
-  
+  //&:first-child {
+  //  background-color: #000;
+  //}
+
   &:active {
     cursor: grabbing;
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
   }
-  
 `;
 
 export const StartControl = styled(YearLabel)`
@@ -49,8 +70,7 @@ export const StartControl = styled(YearLabel)`
   flex-grow: 0;
 
   position: relative;
-  padding-left: 0.5%;
-  margin-right: 0.5%;
+  padding-left: 24px;
 
   &:before {
     border-left: 12px solid ${theme.color.aidsFondsRed};
@@ -122,11 +142,3 @@ export const EndControl = styled(YearLabel)`
   }
 `;
 
-export const YearContainer = styled.div`
-  position: absolute;
-  z-index: 2;
-  width: calc(100% - 40px);
-  bottom: 40px;
-  left: 20px;
-  //left: 1%;
-`;

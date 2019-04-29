@@ -14,7 +14,7 @@ import PropTypes from 'prop-types';
 
 /* consts */
 import { initialState } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.consts';
-import generalInitial from '__consts__/InitialChartDataConst';
+import generalInitial, { initIndItem } from '__consts__/InitialChartDataConst';
 import { connect } from 'react-redux';
 import * as actions from 'services/actions/general';
 
@@ -290,20 +290,46 @@ class HomeModuleMediator extends Component {
   selectInd(val, index) {
     const indKey = `selectedInd${index + 1}`;
 
-    // So if a new batch of subindicators is retrieved
-    // we reset the selected subindicator
-    // AND ALSO whenever an indicator is selected
-    // the year jumps to the most recent year of the
-    // indicators data point, so
-    this.setState(
-      {
-        selectedYear: val.firstYear,
-        [indKey]: val.value,
-        subIndicators1: [],
-        selectedSubInd1: []
-      },
-      this.refetch
-    );
+    if (val === 'resetAll') {
+      // So if a new batch of subindicators is retrieved
+      // we reset the selected subindicator
+      // AND ALSO whenever an indicator is selected
+      // the year jumps to the most recent year of the
+      // indicators data point, so
+      this.setState(
+        {
+          selectedInd1: undefined,
+          selectedInd2: undefined,
+          subIndicators1: [],
+          selectedSubInd1: []
+        },
+        this.refetch
+      );
+    } else if (val === 'reset') {
+      this.setState(
+        {
+          [indKey]: undefined,
+          subIndicators1: [],
+          selectedSubInd1: []
+        },
+        this.refetch
+      );
+    } else {
+      // So if a new batch of subindicators is retrieved
+      // we reset the selected subindicator
+      // AND ALSO whenever an indicator is selected
+      // the year jumps to the most recent year of the
+      // indicators data point, so
+      this.setState(
+        {
+          selectedYear: val.firstYear,
+          [indKey]: val.value,
+          subIndicators1: [],
+          selectedSubInd1: []
+        },
+        this.refetch
+      );
+    }
   }
 
   selectSubInd(item, array = false, index) {

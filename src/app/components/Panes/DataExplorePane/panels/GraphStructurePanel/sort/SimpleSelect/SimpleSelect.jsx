@@ -33,12 +33,14 @@ const propTypes = {
   defValue: PropTypes.any,
   selectKey: PropTypes.string,
   onChange: PropTypes.func,
+  disabled: PropTypes.bool,
   options: PropTypes.array
 };
 const defaultProps = {
   label: 'empty axis',
   optionPlaceHolder: 'empty',
   defValue: undefined,
+  disabled: false,
   selectKey: 'simpleSelect',
   onChange: null,
   options: [
@@ -160,7 +162,12 @@ class SimpleSelect extends React.Component {
 
     return (
       <React.Fragment>
-        <FormControl>
+        <FormControl
+          disabled={this.props.disabled}
+          style={
+            this.props.disabled ? { pointerEvents: 'none', opacity: '0.4' } : {}
+          }
+        >
           <ZimLabel>{this.props.label}</ZimLabel>
           <ZimSelect
             value={this.state.axis}

@@ -63,14 +63,14 @@ class NavPane extends React.Component {
               <ItemLabel>Create chart</ItemLabel>
             </NavPaneItem>
 
-            {this.props.user.role != 'Regular user' && (
-              <NavPaneItem to="/mapper" data-cy="nav-pane-item-1">
-                <ItemIcon>
-                  <SvgIconPointer />
-                </ItemIcon>
-                <ItemLabel>Convert data</ItemLabel>
-              </NavPaneItem>
-            )}
+            {/*{this.props.user.role != 'Regular user' && (*/}
+            <NavPaneItem to="/mapper" data-cy="nav-pane-item-1">
+              <ItemIcon>
+                <SvgIconPointer />
+              </ItemIcon>
+              <ItemLabel>Convert data</ItemLabel>
+            </NavPaneItem>
+            {/*)}*/}
 
             <NavPaneItem
               to="#"
@@ -89,8 +89,13 @@ class NavPane extends React.Component {
         return createChartItems.map((item, index) => {
           const datacy = `nav-pane-item-${index}`;
           return (
-            <NavPaneItem to={item.navTo} key={item.label} data-cy={datacy}>
-              <ItemIcon>
+            <NavPaneItem
+              to={item.navTo}
+              key={item.label}
+              data-cy={datacy}
+              style={item.style}
+            >
+              <ItemIcon style={item.style}>
                 <SvgIconPointer />
               </ItemIcon>
               <ItemLabel>{item.label}</ItemLabel>

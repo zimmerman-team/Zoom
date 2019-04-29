@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { createBrowserHistory } from 'history';
 
 /* consts */
-import initialState from '__consts__/InitialChartDataConst';
+import chartTypes from '__consts__/ChartConst';
 
 /* utils */
 import isEqual from 'lodash/isEqual';
@@ -92,6 +92,7 @@ const propTypes = {
   selectRegion: PropTypes.func,
   selectYearRange: PropTypes.func,
   yearRange: PropTypes.array,
+  chartType: PropTypes.string,
   selectInd: PropTypes.func,
   specOptions: PropTypes.shape({}),
   selectSubInd: PropTypes.func,
@@ -114,6 +115,7 @@ const defaultProps = {
   subInd1AllSelected: true,
   subInd2AllSelected: true,
   multipleInd: false,
+  chartType: chartTypes.geoMap,
   changesMade: true,
   addIndicator: null,
   specOptions: {},
@@ -303,6 +305,7 @@ class DataExplorePane extends React.Component {
               data-cy="nav-pane-item-time-period"
             >
               <GraphStructurePanel
+                chartType={this.props.chartType}
                 specOptions={this.props.specOptions}
                 saveGraphOption={this.props.saveGraphOption}
               />

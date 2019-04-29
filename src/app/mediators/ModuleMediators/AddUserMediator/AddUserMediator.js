@@ -1,6 +1,9 @@
 /* base */
 import React from 'react';
 
+/* utils */
+import sortBy from 'lodash/sortBy';
+
 /* components */
 import AddUserModule from 'modules/UserManagement/AddUser/AddUserModule';
 
@@ -19,7 +22,11 @@ class AddUserMediator extends React.Component {
   };
 
   componentDidMount = () => {
-    this.props.auth0Client.getUserGroups(this);
+    this.props.auth0Client.getUserGroups().then(userGroups => {
+      this.setState({
+        userGroups: sortBy(userGroups, ['label'])
+      });
+    });
     this.props.auth0Client.getUserRoles(this);
   };
 

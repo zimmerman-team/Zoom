@@ -1,6 +1,7 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 /* components */
 import { ModuleContainer } from 'modules/dashboard/DashboardModule.styles';
@@ -22,21 +23,22 @@ const propTypes = {
   changeSortBy: PropTypes.func,
   isSortByOpen: PropTypes.bool,
   setWrapperRef: PropTypes.func,
+  trashCharts: PropTypes.array,
   greetingName: PropTypes.string,
   onEnterPressed: PropTypes.func,
   setIsSortByOpen: PropTypes.func,
   changeSearchKeyword: PropTypes.func,
+  removeAll: PropTypes.func,
   loading: PropTypes.bool,
   users: PropTypes.arrayOf(PropTypes.shape({})),
   teams: PropTypes.arrayOf(PropTypes.shape({})),
-  activeTab: PropTypes.string,
+
   totalPages: PropTypes.number,
   changePage: PropTypes.func
 };
 const defaultProps = {
   tabs: [],
   sort: '',
-  activeTab: '',
   greetingName: '',
   loading: false,
   changeSortBy: null,
@@ -45,8 +47,10 @@ const defaultProps = {
   isSortByOpen: false,
   setIsSortByOpen: null,
   changeSearchKeyword: null,
+  removeAll: null,
   users: [],
   teams: [],
+  trashCharts: [],
   activeTab: 'charts',
   totalPages: 0,
   changePage: null
@@ -58,12 +62,14 @@ const DashboardModule = ({
   sort,
   users,
   datasets,
+  trashCharts,
   charts,
   teams,
   activeTab,
   greetingName,
   isSortByOpen,
   onEnterPressed,
+  removeAll,
   changeSortBy,
   setWrapperRef,
   setIsSortByOpen,
@@ -73,6 +79,9 @@ const DashboardModule = ({
   changePage
 }) => (
   <ModuleContainer>
+    <Helmet>
+      <title>Zoom - Dashboard</title>
+    </Helmet>
     <DashboardHeader
       userName={greetingName}
       title="Zoom dashboard"
@@ -91,6 +100,8 @@ const DashboardModule = ({
       users={users}
       charts={charts}
       datasets={datasets}
+      trashCharts={trashCharts}
+      removeAll={removeAll}
       teams={teams}
       isSortByOpen={isSortByOpen}
       changeSortBy={changeSortBy}

@@ -3,6 +3,10 @@ import React from 'react';
 // import { matchPath } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { createFragmentContainer, graphql } from 'react-relay';
+
+/* mutations */
+import DeleteFileMutation from 'mediators/DashboardMediators/mutations/DeleteFile';
 
 /* actions */
 import * as actions from 'services/actions/nodeBackend';
@@ -33,6 +37,7 @@ class DashboardMediator extends React.Component {
     sort: 'title',
     searchKeyword: '',
     charts: [],
+    trashCharts: [],
     datasets: [],
     loadUsers: false,
     isSortByOpen: false,
@@ -54,22 +59,45 @@ class DashboardMediator extends React.Component {
     if (!isEqual(this.props.user, prevProps.user) && this.props.user)
       this.reloadData('all');
 
-    if (!isEqual(this.props.chartDeleted, prevProps.chartDeleted))
+    if (!isEqual(this.props.chartDeleted, prevProps.chartDeleted)) {
       this.reloadData();
+
+      // we also want to load in the deleted charts
+      // though maybe would be enough to just get there count in the future
+      // TODO implement retrieving only the count of the archived charts
+      this.props.dispatch(
+        actions.allArchivedChartsRequest({
+          authId: this.props.user.authId,
+          sortBy: this.state.sort,
+          archived: true
+        })
+      );
+    }
 
     // we format the charts
     if (
       !isEqual(this.props.userCharts, prevProps.userCharts) &&
-      this.props.userCharts.data
-    )
+      this.props.userCharts.data &&
+      this.props.user
+    ) {
       this.setState({
         charts: formatChartData(
           this.props.userCharts.data,
           this.props.user.authId,
           this.props.history,
           this.deleteChart,
-          this.duplicateChart
+          this.duplicateChart.bind(this)
         )
+      });
+    }
+
+    // we format the charts
+    if (
+      !isEqual(this.props.archivedCharts, prevProps.archivedCharts) &&
+      this.props.archivedCharts.data
+    )
+      this.setState({
+        trashCharts: formatChartData(this.props.archivedCharts.data)
       });
 
     // we format the datasets
@@ -80,7 +108,8 @@ class DashboardMediator extends React.Component {
       this.setState({
         datasets: formatDatasets(
           this.props.userDatasets.data,
-          this.props.history
+          this.props.history,
+          this.deleteDataset
         )
       });
 
@@ -97,10 +126,22 @@ class DashboardMediator extends React.Component {
     if (!isEqual(this.props.teamDeleted, prevProps.teamDeleted))
       this.reloadData();
 
+    // we re-load the datasets
+    if (!isEqual(this.props.datasetDeleted, prevProps.datasetDeleted))
+      this.reloadData();
+
     // set page to 0 when changing tab
-    if (this.props.match.params.tab !== prevProps.match.params.tab) {
+    if (this.props.match.params.tab !== prevProps.match.params.tab)
       this.setState({ page: 0 });
-    }
+
+    // so here we don't actually need make a new call for trash, cause after emptying
+    // it should be empty, and when a data.message is returned, it means that
+    // emptying was succesfull
+    if (
+      !isEqual(this.props.chartTrashEmpty, prevProps.chartTrashEmpty) &&
+      get(this.props.chartTrashEmpty, 'data.message', '').length > 0
+    )
+      this.setState({ trashCharts: [] });
   };
 
   componentWillUnmount = () => {
@@ -145,7 +186,9 @@ class DashboardMediator extends React.Component {
 
   deleteUser = userId => {
     this.props.auth0Client.deleteUser(userId, this, () =>
-      this.props.dispatch(actions.deleteUserRequest({ userId }))
+      this.props.dispatch(
+        actions.deleteUserRequest({ userId, authId: this.props.user.authId })
+      )
     );
   };
 
@@ -285,6 +328,13 @@ class DashboardMediator extends React.Component {
         );
         this.getAllUsers(initialLoad);
         this.getAllTeams(initialLoad);
+        this.props.dispatch(
+          actions.allArchivedChartsRequest({
+            authId: this.props.user.authId,
+            sortBy: this.state.sort,
+            archived: true
+          })
+        );
       }
     } else {
       switch (this.props.match.params.tab) {
@@ -316,6 +366,15 @@ class DashboardMediator extends React.Component {
         case 'teams':
           this.getAllTeams(initialLoad);
           break;
+        case 'trash':
+          this.props.dispatch(
+            actions.allArchivedChartsRequest({
+              authId: this.props.user.authId,
+              sortBy: this.state.sort,
+              archived: true
+            })
+          );
+          break;
       }
     }
   };
@@ -329,11 +388,43 @@ class DashboardMediator extends React.Component {
     );
   };
 
+  deleteDataset = datasetId => {
+    this.props.dispatch(
+      actions.deleteDatasetRequest({
+        authId: this.props.user.authId,
+        datasetId
+      })
+    );
+
+    DeleteFileMutation.commit(
+      this.props.relay.environment,
+      datasetId,
+      this.handleFileDeleteCompleted,
+      this.handleFileDeleteError
+    );
+  };
+
+  handleFileDeleteCompleted(response, error) {
+    if (error) console.log('Error deleting file', error);
+  }
+
+  handleFileDeleteError(error) {
+    if (error) console.log('Error deleting file', error);
+  }
+
   duplicateChart(chartId) {
     this.props.dispatch(
       actions.duplicateChartRequest({
         authId: this.props.user.authId,
         chartId
+      })
+    );
+  }
+
+  emptyTrashChart() {
+    this.props.dispatch(
+      actions.emptyChartTrashRequest({
+        authId: this.props.user.authId
       })
     );
   }
@@ -356,6 +447,8 @@ class DashboardMediator extends React.Component {
         }
         // tabs={tabs}
         page={this.state.page}
+        removeAll={this.emptyTrashChart.bind(this)}
+        trashCharts={this.state.trashCharts}
         sort={this.state.sort}
         users={this.state.users}
         datasets={this.state.datasets}
@@ -370,6 +463,8 @@ class DashboardMediator extends React.Component {
         changeSearchKeyword={this.changeSearchKeyword}
         teams={this.state.teams}
         navItems={data(
+          this.props.auth0Client.isAdministrator(),
+          this.props.auth0Client.isSuperAdmin(),
           this.state.allUsers,
           this.state.allTeams,
           this.state.charts,
@@ -385,8 +480,11 @@ class DashboardMediator extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    chartTrashEmpty: state.chartTrashEmpty,
+    archivedCharts: state.archivedCharts,
+    datasetDeleted: state.datasetDeleted,
     userDatasets: state.userDatasets,
-    chartDeleted: state.userDeleted,
+    chartDeleted: state.chartDeleted,
     chartDuplicated: state.chartDuplicated,
     userDeleted: state.userDeleted,
     // yeah so actually these are the user and team charts
@@ -398,4 +496,19 @@ const mapStateToProps = state => {
 
 // this is the correct syntax for routing to NOT mess up when using both
 // withRouter and connect
-export default withRouter(connect(mapStateToProps)(DashboardMediator));
+// note this graphql is set up here only because we need that graphql
+// environment for the mutation TODO: find a proper solution
+export default createFragmentContainer(
+  withRouter(connect(mapStateToProps)(DashboardMediator)),
+  graphql`
+    fragment DashboardMediator_Indicator on Query {
+      allIndicators(first: 1) {
+        edges {
+          node {
+            name
+          }
+        }
+      }
+    }
+  `
+);

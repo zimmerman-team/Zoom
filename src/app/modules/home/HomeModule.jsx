@@ -1,9 +1,12 @@
 /* base */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Theme from 'theme/Theme';
 import { connect } from 'react-redux';
 import Cookies from 'universal-cookie';
 import { withRouter } from 'react-router';
+
+import { Helmet } from 'react-helmet';
 
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
@@ -16,22 +19,24 @@ import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContai
 import NavPane from 'components/Panes/NavPane/NavPane';
 import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
+import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
+import { YearContainer } from '../../components/CustomYearSelector/CustomYearSelector.style';
 
 const propTypes = {
   loading: PropTypes.bool,
-  indicators: PropTypes.arrayOf(PropTypes.shape)
+  data: PropTypes.arrayOf(PropTypes.shape)
 };
 
 const defaultProps = {
   loading: false,
-  indicators: []
+  data: []
 };
 
 export class HomeModule extends Component {
   state = {
     dialogOpen: true,
     sideBarOpen: false,
-    indicators: [],
+    data: [],
     dialogShown: 'false'
   };
 
@@ -53,19 +58,28 @@ export class HomeModule extends Component {
   };
 
   render = () => {
-    const { indicators, ...otherProps } = this.props;
+    const { data, ...otherProps } = this.props;
 
     const paneContVis =
-      this.props.dataPaneOpen === paneTypes.none ? 'none' : 'unset';
+      this.props.dataPaneOpen === paneTypes.none ? 'none' : 'block';
     const explorePaneVis =
-      this.props.dataPaneOpen === paneTypes.pubPane ? 'unset' : 'none';
+      this.props.dataPaneOpen === paneTypes.pubPane ? 'block' : 'none';
 
     return (
       <React.Fragment>
+        <Helmet>
+          <title>Zoom - Home</title>
+        </Helmet>
         <ModuleContainer
           style={
             this.props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}
           }
+          width={
+            this.props.dataPaneOpen !== paneTypes.none
+              ? 'calc(100vw - 320px)'
+              : '100vw'
+          }
+          display={this.props.dataPaneOpen === paneTypes.visualizer}
         >
           {this.props.loading && <ProgressIcon />}
 
@@ -75,13 +89,28 @@ export class HomeModule extends Component {
 
           <GeoMap
             outerHistory={this.props.history}
-            indicatorData={indicators}
+            indicatorData={data}
             selectedYear={this.props.selectedYear}
             selectYear={this.props.selectYear}
             latitude={15}
             longitude={0}
             zoom={2}
           />
+
+          <YearContainer
+            style={
+              this.props.disableYear
+                ? { pointerEvents: 'none', opacity: '0.4' }
+                : {}
+            }
+            bottom="56px"
+          >
+            <CustomYearSelector
+              backgroundColor={Theme.color.aidsFondsWhiteOpacity}
+              selectedYear={this.props.selectedYear}
+              selectYear={this.props.selectYear}
+            />
+          </YearContainer>
 
           <DataPaneContainer display={paneContVis}>
             <ExplorePanelMediator display={explorePaneVis} {...otherProps} />

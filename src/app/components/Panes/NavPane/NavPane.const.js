@@ -37,11 +37,15 @@ export const createChartItems = [
   {
     label: 'Bar chart',
     navTo: '/visualizer/barchart/vizID/edit'
-  } /*,
+  },
   {
-    label: 'Table',
-    navTo: '/create/table'
-  }*/
+    label: 'Table chart',
+    navTo: '/visualizer/tablechart/vizID/edit'
+  },
+  {
+    label: 'Donut chart',
+    navTo: '/visualizer/donutchart/vizID/edit'
+  }
 ];
 
 export const convertDataItems = [

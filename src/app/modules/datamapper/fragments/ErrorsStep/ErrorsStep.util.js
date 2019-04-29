@@ -21,7 +21,8 @@ export function formatColumns(
   checkRows,
   handleCellClick,
   ignoreErrors,
-  ignoredErrors
+  ignoredErrors,
+  checkedRows
 ) {
   const columns = [];
 
@@ -32,7 +33,11 @@ export function formatColumns(
       property: 'id',
       header: (
         <HeaderCheckBox key={0}>
-          <Checkbox key={0} onChange={checked => checkRows('all', checked)} />
+          <Checkbox
+            key={0}
+            checked={checkedRows}
+            onChange={(event, checked) => checkRows('all', checked)}
+          />
         </HeaderCheckBox>
       ),
       render: val => (

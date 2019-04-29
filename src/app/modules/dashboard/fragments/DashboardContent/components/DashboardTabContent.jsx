@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
-import { createBrowserHistory } from 'history';
 import { connect } from 'react-redux';
 
 /* consts */
@@ -42,6 +41,8 @@ const propTypes = {
   tabContentName: PropTypes.string,
   charts: PropTypes.array,
   users: PropTypes.array,
+  trashCharts: PropTypes.array,
+  removeAll: PropTypes.func,
   loading: PropTypes.bool,
   teams: PropTypes.array
 };
@@ -49,6 +50,8 @@ const defaultProps = {
   charts: [],
   data: [],
   users: [],
+  removeAll: null,
+  trashCharts: [],
   teams: [],
   loading: false,
   tabContentName: 'Charts'
@@ -92,7 +95,7 @@ const DashboardTabContent = props => {
       tabContentName = 'Teams';
       break;
     case 'trash':
-      targetData = '';
+      targetData = props.trashCharts;
       tabContentName = 'Trash';
       sortIsVisible = false;
       isRemoveOption = true;
@@ -103,20 +106,20 @@ const DashboardTabContent = props => {
       style={props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}}
     >
       {props.loading && <ProgressIcon />}
-      {isRemoveOption && (
-        <GridListOptionsPane
-          leftOptionLabel={leftOptionLabel}
-          sortIsVisible={sortIsVisible}
-          isRemoveOption={isRemoveOption}
-          isSortByOpen={props.isSortByOpen}
-          changeSortBy={props.changeSortBy}
-          setWrapperRef={props.setWrapperRef}
-          setIsSortByOpen={props.setIsSortByOpen}
-          activeTab={props.activeTab}
-          sort={props.sort}
-          tabs={props.tabs}
-        />
-      )}
+      {/*{isRemoveOption && (*/}
+      {/*<GridListOptionsPane*/}
+      {/*leftOptionLabel={leftOptionLabel}*/}
+      {/*sortIsVisible={sortIsVisible}*/}
+      {/*isRemoveOption={isRemoveOption}*/}
+      {/*isSortByOpen={props.isSortByOpen}*/}
+      {/*changeSortBy={props.changeSortBy}*/}
+      {/*setWrapperRef={props.setWrapperRef}*/}
+      {/*setIsSortByOpen={props.setIsSortByOpen}*/}
+      {/*activeTab={props.activeTab}*/}
+      {/*sort={props.sort}*/}
+      {/*tabs={props.tabs}*/}
+      {/*/>*/}
+      {/*)}*/}
 
       {targetData.length === 0 && (
         <Message>No item in {tabContentName}</Message>
@@ -133,6 +136,7 @@ const DashboardTabContent = props => {
       {targetData.length > 0 && (
         <Box>
           <GridListOptionsPane
+            removeAll={props.removeAll}
             leftOptionLabel={leftOptionLabel}
             sortIsVisible={sortIsVisible}
             isRemoveOption={isRemoveOption}

@@ -9,13 +9,12 @@ import {
   updatePercentiles,
   formatLongLatData
 } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
-import { formatYearParam } from 'utils/genericUtils';
 import HomeModule from 'modules/home/HomeModule';
 import PropTypes from 'prop-types';
 
 /* consts */
 import { initialState } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.consts';
-import generalInitial from '__consts__/InitialChartDataConst';
+import generalInitial, { initIndItem } from '__consts__/InitialChartDataConst';
 import { connect } from 'react-redux';
 import * as actions from 'services/actions/general';
 
@@ -101,10 +100,8 @@ class HomeModuleMediator extends Component {
       ...initialState
     };
 
-    this.selectInd1 = this.selectInd1.bind(this);
-    this.selectInd2 = this.selectInd2.bind(this);
-    this.selectSubInd1 = this.selectSubInd1.bind(this);
-    this.selectSubInd2 = this.selectSubInd2.bind(this);
+    this.selectInd = this.selectInd.bind(this);
+    this.selectSubInd = this.selectSubInd.bind(this);
     this.selectYear = this.selectYear.bind(this);
     this.refetch = this.refetch.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
@@ -138,7 +135,7 @@ class HomeModuleMediator extends Component {
         allCountries: [],
         allRegions: [],
         selectedSources: [],
-        yearRange: '2003,2016',
+        yearRange: '1992,2018',
         subIndicators1: [],
         subIndicators2: []
       })
@@ -212,12 +209,12 @@ class HomeModuleMediator extends Component {
       );
     }
 
-    const indicators = [];
+    const data = [];
 
     if (countryLayerData.features && countryLayerData.features.length > 0) {
       updatePercentiles(countryLayerData, f => f.properties.value);
 
-      indicators.push({
+      data.push({
         type: 'layer',
         data: countryLayerData,
         legendName: ` ${this.state.selectedInd1} `
@@ -225,7 +222,7 @@ class HomeModuleMediator extends Component {
     }
 
     if (countryCircleData.length > 0) {
-      indicators.push({
+      data.push({
         type: 'circle',
         data: countryCircleData,
         legendName: ` ${this.state.selectedInd2} `
@@ -233,15 +230,15 @@ class HomeModuleMediator extends Component {
     }
 
     if (longLatData.length > 0) {
-      indicators.push({
+      data.push({
         type: 'location',
         data: longLatData,
-        legendName: `POI`
+        legendName: `POI: ${longLatData[0].indName}`
       });
     }
 
     this.setState({
-      indicators,
+      data,
       subIndicators1,
       subIndicators2
     });
@@ -263,6 +260,10 @@ class HomeModuleMediator extends Component {
       regionCountriesCodes
     );
 
+    // so this variable basically controlls the filter param for data points
+    // that don't have/do have geolocationIso2 field
+    const iso2Undef = countriesISO2.indexOf('undefined') !== -1;
+
     const refetchVars = {
       indicator1: [ind1],
       indicator2: [ind2],
@@ -271,7 +272,8 @@ class HomeModuleMediator extends Component {
       singleInd2: ind2 ? ind2 : 'null',
       datePeriod: [selectedYear],
       subInd1: subInd1.length > 0 ? subInd1 : ['undefined'],
-      subInd2: subInd2.length > 0 ? subInd2 : ['undefined']
+      subInd2: subInd2.length > 0 ? subInd2 : ['undefined'],
+      OR_GeolocationIso2_Is_Null: iso2Undef
     };
 
     this.setState({
@@ -285,78 +287,75 @@ class HomeModuleMediator extends Component {
     );
   }
 
-  selectInd1(val) {
-    // So if a new batch of subindicators is retrieved
-    // we reset the selected subindicator
-    this.setState(
-      {
-        selectedInd1: val.value,
-        subIndicators1: [],
-        selectedSubInd1: []
-      },
-      this.refetch
-    );
+  selectInd(val, index) {
+    const indKey = `selectedInd${index + 1}`;
+
+    if (val === 'resetAll') {
+      // So if a new batch of subindicators is retrieved
+      // we reset the selected subindicator
+      // AND ALSO whenever an indicator is selected
+      // the year jumps to the most recent year of the
+      // indicators data point, so
+      this.setState(
+        {
+          selectedInd1: undefined,
+          selectedInd2: undefined,
+          subIndicators1: [],
+          selectedSubInd1: []
+        },
+        this.refetch
+      );
+    } else if (val === 'reset') {
+      this.setState(
+        {
+          [indKey]: undefined,
+          subIndicators1: [],
+          selectedSubInd1: []
+        },
+        this.refetch
+      );
+    } else {
+      // So if a new batch of subindicators is retrieved
+      // we reset the selected subindicator
+      // AND ALSO whenever an indicator is selected
+      // the year jumps to the most recent year of the
+      // indicators data point, so
+      this.setState(
+        {
+          selectedYear: val.firstYear,
+          [indKey]: val.value,
+          subIndicators1: [],
+          selectedSubInd1: []
+        },
+        this.refetch
+      );
+    }
   }
 
-  selectInd2(val) {
-    // So if a new batch of subindicators is retrieved
-    // we reset the selected subindicator
-    this.setState(
-      {
-        selectedInd2: val.value,
-        subIndicators2: [],
-        selectedSubInd2: []
-      },
-      this.refetch
-    );
-  }
+  selectSubInd(item, array = false, index) {
+    let selectedSubInd = [];
 
-  selectSubInd1(item, array = false) {
-    let selectedSubInd1 = [];
+    const subIndKey = `selectedSubInd${index + 1}`;
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
     if (item !== 'reset') {
       if (array) {
         item.forEach(it => {
-          selectedSubInd1.push(it.value);
+          selectedSubInd.push(it.value);
         });
       } else {
-        selectedSubInd1 = [...this.state.selectedSubInd1];
-        const subIndicatorIndex = selectedSubInd1.indexOf(item.value);
+        selectedSubInd = [...this.state[subIndKey]];
+        const subIndicatorIndex = selectedSubInd.indexOf(item.value);
         if (subIndicatorIndex === -1)
           // so if it doesn't exist we add it
-          selectedSubInd1.push(item.value);
+          selectedSubInd.push(item.value);
         // if it does exist we remove it
-        else selectedSubInd1.splice(subIndicatorIndex, 1);
+        else selectedSubInd.splice(subIndicatorIndex, 1);
       }
     }
 
-    this.setState({ selectedSubInd1 }, this.refetch);
-  }
-
-  selectSubInd2(item, array = false) {
-    let selectedSubInd2 = [];
-
-    // so we set up this logic for select/deselect all logic
-    // if all is selected all of the options will be passed in
-    if (item !== 'reset') {
-      if (array) {
-        item.forEach(it => {
-          selectedSubInd2.push(it.value);
-        });
-      } else {
-        selectedSubInd2 = [...this.state.selectedSubInd2];
-        const subIndicatorIndex = selectedSubInd2.indexOf(item.value);
-        if (subIndicatorIndex === -1)
-          // so if it doesn't exist we add it
-          selectedSubInd2.push(item.value);
-        // if it does exist we remove it
-        else selectedSubInd2.splice(subIndicatorIndex, 1);
-      }
-    }
-
-    this.setState({ selectedSubInd2 }, this.refetch);
+    this.setState({ [subIndKey]: selectedSubInd }, this.refetch);
   }
 
   selectYear(val) {
@@ -470,22 +469,32 @@ class HomeModuleMediator extends Component {
   }
 
   render() {
+    const selectedInd = [
+      {
+        indicator: this.state.selectedInd1,
+        // so these are all of the sub-indicators
+        // of the selected indicator
+        subIndicators: this.state.subIndicators1,
+        selectedSubInd: this.state.selectedSubInd1
+      },
+      {
+        indicator: this.state.selectedInd2,
+        // so these are all of the sub-indicators
+        // of the selected indicator
+        subIndicators: this.state.subIndicators2,
+        selectedSubInd: this.state.selectedSubInd2
+      }
+    ];
+
     return (
       <HomeModule
+        selectedInd={selectedInd}
         loading={this.state.loading}
-        indicators={this.state.indicators}
+        data={this.state.data}
         dropDownData={this.props.dropDownData}
-        selectInd1={this.selectInd1}
-        selectInd2={this.selectInd2}
+        selectInd={this.selectInd}
         selectYear={this.selectYear}
-        selectSubInd1={this.selectSubInd1}
-        selectSubInd2={this.selectSubInd2}
-        selectedInd1={this.state.selectedInd1}
-        selectedInd2={this.state.selectedInd2}
-        selectedSubInd1={this.state.selectedSubInd1}
-        selectedSubInd2={this.state.selectedSubInd2}
-        subIndicators1={this.state.subIndicators1}
-        subIndicators2={this.state.subIndicators2}
+        selectSubInd={this.selectSubInd}
         selectRegion={this.selectRegion}
         selectedRegionVal={this.state.selectedRegionVal}
         selectedRegionLabels={this.state.selectedRegionLabels}
@@ -494,6 +503,7 @@ class HomeModuleMediator extends Component {
         selectedCountryLabel={this.state.selectedCountryLabel}
         resetAll={this.resetAll}
         selectedYear={this.state.selectedYear}
+        auth0Client={this.props.auth0Client}
       />
     );
   }
@@ -521,6 +531,7 @@ export default createRefetchContainer(
         countriesISO2: { type: "[String]", defaultValue: ["null"] }
         singleInd1: { type: "String", defaultValue: "null" }
         singleInd2: { type: "String", defaultValue: "null" }
+        OR_GeolocationIso2_Is_Null: { type: "Boolean", defaultValue: true }
       ) {
       indicators1: datapointsAggregation(
         groupBy: [
@@ -529,6 +540,7 @@ export default createRefetchContainer(
           "date"
           "geolocationType"
           "geolocationIso2"
+          "comment"
           "geolocationPolygons"
           "valueFormatType"
         ]
@@ -538,9 +550,11 @@ export default createRefetchContainer(
         indicatorName_In: $indicator1
         geolocationIso2_In: $countriesISO2
         filterName_In: $subInd1
+        OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
       ) {
         indicatorName
         geolocationIso2
+        comment
         geolocationTag
         geolocationType
         geolocationPolygons
@@ -555,6 +569,7 @@ export default createRefetchContainer(
           "date"
           "geolocationType"
           "geolocationIso2"
+          "comment"
           "geolocationCenterLongLat"
           "valueFormatType"
         ]
@@ -564,9 +579,11 @@ export default createRefetchContainer(
         indicatorName_In: $indicator2
         geolocationIso2_In: $countriesISO2
         filterName_In: $subInd2
+        OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
       ) {
         indicatorName
         geolocationIso2
+        comment
         geolocationTag
         geolocationType
         geolocationCenterLongLat
@@ -600,6 +617,7 @@ export default createRefetchContainer(
       $countriesISO2: [String]!
       $singleInd1: String!
       $singleInd2: String!
+      $OR_GeolocationIso2_Is_Null: Boolean!
     ) {
       ...HomeModuleMediator_indicatorAggregations
         @arguments(
@@ -611,6 +629,7 @@ export default createRefetchContainer(
           singleInd2: $singleInd2
           subInd1: $subInd1
           subInd2: $subInd2
+          OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
         )
     }
   `

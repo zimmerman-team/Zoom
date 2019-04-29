@@ -355,6 +355,22 @@ export function getChartFailed(error) {
   };
 }
 
+export const GET_PUBLIC_CHART_INITIAL = 'GET_PUBLIC_CHART_INITIAL';
+export const GET_PUBLIC_CHART_REQUEST = 'GET_PUBLIC_CHART_REQUEST';
+
+export function getPublicChartInitial() {
+  return {
+    type: GET_PUBLIC_CHART_INITIAL
+  };
+}
+
+export function getPublicChartRequest(values) {
+  return {
+    type: GET_PUBLIC_CHART_REQUEST,
+    values
+  };
+}
+
 export const GET_USER_CHARTS_INITIAL = 'GET_USER_CHARTS_INITIAL';
 export const GET_USER_CHARTS_REQUEST = 'GET_USER_CHARTS_REQUEST';
 export const GET_USER_CHARTS_SUCCESS = 'GET_USER_CHARTS_SUCCESS';
@@ -575,6 +591,102 @@ export function duplicateChartSuccess(data) {
 export function duplicateChartFailed(error) {
   return {
     type: DUPLICATE_CHART_FAILED,
+    error
+  };
+}
+
+export const DELETE_DATASET_INITIAL = 'DELETE_DATASET_INITIAL';
+export const DELETE_DATASET_REQUEST = 'DELETE_DATASET_REQUEST';
+export const DELETE_DATASET_SUCCESS = 'DELETE_DATASET_SUCCESS';
+export const DELETE_DATASET_FAILED = 'DELETE_DATASET_FAILED';
+
+export function deleteDatasetInitial() {
+  return {
+    type: DELETE_DATASET_INITIAL
+  };
+}
+
+export function deleteDatasetRequest(values) {
+  return {
+    type: DELETE_DATASET_REQUEST,
+    values
+  };
+}
+
+export function deleteDatasetSuccess(data) {
+  return {
+    type: DELETE_DATASET_SUCCESS,
+    data
+  };
+}
+
+export function deleteDatasetFailed(error) {
+  return {
+    type: DELETE_DATASET_FAILED,
+    error
+  };
+}
+
+export const ALL_ARCHIVED_CHARTS_INITIAL = 'ALL_ARCHIVED_CHARTS_INITIAL';
+export const ALL_ARCHIVED_CHARTS_REQUEST = 'ALL_ARCHIVED_CHARTS_REQUEST';
+export const ALL_ARCHIVED_CHARTS_SUCCESS = 'ALL_ARCHIVED_CHARTS_SUCCESS';
+export const ALL_ARCHIVED_CHARTS_FAILED = 'ALL_ARCHIVED_CHARTS_FAILED';
+
+export function allArchivedChartsInitial() {
+  return {
+    type: ALL_ARCHIVED_CHARTS_INITIAL
+  };
+}
+
+export function allArchivedChartsRequest(values) {
+  return {
+    type: ALL_ARCHIVED_CHARTS_REQUEST,
+    values
+  };
+}
+
+export function allArchivedChartsSuccess(data) {
+  return {
+    type: ALL_ARCHIVED_CHARTS_SUCCESS,
+    data
+  };
+}
+
+export function allArchivedChartsFailed(error) {
+  return {
+    type: ALL_ARCHIVED_CHARTS_FAILED,
+    error
+  };
+}
+
+export const EMPTY_CHART_TRASH_INITIAL = 'EMPTY_CHART_TRASH_INITIAL';
+export const EMPTY_CHART_TRASH_REQUEST = 'EMPTY_CHART_TRASH_REQUEST';
+export const EMPTY_CHART_TRASH_SUCCESS = 'EMPTY_CHART_TRASH_SUCCESS';
+export const EMPTY_CHART_TRASH_FAILED = 'EMPTY_CHART_TRASH_FAILED';
+
+export function emptyChartTrashInitial() {
+  return {
+    type: EMPTY_CHART_TRASH_INITIAL
+  };
+}
+
+export function emptyChartTrashRequest(values) {
+  return {
+    type: EMPTY_CHART_TRASH_REQUEST,
+    values
+  };
+}
+
+export function emptyChartTrashSuccess(data) {
+  return {
+    type: EMPTY_CHART_TRASH_SUCCESS,
+    data
+  };
+}
+
+export function emptyChartTrashFailed(error) {
+  return {
+    type: EMPTY_CHART_TRASH_FAILED,
     error
   };
 }

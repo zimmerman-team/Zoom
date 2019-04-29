@@ -32,11 +32,13 @@ const Box = styled.div`
 `;
 
 const propTypes = {
-  navItems: PropTypes.array
+  navItems: PropTypes.array,
+  trashCount: PropTypes.number
 };
 
 const defaultProps = {
-  navItems: []
+  navItems: [],
+  trashCount: 0
 };
 
 const DashboardTabNavigator = props => {
@@ -53,7 +55,11 @@ const DashboardTabNavigator = props => {
         ))}
       </Box>
       <Box>
-        <DashboardTabNavItem path="/dashboard/trash" label="Trash" count="0" />
+        <DashboardTabNavItem
+          path="/dashboard/trash"
+          label="Trash"
+          count={props.trashCount}
+        />
       </Box>
     </ComponentBase>
   );

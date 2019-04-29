@@ -23,10 +23,10 @@ export const YearLabel = styled.div`
   font-size: 10px;
   font-family: ${theme.font.zoomFontFamOne};
   color: ${theme.color.smallTextBlack};
-  
+
   padding: 10px 0;
   line-height: 12px;
-  
+
   &:hover {
     cursor: pointer;
   }
@@ -141,4 +141,3 @@ export const EndControl = styled(YearLabel)`
     cursor: -webkit-grabbing;
   }
 `;
-

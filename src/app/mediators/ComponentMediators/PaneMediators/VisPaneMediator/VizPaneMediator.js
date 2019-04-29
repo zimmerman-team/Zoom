@@ -557,6 +557,7 @@ class VizPaneMediator extends React.Component {
           this.props.paneData.chartType !== chartTypes.focusNL &&
           this.props.paneData.chartType !== chartTypes.focusKE
         }
+        chartType={this.props.paneData.chartType}
         specOptions={this.props.chartData.specOptions}
         saveGraphOption={this.saveGraphOption}
         allFileSources={this.state.allFileSources}

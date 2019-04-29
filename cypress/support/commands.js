@@ -27,19 +27,20 @@
 import 'cypress-testing-library/add-commands';
 import '@percy/cypress';
 
+//https://github.com/cypress-io/cypress/issues/170
 Cypress.Commands.add('upload_file', (fileName, fileType = ' ', selector) => {
-  cy.get(selector).then(subject => cy.window().then(win => cy.fixture(fileName, 'base64')
-    .then(Cypress.Blob.base64StringToBlob, fileType)
-    .then((blob) => {
-      console.log(subject)
-      const el = subject[0];
-      const testFile = new win.File([blob], fileName , { type : fileType });
-      console.log(testFile)
-      const dataTransfer = new win.DataTransfer();
-      dataTransfer.items.add(testFile);
-      el.files = dataTransfer.files;
-      console.log(el.files);
-      cy.wrap(subject).trigger('change', { force: true })
-      console.log(subject)
-    })))
+  cy.get(selector)
+    .then((subject) => {
+      cy.fixture(fileName, 'base64')
+        .then(Cypress.Blob.base64StringToBlob)
+        .then(blob => {
+          const el = subject[0];
+          const testFile = new File([blob], fileName, { type: fileType });
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(testFile);
+          el.files = dataTransfer.files;
+
+          cy.wrap(subject).trigger('change', { force: true })
+        });
+    });
 });

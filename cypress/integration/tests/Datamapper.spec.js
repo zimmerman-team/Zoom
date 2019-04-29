@@ -351,9 +351,7 @@ describe('Datamapper e2e tests', function() {
     const fileInput = 'input[type=file]';
 
     cy.upload_file(fileName, fileType, fileInput);
-    cy.wait(10000);
     cy.contains('next').click();
-    cy.wait(1000);
     cy.get('[class*=Headings__BaseHeading]').should('contain', 'Upload CSV');
   });
 
@@ -363,12 +361,10 @@ describe('Datamapper e2e tests', function() {
     const fileInput = 'input[type=file]';
 
     cy.upload_file(fileName, fileType, fileInput);
-    cy.wait(10000);
     // So the step should show the uploaded file
     cy.contains(fileName);
-
+    cy.get('[role="progressbar"]').should('not.exist');
     cy.contains('next').click();
-    cy.wait(1000);
   });
 
   it('Check if its the overview step', function() {

@@ -1,4 +1,4 @@
-import Theme from 'theme/Theme';
+import theme from 'theme/Theme';
 import { TextInput } from 'grommet';
 import styled from 'styled-components';
 import { PageHeading as _PageHeading } from 'components/sort/Headings';
@@ -30,14 +30,24 @@ export const PageHeading = styled(_PageHeading)`
   line-height: 0.6;
 `;
 
+export const ModuleTitle = styled.h4`
+  font-family: ${theme.font.zoomFontFamOne};
+  font-weight: 400;
+  color: ${theme.color.zoomBlack};
+  font-size: 32px;
+  line-height: 1;
+  margin: 25px;
+  letter-spacing: 0.5px;
+`;
+
 export const HeaderIcon = styled.div``;
 
 export const HeaderGreeting = styled.div`
   margin: 5px 0;
   font-size: 14px;
   font-weight: 300;
-  color: ${Theme.color.aidsFondsRed};
-  font-family: ${Theme.font.zoomFontFamTwo};
+  color: ${theme.color.aidsFondsRed};
+  font-family: ${theme.font.zoomFontFamTwo};
 `;
 
 export const SearchBox = styled(TextInput)`
@@ -48,7 +58,7 @@ export const SearchBox = styled(TextInput)`
   border-width: 1px;
   padding-left: 35px;
   border-style: solid;
-  border-color: ${Theme.color.zoomGreyFour};
+  border-color: ${theme.color.zoomGreyFour};
   // -webkit-box-shadow: 0px 2px 4px 0px rgba(239, 239, 239, 0.5);
   // -moz-box-shadow: 0px 2px 4px 0px rgba(239, 239, 239, 0.5);
   // box-shadow: 0px 2px 4px 0px rgba(220, 220, 220, 0.5);
@@ -68,6 +78,6 @@ export const NoItems = styled.div`
   padding-top: 105px;
   text-align: center;
   align-self: center;
-  color: ${Theme.color.zoomBlack};
-  font-family: ${Theme.font.zoomFontFamOne};
+  color: ${theme.color.zoomBlack};
+  font-family: ${theme.font.zoomFontFamOne};
 `;

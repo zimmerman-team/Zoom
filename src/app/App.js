@@ -169,61 +169,62 @@ class App extends React.Component {
     return (
       <JssProvider generateClassName={generateClassName}>
         <MuiThemeProvider theme={theme}>
-          {/*<Grommet theme={ZoomTheme}>*/}
-          <QueryRenderer
-            environment={modernEnvironment}
-            query={graphql`
-              query AppQuery {
-                ...ExplorePanelMediator_dropDownData
-                ...VizPaneMediator_dropDownData
-                ...HomeModuleMediator_indicatorAggregations
-                ...VisualizerModuleMediator_indicatorAggregations
-                ...CountryDetailMediator_indicatorAggregations
-                ...MetaDataMediator_dropDownData
-                ...CorrectErrorsMediator_fileCorrection
-                ...FocusModuleMediator_indicatorAggregations
-                ...DatasetMediator_metaData
-              }
-            `}
-            variables={{}}
-            render={({ error, props }) => {
-              if (props) {
-                return (
-                  <Router>
-                    <React.Fragment>
-                      {/* todo: replace toasts with material-ui snackbar https://material-ui.com/demos/snackbars/ */}
-                      <ToastsContainer
-                        store={ToastsStore}
-                        position={ToastsContainerPosition.TOP_CENTER}
-                      />
-                      <AppBar
-                        toggleSideBar={() =>
-                          this.setState({
-                            showSidebar: !this.state.showSidebar
-                          })
-                        }
-                        auth0Client={auth0Client}
-                      />
-                      <MainMenuDrawer
-                        auth0Client={auth0Client}
-                        open={this.state.showSidebar}
-                        toggleSideBar={() =>
-                          this.setState({
-                            showSidebar: !this.state.showSidebar
-                          })
-                        }
-                      />
-                      <Analytics id="UA-134931738-2">
-                        <Routes {...props} auth0Client={auth0Client} />
-                      </Analytics>
-                    </React.Fragment>
-                  </Router>
-                );
-              }
-              return <div>Loading</div>;
-            }}
-          />
-          {/*</Grommet>*/}
+          <Grommet theme={ZoomTheme}>
+            <QueryRenderer
+              environment={modernEnvironment}
+              query={graphql`
+                query AppQuery {
+                  ...ExplorePanelMediator_dropDownData
+                  ...VizPaneMediator_dropDownData
+                  ...HomeModuleMediator_indicatorAggregations
+                  ...VisualizerModuleMediator_indicatorAggregations
+                  ...CountryDetailMediator_indicatorAggregations
+                  ...MetaDataMediator_dropDownData
+                  ...CorrectErrorsMediator_fileCorrection
+                  ...FocusModuleMediator_indicatorAggregations
+                  ...DatasetMediator_metaData
+                  ...DashboardMediator_Indicator
+                }
+              `}
+              variables={{}}
+              render={({ error, props }) => {
+                if (props) {
+                  return (
+                    <Router>
+                      <React.Fragment>
+                        {/* todo: replace toasts with material-ui snackbar https://material-ui.com/demos/snackbars/ */}
+                        <ToastsContainer
+                          store={ToastsStore}
+                          position={ToastsContainerPosition.TOP_CENTER}
+                        />
+                        <AppBar
+                          toggleSideBar={() =>
+                            this.setState({
+                              showSidebar: !this.state.showSidebar
+                            })
+                          }
+                          auth0Client={auth0Client}
+                        />
+                        <MainMenuDrawer
+                          auth0Client={auth0Client}
+                          open={this.state.showSidebar}
+                          toggleSideBar={() =>
+                            this.setState({
+                              showSidebar: !this.state.showSidebar
+                            })
+                          }
+                        />
+                        <Analytics id="UA-134931738-2">
+                          <Routes {...props} auth0Client={auth0Client} />
+                        </Analytics>
+                      </React.Fragment>
+                    </Router>
+                  );
+                }
+                return <div>Loading</div>;
+              }}
+            />
+          </Grommet>
         </MuiThemeProvider>
       </JssProvider>
     );

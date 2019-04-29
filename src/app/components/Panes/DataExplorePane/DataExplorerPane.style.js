@@ -8,6 +8,7 @@ export const ComponentBase = styled.div`
   background-color: ${theme.color.aidsFondsWhite};
   box-shadow: 0 5px 7px rgba(0, 0, 0, 0.5);
   overflow: scroll;
+  z-index: 8;
 `;
 
 export const FilterTitle = styled.span`
@@ -44,8 +45,4 @@ export const ResetContainer = styled.div`
 export const DropDownCont = styled.div`
   background-color: ${theme.color.aidsFondsWhite};
   margin: 6px 20px 6px 18px;
-
-  &&:nth-child(3) {
-    margin-top: 30px;
-  }
 `;

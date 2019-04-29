@@ -1,6 +1,5 @@
 import get from 'lodash/get';
 import find from 'lodash/find';
-import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
 import { paginate } from './genericUtils';
@@ -37,7 +36,6 @@ export function formatUsersTabData(
         },
         onEdit: () => onEdit(d.user_id),
         onView: () => onView(d.user_id),
-        onDuplicate: () => console.log('duplicate'),
         onDelete: () => onDelete(d.user_id)
       };
     });
@@ -94,7 +92,6 @@ export function formatTeamsTabData(
         },
         onEdit: () => onEdit(d._id),
         onView: () => onView(d._id),
-        onDuplicate: () => console.log('duplicate'),
         onDelete: () => onDelete(d._id, get(d, 'name', ''))
       };
     });
@@ -146,13 +143,17 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
 
     let onEdit = undefined;
     let onView = undefined;
-    let onDuplicate = () => duplicate(chart._id);
+    let onDuplicate = undefined;
     let onDelete = undefined;
+
+    if (duplicate) onDuplicate = () => duplicate(chart._id);
+
+    const owner = chart.author && chart.author.authId === userId;
 
     if (history && remove) {
       onView = () => history.push(`/public/${chart.type}/${chart._id}/preview`);
 
-      if (chart.author.authId === userId && remove) {
+      if (owner && remove) {
         onEdit = () =>
           history.push(`/visualizer/${chart.type}/${chart._id}/edit`);
         onView = () =>
@@ -161,11 +162,17 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
       }
     }
 
+    let author = '';
+
+    if (chart.author)
+      author = `${chart.author.firstName} ${chart.author.lastName}`;
+
     return {
       id: chart._id,
       title: chart.name,
+      owner,
       info: {
-        Author: `${chart.author.firstName} ${chart.author.lastName}`,
+        Author: author,
         'Publication date': chart.created.substring(
           0,
           chart.created.indexOf('T')
@@ -187,8 +194,8 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
   });
 }
 
-// formats chart data for the dashboard
-export function formatDatasets(datasets, history) {
+// formats datasets for the dashboard
+export function formatDatasets(datasets, history, remove) {
   return datasets.map(dataset => {
     let shared = '';
     if (dataset.team.length > 0 && dataset.team !== 'none')
@@ -203,6 +210,11 @@ export function formatDatasets(datasets, history) {
     return {
       id: dataset.datasetId,
       title: dataset.name,
+      // so owner here is true
+      // because the datasets
+      // loaded into the dashboard are only the
+      // authors datasets === owners
+      owner: true,
       info: {
         'Publication date': dataset.created
           ? dataset.created.substring(0, dataset.created.indexOf('T'))
@@ -214,7 +226,7 @@ export function formatDatasets(datasets, history) {
         'Data sources': dataset.dataSource
       },
       onEdit: () => history.push(`/dataset/${dataset.datasetId}`),
-      onDelete: () => console.log('delete')
+      onDelete: () => remove(dataset.datasetId)
     };
   });
 }

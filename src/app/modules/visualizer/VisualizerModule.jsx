@@ -18,33 +18,34 @@ import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
 const ModuleBase = styled.div`
   display: flex;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: calc(100vh - 40px);
   position: relative;
 `;
 
 const propTypes = {
-  // indicators: PropTypes.arrayOf(PropTypes.shape),
   loggedIn: PropTypes.bool,
   sideBarOpen: PropTypes.bool,
   dropDownData: PropTypes.shape({}),
-  indicators: PropTypes.arrayOf(PropTypes.shape({})),
+  data: PropTypes.arrayOf(PropTypes.shape({})),
   dataPaneOpen: PropTypes.string,
   auth0Client: PropTypes.shape({}),
-  chartKeys: PropTypes.arrayOf(PropTypes.string),
+  chartKeys: PropTypes.array,
   chartType: PropTypes.string,
   publicPage: PropTypes.bool,
+  saveViewport: PropTypes.func,
   moduleMode: PropTypes.string
 };
 
 const defaultProps = {
-  indicators: [],
+  data: [],
   publicPage: false,
   dataPaneOpen: 'visualizer',
   chartKeys: [],
   auth0Client: {},
   dropDownData: {},
   chartType: PropTypes.string,
+  saveViewport: null,
   loggedIn: true
 };
 
@@ -54,7 +55,7 @@ class BuilderModule extends Component {
     this.state = {
       dialogOpen: true,
       sideBarOpen: false,
-      indicators: []
+      data: []
     };
 
     this.onClose = this.onClose.bind(this);
@@ -78,6 +79,19 @@ class BuilderModule extends Component {
           }
         >
           {this.props.loading && <ProgressIcon />}
+
+          <VizContainer
+            saveViewport={this.props.saveViewport}
+            chartKeys={this.props.chartKeys}
+            publicPage={this.props.publicPage}
+            chartType={this.props.chartType}
+            outerHistory={this.props.outerHistory}
+            data={this.props.data}
+            selectYear={this.props.selectYear}
+            selectedYear={this.props.selectedYear}
+            display={this.props.dataPaneOpen === paneTypes.visualizer}
+          />
+
           {!this.props.publicPage && (
             <VizSidebar
               auth0Client={this.props.auth0Client}
@@ -85,18 +99,10 @@ class BuilderModule extends Component {
               code={this.props.code}
               dropDownData={this.props.dropDownData}
               outerHistory={this.props.outerHistory}
+              /* todo: convoluted logic, refactor */
               display={this.props.dataPaneOpen === paneTypes.visualizer}
             />
           )}
-          <VizContainer
-            chartKeys={this.props.chartKeys}
-            publicPage={this.props.publicPage}
-            chartType={this.props.chartType}
-            outerHistory={this.props.outerHistory}
-            indicators={this.props.indicators}
-            selectYear={this.props.selectYear}
-            selectedYear={this.props.selectedYear}
-          />
         </ModuleBase>
       </Router>
     );

@@ -2,18 +2,7 @@ import styled from 'styled-components';
 import Theme from 'theme/Theme';
 import { NavLink } from 'react-router-dom';
 
-export const ComponentBase = styled(NavLink)`
-  //CSS router Link reset
-  text-decoration: none;
-  &:focus,
-  &:hover,
-  &:visited,
-  &:link,
-  &:active {
-    text-decoration: none;
-    color: ${Theme.color.zoomBlack};
-  }
-
+export const ComponentBase = styled.div`
   min-height: 145px;
   display: flex;
   flex-direction: row;
@@ -44,8 +33,18 @@ export const GridItemHeading = styled.div`
   margin-bottom: 15px;
 `;
 
-export const Box = styled.div`
+export const BoxLink = styled(NavLink)`
   height: 100%;
+  //CSS router Link reset
+  text-decoration: none;
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
+    text-decoration: none;
+    color: ${Theme.color.zoomBlack};
+  }
 `;
 
 export const GridItemInfoContainer = styled.div`

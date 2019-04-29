@@ -2,19 +2,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { matchPath } from 'react-router';
+import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
 
 import GeoMap from 'components/GeoMap/GeoMap';
-import theme from 'theme/Theme';
-import initialState from '__consts__/InitialChartDataConst';
 
 /* utils */
 import { getFocus } from 'modules/visualizer/VisualizerModule.utils';
-
-/**
- * todo: Please write a short component description of what this component does
- * @param {Object} customProperty - please describe component property
- */
 
 const ComponentBase = styled.div`
   display: flex;
@@ -24,10 +18,18 @@ const ComponentBase = styled.div`
   width: 100%;
   height: ${props => props.height};
   flex-shrink: 0;
+
+  position: relative;
+  top: 16px;
+  z-index: 0;
 `;
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  saveViewport: PropTypes.func
+};
+const defaultProps = {
+  saveViewport: null
+};
 
 class GeomapFragment extends React.Component {
   state = {
@@ -73,11 +75,12 @@ class GeomapFragment extends React.Component {
 
   render() {
     const { mode, ...otherProps } = this.props;
-
-    // console.log(this.state.focus);
     return (
       <ComponentBase height={mode ? '400px' : '100%'}>
         <GeoMap
+          chartMounted={this.props.chartMounted}
+          viewport={this.props.viewport}
+          saveViewport={this.props.saveViewport}
           focus={this.state.focus && this.state.focus}
           {...otherProps}
           mapOptions={{ maxBounds: this.state.bounds }}
@@ -90,4 +93,11 @@ class GeomapFragment extends React.Component {
 GeomapFragment.propTypes = propTypes;
 GeomapFragment.defaultProps = defaultProps;
 
-export default GeomapFragment;
+const mapStateToProps = state => {
+  return {
+    chartMounted: state.chartData.chartData.chartMounted,
+    viewport: state.chartData.chartData.specOptions
+  };
+};
+
+export default connect(mapStateToProps)(withRouter(GeomapFragment));

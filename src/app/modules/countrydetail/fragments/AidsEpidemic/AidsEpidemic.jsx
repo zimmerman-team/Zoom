@@ -7,6 +7,9 @@ import LineChart2 from 'components/charts/recharts_linechart/LineChart';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';
 
+/* styles */
+import { ChartContainer } from 'modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic.style';
+
 const propTypes = {
   // data: PropTypes.object,
   background: PropTypes.string,
@@ -37,11 +40,13 @@ const AidsEpidemic = props => {
         title={countryDetailMockData.fragments[1].title}
         showInfoButton
       >
-        {/* <LineChart data={props.aidsLineChartData} /> */}
-        <LineChart2
-          indicators={props.indicators}
-          data={props.aidsLineChartData}
-        />
+        <ChartContainer>
+          {/* <LineChart data={props.aidsLineChartData} /> */}
+          <LineChart2
+            chartKeys={props.indicators}
+            data={props.aidsLineChartData}
+          />
+        </ChartContainer>
       </ModuleFragment>
     </Element>
   );

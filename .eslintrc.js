@@ -63,6 +63,7 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'default-case': 0,
-    'import/prefer-default-export': 0
+    'import/prefer-default-export': 0,
+    'spaced-comment': 0
   }
 };

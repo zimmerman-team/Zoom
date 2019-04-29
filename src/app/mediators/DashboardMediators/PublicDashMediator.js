@@ -35,9 +35,6 @@ class PublicDashMediator extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!isEqual(this.props.user, prevProps.user) && this.props.user)
-      this.reloadData();
-
     // we format the charts
     if (
       !isEqual(this.props.publicCharts, prevProps.publicCharts) &&
@@ -52,19 +49,16 @@ class PublicDashMediator extends React.Component {
   }
 
   reloadData() {
-    if (this.props.user) {
-      const { sortBy, page, pageSize, searchKeyword } = this.state;
+    const { sortBy, page, pageSize, searchKeyword } = this.state;
 
-      this.props.dispatch(
-        actions.getPublicChartsRequest({
-          authId: this.props.user.authId,
-          searchTitle: searchKeyword,
-          sortBy,
-          page,
-          pageSize
-        })
-      );
-    }
+    this.props.dispatch(
+      actions.getPublicChartsRequest({
+        searchTitle: searchKeyword,
+        sortBy,
+        page,
+        pageSize
+      })
+    );
   }
 
   onEnterPressed() {
@@ -108,8 +102,7 @@ class PublicDashMediator extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    publicCharts: state.publicCharts,
-    user: state.user.data
+    publicCharts: state.publicCharts
   };
 };
 

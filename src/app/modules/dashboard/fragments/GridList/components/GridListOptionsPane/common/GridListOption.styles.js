@@ -36,6 +36,7 @@ export const RemoveButton = styled.div`
   display: flex;
   justify-content: center;
   line-height: 2;
+  margin-bottom: 2px;
 
   &:hover {
     background-color: ${theme.color.aidsFondsBlue};

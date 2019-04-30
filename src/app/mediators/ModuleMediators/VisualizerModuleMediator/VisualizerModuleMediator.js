@@ -29,7 +29,7 @@ import initialState from '__consts__/InitialChartDataConst';
 import paneTypes from '__consts__/PaneTypesConst';
 import chartTypes from '__consts__/ChartConst';
 import initialPaneState from '__consts__/InitialPaneDataConst';
-import { colorSet1 } from '__consts__/PaneConst';
+import { colorSet } from '__consts__/PaneConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
 import { axisOptions, aggrOptions } from '__consts__/GraphStructOptionConsts';
 
@@ -161,7 +161,7 @@ class VisualizerModuleMediator extends Component {
     this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.visualizer));
 
     // we also want to reset the previously created/updated chart
-    this.props.dispatch(nodeActions.getPublicChartRequest());
+    this.props.dispatch(nodeActions.createUpdateChartInitial());
 
     // we also want reinitialize chartResults reset the previously created/updated chart
     this.props.dispatch(nodeActions.getPublicChartInitial());
@@ -194,7 +194,7 @@ class VisualizerModuleMediator extends Component {
               [graphKeys.leftYAxis]: axisOptions[0].value,
               [graphKeys.rightYAxis]: axisOptions[0].value,
               [graphKeys.xAxis]: axisOptions[1].value,
-              [graphKeys.colorPallet]: colorSet1,
+              [graphKeys.colorPallet]: colorSet[0].colors,
               [graphKeys.aggregate]: aggrOptions[0].value
             }
           })
@@ -532,6 +532,7 @@ class VisualizerModuleMediator extends Component {
       name,
       selectedYear,
       selectedYears,
+      chartKeys,
       indicatorItems,
       selectedCountryVal,
       description,
@@ -579,12 +580,14 @@ class VisualizerModuleMediator extends Component {
         authorName: author.username,
         createdDate: formatDate(created),
         selectedRegionVal: removeIds(selectedRegionVal),
-        chartKeys: getChartKeys(
-          type,
-          selectedIndNames,
-          specOptions[graphKeys.colorPallet],
-          []
-        ),
+        chartKeys:
+          chartKeys ||
+          getChartKeys(
+            type,
+            selectedIndNames,
+            specOptions[graphKeys.colorPallet],
+            []
+          ),
         specOptions
       })
     );

@@ -3,7 +3,7 @@ import React from 'react';
 const SvgIconPointer = props => (
   <svg
     style={{
-      margin: 'auto',
+      margin: 'auto'
     }}
     fill="#ff0100"
     width={13}

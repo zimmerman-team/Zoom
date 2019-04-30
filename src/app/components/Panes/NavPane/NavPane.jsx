@@ -2,6 +2,7 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import theme from 'theme/Theme';
 
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
@@ -95,8 +96,8 @@ class NavPane extends React.Component {
               data-cy={datacy}
               style={item.style}
             >
-              <ItemIcon style={item.style}>
-                <SvgIconPointer />
+              <ItemIcon>
+                <SvgIconPointer style={item.style} />
               </ItemIcon>
               <ItemLabel>{item.label}</ItemLabel>
             </NavPaneItem>

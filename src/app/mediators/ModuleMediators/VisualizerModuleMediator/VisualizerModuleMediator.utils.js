@@ -4,7 +4,7 @@ import { range } from 'd3-array';
 
 /* consts */
 import chartTypes from '__consts__/ChartConst';
-import { colorSet1 } from '__consts__/PaneConst';
+import { colorSet } from '__consts__/PaneConst';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 
 // these are aggregation keys associated with graphql returned variables
@@ -331,7 +331,11 @@ export function formatGeoData(indAggregations) {
 // may not be keys, but is formed in a similar way as keys would,
 // so yeah mainly used for line generation according to the selected indicators
 // and 'selectedInd' is passed in as a string array of currently selected indicators
-export function formatChartLegends(selectedInd, colors = colorSet1, currKeys) {
+export function formatChartLegends(
+  selectedInd,
+  colors = colorSet[0].colors,
+  currKeys
+) {
   const chartKeys = [];
 
   let colorInd = 0;
@@ -436,7 +440,7 @@ export function formatBarChartKeys(selectedInd) {
   return chartKeys;
 }
 
-export function formatBarData(indicators, colors = colorSet1) {
+export function formatBarData(indicators, colors = colorSet[0].colors) {
   const barChartData = [];
   const barChartKeys = [];
 
@@ -539,7 +543,7 @@ export function formatTableData(indicators) {
   };
 }
 
-export function formatDonutData(indicators, colors = colorSet1) {
+export function formatDonutData(indicators, colors = colorSet[0].colors) {
   const chartData = [];
   indicators.map((indicator, indIndex) => {
     indicator.map(indItem => {
@@ -563,7 +567,7 @@ export function formatDonutData(indicators, colors = colorSet1) {
 export function getChartKeys(
   chartType,
   indicators,
-  colors = colorSet1,
+  colors = colorSet[0].colors,
   currKeys
 ) {
   switch (chartType) {

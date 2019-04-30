@@ -275,6 +275,7 @@ const ChartController = {
       description,
       type,
       descIntro,
+      chartKeys,
       indicatorItems,
       selectedSources,
       yearRange,
@@ -309,6 +310,7 @@ const ChartController = {
                   // so the type of chart
                   type,
 
+                  chartKeys,
                   /* indicators/ sub-indicators of chart */
                   indicatorItems,
 
@@ -374,6 +376,7 @@ const ChartController = {
                     chart._public = _public;
                     chart.teams = teams;
 
+                    chart.chartKeys = chartKeys;
                     /* indicators/ sub-indicators of chart */
                     chart.indicatorItems = indicatorItems;
 

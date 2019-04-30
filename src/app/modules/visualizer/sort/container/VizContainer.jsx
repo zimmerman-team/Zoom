@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 import { Route, withRouter } from 'react-router';
 
+/* consts */
+import graphKeys from '__consts__/GraphStructKeyConst';
+
 import ContextPreview from 'components/ContextPreview/ContextPreview';
 import BarchartFragment from 'modules/visualizer/sort/container/fragments/BarchartFragment';
 import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFragment';
@@ -15,6 +18,8 @@ import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
 import CustomYearSelector from '../../../../components/CustomYearSelector/CustomYearSelector';
 import { YearContainer } from '../../../../components/CustomYearSelector/CustomYearSelector.style';
 import paneTypes from '../../../../__consts__/PaneTypesConst';
+import YearRangeSelector from 'components/YearRangeSelector/YearRangeSelector';
+import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -157,10 +162,19 @@ class VizContainer extends React.Component {
           />
 
           <YearContainer bottom="24px">
-            <CustomYearSelector
-              selectedYear={this.props.selectedYear}
-              selectYear={this.props.selectYear}
-            />
+            {/* so the second item in the aggrOptions array is the year aggregation option*/}
+            {this.props.chartData.specOptions[graphKeys.aggregate] ===
+            aggrOptions[1].value ? (
+              <YearRangeSelector
+                selectYearRange={this.props.selectYearRange}
+                selectedYears={this.props.chartData.selectedYears}
+              />
+            ) : (
+              <CustomYearSelector
+                selectedYear={this.props.selectedYear}
+                selectYear={this.props.selectYear}
+              />
+            )}
           </YearContainer>
         </React.Fragment>
         <PreviewTextContainer mode={this.state.preview ? 'flex' : 'none'}>

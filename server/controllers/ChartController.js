@@ -279,6 +279,7 @@ const ChartController = {
       selectedSources,
       yearRange,
       selectedYear,
+      selectedYears,
       dataSources,
       _public,
       data,
@@ -315,6 +316,7 @@ const ChartController = {
                   yearRange,
 
                   selectedYear,
+                  selectedYears,
                   selectedCountryVal,
                   selectedRegionVal,
                   specOptions
@@ -379,6 +381,7 @@ const ChartController = {
                     chart.yearRange = yearRange;
 
                     chart.selectedYear = selectedYear;
+                    chart.selectedYears = selectedYears;
                     chart.selectedCountryVal = selectedCountryVal;
                     chart.selectedRegionVal = selectedRegionVal;
                     chart.specOptions = specOptions;

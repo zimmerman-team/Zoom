@@ -12,11 +12,13 @@ import * as actions from 'services/actions/general';
 /* helpers */
 import sortBy from 'lodash/sortBy';
 import findIndex from 'lodash/findIndex';
-import { yearStrToArray } from 'utils/genericUtils';
+import { formatYearParam, yearStrToArray } from 'utils/genericUtils';
 
 /* consts */
 import initialState, { initIndItem } from '__consts__/InitialChartDataConst';
 import chartTypes from '__consts__/ChartConst';
+import graphKeys from '__consts__/GraphStructKeyConst';
+import { maxYear } from '__consts__/TimeLineConst';
 
 const propTypes = {
   dropDownData: PropTypes.shape({
@@ -538,11 +540,23 @@ class VizPaneMediator extends React.Component {
 
     specOptions[key] = value;
 
-    this.props.dispatch(
-      actions.storeChartDataRequest({
-        specOptions
-      })
-    );
+    if (key === graphKeys.aggregate) {
+      const startYear = parseInt(this.props.chartData.selectedYear, 10);
+      const endYear = startYear + 10 > maxYear ? maxYear : startYear + 10;
+
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          specOptions,
+          changesMade: true,
+          selectedYears: formatYearParam([startYear, endYear])
+        })
+      );
+    } else
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          specOptions
+        })
+      );
   }
 
   render() {

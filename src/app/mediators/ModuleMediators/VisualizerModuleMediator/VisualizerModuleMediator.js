@@ -20,7 +20,8 @@ import {
   formatChartLegends,
   formatTableData,
   formatDonutData,
-  getChartKeys
+  getChartKeys,
+  aggrKeys
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 
 /* consts */
@@ -30,6 +31,7 @@ import chartTypes from '__consts__/ChartConst';
 import initialPaneState from '__consts__/InitialPaneDataConst';
 import { colorSet1 } from '__consts__/PaneConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
+import { axisOptions, aggrOptions } from '__consts__/GraphStructOptionConsts';
 
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
@@ -93,6 +95,7 @@ const indicatorDataQuery = graphql`
     $countriesISO2: [String]!
     $indicatorStr: String!
     $OR_GeolocationIso2_Is_Null: Boolean!
+    $orderBy: [String]!
   ) {
     indicators: datapointsAggregation(
       groupBy: [
@@ -106,8 +109,8 @@ const indicatorDataQuery = graphql`
         "geolocationCenterLongLat"
         "valueFormatType"
       ]
-      orderBy: ["indicatorName"]
       aggregation: ["Sum(value)"]
+      orderBy: $orderBy
       date_In: $datePeriod
       indicatorName_In: $indicator
       geolocationIso2_In: $countriesISO2
@@ -145,13 +148,12 @@ class VisualizerModuleMediator extends Component {
         : initialState.yearPeriod[0]
     };
 
-    this.indLoadTime = 0;
-
     this.refetch = this.refetch.bind(this);
     this.selectYear = this.selectYear.bind(this);
     this.saveViewport = this.saveViewport.bind(this);
     this.loadChartData = this.loadChartData.bind(this);
     this.storeChartToRedux = this.storeChartToRedux.bind(this);
+    this.selectYearRange = this.selectYearRange.bind(this);
   }
 
   componentDidMount() {
@@ -159,7 +161,11 @@ class VisualizerModuleMediator extends Component {
     this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.visualizer));
 
     // we also want to reset the previously created/updated chart
-    this.props.dispatch(nodeActions.createUpdateChartInitial());
+    this.props.dispatch(nodeActions.getPublicChartRequest());
+
+    // we also want reinitialize chartResults reset the previously created/updated chart
+    this.props.dispatch(nodeActions.getPublicChartInitial());
+    this.props.dispatch(nodeActions.getChartInitial());
 
     if (this.props.match.params.code !== 'vizID')
       this.setState(
@@ -185,10 +191,11 @@ class VisualizerModuleMediator extends Component {
         this.props.dispatch(
           actions.storeChartDataRequest({
             specOptions: {
-              [graphKeys.leftYAxis]: 'number',
-              [graphKeys.rightYAxis]: 'number',
-              [graphKeys.xAxis]: 'category',
-              [graphKeys.colorPallet]: colorSet1
+              [graphKeys.leftYAxis]: axisOptions[0].value,
+              [graphKeys.rightYAxis]: axisOptions[0].value,
+              [graphKeys.xAxis]: axisOptions[1].value,
+              [graphKeys.colorPallet]: colorSet1,
+              [graphKeys.aggregate]: aggrOptions[0].value
             }
           })
         );
@@ -235,6 +242,7 @@ class VisualizerModuleMediator extends Component {
 
     // TODO redo this check properly
     const {
+      data,
       name,
       desc,
       descIntro,
@@ -252,14 +260,20 @@ class VisualizerModuleMediator extends Component {
       team: prevTeam,
       specOptions: prevSpecOptions,
       chartKeys: prevchartKeys,
+      data: prevData,
       ...prevRestChart
     } = prevProps.chartData;
 
     // so we refetch data when chartData changes
-    // and we dont want to refetch data when only the name/description ofthe chart is changed
-    /* TODO: optimize the speed of the application by NOT calling this refetch
-        when the 'data' variable changes in the chartData*/
-    if (!isEqual(restChart, prevRestChart) && restChart.changesMade)
+    // and we dont want to refetch data when only the name/description of the chart is changed
+    // or other data not related stuff changes
+    if (
+      (!isEqual(restChart, prevRestChart) ||
+        (specOptions[graphKeys.aggregate] &&
+          specOptions[graphKeys.aggregate] !==
+            prevSpecOptions[graphKeys.aggregate])) &&
+      restChart.changesMade
+    )
       this.refetch();
   }
 
@@ -326,7 +340,10 @@ class VisualizerModuleMediator extends Component {
           this.props.chartData.specOptions[graphKeys.colorPallet],
           this.props.chartData.chartKeys
         );
-        data = formatLineData(aggregationData);
+        data = formatLineData(
+          aggregationData,
+          this.props.chartData.specOptions[graphKeys.aggregate]
+        );
         break;
       case chartTypes.barChart:
         data = formatBarData(
@@ -383,8 +400,6 @@ class VisualizerModuleMediator extends Component {
         selectedInd
       })
     );
-
-    this.setState({ loading: false });
   }
 
   refetch() {
@@ -398,6 +413,26 @@ class VisualizerModuleMediator extends Component {
       });
 
     const indicatorData = [];
+
+    let datePeriod = [];
+    let orderBy = [];
+
+    if (this.props.chartData.selectedInd.length > 0) {
+      // so the first option in the axis options is 'geo' so if aggregated by geolocation
+      // the user can only select one year and the order is by 'geolocationTag'
+      // and if aggregated by year, which is the other option, the user can select
+      // a range of years by which to aggregate and the orderBy is by 'date'
+      if (
+        this.props.chartData.specOptions[graphKeys.aggregate] ===
+        aggrOptions[0].value
+      ) {
+        datePeriod = [this.props.chartData.selectedYear];
+        orderBy = [aggrKeys[aggrOptions[0].value]];
+      } else {
+        datePeriod = this.props.chartData.selectedYears;
+        orderBy = [aggrKeys[aggrOptions[1].value]];
+      }
+    }
 
     this.props.chartData.selectedInd.forEach((indItem, index) => {
       const indicator = indItem.indicator;
@@ -420,9 +455,10 @@ class VisualizerModuleMediator extends Component {
         indicator: [indicator],
         indicatorStr: indicator || 'null',
         subInds,
-        datePeriod: [this.props.chartData.selectedYear],
+        datePeriod,
         countriesISO2,
-        OR_GeolocationIso2_Is_Null: iso2Undef
+        OR_GeolocationIso2_Is_Null: iso2Undef,
+        orderBy
       };
 
       fetchQuery(
@@ -436,14 +472,10 @@ class VisualizerModuleMediator extends Component {
           subIndicators: data.subIndicators
         });
 
-        // so we use this to control, when the last
-        // query has been fetched and only when the last query gets fetched
-        // then the indicator data would be filled
-        // and then it can be formatted
-        this.indLoadTime += 1;
-
-        if (this.indLoadTime === this.props.chartData.selectedInd.length) {
-          this.indLoadTime = 0;
+        // so we only update the indicators when we've retrieved the same
+        // amount of indicator data as we have indicators selected
+        if (indicatorData.length === this.props.chartData.selectedInd.length) {
+          this.setState({ loading: false });
           this.updateIndicators(indicatorData);
         }
       });
@@ -457,6 +489,14 @@ class VisualizerModuleMediator extends Component {
       actions.storeChartDataRequest({
         selectedYear: val,
         changesMade: true
+      })
+    );
+  }
+
+  selectYearRange(array) {
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        selectedYears: array
       })
     );
   }
@@ -491,6 +531,7 @@ class VisualizerModuleMediator extends Component {
       _id,
       name,
       selectedYear,
+      selectedYears,
       indicatorItems,
       selectedCountryVal,
       description,
@@ -531,6 +572,7 @@ class VisualizerModuleMediator extends Component {
         chartId: _id,
         descIntro,
         selectedYear,
+        selectedYears,
         selectedCountryVal,
         desc: description,
         selectedInd,
@@ -572,6 +614,7 @@ class VisualizerModuleMediator extends Component {
         code={this.props.match.params.code}
         loading={this.state.loading}
         auth0Client={this.props.auth0Client}
+        selectYearRange={this.selectYearRange}
         selectYear={this.selectYear}
         selectedYear={this.props.chartData.selectedYear}
         data={this.props.chartData.data}

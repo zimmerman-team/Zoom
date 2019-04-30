@@ -31,6 +31,7 @@ const propTypes = {
   dataPaneOpen: PropTypes.string,
   auth0Client: PropTypes.shape({}),
   chartKeys: PropTypes.array,
+  selectYearRange: PropTypes.func,
   chartType: PropTypes.string,
   publicPage: PropTypes.bool,
   saveViewport: PropTypes.func,
@@ -43,6 +44,7 @@ const defaultProps = {
   dataPaneOpen: 'visualizer',
   chartKeys: [],
   auth0Client: {},
+  selectYearRange: null,
   dropDownData: {},
   chartType: PropTypes.string,
   saveViewport: null,
@@ -87,6 +89,7 @@ class BuilderModule extends Component {
             chartType={this.props.chartType}
             outerHistory={this.props.outerHistory}
             data={this.props.data}
+            selectYearRange={this.props.selectYearRange}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
             display={this.props.dataPaneOpen === paneTypes.visualizer}

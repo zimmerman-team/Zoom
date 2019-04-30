@@ -123,6 +123,7 @@ export class AppBar extends React.Component {
         selectedSources: this.props.paneData.selectedSources,
         yearRange: this.props.paneData.yearRange,
         selectedYear: this.props.chartData.selectedYear,
+        selectedYears: this.props.chartData.selectedYears,
         selectedCountryVal: this.props.chartData.selectedCountryVal,
         selectedRegionVal: this.props.chartData.selectedRegionVal,
         specOptions: this.props.chartData.specOptions

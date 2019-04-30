@@ -5,6 +5,14 @@ import { range } from 'd3-array';
 /* consts */
 import chartTypes from '__consts__/ChartConst';
 import { colorSet1 } from '__consts__/PaneConst';
+import { aggrOptions } from '__consts__/GraphStructOptionConsts';
+
+// these are aggregation keys associated with graphql returned variables
+// 'geolocationTag' & 'date' are the graphql variables
+export const aggrKeys = {
+  [aggrOptions[0].value]: 'geolocationTag',
+  [aggrOptions[1].value]: 'date'
+};
 
 // Updates layer percentiles depending on the value
 export function updatePercentiles(featureCollection, accessor) {
@@ -247,6 +255,8 @@ export function formatDate(created) {
 }
 
 export function formatGeoData(indAggregations) {
+  console.log('indAggregations', indAggregations);
+
   let longLatData = [];
   let countryLayerData = {};
   const geomapData = [];
@@ -352,11 +362,11 @@ export function formatChartLegends(selectedInd, colors = colorSet1, currKeys) {
 }
 
 // *this is also formating the linechart by geolocation
-export function formatLineData(indicators) {
+export function formatLineData(indicators, aggregate) {
+  const aggrKey = aggrKeys[aggregate];
+
   const indicatorData = [];
   const indicatorNames = [];
-
-  console.log('indicators', indicators);
 
   indicators.forEach((indicator, index) => {
     if (indicator.length > 0) {
@@ -376,16 +386,21 @@ export function formatLineData(indicators) {
         // yeah and cause we might receive data with the same geolocation name
         // we add in the values for that geolocation so it wouldn't be repeated over and over
         const existItemInd = findIndex(indicatorData, existing => {
-          return indItem.geolocationTag === existing.geoName;
+          return indItem[aggrKey] === existing[aggrKey];
         });
+
+        let aggrValue = indItem.date;
+
+        if (aggrKey === 'geolocationTag')
+          aggrValue =
+            indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
+              ? indItem.geolocationIso2
+              : indItem.geolocationTag;
 
         if (existItemInd === -1)
           indicatorData.push({
-            geoName: indItem.geolocationTag,
-            geolocation:
-              indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
-                ? indItem.geolocationIso2
-                : indItem.geolocationTag,
+            [aggrKey]: indItem[aggrKey],
+            [aggregate]: aggrValue,
             [indName]: Math.round(indItem.value)
           });
         else if (indicatorData[existItemInd][indName] !== undefined)

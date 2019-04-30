@@ -20,6 +20,7 @@ import {
   formatManData,
   formatOverviewData
 } from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
+import { formatErrorColumns } from 'mediators/DataMapperMediators/ManualMappingMediator.util';
 
 const propTypes = {
   fileId: PropTypes.string,
@@ -96,6 +97,11 @@ class CorrectErrorsMediator extends React.Component {
 
         const stepData = { ...this.props.stepData };
         stepData.overviewData = overviewData;
+
+        stepData.errorColumns = formatErrorColumns(
+          response.fileValidationResults.foundList,
+          stepData.errorData.ignoredErrors
+        );
 
         this.props.dispatch(generalActions.saveStepDataRequest(stepData));
       }
@@ -188,12 +194,6 @@ class CorrectErrorsMediator extends React.Component {
           this.setState({ columnHeaders });
         }
 
-        // TODO: readjust this when we get info about errors existing in file from the backend when error_toggle = false
-        // const errorsExists = checkIfErrors(
-        //   results.error_data.error_messages,
-        //   this.state.ignoredErrors
-        // );
-
         const rowCount =
           command.error_toggle &&
           (!results.error_data.error_messages ||
@@ -209,7 +209,6 @@ class CorrectErrorsMediator extends React.Component {
             correctCommand: command,
             rowCount,
             loading: false,
-            // TODO: readjust this when we get info about errors existing in file from the backend when error_toggle = false
             errorsExists: !this.state.errorsChecked
           },
           this.afterErrorTableUpdate
@@ -403,32 +402,31 @@ class CorrectErrorsMediator extends React.Component {
   // basically will addin/remove the column names for errors to be ignored
   // and will save these errors in the props ofcourse
   ignoreErrors(headerName) {
-    this.setState((prevState, props) => {
-      const ignoredErrors = [...prevState.ignoredErrors];
-      const headerInd = ignoredErrors.indexOf(headerName);
+    const ignoredErrors = [...this.props.stepData.errorData.ignoredErrors];
+    const errorColumns = [...this.props.stepData.errorColumns];
+    const headerInd = ignoredErrors.indexOf(headerName);
+    const errColInd = errorColumns.indexOf(headerName);
 
-      if (headerInd === -1) ignoredErrors.push(headerName);
-      else ignoredErrors.splice(headerInd, 1);
+    if (headerInd === -1) {
+      if (errColInd !== -1) errorColumns.splice(errColInd, 1);
 
-      // and we save it in the props
-      const stepData = { ...props.stepData };
+      ignoredErrors.push(headerName);
+    } else {
+      if (errColInd === -1) errorColumns.push(headerName);
 
-      // TODO: readjust this when we get info about errors existing in file from the backend when error_toggle = false
-      // const errorsExists = checkIfErrors(
-      //   this.state.errorMessages,
-      //   ignoredErrors
-      // );
+      ignoredErrors.splice(headerInd, 1);
+    }
 
-      stepData.errorData = {
-        // TODO: readjust this when we get info about errors existing in file from the backend when error_toggle = false
-        errorsExists: !prevState.errorsChecked,
-        ignoredErrors: ignoredErrors
-      };
+    // and we save it in the props
+    const stepData = { ...this.props.stepData };
 
-      props.dispatch(generalActions.saveStepDataRequest(stepData));
+    stepData.errorData = {
+      ...stepData.errorData,
+      ignoredErrors
+    };
+    stepData.errorColumns = errorColumns;
 
-      return { ignoredErrors, errorsExists };
-    });
+    this.props.dispatch(generalActions.saveStepDataRequest(stepData));
   }
 
   // mainly used to load the error table data
@@ -453,7 +451,7 @@ class CorrectErrorsMediator extends React.Component {
       <ErrorStep
         showErrors={this.showErrors}
         ignoreErrors={this.ignoreErrors}
-        ignoredErrors={this.state.ignoredErrors}
+        ignoredErrors={this.props.stepData.errorData.ignoredErrors}
         loading={this.state.loading}
         updateCell={this.updateCell}
         checkedRows={this.state.checkedRows}

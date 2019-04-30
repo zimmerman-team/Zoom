@@ -302,7 +302,7 @@ class DataMapperModule extends React.Component {
     return (
       <ModuleContainer>
         <Helmet>
-          <title>Zoom - Datamapper</title>
+          <title>Zoom - Convert Data</title>
         </Helmet>
         <ModuleHeader>
           <Stepper

@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Helmet } from 'react-helmet';
 
 /* components */
 import {
@@ -44,6 +45,9 @@ const defaultProps = {
 const PublicChartLibraryModule = props => {
   return (
     <ModuleContainer>
+      <Helmet>
+        <title>Zoom - Chart Library</title>
+      </Helmet>
       <ModuleTitle>Zoom chart library</ModuleTitle>
       <Searchbox
         inputChange={props.changeSearchKeyword}

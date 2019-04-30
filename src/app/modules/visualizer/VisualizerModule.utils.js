@@ -40,3 +40,24 @@ export function getFocus(chartType) {
       return { latitude: 15, longitude: 0, zoom: 2 };
   }
 }
+
+export function formatWindowTitle(chartType){
+  switch (chartType) {
+    case 'focusNL':
+      return 'Zoom - Create Country Focus Page NL';
+    case 'focusKE':
+      return 'Zoom - Create Country Focus Page KE';
+    case 'linechart':
+      return 'Zoom - Create Line Chart';
+    case 'barchart':
+      return 'Zoom - Create Bar Chart';
+    case 'geomap':
+      return 'Zoom - Create Geomap';
+    case 'donutchart':
+      return 'Zoom - Create Donut Chart';
+    case 'tablechart':
+      return 'Zoom - Create Table Chart';
+    default:
+      return 'ZOOM';
+  }
+}

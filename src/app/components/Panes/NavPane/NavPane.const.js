@@ -36,12 +36,12 @@ export const createChartItems = [
   },
   {
     label: 'Bar chart',
-    navTo: '/visualizer/barchart/vizID/edit',
+    // navTo: '/visualizer/barchart/vizID/edit',
     style: {color: theme.color.zoomGreyEleven, cursor: 'default', fill: theme.color.zoomGreyEleven, backgroundColor: theme.color.aidsFondsWhite}
   },
   {
     label: 'Table chart',
-    navTo: '/visualizer/tablechart/vizID/edit',
+    // navTo: '/visualizer/tablechart/vizID/edit',
     style: {
       color: theme.color.zoomGreyEleven,
       cursor: 'default',
@@ -50,7 +50,7 @@ export const createChartItems = [
     },
   {
     label: 'Donut chart',
-    navTo: '/visualizer/donutchart/vizID/edit',
+    // navTo: '/visualizer/donutchart/vizID/edit',
     style: {
       color: theme.color.zoomGreyEleven,
       cursor: 'default',

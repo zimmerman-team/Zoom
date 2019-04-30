@@ -20,13 +20,11 @@ export const startItems = [
 export const createChartItems = [
   {
     label: 'Geo Map Chart',
-
-    navTo: '/visualizer/geomap/vizID/edit'
+    navTo: '/visualizer/geomap/vizID/edit',
   },
   {
     label: 'Country Focus Page Kenya',
     navTo: '/visualizer/focusKE/vizID/edit',
-    style: {color: theme.color.zoomGreyEleven, cursor: 'default'}
   },
   {
     label: 'Country Focus Page Netherlands',
@@ -38,19 +36,27 @@ export const createChartItems = [
   },
   {
     label: 'Bar chart',
-    navTo: '/visualizer/barchart/vizID/edit'
+    navTo: '/visualizer/barchart/vizID/edit',
+    style: {color: theme.color.zoomGreyEleven, cursor: 'default', fill: theme.color.zoomGreyEleven, backgroundColor: theme.color.aidsFondsWhite}
   },
   {
     label: 'Table chart',
     navTo: '/visualizer/tablechart/vizID/edit',
-    style: {color: theme.color.zoomGreyEleven, cursor: 'default'}
-  },
+    style: {
+      color: theme.color.zoomGreyEleven,
+      cursor: 'default',
+      fill: theme.color.zoomGreyEleven,
+      backgroundColor: theme.color.aidsFondsWhite }
+    },
   {
     label: 'Donut chart',
     navTo: '/visualizer/donutchart/vizID/edit',
-    style: {color: theme.color.zoomGreyEleven, cursor: 'default'}
-  }
-];
+    style: {
+      color: theme.color.zoomGreyEleven,
+      cursor: 'default',
+      fill: theme.color.zoomGreyEleven,
+      backgroundColor: theme.color.aidsFondsWhite }
+  }];
 
 export const convertDataItems = [
   {

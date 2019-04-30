@@ -4,8 +4,8 @@ const SvgIconPointer = props => (
   <svg
     style={{
       margin: 'auto',
-      fill: "#ff0100"
     }}
+    fill="#ff0100"
     width={13}
     height={11}
     {...props}

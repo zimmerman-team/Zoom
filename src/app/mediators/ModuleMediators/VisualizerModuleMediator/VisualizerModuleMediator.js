@@ -576,6 +576,7 @@ class VisualizerModuleMediator extends Component {
         selectedYear={this.props.chartData.selectedYear}
         data={this.props.chartData.data}
         dropDownData={this.props.dropDownData}
+        chartTitle={this.props.chartData.name}
       />
     );
   }

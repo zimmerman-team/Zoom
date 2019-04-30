@@ -4,15 +4,18 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
 
 /* components */
-
 import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';
 import VizContainer from 'modules/visualizer/sort/container/VizContainer';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
+
+/* utils */
+import { formatWindowTitle } from './VisualizerModule.utils';
 
 // import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
@@ -32,6 +35,7 @@ const propTypes = {
   auth0Client: PropTypes.shape({}),
   chartKeys: PropTypes.array,
   chartType: PropTypes.string,
+  chartTitle: PropTypes.string,
   publicPage: PropTypes.bool,
   saveViewport: PropTypes.func,
   moduleMode: PropTypes.string
@@ -45,6 +49,7 @@ const defaultProps = {
   auth0Client: {},
   dropDownData: {},
   chartType: PropTypes.string,
+  chartTitle: '',
   saveViewport: null,
   loggedIn: true
 };
@@ -70,6 +75,18 @@ class BuilderModule extends Component {
     this.setState({ sideBarOpen: true });
   };
 
+  renderWindowTitle = (chartType, pathname) => {
+    return (
+      <Helmet>
+        {pathname.includes('vizID') ? (
+          <title>{formatWindowTitle(chartType)}</title>
+        ) : (
+          <title>{this.props.chartTitle}</title>
+        )}
+      </Helmet>
+    );
+  };
+
   render() {
     return (
       <Router>
@@ -79,6 +96,11 @@ class BuilderModule extends Component {
           }
         >
           {this.props.loading && <ProgressIcon />}
+
+          {this.renderWindowTitle(
+            this.props.chartType,
+            this.props.outerHistory.location.pathname
+          )}
 
           <VizContainer
             saveViewport={this.props.saveViewport}

@@ -547,6 +547,7 @@ class VizPaneMediator extends React.Component {
       this.props.dispatch(
         actions.storeChartDataRequest({
           specOptions,
+          changesMade: true,
           selectedYears: formatYearParam([startYear, endYear])
         })
       );

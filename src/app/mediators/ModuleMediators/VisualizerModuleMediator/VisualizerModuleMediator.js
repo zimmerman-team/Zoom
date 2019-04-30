@@ -161,7 +161,11 @@ class VisualizerModuleMediator extends Component {
     this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.visualizer));
 
     // we also want to reset the previously created/updated chart
-    this.props.dispatch(nodeActions.createUpdateChartInitial());
+    this.props.dispatch(nodeActions.getPublicChartRequest());
+
+    // we also want reinitialize chartResults reset the previously created/updated chart
+    this.props.dispatch(nodeActions.getPublicChartInitial());
+    this.props.dispatch(nodeActions.getChartInitial());
 
     if (this.props.match.params.code !== 'vizID')
       this.setState(

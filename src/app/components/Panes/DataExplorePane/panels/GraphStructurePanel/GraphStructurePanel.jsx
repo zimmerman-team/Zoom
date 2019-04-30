@@ -15,7 +15,7 @@ import {
   axisOptions,
   aggrOptions,
   rankOptions
-} from './GraphStructurePanel.const';
+} from '__consts__/GraphStructOptionConsts';
 
 /**
  *
@@ -93,7 +93,13 @@ class GraphStructurePanel extends React.Component {
         {/* THIRD ROW //////////////////////////////////////////////////////// */}
         <FilterContainer>
           {/* AGGREGATE BY */}
-          <SimpleSelect label="Aggregate by" options={aggrOptions} />
+          <SimpleSelect
+            label="Aggregate by"
+            options={aggrOptions}
+            selectKey={graphKeys.aggregate}
+            defValue={this.props.specOptions[graphKeys.aggregate]}
+            onChange={this.props.saveGraphOption}
+          />
           {/* RANK BY */}
           <SimpleSelect
             disabled={this.props.chartType === chartTypes.lineChart}

@@ -7,6 +7,9 @@ import { connect } from 'react-redux';
 /* mock */
 // import { LinechartMockData } from './LinechartMockData';
 
+/* consts */
+import graphKeys from '__consts__/GraphStructKeyConst';
+
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import LineChart from 'components/charts/recharts_linechart/LineChart';
@@ -54,7 +57,7 @@ const LinechartFragment = props => {
         <LineChart
           chartKeys={props.chartKeys}
           data={props.indicatorData}
-          xAxisKey="geolocation"
+          xAxisKey={props.specOptions[graphKeys.aggregate]}
           specOptions={props.specOptions}
         />
       </Box>

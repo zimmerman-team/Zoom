@@ -140,7 +140,12 @@ jobs:
           name: Set CYPRESS_baseUrl
           command: |
             echo 'export CYPRESS_baseUrl="$CYPRESS_BASEURL"' >> $BASH_ENV
-      - run: yarn e2e
+      - run: |
+          if [ "${CIRCLE_BRANCH}" == "feature" ]; then
+            yarn e2e
+          else
+            yarn e2e --percy
+          fi
 
 # WORKFLOWS
 workflows:

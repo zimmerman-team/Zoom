@@ -17,10 +17,11 @@ import themes from 'theme/Theme';
 import IconPointer from 'assets/icons/IconPointer';
 
 /* utils */
+import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
 
 /* consts */
-import { colorSet1, colorSet2, colorSet3 } from '__consts__/PaneConst';
+import { colorSet as colorSetz } from '__consts__/PaneConst';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -30,7 +31,7 @@ import { colorSet1, colorSet2, colorSet3 } from '__consts__/PaneConst';
 const propTypes = {
   classes: PropTypes.object,
   label: PropTypes.string,
-  defValue: PropTypes.array,
+  defValue: PropTypes.arrayOf(PropTypes.string),
   optionPlaceHolder: PropTypes.string,
   selectKey: PropTypes.string,
   onChange: PropTypes.func,
@@ -39,7 +40,7 @@ const propTypes = {
 const defaultProps = {
   label: 'empty axis',
   optionPlaceHolder: 'empty',
-  defValue: colorSet1,
+  defValue: colorSetz[0].colors,
   selectKey: 'colorSelect',
   onChange: null,
   options: [
@@ -154,13 +155,19 @@ const ZimLabel = styled(props => (
 
 class ColorSelect extends React.Component {
   state = {
-    colorSet: this.props.defValue,
+    colorSet: find(colorSetz, set => {
+      return isEqual(set.colors, this.props.defValue);
+    }).index,
     name: 'hai'
   };
 
   handleChange = event => {
-    this.props.onChange &&
-      this.props.onChange(event.target.value, this.props.selectKey);
+    if (this.props.onChange) {
+      const colors = find(colorSetz, ['index', event.target.value]).colors;
+
+      this.props.onChange(colors, this.props.selectKey);
+    }
+
     this.setState({ [event.target.name]: event.target.value });
   };
 
@@ -179,23 +186,13 @@ class ColorSelect extends React.Component {
             name="colorSet"
             IconComponent={IconPointer}
           >
-            <ZimMenuItem value={colorSet2}>
-              {colorSet2.map(color => (
-                <PaletFragment key={color} colors={color} />
-              ))}
-            </ZimMenuItem>
-            <ZimMenuItem value={colorSet1}>
-              <PaletContainer>
-                {colorSet1.map(color => (
+            {colorSetz.map(set => (
+              <ZimMenuItem value={set.index}>
+                {set.colors.map(color => (
                   <PaletFragment key={color} colors={color} />
                 ))}
-              </PaletContainer>
-            </ZimMenuItem>
-            <ZimMenuItem value={colorSet3}>
-              {colorSet3.map(color => (
-                <PaletFragment key={color} colors={color} />
-              ))}
-            </ZimMenuItem>
+              </ZimMenuItem>
+            ))}
           </ZimSelect>
         </FormControl>
       </React.Fragment>

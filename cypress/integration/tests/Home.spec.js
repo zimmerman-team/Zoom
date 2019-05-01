@@ -45,7 +45,7 @@ describe('Home page geo map filters', function() {
     cy.get('[data-cy="geomap-filter-button"]').click();
   });
 
-  it('Should make a snapshot of the visual current state', function() {
+  it('Should make a snapshot of the visual current steet', function() {
     cy.percySnapshot('Home page - Geo map filters');
   });
 

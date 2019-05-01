@@ -210,7 +210,10 @@ describe('Datamapper e2e tests', function() {
   it('Go to datamapper', function() {
     signIn();
     cy.visit('/mapper');
+  });
 
+  it('Should make a snapshot of the visual current state', function() {
+    cy.percySnapshot('Datamapper page - step 1');
   });
 
   it('Page should contain first steps title', function() {
@@ -343,6 +346,10 @@ describe('Datamapper e2e tests', function() {
     cy.wait(1000);
   });
 
+  it('Should make a snapshot of the visual current state', function() {
+    cy.percySnapshot('Datamapper page - step 2');
+  });
+
   it('Check if its the upload step', function() {
     cy.get('[class*=Headings__BaseHeading]').should('contain', 'Upload CSV');
   });
@@ -382,6 +389,10 @@ describe('Datamapper e2e tests', function() {
     cy.get('[class*=Headings__BaseHeading]').should('contain', 'Overview');
   });
 
+  it('Should make a snapshot of the visual current state', function() {
+    cy.percySnapshot('Datamapper page - step 3');
+  });
+
   it('Check if overview table is generated correctly', function() {
     fileColumns.forEach((column, index) => {
       // checking if the 'File Column' cell contains the fileColumn name
@@ -414,6 +425,10 @@ describe('Datamapper e2e tests', function() {
   it('Go to Correct errors step', function() {
     cy.contains('next').click();
     cy.wait(1000);
+  });
+
+  it('Should make a snapshot of the visual current state', function() {
+    cy.percySnapshot('Datamapper page - step 4');
   });
 
   it('Check if its the correct errors step', function() {
@@ -614,6 +629,10 @@ describe('Datamapper e2e tests', function() {
       'contain',
       'Manual mapping'
     );
+  });
+
+  it('Should make a snapshot of the visual current state', function() {
+    cy.percySnapshot('Datamapper page - step 5');
   });
 
   it('Try progressing without doing any mapping', function() {

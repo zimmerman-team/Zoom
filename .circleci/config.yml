@@ -135,12 +135,18 @@ jobs:
           at: ~/zoom-v2-ui
       # --ignore-engines is a temporarily fix for the module codacy-coverage not having updated their node version....
       - run: yarn add cypress --ignore-engines
-      # setting this env var to only test on dev server when deployed. => fixme: should probably checkout => test(local) => build_deploy
+      # setting this env var to only test on dev server when deployed.
       - run:
           name: Set CYPRESS_baseUrl
           command: |
             echo 'export CYPRESS_baseUrl="$CYPRESS_BASEURL"' >> $BASH_ENV
       - run: yarn e2e
+#        |
+#          if [ "${CIRCLE_BRANCH}" == "feature" ]; then
+#            yarn e2e
+#          else
+#            yarn e2e --percy
+#          fi
 
 # WORKFLOWS
 workflows:

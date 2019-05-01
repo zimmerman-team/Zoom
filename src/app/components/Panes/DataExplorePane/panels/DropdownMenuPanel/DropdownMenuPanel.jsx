@@ -108,6 +108,7 @@ const DropdownMenuPanel = props => {
               </IndLabelContainer>
             )}
             <ZoomSelect
+              data-cy={`datapane-select-${index}`}
               categorise={detail.categorise}
               multiple={detail.multiple}
               selectAll={detail.selectAll}

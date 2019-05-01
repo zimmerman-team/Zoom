@@ -35,6 +35,7 @@ const defaultProps = {
 /*todo: implement show/hide based on material-ui drawer component*/
 
 const VizSidebar = props => {
+  // console.log('display? ', props.display);
   return (
     /** component base container */
     <ComponentBase

@@ -2,12 +2,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Helmet } from 'react-helmet';
 
 /* components */
 import {
   ModuleContainer,
-  PageHeading as _PageHeading,
-  ViewContainer
+  ViewContainer,
+  ModuleTitle
 } from 'modules/dashboard/DashboardModule.styles';
 
 import Searchbox from 'modules/dashboard/fragments/Searchbox/Searchbox';
@@ -16,10 +17,6 @@ import Pagination from '../../components/Pagination/Pagination';
 import GridList from '../dashboard/fragments/GridList/GridList';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 // import data from './PublicChartLibraryModule.const';
-
-const PageHeading = styled(_PageHeading)`
-  margin-bottom: 28px;
-`;
 
 const Box = styled.div`
   width: 100%;
@@ -48,7 +45,10 @@ const defaultProps = {
 const PublicChartLibraryModule = props => {
   return (
     <ModuleContainer>
-      <PageHeading>Zoom chart library</PageHeading>
+      <Helmet>
+        <title>Zoom - Chart Library</title>
+      </Helmet>
+      <ModuleTitle>Zoom chart library</ModuleTitle>
       <Searchbox
         inputChange={props.changeSearchKeyword}
         onEnterPressed={props.onEnterPressed}

@@ -62,6 +62,7 @@ const propTypes = {
         value: PropTypes.string
       })
     ),
+    errorColumns: PropTypes.arrayOf(PropTypes.string),
     sourceText: PropTypes.string,
     q3Text: PropTypes.string,
     q4Text: PropTypes.string,
@@ -150,11 +151,6 @@ class WrapUpMediator extends React.Component {
       // and then add the metadata
       else this.addMetaData();
     }
-  }
-
-  componentWillUnmount() {
-    // and we reset the values in the reducer
-    this.props.dispatch(generalActions.saveStepDataInitial());
   }
 
   handleSourceCompleted(response, error) {

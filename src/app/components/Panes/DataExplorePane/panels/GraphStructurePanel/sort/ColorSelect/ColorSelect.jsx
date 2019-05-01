@@ -16,6 +16,13 @@ import FormControl from '@material-ui/core/FormControl/index';
 import themes from 'theme/Theme';
 import IconPointer from 'assets/icons/IconPointer';
 
+/* utils */
+import find from 'lodash/find';
+import isEqual from 'lodash/isEqual';
+
+/* consts */
+import { colorSet as colorSetz } from '__consts__/PaneConst';
+
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
@@ -24,24 +31,30 @@ import IconPointer from 'assets/icons/IconPointer';
 const propTypes = {
   classes: PropTypes.object,
   label: PropTypes.string,
+  defValue: PropTypes.arrayOf(PropTypes.string),
   optionPlaceHolder: PropTypes.string,
+  selectKey: PropTypes.string,
+  onChange: PropTypes.func,
   options: PropTypes.array
 };
 const defaultProps = {
   label: 'empty axis',
   optionPlaceHolder: 'empty',
+  defValue: colorSetz[0].colors,
+  selectKey: 'colorSelect',
+  onChange: null,
   options: [
     {
       name: 'Option 1',
-      value: 1
+      value: []
     },
     {
       name: 'Option 2',
-      value: 1
+      value: []
     },
     {
       name: 'Option 3',
-      value: 1
+      value: []
     }
   ]
 };
@@ -119,10 +132,6 @@ const PaletFragment = styled.div`
   background-color: ${props => props.colors};
 `;
 
-const colorSet1 = ['#57c5f7', '#518ec8', '#366d8f', '#214457', '#151d2b'];
-const colorSet2 = ['#ff0000', '#c00000', '#820000', '#640000', '#340000'];
-const colorSet3 = ['#00ee00', '#00c200', '#00c800', '#00ac00', '#008000'];
-
 const PaletContainer = styled.div`
   display: flex;
 `;
@@ -146,11 +155,19 @@ const ZimLabel = styled(props => (
 
 class ColorSelect extends React.Component {
   state = {
-    colorSet: '',
+    colorSet: find(colorSetz, set => {
+      return isEqual(set.colors, this.props.defValue);
+    }).index,
     name: 'hai'
   };
 
   handleChange = event => {
+    if (this.props.onChange) {
+      const colors = find(colorSetz, ['index', event.target.value]).colors;
+
+      this.props.onChange(colors, this.props.selectKey);
+    }
+
     this.setState({ [event.target.name]: event.target.value });
   };
 
@@ -169,24 +186,13 @@ class ColorSelect extends React.Component {
             name="colorSet"
             IconComponent={IconPointer}
           >
-            <ZimMenuItem value="">Select palet</ZimMenuItem>
-            <ZimMenuItem value={1}>
-              {colorSet2.map(color => (
-                <PaletFragment key={color} colors={color} />
-              ))}
-            </ZimMenuItem>
-            <ZimMenuItem value={2}>
-              <PaletContainer>
-                {colorSet1.map(color => (
+            {colorSetz.map(set => (
+              <ZimMenuItem value={set.index}>
+                {set.colors.map(color => (
                   <PaletFragment key={color} colors={color} />
                 ))}
-              </PaletContainer>
-            </ZimMenuItem>
-            <ZimMenuItem value={3}>
-              {colorSet3.map(color => (
-                <PaletFragment key={color} colors={color} />
-              ))}
-            </ZimMenuItem>
+              </ZimMenuItem>
+            ))}
           </ZimSelect>
         </FormControl>
       </React.Fragment>

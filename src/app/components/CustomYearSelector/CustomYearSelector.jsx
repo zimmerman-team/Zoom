@@ -3,49 +3,42 @@ import PropTypes from 'prop-types';
 
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
+import { maxYear, minYear } from '__consts__/TimeLineConst';
 
 /* utils */
 import isEqual from 'lodash/isEqual';
+import { formatYearLabels } from 'utils/YearSelectUtil';
 
 /* styles */
 import {
   ComponentBase,
   YearLabel,
   SelectedYearLabel,
-  StartControl,
-  EndControl
+  Text
 } from './CustomYearSelector.style';
 
 const propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
-  selectedYear: PropTypes.string
+  selectedYear: PropTypes.string,
+
+  backgroundColor: PropTypes.string
 };
 
 const defaultProps = {
-  min: 1990,
-  max: 2019,
-  selectedYear: parseInt(initialState.yearPeriod[0], 10)
+  min: minYear,
+  max: maxYear,
+  selectedYear: parseInt(initialState.yearPeriod[0], 10),
+
+  backgroundColor: 'transparent'
 };
 
 class CustomYearSelector extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      numArray: [],
-      mouseDown: false,
-      selectedYear: props.selectedYear
-    };
-
-    this.handleMouseEnter = this.handleMouseEnter.bind(this);
-    this.handleMouseDown = this.handleMouseDown.bind(this);
-    this.handleMouseUp = this.handleMouseUp.bind(this);
-    this.renderYearLabels = this.renderYearLabels.bind(this);
-    this.setWrapperRef = this.setWrapperRef.bind(this);
-    this.handleMoveOutside = this.handleMoveOutside.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-  }
+  state = {
+    numArray: [],
+    mouseDown: false,
+    selectedYear: this.props.selectedYear
+  };
 
   componentDidMount() {
     // we will use this to detect if the 'mouse dragg' has exited the component
@@ -72,72 +65,81 @@ class CustomYearSelector extends React.Component {
   /**
    * Set the wrapper ref
    */
-  setWrapperRef(node) {
+  setWrapperRef = node => {
     this.wrapperRef = node;
-  }
+  };
 
   /**
    * Alert if clicked on outside of element
    */
-  handleMoveOutside(event) {
+  handleMoveOutside = event => {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.handleMouseUp();
     }
-  }
+  };
 
-  handleMouseEnter(number) {
+  handleMouseEnter = number => {
     if (this.state.mouseDown) {
       this.setState({ selectedYear: number });
     }
-  }
+  };
 
-  handleMouseDown() {
+  handleMouseDown = () => {
     this.setState({ mouseDown: true });
-  }
+  };
 
-  handleMouseUp() {
+  handleMouseUp = () => {
     if (this.state.mouseDown) {
       this.setState({ mouseDown: false });
       this.props.selectYear(this.state.selectedYear);
     }
-  }
+  };
 
-  handleClick(number) {
+  handleClick = number => {
     this.setState({ selectedYear: number });
     this.props.selectYear(number);
-  }
+  };
 
-  renderYearLabels(number, index) {
+  renderYearLabels = (number, index) => {
     let yearLabels = '';
 
     if (this.state.selectedYear === number)
       yearLabels = (
         <SelectedYearLabel
+          data-cy={`year-${number}`}
           onMouseDown={() => this.handleMouseDown()}
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
-          {number}
+          <Text>
+            {formatYearLabels(number, this.props.min, this.props.max)}
+          </Text>
         </SelectedYearLabel>
       );
     else
       yearLabels = (
         <YearLabel
+          data-cy={`year-${number}`}
           onClick={() => this.handleClick(number)}
           onMouseEnter={() => this.handleMouseEnter(number)}
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
-          {number}
+          <Text>
+            {formatYearLabels(number, this.props.min, this.props.max)}
+          </Text>
         </YearLabel>
       );
 
     return yearLabels;
-  }
+  };
 
   render() {
     return (
-      <ComponentBase ref={this.setWrapperRef}>
+      <ComponentBase
+        ref={this.setWrapperRef}
+        backgroundColor={this.props.backgroundColor}
+      >
         {this.state.numArray.map(this.renderYearLabels)}
       </ComponentBase>
     );

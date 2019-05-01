@@ -9,7 +9,9 @@ import Theme from 'theme/Theme';
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
  */
-const ComponentBase = styled.div``;
+const ComponentBase = styled.div`
+  margin-bottom: 5px;
+`;
 
 const HeaderIcon = styled.div`
   display: flex;

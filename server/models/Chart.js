@@ -19,6 +19,7 @@ const ChartSchema = new Schema(
     // so the type of chart
     type: { type: String, required: true },
 
+    chartKeys: [],
     /* indicators/ sub-indicators of chart */
     indicatorItems: [
       {
@@ -28,7 +29,7 @@ const ChartSchema = new Schema(
       }
     ],
 
-    data: { type: [], default: [] },
+    dataFileUrl: String,
 
     /* so this one is used for trash */
     archived: { type: Boolean, default: false },
@@ -56,8 +57,10 @@ const ChartSchema = new Schema(
     yearRange: String,
 
     selectedYear: String,
+    selectedYears: [String],
     selectedCountryVal: [String],
-    selectedRegionVal: [[]]
+    selectedRegionVal: [[]],
+    specOptions: { type: Map, default: {} }
   },
   {
     timestamps: { createdAt: 'created', updatedAt: 'last_updated' }

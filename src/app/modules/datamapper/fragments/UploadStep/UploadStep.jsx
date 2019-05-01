@@ -91,6 +91,7 @@ class UploadStep extends React.Component {
               browse
             </BrowseLink>
             <EmptyInput
+              data-cy="input"
               type="file"
               ref={this.inputOpenFileRef}
               onChange={e => this.props.handleFileUpload(e)}

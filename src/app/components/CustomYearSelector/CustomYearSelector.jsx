@@ -106,6 +106,7 @@ class CustomYearSelector extends React.Component {
     if (this.state.selectedYear === number)
       yearLabels = (
         <SelectedYearLabel
+          data-cy={`year-${number}`}
           onMouseDown={() => this.handleMouseDown()}
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
@@ -118,6 +119,7 @@ class CustomYearSelector extends React.Component {
     else
       yearLabels = (
         <YearLabel
+          data-cy={`year-${number}`}
           onClick={() => this.handleClick(number)}
           onMouseEnter={() => this.handleMouseEnter(number)}
           onMouseUp={() => this.handleMouseUp()}

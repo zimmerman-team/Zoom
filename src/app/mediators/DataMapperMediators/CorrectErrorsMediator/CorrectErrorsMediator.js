@@ -20,6 +20,7 @@ import {
   formatManData,
   formatOverviewData
 } from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
+import { formatErrorColumns } from 'mediators/DataMapperMediators/ManualMappingMediator.util';
 
 const propTypes = {
   fileId: PropTypes.string,
@@ -45,6 +46,7 @@ class CorrectErrorsMediator extends React.Component {
       errorCells: [],
       errorMessages: {},
       loadErrors: false,
+      allChecked: false,
       pageSize: 10,
       columnHeaders: [],
       page: 0,
@@ -96,6 +98,11 @@ class CorrectErrorsMediator extends React.Component {
         const stepData = { ...this.props.stepData };
         stepData.overviewData = overviewData;
 
+        stepData.errorColumns = formatErrorColumns(
+          response.fileValidationResults.foundList,
+          stepData.errorData.ignoredErrors
+        );
+
         this.props.dispatch(generalActions.saveStepDataRequest(stepData));
       }
 
@@ -146,7 +153,24 @@ class CorrectErrorsMediator extends React.Component {
           JSON.parse(response.fileErrorCorrection.result)
         );
 
-        const errorTableData = JSON.parse(results.data_table);
+        const errorTableData = JSON.parse(results.data_table).map(row => {
+          // so we want this logic, so that when we load new data into the view
+          // the previously checked rows would still be checked
+          const checkInd = findIndex(this.state.errorTableData, [
+            'index',
+            row.index
+          ]);
+
+          const checked =
+            checkInd !== -1
+              ? this.state.errorTableData[checkInd].checked
+              : false;
+
+          return {
+            ...row,
+            checked
+          };
+        });
 
         let repCol = null;
         if (command.replace_pressed && command.filter_column_heading)
@@ -170,12 +194,6 @@ class CorrectErrorsMediator extends React.Component {
           this.setState({ columnHeaders });
         }
 
-        // TODO: readjust this when we get info about errors existing in file from the backend when error_toggle = false
-        // const errorsExists = checkIfErrors(
-        //   results.error_data.error_messages,
-        //   this.state.ignoredErrors
-        // );
-
         const rowCount =
           command.error_toggle &&
           (!results.error_data.error_messages ||
@@ -191,7 +209,6 @@ class CorrectErrorsMediator extends React.Component {
             correctCommand: command,
             rowCount,
             loading: false,
-            // TODO: readjust this when we get info about errors existing in file from the backend when error_toggle = false
             errorsExists: !this.state.errorsChecked
           },
           this.afterErrorTableUpdate
@@ -337,18 +354,22 @@ class CorrectErrorsMediator extends React.Component {
 
   checkRows(index, checked) {
     this.setState(prevState => {
-      const errorTableData = [...prevState.errorTableData];
+      let errorTableData = [];
+
       let checkedRows = false;
       if (index === 'all') {
         // so if all is checked === true, it means that all rows are checked
         // and viceversa unchecked so we can set the checked rows thingy here
         checkedRows = checked;
 
-        errorTableData.map(row => {
-          row.checked = checked;
-          return row;
+        errorTableData = prevState.errorTableData.map(row => {
+          return {
+            ...row,
+            checked
+          };
         });
       } else {
+        errorTableData = [...prevState.errorTableData];
         const actualInd = findIndex(errorTableData, ['index', index]);
         errorTableData[actualInd].checked = !errorTableData[actualInd].checked;
         checkedRows = findIndex(errorTableData, ['checked', true]) !== -1;
@@ -381,32 +402,31 @@ class CorrectErrorsMediator extends React.Component {
   // basically will addin/remove the column names for errors to be ignored
   // and will save these errors in the props ofcourse
   ignoreErrors(headerName) {
-    this.setState((prevState, props) => {
-      const ignoredErrors = [...prevState.ignoredErrors];
-      const headerInd = ignoredErrors.indexOf(headerName);
+    const ignoredErrors = [...this.props.stepData.errorData.ignoredErrors];
+    const errorColumns = [...this.props.stepData.errorColumns];
+    const headerInd = ignoredErrors.indexOf(headerName);
+    const errColInd = errorColumns.indexOf(headerName);
 
-      if (headerInd === -1) ignoredErrors.push(headerName);
-      else ignoredErrors.splice(headerInd, 1);
+    if (headerInd === -1) {
+      if (errColInd !== -1) errorColumns.splice(errColInd, 1);
 
-      // and we save it in the props
-      const stepData = { ...props.stepData };
+      ignoredErrors.push(headerName);
+    } else {
+      if (errColInd === -1) errorColumns.push(headerName);
 
-      // TODO: readjust this when we get info about errors existing in file from the backend when error_toggle = false
-      // const errorsExists = checkIfErrors(
-      //   this.state.errorMessages,
-      //   ignoredErrors
-      // );
+      ignoredErrors.splice(headerInd, 1);
+    }
 
-      stepData.errorData = {
-        // TODO: readjust this when we get info about errors existing in file from the backend when error_toggle = false
-        errorsExists: !prevState.errorsChecked,
-        ignoredErrors: ignoredErrors
-      };
+    // and we save it in the props
+    const stepData = { ...this.props.stepData };
 
-      props.dispatch(generalActions.saveStepDataRequest(stepData));
+    stepData.errorData = {
+      ...stepData.errorData,
+      ignoredErrors
+    };
+    stepData.errorColumns = errorColumns;
 
-      return { ignoredErrors, errorsExists };
-    });
+    this.props.dispatch(generalActions.saveStepDataRequest(stepData));
   }
 
   // mainly used to load the error table data
@@ -431,7 +451,7 @@ class CorrectErrorsMediator extends React.Component {
       <ErrorStep
         showErrors={this.showErrors}
         ignoreErrors={this.ignoreErrors}
-        ignoredErrors={this.state.ignoredErrors}
+        ignoredErrors={this.props.stepData.errorData.ignoredErrors}
         loading={this.state.loading}
         updateCell={this.updateCell}
         checkedRows={this.state.checkedRows}

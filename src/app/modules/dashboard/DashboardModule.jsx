@@ -23,10 +23,12 @@ const propTypes = {
   changeSortBy: PropTypes.func,
   isSortByOpen: PropTypes.bool,
   setWrapperRef: PropTypes.func,
+  trashCharts: PropTypes.array,
   greetingName: PropTypes.string,
   onEnterPressed: PropTypes.func,
   setIsSortByOpen: PropTypes.func,
   changeSearchKeyword: PropTypes.func,
+  removeAll: PropTypes.func,
   loading: PropTypes.bool,
   users: PropTypes.arrayOf(PropTypes.shape({})),
   teams: PropTypes.arrayOf(PropTypes.shape({})),
@@ -45,8 +47,10 @@ const defaultProps = {
   isSortByOpen: false,
   setIsSortByOpen: null,
   changeSearchKeyword: null,
+  removeAll: null,
   users: [],
   teams: [],
+  trashCharts: [],
   activeTab: 'charts',
   totalPages: 0,
   changePage: null
@@ -58,12 +62,14 @@ const DashboardModule = ({
   sort,
   users,
   datasets,
+  trashCharts,
   charts,
   teams,
   activeTab,
   greetingName,
   isSortByOpen,
   onEnterPressed,
+  removeAll,
   changeSortBy,
   setWrapperRef,
   setIsSortByOpen,
@@ -94,6 +100,8 @@ const DashboardModule = ({
       users={users}
       charts={charts}
       datasets={datasets}
+      trashCharts={trashCharts}
+      removeAll={removeAll}
       teams={teams}
       isSortByOpen={isSortByOpen}
       changeSortBy={changeSortBy}

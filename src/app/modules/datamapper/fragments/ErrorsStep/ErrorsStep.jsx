@@ -118,7 +118,7 @@ class ErrorStep extends React.Component {
       !isEqual(this.props.data, prevProps.data) ||
       !isEqual(this.props.ignoredErrors, prevProps.ignoredErrors) ||
       !isEqual(this.props.errorCells, prevProps.errorCells)
-    ) {
+    )
       this.setState(
         {
           data: this.props.data,
@@ -127,12 +127,12 @@ class ErrorStep extends React.Component {
             this.props.checkRows,
             this.handleCellClick,
             this.props.ignoreErrors,
-            this.props.ignoredErrors
+            this.props.ignoredErrors,
+            this.props.checkedRows
           )
         },
         this.changeColors
       );
-    }
   }
 
   componentWillUnmount() {
@@ -162,13 +162,10 @@ class ErrorStep extends React.Component {
   colorErrors() {
     this.props.errorCells.forEach(cell => {
       // and we don't color the ignored columns
-      if (this.props.ignoredErrors.indexOf(cell.col) === -1) {
-        const colInd =
-          findIndex(this.state.columns, ['property', cell.col]) + 1;
-        document.querySelector(
-          `tbody tr:nth-child(${cell.row}) td:nth-child(${colInd})`
-        ).style.backgroundColor = theme.color.errorCellColor;
-      }
+      const colInd = findIndex(this.state.columns, ['property', cell.col]) + 1;
+      document.querySelector(
+        `tbody tr:nth-child(${cell.row}) td:nth-child(${colInd})`
+      ).style.backgroundColor = theme.color.errorCellColor;
     });
   }
 

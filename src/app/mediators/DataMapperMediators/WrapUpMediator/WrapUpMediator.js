@@ -62,6 +62,7 @@ const propTypes = {
         value: PropTypes.string
       })
     ),
+    errorColumns: PropTypes.arrayOf(PropTypes.string),
     sourceText: PropTypes.string,
     q3Text: PropTypes.string,
     q4Text: PropTypes.string,

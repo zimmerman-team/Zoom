@@ -42,6 +42,7 @@ const initialState = {
   chartId: 'vizID',
   name: 'Chart',
   selectedYear: '2005',
+  selectedYears: formatYearParam([2000, 2010]),
   _public: false,
   team: false,
   chartKeys:

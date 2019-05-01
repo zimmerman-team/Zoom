@@ -2,6 +2,7 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import theme from 'theme/Theme';
 
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
@@ -89,9 +90,14 @@ class NavPane extends React.Component {
         return createChartItems.map((item, index) => {
           const datacy = `nav-pane-item-${index}`;
           return (
-            <NavPaneItem to={item.navTo} key={item.label} data-cy={datacy}>
+            <NavPaneItem
+              to={item.navTo}
+              key={item.label}
+              data-cy={datacy}
+              style={item.style}
+            >
               <ItemIcon>
-                <SvgIconPointer />
+                <SvgIconPointer style={item.style} />
               </ItemIcon>
               <ItemLabel>{item.label}</ItemLabel>
             </NavPaneItem>

@@ -3,10 +3,18 @@ describe('Home page navigation', function() {
     cy.visit('/home');
   });
 
+  it('Should make a snapshot of the visual current state', function() {
+    cy.percySnapshot('Home page - Dialog');
+  });
+
   it('Should display a dialog overlay', function() {
     cy.get('[data-cy=dialog-overlay]');
     cy.get('[data-cy=dialog-overlay]').click();
   });
+});
+
+it('Should make a snapshot of the visual current state', function() {
+  cy.percySnapshot('Home page');
 });
 
 
@@ -35,6 +43,10 @@ describe('Home page geo map filters', function() {
   // Contain is used in the next tests because third party library's created the DOM elements
   it('Navigates through geo map filters', function() {
     cy.get('[data-cy="geomap-filter-button"]').click();
+  });
+
+  it('Should make a snapshot of the visual current state', function() {
+    cy.percySnapshot('Home page - Geo map filters');
   });
 
   it('Resets values', function() {

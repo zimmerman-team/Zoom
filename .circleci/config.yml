@@ -158,6 +158,6 @@ workflows:
           requires:
             - checkout_repo
 # TODO: Uncomment when all tests are fixed
-#      - test_e2e:
-#          requires:
-#            - build_deploy
+      - test_e2e:
+          requires:
+            - build_deploy

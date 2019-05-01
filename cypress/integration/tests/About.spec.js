@@ -1,6 +1,9 @@
 describe('About page E2E test', function() {
   it('Visit about page', function() {
     cy.visit('/About');
+  });
+
+  it('Should make a snapshot of the visual current state', function() {
     cy.percySnapshot('About page');
   });
 

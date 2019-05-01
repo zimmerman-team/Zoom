@@ -1,70 +1,44 @@
 import React, { Component } from 'react';
-import { createRefetchContainer, graphql } from 'react-relay';
+import { createFragmentContainer, graphql } from 'react-relay';
+import { connect } from 'react-redux';
+import { fetchQuery } from 'relay-runtime';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
+import VisualizerModule from 'modules/visualizer/VisualizerModule';
+
+/* utils */
 import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
-import { withRouter } from 'react-router';
 import {
   formatBarData,
   formatCountryParam,
   formatDate,
   formatGeoData,
-  formatKeys,
+  formatBarChartKeys,
   formatLineData,
-  removeIds
+  removeIds,
+  formatChartLegends,
+  formatTableData,
+  formatDonutData,
+  getChartKeys,
+  aggrKeys
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
-import PropTypes from 'prop-types';
-import VisualizerModule from 'modules/visualizer/VisualizerModule';
-import { connect } from 'react-redux';
 
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
 import paneTypes from '__consts__/PaneTypesConst';
 import chartTypes from '__consts__/ChartConst';
 import initialPaneState from '__consts__/InitialPaneDataConst';
+import { colorSet } from '__consts__/PaneConst';
+import graphKeys from '__consts__/GraphStructKeyConst';
+import { axisOptions, aggrOptions } from '__consts__/GraphStructOptionConsts';
 
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
 import * as actions from 'services/actions/general';
 
 const propTypes = {
-  indicatorAggregations: PropTypes.shape({
-    indicators1: PropTypes.arrayOf(
-      PropTypes.shape({
-        indicatorName: PropTypes.string,
-        geolocationIso2: PropTypes.string,
-        geolocationTag: PropTypes.string,
-        date: PropTypes.string,
-        value: PropTypes.number
-      })
-    ),
-    indicators2: PropTypes.arrayOf(
-      PropTypes.shape({
-        indicatorName: PropTypes.string,
-        geolocationIso2: PropTypes.string,
-        geolocationTag: PropTypes.string,
-        date: PropTypes.string,
-        value: PropTypes.number
-      })
-    ),
-    subIndicators1: PropTypes.shape({
-      edges: PropTypes.arrayOf(
-        PropTypes.shape({
-          node: PropTypes.shape({
-            name: PropTypes.string
-          })
-        })
-      )
-    }),
-    subIndicators2: PropTypes.shape({
-      edges: PropTypes.arrayOf(
-        PropTypes.shape({
-          node: PropTypes.shape({
-            name: PropTypes.string
-          })
-        })
-      )
-    })
-  }),
+  publicChart: PropTypes.shape({}),
   chartResults: PropTypes.shape({}),
   chartData: PropTypes.shape({}),
   user: PropTypes.shape({}),
@@ -98,12 +72,71 @@ const defaultProps = {
   dropDownData: {},
   publicPage: false,
   chartResults: {},
+  publicChart: {},
   auth0Client: {},
   chartData: {},
   user: {},
   paneData: {},
   indicatorAggregations: {}
 };
+
+// so we will start getting the indicator data with this
+// fetch query to encapsulate the unlimited amounts of indicators
+// functionality properly
+// this will also decrease the loading times of fetching queries
+// cause previously when one indicator would get selected
+// all indicators data would be fetched, and now we will
+// just need to make this one fetch for each separate indicator selections
+const indicatorDataQuery = graphql`
+  query VisualizerModuleMediatorQuery(
+    $datePeriod: [String]!
+    $indicator: [String]!
+    $subInds: [String]!
+    $countriesISO2: [String]!
+    $indicatorStr: String!
+    $OR_GeolocationIso2_Is_Null: Boolean!
+    $orderBy: [String]!
+  ) {
+    indicators: datapointsAggregation(
+      groupBy: [
+        "indicatorName"
+        "geolocationTag"
+        "date"
+        "geolocationType"
+        "geolocationIso2"
+        "comment"
+        "geolocationPolygons"
+        "geolocationCenterLongLat"
+        "valueFormatType"
+      ]
+      aggregation: ["Sum(value)"]
+      orderBy: $orderBy
+      date_In: $datePeriod
+      indicatorName_In: $indicator
+      geolocationIso2_In: $countriesISO2
+      filterName_In: $subInds
+      OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
+    ) {
+      indicatorName
+      geolocationIso2
+      comment
+      geolocationTag
+      geolocationType
+      geolocationPolygons
+      geolocationCenterLongLat
+      valueFormatType
+      date
+      value
+    }
+    subIndicators: allFilters(indicator_Name_In: $indicatorStr) {
+      edges {
+        node {
+          name
+        }
+      }
+    }
+  }
+`;
 
 class VisualizerModuleMediator extends Component {
   constructor(props) {
@@ -112,13 +145,15 @@ class VisualizerModuleMediator extends Component {
       loading: false,
       selectedYear: this.props.chartData.selectedYear
         ? this.props.chartData.selectedYear
-        : initialState.yearPeriod[0],
-      chartKeys: [],
-      indicators: []
+        : initialState.yearPeriod[0]
     };
 
     this.refetch = this.refetch.bind(this);
     this.selectYear = this.selectYear.bind(this);
+    this.saveViewport = this.saveViewport.bind(this);
+    this.loadChartData = this.loadChartData.bind(this);
+    this.storeChartToRedux = this.storeChartToRedux.bind(this);
+    this.selectYearRange = this.selectYearRange.bind(this);
   }
 
   componentDidMount() {
@@ -128,130 +163,93 @@ class VisualizerModuleMediator extends Component {
     // we also want to reset the previously created/updated chart
     this.props.dispatch(nodeActions.createUpdateChartInitial());
 
-    if (this.props.match.params.code !== 'vizID') {
-      if (this.props.user)
-        this.setState(
-          {
-            loading: true
-          },
-          () =>
-            this.props.dispatch(
-              nodeActions.getChartRequest({
-                authId: this.props.user.authId,
-                chartId: this.props.match.params.code
-              })
-            )
-        );
-    }
-    // and we store this so it would be accessible to the visualizer mediator
-    else
+    // we also want reinitialize chartResults reset the previously created/updated chart
+    this.props.dispatch(nodeActions.getPublicChartInitial());
+    this.props.dispatch(nodeActions.getChartInitial());
+
+    if (this.props.match.params.code !== 'vizID')
+      this.setState(
+        {
+          loading: true
+        },
+        this.loadChartData
+      );
+    else {
+      // and we store the chart type so it would be accessible to the visualizer mediator
       this.props.dispatch(
         actions.storePaneDataRequest({
           chartType: this.props.match.params.chart
         })
       );
+      if (chartTypes.lineChart === this.props.match.params.chart)
+        // we also store the initial values for the linecharts
+        // graphstructure pane
+        // so yeah yAxis should initially be numbers
+        // and xAxis should initially be the categories
+        // and the color pallet should be the first color
+        // set from the consts
+        this.props.dispatch(
+          actions.storeChartDataRequest({
+            specOptions: {
+              [graphKeys.leftYAxis]: axisOptions[0].value,
+              [graphKeys.rightYAxis]: axisOptions[0].value,
+              [graphKeys.xAxis]: axisOptions[1].value,
+              [graphKeys.colorPallet]: colorSet[0].colors,
+              [graphKeys.aggregate]: aggrOptions[0].value
+            }
+          })
+        );
+    }
   }
 
   componentDidUpdate(prevProps) {
     if (!isEqual(this.props.user, prevProps.user) && this.props.user) {
-      if (this.props.match.params.code !== 'vizID') {
-        this.props.dispatch(
-          nodeActions.getChartRequest({
-            authId: this.props.user.authId,
-            chartId: this.props.match.params.code
-          })
-        );
-      }
+      this.loadChartData();
     }
 
+    // we update the key data with the colors
+    /* TODO: update the bar data correctly without
+        initiating a change in the saved data */
     if (
       !isEqual(
-        this.props.indicatorAggregations,
-        prevProps.indicatorAggregations
+        this.props.chartData.specOptions[graphKeys.colorPallet],
+        prevProps.chartData.specOptions[graphKeys.colorPallet]
       )
     ) {
-      this.updateIndicators();
+      const selectedIndNames = this.props.chartData.selectedInd.map(indItem => {
+        return indItem.indicator;
+      });
+
+      const chartKeys = formatChartLegends(
+        selectedIndNames,
+        this.props.chartData.specOptions[graphKeys.colorPallet],
+        this.props.chartData.chartKeys
+      );
+
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          chartKeys
+        })
+      );
     }
 
     // and we load in the chart data retrieved from the node backend
     if (
       !isEqual(this.props.chartResults, prevProps.chartResults) &&
       this.props.chartResults
-    ) {
-      const {
-        _id,
-        name,
-        selectedYear,
-        indicatorItems,
-        selectedCountryVal,
-        description,
-        selectedRegionVal,
-        type,
-        selectedSources,
-        author,
-        dataSources,
-        _public,
-        team,
-        descIntro,
-        data,
-        created,
-        yearRange
-      } = this.props.chartResults;
-
-      // we load up the redux chartData variable
-      this.props.dispatch(
-        actions.storeChartDataRequest({
-          changesMade: false,
-          chartMounted: true,
-          name,
-          _public,
-          team: team.length > 0,
-          indicators: data,
-          chartId: _id,
-          descIntro,
-          selectedYear,
-          // TODO this will need to be redone after we implement the logic for infinite amounts of indicators
-          selectedInd1: indicatorItems[0].indicator,
-          selectedInd2: indicatorItems[1].indicator,
-          selectedCountryVal,
-          desc: description,
-          selectedSubInd1: indicatorItems[0].subIndicators,
-          selectedSubInd2: indicatorItems[1].subIndicators,
-          dataSource1: dataSources[0],
-          dataSource2: dataSources[1],
-          authorName: author.username,
-          createdDate: formatDate(created),
-          selectedRegionVal: removeIds(selectedRegionVal)
-        })
-      );
-
-      // we load up the redux paneData variable
-      this.props.dispatch(
-        actions.storePaneDataRequest({
-          chartType: type,
-          selectedSources,
-          subIndicators1: indicatorItems[0].allSubIndicators,
-          subIndicators2: indicatorItems[1].allSubIndicators,
-          yearRange
-        })
-      );
-
-      this.setState({
-        loading: false,
-        chartKeys: formatKeys([
-          indicatorItems[0].indicator,
-          indicatorItems[1].indicator
-        ])
-      });
-    }
+    )
+      this.storeChartToRedux();
 
     // TODO redo this check properly
     const {
+      data,
       name,
       desc,
       descIntro,
       _public,
       team,
+      specOptions,
+      chartKeys,
       ...restChart
     } = this.props.chartData;
     const {
@@ -260,11 +258,22 @@ class VisualizerModuleMediator extends Component {
       descIntro: prevDescIntro,
       _public: prevPublc,
       team: prevTeam,
+      specOptions: prevSpecOptions,
+      chartKeys: prevchartKeys,
+      data: prevData,
       ...prevRestChart
     } = prevProps.chartData;
+
     // so we refetch data when chartData changes
-    // and we dont want to refetch data when only the name/description ofthe chart is changed
-    if (!isEqual(restChart, prevRestChart) && restChart.changesMade)
+    // and we dont want to refetch data when only the name/description of the chart is changed
+    // or other data not related stuff changes
+    if (
+      (!isEqual(restChart, prevRestChart) ||
+        (specOptions[graphKeys.aggregate] &&
+          specOptions[graphKeys.aggregate] !==
+            prevSpecOptions[graphKeys.aggregate])) &&
+      restChart.changesMade
+    )
       this.refetch();
   }
 
@@ -290,126 +299,187 @@ class VisualizerModuleMediator extends Component {
     this.props.dispatch(nodeActions.createDuplicateChartInitial());
   }
 
-  updateIndicators() {
-    let subIndicators1 = this.props.indicatorAggregations.subIndicators1.edges.map(
-      indicator => {
-        return { label: indicator.node.name, value: indicator.node.name };
-      }
-    );
+  updateIndicators(indicatorData) {
+    // this will be used for some extra formatting things
+    // concerning chart keys and also for saving the subIndicators
+    // of the appropriate indicators
+    const selectedInd = [...this.props.chartData.selectedInd];
 
-    // and we sort them
-    subIndicators1 = sortBy(subIndicators1, ['label']);
+    const aggregationData = [];
 
-    let subIndicators2 = this.props.indicatorAggregations.subIndicators2.edges.map(
-      indicator => {
-        return { label: indicator.node.name, value: indicator.node.name };
-      }
-    );
+    // formating indicator data commences!
+    indicatorData.forEach(indItem => {
+      // so we format it in this way so that the loaded in 'indAggregation'
+      // data would be formated for the same selected indicator index elements
+      // cause it might not have been loaded in with the same indexes
+      // as the indicator selections, cause of promise stuff
+      // the actual index was stored when initially this 'indicatorData' was formed
+      aggregationData[indItem.index] = indItem.indAggregation;
+    });
 
-    // and we sort them
-    subIndicators2 = sortBy(subIndicators2, ['label']);
+    const selectedIndNames = selectedInd.map(indItem => {
+      return indItem.indicator;
+    });
 
-    let indicators = [];
+    let data = [];
     let chartKeys = [];
 
     switch (this.props.match.params.chart) {
       case chartTypes.geoMap:
-        indicators = formatGeoData(
-          this.props.indicatorAggregations.indicators1,
-          this.props.chartData.selectedInd1,
-          this.props.indicatorAggregations.indicators2,
-          this.props.chartData.selectedInd2
-        );
+        data = formatGeoData(aggregationData);
         break;
       case chartTypes.focusKE:
-        indicators = formatGeoData(
-          this.props.indicatorAggregations.indicators1,
-          this.props.chartData.selectedInd1,
-          this.props.indicatorAggregations.indicators2,
-          this.props.chartData.selectedInd2
-        );
+        data = formatGeoData(aggregationData);
         break;
       case chartTypes.focusNL:
-        indicators = formatGeoData(
-          this.props.indicatorAggregations.indicators1,
-          this.props.chartData.selectedInd1,
-          this.props.indicatorAggregations.indicators2,
-          this.props.chartData.selectedInd2
-        );
+        data = formatGeoData(aggregationData);
         break;
       case chartTypes.lineChart:
-        indicators = formatLineData([
-          this.props.indicatorAggregations.indicators1,
-          this.props.indicatorAggregations.indicators2
-        ]);
+        chartKeys = formatChartLegends(
+          selectedIndNames,
+          this.props.chartData.specOptions[graphKeys.colorPallet],
+          this.props.chartData.chartKeys
+        );
+        data = formatLineData(
+          aggregationData,
+          this.props.chartData.specOptions[graphKeys.aggregate]
+        );
         break;
       case chartTypes.barChart:
-        indicators = formatBarData([
-          this.props.indicatorAggregations.indicators1,
-          this.props.indicatorAggregations.indicators2
-        ]);
-        chartKeys = formatKeys([
-          this.props.chartData.selectedInd1,
-          this.props.chartData.selectedInd2
-        ]);
+        data = formatBarData(
+          aggregationData,
+          this.props.chartData.specOptions[graphKeys.colorPallet]
+        );
+        chartKeys = formatBarChartKeys(selectedIndNames);
+        break;
+      case chartTypes.tableChart:
+        data = formatTableData(aggregationData);
+        break;
+      case chartTypes.donutChart:
+        data = formatDonutData(
+          aggregationData,
+          this.props.chartData.specOptions[graphKeys.colorPallet]
+        );
+        chartKeys = formatChartLegends(
+          selectedIndNames,
+          this.props.chartData.specOptions[graphKeys.colorPallet],
+          this.props.chartData.chartKeys
+        );
         break;
       default:
-        indicators = [];
+        data = [];
         break;
     }
-
-    // and we save the subindicator selection for the datapane
-    this.props.dispatch(
-      actions.storePaneDataRequest({
-        subIndicators1,
-        subIndicators2
-      })
-    );
 
     // and we save the chart data
     this.props.dispatch(
       actions.storeChartDataRequest({
-        indicators
+        chartKeys,
+        data
       })
     );
 
-    this.setState({ indicators, chartKeys });
-  }
+    // formatting the subindicator data commences!
+    indicatorData.forEach(indItem => {
+      let subIndicators = indItem.subIndicators.edges.map(indicator => {
+        return { label: indicator.node.name, value: indicator.node.name };
+      });
 
-  refetch(
-    ind1 = this.props.chartData.selectedInd1,
-    ind2 = this.props.chartData.selectedInd2,
-    selectedYear = this.props.chartData.selectedYear,
-    subInd1 = this.props.chartData.selectedSubInd1,
-    subInd2 = this.props.chartData.selectedSubInd2,
-    countriesCodes = this.props.chartData.selectedCountryVal,
-    regionCountriesCodes = this.props.chartData.selectedRegionVal
-  ) {
-    this.setState({
-      loading: true
+      // and we sort them
+      subIndicators = sortBy(subIndicators, ['label']);
+
+      // so we associate the sub-indicators with their respective indicator
+      // cause the data retrieved in 'indicatorData' might not be aligned
+      // in the same way as the selectedInd data is aligned
+      selectedInd[indItem.index].subIndicators = subIndicators;
     });
 
-    // We forming the param for countries from the selected countries of a region
-    // and single selected countries
-    const countriesISO2 = formatCountryParam(
-      countriesCodes,
-      regionCountriesCodes
+    // and we save the subindicator selection for the datapane
+    this.props.dispatch(
+      actions.storePaneDataRequest({
+        selectedInd
+      })
     );
+  }
 
-    const refetchVars = {
-      indicator1: [ind1],
-      indicator2: [ind2],
-      countriesISO2,
-      singleInd1: ind1 || 'null',
-      singleInd2: ind2 || 'null',
-      datePeriod: [selectedYear],
-      subInd1: subInd1.length > 0 ? subInd1 : ['undefined'],
-      subInd2: subInd2.length > 0 ? subInd2 : ['undefined']
-    };
+  refetch() {
+    /* TODO: we can up the speed of this by not calling all of the indicators
+        everytime one indicators data is called, though the whole flow of
+        data formatting/saving would need to be changed*/
 
-    this.props.relay.refetch(refetchVars, null, () =>
-      this.setState({ loading: false })
-    );
+    if (this.props.chartData.selectedInd.length > 0)
+      this.setState({
+        loading: true
+      });
+
+    const indicatorData = [];
+
+    let datePeriod = [];
+    let orderBy = [];
+
+    if (this.props.chartData.selectedInd.length > 0) {
+      // so the first option in the axis options is 'geo' so if aggregated by geolocation
+      // the user can only select one year and the order is by 'geolocationTag'
+      // and if aggregated by year, which is the other option, the user can select
+      // a range of years by which to aggregate and the orderBy is by 'date'
+      if (
+        this.props.chartData.specOptions[graphKeys.aggregate] ===
+        aggrOptions[0].value
+      ) {
+        datePeriod = [this.props.chartData.selectedYear];
+        orderBy = [aggrKeys[aggrOptions[0].value]];
+      } else {
+        datePeriod = this.props.chartData.selectedYears;
+        orderBy = [aggrKeys[aggrOptions[1].value]];
+      }
+    }
+
+    this.props.chartData.selectedInd.forEach((indItem, index) => {
+      const indicator = indItem.indicator;
+
+      const subInds =
+        indItem.selectedSubInd.length > 0 ? indItem.selectedSubInd : ['null'];
+
+      // We forming the param for countries from the selected countries of a region
+      // and single selected countries
+      const countriesISO2 = formatCountryParam(
+        this.props.chartData.selectedCountryVal,
+        this.props.chartData.selectedRegionVal
+      );
+
+      // so this variable basically controlls the filter param for data points
+      // that don't have/do have geolocationIso2 field
+      const iso2Undef = countriesISO2.indexOf('undefined') !== -1;
+
+      const refetchVars = {
+        indicator: [indicator],
+        indicatorStr: indicator || 'null',
+        subInds,
+        datePeriod,
+        countriesISO2,
+        OR_GeolocationIso2_Is_Null: iso2Undef,
+        orderBy
+      };
+
+      fetchQuery(
+        this.props.relay.environment,
+        indicatorDataQuery,
+        refetchVars
+      ).then(data => {
+        indicatorData.push({
+          index,
+          indAggregation: data.indicators,
+          subIndicators: data.subIndicators
+        });
+
+        // so we only update the indicators when we've retrieved the same
+        // amount of indicator data as we have indicators selected
+        if (indicatorData.length === this.props.chartData.selectedInd.length) {
+          this.setState({ loading: false });
+          this.updateIndicators(indicatorData);
+        }
+      });
+    });
   }
 
   selectYear(val) {
@@ -423,20 +493,136 @@ class VisualizerModuleMediator extends Component {
     );
   }
 
+  selectYearRange(array) {
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        selectedYears: array
+      })
+    );
+  }
+
+  saveViewport(viewPort) {
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        specOptions: viewPort
+      })
+    );
+  }
+
+  loadChartData() {
+    if (this.props.publicPage) {
+      this.props.dispatch(
+        nodeActions.getPublicChartRequest({
+          chartId: this.props.match.params.code
+        })
+      );
+    } else if (this.props.match.params.code !== 'vizID' && this.props.user) {
+      this.props.dispatch(
+        nodeActions.getChartRequest({
+          authId: this.props.user.authId,
+          chartId: this.props.match.params.code
+        })
+      );
+    }
+  }
+
+  storeChartToRedux() {
+    const {
+      _id,
+      name,
+      selectedYear,
+      selectedYears,
+      chartKeys,
+      indicatorItems,
+      selectedCountryVal,
+      description,
+      selectedRegionVal,
+      type,
+      selectedSources,
+      author,
+      dataSources,
+      _public,
+      team,
+      descIntro,
+      specOptions,
+      created,
+      yearRange
+    } = this.props.chartResults.chart;
+
+    const selectedIndNames = [];
+
+    const selectedInd = indicatorItems.map((indItem, index) => {
+      selectedIndNames.push(indItem.indicator);
+      return {
+        indicator: indItem.indicator,
+        subIndicators: indItem.allSubIndicators,
+        selectedSubInd: indItem.subIndicators,
+        dataSource: dataSources[index]
+      };
+    });
+
+    // we load up the redux chartData variable
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        changesMade: this.props.chartResults.data === undefined,
+        chartMounted: true,
+        name,
+        _public,
+        team: team.length > 0,
+        data: this.props.chartResults.data || [],
+        chartId: _id,
+        descIntro,
+        selectedYear,
+        selectedYears,
+        selectedCountryVal,
+        desc: description,
+        selectedInd,
+        authorName: author.username,
+        createdDate: formatDate(created),
+        selectedRegionVal: removeIds(selectedRegionVal),
+        chartKeys:
+          chartKeys ||
+          getChartKeys(
+            type,
+            selectedIndNames,
+            specOptions[graphKeys.colorPallet],
+            []
+          ),
+        specOptions
+      })
+    );
+
+    // we load up the redux paneData variable
+    this.props.dispatch(
+      actions.storePaneDataRequest({
+        chartType: type,
+        selectedSources,
+        yearRange
+      })
+    );
+
+    this.setState({
+      loading: false
+    });
+  }
+
   render() {
     return (
       <VisualizerModule
-        chartKeys={this.state.chartKeys}
+        saveViewport={this.saveViewport}
+        chartKeys={this.props.chartData.chartKeys}
         publicPage={this.props.publicPage}
         outerHistory={this.props.history}
         chartType={this.props.paneData.chartType}
         code={this.props.match.params.code}
         loading={this.state.loading}
         auth0Client={this.props.auth0Client}
+        selectYearRange={this.selectYearRange}
         selectYear={this.selectYear}
         selectedYear={this.props.chartData.selectedYear}
-        indicators={this.props.chartData.indicators}
+        data={this.props.chartData.data}
         dropDownData={this.props.dropDownData}
+        chartTitle={this.props.chartData.name}
       />
     );
   }
@@ -455,110 +641,22 @@ const mapStateToProps = state => {
   };
 };
 
-export default createRefetchContainer(
+// we'll have this random fragment container
+// only cause we need the react relay environment
+// for the actual fetchQuery
+/* TODO: find out a proper way to fetchQuery without the need
+    of this crateFragmentContainer for the relay environment */
+export default createFragmentContainer(
   connect(mapStateToProps)(withRouter(VisualizerModuleMediator)),
   graphql`
-    fragment VisualizerModuleMediator_indicatorAggregations on Query
-      @argumentDefinitions(
-        datePeriod: { type: "[String]", defaultValue: ["null"] }
-        indicator1: { type: "[String]", defaultValue: ["null"] }
-        indicator2: { type: "[String]", defaultValue: ["null"] }
-        subInd1: { type: "[String]", defaultValue: ["null"] }
-        subInd2: { type: "[String]", defaultValue: ["null"] }
-        countriesISO2: { type: "[String]", defaultValue: ["null"] }
-        singleInd1: { type: "String", defaultValue: "null" }
-        singleInd2: { type: "String", defaultValue: "null" }
-      ) {
-      indicators1: datapointsAggregation(
-        groupBy: [
-          "indicatorName"
-          "geolocationTag"
-          "date"
-          "geolocationType"
-          "geolocationIso2"
-          "geolocationPolygons"
-          "valueFormatType"
-        ]
-        orderBy: ["indicatorName"]
-        aggregation: ["Sum(value)"]
-        date_In: $datePeriod
-        indicatorName_In: $indicator1
-        geolocationIso2_In: $countriesISO2
-        filterName_In: $subInd1
-      ) {
-        indicatorName
-        geolocationIso2
-        geolocationTag
-        geolocationType
-        geolocationPolygons
-        valueFormatType
-        date
-        value
-      }
-      indicators2: datapointsAggregation(
-        groupBy: [
-          "indicatorName"
-          "geolocationTag"
-          "date"
-          "geolocationType"
-          "geolocationIso2"
-          "geolocationCenterLongLat"
-          "valueFormatType"
-        ]
-        orderBy: ["indicatorName"]
-        aggregation: ["Sum(value)"]
-        date_In: $datePeriod
-        indicatorName_In: $indicator2
-        geolocationIso2_In: $countriesISO2
-        filterName_In: $subInd2
-      ) {
-        indicatorName
-        geolocationIso2
-        geolocationTag
-        geolocationType
-        geolocationCenterLongLat
-        valueFormatType
-        date
-        value
-      }
-      subIndicators1: allFilters(indicator_Name: $singleInd1) {
+    fragment VisualizerModuleMediator_indicatorAggregations on Query {
+      allIndicators(first: 1) {
         edges {
           node {
             name
           }
         }
       }
-      subIndicators2: allFilters(indicator_Name: $singleInd2) {
-        edges {
-          node {
-            name
-          }
-        }
-      }
-    }
-  `,
-  graphql`
-    query VisualizerModuleMediatorRefetchQuery(
-      $datePeriod: [String]!
-      $indicator1: [String]!
-      $indicator2: [String]!
-      $subInd1: [String]!
-      $subInd2: [String]!
-      $countriesISO2: [String]!
-      $singleInd1: String!
-      $singleInd2: String!
-    ) {
-      ...VisualizerModuleMediator_indicatorAggregations
-        @arguments(
-          datePeriod: $datePeriod
-          indicator1: $indicator1
-          indicator2: $indicator2
-          countriesISO2: $countriesISO2
-          singleInd1: $singleInd1
-          singleInd2: $singleInd2
-          subInd1: $subInd1
-          subInd2: $subInd2
-        )
     }
   `
 );

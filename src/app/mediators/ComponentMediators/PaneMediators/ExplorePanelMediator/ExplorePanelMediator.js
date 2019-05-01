@@ -59,6 +59,7 @@ const indicatorQuery = graphql`
       edges {
         node {
           name
+          firstDataYear
         }
       }
     }
@@ -92,27 +93,28 @@ class ExplorePanelMediator extends React.Component {
   componentDidMount() {
     if (this.props.dropDownData) {
       let allCountries = this.props.dropDownData.allCountries.edges.map(
-        indicator => {
-          return { label: indicator.node.name, value: indicator.node.iso2 };
+        country => {
+          return { label: country.node.name, value: country.node.iso2 };
         }
       );
 
       allCountries = sortBy(allCountries, ['label']);
 
-      let allRegions = this.props.dropDownData.allRegions.edges.map(
-        indicator => {
-          return { label: indicator.node.name, value: indicator.node.country };
-        }
-      );
+      let allRegions = this.props.dropDownData.allRegions.edges.map(region => {
+        return { label: region.node.name, value: region.node.country };
+      });
 
       allRegions = sortBy(allRegions, ['label']);
 
       // and we also push in a variable for undefined
-      allRegions.push({ label: 'undefined', value: [{ iso2: '' }] });
+      allRegions.push({ label: 'undefined', value: [{ iso2: 'undefined' }] });
 
       let allFileSources = this.props.dropDownData.allFileSources.edges.map(
-        indicator => {
-          return { label: indicator.node.name, value: indicator.node.name };
+        source => {
+          return {
+            label: source.node.name,
+            value: source.node.name
+          };
         }
       );
 
@@ -191,7 +193,11 @@ class ExplorePanelMediator extends React.Component {
     fetchQuery(this.props.relay.environment, indicatorQuery, refetchVars).then(
       data => {
         let allIndNames = data.allIndicators.edges.map(indicator => {
-          return { label: indicator.node.name, value: indicator.node.name };
+          return {
+            label: indicator.node.name,
+            value: indicator.node.name,
+            firstYear: indicator.node.firstDataYear
+          };
         });
 
         allIndNames = sortBy(allIndNames, ['label']);
@@ -204,8 +210,7 @@ class ExplorePanelMediator extends React.Component {
   resetIndicators(dontReset = false) {
     if (!dontReset) {
       // and we also deselect the indicators
-      this.props.selectInd1({ value: undefined });
-      this.props.selectInd2({ value: undefined });
+      this.props.selectInd('resetAll');
     }
   }
 

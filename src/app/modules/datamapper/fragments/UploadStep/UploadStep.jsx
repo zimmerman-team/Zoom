@@ -23,7 +23,8 @@ import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 const propTypes = {
   handleFileUpload: PropTypes.func,
   error: PropTypes.bool,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  file: PropTypes.string
 };
 const defaultProps = {
   handleFileUpload: undefined,
@@ -91,6 +92,7 @@ class UploadStep extends React.Component {
               browse
             </BrowseLink>
             <EmptyInput
+              data-cy="input"
               type="file"
               ref={this.inputOpenFileRef}
               onChange={e => this.props.handleFileUpload(e)}

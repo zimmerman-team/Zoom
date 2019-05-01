@@ -181,7 +181,7 @@ export function formatLongLatData(indicators, indName) {
           indName,
           longitude: long,
           latitude: lat,
-          name: indicator.geolocationTag,
+          name: indicator.comment || indicator.geolocationTag,
           format: indicator.valueFormatType,
           value: Math.round(indicator.value)
         });

@@ -30,23 +30,31 @@ const propTypes = {
   classes: PropTypes.object,
   label: PropTypes.string,
   optionPlaceHolder: PropTypes.string,
+  defValue: PropTypes.any,
+  selectKey: PropTypes.string,
+  onChange: PropTypes.func,
+  disabled: PropTypes.bool,
   options: PropTypes.array
 };
 const defaultProps = {
   label: 'empty axis',
   optionPlaceHolder: 'empty',
+  defValue: undefined,
+  disabled: false,
+  selectKey: 'simpleSelect',
+  onChange: null,
   options: [
     {
-      name: 'Option 1',
+      label: 'Option 1',
       value: 1
     },
     {
-      name: 'Option 2',
-      value: 1
+      label: 'Option 2',
+      value: 2
     },
     {
-      name: 'Option 3',
-      value: 1
+      label: 'Option 3',
+      value: 3
     }
   ]
 };
@@ -138,12 +146,14 @@ const ZimLabel = styled(props => (
 
 class SimpleSelect extends React.Component {
   state = {
-    axis: '',
+    axis: this.props.defValue || this.props.options[0].value,
     name: 'hai',
     labelWidth: '135px'
   };
 
   handleChange = event => {
+    this.props.onChange &&
+      this.props.onChange(event.target.value, this.props.selectKey);
     this.setState({ [event.target.name]: event.target.value });
   };
 
@@ -152,7 +162,12 @@ class SimpleSelect extends React.Component {
 
     return (
       <React.Fragment>
-        <FormControl>
+        <FormControl
+          disabled={this.props.disabled}
+          style={
+            this.props.disabled ? { pointerEvents: 'none', opacity: '0.4' } : {}
+          }
+        >
           <ZimLabel>{this.props.label}</ZimLabel>
           <ZimSelect
             value={this.state.axis}
@@ -162,9 +177,11 @@ class SimpleSelect extends React.Component {
             name="axis"
             IconComponent={IconPointer}
           >
-            <ZimMenuItem value="">Select x-axis</ZimMenuItem>
-            <ZimMenuItem value={10}>Linear</ZimMenuItem>
-            <ZimMenuItem value={20}>None</ZimMenuItem>
+            {this.props.options.map(option => (
+              <ZimMenuItem value={option.value} key={option.key}>
+                {option.label}
+              </ZimMenuItem>
+            ))}
           </ZimSelect>
         </FormControl>
       </React.Fragment>

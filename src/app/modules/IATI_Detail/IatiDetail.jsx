@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Sectors from 'modules/IATI_Detail/fragments/Sectors/Sectors';
 import TotalBudget from 'modules/IATI_Detail/fragments/TotalBudget/TotalBudget';
 import Header from 'modules/IATI_Detail/fragments/Header/Header';
+import { Helmet } from 'react-helmet';
 
 const propTypes = {
   data: PropTypes.shape({
@@ -64,6 +65,9 @@ const defaultProps = {
 const IatiDetail = props => {
   return (
     <React.Fragment>
+      <Helmet>
+        <title>Zoom - Country detail</title>
+      </Helmet>
       <Header data={props.data} />
       <TotalBudget
         data={props.data.budgets}

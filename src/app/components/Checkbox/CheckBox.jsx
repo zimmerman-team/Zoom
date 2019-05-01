@@ -6,7 +6,6 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import IconBoxUnchecked from 'assets/icons/IconBoxUnchecked';
 import IconBoxChecked from 'assets/icons/IconBoxChecked';
 import theme from 'theme/Theme';
-import NoSsr from '@material-ui/core/NoSsr';
 
 const Label = styled.span`
   color: #9b9b9b;

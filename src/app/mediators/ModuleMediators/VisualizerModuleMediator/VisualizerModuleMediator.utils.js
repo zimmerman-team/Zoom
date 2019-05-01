@@ -2,22 +2,17 @@ import findIndex from 'lodash/findIndex';
 import { scaleQuantile } from 'd3-scale';
 import { range } from 'd3-array';
 
-const lineChartColors = [
-  'hsl(23, 70%, 50%)',
-  'hsl(137, 70%, 50%)',
-  'hsl(54, 70%, 50%)',
-  'hsl(20, 70%, 50%)',
-  'hsl(84, 70%, 50%)'
-];
+/* consts */
+import chartTypes from '__consts__/ChartConst';
+import { colorSet } from '__consts__/PaneConst';
+import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 
-const barChartColors = [
-  'hsl(265, 70%, 50%)',
-  'hsl(323, 70%, 50%)',
-  'hsl(144, 70%, 50%)',
-  'hsl(91, 70%, 50%)',
-  'hsl(28, 70%, 50%)',
-  'hsl(275, 70%, 50%)'
-];
+// these are aggregation keys associated with graphql returned variables
+// 'geolocationTag' & 'date' are the graphql variables
+export const aggrKeys = {
+  [aggrOptions[0].value]: 'geolocationTag',
+  [aggrOptions[1].value]: 'date'
+};
 
 // Updates layer percentiles depending on the value
 export function updatePercentiles(featureCollection, accessor) {
@@ -198,7 +193,7 @@ export function formatLongLatData(indicators, indName) {
           indName,
           longitude: long,
           latitude: lat,
-          name: indicator.geolocationTag,
+          name: indicator.comment || indicator.geolocationTag,
           format: indicator.valueFormatType,
           value: Math.round(indicator.value)
         });
@@ -259,122 +254,163 @@ export function formatDate(created) {
   )} ${date.getFullYear()}`;
 }
 
-export function formatGeoData(
-  indicators1,
-  selectedInd1,
-  indicators2,
-  selectedInd2
-) {
+export function formatGeoData(indAggregations) {
+  console.log('indAggregations', indAggregations);
+
   let longLatData = [];
   let countryLayerData = {};
-
-  // so we check here if the retrieved data is long lat
-  // and then format it differently
-  // TODO: make this work differently, this is currently i quick and dirty fix
-  if (
-    indicators1[0] &&
-    indicators1[0].geolocationTag &&
-    indicators1[0].geolocationTag.indexOf(',') !== -1 &&
-    /\d/.test(indicators1[0].geolocationTag)
-  ) {
-    longLatData = formatLongLatData(indicators1, selectedInd1);
-  } else {
-    countryLayerData = formatCountryLayerData(indicators1, selectedInd1);
-  }
-
+  const geomapData = [];
   let countryCircleData = [];
-  // so we check here if the retrieved data is long lat
-  // and then format it differently
-  // TODO: make this work differently, this is currently i quick and dirty fix
-  if (
-    indicators2[0] &&
-    indicators2[0].geolocationTag &&
-    indicators2[0].geolocationTag.indexOf(',') !== -1 &&
-    /\d/.test(indicators2[0].geolocationTag)
-  ) {
-    longLatData = formatLongLatData(indicators2, selectedInd2);
-  } else {
-    countryCircleData = formatCountryCenterData(indicators2, selectedInd2);
-  }
 
-  const indicators = [];
+  indAggregations.forEach((aggregation, index) => {
+    if (aggregation && aggregation[0]) {
+      const indName = aggregation[0].indicatorName;
 
-  if (countryLayerData.features && countryLayerData.features.length > 0) {
-    updatePercentiles(countryLayerData, f => f.properties.value);
+      // so we check here if the retrieved data is long lat
+      // and then format it differently
+      // TODO: make this work differently, this is currently i quick and dirty fix
+      if (
+        aggregation[0] &&
+        aggregation[0].geolocationTag &&
+        aggregation[0].geolocationTag.indexOf(',') !== -1 &&
+        /\d/.test(aggregation[0].geolocationTag)
+      ) {
+        // so if the tag contains some numbers divided by a comma
+        // that means that its a long/lat aggregation
+        // and it then overrides the other legend types on the geomap
+        longLatData = formatLongLatData(aggregation, indName);
 
-    indicators.push({
-      type: 'layer',
-      data: countryLayerData,
-      legendName: ` ${selectedInd1} `
-    });
-  }
+        // and we push them into the indicatorData array for the geomap
+        if (longLatData.length > 0) {
+          geomapData.push({
+            type: 'location',
+            data: longLatData,
+            legendName: `POI: ${indName}`
+          });
+        }
+      } else if (index === 0) {
+        // so for the first indicator aggregation on the geomap
+        // we form the layers
+        countryLayerData = formatCountryLayerData(aggregation, indName);
 
-  if (countryCircleData.length > 0) {
-    indicators.push({
-      type: 'circle',
-      data: countryCircleData,
-      legendName: ` ${selectedInd2} `
-    });
-  }
+        // and we push them into the indicatorData array for the geomap
+        if (countryLayerData.features && countryLayerData.features.length > 0) {
+          updatePercentiles(countryLayerData, f => f.properties.value);
 
-  if (longLatData.length > 0) {
-    indicators.push({
-      type: 'location',
-      data: longLatData,
-      legendName: `POI`
-    });
-  }
+          geomapData.push({
+            type: 'layer',
+            data: countryLayerData,
+            legendName: ` ${indName} `
+          });
+        }
+      } else if (index === 1) {
+        // and for the second indicator aggregation on the geomap
+        // we format the center data
+        countryCircleData = formatCountryCenterData(aggregation, indName);
 
-  return indicators;
+        // and we push in the circle data for the indicatorData array for the geomap
+        if (countryCircleData.length > 0) {
+          geomapData.push({
+            type: 'circle',
+            data: countryCircleData,
+            legendName: ` ${indName} `
+          });
+        }
+      }
+      // else {
+      //   // here we'll format mainly the long/lat data
+      //   // when this functionality for the geomap will
+      //   // be addressed
+      // }
+    }
+  });
+
+  return geomapData;
 }
 
-export function formatLineData(indicators) {
-  const indicatorData = [];
+// may not be keys, but is formed in a similar way as keys would,
+// so yeah mainly used for line generation according to the selected indicators
+// and 'selectedInd' is passed in as a string array of currently selected indicators
+export function formatChartLegends(
+  selectedInd,
+  colors = colorSet[0].colors,
+  currKeys
+) {
+  const chartKeys = [];
 
   let colorInd = 0;
-  indicators.forEach((indicator, index) => {
-    const indicatorItem = [];
-    if (indicator.length > 0) {
-      const existInd = findIndex(indicatorData, existing => {
-        return indicator[0].indicatorName === existing.id;
+  selectedInd.forEach((indName, index) => {
+    // this if is here so we dont push 'undefined' as a key
+    if (indName) {
+      let key = indName;
+
+      if (findIndex(chartKeys, ['name', indName]) !== -1)
+        key = indName.concat(` (${index})`);
+
+      const orientation =
+        currKeys.length > 0 && currKeys[index]
+          ? currKeys[index].orientation
+          : 'left';
+
+      chartKeys.push({
+        name: key,
+        color: colors[colorInd],
+        orientation
       });
 
-      let id = indicator[0].indicatorName;
+      if (colorInd + 1 < colors.length) colorInd += 1;
+    }
+  });
+
+  return chartKeys;
+}
+
+// *this is also formating the linechart by geolocation
+export function formatLineData(indicators, aggregate) {
+  const aggrKey = aggrKeys[aggregate];
+
+  const indicatorData = [];
+  const indicatorNames = [];
+
+  indicators.forEach((indicator, index) => {
+    if (indicator.length > 0) {
+      const existInd = indicatorNames.indexOf(indicator[0].indicatorName);
+
+      let indName = indicator[0].indicatorName;
 
       // so we need this logic for when a person would
       // plot two indicators with the same name
       // as the id needs to be unique, we just add
       // the index as a suffix
-      if (existInd !== -1) id = id.concat(` (${index})`);
+      if (existInd !== -1) indName = indName.concat(` (${index})`);
 
-      indicatorData.push({
-        id,
-        color: lineChartColors[colorInd],
-        data: []
-      });
+      indicatorNames.push(indName);
 
-      indicator.forEach(indItem => {
+      indicator.forEach((indItem, index) => {
         // yeah and cause we might receive data with the same geolocation name
         // we add in the values for that geolocation so it wouldn't be repeated over and over
-        const existItemInd = findIndex(indicatorItem.data, existing => {
-          return indItem.geolocationTag === existing.geoName;
+        const existItemInd = findIndex(indicatorData, existing => {
+          return indItem[aggrKey] === existing[aggrKey];
         });
 
+        let aggrValue = indItem.date;
+
+        if (aggrKey === 'geolocationTag')
+          aggrValue =
+            indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
+              ? indItem.geolocationIso2
+              : indItem.geolocationTag;
+
         if (existItemInd === -1)
-          indicatorItem.push({
-            geoName: indItem.geolocationTag,
-            x:
-              indItem.geolocationIso2.length > 0
-                ? indItem.geolocationIso2
-                : indItem.geolocationTag,
-            y: Math.round(indItem.value)
+          indicatorData.push({
+            [aggrKey]: indItem[aggrKey],
+            [aggregate]: aggrValue,
+            [indName]: Math.round(indItem.value)
           });
-        else indicatorItem[existItemInd].y += Math.round(indItem.value);
+        else if (indicatorData[existItemInd][indName] !== undefined)
+          indicatorData[existItemInd][indName] += Math.round(indItem.value);
+        else indicatorData[existItemInd][indName] = Math.round(indItem.value);
       });
-
-      if (colorInd + 1 < lineChartColors.length) colorInd += 1;
-
-      indicatorData[index].data = indicatorItem;
     }
   });
 
@@ -385,7 +421,8 @@ export function formatLineData(indicators) {
 // keys for certain types of charts(like bar chart)
 // according to the selected indicator
 // array passed into it
-export function formatKeys(selectedInd) {
+// *this is also formating the barchart by geolocation
+export function formatBarChartKeys(selectedInd) {
   const chartKeys = [];
 
   selectedInd.forEach((indName, index) => {
@@ -403,7 +440,7 @@ export function formatKeys(selectedInd) {
   return chartKeys;
 }
 
-export function formatBarData(indicators) {
+export function formatBarData(indicators, colors = colorSet[0].colors) {
   const barChartData = [];
   const barChartKeys = [];
 
@@ -411,7 +448,6 @@ export function formatBarData(indicators) {
   indicators.map((indicator, index) => {
     if (indicator.length > 0) {
       const existInd = barChartKeys.indexOf(indicator[0].indicatorName);
-
       let indName = indicator[0].indicatorName;
 
       // so we need this logic for when a person would
@@ -434,25 +470,114 @@ export function formatBarData(indicators) {
             geoName: indItem.geolocationTag,
 
             geolocation:
-              indItem.geolocationIso2.length > 0
+              indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
                 ? indItem.geolocationIso2.toUpperCase()
                 : indItem.geolocationTag,
 
             [indName]: Math.round(indItem.value),
-            [`${indName}Color`]: barChartColors[colorInd]
+            [`${indName}Color`]: colors[colorInd]
           });
         else if (barChartData[existItemInd][indName] !== undefined)
           barChartData[existItemInd][indName] += Math.round(indItem.value);
         else {
           barChartData[existItemInd][indName] = Math.round(indItem.value);
-          barChartData[existItemInd][`${indName}Color`] =
-            barChartColors[colorInd];
+          barChartData[existItemInd][`${indName}Color`] = colors[colorInd];
         }
       });
 
-      if (colorInd + 1 < lineChartColors.length) colorInd += 1;
+      if (colorInd + 1 < colors.length) colorInd += 1;
     }
   });
 
   return barChartData;
+}
+
+export function formatTableData(indicators) {
+  const tableChartColumns = [];
+  tableChartColumns.push(
+    { name: `Geolocation` },
+    { name: 'Date' },
+    { name: `Measure Value` },
+    { name: 'Indicator' },
+    { name: 'Unit of measure' },
+    { name: 'ISO2 codes' }
+  );
+  const tableChartData = [];
+
+  indicators.forEach(indicator => {
+    if (indicator.length > 0) {
+      indicator.forEach(indItem => {
+        tableChartData.push([
+          //Geolocation
+          indItem.geolocationTag === null || indItem.geolocationTag.length <= 0
+            ? 'N/A'
+            : indItem.geolocationTag,
+
+          //Date
+          indItem.date === null || indItem.date.length <= 0
+            ? 'N/A'
+            : indItem.date,
+
+          //Measure Value
+          indItem.value === null ? 'N/A' : Math.round(indItem.value),
+
+          //Indicator
+          indItem.indicatorName,
+
+          //Unit of measure
+          indItem.valueFormatType,
+
+          //ISO2 codes
+          indItem.geolocationIso2 === null ||
+          indItem.geolocationIso2.length <= 0
+            ? 'N/A'
+            : indItem.geolocationIso2.toUpperCase()
+        ]);
+      });
+    }
+  });
+  return {
+    title: '',
+    columns: tableChartColumns,
+    rows: tableChartData
+  };
+}
+
+export function formatDonutData(indicators, colors = colorSet[0].colors) {
+  const chartData = [];
+  indicators.map((indicator, indIndex) => {
+    indicator.map(indItem => {
+      if (chartData[indIndex] === undefined) {
+        const colorInd =
+          indIndex < colors.length ? indIndex : colors.length - 1;
+
+        chartData.push({
+          id: indItem.indicatorName,
+          label: indItem.indicatorName,
+          value: indItem.value,
+          color: colors[colorInd]
+        });
+      } else chartData[indIndex].value += indItem.value;
+    });
+  });
+
+  return chartData;
+}
+
+export function getChartKeys(
+  chartType,
+  indicators,
+  colors = colorSet[0].colors,
+  currKeys
+) {
+  switch (chartType) {
+    case chartTypes.lineChart:
+      return formatChartLegends(indicators, colors, currKeys);
+    case chartTypes.barChart:
+      return formatBarChartKeys(indicators);
+    case chartTypes.donutChart:
+      return formatChartLegends(indicators, colors, currKeys);
+    default:
+      return [];
+  }
 }

@@ -15,6 +15,7 @@ import {
 } from 'modules/datamapper/DataMapperModule.util';
 import find from 'lodash/find';
 import { ToastsStore } from 'react-toasts';
+import { Helmet } from 'react-helmet';
 
 /* styles */
 import {
@@ -60,6 +61,11 @@ class DataMapperModule extends React.Component {
     this.nextDisabled = this.nextDisabled.bind(this);
   }
 
+  componentWillUnmount() {
+    // and we reset the values in the reducer
+    this.props.dispatch(actions.saveStepDataInitial());
+  }
+
   // basically checks if next button should be disabled
   // depending on the current step
   nextDisabled() {
@@ -89,9 +95,7 @@ class DataMapperModule extends React.Component {
       // and the user should be able to progress only if they've fixed
       // all the found errors
       return (
-        !this.state.stepsDisabled &&
-        (!this.props.stepData.errorData ||
-          this.props.stepData.errorData.errorsExists)
+        !this.state.stepsDisabled && this.props.stepData.errorColumns.length > 0
       );
 
     return false;
@@ -152,14 +156,10 @@ class DataMapperModule extends React.Component {
         // are the error that we retrieve for this step
         // and the user should be able to progress only if they've fixed
         // all the found errors
-        if (
-          !prevState.stepsDisabled &&
-          (!stepData.errorData || stepData.errorData.errorsExists)
-        ) {
+        if (!prevState.stepsDisabled && stepData.errorColumns.length > 0) {
           ToastsStore.error(
             <SimpleErrorText>
-              {' '}
-              Please make sure there are no errors before proceeding{' '}
+              Please correct errors before proceeding
             </SimpleErrorText>
           );
         } else {
@@ -295,6 +295,9 @@ class DataMapperModule extends React.Component {
 
     return (
       <ModuleContainer>
+        <Helmet>
+          <title>Zoom - Convert Data</title>
+        </Helmet>
         <ModuleHeader>
           <Stepper
             step={this.state.step}

@@ -40,6 +40,8 @@ export const CustomHandle = styled.div`
   color: ${theme.color.aidsFondsWhite};
   font-size: 12px;
   font-family: ${theme.font.zoomFontFamOne};
+  line-height: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   &:focus {
     border-color: #57c5f7;
     box-shadow: 0 0 0 5px #96dbfa;

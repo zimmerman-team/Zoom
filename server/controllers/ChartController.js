@@ -1,3 +1,4 @@
+const fs = require('fs');
 /* consts */
 const config = require('../config/config');
 
@@ -112,7 +113,7 @@ const ChartController = {
     res.json(chart);
   },
 
-  // gets one user or public chart
+  // gets one user chart
   get: (req, res) => {
     const { chartId, authId } = req.query;
 
@@ -120,105 +121,122 @@ const ChartController = {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
       else
-        Chart.findOne({
-          $or: [
-            { _id: chartId, author, archived: false },
-            { _id: chartId, _public: true, archived: false }
-          ]
-        })
+        Chart.findOne({ _id: chartId, author, archived: false })
           .populate('author')
           .exec((chartError, chart) => {
             if (chartError) general.handleError(res, chartError);
-            res.json(chart);
+            else if (!chart) general.handleError(res, 'chart not found', 404);
+            else if (chart.dataFileUrl) {
+              fs.readFile(chart.dataFileUrl, 'utf8', (dataErr, data) => {
+                if (dataErr) general.handleError(res, dataErr);
+                else
+                  res.send({
+                    chart,
+                    data: JSON.parse(data)
+                  });
+              });
+            } else
+              res.send({
+                chart
+              });
           });
     });
   },
 
+  // gets one public chart
+  getOnePublic: (req, res) => {
+    const { chartId } = req.query;
+
+    Chart.findOne({ _id: chartId, _public: true, archived: false })
+      .populate('author')
+      .exec((chartError, chart) => {
+        if (chartError) general.handleError(res, chartError);
+        else if (!chart) general.handleError(res, 'chart not found', 404);
+        else if (chart.dataFileUrl) {
+          fs.readFile(chart.dataFileUrl, 'utf8', (dataErr, data) => {
+            if (dataErr) general.handleError(res, dataErr);
+            else
+              res.send({
+                chart,
+                data: JSON.parse(data)
+              });
+          });
+        } else
+          res.send({
+            chart
+          });
+      });
+  },
+
   // this basically validates the user and gets all public charts
   getPublic: (req, res) => {
-    const { authId, sortBy, pageSize, page, searchTitle } = req.query;
-    User.findOne({ authId }).exec((userError, author) => {
-      if (userError) general.handleError(res, userError);
-      else if (!author) general.handleError(res, 'User not found', 404);
-      else {
-        Chart.countDocuments(
+    const { sortBy, pageSize, page, searchTitle } = req.query;
+    Chart.countDocuments(
+      {
+        _public: true,
+        archived: false,
+        name: { $regex: searchTitle, $options: 'i' }
+      },
+      (countError, count) => {
+        if (countError) general.handleError(res, countError);
+        const sort = utils.getDashboardSortBy(sortBy);
+        const pSize = parseInt(pageSize, 10);
+        const p = parseInt(page, 10);
+        Chart.find(
           {
             _public: true,
             archived: false,
             name: { $regex: searchTitle, $options: 'i' }
           },
-          (countError, count) => {
-            if (userError) general.handleError(res, countError);
-            const sort = utils.getDashboardSortBy(sortBy);
-            const pSize = parseInt(pageSize, 10);
-            const p = parseInt(page, 10);
-            Chart.find(
-              {
-                _public: true,
-                archived: false,
-                name: { $regex: searchTitle, $options: 'i' }
-              },
-              'created last_updated team type dataSources _id name _public'
-            )
-              .limit(pSize)
-              .skip(p * pSize)
-              .collation({ locale: 'en' })
-              .sort(sort)
-              .populate('author', 'username authId')
-              .exec((chartError, charts) => {
-                if (chartError) general.handleError(res, chartError);
-                res.json({
-                  count,
-                  charts
-                });
-              });
-          }
-        );
-      }
-    });
-  },
-
-  // this basically validates the user and gets all public charts
-  getOnePublic: function(req, res) {
-    const { chartId, authId } = req.query;
-    User.findOne({ authId }).exec(userError => {
-      if (userError) general.handleError(res, userError);
-      else
-        Chart.findOne(
-          { _id: chartId, _public: true },
-          'name',
-          (chartError, chart) => {
+          'created last_updated team type dataSources _id name _public'
+        )
+          .limit(pSize)
+          .skip(p * pSize)
+          .collation({ locale: 'en' })
+          .sort(sort)
+          .populate('author', 'username authId')
+          .exec((chartError, charts) => {
             if (chartError) general.handleError(res, chartError);
-            res.json(chart);
-          }
-        );
-    });
+            res.json({
+              count,
+              charts
+            });
+          });
+      }
+    );
   },
 
-  // gets all user charts and team charts
+  // gets all user charts and team charts or archived charts of the user
   getAll: (req, res) => {
-    const { authId, sortBy, searchTitle } = req.query;
+    const { authId, sortBy, searchTitle, archived } = req.query;
     User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
       else {
         const sort = utils.getDashboardSortBy(sortBy);
 
+        const query = archived
+          ? {
+              author,
+              archived: true
+            }
+          : {
+              $or: [
+                {
+                  author,
+                  archived: false,
+                  name: { $regex: searchTitle, $options: 'i' }
+                },
+                {
+                  team: author.team,
+                  archived: false,
+                  name: { $regex: searchTitle, $options: 'i' }
+                }
+              ]
+            };
+
         Chart.find(
-          {
-            $or: [
-              {
-                author,
-                archived: false,
-                name: { $regex: searchTitle, $options: 'i' }
-              },
-              {
-                team: author.team,
-                archived: false,
-                name: { $regex: searchTitle, $options: 'i' }
-              }
-            ]
-          },
+          query,
           'created last_updated team _public type dataSources _id name archived'
         )
           .collation({ locale: 'en' })
@@ -257,14 +275,17 @@ const ChartController = {
       description,
       type,
       descIntro,
+      chartKeys,
       indicatorItems,
       selectedSources,
       yearRange,
       selectedYear,
+      selectedYears,
       dataSources,
       _public,
       data,
-      team,
+      teams,
+      specOptions,
       selectedCountryVal,
       selectedRegionVal
     } = req.body;
@@ -283,13 +304,13 @@ const ChartController = {
                   dataSources,
                   description,
                   _public,
-                  team,
-                  data,
+                  teams,
                   descIntro,
 
                   // so the type of chart
                   type,
 
+                  chartKeys,
                   /* indicators/ sub-indicators of chart */
                   indicatorItems,
 
@@ -297,19 +318,37 @@ const ChartController = {
                   yearRange,
 
                   selectedYear,
+                  selectedYears,
                   selectedCountryVal,
-                  selectedRegionVal
+                  selectedRegionVal,
+                  specOptions
                 });
 
                 chartz.save(err => {
-                  if (err) general.handleError(res, err);
-
-                  res.json({
-                    message: 'chart created',
-                    id: chartz._id,
-                    name: chartz.name,
-                    chartType: type
-                  });
+                  if (err) {
+                    console.log('saving this biggo gives error', err);
+                    general.handleError(res, err);
+                  } else {
+                    const fileUrl = `server/data/chartData${chartz.id}.txt`;
+                    fs.writeFile(fileUrl, JSON.stringify(data), fileError => {
+                      if (fileError) {
+                        console.log('fileError', fileError);
+                        general.handleError(res, fileError);
+                      } else {
+                        chartz.dataFileUrl = fileUrl;
+                        chartz.save(urlSavErr => {
+                          if (urlSavErr) general.handleError(res, urlSavErr);
+                          else
+                            res.json({
+                              message: 'chart created',
+                              id: chartz._id,
+                              name: chartz.name,
+                              chartType: type
+                            });
+                        });
+                      }
+                    });
+                  }
                 });
               })
               .catch(promiseErr => {
@@ -318,43 +357,53 @@ const ChartController = {
           } else if (author.equals(chart.author)) {
             genUniqueName(Chart, name, chart.name)
               .then(uniqueName => {
-                chart.name = uniqueName;
-                chart.author = author;
+                const fileUrl = `server/data/chartData${chart.id}.txt`;
+                fs.writeFile(fileUrl, JSON.stringify(data), fileError => {
+                  if (fileError) {
+                    general.handleError(res, fileError);
+                  } else {
+                    chart.name = uniqueName;
+                    chart.author = author;
 
-                chart.description = description;
-                chart.dataSources = dataSources;
+                    chart.description = description;
+                    chart.dataSources = dataSources;
 
-                chart.data = data;
-                chart.descIntro = descIntro;
+                    chart.dataFileUrl = fileUrl;
+                    chart.descIntro = descIntro;
 
-                // so the type of chart
-                chart.type = type;
-                chart._public = _public;
-                chart.team = team;
+                    // so the type of chart
+                    chart.type = type;
+                    chart._public = _public;
+                    chart.teams = teams;
 
-                /* indicators/ sub-indicators of chart */
-                chart.indicatorItems = indicatorItems;
+                    chart.chartKeys = chartKeys;
+                    /* indicators/ sub-indicators of chart */
+                    chart.indicatorItems = indicatorItems;
 
-                chart.selectedSources = selectedSources;
-                chart.yearRange = yearRange;
+                    chart.selectedSources = selectedSources;
+                    chart.yearRange = yearRange;
 
-                chart.selectedYear = selectedYear;
-                chart.selectedCountryVal = selectedCountryVal;
-                chart.selectedRegionVal = selectedRegionVal;
+                    chart.selectedYear = selectedYear;
+                    chart.selectedYears = selectedYears;
+                    chart.selectedCountryVal = selectedCountryVal;
+                    chart.selectedRegionVal = selectedRegionVal;
+                    chart.specOptions = specOptions;
 
-                chart.save(err => {
-                  if (err) general.handleError(res, err);
-
-                  res.json({
-                    message: 'chart updated',
-                    id: chart._id,
-                    name: chart.name,
-                    chartType: chart.type
-                  });
+                    chart.save(err2 => {
+                      if (err2) general.handleError(res, err2);
+                      else
+                        res.json({
+                          message: 'chart updated',
+                          id: chart._id,
+                          name: chart.name,
+                          chartType: chart.type
+                        });
+                    });
+                  }
                 });
               })
-              .catch(promiseErr => {
-                general.handleError(res, promiseErr);
+              .catch(promiseErr2 => {
+                general.handleError(res, promiseErr2);
               });
           } else general.handleError(res, 'Unauthorized', 401);
         });
@@ -464,21 +513,20 @@ const ChartController = {
     });
   },
 
-  emptyTrash: function(user, res) {
-    // TODO: should be adjusted without the promises, or maybe with promises if
-    // TODO: it works and makes sense
-    /*
-     * Delete all archived visualisations
-     */
+  // deletes all of users archived charts
+  emptyTrash: (req, res) => {
+    const { authId } = req.query;
 
-    return Chart.remove({
-      author: user._id,
-      archived: true
-    })
-      .then(viz => res(null))
-      .catch(error => {
-        general.handleError(res, error);
-      });
+    User.findOne({ authId }).exec((userError, author) => {
+      if (userError) general.handleError(res, userError);
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else {
+        Chart.deleteMany({ author, archived: true }).exec(delErr => {
+          if (delErr) general.handleError(res, delErr);
+          else res.json({ message: 'chart trash emptied!' });
+        });
+      }
+    });
   },
 
   updateAndRefresh: function(user, vizId, viz, res) {

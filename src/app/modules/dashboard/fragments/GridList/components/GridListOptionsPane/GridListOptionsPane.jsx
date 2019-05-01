@@ -11,20 +11,22 @@ const ComponentBase = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 17px;
-  margin-bottom: 17px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   width: 100%;
 `;
 
 const propTypes = {
   visibilityLeftButton: PropTypes.string,
   leftOptionLabel: PropTypes.string,
+  removeAll: PropTypes.func,
   isRemoveOption: PropTypes.bool
 };
 
 const defaultProps = {
   visibilityLeftButton: 'visible',
   leftOptionLabel: '',
+  removeAll: null,
   isRemoveOption: false
 };
 
@@ -32,6 +34,7 @@ const GridListOptionsPane = props => {
   return (
     <ComponentBase>
       <GridListOption
+        removeAll={props.removeAll}
         isRemoveOption={props.isRemoveOption}
         icon={<SvgIconAdd />}
         label={props.leftOptionLabel}

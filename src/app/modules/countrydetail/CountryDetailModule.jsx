@@ -15,6 +15,9 @@ import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTran
 import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';
 import Projects from 'modules/countrydetail/fragments/Projects/Projects';
 
+/* utils */
+import { capitalize } from './CountryDetailModule.utilis';
+
 const ModuleContainer = styled(Box)`
   background-color: ${theme.color.aidsFondsWhite};
 `;
@@ -91,8 +94,9 @@ const CountryDetailModule = props => {
   return (
     <ModuleContainer>
       <Helmet>
-        <title>Zoom - Country detail</title>
+        <title>Zoom - Country Detail {capitalize(props.countryName)}</title>
       </Helmet>
+
       {/* Fragment 1: Page navigation */}
       <PageNavigation />
 

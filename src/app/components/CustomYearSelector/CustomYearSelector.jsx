@@ -3,18 +3,18 @@ import PropTypes from 'prop-types';
 
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
+import { maxYear, minYear } from '__consts__/TimeLineConst';
 
 /* utils */
 import isEqual from 'lodash/isEqual';
+import { formatYearLabels } from 'utils/YearSelectUtil';
 
 /* styles */
 import {
   ComponentBase,
   YearLabel,
   SelectedYearLabel,
-  Text,
-  StartControl,
-  EndControl
+  Text
 } from './CustomYearSelector.style';
 
 const propTypes = {
@@ -26,8 +26,8 @@ const propTypes = {
 };
 
 const defaultProps = {
-  min: 1990,
-  max: 2019,
+  min: minYear,
+  max: maxYear,
   selectedYear: parseInt(initialState.yearPeriod[0], 10),
 
   backgroundColor: 'transparent'
@@ -100,13 +100,6 @@ class CustomYearSelector extends React.Component {
     this.props.selectYear(number);
   };
 
-  formatYearLabels(number) {
-    if (number == this.props.min || number == this.props.max) {
-      return number;
-    }
-    return String(number).slice(-2);
-  }
-
   renderYearLabels = (number, index) => {
     let yearLabels = '';
 
@@ -118,7 +111,9 @@ class CustomYearSelector extends React.Component {
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
-          <Text>{this.formatYearLabels(number)}</Text>
+          <Text>
+            {formatYearLabels(number, this.props.min, this.props.max)}
+          </Text>
         </SelectedYearLabel>
       );
     else
@@ -130,7 +125,9 @@ class CustomYearSelector extends React.Component {
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
-          <Text>{this.formatYearLabels(number)}</Text>
+          <Text>
+            {formatYearLabels(number, this.props.min, this.props.max)}
+          </Text>
         </YearLabel>
       );
 

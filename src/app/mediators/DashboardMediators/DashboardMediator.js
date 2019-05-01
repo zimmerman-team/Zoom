@@ -37,6 +37,7 @@ class DashboardMediator extends React.Component {
     sort: 'title',
     searchKeyword: '',
     charts: [],
+    trashCharts: [],
     datasets: [],
     loadUsers: false,
     isSortByOpen: false,
@@ -58,8 +59,20 @@ class DashboardMediator extends React.Component {
     if (!isEqual(this.props.user, prevProps.user) && this.props.user)
       this.reloadData('all');
 
-    if (!isEqual(this.props.chartDeleted, prevProps.chartDeleted))
+    if (!isEqual(this.props.chartDeleted, prevProps.chartDeleted)) {
       this.reloadData();
+
+      // we also want to load in the deleted charts
+      // though maybe would be enough to just get there count in the future
+      // TODO implement retrieving only the count of the archived charts
+      this.props.dispatch(
+        actions.allArchivedChartsRequest({
+          authId: this.props.user.authId,
+          sortBy: this.state.sort,
+          archived: true
+        })
+      );
+    }
 
     // we format the charts
     if (
@@ -77,6 +90,15 @@ class DashboardMediator extends React.Component {
         )
       });
     }
+
+    // we format the charts
+    if (
+      !isEqual(this.props.archivedCharts, prevProps.archivedCharts) &&
+      this.props.archivedCharts.data
+    )
+      this.setState({
+        trashCharts: formatChartData(this.props.archivedCharts.data)
+      });
 
     // we format the datasets
     if (
@@ -109,9 +131,17 @@ class DashboardMediator extends React.Component {
       this.reloadData();
 
     // set page to 0 when changing tab
-    if (this.props.match.params.tab !== prevProps.match.params.tab) {
+    if (this.props.match.params.tab !== prevProps.match.params.tab)
       this.setState({ page: 0 });
-    }
+
+    // so here we don't actually need make a new call for trash, cause after emptying
+    // it should be empty, and when a data.message is returned, it means that
+    // emptying was succesfull
+    if (
+      !isEqual(this.props.chartTrashEmpty, prevProps.chartTrashEmpty) &&
+      get(this.props.chartTrashEmpty, 'data.message', '').length > 0
+    )
+      this.setState({ trashCharts: [] });
   };
 
   componentWillUnmount = () => {
@@ -298,6 +328,13 @@ class DashboardMediator extends React.Component {
         );
         this.getAllUsers(initialLoad);
         this.getAllTeams(initialLoad);
+        this.props.dispatch(
+          actions.allArchivedChartsRequest({
+            authId: this.props.user.authId,
+            sortBy: this.state.sort,
+            archived: true
+          })
+        );
       }
     } else {
       switch (this.props.match.params.tab) {
@@ -328,6 +365,15 @@ class DashboardMediator extends React.Component {
           break;
         case 'teams':
           this.getAllTeams(initialLoad);
+          break;
+        case 'trash':
+          this.props.dispatch(
+            actions.allArchivedChartsRequest({
+              authId: this.props.user.authId,
+              sortBy: this.state.sort,
+              archived: true
+            })
+          );
           break;
       }
     }
@@ -375,6 +421,14 @@ class DashboardMediator extends React.Component {
     );
   }
 
+  emptyTrashChart() {
+    this.props.dispatch(
+      actions.emptyChartTrashRequest({
+        authId: this.props.user.authId
+      })
+    );
+  }
+
   render() {
     const greetingName =
       get(this.props.user, 'firstName', '') !== ''
@@ -393,6 +447,8 @@ class DashboardMediator extends React.Component {
         }
         // tabs={tabs}
         page={this.state.page}
+        removeAll={this.emptyTrashChart.bind(this)}
+        trashCharts={this.state.trashCharts}
         sort={this.state.sort}
         users={this.state.users}
         datasets={this.state.datasets}
@@ -424,6 +480,8 @@ class DashboardMediator extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    chartTrashEmpty: state.chartTrashEmpty,
+    archivedCharts: state.archivedCharts,
     datasetDeleted: state.datasetDeleted,
     userDatasets: state.userDatasets,
     chartDeleted: state.chartDeleted,

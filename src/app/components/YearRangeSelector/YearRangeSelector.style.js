@@ -2,17 +2,9 @@ import styled from 'styled-components';
 
 import theme from 'theme/Theme';
 
-export const YearContainer = styled.div`
-  position: relative;
-  bottom: ${props => props.bottom};
-  width: calc(100% - 48px);
-  max-width: 1000px;
-`;
-
 export const ComponentBase = styled.div`
   display: flex;
   background-color: ${theme.color.aidsFondsWhiteOpacity};
-  justify-content: center;
 `;
 
 export const YearLabel = styled.div`
@@ -46,21 +38,11 @@ export const YearLabel = styled.div`
   -moz-user-select: none;
 `;
 
-export const Text = styled.div`
-  //width: 24px;
-`;
-
 export const SelectedYearLabel = styled(YearLabel)`
-  background-color: ${theme.color.aidsFondsRed};
+  background-color: ${theme.color.aidsFondsBlue};
   color: ${theme.color.aidsFondsWhite};
-  //&:first-child {
-  //  background-color: #000;
-  //}
-
-  &:active {
-    cursor: grabbing;
-    cursor: -moz-grabbing;
-    cursor: -webkit-grabbing;
+  &:first-child {
+    background-color: #000;4
   }
 `;
 
@@ -70,12 +52,13 @@ export const StartControl = styled(YearLabel)`
   flex-grow: 0;
 
   position: relative;
-  padding-left: 24px;
+  padding-left: 1%;
+  margin-right: 0.5%;
 
   &:before {
-    border-left: 12px solid ${theme.color.aidsFondsRed};
-    border-top: 20px solid ${theme.color.aidsFondsBlue};
-    border-bottom: 20px solid ${theme.color.aidsFondsBlue};
+    border-left: 0.5vw solid ${theme.color.aidsFondsRed};
+    border-top: 16px solid ${theme.color.aidsFondsBlue};
+    border-bottom: 16px solid ${theme.color.aidsFondsBlue};
     content: '';
     height: 0;
     left: 100%;
@@ -109,13 +92,13 @@ export const EndControl = styled(YearLabel)`
 
   position: relative;
 
-  padding-right: 0.5%;
+  padding-right: 1%;
   margin-left: 0.5%;
 
   &:before {
-    border-right: 12px solid ${theme.color.aidsFondsRed};
-    border-top: 20px solid ${theme.color.aidsFondsBlue};
-    border-bottom: 20px solid ${theme.color.aidsFondsBlue};
+    border-right: 0.5vw solid ${theme.color.aidsFondsRed};
+    border-top: 16px solid ${theme.color.aidsFondsBlue};
+    border-bottom: 16px solid ${theme.color.aidsFondsBlue};
     content: '';
     height: 0;
     right: 100%;

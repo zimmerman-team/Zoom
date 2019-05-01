@@ -143,8 +143,10 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
 
     let onEdit = undefined;
     let onView = undefined;
-    let onDuplicate = () => duplicate(chart._id);
+    let onDuplicate = undefined;
     let onDelete = undefined;
+
+    if (duplicate) onDuplicate = () => duplicate(chart._id);
 
     const owner = chart.author && chart.author.authId === userId;
 

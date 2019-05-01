@@ -90,10 +90,16 @@ describe('Create geo functionality', function() {
   });
 });
 
+
+
 describe('Chartbuilder geomap chart fragment e2e', function() {
   it('Should contain /geomap in the url', function() {
     navigateToCreateGeo();
     cy.url().should('include', '/visualizer/geomap');
+  });
+
+  it('Should make a snapshot of the visual current state', function() {
+    cy.percySnapshot('Chartbuilder - Geomap');
   });
 
   it('Should pass written text from the /context to /preview', function() {

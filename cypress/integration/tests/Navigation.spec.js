@@ -61,8 +61,3 @@ describe('Visiting all pages through navigation from home as logged in', () => {
     cy.get('h2').should('contain', 'About zoom');
   });
 });
-
-
-
-
-

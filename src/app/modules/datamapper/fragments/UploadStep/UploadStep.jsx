@@ -23,7 +23,8 @@ import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 const propTypes = {
   handleFileUpload: PropTypes.func,
   error: PropTypes.bool,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  file: PropTypes.string
 };
 const defaultProps = {
   handleFileUpload: undefined,

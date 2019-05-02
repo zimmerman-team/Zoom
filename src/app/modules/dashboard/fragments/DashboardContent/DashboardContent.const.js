@@ -37,7 +37,7 @@ export function data(
       label: 'Teams',
       path: `${Path}teams`,
       count: teams.length,
-      superAdminOnly: true
+      adminOnly: true
     }
   ];
 

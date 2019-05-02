@@ -27,8 +27,6 @@ const defaultProps = {
 };
 
 const LineChart = ({ data, chartKeys, xAxisKey, specOptions }) => {
-  console.log('chartKeys', chartKeys);
-
   return (
     <ResponsiveContainer>
       <ReLineChart

@@ -151,6 +151,7 @@ class DataExplorePane extends React.Component {
 
       // we push in the indicator dropdown data
       indPanels.push({
+        indIndex: index,
         sectionRemove: this.props.multipleInd,
         removeIndicator: () => this.props.removeIndicator(index),
         indicator: true,
@@ -167,6 +168,7 @@ class DataExplorePane extends React.Component {
 
       // and we push in the sub-indicator dropdown data
       indPanels.push({
+        indIndex: index,
         addIndicator: this.props.addIndicator,
         sectionAdd:
           index === this.props.selectedInd.length - 1 && this.props.multipleInd,

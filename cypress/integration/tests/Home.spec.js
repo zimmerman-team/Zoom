@@ -1,23 +1,31 @@
 describe('Home page navigation', function() {
   it('Should visit home page', function() {
     cy.visit('/home');
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
   });
 
   it('Should make a snapshot of the visual current state', function() {
-    cy.wait(8000);
     cy.percySnapshot('Home page - Dialog');
   });
 
   it('Should display a dialog overlay', function() {
     cy.get('[data-cy=dialog-overlay]');
+  });
+
+  it('Should be able to click away the dialog overlay', function() {
     cy.get('[data-cy=dialog-overlay]').click();
+    cy.get('[data-cy=dialog-overlay]').should('not.be.visible');
+  });
+
+  it('Should make a snapshot of the visual current state', function() {
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
+    cy.percySnapshot('Home page');
   });
 });
 
-it('Should make a snapshot of the visual current state', function() {
-  cy.wait(8000);
-  cy.percySnapshot('Home page');
-});
+
 
 
 describe('Home page map controls', function() {
@@ -48,7 +56,8 @@ describe('Home page geo map filters', function() {
   });
 
   it('Should make a snapshot of the visual current steet', function() {
-    cy.wait(8000);
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
     cy.percySnapshot('Home page - Geo map filters');
   });
 
@@ -69,6 +78,8 @@ describe('Home page geo map filters', function() {
   });
 
   it('Plots Europe data about aids related deaths', function() {
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
     cy.get('[data-cy="legendLayer-label"]').should('contain', 'aids related deaths');
   });
 });

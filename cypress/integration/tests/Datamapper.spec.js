@@ -4,14 +4,16 @@ function signOut() {
 }
 function signIn() {
   cy.visit('/');
-  cy.wait(1000);
+  cy.waitPageLoader();
+  cy.waitPageLoader2();
   cy.get('[data-cy="dialog-overlay"]').click();
   signOut();
   cy.get('[data-cy=sidebar-toggle]').click();
   cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
   cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
   cy.get('[data-cy=sidebar-login-button]').click();
-  cy.wait(6000);
+  cy.waitPageLoader();
+  cy.waitPageLoader2();
 }
 
 const firstStepVal = {
@@ -210,10 +212,11 @@ describe('Datamapper e2e tests', function() {
   it('Go to datamapper', function() {
     signIn();
     cy.visit('/mapper');
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
   });
 
   it('Should make a snapshot of the visual current state', function() {
-    cy.wait(8000);
     cy.percySnapshot('Datamapper page - step 1');
   });
 
@@ -348,7 +351,8 @@ describe('Datamapper e2e tests', function() {
   });
 
   it('Should make a snapshot of the visual current state', function() {
-    cy.wait(8000);
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
     cy.percySnapshot('Datamapper page - step 2');
   });
 
@@ -383,7 +387,8 @@ describe('Datamapper e2e tests', function() {
 
     //TODO: instead of wait it would be better to check if the loading icon has disappeared,
     //TODO: or that the next button gets a red color. See TGF solution for this.
-    cy.wait(150000);
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
     cy.contains('next').click();
   });
 
@@ -392,7 +397,8 @@ describe('Datamapper e2e tests', function() {
   });
 
   it('Should make a snapshot of the visual current state', function() {
-    cy.wait(8000);
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
     cy.percySnapshot('Datamapper page - step 3');
   });
 
@@ -492,7 +498,8 @@ describe('Datamapper e2e tests', function() {
 
     cy.get('[class*=ErrorStepstyles__ButtonContainer] button').click();
 
-    cy.wait(55000);
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
 
     // and here we check if those two deleted row cells
     delRowCells.forEach(cell => {
@@ -636,7 +643,8 @@ describe('Datamapper e2e tests', function() {
   });
 
   it('Should make a snapshot of the visual current state', function() {
-    cy.wait(8000);
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
     cy.percySnapshot('Datamapper page - step 5');
   });
 

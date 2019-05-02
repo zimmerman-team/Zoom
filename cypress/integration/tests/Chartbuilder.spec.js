@@ -10,42 +10,42 @@ function signIn() {
   cy.wait(7000);
 }
 function navigateToCreateGeo() {
-  cy.visit('/home');
+  cy.get('[data-cy="home-logo"]').click();
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
 }
 function navigateToCreateLinechart() {
-  cy.visit('/home');
+  cy.get('[data-cy="home-logo"]').click();
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-3"]').click();
 }
 function navigateToTablechart() {
-  cy.visit('/home');
+  cy.get('[data-cy="home-logo"]').click();
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-5"]').click();
 }
 function navigateToBarchart() {
-  cy.visit('/home');
+  cy.get('[data-cy="home-logo"]').click();
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-4"]').click();
 }
 function navigateToCountryFocusKenya() {
-  cy.visit('/home');
+  cy.get('[data-cy="home-logo"]').click();
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-1"]').click();
 }
 function navigateToCountryFocusNetherlands() {
-  cy.visit('/home');
+  cy.get('[data-cy="home-logo"]').click();
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
@@ -88,12 +88,13 @@ describe('Create geo functionality', function() {
 
 describe('Chartbuilder geomap chart fragment e2e', function() {
   it('Should contain /geomap in the url', function() {
-    // navigateToCreateGeo();
-    // Fixme: use function above.
-    // So the function given above is failling.
+    navigateToCreateGeo();
+
+    // Fixme: use the navigateToCreateGe() function
+    // So the navigateToCreateGeo() function is failling.
     // Although the user is logged in, it gets the "geo map filters" button instead of the "create" button.
     // I failed to reproduce this bug on local, dev and test server.
-    cy.visit('/visualizer/geomap/vizID/edit');
+    // cy.visit('/visualizer/geomap/vizID/edit');
     cy.url().should('include', '/visualizer/geomap');
   });
 

@@ -251,6 +251,7 @@ export class AppBar extends React.Component {
           />
           <Link to="/">
             <AidsFondLogo
+              data-cy="home-logo"
               a11yTitle="Aidsfonds logo"
               fit="contain"
               alignSelf="center"

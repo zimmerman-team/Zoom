@@ -124,7 +124,10 @@ const UserApi = {
       if (adminErr) return general.handleError(res, adminErr);
       if (!adminUser) return general.handleError(res, 'User not found', 404);
 
-      if (adminUser.role === 'Administrator') {
+      if (
+        adminUser.role === 'Administrator' ||
+        adminUser.role === 'Super admin'
+      ) {
         User.findOne({ authId: updateUser.authId }, (userErr, userFound) => {
           if (userErr) return general.handleError(res, userErr);
 
@@ -154,7 +157,10 @@ const UserApi = {
       if (adminErr) return general.handleError(res, adminErr);
       if (!adminUser) return general.handleError(res, 'User not found', 404);
 
-      if (adminUser.role === 'Administrator') {
+      if (
+        adminUser.role === 'Administrator' ||
+        adminUser.role === 'Super admin'
+      ) {
         // and then to each user we add the specified team
 
         updateUsers.forEach(updatU => {
@@ -181,7 +187,10 @@ const UserApi = {
       if (adminErr) return general.handleError(res, adminErr);
       if (!adminUser) return general.handleError(res, 'User not found', 404);
 
-      if (adminUser.role === 'Administrator') {
+      if (
+        adminUser.role === 'Administrator' ||
+        adminUser.role === 'Super admin'
+      ) {
         // Remove team from selected users
         if (usersToDelete.length > 0) {
           usersToDelete.forEach(user => {

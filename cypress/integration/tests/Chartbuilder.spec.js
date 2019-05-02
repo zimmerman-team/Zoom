@@ -11,19 +11,18 @@ function signIn() {
   cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
   cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
   cy.get('[data-cy=sidebar-login-button]').click();
+
+  cy.wait(5000);
 }
 
-function hackz(navigate){
-  if(cy.get('[data-cy="appbar-right-button"]').should(' contain', 'create' )){
-    navigate();
-  }else{
-    cy.get('[data-cy="appbar-right-button"]').click();
-    cy.get('[data-cy="appbar-right-button"]').click();
-  }
-}
 function navigateToCreateGeo() {
   cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="appbar-right-button"]').should('have.text', 'Create')
+    .then(() => {
+      cy.get('[data-cy="appbar-right-button"]').click();
+      cy.get('[data-cy="appbar-right-button"]').click();
+    });
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
@@ -31,6 +30,11 @@ function navigateToCreateGeo() {
 function navigateToCreateLinechart() {
   cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="appbar-right-button"]').should('have.text', 'Create')
+    .then(() => {
+      cy.get('[data-cy="appbar-right-button"]').click();
+      cy.get('[data-cy="appbar-right-button"]').click();
+    });
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-3"]').click();
@@ -38,6 +42,11 @@ function navigateToCreateLinechart() {
 function navigateToTablechart() {
   cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="appbar-right-button"]').should('have.text', 'Create')
+    .then(() => {
+      cy.get('[data-cy="appbar-right-button"]').click();
+      cy.get('[data-cy="appbar-right-button"]').click();
+    });
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-5"]').click();
@@ -45,6 +54,11 @@ function navigateToTablechart() {
 function navigateToBarchart() {
   cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="appbar-right-button"]').should('have.text', 'Create')
+    .then(() => {
+      cy.get('[data-cy="appbar-right-button"]').click();
+      cy.get('[data-cy="appbar-right-button"]').click();
+    });
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-4"]').click();
@@ -52,6 +66,11 @@ function navigateToBarchart() {
 function navigateToCountryFocusKenya() {
   cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="appbar-right-button"]').should('have.text', 'Create')
+    .then(() => {
+      cy.get('[data-cy="appbar-right-button"]').click();
+      cy.get('[data-cy="appbar-right-button"]').click();
+    });
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-1"]').click();
@@ -59,6 +78,11 @@ function navigateToCountryFocusKenya() {
 function navigateToCountryFocusNetherlands() {
   cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="appbar-right-button"]').should('have.text', 'Create')
+    .then(() => {
+      cy.get('[data-cy="appbar-right-button"]').click();
+      cy.get('[data-cy="appbar-right-button"]').click();
+    });
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-2"]').click();
@@ -69,7 +93,7 @@ describe('Create geo functionality', function() {
     cy.visit('/home');
     cy.wait(1000);
     cy.get('[data-cy="dialog-overlay"]').click();
-    cy.get('[data-cy="appbar-right-button"]').should('not.have.text', 'Create');
+    cy.get('[data-cy="appbar-right-button"]').should('not.have.text', 'Create')
   });
 
   it('Should display appropriate content per tab', function() {
@@ -100,13 +124,7 @@ describe('Create geo functionality', function() {
 
 describe('Chartbuilder geomap chart fragment e2e', function() {
   it('Should contain /geomap in the url', function() {
-    hackz(navigateToCreateGeo());
-
-    // Fixme: use the navigateToCreateGeo() function
-    // So the navigateToCreateGeo() function is failling.
-    // Although the user is logged in, it gets the "geo map filters" button instead of the "create" button.
-    // I failed to reproduce this bug on local, dev and test server.
-    // cy.visit('/visualizer/geomap/vizID/edit');
+    navigateToCreateGeo();
     cy.url().should('include', '/visualizer/geomap');
   });
 

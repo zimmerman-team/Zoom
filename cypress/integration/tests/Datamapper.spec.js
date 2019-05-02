@@ -213,6 +213,7 @@ describe('Datamapper e2e tests', function() {
   });
 
   it('Should make a snapshot of the visual current state', function() {
+    cy.wait(8000);
     cy.percySnapshot('Datamapper page - step 1');
   });
 
@@ -347,6 +348,7 @@ describe('Datamapper e2e tests', function() {
   });
 
   it('Should make a snapshot of the visual current state', function() {
+    cy.wait(8000);
     cy.percySnapshot('Datamapper page - step 2');
   });
 
@@ -390,6 +392,7 @@ describe('Datamapper e2e tests', function() {
   });
 
   it('Should make a snapshot of the visual current state', function() {
+    cy.wait(8000);
     cy.percySnapshot('Datamapper page - step 3');
   });
 
@@ -428,6 +431,7 @@ describe('Datamapper e2e tests', function() {
   });
 
   it('Should make a snapshot of the visual current state', function() {
+    cy.wait(8000);
     cy.percySnapshot('Datamapper page - step 4');
   });
 
@@ -632,6 +636,7 @@ describe('Datamapper e2e tests', function() {
   });
 
   it('Should make a snapshot of the visual current state', function() {
+    cy.wait(8000);
     cy.percySnapshot('Datamapper page - step 5');
   });
 

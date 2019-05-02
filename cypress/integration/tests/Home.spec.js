@@ -4,6 +4,7 @@ describe('Home page navigation', function() {
   });
 
   it('Should make a snapshot of the visual current state', function() {
+    cy.wait(8000);
     cy.percySnapshot('Home page - Dialog');
   });
 
@@ -14,6 +15,7 @@ describe('Home page navigation', function() {
 });
 
 it('Should make a snapshot of the visual current state', function() {
+  cy.wait(8000);
   cy.percySnapshot('Home page');
 });
 
@@ -46,6 +48,7 @@ describe('Home page geo map filters', function() {
   });
 
   it('Should make a snapshot of the visual current steet', function() {
+    cy.wait(8000);
     cy.percySnapshot('Home page - Geo map filters');
   });
 

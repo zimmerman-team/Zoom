@@ -99,6 +99,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
   });
 
   it('Should make a snapshot of the visual current state', function() {
+    cy.wait(8000);
     cy.percySnapshot('Chartbuilder - Geomap');
   });
 

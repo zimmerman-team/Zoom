@@ -4,6 +4,7 @@ describe('About page E2E test', function() {
   });
 
   it('Should make a snapshot of the visual current state', function() {
+    cy.wait(8000);
     cy.percySnapshot('About page');
   });
 

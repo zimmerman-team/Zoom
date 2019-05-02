@@ -216,12 +216,15 @@ class VisualizerModuleMediator extends Component {
         prevProps.chartData.specOptions[graphKeys.colorPallet]
       )
     ) {
-      const selectedIndNames = this.props.chartData.selectedInd.map(indItem => {
-        return indItem.indicator;
+      const selectedInds = this.props.chartData.selectedInd.map(indItem => {
+        return {
+          indName: indItem.indicator,
+          subInd: indItem.selectedSubInd
+        };
       });
 
       const chartKeys = formatChartLegends(
-        selectedIndNames,
+        selectedInds,
         this.props.chartData.specOptions[graphKeys.colorPallet],
         this.props.chartData.chartKeys
       );
@@ -314,11 +317,19 @@ class VisualizerModuleMediator extends Component {
       // cause it might not have been loaded in with the same indexes
       // as the indicator selections, cause of promise stuff
       // the actual index was stored when initially this 'indicatorData' was formed
-      aggregationData[indItem.index] = indItem.indAggregation;
+      aggregationData[indItem.index] = {
+        data: indItem.indAggregation,
+        selectedSubInd: selectedInd[indItem.index].selectedSubInd
+      };
     });
 
-    const selectedIndNames = selectedInd.map(indItem => {
-      return indItem.indicator;
+    // we just reparse it here, cause we want to
+    // load in less data
+    const selectedInds = selectedInd.map(indItem => {
+      return {
+        indName: indItem.indicator,
+        subInd: indItem.selectedSubInd
+      };
     });
 
     let data = [];
@@ -336,7 +347,7 @@ class VisualizerModuleMediator extends Component {
         break;
       case chartTypes.lineChart:
         chartKeys = formatChartLegends(
-          selectedIndNames,
+          selectedInds,
           this.props.chartData.specOptions[graphKeys.colorPallet],
           this.props.chartData.chartKeys
         );
@@ -350,7 +361,7 @@ class VisualizerModuleMediator extends Component {
           aggregationData,
           this.props.chartData.specOptions[graphKeys.colorPallet]
         );
-        chartKeys = formatBarChartKeys(selectedIndNames);
+        chartKeys = formatBarChartKeys(selectedInds);
         break;
       case chartTypes.tableChart:
         data = formatTableData(aggregationData);
@@ -361,7 +372,7 @@ class VisualizerModuleMediator extends Component {
           this.props.chartData.specOptions[graphKeys.colorPallet]
         );
         chartKeys = formatChartLegends(
-          selectedIndNames,
+          selectedInds,
           this.props.chartData.specOptions[graphKeys.colorPallet],
           this.props.chartData.chartKeys
         );
@@ -549,10 +560,13 @@ class VisualizerModuleMediator extends Component {
       yearRange
     } = this.props.chartResults.chart;
 
-    const selectedIndNames = [];
+    const selectedInds = [];
 
     const selectedInd = indicatorItems.map((indItem, index) => {
-      selectedIndNames.push(indItem.indicator);
+      selectedInds.push({
+        indName: indItem.indicator,
+        subInds: indItem.selectedSubInd
+      });
       return {
         indicator: indItem.indicator,
         subIndicators: indItem.allSubIndicators,
@@ -584,7 +598,7 @@ class VisualizerModuleMediator extends Component {
           chartKeys ||
           getChartKeys(
             type,
-            selectedIndNames,
+            selectedInds,
             specOptions[graphKeys.colorPallet],
             []
           ),

@@ -31,9 +31,17 @@ const Pagination = props => (
     containerClassName="pagination"
     pageClassName="page"
     activeClassName="active-page"
-    nextClassName="nextPage"
-    previousClassName="prevPage"
+    // nextClassName="nextPage"
+    // previousClassName="prevPage"
     disabledClassName="disabledLab"
+    previousClassName={
+      props.pageCount > 1 && props.forcePage > 0 ? 'prevPage' : 'disabledLab'
+    }
+    nextClassName={
+      props.pageCount > 1 && props.forcePage + 1 < props.pageCount
+        ? 'nextPage'
+        : 'disabledLab'
+    }
   />
 );
 

@@ -27,7 +27,8 @@ const propTypes = {
   trashCharts: PropTypes.array,
   removeAll: PropTypes.func,
   loading: PropTypes.bool,
-  teams: PropTypes.array
+  teams: PropTypes.array,
+  isSuperAdmin: PropTypes.bool
 };
 
 const defaultProps = {
@@ -35,7 +36,8 @@ const defaultProps = {
   loading: false,
   removeAll: null,
   trashCharts: [],
-  loggedIn: true
+  loggedIn: true,
+  isSuperAdmin: false
 };
 
 /*todo: implement show/hide based on material-ui drawer component*/
@@ -64,6 +66,7 @@ const DashboardContent = props => {
         activeTab={props.activeTab}
         sort={props.sort}
         tabs={props.tabs}
+        isSuperAdmin={props.isSuperAdmin}
       />
     </FragmentBase>
   );

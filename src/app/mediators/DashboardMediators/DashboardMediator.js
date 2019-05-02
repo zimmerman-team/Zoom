@@ -473,6 +473,7 @@ class DashboardMediator extends React.Component {
         totalPages={this.getViewPagesNumber()}
         changePage={this.changePage}
         greetingName={greetingName}
+        isSuperAdmin={this.props.auth0Client.isSuperAdmin()}
       />
     );
   }

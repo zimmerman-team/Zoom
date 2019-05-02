@@ -1,12 +1,7 @@
-function signOut() {
-  cy.clearCookies();
-  cy.clearLocalStorage();
-}
 function signIn() {
   cy.visit('/');
   cy.wait(1000);
   cy.get('[data-cy="dialog-overlay"]').click();
-  signOut();
   cy.get('[data-cy=sidebar-toggle]').click();
   cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
   cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
@@ -60,7 +55,6 @@ function navigateToCountryFocusNetherlands() {
 describe('Create geo functionality', function() {
   it("Shouldn't be able to create geo when not logged in", function() {
     cy.visit('/home');
-    signOut();
     cy.wait(1000);
     cy.get('[data-cy="dialog-overlay"]').click();
     cy.get('[data-cy="appbar-right-button"]').should('not.have.text', 'Create');

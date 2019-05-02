@@ -30,8 +30,8 @@ export function data(
     {
       label: 'Users',
       path: `${Path}users`,
-      count: users.length,
-      adminOnly: true
+      count: users.length
+      // adminOnly: true
     },
     {
       label: 'Teams',

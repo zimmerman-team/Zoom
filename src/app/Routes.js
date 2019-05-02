@@ -1,6 +1,8 @@
-import React, { lazy, Suspense } from 'react';
+import React, { Suspense } from 'react';
+import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 // Utils
+import get from 'lodash/get';
 import PageLoader from 'modules/common/pageloader/PageLoader';
 // always active
 
@@ -189,14 +191,21 @@ const Routes = props => {
           <Route
             exact
             path="/edit-user/:userId"
-            render={() =>
-              props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
+            render={rProps => {
+              const isRegularUserEditSelf =
+                get(props.user.data, 'role', '') === 'Regular user' ||
+                get(props.user.data, 'role', '') === 'Moderator'
+                  ? get(props.user.data, 'authId', '') ===
+                    rProps.match.params.userId
+                  : false;
+              return props.auth0Client.isAuthenticated() &&
+                (props.auth0Client.isAdministrator() ||
+                  isRegularUserEditSelf) ? (
                 <EditUserMediator auth0Client={props.auth0Client} />
               ) : (
                 <Redirect to="/" />
-              )
-            }
+              );
+            }}
           />
           <Route
             exact
@@ -313,6 +322,14 @@ const Routes = props => {
   );
 };
 
+const mapStateToProps = state => {
+  return {
+    userUpdated: state.userUpdated,
+    userAdded: state.userAdded,
+    user: state.userPersist
+  };
+};
+
 Routes.propTypes = {};
 
-export default Routes;
+export default connect(mapStateToProps)(Routes);

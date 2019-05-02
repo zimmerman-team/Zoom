@@ -1,7 +1,7 @@
 import axios from 'axios';
 import auth0 from 'auth0-js';
 import get from 'lodash/get';
-import some from 'lodash/some';
+import find from 'lodash/find';
 import filter from 'lodash/filter';
 import { nodeBackendGetRequest } from 'services/index';
 
@@ -66,15 +66,18 @@ class Auth {
   }
 
   signOut() {
-    // localStorage.removeItem('userGroup');
-    localStorage.removeItem('auth_access_token');
-    localStorage.removeItem('auth_id_token');
-    localStorage.removeItem('auth_expires_at');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userGroup');
-    this.auth0.logout({
-      returnTo: process.env.REACT_APP_PROJECT_URL,
-      clientID: process.env.REACT_APP_CLIENT_ID
+    return new Promise((resolve, reject) => {
+      localStorage.removeItem('auth_access_token');
+      localStorage.removeItem('auth_id_token');
+      localStorage.removeItem('auth_expires_at');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('userGroup');
+      this.auth0.logout({
+        returnTo: process.env.REACT_APP_PROJECT_URL,
+        clientID: process.env.REACT_APP_CLIENT_ID
+      });
+
+      resolve();
     });
   }
 
@@ -247,7 +250,7 @@ class Auth {
                 )
                 .then(response2 => {
                   let result = response2.data.users;
-                  if (currentUserRole !== 'Super admin') {
+                  if (currentUserRole === 'Administrator') {
                     result = filter(response2.data.users, d => {
                       let pass = false;
                       const dUserGroups = get(
@@ -270,6 +273,17 @@ class Auth {
                       }
                       return pass;
                     });
+                  }
+                  if (currentUserRole === 'Regular user') {
+                    const currentUserEmail = get(
+                      this.getProfile(),
+                      'email',
+                      ''
+                    );
+                    const currentUser = find(response2.data.users, {
+                      email: currentUserEmail
+                    });
+                    result = [currentUser];
                   }
                   if (stateAction) {
                     stateAction({ users: result });

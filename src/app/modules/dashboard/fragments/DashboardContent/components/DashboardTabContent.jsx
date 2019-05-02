@@ -45,7 +45,8 @@ const propTypes = {
   removeAll: PropTypes.func,
   loading: PropTypes.bool,
   teams: PropTypes.array,
-  isSuperAdmin: PropTypes.bool
+  isSuperAdmin: PropTypes.bool,
+  isAdministrator: PropTypes.bool
 };
 
 const defaultProps = {
@@ -57,7 +58,8 @@ const defaultProps = {
   teams: [],
   loading: false,
   tabContentName: 'Charts',
-  isSuperAdmin: false
+  isSuperAdmin: false,
+  isAdministrator: false
 };
 
 const DashboardTabContent = props => {
@@ -88,7 +90,8 @@ const DashboardTabContent = props => {
     case 'users':
       targetData = props.users;
       targetUrl = '/add-user';
-      leftOptionLabel = 'add user';
+      leftOptionLabel =
+        props.isAdministrator || props.isSuperAdmin ? 'add user' : null;
       tabContentName = 'Users';
       break;
     case 'teams':

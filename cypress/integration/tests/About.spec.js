@@ -16,8 +16,10 @@ describe('About page E2E test', function() {
     cy.get('[data-cy="about-paragraph"]').should('have.length', 3);
   });
 
+  //So we want to make this assertion of the element actually being there.
+  //The tests are being run in a 1680 x 954 (49%) window.
   it('Hovering over 2012 spent rectangle should display overlay', function() {
-    cy.get('[transform="translate(160.5, 0)"] > rect').trigger('mouseover');
+    cy.get('[transform="translate(107, 207)"] > rect').trigger('mouseover');
   });
 
   it('Click link should redirect to Aidsfonds website', function() {

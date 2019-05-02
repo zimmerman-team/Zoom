@@ -9,6 +9,7 @@ import { BarchartMockData } from './BachartMockData';
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import { ResponsiveBar } from '@nivo/bar';
+import TooltipContent from 'modules/visualizer/sort/container/fragments/common/ToolTipContent';
 
 /* styles */
 import { FragmentBase } from '../VizContainer.style';
@@ -35,7 +36,9 @@ const BarchartFragment = props => {
       <Box>
         <ResponsiveBar
           data={props.indicatorData}
-          keys={props.chartKeys}
+          keys={props.chartKeys.map(item => {
+            return item.key;
+          })}
           indexBy="geolocation"
           margin={{
             top: 20,
@@ -43,6 +46,15 @@ const BarchartFragment = props => {
             bottom: 25,
             left: 30
           }}
+          tooltip={payload => (
+            <TooltipContent
+              xKey={payload.indexValue}
+              index={payload.index}
+              color={payload.color}
+              valueLabel={payload.data[`${payload.id}Label`]}
+              value={payload.value}
+            />
+          )}
           padding={0.3}
           groupMode="grouped"
           colors="nivo"
@@ -110,7 +122,7 @@ const BarchartFragment = props => {
           legends={[]}
         />
       </Box>
-      <ChartLegends />
+      <ChartLegends data={props.chartKeys} />
     </FragmentBase>
   );
 };

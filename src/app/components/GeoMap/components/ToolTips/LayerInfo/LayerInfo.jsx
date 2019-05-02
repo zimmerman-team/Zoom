@@ -34,11 +34,13 @@ const layerInfo = hoverLayerInfo => {
       >
         <ToolTipTitle>{countryName}</ToolTipTitle>
         <ValueContainer>
-          <ToolTipLabel>{hoverLayerInfo.properties.indName}: </ToolTipLabel>
-          <ToolTipText>
-            {formatNumber(hoverLayerInfo.properties.value)}
-            {nrFormat}
-          </ToolTipText>
+          <ToolTipLabel>
+            {hoverLayerInfo.properties.tooltipLabel}:
+            <ToolTipText>
+              {formatNumber(hoverLayerInfo.properties.value)}
+              {nrFormat}
+            </ToolTipText>
+          </ToolTipLabel>
         </ValueContainer>
       </ToolTipContainer>
     );

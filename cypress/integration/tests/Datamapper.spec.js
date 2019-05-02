@@ -201,16 +201,15 @@ describe('Datamapper e2e tests', function() {
     //  we click the column selection to select which column values to find
     cy.get(
       `tbody tr:nth-child(${rowNumber}) td:nth-child(2) [data-name="selectHeader"]`
-    ).click({force: true});
+    ).click({ force: true });
 
     // we click the 'Source.1' column to check find all the 'nan' values
-    cy.get(`li:nth-child(${valNumber})`).click({force: true});
+    cy.get(`li:nth-child(${valNumber})`).click({ force: true });
   }
 
   it('Go to datamapper', function() {
     signIn();
     cy.visit('/mapper');
-
   });
 
   it('Page should contain first steps title', function() {

@@ -10,53 +10,96 @@ import ProfileSettingsModule from './modules/profilesettings/ProfileSettingsModu
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
 
 // Modules lazy load
-const CountryDetailMediator = lazy(() =>
+/*const CountryDetailMediator = lazy(() =>
   import(
     'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator'
   )
-);
+);*/
+
+import CountryDetailMediator from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator';
+
+/*
 const HomeModuleMediator = lazy(() =>
   import('mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator')
 );
+*/
 
-const FocusModuleMediator = lazy(() =>
+import HomeModuleMediator from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator';
+
+/*const FocusModuleMediator = lazy(() =>
   import('mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator')
-);
+);*/
 
+import FocusModuleMediator from 'mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator';
+
+/*
 const VisualizerModuleMediator = lazy(() =>
   import(
     'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator'
   )
 );
+*/
 
+import VisualizerModuleMediator from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator';
+
+/*
 const IatiDetailMediator = lazy(() =>
   import('mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator')
 );
-const AddUserMediator = lazy(() =>
+*/
+
+import IatiDetailMediator from 'mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator';
+
+/*const AddUserMediator = lazy(() =>
   import('mediators/ModuleMediators/AddUserMediator/AddUserMediator')
-);
-const EditUserMediator = lazy(() =>
+);*/
+
+import AddUserMediator from 'mediators/ModuleMediators/AddUserMediator/AddUserMediator';
+
+/*const EditUserMediator = lazy(() =>
   import('mediators/ModuleMediators/EditUserMediator/EditUserMediator')
-);
-const CreateTeamMediator = lazy(() =>
+);*/
+
+import EditUserMediator from 'mediators/ModuleMediators/EditUserMediator/EditUserMediator';
+
+/*const CreateTeamMediator = lazy(() =>
   import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator')
-);
+);*/
+
+import CreateTeamMediator from 'mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator';
+
+/*
 const EditTeamMediator = lazy(() =>
   import('mediators/ModuleMediators/EditTeamMediator/EditTeamMediator')
 );
-const PublicDashMediator = lazy(() =>
+*/
+
+import EditTeamMediator from 'mediators/ModuleMediators/EditTeamMediator/EditTeamMediator';
+
+/*const PublicDashMediator = lazy(() =>
   import('mediators/DashboardMediators/PublicDashMediator')
-);
+);*/
 
-const DatasetMediator = lazy(() =>
+import PublicDashMediator from 'mediators/DashboardMediators/PublicDashMediator';
+
+/*const DatasetMediator = lazy(() =>
   import('mediators/ModuleMediators/DatasetMediator/DatasetMediator')
-);
+);*/
 
-const About = lazy(() => import('modules/about/About'));
+import DatasetMediator from 'mediators/ModuleMediators/DatasetMediator/DatasetMediator';
 
+// const About = lazy(() => import('modules/about/About'));
+
+import About from 'modules/about/About';
+import CookieModule from 'modules/CookieModule/CookieModule';
+
+/*
 const DashboardMediator = lazy(() =>
   import('mediators/DashboardMediators/DashboardMediator')
 );
+*/
+
+import DashboardMediator from 'mediators/DashboardMediators/DashboardMediator';
 
 // const ManMappingStep = lazy(() =>
 //   import('modules/datamapper/fragments/ManMappingStep/ManMappingStep')
@@ -219,6 +262,7 @@ const Routes = props => {
             }
           />
           <Route path="/about" render={() => <About />} />
+          <Route path="/cookies" render={() => <CookieModule />} />
           <Route
             path="/mapper"
             render={() =>

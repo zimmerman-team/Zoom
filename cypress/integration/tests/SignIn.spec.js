@@ -2,7 +2,7 @@ context('Sign in', () => {
   it('Visit Homepage', () => {
     cy.visit('/');
     cy.wait(1000);
-    cy.get('[data-cy="dialog-overlay"]').click({force: true});
+    cy.get('[data-cy="dialog-overlay"]').click({ force: true });
   });
   it('Check if signed in', () => {
     cy.get('[data-cy=sidebar-toggle]').click();

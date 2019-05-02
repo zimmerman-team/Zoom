@@ -16,42 +16,42 @@ function signIn() {
 }
 function navigateToCreateGeo() {
   cy.visit('/home');
-  cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="dialog-overlay"]').click({ force: true });
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
 }
 function navigateToCreateLinechart() {
   cy.visit('/home');
-  cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="dialog-overlay"]').click({ force: true });
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-3"]').click();
 }
 function navigateToTablechart() {
   cy.visit('/home');
-  cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="dialog-overlay"]').click({ force: true });
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-5"]').click();
 }
 function navigateToBarchart() {
   cy.visit('/home');
-  cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="dialog-overlay"]').click({ force: true });
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-4"]').click();
 }
 function navigateToCountryFocusKenya() {
   cy.visit('/home');
-  cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="dialog-overlay"]').click({ force: true });
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-1"]').click();
 }
 function navigateToCountryFocusNetherlands() {
   cy.visit('/home');
-  cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  cy.get('[data-cy="dialog-overlay"]').click({ force: true });
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-2"]').click();
@@ -156,7 +156,7 @@ describe('Chartbuilder line chart fragment e2e', function() {
 
   it('Should display mapped data on the linechart', function() {
     navigateToCreateLinechart();
-    cy.contains('Select indicator').click({force: true});
+    cy.contains('Select indicator').click({ force: true });
     cy.contains('aids related deaths (unaids)').click();
     cy.get('[data-cy="aids related deaths (unaids)"]');
   });
@@ -172,27 +172,34 @@ describe('Chartbuilder table chart fragment e2e', function() {
   it('Should display aids related deaths in the year 1990', function() {
     cy.get('[data-cy="year-1990"]').click();
     cy.wait(1000);
-    cy.get('#MUIDataTableBodyRow-2 > :nth-child(5)').should("contain", "1990");
-    cy.get('#MUIDataTableBodyRow-2 > :nth-child(9)').should("contain", "aids related deaths (unaids)");
+    cy.get('#MUIDataTableBodyRow-2 > :nth-child(5)').should('contain', '1990');
+    cy.get('#MUIDataTableBodyRow-2 > :nth-child(9)').should(
+      'contain',
+      'aids related deaths (unaids)'
+    );
   });
 
   it('Should sort on Geolocation', function() {
-    cy.get(":nth-child(2) > .MUIDataTableHeadCell-toolButton > .MUIDataTableHeadCell-data").click();
-    cy.get('tbody>tr').first().should("contain", "zimbabwe")
+    cy.get(
+      ':nth-child(2) > .MUIDataTableHeadCell-toolButton > .MUIDataTableHeadCell-data'
+    ).click();
+    cy.get('tbody>tr')
+      .first()
+      .should('contain', 'zimbabwe');
   });
 
   it('Should only display Kenya data when searching "kenya"', function() {
     cy.get('[aria-label="Search"]').click();
-    cy.get(".MuiInputBase-root > .MuiInputBase-input").type("kenya");
-    cy.get("tbody>tr").should("contain", "kenya");
+    cy.get('.MuiInputBase-root > .MuiInputBase-input').type('kenya');
+    cy.get('tbody>tr').should('contain', 'kenya');
   });
 
   it('Should be able to delete Kenya data from table', function() {
-    cy.get("tbody>tr").within(() => {
+    cy.get('tbody>tr').within(() => {
       cy.get('input[type="checkbox"]').click();
     });
     cy.get('[aria-label="Delete Selected Rows"]').click();
-    cy.get("tbody>tr").should("contain", "Sorry, no matching records found");
+    cy.get('tbody>tr').should('contain', 'Sorry, no matching records found');
 
     cy.get('[aria-label="Search"]').click();
     cy.get('.MUIDataTableSearch-main').within(() => {
@@ -202,7 +209,7 @@ describe('Chartbuilder table chart fragment e2e', function() {
 
   it('Resetting all values should leave a empty datatable', function() {
     cy.get('[data-cy="data-explorer-panel-reset"]').click();
-    cy.get("tbody>tr").should("contain", "Sorry, no matching records found");
+    cy.get('tbody>tr').should('contain', 'Sorry, no matching records found');
   });
 });
 
@@ -231,4 +238,3 @@ describe('Chartbuilder country focus Netherlands fragment e2e', function() {
     cy.url().should('include', '/visualizer/focusNL');
   });
 });
-

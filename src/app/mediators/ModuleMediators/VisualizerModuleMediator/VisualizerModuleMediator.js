@@ -317,6 +317,9 @@ class VisualizerModuleMediator extends Component {
       aggregationData[indItem.index] = indItem.indAggregation;
     });
 
+    // TODO: Continue from here
+    const selectedIndNames = [];
+
     const selectedIndNames = selectedInd.map(indItem => {
       return indItem.indicator;
     });

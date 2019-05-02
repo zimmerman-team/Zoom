@@ -1,7 +1,12 @@
+function signOut() {
+  cy.clearCookies();
+  cy.clearLocalStorage();
+}
 function signIn() {
   cy.visit('/');
   cy.wait(1000);
   cy.get('[data-cy="dialog-overlay"]').click();
+  signOut();
   cy.get('[data-cy=sidebar-toggle]').click();
   cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
   cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
@@ -10,42 +15,42 @@ function signIn() {
   cy.wait(7000);
 }
 function navigateToCreateGeo() {
-  cy.get('[data-cy="home-logo"]').click();
+  cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
 }
 function navigateToCreateLinechart() {
-  cy.get('[data-cy="home-logo"]').click();
+  cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-3"]').click();
 }
 function navigateToTablechart() {
-  cy.get('[data-cy="home-logo"]').click();
+  cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-5"]').click();
 }
 function navigateToBarchart() {
-  cy.get('[data-cy="home-logo"]').click();
+  cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-4"]').click();
 }
 function navigateToCountryFocusKenya() {
-  cy.get('[data-cy="home-logo"]').click();
+  cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-1"]').click();
 }
 function navigateToCountryFocusNetherlands() {
-  cy.get('[data-cy="home-logo"]').click();
+  cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
@@ -55,6 +60,7 @@ function navigateToCountryFocusNetherlands() {
 describe('Create geo functionality', function() {
   it("Shouldn't be able to create geo when not logged in", function() {
     cy.visit('/home');
+    signOut();
     cy.wait(1000);
     cy.get('[data-cy="dialog-overlay"]').click();
     cy.get('[data-cy="appbar-right-button"]').should('not.have.text', 'Create');
@@ -90,7 +96,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
   it('Should contain /geomap in the url', function() {
     navigateToCreateGeo();
 
-    // Fixme: use the navigateToCreateGe() function
+    // Fixme: use the navigateToCreateGeo() function
     // So the navigateToCreateGeo() function is failling.
     // Although the user is logged in, it gets the "geo map filters" button instead of the "create" button.
     // I failed to reproduce this bug on local, dev and test server.

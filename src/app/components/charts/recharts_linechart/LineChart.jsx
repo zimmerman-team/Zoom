@@ -27,6 +27,8 @@ const defaultProps = {
 };
 
 const LineChart = ({ data, chartKeys, xAxisKey, specOptions }) => {
+  console.log('chartKeys', chartKeys);
+
   return (
     <ResponsiveContainer>
       <ReLineChart
@@ -74,6 +76,7 @@ const LineChart = ({ data, chartKeys, xAxisKey, specOptions }) => {
               stroke: '#fff',
               fill: chartKey.color
             }}
+            name={chartKey.label}
             dataKey={chartKey.name}
             stroke={chartKey.color}
             yAxisId={chartKey.orientation}

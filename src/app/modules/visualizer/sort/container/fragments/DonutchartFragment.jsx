@@ -13,6 +13,7 @@ import graphKeys from '__consts__/GraphStructKeyConst';
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import { ResponsivePie } from '@nivo/pie';
+import TooltipContent from 'modules/visualizer/sort/container/fragments/common/ToolTipContent';
 
 /* styles */
 import { FragmentBase } from '../VizContainer.style';
@@ -77,15 +78,24 @@ const DonutchartFragment = props => {
             }
             return item.label;
           }}
-          tooltipFormat={l => {
-            return `EUR ${l.toLocaleString(
-              {},
-              {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 2
-              }
-            )}`;
-          }}
+          tooltip={payload => (
+            <TooltipContent
+              index={payload.id}
+              color={payload.color}
+              valueLabel={payload.label}
+              value={payload.value}
+            />
+          )}
+          // tooltipFormat={l => {
+          //   console.log(l);
+          //   return `EUR ${l.toLocaleString(
+          //     {},
+          //     {
+          //       minimumFractionDigits: 0,
+          //       maximumFractionDigits: 2
+          //     }
+          //   )}`;
+          // }}
           defs={[
             {
               id: 'dots',

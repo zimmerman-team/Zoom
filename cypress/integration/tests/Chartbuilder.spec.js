@@ -18,11 +18,8 @@ function signIn() {
 function navigateToCreateGeo() {
   cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
-  cy.get('[data-cy="appbar-right-button"]').should('have.text', 'Create')
-    .then(() => {
-      cy.get('[data-cy="appbar-right-button"]').click();
-      cy.get('[data-cy="appbar-right-button"]').click();
-    });
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
@@ -30,11 +27,8 @@ function navigateToCreateGeo() {
 function navigateToCreateLinechart() {
   cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
-  cy.get('[data-cy="appbar-right-button"]').should('have.text', 'Create')
-    .then(() => {
-      cy.get('[data-cy="appbar-right-button"]').click();
-      cy.get('[data-cy="appbar-right-button"]').click();
-    });
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-3"]').click();
@@ -42,11 +36,8 @@ function navigateToCreateLinechart() {
 function navigateToTablechart() {
   cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
-  cy.get('[data-cy="appbar-right-button"]').should('have.text', 'Create')
-    .then(() => {
-      cy.get('[data-cy="appbar-right-button"]').click();
-      cy.get('[data-cy="appbar-right-button"]').click();
-    });
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-5"]').click();
@@ -54,11 +45,8 @@ function navigateToTablechart() {
 function navigateToBarchart() {
   cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
-  cy.get('[data-cy="appbar-right-button"]').should('have.text', 'Create')
-    .then(() => {
-      cy.get('[data-cy="appbar-right-button"]').click();
-      cy.get('[data-cy="appbar-right-button"]').click();
-    });
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-4"]').click();
@@ -66,11 +54,8 @@ function navigateToBarchart() {
 function navigateToCountryFocusKenya() {
   cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
-  cy.get('[data-cy="appbar-right-button"]').should('have.text', 'Create')
-    .then(() => {
-      cy.get('[data-cy="appbar-right-button"]').click();
-      cy.get('[data-cy="appbar-right-button"]').click();
-    });
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-1"]').click();
@@ -78,11 +63,8 @@ function navigateToCountryFocusKenya() {
 function navigateToCountryFocusNetherlands() {
   cy.visit('/home');
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
-  cy.get('[data-cy="appbar-right-button"]').should('have.text', 'Create')
-    .then(() => {
-      cy.get('[data-cy="appbar-right-button"]').click();
-      cy.get('[data-cy="appbar-right-button"]').click();
-    });
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-2"]').click();
@@ -119,8 +101,6 @@ describe('Create geo functionality', function() {
     cy.get('[data-cy="nav-pane-item-6"]').should('have.text', 'Donut chart');
   });
 });
-
-
 
 describe('Chartbuilder geomap chart fragment e2e', function() {
   it('Should contain /geomap in the url', function() {

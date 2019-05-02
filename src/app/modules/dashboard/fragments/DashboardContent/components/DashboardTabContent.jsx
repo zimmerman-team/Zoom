@@ -44,8 +44,10 @@ const propTypes = {
   trashCharts: PropTypes.array,
   removeAll: PropTypes.func,
   loading: PropTypes.bool,
-  teams: PropTypes.array
+  teams: PropTypes.array,
+  isSuperAdmin: PropTypes.bool
 };
+
 const defaultProps = {
   charts: [],
   data: [],
@@ -54,7 +56,8 @@ const defaultProps = {
   trashCharts: [],
   teams: [],
   loading: false,
-  tabContentName: 'Charts'
+  tabContentName: 'Charts',
+  isSuperAdmin: false
 };
 
 const DashboardTabContent = props => {
@@ -91,7 +94,7 @@ const DashboardTabContent = props => {
     case 'teams':
       targetData = props.teams;
       targetUrl = '/create-team';
-      leftOptionLabel = 'create team';
+      leftOptionLabel = props.isSuperAdmin ? 'create team' : null;
       tabContentName = 'Teams';
       break;
     case 'trash':
@@ -121,10 +124,6 @@ const DashboardTabContent = props => {
       {/*/>*/}
       {/*)}*/}
 
-      {targetData.length === 0 && (
-        <Message>No item in {tabContentName}</Message>
-      )}
-
       {(props.dataPaneOpen === paneTypes.privPane ||
         props.dataPaneOpen === paneTypes.createChart ||
         props.dataPaneOpen === paneTypes.convertData) && (
@@ -133,24 +132,25 @@ const DashboardTabContent = props => {
         </DataPaneContainer>
       )}
 
-      {targetData.length > 0 && (
-        <Box>
-          <GridListOptionsPane
-            removeAll={props.removeAll}
-            leftOptionLabel={leftOptionLabel}
-            sortIsVisible={sortIsVisible}
-            isRemoveOption={isRemoveOption}
-            isSortByOpen={props.isSortByOpen}
-            changeSortBy={props.changeSortBy}
-            setWrapperRef={props.setWrapperRef}
-            setIsSortByOpen={props.setIsSortByOpen}
-            activeTab={props.activeTab}
-            sort={props.sort}
-            tabs={props.tabs}
-            targetUrl={targetUrl}
-          />
-          <GridList items={targetData} />
-        </Box>
+      <Box>
+        <GridListOptionsPane
+          removeAll={props.removeAll}
+          leftOptionLabel={leftOptionLabel}
+          sortIsVisible={sortIsVisible}
+          isRemoveOption={isRemoveOption}
+          isSortByOpen={props.isSortByOpen}
+          changeSortBy={props.changeSortBy}
+          setWrapperRef={props.setWrapperRef}
+          setIsSortByOpen={props.setIsSortByOpen}
+          activeTab={props.activeTab}
+          sort={props.sort}
+          tabs={props.tabs}
+          targetUrl={targetUrl}
+        />
+        {targetData.length > 0 && <GridList items={targetData} />}
+      </Box>
+      {targetData.length === 0 && (
+        <Message>No item in {tabContentName}</Message>
       )}
     </ComponentBase>
   );

@@ -16,7 +16,7 @@ function signIn() {
 }
 
 function navigateToCreateGeo() {
-  cy.visit('/home');
+  signIn();
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
@@ -25,7 +25,7 @@ function navigateToCreateGeo() {
   cy.get('[data-cy="nav-pane-item-0"]').click();
 }
 function navigateToCreateLinechart() {
-  cy.visit('/home');
+  signIn();
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
@@ -34,25 +34,27 @@ function navigateToCreateLinechart() {
   cy.get('[data-cy="nav-pane-item-3"]').click();
 }
 function navigateToTablechart() {
-  cy.visit('/home');
-  cy.get('[data-cy="dialog-overlay"]').click({force: true});
-  cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="nav-pane-item-0"]').click();
-  cy.get('[data-cy="nav-pane-item-5"]').click();
+  cy.visit('/visualizer/tablechart/vizID/edit');
+  // cy.visit('/home');
+  // cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  // cy.get('[data-cy="appbar-right-button"]').click();
+  // cy.get('[data-cy="appbar-right-button"]').click();
+  // cy.get('[data-cy="appbar-right-button"]').click();
+  // cy.get('[data-cy="nav-pane-item-0"]').click();
+  // cy.get('[data-cy="nav-pane-item-5"]').click();
 }
 function navigateToBarchart() {
-  cy.visit('/home');
-  cy.get('[data-cy="dialog-overlay"]').click({force: true});
-  cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="nav-pane-item-0"]').click();
-  cy.get('[data-cy="nav-pane-item-4"]').click();
+  cy.visit('/visualizer/barchart/vizID/edit');
+  // cy.visit('/home');
+  // cy.get('[data-cy="dialog-overlay"]').click({force: true});
+  // cy.get('[data-cy="appbar-right-button"]').click();
+  // cy.get('[data-cy="appbar-right-button"]').click();
+  // cy.get('[data-cy="appbar-right-button"]').click();
+  // cy.get('[data-cy="nav-pane-item-0"]').click();
+  // cy.get('[data-cy="nav-pane-item-4"]').click();
 }
 function navigateToCountryFocusKenya() {
-  cy.visit('/home');
+  signIn();
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
@@ -61,7 +63,7 @@ function navigateToCountryFocusKenya() {
   cy.get('[data-cy="nav-pane-item-1"]').click();
 }
 function navigateToCountryFocusNetherlands() {
-  cy.visit('/home');
+  signIn();
   cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();

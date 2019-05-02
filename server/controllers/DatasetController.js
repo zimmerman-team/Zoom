@@ -89,7 +89,7 @@ const DatasetApi = {
       if (error) general.handleError(res, error);
       else if (!acc) general.handleError(res, 'User not found', 404);
       else {
-        if (acc.role === 'Administrator') {
+        if (acc.role === 'Administrator' || acc.role === 'Super admin') {
           const dataset = new Dataset({
             datasetId: data.datasetId,
             author: acc,
@@ -118,7 +118,10 @@ const DatasetApi = {
     User.findOne({ authId: data.authId }, (error, author) => {
       if (error) general.handleError(res, error);
       else if (!author) general.handleError(res, 'User not found', 404);
-      else if (author.role === 'Administrator') {
+      else if (
+        author.role === 'Administrator' ||
+        author.role === 'Super admin'
+      ) {
         Dataset.findOne(
           { author, datasetId: data.datasetId },
           (setError, dataset) => {

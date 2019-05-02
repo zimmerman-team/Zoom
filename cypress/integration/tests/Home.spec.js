@@ -9,7 +9,6 @@ describe('Home page navigation', function() {
   });
 });
 
-
 describe('Home page map controls', function() {
   // it('Goes in and out of fullscreen', function() {
   //   cy.get('[data-cy="home-fullscreen-button"]').click();
@@ -54,6 +53,9 @@ describe('Home page geo map filters', function() {
   });
 
   it('Plots Europe data about aids related deaths', function() {
-    cy.get('[data-cy="legendLayer-label"]').should('contain', 'aids related deaths');
+    cy.get('[data-cy="legendLayer-label"]').should(
+      'contain',
+      'aids related deaths'
+    );
   });
 });

@@ -11,8 +11,15 @@ function signIn() {
   cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
   cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
   cy.get('[data-cy=sidebar-login-button]').click();
+}
 
-  cy.wait(7000);
+function hackz(navigate){
+  if(cy.get('[data-cy="appbar-right-button"]').should(' contain', 'create' )){
+    navigate();
+  }else{
+    cy.get('[data-cy="appbar-right-button"]').click();
+    cy.get('[data-cy="appbar-right-button"]').click();
+  }
 }
 function navigateToCreateGeo() {
   cy.visit('/home');
@@ -60,7 +67,6 @@ function navigateToCountryFocusNetherlands() {
 describe('Create geo functionality', function() {
   it("Shouldn't be able to create geo when not logged in", function() {
     cy.visit('/home');
-    signOut();
     cy.wait(1000);
     cy.get('[data-cy="dialog-overlay"]').click();
     cy.get('[data-cy="appbar-right-button"]').should('not.have.text', 'Create');
@@ -94,7 +100,7 @@ describe('Create geo functionality', function() {
 
 describe('Chartbuilder geomap chart fragment e2e', function() {
   it('Should contain /geomap in the url', function() {
-    navigateToCreateGeo();
+    hackz(navigateToCreateGeo());
 
     // Fixme: use the navigateToCreateGeo() function
     // So the navigateToCreateGeo() function is failling.

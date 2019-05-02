@@ -215,7 +215,7 @@ const Routes = props => {
             path="/create-team"
             render={() =>
               props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
+              props.auth0Client.isSuperAdmin() ? (
                 <CreateTeamMediator auth0Client={props.auth0Client} />
               ) : (
                 <Redirect to="/" />

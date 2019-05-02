@@ -42,7 +42,7 @@ export function data(
   ];
 
   return filter(tabs, t => {
-    if (t.adminObnly) return isAdmin;
+    if (t.adminOnly) return isAdmin;
     if (t.superAdminOnly) return isSuperAdmin;
     return true;
   });

@@ -3,15 +3,9 @@ beforeEach(() => {
   Cypress.Cookies.preserveOnce('homeDialogShown', 'false')
 });
 
-// function signOut() {
-//   cy.clearCookies();
-//   cy.clearLocalStorage();
-// }
-
 function signIn() {
-  cy.visit('/');
+  cy.visit('/home');
   cy.wait(1000);
-  // signOut();
   cy.get('[data-cy=sidebar-toggle]').click();
   cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
   cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
@@ -21,43 +15,33 @@ function signIn() {
 }
 
 function navigateToCreateGeo() {
-  signIn();
+  // signIn();
   cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="appbar-right-button"]').click();
+  // cy.get('[data-cy="appbar-right-button"]').click();
+  // cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
 }
+
 function navigateToCreateLinechart() {
-  signIn();
+  // signIn();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-3"]').click();
 }
+
 function navigateToTablechart() {
   cy.visit('/visualizer/tablechart/vizID/edit');
-  // cy.visit('/home');
-  // cy.get('[data-cy="dialog-overlay"]').click({force: true});
-  // cy.get('[data-cy="appbar-right-button"]').click();
-  // cy.get('[data-cy="appbar-right-button"]').click();
-  // cy.get('[data-cy="appbar-right-button"]').click();
-  // cy.get('[data-cy="nav-pane-item-0"]').click();
-  // cy.get('[data-cy="nav-pane-item-5"]').click();
 }
+
 function navigateToBarchart() {
   cy.visit('/visualizer/barchart/vizID/edit');
-  // cy.visit('/home');
-  // cy.get('[data-cy="dialog-overlay"]').click({force: true});
-  // cy.get('[data-cy="appbar-right-button"]').click();
-  // cy.get('[data-cy="appbar-right-button"]').click();
-  // cy.get('[data-cy="appbar-right-button"]').click();
-  // cy.get('[data-cy="nav-pane-item-0"]').click();
-  // cy.get('[data-cy="nav-pane-item-4"]').click();
 }
+
 function navigateToCountryFocusKenya() {
-  signIn();
+  // signIn();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
@@ -65,7 +49,7 @@ function navigateToCountryFocusKenya() {
   cy.get('[data-cy="nav-pane-item-1"]').click();
 }
 function navigateToCountryFocusNetherlands() {
-  signIn();
+  // signIn();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
@@ -106,7 +90,7 @@ describe('Create geo functionality', function() {
 });
 
 describe('Chartbuilder geomap chart fragment e2e', function() {
-  it('Should contain /geomap in the url', function() {
+  it('Should include /geomap in the url', function() {
     navigateToCreateGeo();
     cy.url().should('include', '/visualizer/geomap');
   });
@@ -114,12 +98,13 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
+    cy.wait(2000);
     cy.percySnapshot('Chartbuilder - Geomap');
   });
 
   it('Should pass written text from the /context to /preview', function() {
     // Fixme: Change to proper url or simultate click of the button.
-    cy.visit('/visualizer/geomap/vizID/context');
+    cy.get('tab-2');
     cy.get('textarea')
       .last()
       .type('This is a test');

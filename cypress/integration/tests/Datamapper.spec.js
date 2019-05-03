@@ -212,8 +212,8 @@ describe('Datamapper e2e tests', function() {
   it('Go to datamapper', function() {
     signIn();
     cy.visit('/mapper');
-    cy.waitPageLoader();
     cy.waitPageLoader2();
+    cy.waitPageLoader();
   });
 
   it('Should make a snapshot of the visual current state', function() {

@@ -5,7 +5,7 @@ function signOut() {
 function signIn() {
   cy.visit('/');
   cy.wait(1000);
-  cy.get('[data-cy="dialog-overlay"]').click();
+  cy.get('[data-cy="dialog-overlay"]').click({force: true});
   signOut();
   cy.get('[data-cy=sidebar-toggle]').click();
   cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));

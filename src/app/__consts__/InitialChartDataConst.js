@@ -44,7 +44,7 @@ const initialState = {
   selectedYear: '2005',
   selectedYears: formatYearParam([2000, 2010]),
   _public: false,
-  team: false,
+  team: [],
   chartKeys:
     process.env.NODE_ENV === 'development'
       ? [

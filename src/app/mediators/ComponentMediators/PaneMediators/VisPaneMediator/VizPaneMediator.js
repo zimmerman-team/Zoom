@@ -519,17 +519,15 @@ class VizPaneMediator extends React.Component {
   handleAxisSwitch(checked, indicator, index) {
     // so if checked is false this the left axis will be selected
     // for this indicator otherwise its the right
-    if (indicator) {
-      const { chartKeys } = this.props.chartData;
+    const { chartKeys } = this.props.chartData;
 
-      chartKeys[index].orientation = checked ? 'right' : 'left';
+    chartKeys[index].orientation = checked ? 'right' : 'left';
 
-      this.props.dispatch(
-        actions.storeChartDataRequest({
-          chartKeys
-        })
-      );
-    }
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        chartKeys
+      })
+    );
   }
 
   saveGraphOption(value, key) {

@@ -429,19 +429,27 @@ class VisualizerModuleMediator extends Component {
     let orderBy = [];
 
     if (this.props.chartData.selectedInd.length > 0) {
-      // so the first option in the axis options is 'geo' so if aggregated by geolocation
-      // the user can only select one year and the order is by 'geolocationTag'
-      // and if aggregated by year, which is the other option, the user can select
-      // a range of years by which to aggregate and the orderBy is by 'date'
       if (
-        this.props.chartData.specOptions[graphKeys.aggregate] ===
-        aggrOptions[0].value
+        this.props.paneData.chartType === chartTypes.lineChart ||
+        this.props.paneData.chartType === chartTypes.barChart
       ) {
+        // so the first option in the axis options is 'geo' so if aggregated by geolocation
+        // the user can only select one year and the order is by 'geolocationTag'
+        // and if aggregated by year, which is the other option, the user can select
+        // a range of years by which to aggregate and the orderBy is by 'date'
+        if (
+          this.props.chartData.specOptions[graphKeys.aggregate] ===
+          aggrOptions[0].value
+        ) {
+          datePeriod = [this.props.chartData.selectedYear];
+          orderBy = [aggrKeys[aggrOptions[0].value]];
+        } else {
+          datePeriod = this.props.chartData.selectedYears;
+          orderBy = [aggrKeys[aggrOptions[1].value]];
+        }
+      } else {
         datePeriod = [this.props.chartData.selectedYear];
         orderBy = [aggrKeys[aggrOptions[0].value]];
-      } else {
-        datePeriod = this.props.chartData.selectedYears;
-        orderBy = [aggrKeys[aggrOptions[1].value]];
       }
     }
 
@@ -507,7 +515,8 @@ class VisualizerModuleMediator extends Component {
   selectYearRange(array) {
     this.props.dispatch(
       actions.storeChartDataRequest({
-        selectedYears: array
+        selectedYears: array,
+        changesMade: true
       })
     );
   }
@@ -553,7 +562,7 @@ class VisualizerModuleMediator extends Component {
       author,
       dataSources,
       _public,
-      team,
+      teams,
       descIntro,
       specOptions,
       created,
@@ -582,7 +591,7 @@ class VisualizerModuleMediator extends Component {
         chartMounted: true,
         name,
         _public,
-        team: team.length > 0,
+        team: teams.length > 0,
         data: this.props.chartResults.data || [],
         chartId: _id,
         descIntro,
@@ -629,7 +638,11 @@ class VisualizerModuleMediator extends Component {
         outerHistory={this.props.history}
         chartType={this.props.paneData.chartType}
         code={this.props.match.params.code}
-        loading={this.state.loading}
+        loading={
+          this.state.loading ||
+          this.props.chartCreated.request ||
+          this.props.dupChartCreated.request
+        }
         auth0Client={this.props.auth0Client}
         selectYearRange={this.selectYearRange}
         selectYear={this.selectYear}
@@ -651,6 +664,7 @@ const mapStateToProps = state => {
     chartData: state.chartData.chartData,
     user: state.user.data,
     dupChartCreated: state.dupChartCreated,
+    chartCreated: state.chartCreated,
     paneData: state.paneData.paneData
   };
 };

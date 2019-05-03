@@ -375,7 +375,13 @@ export function formatChartLegends(
       });
 
       if (colorInd + 1 < colors.length) colorInd += 1;
-    }
+    } else
+      chartKeys.push({
+        label: undefined,
+        name: undefined,
+        color: '',
+        orientation: 'left'
+      });
   });
 
   return chartKeys;

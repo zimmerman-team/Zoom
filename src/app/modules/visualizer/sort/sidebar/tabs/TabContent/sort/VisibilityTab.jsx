@@ -11,9 +11,13 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { makeStyles } from '@material-ui/styles';
 import Switch from '@material-ui/core/Switch';
 import { connect } from 'react-redux';
+import get from 'lodash/get';
+import pull from 'lodash/pull';
+import find from 'lodash/find';
 
 /* actions */
 import * as actions from 'services/actions/general';
+import { ZoomSelect } from 'components/Panes/DataExplorePane/panels/DropdownMenuPanel/DropdownMenuPanel.style';
 
 /** Button component description */
 
@@ -111,6 +115,10 @@ const ZoomSwitch = styled(Switch)`
 `;
 
 function VisibilityTab(props) {
+  const options = get(props.user, 'teams', []).map(team => ({
+    value: team,
+    label: team
+  }));
   const classes = useStyles();
 
   const handleChange = name => event => {
@@ -119,6 +127,33 @@ function VisibilityTab(props) {
         [name]: event.target.checked
       })
     );
+  };
+
+  const handleAllTeamSelect = (reset = false) => {
+    const newTeams = !reset ? options.map(o => o.value) : [];
+    props.dispatch(
+      actions.storeChartDataRequest({
+        team: newTeams
+      })
+    );
+  };
+
+  const handleTeamSelect = (team, selectAll = false) => {
+    if (selectAll || team === 'reset') {
+      handleAllTeamSelect(team === 'reset');
+    } else if (team.value) {
+      let newTeams = props.chartData.team;
+      if (find(newTeams, t => t === team.value)) {
+        newTeams = pull(newTeams, team.value);
+      } else {
+        newTeams.push(team.value);
+      }
+      props.dispatch(
+        actions.storeChartDataRequest({
+          team: newTeams
+        })
+      );
+    }
   };
 
   /*todo: figure out why the custom styling is resetting to the default styling*/
@@ -150,24 +185,19 @@ function VisibilityTab(props) {
               }
               label="Publish to public Zoom library"
             />
-            <ControlLabel
-              control={
-                <Switch
-                  data-cy="publish-chart-to-team"
-                  checked={props.chartData.team}
-                  onChange={handleChange('team')}
-                  value="team"
-                  classes={{
-                    switchBase: classes.iOSSwitchBase,
-                    bar: classes.iOSBar,
-                    icon: classes.iOSIcon,
-                    iconChecked: classes.iOSIconChecked,
-                    checked: classes.iOSChecked
-                  }}
-                  disableRipple
-                />
-              }
-              label="Published with my team"
+
+            <div>Published with my team</div>
+            <ZoomSelect
+              border
+              multiple
+              selectAll
+              // defaultAll
+              data={options}
+              selectVal={handleTeamSelect}
+              placeHolderText="Select team"
+              placeHolderNumber={options.length}
+              valueSelected={props.chartData.team}
+              arraySelected={props.chartData.team}
             />
           </FormGroup>
         </FormControl>
@@ -181,7 +211,8 @@ VisibilityTab.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
-    chartData: state.chartData.chartData
+    chartData: state.chartData.chartData,
+    user: state.user.data
   };
 };
 

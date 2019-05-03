@@ -135,7 +135,11 @@ export class LoginForm extends React.Component {
 
         {this.props.auth0Client.isAuthenticated() ? (
           <FormButton
-            onClick={this.props.auth0Client.signOut}
+            onClick={() => {
+              this.props.auth0Client.signOut().then(() => {
+                this.props.dispatch(syncActions.clearUserData());
+              });
+            }}
             data-cy="sidebar-logout-button"
           >
             Sign out

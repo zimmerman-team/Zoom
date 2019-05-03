@@ -7,27 +7,15 @@ import { connect } from 'react-redux';
 /* mock */
 // import { LinechartMockData } from './LinechartMockData';
 
+/* consts */
+import graphKeys from '__consts__/GraphStructKeyConst';
+
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
-import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import LineChart from 'components/charts/recharts_linechart/LineChart';
 
 /* styles */
-import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
-
-/**
- * todo: Please write a short component description of what this component does
- * @param {Object} customProperty - please describe component property
- */
-
-const ComponentBase = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-`;
+import { FragmentBase } from '../VizContainer.style';
 
 const Box = styled.div`
   width: 1024px;
@@ -36,7 +24,7 @@ const Box = styled.div`
 `;
 
 const propTypes = {
-  indicators: PropTypes.arrayOf(
+  chartKeys: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
       color: PropTypes.string
@@ -57,30 +45,24 @@ const propTypes = {
   )
 };
 const defaultProps = {
-  indicators: [],
+  chartKeys: [],
   specOptions: {},
   indicatorData: []
 };
 
 const LinechartFragment = props => {
   return (
-    <ComponentBase>
+    <FragmentBase>
       <Box>
         <LineChart
-          indicators={props.indicators}
+          chartKeys={props.chartKeys}
           data={props.indicatorData}
-          xAxisKey="geolocation"
+          xAxisKey={props.specOptions[graphKeys.aggregate]}
           specOptions={props.specOptions}
         />
       </Box>
-      <ChartLegends data={props.indicators} />
-      <LineYearContainer>
-        <CustomYearSelector
-          selectedYear={props.selectedYear}
-          selectYear={props.selectYear}
-        />
-      </LineYearContainer>
-    </ComponentBase>
+      <ChartLegends data={props.chartKeys} />
+    </FragmentBase>
   );
 };
 

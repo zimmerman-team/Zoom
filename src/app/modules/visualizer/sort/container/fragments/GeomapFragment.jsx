@@ -10,11 +10,6 @@ import GeoMap from 'components/GeoMap/GeoMap';
 /* utils */
 import { getFocus } from 'modules/visualizer/VisualizerModule.utils';
 
-/**
- * todo: Please write a short component description of what this component does
- * @param {Object} customProperty - please describe component property
- */
-
 const ComponentBase = styled.div`
   display: flex;
   flex-direction: column;
@@ -23,6 +18,10 @@ const ComponentBase = styled.div`
   width: 100%;
   height: ${props => props.height};
   flex-shrink: 0;
+
+  position: relative;
+  top: 16px;
+  z-index: 0;
 `;
 
 const propTypes = {
@@ -76,8 +75,6 @@ class GeomapFragment extends React.Component {
 
   render() {
     const { mode, ...otherProps } = this.props;
-
-    // console.log(this.state.focus);
     return (
       <ComponentBase height={mode ? '400px' : '100%'}>
         <GeoMap

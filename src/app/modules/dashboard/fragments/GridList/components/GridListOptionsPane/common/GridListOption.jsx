@@ -22,12 +22,14 @@ const propTypes = {
   label: PropTypes.string,
   visibility: PropTypes.string,
   isRemoveOption: PropTypes.bool,
+  removeAll: PropTypes.func,
   isSort: PropTypes.bool,
   targetUrl: PropTypes.string
 };
 const defaultProps = {
   label: '',
   visibility: 'visible',
+  removeAll: null,
   isRemoveOption: false,
   isSort: false,
   targetUrl: '/'
@@ -41,7 +43,11 @@ const Link = styled(_Link)`
 const GridListOption = props => {
   switch (true) {
     case props.isRemoveOption:
-      return <RemoveButton>remove indefinite</RemoveButton>;
+      return (
+        <RemoveButton onClick={() => props.removeAll()}>
+          remove indefinite
+        </RemoveButton>
+      );
     case props.isSort:
       return (
         <React.Fragment>

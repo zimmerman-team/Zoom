@@ -23,16 +23,19 @@ const propTypes = {
   changeSortBy: PropTypes.func,
   isSortByOpen: PropTypes.bool,
   setWrapperRef: PropTypes.func,
+  trashCharts: PropTypes.array,
   greetingName: PropTypes.string,
   onEnterPressed: PropTypes.func,
   setIsSortByOpen: PropTypes.func,
   changeSearchKeyword: PropTypes.func,
+  removeAll: PropTypes.func,
   loading: PropTypes.bool,
   users: PropTypes.arrayOf(PropTypes.shape({})),
   teams: PropTypes.arrayOf(PropTypes.shape({})),
-
   totalPages: PropTypes.number,
-  changePage: PropTypes.func
+  changePage: PropTypes.func,
+  isSuperAdmin: PropTypes.bool,
+  isAdministrator: PropTypes.bool
 };
 const defaultProps = {
   tabs: [],
@@ -45,11 +48,15 @@ const defaultProps = {
   isSortByOpen: false,
   setIsSortByOpen: null,
   changeSearchKeyword: null,
+  removeAll: null,
   users: [],
   teams: [],
+  trashCharts: [],
   activeTab: 'charts',
   totalPages: 0,
-  changePage: null
+  changePage: null,
+  isSuperAdmin: false,
+  isAdministrator: false
 };
 
 const DashboardModule = ({
@@ -58,19 +65,23 @@ const DashboardModule = ({
   sort,
   users,
   datasets,
+  trashCharts,
   charts,
   teams,
   activeTab,
   greetingName,
   isSortByOpen,
   onEnterPressed,
+  removeAll,
   changeSortBy,
   setWrapperRef,
   setIsSortByOpen,
   changeSearchKeyword,
   navItems,
   totalPages,
-  changePage
+  changePage,
+  isSuperAdmin,
+  isAdministrator
 }) => (
   <ModuleContainer>
     <Helmet>
@@ -94,6 +105,8 @@ const DashboardModule = ({
       users={users}
       charts={charts}
       datasets={datasets}
+      trashCharts={trashCharts}
+      removeAll={removeAll}
       teams={teams}
       isSortByOpen={isSortByOpen}
       changeSortBy={changeSortBy}
@@ -102,12 +115,16 @@ const DashboardModule = ({
       activeTab={activeTab}
       sort={sort}
       navItems={navItems}
+      isAdministrator={isAdministrator}
+      isSuperAdmin={isSuperAdmin}
     />
-    <Pagination
-      pageCount={totalPages}
-      changePage={changePage}
-      forcePage={page}
-    />
+    {totalPages > 0 && (
+      <Pagination
+        pageCount={totalPages}
+        changePage={changePage}
+        forcePage={page}
+      />
+    )}
   </ModuleContainer>
 );
 

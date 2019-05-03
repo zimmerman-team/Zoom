@@ -1,3 +1,10 @@
+const fs = require('fs');
+const isEqual = require('lodash/isEqual');
+
+const dataPath = __dirname
+  .substring(0, __dirname.indexOf('controllers') - 1)
+  .concat('/data/');
+
 /* consts */
 const config = require('../config/config');
 
@@ -62,7 +69,7 @@ function genUniqueName(model, name, orgName = undefined, incr = 1) {
 
 const ChartController = {
   test: (req, res) => {
-    res.send('SUCCESS');
+    res.send(__dirname);
   },
 
   // use this only if you have an empty database
@@ -125,7 +132,19 @@ const ChartController = {
           .exec((chartError, chart) => {
             if (chartError) general.handleError(res, chartError);
             else if (!chart) general.handleError(res, 'chart not found', 404);
-            else res.json(chart);
+            else if (chart.dataFileUrl) {
+              fs.readFile(chart.dataFileUrl, 'utf8', (dataErr, data) => {
+                if (dataErr) general.handleError(res, dataErr);
+                else
+                  res.send({
+                    chart,
+                    data: JSON.parse(data)
+                  });
+              });
+            } else
+              res.send({
+                chart
+              });
           });
     });
   },
@@ -139,7 +158,19 @@ const ChartController = {
       .exec((chartError, chart) => {
         if (chartError) general.handleError(res, chartError);
         else if (!chart) general.handleError(res, 'chart not found', 404);
-        else res.json(chart);
+        else if (chart.dataFileUrl) {
+          fs.readFile(chart.dataFileUrl, 'utf8', (dataErr, data) => {
+            if (dataErr) general.handleError(res, dataErr);
+            else
+              res.send({
+                chart,
+                data: JSON.parse(data)
+              });
+          });
+        } else
+          res.send({
+            chart
+          });
       });
   },
 
@@ -163,7 +194,7 @@ const ChartController = {
             archived: false,
             name: { $regex: searchTitle, $options: 'i' }
           },
-          'created last_updated team type dataSources _id name _public'
+          'created last_updated teams type dataSources _id name _public'
         )
           .limit(pSize)
           .skip(p * pSize)
@@ -181,31 +212,38 @@ const ChartController = {
     );
   },
 
-  // gets all user charts and team charts
+  // gets all user charts and team charts or archived charts of the user
   getAll: (req, res) => {
-    const { authId, sortBy, searchTitle } = req.query;
+    const { authId, sortBy, searchTitle, archived } = req.query;
     User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
       else {
         const sort = utils.getDashboardSortBy(sortBy);
 
+        const query = archived
+          ? {
+              author,
+              archived: true
+            }
+          : {
+              $or: [
+                {
+                  author,
+                  archived: false,
+                  name: { $regex: searchTitle, $options: 'i' }
+                },
+                {
+                  teams: { $all: author.teams },
+                  archived: false,
+                  name: { $regex: searchTitle, $options: 'i' }
+                }
+              ]
+            };
+
         Chart.find(
-          {
-            $or: [
-              {
-                author,
-                archived: false,
-                name: { $regex: searchTitle, $options: 'i' }
-              },
-              {
-                team: author.team,
-                archived: false,
-                name: { $regex: searchTitle, $options: 'i' }
-              }
-            ]
-          },
-          'created last_updated team _public type dataSources _id name archived'
+          query,
+          'created last_updated teams _public type dataSources _id name archived'
         )
           .collation({ locale: 'en' })
           .sort(sort)
@@ -218,6 +256,7 @@ const ChartController = {
     });
   },
 
+  // This guys is not used, TODO: remove it most likely
   getTeamFeedCharts: function(req, res) {
     const { authId } = req.query;
 
@@ -243,10 +282,12 @@ const ChartController = {
       description,
       type,
       descIntro,
+      chartKeys,
       indicatorItems,
       selectedSources,
       yearRange,
       selectedYear,
+      selectedYears,
       dataSources,
       _public,
       data,
@@ -271,12 +312,12 @@ const ChartController = {
                   description,
                   _public,
                   teams,
-                  data,
                   descIntro,
 
                   // so the type of chart
                   type,
 
+                  chartKeys,
                   /* indicators/ sub-indicators of chart */
                   indicatorItems,
 
@@ -284,20 +325,37 @@ const ChartController = {
                   yearRange,
 
                   selectedYear,
+                  selectedYears,
                   selectedCountryVal,
                   selectedRegionVal,
                   specOptions
                 });
 
                 chartz.save(err => {
-                  if (err) general.handleError(res, err);
-
-                  res.json({
-                    message: 'chart created',
-                    id: chartz._id,
-                    name: chartz.name,
-                    chartType: type
-                  });
+                  if (err) {
+                    console.log('saving this biggo gives error', err);
+                    general.handleError(res, err);
+                  } else {
+                    const fileUrl = `${dataPath}chartData${chartz.id}.txt`;
+                    fs.writeFile(fileUrl, JSON.stringify(data), fileError => {
+                      if (fileError) {
+                        console.log('fileError', fileError);
+                        general.handleError(res, fileError);
+                      } else {
+                        chartz.dataFileUrl = fileUrl;
+                        chartz.save(urlSavErr => {
+                          if (urlSavErr) general.handleError(res, urlSavErr);
+                          else
+                            res.json({
+                              message: 'chart created',
+                              id: chartz._id,
+                              name: chartz.name,
+                              chartType: type
+                            });
+                        });
+                      }
+                    });
+                  }
                 });
               })
               .catch(promiseErr => {
@@ -306,44 +364,53 @@ const ChartController = {
           } else if (author.equals(chart.author)) {
             genUniqueName(Chart, name, chart.name)
               .then(uniqueName => {
-                chart.name = uniqueName;
-                chart.author = author;
+                const fileUrl = `${dataPath}chartData${chart.id}.txt`;
+                fs.writeFile(fileUrl, JSON.stringify(data), fileError => {
+                  if (fileError) {
+                    general.handleError(res, fileError);
+                  } else {
+                    chart.name = uniqueName;
+                    chart.author = author;
 
-                chart.description = description;
-                chart.dataSources = dataSources;
+                    chart.description = description;
+                    chart.dataSources = dataSources;
 
-                chart.data = data;
-                chart.descIntro = descIntro;
+                    chart.dataFileUrl = fileUrl;
+                    chart.descIntro = descIntro;
 
-                // so the type of chart
-                chart.type = type;
-                chart._public = _public;
-                chart.teams = teams;
+                    // so the type of chart
+                    chart.type = type;
+                    chart._public = _public;
+                    chart.teams = teams;
 
-                /* indicators/ sub-indicators of chart */
-                chart.indicatorItems = indicatorItems;
+                    chart.chartKeys = chartKeys;
+                    /* indicators/ sub-indicators of chart */
+                    chart.indicatorItems = indicatorItems;
 
-                chart.selectedSources = selectedSources;
-                chart.yearRange = yearRange;
+                    chart.selectedSources = selectedSources;
+                    chart.yearRange = yearRange;
 
-                chart.selectedYear = selectedYear;
-                chart.selectedCountryVal = selectedCountryVal;
-                chart.selectedRegionVal = selectedRegionVal;
-                chart.specOptions = specOptions;
+                    chart.selectedYear = selectedYear;
+                    chart.selectedYears = selectedYears;
+                    chart.selectedCountryVal = selectedCountryVal;
+                    chart.selectedRegionVal = selectedRegionVal;
+                    chart.specOptions = specOptions;
 
-                chart.save(err => {
-                  if (err) general.handleError(res, err);
-
-                  res.json({
-                    message: 'chart updated',
-                    id: chart._id,
-                    name: chart.name,
-                    chartType: chart.type
-                  });
+                    chart.save(err2 => {
+                      if (err2) general.handleError(res, err2);
+                      else
+                        res.json({
+                          message: 'chart updated',
+                          id: chart._id,
+                          name: chart.name,
+                          chartType: chart.type
+                        });
+                    });
+                  }
                 });
               })
-              .catch(promiseErr => {
-                general.handleError(res, promiseErr);
+              .catch(promiseErr2 => {
+                general.handleError(res, promiseErr2);
               });
           } else general.handleError(res, 'Unauthorized', 401);
         });
@@ -368,7 +435,9 @@ const ChartController = {
                 // for the team just in case
                 // someone from another team would be able to duplicate
                 // this chart
-                const team = author.team === chart.team ? chart.team : '';
+                const teams = isEqual(author.teams, chart.teams)
+                  ? chart.teams
+                  : [];
 
                 const chartz = new Chart({
                   name: uniqueName,
@@ -376,7 +445,7 @@ const ChartController = {
                   dataSources: chart.dataSources,
                   description: chart.description,
                   _public: chart._public,
-                  team,
+                  teams,
                   data: chart.data,
                   descIntro: chart.descIntro,
 
@@ -453,21 +522,20 @@ const ChartController = {
     });
   },
 
-  emptyTrash: function(user, res) {
-    // TODO: should be adjusted without the promises, or maybe with promises if
-    // TODO: it works and makes sense
-    /*
-     * Delete all archived visualisations
-     */
+  // deletes all of users archived charts
+  emptyTrash: (req, res) => {
+    const { authId } = req.query;
 
-    return Chart.remove({
-      author: user._id,
-      archived: true
-    })
-      .then(viz => res(null))
-      .catch(error => {
-        general.handleError(res, error);
-      });
+    User.findOne({ authId }).exec((userError, author) => {
+      if (userError) general.handleError(res, userError);
+      else if (!author) general.handleError(res, 'User not found', 404);
+      else {
+        Chart.deleteMany({ author, archived: true }).exec(delErr => {
+          if (delErr) general.handleError(res, delErr);
+          else res.json({ message: 'chart trash emptied!' });
+        });
+      }
+    });
   },
 
   updateAndRefresh: function(user, vizId, viz, res) {

@@ -1,6 +1,7 @@
 describe('About page E2E test', function() {
   it('Visit about page', function() {
     cy.visit('/About');
+    cy.percySnapshot('About page');
   });
 
   it('Title should contain About zoom', function() {

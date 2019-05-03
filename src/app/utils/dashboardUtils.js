@@ -127,13 +127,8 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
   const chartz = charts.charts ? charts.charts : charts;
 
   return chartz.map(chart => {
-    let shared = '';
-    if (chart.teams.length > 0) shared = shared.concat(chart.teams.join(', '));
-    if (chart._public)
-      shared =
-        shared.length > 0
-          ? shared.concat(', ').concat('Public')
-          : shared.concat('Public');
+    let shared = chart.teams;
+    if (chart._public) shared.push('Public');
     let dataSources = '';
 
     chart.dataSources.forEach((source, index) => {

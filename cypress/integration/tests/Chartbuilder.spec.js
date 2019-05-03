@@ -27,14 +27,14 @@ function signIn() {
 }
 
 function navigateToCreateGeo() {
-  // signIn();
+  signIn();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
 }
 
 function navigateToCreateLinechart() {
-  // signIn();
+  signIn();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-3"]').click();
@@ -49,13 +49,13 @@ function navigateToBarchart() {
 }
 
 function navigateToCountryFocusKenya() {
-  // signIn();
+  signIn();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-1"]').click();
 }
 function navigateToCountryFocusNetherlands() {
-  // signIn();
+  signIn();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-2"]').click();
@@ -108,7 +108,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
 
   it('Should pass written text from the /context to /preview', function() {
     // Fixme: Change to proper url or simultate click of the button.
-    cy.get('tab-2');
+    cy.visit('/visualizer/geomap/vizID/context');
     cy.get('textarea')
       .last()
       .type('This is a test');

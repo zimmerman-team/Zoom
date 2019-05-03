@@ -638,7 +638,11 @@ class VisualizerModuleMediator extends Component {
         outerHistory={this.props.history}
         chartType={this.props.paneData.chartType}
         code={this.props.match.params.code}
-        loading={this.state.loading}
+        loading={
+          this.state.loading ||
+          this.props.chartCreated.request ||
+          this.props.dupChartCreated.request
+        }
         auth0Client={this.props.auth0Client}
         selectYearRange={this.selectYearRange}
         selectYear={this.selectYear}
@@ -660,6 +664,7 @@ const mapStateToProps = state => {
     chartData: state.chartData.chartData,
     user: state.user.data,
     dupChartCreated: state.dupChartCreated,
+    chartCreated: state.chartCreated,
     paneData: state.paneData.paneData
   };
 };

@@ -43,7 +43,7 @@ const AidsEpidemic = props => {
         <ChartContainer>
           {/* <LineChart data={props.aidsLineChartData} /> */}
           <LineChart2
-            indicators={props.indicators}
+            chartKeys={props.indicators}
             data={props.aidsLineChartData}
           />
         </ChartContainer>

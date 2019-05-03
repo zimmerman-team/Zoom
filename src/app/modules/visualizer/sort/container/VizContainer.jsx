@@ -4,14 +4,22 @@ import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 import { Route, withRouter } from 'react-router';
 
+/* consts */
+import graphKeys from '__consts__/GraphStructKeyConst';
+
 import ContextPreview from 'components/ContextPreview/ContextPreview';
 import BarchartFragment from 'modules/visualizer/sort/container/fragments/BarchartFragment';
 import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFragment';
 
 import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment';
 import TablechartFragment from 'modules/visualizer/sort/container/fragments/TablechartFragment';
-import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
 import DonutchartFragment from 'modules/visualizer/sort/container/fragments/DonutchartFragment';
+import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
+import CustomYearSelector from '../../../../components/CustomYearSelector/CustomYearSelector';
+import { YearContainer } from '../../../../components/CustomYearSelector/CustomYearSelector.style';
+import paneTypes from '../../../../__consts__/PaneTypesConst';
+import YearRangeSelector from 'components/YearRangeSelector/YearRangeSelector';
+import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -39,14 +47,16 @@ const propTypes = {
   publicPage: PropTypes.bool,
   chartKeys: PropTypes.array,
   saveViewport: PropTypes.func,
-  mode: PropTypes.bool
+  mode: PropTypes.bool,
+  context: PropTypes.bool
 };
 const defaultProps = {
   chartType: 'geomap',
   publicPage: false,
   chartKeys: [],
   saveViewport: null,
-  mode: location.pathname.includes('preview')
+  mode: location.pathname.includes('preview'),
+  context: location.pathname.includes('context')
 };
 
 class VizContainer extends React.Component {
@@ -57,11 +67,15 @@ class VizContainer extends React.Component {
   componentDidMount() {
     // need an initial set here, because those default props, don't actually set
     // the state correctly
-    this.setState({ preview: location.pathname.includes('preview') });
+    this.setState({
+      preview: location.pathname.includes('preview'),
+      context: location.pathname.includes('context')
+    });
 
     this.props.history.listen((location, action) => {
       const mode = location.pathname.includes('preview');
-      this.setState({ preview: mode });
+      const context = location.pathname.includes('context');
+      this.setState({ preview: mode, context });
     });
   }
 
@@ -71,6 +85,12 @@ class VizContainer extends React.Component {
         mode={
           this.state.preview || this.props.publicPage ? 'initial' : 'center'
         }
+        style={{
+          width:
+            !this.state.context && !this.state.preview && this.props.display
+              ? 'calc(100vw - 320px)'
+              : '100vw'
+        }}
       >
         <PreviewTextContainer
           mode={this.state.preview || this.props.publicPage ? 'flex' : 'none'}
@@ -91,7 +111,7 @@ class VizContainer extends React.Component {
             outerHistory={this.props.outerHistory}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
-            indicatorData={this.props.indicators}
+            indicatorData={this.props.data}
             saveViewport={this.props.saveViewport}
             path="/(visualizer|public)/(geomap|focusKE|focusNL)/:code/:tab"
             component={GeomapFragment}
@@ -102,8 +122,8 @@ class VizContainer extends React.Component {
             chartType={this.props.chartType}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
-            indicatorData={this.props.indicators}
-            indicators={this.props.chartKeys}
+            indicatorData={this.props.data}
+            chartKeys={this.props.chartKeys}
             path="/(visualizer|public)/linechart/:code/:tab"
             component={LinechartFragment}
             mode={this.state.preview}
@@ -113,7 +133,7 @@ class VizContainer extends React.Component {
             chartType={this.props.chartType}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
-            indicatorData={this.props.indicators}
+            indicatorData={this.props.data}
             chartKeys={this.props.chartKeys}
             path="/(visualizer|public)/barchart/:code/:tab"
             component={BarchartFragment}
@@ -123,7 +143,7 @@ class VizContainer extends React.Component {
             chartType={this.props.chartType}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
-            indicatorData={this.props.indicators}
+            indicatorData={this.props.data}
             chartKeys={this.props.chartKeys}
             path="/(visualizer|public)/tablechart/:code/:tab"
             component={TablechartFragment}
@@ -134,12 +154,28 @@ class VizContainer extends React.Component {
             chartType={this.props.chartType}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
-            indicatorData={this.props.indicators}
+            indicatorData={this.props.data}
             chartKeys={this.props.chartKeys}
             path="/(visualizer|public)/donutchart/:code/:tab"
             component={DonutchartFragment}
             mode={this.state.preview}
           />
+
+          <YearContainer bottom="24px">
+            {/* so the second item in the aggrOptions array is the year aggregation option*/}
+            {this.props.chartData.specOptions[graphKeys.aggregate] ===
+            aggrOptions[1].value ? (
+              <YearRangeSelector
+                selectYearRange={this.props.selectYearRange}
+                selectedYears={this.props.chartData.selectedYears}
+              />
+            ) : (
+              <CustomYearSelector
+                selectedYear={this.props.selectedYear}
+                selectYear={this.props.selectYear}
+              />
+            )}
+          </YearContainer>
         </React.Fragment>
         <PreviewTextContainer mode={this.state.preview ? 'flex' : 'none'}>
           <ContextPreview

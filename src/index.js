@@ -10,6 +10,9 @@ import { routerMiddleware } from 'react-router-redux';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { createBrowserHistory as createHistory } from 'history';
 import createSagaMiddleware from 'redux-saga';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore, persistReducer } from 'redux-persist';
+import storageSession from 'redux-persist/lib/storage/session';
 
 import reducers from 'services/reducers';
 import mutationReducers from 'services/reducers/mutation';
@@ -22,21 +25,34 @@ const history = createHistory();
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+const persistConfig = {
+  key: 'root',
+  storage: storageSession,
+  whitelist: ['userPersist']
+};
+
 const store = createStore(
-  combineReducers({
-    ...reducers,
-    ...mutationReducers,
-    ...syncReducers,
-    ...generalReducers
-  }),
+  persistReducer(
+    persistConfig,
+    combineReducers({
+      ...reducers,
+      ...mutationReducers,
+      ...syncReducers,
+      ...generalReducers
+    })
+  ),
   composeEnhancers(applyMiddleware(sagaMiddleware, routerMiddleware(history)))
 );
+
+const persistor = persistStore(store);
 
 sagaMiddleware.run(sagas);
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
 );

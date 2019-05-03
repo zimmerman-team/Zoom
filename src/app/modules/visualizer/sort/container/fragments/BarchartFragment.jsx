@@ -6,31 +6,17 @@ import styled from 'styled-components';
 /* mock */
 import { BarchartMockData } from './BachartMockData';
 
-/* styles */
-import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
-
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
-import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import { ResponsiveBar } from '@nivo/bar';
+import TooltipContent from 'modules/visualizer/sort/container/fragments/common/ToolTipContent';
 
-/**
- * todo: Please write a short component description of what this component does
- * @param {Object} customProperty - please describe component property
- */
-
-const ComponentBase = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-`;
+/* styles */
+import { FragmentBase } from '../VizContainer.style';
 
 const Box = styled.div`
-  width: 1024px;
+  width: 100%;
+  max-width: 1024px;
   height: 500px;
   outline: 1px solid gray;
 `;
@@ -46,11 +32,13 @@ const defaultProps = {
 
 const BarchartFragment = props => {
   return (
-    <ComponentBase>
+    <FragmentBase>
       <Box>
         <ResponsiveBar
           data={props.indicatorData}
-          keys={props.chartKeys}
+          keys={props.chartKeys.map(item => {
+            return item.key;
+          })}
           indexBy="geolocation"
           margin={{
             top: 20,
@@ -58,6 +46,15 @@ const BarchartFragment = props => {
             bottom: 25,
             left: 30
           }}
+          tooltip={payload => (
+            <TooltipContent
+              xKey={payload.indexValue}
+              index={payload.index}
+              color={payload.color}
+              valueLabel={payload.data[`${payload.id}Label`]}
+              value={payload.value}
+            />
+          )}
           padding={0.3}
           groupMode="grouped"
           colors="nivo"
@@ -125,14 +122,8 @@ const BarchartFragment = props => {
           legends={[]}
         />
       </Box>
-      <ChartLegends />
-      <LineYearContainer>
-        <CustomYearSelector
-          selectedYear={props.selectedYear}
-          selectYear={props.selectYear}
-        />
-      </LineYearContainer>
-    </ComponentBase>
+      <ChartLegends data={props.chartKeys} />
+    </FragmentBase>
   );
 };
 

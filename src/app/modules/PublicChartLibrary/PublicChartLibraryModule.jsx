@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Helmet } from 'react-helmet';
 
 /* components */
 import {
@@ -17,8 +18,18 @@ import GridList from '../dashboard/fragments/GridList/GridList';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 // import data from './PublicChartLibraryModule.const';
 
+import theme from 'theme/Theme';
+
 const Box = styled.div`
   width: 100%;
+`;
+const Message = styled.div`
+  padding-top: 70px;
+  text-align: center;
+  font-size: 32px;
+  line-height: 1;
+  color: ${theme.color.zoomBlack};
+  font-family: ${theme.font.zoomFontFamOne};
 `;
 
 const propTypes = {
@@ -28,11 +39,13 @@ const propTypes = {
   isSortByOpen: PropTypes.bool,
   setIsSortByOpen: PropTypes.func,
   loading: PropTypes.bool,
-  pageCount: PropTypes.number
+  pageCount: PropTypes.number,
+  page: PropTypes.number
 };
 
 const defaultProps = {
   pageCount: 1,
+  page: 0,
   changePage: null,
   changeSortBy: null,
   setIsSortByOpen: null,
@@ -44,6 +57,9 @@ const defaultProps = {
 const PublicChartLibraryModule = props => {
   return (
     <ModuleContainer>
+      <Helmet>
+        <title>Zoom - Chart Library</title>
+      </Helmet>
       <ModuleTitle>Zoom chart library</ModuleTitle>
       <Searchbox
         inputChange={props.changeSearchKeyword}
@@ -62,8 +78,15 @@ const PublicChartLibraryModule = props => {
         <ViewContainer>
           <GridList withoptions={false} items={props.data} />
         </ViewContainer>
+        {props.data.length === 0 && <Message>No charts</Message>}
       </Box>
-      <Pagination pageCount={props.pageCount} changePage={props.changePage} />
+      {props.data.length > 0 && (
+        <Pagination
+          forcePage={props.page}
+          pageCount={props.pageCount}
+          changePage={props.changePage}
+        />
+      )}
     </ModuleContainer>
   );
 };

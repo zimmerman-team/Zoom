@@ -4,7 +4,9 @@ export default {
     pageHeadingSmall: '32px',
     caption: '12px',
     body2: '14px',
-    subTitle2: '14px'
+    subTitle2: '14px',
+    cookieNoticMessage: '16px',
+    cookieNoticeButton: '20px'
   },
 
   color: {
@@ -31,6 +33,7 @@ export default {
     zoomGreyEleven: '#BFBFBF', //grey-light-25
     zoomGreyTwelf: '#d9d9d9',
     zoomGreyThirteen: '#e0e0e0',
+    zoomGrey14: '#666666',
     zoomBlack: '#000000',
     colHeadColor: '#9b9b9b',
     errorCellColor: '#ff807f',

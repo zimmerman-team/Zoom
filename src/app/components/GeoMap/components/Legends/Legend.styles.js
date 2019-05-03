@@ -17,6 +17,7 @@ export const LegendLabel = styled.div`
   color: ${theme.color.zoomBlack};
   font-family: ${theme.font.zoomFontFamOne};
   font-size: 10px;
+  max-width: 270px;
 `;
 
 export const LegendIcon = styled.div`

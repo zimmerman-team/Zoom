@@ -20,9 +20,17 @@ export const Row = styled.div`
   white-space: pre-wrap;
 `;
 
+export const ToolTipValue = styled.span`
+  font-weight: bold;
+`;
+
+export const ToolTipText = styled.div`
+  max-width: 250px;
+`;
+
 export const Rect = styled.div`
   width: 14px;
   height: 14px;
-  margin-right: 5px;
+  margin: 6px 5px auto 0;
   background-color: ${props => props.theme.color};
 `;

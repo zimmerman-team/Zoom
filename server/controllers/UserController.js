@@ -1,9 +1,9 @@
 /* general */
+const isEqual = require('lodash/isEqual');
+
 const general = require('./generalResponse');
 
 const User = require('../models/User');
-
-const isEqual = require('lodash/isEqual');
 
 const UserApi = {
   getUser: (req, res) => {
@@ -58,19 +58,16 @@ const UserApi = {
   addNewUser: (req, res) => {
     const user = req.body;
 
-    return User.create(
-      {
-        username: user.username,
-        email: user.email,
-        authId: user.authId,
-        role: user.role,
-        avatar: user.avatar,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        teams: user.teams
-      },
-      { new: true }
-    )
+    return User.create({
+      username: user.username,
+      email: user.email,
+      authId: user.authId,
+      role: user.role,
+      avatar: user.avatar,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      teams: user.teams
+    })
       .then(acc => res.json(acc))
       .catch(error => {
         general.handleError(res, error);
@@ -133,8 +130,10 @@ const UserApi = {
 
           if (updateUser.role && userFound.role !== updateUser.role)
             userFound.role = updateUser.role;
-          if (updateUser.team && userFound.team !== updateUser.team)
-            userFound.team = updateUser.team;
+
+          if (!isEqual(userFound.teams, updateUser.teams) && updateUser.teams) {
+            userFound.teams = updateUser.teams;
+          }
 
           return userFound.save(saveError => {
             if (saveError) general.handleError(res, saveError);

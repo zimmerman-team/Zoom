@@ -90,6 +90,13 @@ const ControlLabel = styled(FormControlLabel)`
   }
 `;
 
+const Label = styled.span`
+  color: rgba(0, 0, 0, 0.87);
+  font-family: ${themes.font.zoomFontFamTwo};
+  font-weight: 300;
+  font-size: 14px;
+`;
+
 const ZoomSwitch = styled(Switch)`
   && {
     span:nth-child(1) {
@@ -133,7 +140,7 @@ function VisibilityTab(props) {
     const newTeams = !reset ? options.map(o => o.value) : [];
     props.dispatch(
       actions.storeChartDataRequest({
-        team: newTeams
+        teams: newTeams
       })
     );
   };
@@ -150,11 +157,13 @@ function VisibilityTab(props) {
       }
       props.dispatch(
         actions.storeChartDataRequest({
-          team: newTeams
+          teams: newTeams
         })
       );
     }
   };
+
+  console.log(options, props.chartData.teams, props.chartData.team);
 
   /*todo: figure out why the custom styling is resetting to the default styling*/
 
@@ -186,7 +195,7 @@ function VisibilityTab(props) {
               label="Publish to public Zoom library"
             />
 
-            <div>Published with my team</div>
+            <Label>Published with my team</Label>
             <ZoomSelect
               border
               multiple
@@ -196,8 +205,8 @@ function VisibilityTab(props) {
               selectVal={handleTeamSelect}
               placeHolderText="Select team"
               placeHolderNumber={options.length}
-              valueSelected={props.chartData.team}
-              arraySelected={props.chartData.team}
+              valueSelected={props.chartData.teams}
+              arraySelected={props.chartData.teams}
             />
           </FormGroup>
         </FormControl>

@@ -15,7 +15,7 @@ export function updatePercentiles(featureCollection, accessor) {
   });
 }
 
-export function formatCountryLayerData(indicators, indName) {
+export function formatCountryLayerData(indicators, indName, selectedSubInd) {
   const countryLayers = {
     type: 'FeatureCollection',
     features: []
@@ -38,6 +38,7 @@ export function formatCountryLayerData(indicators, indName) {
         // which is i dunno a double string or sth :D
         geometry: JSON.parse(JSON.parse(indicator.geolocationPolygons)),
         properties: {
+          tooltipLabel: `${indName} - ${selectedSubInd.join(', ')}`,
           indName,
           name: indicator.geolocationTag,
           iso2: indicator.geolocationIso2,
@@ -76,7 +77,7 @@ export function formatCountryLayerData(indicators, indName) {
   return countryLayers;
 }
 
-export function formatCountryCenterData(indicators, indName) {
+export function formatCountryCenterData(indicators, indName, selectedSubInd) {
   const countryCenteredData = [];
 
   indicators.forEach(indicator => {
@@ -97,6 +98,7 @@ export function formatCountryCenterData(indicators, indName) {
         const coord = JSON.parse(JSON.parse(indicator.geolocationCenterLongLat))
           .coordinates;
         countryCenteredData.push({
+          tooltipLabel: `${indName} - ${selectedSubInd.join(', ')}`,
           indName,
           value: Math.round(indicator.value),
           geolocationIso2: indicator.geolocationIso2,
@@ -155,7 +157,7 @@ export function formatCountryParam(countryCodes, regionCountryCodes) {
   return jointCountries;
 }
 
-export function formatLongLatData(indicators, indName) {
+export function formatLongLatData(indicators, indName, selectedSubInd) {
   const longLatData = [];
 
   indicators.forEach(indicator => {
@@ -178,6 +180,7 @@ export function formatLongLatData(indicators, indName) {
         lat = parseFloat(lat);
 
         longLatData.push({
+          tooltipLabel: `${indName} - ${selectedSubInd.join(', ')}`,
           indName,
           longitude: long,
           latitude: lat,

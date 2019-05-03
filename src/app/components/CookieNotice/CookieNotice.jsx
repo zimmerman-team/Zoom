@@ -24,10 +24,14 @@ const defaultProps = {
 };
 
 function CookieNotice(props) {
+  /* this hook is for setting the cookie */
   const [cookie, setCookie] = useCookie('cookieNotice', 'true');
+  /* this hook is for visually hiding the component */
   const [visible, setVisibility] = useState(cookie);
   return (
+    /* if visible is false, hide */
     visible &&
+    /* if cookie is false, also hide */
     (cookie && (
       <ComponentBase>
         <CookieMessage>

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 
 /* consts */
-import initialState from '__consts__/InitialChartDataConst';
+import { minYear, maxYear } from '__consts__/TimeLineConst';
 
 /* styles */
 import {
@@ -54,10 +54,10 @@ class YearSelector extends React.Component {
   render() {
     return (
       <ComponentBase>
-        <YearLabel> 1990 </YearLabel>
+        <YearLabel> {minYear} </YearLabel>
         <RangeContainer
-          min={1990}
-          max={2019}
+          min={minYear}
+          max={maxYear}
           value={this.state.yearPeriod}
           handle={val => this.renderHandle(val)}
           onAfterChange={() =>
@@ -65,7 +65,7 @@ class YearSelector extends React.Component {
           }
           onChange={yearPeriod => this.setState({ yearPeriod })}
         />
-        <YearLabel> 2019 </YearLabel>
+        <YearLabel> {maxYear} </YearLabel>
       </ComponentBase>
     );
   }

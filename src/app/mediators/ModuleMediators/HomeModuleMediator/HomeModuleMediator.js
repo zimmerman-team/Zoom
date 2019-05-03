@@ -163,6 +163,7 @@ class HomeModuleMediator extends Component {
 
     let longLatData = [];
     let countryLayerData = {};
+    let longLatSubind = '';
 
     // so we check here if the retrieved data is long lat
     // and then format it differently
@@ -177,12 +178,15 @@ class HomeModuleMediator extends Component {
     ) {
       longLatData = formatLongLatData(
         this.props.indicatorAggregations.indicators1,
-        this.state.selectedInd1
+        this.state.selectedInd1,
+        this.state.selectedSubInd1
       );
+      longLatSubind = this.state.selectedSubInd1.join(', ');
     } else {
       countryLayerData = formatCountryLayerData(
         this.props.indicatorAggregations.indicators1,
-        this.state.selectedInd1
+        this.state.selectedInd1,
+        this.state.selectedSubInd1
       );
     }
 
@@ -200,12 +204,15 @@ class HomeModuleMediator extends Component {
     ) {
       longLatData = formatLongLatData(
         this.props.indicatorAggregations.indicators2,
-        this.state.selectedInd2
+        this.state.selectedInd2,
+        this.state.selectedSubInd2
       );
+      longLatSubind = this.state.selectedSubInd2.join(', ');
     } else {
       countryCircleData = formatCountryCenterData(
         this.props.indicatorAggregations.indicators2,
-        this.state.selectedInd2
+        this.state.selectedInd2,
+        this.state.selectedSubInd2
       );
     }
 
@@ -217,7 +224,9 @@ class HomeModuleMediator extends Component {
       data.push({
         type: 'layer',
         data: countryLayerData,
-        legendName: ` ${this.state.selectedInd1} `
+        legendName: ` ${
+          this.state.selectedInd1
+        } - ${this.state.selectedSubInd1.join(', ')}`
       });
     }
 
@@ -225,7 +234,9 @@ class HomeModuleMediator extends Component {
       data.push({
         type: 'circle',
         data: countryCircleData,
-        legendName: ` ${this.state.selectedInd2} `
+        legendName: ` ${
+          this.state.selectedInd2
+        } - ${this.state.selectedSubInd2.join(', ')}`
       });
     }
 
@@ -233,7 +244,7 @@ class HomeModuleMediator extends Component {
       data.push({
         type: 'location',
         data: longLatData,
-        legendName: `POI: ${longLatData[0].indName}`
+        legendName: `POI: ${longLatData[0].indName} - ${longLatSubind}`
       });
     }
 

@@ -11,7 +11,6 @@ import * as actions from 'services/actions/general';
 
 /* helpers */
 import sortBy from 'lodash/sortBy';
-import findIndex from 'lodash/findIndex';
 import { formatYearParam, yearStrToArray } from 'utils/genericUtils';
 
 /* consts */
@@ -517,22 +516,18 @@ class VizPaneMediator extends React.Component {
 
   // so this mainly controls the data for the linechart
   // cause you can switch the Y-axis of the data/indicator thats being shown
-  handleAxisSwitch(checked, indicator) {
+  handleAxisSwitch(checked, indicator, index) {
     // so if checked is false this the left axis will be selected
     // for this indicator otherwise its the right
-    if (indicator) {
-      const { chartKeys } = this.props.chartData;
+    const { chartKeys } = this.props.chartData;
 
-      const indIndex = findIndex(chartKeys, ['name', indicator]);
+    chartKeys[index].orientation = checked ? 'right' : 'left';
 
-      chartKeys[indIndex].orientation = checked ? 'right' : 'left';
-
-      this.props.dispatch(
-        actions.storeChartDataRequest({
-          chartKeys
-        })
-      );
-    }
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        chartKeys
+      })
+    );
   }
 
   saveGraphOption(value, key) {

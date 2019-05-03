@@ -1,9 +1,9 @@
 /* general */
+const isEqual = require('lodash/isEqual');
+
 const general = require('./generalResponse');
 
 const User = require('../models/User');
-
-const isEqual = require('lodash/isEqual');
 
 const UserApi = {
   getUser: (req, res) => {
@@ -58,19 +58,16 @@ const UserApi = {
   addNewUser: (req, res) => {
     const user = req.body;
 
-    return User.create(
-      {
-        username: user.username,
-        email: user.email,
-        authId: user.authId,
-        role: user.role,
-        avatar: user.avatar,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        teams: user.teams
-      },
-      { new: true }
-    )
+    return User.create({
+      username: user.username,
+      email: user.email,
+      authId: user.authId,
+      role: user.role,
+      avatar: user.avatar,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      teams: user.teams
+    })
       .then(acc => res.json(acc))
       .catch(error => {
         general.handleError(res, error);
@@ -124,14 +121,19 @@ const UserApi = {
       if (adminErr) return general.handleError(res, adminErr);
       if (!adminUser) return general.handleError(res, 'User not found', 404);
 
-      if (adminUser.role === 'Administrator') {
+      if (
+        adminUser.role === 'Administrator' ||
+        adminUser.role === 'Super admin'
+      ) {
         User.findOne({ authId: updateUser.authId }, (userErr, userFound) => {
           if (userErr) return general.handleError(res, userErr);
 
           if (updateUser.role && userFound.role !== updateUser.role)
             userFound.role = updateUser.role;
-          if (updateUser.team && userFound.team !== updateUser.team)
-            userFound.team = updateUser.team;
+
+          if (!isEqual(userFound.teams, updateUser.teams) && updateUser.teams) {
+            userFound.teams = updateUser.teams;
+          }
 
           return userFound.save(saveError => {
             if (saveError) general.handleError(res, saveError);
@@ -154,7 +156,10 @@ const UserApi = {
       if (adminErr) return general.handleError(res, adminErr);
       if (!adminUser) return general.handleError(res, 'User not found', 404);
 
-      if (adminUser.role === 'Administrator') {
+      if (
+        adminUser.role === 'Administrator' ||
+        adminUser.role === 'Super admin'
+      ) {
         // and then to each user we add the specified team
 
         updateUsers.forEach(updatU => {
@@ -181,7 +186,10 @@ const UserApi = {
       if (adminErr) return general.handleError(res, adminErr);
       if (!adminUser) return general.handleError(res, 'User not found', 404);
 
-      if (adminUser.role === 'Administrator') {
+      if (
+        adminUser.role === 'Administrator' ||
+        adminUser.role === 'Super admin'
+      ) {
         // Remove team from selected users
         if (usersToDelete.length > 0) {
           usersToDelete.forEach(user => {

@@ -4,25 +4,17 @@ import {
   DescriptionParagraph,
   DescriptionParagraphBold
 } from 'components/sort/Paragraphs';
-import {
-  AboutTitle,
-  ModuleContainer,
-  RedLink,
-  Text
-} from 'modules/about/About.styles';
+import { AboutTitle, RedLink, Text } from 'modules/about/About.styles';
 import BarChartVertical from 'components/charts/barcharts/vertical/BarChartVertical';
 import { IATIDetailBarChartMockData } from '__mocks__/barChartVerticalMock';
-import { Helmet } from 'react-helmet';
+import ModuleContainer from 'modules/common/modulecontainer/ModuleContainer';
 
 const propTypes = {};
 const defaultProps = {};
 
 const About = props => {
   return (
-    <ModuleContainer>
-      <Helmet>
-        <title>Zoom - About</title>
-      </Helmet>
+    <ModuleContainer title={'About zoom'}>
       <AboutTitle data-cy="about-heading">About zoom</AboutTitle>
       <DescriptionParagraphBold data-cy="about-paragraph">
         The major aim of ZOOM is to develop and implement an open data platform

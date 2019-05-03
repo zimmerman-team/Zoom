@@ -24,7 +24,8 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const WebpackBar = require('webpackbar');
-
+const BrotliGzipPlugin = require('brotli-gzip-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -237,12 +238,12 @@ module.exports = function(webpackEnv) {
       // https://twitter.com/wSokra/status/969633336732905474
       // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
       splitChunks: {
-        chunks: 'all',
-        name: false,
+        chunks: 'async',
+
       },
       // Keep the runtime chunk separated to enable long term caching
       // https://twitter.com/wSokra/status/969679223278505985
-      runtimeChunk: true,
+      runtimeChunk: 'single',
     },
     resolve: {
       // This allows you to set a fallback for where Webpack should look for modules.
@@ -603,6 +604,29 @@ module.exports = function(webpackEnv) {
           silent: true,
           formatter: typescriptFormatter,
         }),
+      isEnvProduction &&
+        new BrotliGzipPlugin({
+          asset: '[path].br[query]',
+          algorithm: 'brotli',
+          test: /\.(js|json|css|html|svg)$/,
+          threshold: 10240,
+          minRatio: 0.8,
+          quality: 11,
+        }),
+      isEnvProduction &&
+        new BrotliGzipPlugin({
+          asset: '[path].gz[query]',
+          algorithm: 'gzip',
+          test: /\.(js|json|css|html|svg)$/,
+          threshold: 10240,
+          minRatio: 0.8,
+        }),
+      isEnvProduction &&
+        new webpack.optimize.LimitChunkCountPlugin({
+          maxChunks:2,
+        }),
+      // isEnvProduction &&
+      //   new BundleAnalyzerPlugin(),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.

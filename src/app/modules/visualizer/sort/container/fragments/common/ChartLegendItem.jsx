@@ -14,16 +14,17 @@ const ComponentBase = styled.div`
   display: flex;
   flex-direction: row;
   width: 200px;
-  height: 20px;
+  height: max-content;
   align-items: center;
   margin-right: 100px;
   justify-content: space-between;
 `;
 
 const LegendLabel = styled.div`
+  max-width: 176px;
   font-size: 10px;
   font-family: ${theme.font.zoomFontFamTwo};
-  line-height: 7px;
+  line-height: 9px;
   &:after {
     color: black;
     content: '${props => props.text}';
@@ -37,6 +38,7 @@ const Box = styled.div`
 const LegendColor = styled.div`
   width: 7px;
   height: 7px;
+  margin-top: 2px;
   margin-right: 2px;
   background-color: ${props => props.color};
 `;

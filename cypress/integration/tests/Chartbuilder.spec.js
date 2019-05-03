@@ -161,8 +161,6 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     cy.visit('/public/chart-library');
     // Fixme: Should check on the vizID in the url, however on creating a chart, the vizID is not in the URL yet.
   });
-
-
 });
 
 describe('Chartbuilder line chart fragment e2e', function() {

@@ -45,6 +45,7 @@ const DatasetApi = {
     });
   },
 
+  // TODO: this is not being used, maybe remove it?
   // so this updates the team related to the dataset
   // currently only the owner can do this
   updateTeam: function(author, datasetId, team, res) {
@@ -89,12 +90,12 @@ const DatasetApi = {
       if (error) general.handleError(res, error);
       else if (!acc) general.handleError(res, 'User not found', 404);
       else {
-        if (acc.role === 'Administrator') {
+        if (acc.role === 'Administrator' || acc.role === 'Super admin') {
           const dataset = new Dataset({
             datasetId: data.datasetId,
             author: acc,
             name: data.name,
-            team: data.team,
+            teams: data.teams,
             dataSource: data.dataSource,
             public: data.public
           });
@@ -118,7 +119,10 @@ const DatasetApi = {
     User.findOne({ authId: data.authId }, (error, author) => {
       if (error) general.handleError(res, error);
       else if (!author) general.handleError(res, 'User not found', 404);
-      else if (author.role === 'Administrator') {
+      else if (
+        author.role === 'Administrator' ||
+        author.role === 'Super admin'
+      ) {
         Dataset.findOne(
           { author, datasetId: data.datasetId },
           (setError, dataset) => {
@@ -126,7 +130,7 @@ const DatasetApi = {
             else {
               if (data.name) dataset.name = data.name;
 
-              if (data.team) dataset.team = data.team;
+              if (data.teams) dataset.teams = data.teams;
 
               if (data.dataSource) dataset.dataSource = data.dataSource;
 

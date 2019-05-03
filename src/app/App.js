@@ -9,7 +9,7 @@ import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import auth0Client from 'auth/Auth';
 import Analytics from 'react-router-ga';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
+import Cookies from 'universal-cookie';
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
 
@@ -46,6 +46,7 @@ import {
 } from 'react-toasts';
 
 import MainMenuDrawer from 'components/MainMenuDrawer/MainMenuDrawer';
+import CookieNotice from 'components/CookieNotice/CookieNotice';
 
 const modernEnvironment = new Environment({
   network: Network.create(fetchQuery),
@@ -192,6 +193,8 @@ class App extends React.Component {
                   return (
                     <Router>
                       <React.Fragment>
+                        <CookieNotice />
+
                         {/* todo: replace toasts with material-ui snackbar https://material-ui.com/demos/snackbars/ */}
                         <ToastsContainer
                           store={ToastsStore}

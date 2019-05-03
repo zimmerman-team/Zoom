@@ -14,7 +14,7 @@ const ComponentBase = styled.div`
   display: flex;
   flex-direction: column;
   width: 1024px;
-  height: 80px;
+  height: max-content;
   flex-wrap: wrap;
   padding-top: 20px;
 `;
@@ -37,7 +37,9 @@ const ChartLegends = props => {
     <ComponentBase>
       {props.data.map(indicator => {
         return (
-          <ChartLegendItem color={indicator.color} text={indicator.name} />
+          indicator.label && (
+            <ChartLegendItem color={indicator.color} text={indicator.label} />
+          )
         );
       })}
     </ComponentBase>

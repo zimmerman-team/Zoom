@@ -30,8 +30,8 @@ export function data(
     {
       label: 'Users',
       path: `${Path}users`,
-      count: users.length,
-      adminOnly: true
+      count: users.length
+      // adminOnly: true
     },
     {
       label: 'Teams',
@@ -42,7 +42,7 @@ export function data(
   ];
 
   return filter(tabs, t => {
-    if (t.adminObnly) return isAdmin;
+    if (t.adminOnly) return isAdmin;
     if (t.superAdminOnly) return isSuperAdmin;
     return true;
   });

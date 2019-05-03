@@ -51,11 +51,13 @@ const markerInfo = hoverMarkerInfo => {
       >
         <ToolTipTitle>{countryName}</ToolTipTitle>
         <ValueContainer>
-          <ToolTipLabel>{hoverMarkerInfo.indName}: </ToolTipLabel>
-          <ToolTipText>
-            {formatNumber(hoverMarkerInfo.value)}
-            {nrFormat}
-          </ToolTipText>
+          <ToolTipLabel>
+            {hoverMarkerInfo.tooltipLabel}:
+            <ToolTipText>
+              {formatNumber(hoverMarkerInfo.value)}
+              {nrFormat}
+            </ToolTipText>
+          </ToolTipLabel>
         </ValueContainer>
       </ToolTipContainer>
     );

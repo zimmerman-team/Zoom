@@ -1,2 +1,2 @@
-export const minYear = 1990;
-export const maxYear = 2019;
+export const minYear = 1980;
+export const maxYear = 2030;

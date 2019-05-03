@@ -23,7 +23,7 @@ export const ToolTipLabel = styled.div`
   text-align: left;
 `;
 
-export const ToolTipText = styled(ToolTipLabel)`
+export const ToolTipText = styled.span`
   color: ${theme.color.aidsFondsRed};
   margin-left: 4px;
 `;

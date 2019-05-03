@@ -1,4 +1,6 @@
 const fs = require('fs');
+const isEqual = require('lodash/isEqual');
+
 /* consts */
 const config = require('../config/config');
 
@@ -188,7 +190,7 @@ const ChartController = {
             archived: false,
             name: { $regex: searchTitle, $options: 'i' }
           },
-          'created last_updated team type dataSources _id name _public'
+          'created last_updated teams type dataSources _id name _public'
         )
           .limit(pSize)
           .skip(p * pSize)
@@ -228,7 +230,7 @@ const ChartController = {
                   name: { $regex: searchTitle, $options: 'i' }
                 },
                 {
-                  team: author.team,
+                  teams: { $all: author.teams },
                   archived: false,
                   name: { $regex: searchTitle, $options: 'i' }
                 }
@@ -250,6 +252,7 @@ const ChartController = {
     });
   },
 
+  // This guys is not used, TODO: remove it most likely
   getTeamFeedCharts: function(req, res) {
     const { authId } = req.query;
 
@@ -428,7 +431,9 @@ const ChartController = {
                 // for the team just in case
                 // someone from another team would be able to duplicate
                 // this chart
-                const team = author.team === chart.team ? chart.team : '';
+                const teams = isEqual(author.teams, chart.teams)
+                  ? chart.teams
+                  : [];
 
                 const chartz = new Chart({
                   name: uniqueName,
@@ -436,7 +441,7 @@ const ChartController = {
                   dataSources: chart.dataSources,
                   description: chart.description,
                   _public: chart._public,
-                  team,
+                  teams,
                   data: chart.data,
                   descIntro: chart.descIntro,
 

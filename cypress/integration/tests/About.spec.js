@@ -6,7 +6,7 @@ describe('About page E2E test', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.percySnapshot('About page');
+    // cy.percySnapshot('About page');
   });
 
   it('Title should contain About zoom', function() {

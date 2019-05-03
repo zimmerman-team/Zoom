@@ -7,6 +7,18 @@ function signIn() {
   cy.visit('/home');
   cy.waitPageLoader();
   cy.waitPageLoader2();
+
+  //Check if signed in
+  cy.get('[data-cy=sidebar-toggle]').click();
+  cy.get('body').then($body => {
+    if ($body.find('[data-cy=sidebar-logout-button]').length) {
+      cy.get('[data-cy=sidebar-logout-button]').click();
+      cy.wait(1000);
+    } else {
+      cy.get('[data-cy=sidebar-close]').click();
+    }
+  });
+
   cy.get('[data-cy=sidebar-toggle]').click();
   cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
   cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
@@ -17,16 +29,12 @@ function signIn() {
 function navigateToCreateGeo() {
   // signIn();
   cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
 }
 
 function navigateToCreateLinechart() {
   // signIn();
-  cy.get('[data-cy="appbar-rightq-button"]').click();
-  cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-3"]').click();
@@ -43,15 +51,11 @@ function navigateToBarchart() {
 function navigateToCountryFocusKenya() {
   // signIn();
   cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-1"]').click();
 }
 function navigateToCountryFocusNetherlands() {
   // signIn();
-  cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-2"]').click();
@@ -99,7 +103,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
     cy.wait(2000);
-    cy.percySnapshot('Chartbuilder - Geomap');
+    // cy.percySnapshot('Chartbuilder - Geomap');
   });
 
   it('Should pass written text from the /context to /preview', function() {

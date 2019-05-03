@@ -6,7 +6,7 @@ describe('Home page navigation', function() {
   });
 
   it('Should make a snapshot of the visual current state', function() {
-    cy.percySnapshot('Home page - Dialog');
+    //cy.percySnapshot('Home page - Dialog');
   });
 
   it('Should display a dialog overlay', function() {
@@ -21,7 +21,7 @@ describe('Home page navigation', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.percySnapshot('Home page');
+    //cy.percySnapshot('Home page');
   });
 });
 
@@ -58,7 +58,7 @@ describe('Home page geo map filters', function() {
   it('Should make a snapshot of the visual current steet', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.percySnapshot('Home page - Geo map filters');
+    //cy.percySnapshot('Home page - Geo map filters');
   });
 
   it('Resets values', function() {

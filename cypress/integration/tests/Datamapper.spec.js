@@ -217,7 +217,7 @@ describe('Datamapper e2e tests', function() {
   });
 
   it('Should make a snapshot of the visual current state', function() {
-    cy.percySnapshot('Datamapper page - step 1');
+    //cy.percySnapshot('Datamapper page - step 1');
   });
 
   it('Page should contain first steps title', function() {
@@ -353,7 +353,7 @@ describe('Datamapper e2e tests', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.percySnapshot('Datamapper page - step 2');
+    //Snapshot('Datamapper page - step 2');
   });
 
   it('Check if its the upload step', function() {
@@ -399,7 +399,7 @@ describe('Datamapper e2e tests', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.percySnapshot('Datamapper page - step 3');
+    //cy.percySnapshot('Datamapper page - step 3');
   });
 
   it('Check if overview table is generated correctly', function() {
@@ -438,7 +438,7 @@ describe('Datamapper e2e tests', function() {
 
   it('Should make a snapshot of the visual current state', function() {
     cy.wait(8000);
-    cy.percySnapshot('Datamapper page - step 4');
+    //cy.percySnapshot('Datamapper page - step 4');
   });
 
   it('Check if its the correct errors step', function() {
@@ -645,7 +645,7 @@ describe('Datamapper e2e tests', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.percySnapshot('Datamapper page - step 5');
+    //cy.percySnapshot('Datamapper page - step 5');
   });
 
   it('Try progressing without doing any mapping', function() {

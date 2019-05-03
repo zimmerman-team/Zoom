@@ -34,7 +34,8 @@ const propTypes = {
   teams: PropTypes.arrayOf(PropTypes.shape({})),
   totalPages: PropTypes.number,
   changePage: PropTypes.func,
-  isSuperAdmin: PropTypes.bool
+  isSuperAdmin: PropTypes.bool,
+  isAdministrator: PropTypes.bool
 };
 const defaultProps = {
   tabs: [],
@@ -54,7 +55,8 @@ const defaultProps = {
   activeTab: 'charts',
   totalPages: 0,
   changePage: null,
-  isSuperAdmin: false
+  isSuperAdmin: false,
+  isAdministrator: false
 };
 
 const DashboardModule = ({
@@ -78,7 +80,8 @@ const DashboardModule = ({
   navItems,
   totalPages,
   changePage,
-  isSuperAdmin
+  isSuperAdmin,
+  isAdministrator
 }) => (
   <ModuleContainer>
     <Helmet>
@@ -112,6 +115,7 @@ const DashboardModule = ({
       activeTab={activeTab}
       sort={sort}
       navItems={navItems}
+      isAdministrator={isAdministrator}
       isSuperAdmin={isSuperAdmin}
     />
     {totalPages > 0 && (

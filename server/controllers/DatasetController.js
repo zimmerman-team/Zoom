@@ -45,6 +45,7 @@ const DatasetApi = {
     });
   },
 
+  // TODO: this is not being used, maybe remove it?
   // so this updates the team related to the dataset
   // currently only the owner can do this
   updateTeam: function(author, datasetId, team, res) {
@@ -94,7 +95,7 @@ const DatasetApi = {
             datasetId: data.datasetId,
             author: acc,
             name: data.name,
-            team: data.team,
+            teams: data.teams,
             dataSource: data.dataSource,
             public: data.public
           });
@@ -129,7 +130,7 @@ const DatasetApi = {
             else {
               if (data.name) dataset.name = data.name;
 
-              if (data.team) dataset.team = data.team;
+              if (data.teams) dataset.teams = data.teams;
 
               if (data.dataSource) dataset.dataSource = data.dataSource;
 

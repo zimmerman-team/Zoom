@@ -1,5 +1,6 @@
 beforeEach(() => {
-  // set this for skipping landing page
+  // README keep in mind that Cypress clears the whole state before each test. => signIn() before each test.
+  // set this for skipping landing dialog
   Cypress.Cookies.preserveOnce('homeDialogShown', 'false')
 });
 
@@ -18,7 +19,6 @@ function signIn() {
       cy.get('[data-cy=sidebar-close]').click();
     }
   });
-  // cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy=sidebar-toggle]').click();
   cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
   cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
@@ -122,7 +122,6 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
       'This is a test'
     );
   });
-});
 
   it('Should map aids related deaths data on the geo map', function() {
     navigateToCreateGeo();
@@ -164,6 +163,8 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
   });
 
 
+});
+
 describe('Chartbuilder line chart fragment e2e', function() {
   it('Should contain /linechart/ in the url', function() {
     navigateToCreateLinechart();
@@ -178,6 +179,7 @@ describe('Chartbuilder line chart fragment e2e', function() {
   });
 });
 
+//So yeah now that i think of it a fixture is defo needed
 describe('Chartbuilder table chart fragment e2e', function() {
   it('Should contain /tablechart in the url', function() {
     signIn();
@@ -185,21 +187,26 @@ describe('Chartbuilder table chart fragment e2e', function() {
     cy.url().should('include', '/visualizer/tablechart');
   });
 
-  it('Should display aids related deaths in the year 1990', function() {
-    cy.get('[data-cy="year-1990"]').click();
-    cy.wait(1000);
-    cy.get('#MUIDataTableBodyRow-2 > :nth-child(5)').should("contain", "1990");
+  it('Should display aids related deaths in the year 2005', function() {
+    signIn();
+    navigateToTablechart();
+    cy.waitPageLoader();
+    cy.get('[data-cy="year-2005"]').click();
+    cy.waitPageLoader();
+    cy.get('#MUIDataTableBodyRow-2 > :nth-child(5)').should("contain", "2005");
     cy.get('#MUIDataTableBodyRow-2 > :nth-child(9)').should("contain", "aids related deaths (unaids)");
   });
 
   it('Should sort on Geolocation', function() {
     cy.get(":nth-child(2) > .MUIDataTableHeadCell-toolButton > .MUIDataTableHeadCell-data").click();
-    cy.get('tbody>tr').first().should("contain", "zimbabwe")
+    cy.waitPageLoader();
+    cy.get('tbody>tr').should("contain", "tonga")
   });
 
   it('Should only display Kenya data when searching "kenya"', function() {
     cy.get('[aria-label="Search"]').click();
     cy.get(".MuiInputBase-root > .MuiInputBase-input").type("kenya");
+    cy.waitPageLoader();
     cy.get("tbody>tr").should("contain", "kenya");
   });
 
@@ -208,6 +215,7 @@ describe('Chartbuilder table chart fragment e2e', function() {
       cy.get('input[type="checkbox"]').click();
     });
     cy.get('[aria-label="Delete Selected Rows"]').click();
+    cy.waitPageLoader();
     cy.get("tbody>tr").should("contain", "Sorry, no matching records found");
 
     cy.get('[aria-label="Search"]').click();
@@ -218,6 +226,7 @@ describe('Chartbuilder table chart fragment e2e', function() {
 
   it('Resetting all values should leave a empty datatable', function() {
     cy.get('[data-cy="data-explorer-panel-reset"]').click();
+    cy.waitPageLoader();
     cy.get("tbody>tr").should("contain", "Sorry, no matching records found");
   });
 });

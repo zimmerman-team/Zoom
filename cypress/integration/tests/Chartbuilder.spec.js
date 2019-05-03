@@ -1,12 +1,17 @@
-function signOut() {
-  cy.clearCookies();
-  cy.clearLocalStorage();
-}
+beforeEach(() => {
+  // set this for skipping landing page
+  Cypress.Cookies.preserveOnce('homeDialogShown', 'false')
+});
+
+// function signOut() {
+//   cy.clearCookies();
+//   cy.clearLocalStorage();
+// }
+
 function signIn() {
   cy.visit('/');
   cy.wait(1000);
-  cy.get('[data-cy="dialog-overlay"]').click({force: true});
-  signOut();
+  // signOut();
   cy.get('[data-cy=sidebar-toggle]').click();
   cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
   cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
@@ -17,7 +22,6 @@ function signIn() {
 
 function navigateToCreateGeo() {
   signIn();
-  cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
@@ -26,7 +30,6 @@ function navigateToCreateGeo() {
 }
 function navigateToCreateLinechart() {
   signIn();
-  cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
@@ -55,7 +58,6 @@ function navigateToBarchart() {
 }
 function navigateToCountryFocusKenya() {
   signIn();
-  cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
@@ -64,7 +66,6 @@ function navigateToCountryFocusKenya() {
 }
 function navigateToCountryFocusNetherlands() {
   signIn();
-  cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
@@ -76,12 +77,12 @@ describe('Create geo functionality', function() {
   it("Shouldn't be able to create geo when not logged in", function() {
     cy.visit('/home');
     cy.wait(1000);
-    cy.get('[data-cy="dialog-overlay"]').click();
     cy.get('[data-cy="appbar-right-button"]').should('not.have.text', 'Create')
   });
 
   it('Should display appropriate content per tab', function() {
     signIn();
+    cy.wait(2000);
     cy.get('[data-cy="appbar-right-button"]').click();
     cy.get('[data-cy="nav-pane-item-0"]').should('have.text', 'Create chart');
     cy.get('[data-cy="nav-pane-item-1"]').should('have.text', 'Convert data');

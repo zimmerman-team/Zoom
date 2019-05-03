@@ -351,7 +351,12 @@ class ZoomSelect extends React.Component {
                 )}
                 {this.props.selectAll && this.props.multiple && (
                   <SelectAll onClick={() => this.selectAllClick()}>
-                    <DropDownCheckbox checked={this.state.allSelected} />
+                    <DropDownCheckbox
+                      checked={
+                        this.state.allSelected ||
+                        this.props.arraySelected.length > 0
+                      }
+                    />
                     <DropDownLabel>Select / Deselect all</DropDownLabel>
                   </SelectAll>
                 )}

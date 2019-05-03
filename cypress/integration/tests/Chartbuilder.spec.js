@@ -18,12 +18,12 @@ function signIn() {
       cy.get('[data-cy=sidebar-close]').click();
     }
   });
-
+  // cy.get('[data-cy="dialog-overlay"]').click({force: true});
   cy.get('[data-cy=sidebar-toggle]').click();
   cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
   cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
   cy.get('[data-cy=sidebar-login-button]').click();
-  cy.wait(5000);
+  cy.wait(10000);
 }
 
 function navigateToCreateGeo() {
@@ -108,7 +108,8 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
 
   it('Should pass written text from the /context to /preview', function() {
     // Fixme: Change to proper url or simultate click of the button.
-    cy.visit('/visualizer/geomap/vizID/context');
+    // cy.visit('/visualizer/geomap/vizID/context');
+    cy.get('[data-cy="tab-2"]');
     cy.get('textarea')
       .last()
       .type('This is a test');

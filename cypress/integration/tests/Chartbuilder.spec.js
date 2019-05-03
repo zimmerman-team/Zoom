@@ -5,27 +5,27 @@ beforeEach(() => {
 
 function signIn() {
   cy.visit('/home');
-  cy.wait(1000);
+  cy.waitPageLoader();
+  cy.waitPageLoader2();
   cy.get('[data-cy=sidebar-toggle]').click();
   cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
   cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
   cy.get('[data-cy=sidebar-login-button]').click();
-
   cy.wait(5000);
 }
 
 function navigateToCreateGeo() {
   // signIn();
   cy.get('[data-cy="appbar-right-button"]').click();
-  // cy.get('[data-cy="appbar-right-button"]').click();
-  // cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
 }
 
 function navigateToCreateLinechart() {
   // signIn();
-  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="appbar-rightq-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="appbar-right-button"]').click();
   cy.get('[data-cy="nav-pane-item-0"]').click();
@@ -218,8 +218,6 @@ describe('Chartbuilder bar chart fragment e2e', function() {
     navigateToBarchart();
     cy.url().should('include', '/visualizer/barchart');
   });
-
-  //TODO: Check on chartlegends when implemented
 });
 
 describe('Chartbuilder country focus Kenya fragment e2e', function() {

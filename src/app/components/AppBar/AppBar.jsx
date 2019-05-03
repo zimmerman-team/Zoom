@@ -235,8 +235,6 @@ export class AppBar extends React.Component {
   }
 
   render() {
-    console.log('this.props.chartCreated', this.props.chartCreated);
-
     return (
       <ComponentBase
         elevation="small"

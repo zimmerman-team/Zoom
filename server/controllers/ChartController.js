@@ -237,7 +237,7 @@ const ChartController = {
 
         Chart.find(
           query,
-          'created last_updated team _public type dataSources _id name archived'
+          'created last_updated teams _public type dataSources _id name archived'
         )
           .collation({ locale: 'en' })
           .sort(sort)

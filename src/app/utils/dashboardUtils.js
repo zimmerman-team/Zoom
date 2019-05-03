@@ -127,8 +127,7 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
   const chartz = charts.charts ? charts.charts : charts;
 
   return chartz.map(chart => {
-    let shared = '';
-    if (chart.team.length > 0) shared = shared.concat(chart.team);
+    let shared = chart.teams;
     if (chart._public)
       shared =
         shared.length > 0

@@ -129,6 +129,7 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
   return chartz.map(chart => {
     let shared = chart.teams;
     if (chart._public) shared.push('Public');
+    shared = shared.join(', ');
     let dataSources = '';
 
     chart.dataSources.forEach((source, index) => {

@@ -591,7 +591,7 @@ class VisualizerModuleMediator extends Component {
         chartMounted: true,
         name,
         _public,
-        team: teams.length > 0,
+        teams,
         data: this.props.chartResults.data || [],
         chartId: _id,
         descIntro,

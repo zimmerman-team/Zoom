@@ -17,7 +17,7 @@ import find from 'lodash/find';
 
 /* actions */
 import * as actions from 'services/actions/general';
-import { ZoomSelect } from 'components/Panes/DataExplorePane/panels/DropdownMenuPanel/DropdownMenuPanel.style';
+import ZoomSelect from 'components/Select/ZoomSelect';
 
 /** Button component description */
 
@@ -90,6 +90,13 @@ const ControlLabel = styled(FormControlLabel)`
   }
 `;
 
+const Label = styled.span`
+  color: rgba(0, 0, 0, 0.87);
+  font-family: ${themes.font.zoomFontFamTwo};
+  font-weight: 300;
+  font-size: 14px;
+`;
+
 const ZoomSwitch = styled(Switch)`
   && {
     span:nth-child(1) {
@@ -133,16 +140,18 @@ function VisibilityTab(props) {
     const newTeams = !reset ? options.map(o => o.value) : [];
     props.dispatch(
       actions.storeChartDataRequest({
-        team: newTeams
+        teams: newTeams
       })
     );
   };
 
   const handleTeamSelect = (team, selectAll = false) => {
     if (selectAll || team === 'reset') {
-      handleAllTeamSelect(team === 'reset');
+      handleAllTeamSelect(
+        team === 'reset' || props.chartData.teams.length === options.length
+      );
     } else if (team.value) {
-      let newTeams = props.chartData.team;
+      let newTeams = [...props.chartData.teams];
       if (find(newTeams, t => t === team.value)) {
         newTeams = pull(newTeams, team.value);
       } else {
@@ -150,7 +159,7 @@ function VisibilityTab(props) {
       }
       props.dispatch(
         actions.storeChartDataRequest({
-          team: newTeams
+          teams: newTeams
         })
       );
     }
@@ -186,7 +195,7 @@ function VisibilityTab(props) {
               label="Publish to public Zoom library"
             />
 
-            <div>Published with my team</div>
+            <Label>Published with my team</Label>
             <ZoomSelect
               border
               multiple
@@ -196,8 +205,8 @@ function VisibilityTab(props) {
               selectVal={handleTeamSelect}
               placeHolderText="Select team"
               placeHolderNumber={options.length}
-              valueSelected={props.chartData.team}
-              arraySelected={props.chartData.team}
+              valueSelected={props.chartData.teams}
+              arraySelected={props.chartData.teams}
             />
           </FormGroup>
         </FormControl>

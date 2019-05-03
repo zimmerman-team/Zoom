@@ -17,7 +17,7 @@ import find from 'lodash/find';
 
 /* actions */
 import * as actions from 'services/actions/general';
-import { ZoomSelect } from 'components/Panes/DataExplorePane/panels/DropdownMenuPanel/DropdownMenuPanel.style';
+import ZoomSelect from 'components/Select/ZoomSelect';
 
 /** Button component description */
 
@@ -147,9 +147,11 @@ function VisibilityTab(props) {
 
   const handleTeamSelect = (team, selectAll = false) => {
     if (selectAll || team === 'reset') {
-      handleAllTeamSelect(team === 'reset');
+      handleAllTeamSelect(
+        team === 'reset' || props.chartData.teams.length === options.length
+      );
     } else if (team.value) {
-      let newTeams = props.chartData.team;
+      let newTeams = [...props.chartData.teams];
       if (find(newTeams, t => t === team.value)) {
         newTeams = pull(newTeams, team.value);
       } else {
@@ -162,8 +164,6 @@ function VisibilityTab(props) {
       );
     }
   };
-
-  console.log(options, props.chartData.teams, props.chartData.team);
 
   /*todo: figure out why the custom styling is resetting to the default styling*/
 

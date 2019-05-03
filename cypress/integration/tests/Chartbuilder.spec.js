@@ -23,6 +23,7 @@ function signIn() {
   cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
   cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
   cy.get('[data-cy=sidebar-login-button]').click();
+  //Instead of wait => wait till request has been done and page has fully loaded
   cy.wait(10000);
 }
 
@@ -108,8 +109,10 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
 
   it('Should pass written text from the /context to /preview', function() {
     // Fixme: Change to proper url or simultate click of the button.
-    // cy.visit('/visualizer/geomap/vizID/context');
-    cy.get('[data-cy="tab-2"]');
+    cy.waitPageLoader();
+    cy.get('[href="/visualizer/geomap/vizID/context"]').click();
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
     cy.get('textarea')
       .last()
       .type('This is a test');
@@ -119,6 +122,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
       'This is a test'
     );
   });
+});
 
   it('Should map aids related deaths data on the geo map', function() {
     navigateToCreateGeo();
@@ -129,6 +133,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
       'aids related deaths (unaids)'
     );
   });
+
   // TODO: Implement this test.
   // it('Should "save" the chart to the dashboard', function() {
   //   navigateToCreateGeo();
@@ -157,7 +162,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     cy.visit('/public/chart-library');
     // Fixme: Should check on the vizID in the url, however on creating a chart, the vizID is not in the URL yet.
   });
-});
+
 
 describe('Chartbuilder line chart fragment e2e', function() {
   it('Should contain /linechart/ in the url', function() {
@@ -166,7 +171,7 @@ describe('Chartbuilder line chart fragment e2e', function() {
   });
 
   it('Should display mapped data on the linechart', function() {
-    navigateToCreateLinechart();
+    cy.wait(5000);
     cy.contains('Select indicator').click({force: true});
     cy.contains('aids related deaths (unaids)').click();
     cy.get('[data-cy="aids related deaths (unaids)"]');

@@ -1,6 +1,10 @@
 const fs = require('fs');
 const isEqual = require('lodash/isEqual');
 
+const dataPath = __dirname
+  .substring(0, __dirname.indexOf('controllers') - 1)
+  .concat('/data/');
+
 /* consts */
 const config = require('../config/config');
 
@@ -65,7 +69,7 @@ function genUniqueName(model, name, orgName = undefined, incr = 1) {
 
 const ChartController = {
   test: (req, res) => {
-    res.send('SUCCESS');
+    res.send(__dirname);
   },
 
   // use this only if you have an empty database
@@ -332,7 +336,7 @@ const ChartController = {
                     console.log('saving this biggo gives error', err);
                     general.handleError(res, err);
                   } else {
-                    const fileUrl = `server/data/chartData${chartz.id}.txt`;
+                    const fileUrl = `${dataPath}chartData${chartz.id}.txt`;
                     fs.writeFile(fileUrl, JSON.stringify(data), fileError => {
                       if (fileError) {
                         console.log('fileError', fileError);
@@ -360,7 +364,7 @@ const ChartController = {
           } else if (author.equals(chart.author)) {
             genUniqueName(Chart, name, chart.name)
               .then(uniqueName => {
-                const fileUrl = `server/data/chartData${chart.id}.txt`;
+                const fileUrl = `${dataPath}chartData${chart.id}.txt`;
                 fs.writeFile(fileUrl, JSON.stringify(data), fileError => {
                   if (fileError) {
                     general.handleError(res, fileError);

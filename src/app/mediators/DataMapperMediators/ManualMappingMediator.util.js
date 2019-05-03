@@ -3,6 +3,8 @@ export function formatErrorColumns(typesString, ignoredErrors = []) {
 
   const types = JSON.parse(JSON.parse(typesString));
 
+  console.log('types', types);
+
   // weird data formatting commencing
   Object.keys(types).forEach(key => {
     // so the element at index 1
@@ -14,6 +16,8 @@ export function formatErrorColumns(typesString, ignoredErrors = []) {
       // and at index 0 we have the columns name, so we push it in
       errorColumns.push(types[key][0]);
   });
+
+  console.log('errorColumns', errorColumns);
 
   return errorColumns;
 }

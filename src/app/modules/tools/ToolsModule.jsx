@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Select, Box, RangeInput, Tabs, Tab, Text } from 'grommet';
 
 // import RichtTabTitle from './comps/RichtTabTitle';
-import { CircleInformation } from 'grommet-icons';
+import { CircleInformation } from 'grommet-icons/icons/CircleInformation';
 import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePane';
 
 const ComponentBase = styled.div`

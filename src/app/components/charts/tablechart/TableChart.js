@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MUIDataTable from 'mui-datatables';
-import { MuiThemeProvider } from '@material-ui/core';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 /* components */
 import getTheme from './TableChart.styles';

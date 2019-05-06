@@ -2,12 +2,12 @@ import update from 'immutability-helper';
 import * as syncActions from 'services/actions/sync';
 
 const initial = {
-  data: null,
+  data: null
 };
 
 function updateSuccess(state, action) {
   return update(state, {
-    data: { $set: action.data },
+    data: { $set: action.data }
   });
 }
 
@@ -31,7 +31,7 @@ function forgotPasswordEmailSent(state = initial, action) {
 
 const reducers = {
   loginStatusMessage,
-  forgotPasswordEmailSent,
+  forgotPasswordEmailSent
 };
 
 export default reducers;

@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import { Box, Accordion, AccordionPanel } from 'grommet';
+import { Box } from 'grommet/components/Box';
+import { Accordion } from 'grommet/components/Accordion';
+import { AccordionPanel } from 'grommet/components/AccordionPanel';
 import theme from 'theme/Theme';
 
 export const ComponentBase = styled.div`

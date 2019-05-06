@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Box, Button, DataTable, Text } from 'grommet';
+import { Button } from 'grommet/components/Button';
 import theme from 'theme/Theme';
 
 /**

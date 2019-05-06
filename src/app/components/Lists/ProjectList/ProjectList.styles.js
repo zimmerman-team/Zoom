@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { Box, Heading } from 'grommet';
+import { Box } from 'grommet/components/Box';
+import { Heading } from 'grommet/components/Heading';
 import theme from 'theme/Theme';
 
 export const List = styled(Box)`

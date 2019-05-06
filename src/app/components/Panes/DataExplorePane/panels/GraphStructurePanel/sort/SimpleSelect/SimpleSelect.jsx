@@ -2,8 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Select from '@material-ui/core/Select/index';
-import theme from 'theme/Theme';
+import Select from '@material-ui/core/Select';
 import ReactDOM from 'react-dom';
 import { withStyles } from '@material-ui/core/styles/index';
 import Input from '@material-ui/core/Input/index';

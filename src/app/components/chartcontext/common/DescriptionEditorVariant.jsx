@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import InputBase from '@material-ui/core/InputBase';
 import theme from 'theme/Theme';
-import ContextHeader from 'components/chartcontext/common/ContextHeader';
 
 const propTypes = {
   saveText: PropTypes.func,

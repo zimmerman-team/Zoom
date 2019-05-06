@@ -604,7 +604,7 @@ module.exports = function(webpackEnv) {
           silent: true,
           formatter: typescriptFormatter,
         }),
-      isEnvProduction &&
+      /*isEnvProduction &&
         new BrotliGzipPlugin({
           asset: '[path].br[query]',
           algorithm: 'brotli',
@@ -620,13 +620,13 @@ module.exports = function(webpackEnv) {
           test: /\.(js|json|css|html|svg)$/,
           threshold: 10240,
           minRatio: 0.8,
-        }),
+        }),*/
       isEnvProduction &&
         new webpack.optimize.LimitChunkCountPlugin({
           maxChunks:2,
         }),
-      // isEnvProduction &&
-      //   new BundleAnalyzerPlugin(),
+      /*isEnvProduction &&
+        new BundleAnalyzerPlugin(),*/
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.

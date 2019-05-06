@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 /* components */
-import { Select, CheckBox, Box } from 'grommet';
+import { Select } from 'grommet/components/Select';
+import { CheckBox } from 'grommet/components/CheckBox';
+import { Box } from 'grommet/components/Box';
 
 import theme from 'theme/Theme';
 

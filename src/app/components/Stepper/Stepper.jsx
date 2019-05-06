@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /* components */
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import StepConnector from '@material-ui/core/StepConnector';
 import { withStyles } from '@material-ui/core/styles';
 import ZoomButton from 'components/ZoomButton/ZoomButton';

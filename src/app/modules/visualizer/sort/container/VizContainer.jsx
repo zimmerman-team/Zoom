@@ -8,16 +8,16 @@ import { Route, withRouter } from 'react-router';
 import graphKeys from '__consts__/GraphStructKeyConst';
 
 import ContextPreview from 'components/ContextPreview/ContextPreview';
-import BarchartFragment from 'modules/visualizer/sort/container/fragments/BarchartFragment';
-import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFragment';
+import BarchartFragment from 'modules/visualizer/sort/container/fragments/BarchartFragment/BarchartFragment';
+import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFragment/GeomapFragment';
 
-import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment';
-import TablechartFragment from 'modules/visualizer/sort/container/fragments/TablechartFragment';
-import DonutchartFragment from 'modules/visualizer/sort/container/fragments/DonutchartFragment';
+import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment/LinechartFragment';
+import TablechartFragment from 'modules/visualizer/sort/container/fragments/TablechartFragment/TablechartFragment';
+import DonutchartFragment from 'modules/visualizer/sort/container/fragments/DonutchartFragment/DonutchartFragment';
 import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
 import CustomYearSelector from '../../../../components/CustomYearSelector/CustomYearSelector';
 import { YearContainer } from '../../../../components/CustomYearSelector/CustomYearSelector.style';
-import paneTypes from '../../../../__consts__/PaneTypesConst';
+
 import YearRangeSelector from 'components/YearRangeSelector/YearRangeSelector';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 

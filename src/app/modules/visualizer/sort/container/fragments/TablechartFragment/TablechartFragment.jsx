@@ -2,12 +2,12 @@
 import React from 'react';
 
 /* components */
-import TableChart from '../../../../../components/charts/tablechart/TableChart';
-import { FragmentBase } from '../VizContainer.style';
+import TableChart from 'components/charts/tablechart/TableChart';
+import { FragmentBase } from 'modules/visualizer/sort/container/VizContainer.style';
 
 const TablechartFragment = props => {
   return (
-    <FragmentBase>
+    <FragmentBase position="flex-start" paddingTop="40px">
       <TableChart
         title={props.indicatorData.title}
         data={props.indicatorData.rows}

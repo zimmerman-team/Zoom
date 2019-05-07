@@ -16,7 +16,7 @@ import { ResponsivePie } from '@nivo/pie';
 import TooltipContent from 'modules/visualizer/sort/container/fragments/common/ToolTipContent';
 
 /* styles */
-import { FragmentBase } from '../VizContainer.style';
+import { FragmentBase } from 'modules/visualizer/sort/container/VizContainer.style';
 
 const Box = styled.div`
   width: 1024px;

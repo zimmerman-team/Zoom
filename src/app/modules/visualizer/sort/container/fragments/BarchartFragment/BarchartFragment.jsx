@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 /* mock */
-import { BarchartMockData } from './BachartMockData';
+import { BarchartMockData } from 'modules/visualizer/sort/container/fragments/BarchartFragment/BachartMockData';
 
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
@@ -12,7 +12,7 @@ import { ResponsiveBar } from '@nivo/bar';
 import TooltipContent from 'modules/visualizer/sort/container/fragments/common/ToolTipContent';
 
 /* styles */
-import { FragmentBase } from '../VizContainer.style';
+import { FragmentBase } from 'modules/visualizer/sort/container/VizContainer.style';
 
 const Box = styled.div`
   width: 100%;

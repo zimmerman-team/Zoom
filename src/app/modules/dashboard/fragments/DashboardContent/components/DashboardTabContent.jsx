@@ -119,7 +119,7 @@ const DashboardTabContent = props => {
         props.dataPaneOpen === paneTypes.createChart ||
         props.dataPaneOpen === paneTypes.convertData) && (
         <DataPaneContainer>
-          <NavPane />
+          <NavPane auth0Client={props.auth0Client} />
         </DataPaneContainer>
       )}
 

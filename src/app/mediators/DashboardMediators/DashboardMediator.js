@@ -475,6 +475,7 @@ class DashboardMediator extends React.Component {
         greetingName={greetingName}
         isAdministrator={this.props.auth0Client.isAdministrator()}
         isSuperAdmin={this.props.auth0Client.isSuperAdmin()}
+        auth0Client={this.props.auth0Client}
       />
     );
   }

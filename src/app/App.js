@@ -19,7 +19,7 @@ import isEqual from 'lodash/isEqual';
 
 // Routes
 import Routes from './Routes';
-import { Grommet } from 'grommet';
+import { Grommet } from 'grommet/components/Grommet';
 import { ZoomTheme } from 'styles/ZoomTheme';
 
 /* global app components */

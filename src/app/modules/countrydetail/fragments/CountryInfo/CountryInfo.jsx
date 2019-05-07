@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /* components */
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import { Element } from 'react-scroll/modules';
 import { SimpleText } from 'components/sort/Misc';
 import {

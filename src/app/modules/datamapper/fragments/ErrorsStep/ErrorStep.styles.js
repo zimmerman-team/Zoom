@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import { SectionHeading } from 'components/sort/Headings';
 
 import ZoomTable from 'components/ZoomTable/ZoomTable';

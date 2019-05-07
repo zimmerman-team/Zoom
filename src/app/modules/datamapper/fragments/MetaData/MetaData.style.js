@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { Box, Text } from 'grommet';
+import { Box } from 'grommet/components/Box';
+import { Text } from 'grommet/components/Text';
 import theme from 'theme/Theme';
 
 export const FieldContainer = styled(Box)`

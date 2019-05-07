@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import ColumnHeader from 'components/ZoomTable/ColumnHeader';
 import theme from 'theme/Theme';
 import CellValue from 'components/ZoomTable/CellValue';

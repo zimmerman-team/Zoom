@@ -15,7 +15,7 @@ import keys from 'lodash/keys';
 import pickBy from 'lodash/pickBy';
 
 /* components */
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import ZoomSelect from 'components/Select/ZoomSelect';
 
 /* styles */

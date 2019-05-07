@@ -3,7 +3,8 @@ import { shallow } from 'enzyme';
 import InputField from 'components/InputField/InputField';
 
 // Components
-import { FormField, TextInput } from 'grommet';
+import { FormField } from 'grommet/components/FormField';
+import { TextInput } from 'grommet/components/TextInput';
 
 const wrapper = shallow(<InputField />);
 

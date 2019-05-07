@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import theme from 'theme/Theme';
 import { Helmet } from 'react-helmet';
 

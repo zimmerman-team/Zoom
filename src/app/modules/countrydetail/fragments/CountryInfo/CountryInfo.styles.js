@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import { PageHeading } from 'components/sort/Headings';
 
 export const CountryInfoContainer = styled(Box)``;

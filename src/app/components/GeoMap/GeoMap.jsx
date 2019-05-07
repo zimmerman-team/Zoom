@@ -1,7 +1,8 @@
 /* base */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import MapGL, { LinearInterpolator } from 'react-map-gl';
+import MapGL from 'react-map-gl/dist/es6/components/interactive-map';
+import LinearInterpolator from 'react-map-gl/dist/es6/utils/transition/linear-interpolator';
 import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
 

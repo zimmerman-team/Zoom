@@ -2,7 +2,7 @@
 /* third party */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 
 /* custom components */
 import ZoomSelect from 'components/Select/ZoomSelect';

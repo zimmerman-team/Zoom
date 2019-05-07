@@ -2,7 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Select, Box, RangeInput, Tabs, Tab, Text } from 'grommet';
+import { Box } from 'grommet/components/Box';
+import { Tabs } from 'grommet/components/Tabs';
+import { Tab } from 'grommet/components/Tab';
 
 // import RichtTabTitle from './comps/RichtTabTitle';
 import { CircleInformation } from 'grommet-icons/icons/CircleInformation';

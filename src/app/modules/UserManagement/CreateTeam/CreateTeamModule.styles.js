@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { Box, TextInput } from 'grommet';
+import { Box } from 'grommet/components/Box';
+import { TextInput } from 'grommet/components/TextInput';
 
 import ZoomButton from 'components/ZoomButton/ZoomButton';
 import IconSort from 'assets/icons/IconSort';

@@ -1,5 +1,5 @@
 import theme from 'theme/Theme';
-import { TextInput } from 'grommet';
+import { TextInput } from 'grommet/components/TextInput';
 import styled from 'styled-components';
 import { PageHeading as _PageHeading } from 'components/sort/Headings';
 

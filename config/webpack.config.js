@@ -609,7 +609,7 @@ module.exports = function(webpackEnv) {
         // The formatter is invoked directly in WebpackDevServerUtils during development
         formatter: isEnvProduction ? typescriptFormatter : undefined,
       }),
-      /*isEnvProduction &&
+      isEnvProduction &&
         new BrotliGzipPlugin({
           asset: '[path].br[query]',
           algorithm: 'brotli',
@@ -617,7 +617,7 @@ module.exports = function(webpackEnv) {
           threshold: 10240,
           minRatio: 0.8,
           quality: 11,
-        }),*/
+        }),
       /*isEnvProduction &&
         new BundleAnalyzerPlugin(),*/
     ].filter(Boolean),

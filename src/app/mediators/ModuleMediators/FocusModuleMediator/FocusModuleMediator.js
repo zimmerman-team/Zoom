@@ -337,6 +337,7 @@ class FocusModuleMediator extends Component {
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
         yearPeriod={this.state.yearPeriod}
+        auth0Client={this.props.auth0Client}
       />
     );
   }

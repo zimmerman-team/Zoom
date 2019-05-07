@@ -133,6 +133,7 @@ const Routes = props => {
               <FocusModuleMediator
                 indicatorAggregations={props}
                 dropDownData={props}
+                auth0Client={props.auth0Client}
               />
             )}
           />

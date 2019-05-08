@@ -414,7 +414,11 @@ describe('Datamapper e2e tests', function() {
         { fileContent, fileName, mimeType: 'text/csv' },
         {subjectType: 'input'}
       );
-    });
+    })
+      .catch((error) => {
+        assert.isNotOk(error, 'Promise error');
+      });
+
 
     // So the step should show the uploaded file
     cy.contains(fileName);
@@ -495,19 +499,19 @@ describe('Datamapper e2e tests', function() {
 
     // verify that the errors are found correctly at least for the first page
     // in total for the file 'CypressSample.csv' there should be 5 errors shown
-    cy.get('tbody tr:nth-child(1) td:nth-child(8)').should($el => {
+    cy.get('tbody tr:nth-child(1) td:nth-child(1)').should($el => {
       expect($el).to.have.css('background-color', 'rgb(255, 128, 127)');
     });
-    cy.get('tbody tr:nth-child(2) td:nth-child(8)').should($el => {
+    cy.get('tbody tr:nth-child(2) td:nth-child(1)').should($el => {
       expect($el).to.have.css('background-color', 'rgb(255, 128, 127)');
     });
-    cy.get('tbody tr:nth-child(3) td:nth-child(4)').should($el => {
+    cy.get('tbody tr:nth-child(3) td:nth-child(6)').should($el => {
       expect($el).to.have.css('background-color', 'rgb(255, 128, 127)');
     });
-    cy.get('tbody tr:nth-child(4) td:nth-child(4)').should($el => {
+    cy.get('tbody tr:nth-child(4) td:nth-child(6)').should($el => {
       expect($el).to.have.css('background-color', 'rgb(255, 128, 127)');
     });
-    cy.get('tbody tr:nth-child(5) td:nth-child(4)').should($el => {
+    cy.get('tbody tr:nth-child(5) td:nth-child(6)').should($el => {
       expect($el).to.have.css('background-color', 'rgb(255, 128, 127)');
     });
   });
@@ -528,7 +532,7 @@ describe('Datamapper e2e tests', function() {
       .click();
 
     cy.get('[class*=ErrorStepstyles__ButtonContainer] button').click();
-
+    cy.wait(1000);
     cy.waitPageLoader();
     cy.waitPageLoader2();
 

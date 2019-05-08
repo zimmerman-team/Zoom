@@ -412,7 +412,7 @@ describe('Datamapper e2e tests', function() {
     cy.fixture(fileName).then(fileContent => {
       cy.get(fileInput).upload(
         { fileContent, fileName, mimeType: 'text/csv' },
-        { force: true}
+        {subjectType: 'input'}
       );
     });
 

@@ -33,12 +33,17 @@ const defaultProps = {
 };
 
 const ChartLegends = props => {
+  console.log(props);
   return (
     <ComponentBase>
       {props.data.map(indicator => {
         return (
           indicator.label && (
-            <ChartLegendItem color={indicator.color} text={indicator.label} />
+            <ChartLegendItem
+              color={indicator.color}
+              text={indicator.label}
+              data-cy={indicator.name}
+            />
           )
         );
       })}

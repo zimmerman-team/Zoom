@@ -55,9 +55,9 @@ const defaultProps = {
 const ChartLegendItem = props => {
   return (
     <ComponentBase>
-      <Box data-cy={props.text}>
+      <Box>
         <LegendColor color={props.color} />
-        <LegendLabel text={props.text} />
+        <LegendLabel text={props.text} data-cy="legend-label" />
       </Box>
       <FragmentInfoButton />
     </ComponentBase>

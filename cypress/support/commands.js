@@ -29,23 +29,20 @@ import '@percy/cypress';
 
 //https://github.com/cypress-io/cypress/issues/170
 Cypress.Commands.add('upload_file', (fileName, fileType = ' ', selector) => {
-  try {
-    cy.get(selector).then(subject => {
-      cy.fixture(fileName, 'base64')
-        .then(Cypress.Blob.base64StringToBlob)
-        .then(blob => {
-          const el = subject[0];
-          const testFile = new File([blob], fileName, { type: fileType });
-          const dataTransfer = new DataTransfer();
-          dataTransfer.items.add(testFile);
-          el.files = dataTransfer.files;
+  cy.get(selector).then(subject => {
+    cy.fixture(fileName, 'base64')
+      .then(Cypress.Blob.base64StringToBlob)
+      .then(blob => {
+        const el = subject[0];
+        const testFile = new File([blob], fileName, { type: fileType });
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(testFile);
+        el.files = dataTransfer.files;
 
-          cy.wrap(subject).trigger('change', { force: true });
-        })
-    })
-  } catch(e){
-    cy.log(e, 'Promise error, daar wordt je toch ziek van')
-  };
+        cy.wrap(subject).trigger('change', { force: true });
+        // throw new Error('Promise error, wordt je toch moe van....')
+      })
+  });
 });
 
 Cypress.Commands.add('waitPageLoader', (timeout = 1750000) => {

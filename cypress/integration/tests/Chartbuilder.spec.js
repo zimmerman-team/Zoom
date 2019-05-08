@@ -111,7 +111,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(6000);
+    cy.wait(10000);
     cy.percySnapshot('Chartbuilder - Geomap');
   });
 
@@ -135,6 +135,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     navigateToCreateGeo();
     cy.contains('Select indicator').click();
     cy.contains('aids related deaths (unaids)').click();
+    cy.wait(5000);
     cy.get('[data-cy="legendLayer-label"]').should(
       'contain',
       'aids related deaths (unaids)'
@@ -260,7 +261,6 @@ describe('Chartbuilder table chart fragment e2e', function() {
 
 describe('Chartbuilder bar chart fragment e2e', function() {
   it('Should contain /barchart in the url', function() {
-    signIn();
     navigateToBarchart();
     cy.url().should('include', '/visualizer/barchart');
   });
@@ -268,7 +268,7 @@ describe('Chartbuilder bar chart fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(6000);
+    cy.wait(10000);
     cy.percySnapshot('Chartbuilder - Barchart');
   });
 });
@@ -282,7 +282,7 @@ describe('Chartbuilder country focus Kenya fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(6000);
+    cy.wait(10000);
     cy.percySnapshot('Chartbuilder - Kenya focus');
   });
 });
@@ -296,7 +296,7 @@ describe('Chartbuilder country focus Netherlands fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(6000);
+    cy.wait(10000);
     cy.percySnapshot('Chartbuilder - Netherlands focus');
   });
 });

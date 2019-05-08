@@ -184,13 +184,13 @@ describe('Chartbuilder line chart fragment e2e', function() {
     //Here we check on the Chart Legend
     // cy.get('[data-cy="aids related deaths (unaids)"]');
   });
-});
 
-it('Should make a snapshot of the visual current state', function() {
-  cy.waitPageLoader();
-  cy.waitPageLoader2();
-  cy.wait(6000);
-  cy.percySnapshot('Chartbuilder - Linechart');
+  it('Should make a snapshot of the visual current state', function() {
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
+    cy.wait(6000);
+    cy.percySnapshot('Chartbuilder - Linechart');
+  });
 });
 
 //So yeah now that i think of it a fixture is defo needed

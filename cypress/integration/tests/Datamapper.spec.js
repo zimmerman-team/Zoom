@@ -404,20 +404,19 @@ describe('Datamapper e2e tests', function() {
 
   it('Check upload correct file and progress to the next step', function() {
     const fileName = 'CypressSample.csv';
-    // const fileType = 'text/csv';
+    const fileType = 'text/csv';
     const fileInput = 'input[type=file]';
-    //
-    // cy.upload_file(fileName, fileType, fileInput);
+    cy.upload_file(fileName, fileType, fileInput);
 
-    cy.fixture(fileName).then(fileContent => {
-      cy.get(fileInput).upload(
-        { fileContent, fileName, mimeType: 'text/csv' },
-        {subjectType: 'input'}
-      );
-    })
-      .catch((error) => {
-        assert.isNotOk(error, 'Promise error');
-      });
+    // cy.fixture(fileName).then(fileContent => {
+    //   cy.get(fileInput).upload(
+    //     { fileContent, fileName, mimeType: 'text/csv' },
+    //     {subjectType: 'input'}
+    //   );
+    // })
+    //   .catch((error) => {
+    //     assert.isNotOk(error, 'Promise error');
+    //   });
 
 
     // So the step should show the uploaded file

@@ -233,17 +233,6 @@ describe('Datamapper e2e tests', function() {
     cy.get(`li:nth-child(${valNumber})`).click({force: true});
   }
 
-  // it('Go to datamapper', function() {
-  //   signIn();
-  //   cy.visit('/mapper');
-  //   cy.waitPageLoader2();
-  //   cy.waitPageLoader();
-  // });
-  //
-  // it('Should make a snapshot of the visual current state', function() {
-  //   //cy.percySnapshot('Datamapper page - step 1');
-  // });
-
   it('Page should contain first steps title', function() {
     signIn();
     cy.waitPageLoader2();
@@ -255,6 +244,10 @@ describe('Datamapper e2e tests', function() {
       'contain',
       'Describe meta data'
     );
+  });
+
+  it('Should make a snapshot of the visual current state', function() {
+    cy.percySnapshot('Datamapper page - step 1');
   });
 
   it('Check user restriction to the next step with no fields entered', function() {
@@ -383,7 +376,7 @@ describe('Datamapper e2e tests', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    //Snapshot('Datamapper page - step 2');
+    cy.percySnapshot('Datamapper page - step 2');
   });
 
   it('Check if its the upload step', function() {
@@ -414,9 +407,6 @@ describe('Datamapper e2e tests', function() {
     cy.upload_file(fileName, fileType, fileInput);
     // So the step should show the uploaded file
     cy.contains(fileName);
-
-    //TODO: instead of wait it would be better to check if the loading icon has disappeared,
-    //TODO: or that the next button gets a red color. See TGF solution for this.
     cy.waitPageLoader();
     cy.waitPageLoader2();
     cy.contains('next').click();
@@ -429,7 +419,7 @@ describe('Datamapper e2e tests', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    //cy.percySnapshot('Datamapper page - step 3');
+    cy.percySnapshot('Datamapper page - step 3');
   });
 
   it('Check if overview table is generated correctly', function() {

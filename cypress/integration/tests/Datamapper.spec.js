@@ -1,7 +1,7 @@
 beforeEach(() => {
   // README keep in mind that Cypress clears the whole state before each test. => signIn() before each test.
   // set this for skipping landing dialog
-  cy.setCookie('homeDialogShown', 'false');
+
   cy.setCookie('cookieNotice', 'false');
 });
 
@@ -221,13 +221,6 @@ const fileDataType = [
 // and this is an array of blank cells for each file column
 // each arrays index is in relation to the fileColumns array indexes
 const blankCells = [0, 0, 0, 0, 0, 0, 0, 0, 3, 11];
-
-beforeEach(() => {
-  // README keep in mind that Cypress clears the whole state before each test. => signIn() before each test.
-  // set this for skipping landing dialog
-  cy.setCookie('homeDialogShown', 'false');
-  cy.setCookie('cookieNotice', 'false');
-});
 
 describe('Datamapper e2e tests', function() {
   function selectItem(rowNumber, valNumber) {

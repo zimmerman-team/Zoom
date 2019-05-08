@@ -1,7 +1,6 @@
 beforeEach(() => {
   // README keep in mind that Cypress clears the whole state before each test. => signIn() before each test.
   // set this for skipping landing dialog
-  cy.setCookie('homeDialogShown', 'false');
   cy.setCookie('cookieNotice', 'false');
 });
 

@@ -246,9 +246,11 @@ describe('Datamapper e2e tests', function() {
 
   it('Page should contain first steps title', function() {
     signIn();
-    cy.visit('/mapper');
     cy.waitPageLoader2();
     cy.waitPageLoader();
+    cy.wait(2000);
+    cy.get('[data-cy="appbar-right-button"]').click();
+    cy.get('[data-cy="nav-pane-item-1"]').click();
     cy.get('[class*=Headings__BaseHeading]').should(
       'contain',
       'Describe meta data'
@@ -256,7 +258,6 @@ describe('Datamapper e2e tests', function() {
   });
 
   it('Check user restriction to the next step with no fields entered', function() {
-    signIn();
     cy.contains('next').click();
     cy.wait(1000);
     cy.get('[class*=Headings__BaseHeading]').should(

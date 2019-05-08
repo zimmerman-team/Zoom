@@ -111,8 +111,8 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(2000);
-    // cy.percySnapshot('Chartbuilder - Geomap');
+    cy.wait(6000);
+    cy.percySnapshot('Chartbuilder - Geomap');
   });
 
   it('Should pass written text from the /context to /preview', function() {
@@ -186,23 +186,35 @@ describe('Chartbuilder line chart fragment e2e', function() {
   });
 });
 
+it('Should make a snapshot of the visual current state', function() {
+  cy.waitPageLoader();
+  cy.waitPageLoader2();
+  cy.wait(6000);
+  cy.percySnapshot('Chartbuilder - Linechart');
+});
+
 //So yeah now that i think of it a fixture is defo needed
 describe('Chartbuilder table chart fragment e2e', function() {
-  it('Should contain /tablechart in the url', function() {
+  it('Should contain /tablechart in the url and map aids related deaths data', function() {
     signIn();
     navigateToTablechart();
     cy.waitPageLoader2();
     cy.waitPageLoader();
     cy.url().should('include', '/visualizer/tablechart');
-  });
 
-  it('Should display aids related deaths in the year 2005', function() {
     cy.get('[data-cy="year-2005"]').click();
     cy.contains('Select indicator').click();
     cy.contains('aids related deaths (unaids)').click();
     cy.waitPageLoader();
     cy.get('#MUIDataTableBodyRow-2 > :nth-child(5)').should("contain", "2005");
     cy.get('#MUIDataTableBodyRow-2 > :nth-child(9)').should("contain", "aids related deaths (unaids)");
+  });
+
+  it('Should make a snapshot of the visual current state', function() {
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
+    cy.wait(6000);
+    cy.percySnapshot('Chartbuilder - Tablechart');
   });
 
   it('Should sort on Geolocation', function() {
@@ -237,6 +249,13 @@ describe('Chartbuilder table chart fragment e2e', function() {
     cy.waitPageLoader();
     cy.get("tbody>tr").should("contain", "Sorry, no matching records found");
   });
+
+  it('Should make a snapshot of the visual current state', function() {
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
+    cy.wait(6000);
+    cy.percySnapshot('Chartbuilder - Tablechart empty state');
+  });
 });
 
 describe('Chartbuilder bar chart fragment e2e', function() {
@@ -245,6 +264,13 @@ describe('Chartbuilder bar chart fragment e2e', function() {
     navigateToBarchart();
     cy.url().should('include', '/visualizer/barchart');
   });
+
+  it('Should make a snapshot of the visual current state', function() {
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
+    cy.wait(6000);
+    cy.percySnapshot('Chartbuilder - Barchart');
+  });
 });
 
 describe('Chartbuilder country focus Kenya fragment e2e', function() {
@@ -252,12 +278,26 @@ describe('Chartbuilder country focus Kenya fragment e2e', function() {
     navigateToCountryFocusKenya();
     cy.url().should('include', '/visualizer/focusKE');
   });
+
+  it('Should make a snapshot of the visual current state', function() {
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
+    cy.wait(6000);
+    cy.percySnapshot('Chartbuilder - Kenya focus');
+  });
 });
 
 describe('Chartbuilder country focus Netherlands fragment e2e', function() {
   it('Should contain /focusNL in the url', function() {
     navigateToCountryFocusNetherlands();
     cy.url().should('include', '/visualizer/focusNL');
+  });
+
+  it('Should make a snapshot of the visual current state', function() {
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
+    cy.wait(6000);
+    cy.percySnapshot('Chartbuilder - Netherlands focus');
   });
 });
 

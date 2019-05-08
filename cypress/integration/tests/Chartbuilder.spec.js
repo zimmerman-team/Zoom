@@ -179,10 +179,10 @@ describe('Chartbuilder line chart fragment e2e', function() {
 
   it('Should display mapped data on the linechart', function() {
     cy.wait(5000);
-    cy.contains('Select indicator').click({force: true});
+    cy.contains('Select indicator').click();
     cy.contains('aids related deaths (unaids)').click();
     //Here we check on the Chart Legend
-    cy.get('[data-cy="aids related deaths (unaids)"]');
+    // cy.get('[data-cy="aids related deaths (unaids)"]');
   });
 });
 
@@ -197,8 +197,11 @@ describe('Chartbuilder table chart fragment e2e', function() {
   it('Should display aids related deaths in the year 2005', function() {
     signIn();
     navigateToTablechart();
+    cy.get();
     cy.waitPageLoader();
     cy.get('[data-cy="year-2005"]').click();
+    cy.contains('Select indicator').click();
+    cy.contains('aids related deaths (unaids)').click();
     cy.waitPageLoader();
     cy.get('#MUIDataTableBodyRow-2 > :nth-child(5)').should("contain", "2005");
     cy.get('#MUIDataTableBodyRow-2 > :nth-child(9)').should("contain", "aids related deaths (unaids)");

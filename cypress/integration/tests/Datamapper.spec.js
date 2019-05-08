@@ -1,3 +1,6 @@
+import 'cypress-file-upload';
+
+
 beforeEach(() => {
   // README keep in mind that Cypress clears the whole state before each test. => signIn() before each test.
   // set this for skipping landing dialog
@@ -401,10 +404,18 @@ describe('Datamapper e2e tests', function() {
 
   it('Check upload correct file and progress to the next step', function() {
     const fileName = 'CypressSample.csv';
-    const fileType = 'text/csv';
+    // const fileType = 'text/csv';
     const fileInput = 'input[type=file]';
+    //
+    // cy.upload_file(fileName, fileType, fileInput);
 
-    cy.upload_file(fileName, fileType, fileInput);
+    cy.fixture(fileName).then(fileContent => {
+      cy.get(fileInput).upload(
+        { fileContent, fileName, mimeType: 'text/csv' },
+        { force: true}
+      );
+    });
+
     // So the step should show the uploaded file
     cy.contains(fileName);
     cy.waitPageLoader();

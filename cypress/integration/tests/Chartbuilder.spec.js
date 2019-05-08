@@ -62,6 +62,7 @@ function navigateToCountryFocusKenya() {
   cy.get('[data-cy="nav-pane-item-0"]').click();
   cy.get('[data-cy="nav-pane-item-1"]').click();
 }
+
 function navigateToCountryFocusNetherlands() {
   signIn();
   cy.get('[data-cy="appbar-right-button"]').click();

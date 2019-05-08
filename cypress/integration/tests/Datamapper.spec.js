@@ -256,6 +256,7 @@ describe('Datamapper e2e tests', function() {
   });
 
   it('Check user restriction to the next step with no fields entered', function() {
+    signIn();
     cy.contains('next').click();
     cy.wait(1000);
     cy.get('[class*=Headings__BaseHeading]').should(

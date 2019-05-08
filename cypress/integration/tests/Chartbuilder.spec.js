@@ -191,14 +191,12 @@ describe('Chartbuilder table chart fragment e2e', function() {
   it('Should contain /tablechart in the url', function() {
     signIn();
     navigateToTablechart();
+    cy.waitPageLoader2();
+    cy.waitPageLoader();
     cy.url().should('include', '/visualizer/tablechart');
   });
 
   it('Should display aids related deaths in the year 2005', function() {
-    signIn();
-    navigateToTablechart();
-    cy.get();
-    cy.waitPageLoader();
     cy.get('[data-cy="year-2005"]').click();
     cy.contains('Select indicator').click();
     cy.contains('aids related deaths (unaids)').click();
@@ -251,7 +249,6 @@ describe('Chartbuilder bar chart fragment e2e', function() {
 
 describe('Chartbuilder country focus Kenya fragment e2e', function() {
   it('Should contain /focusKE in the url', function() {
-    signIn();
     navigateToCountryFocusKenya();
     cy.url().should('include', '/visualizer/focusKE');
   });
@@ -259,7 +256,6 @@ describe('Chartbuilder country focus Kenya fragment e2e', function() {
 
 describe('Chartbuilder country focus Netherlands fragment e2e', function() {
   it('Should contain /focusNL in the url', function() {
-    signIn();
     navigateToCountryFocusNetherlands();
     cy.url().should('include', '/visualizer/focusNL');
   });

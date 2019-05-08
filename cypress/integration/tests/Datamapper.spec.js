@@ -2,18 +2,35 @@ function signOut() {
   cy.clearCookies();
   cy.clearLocalStorage();
 }
+
 function signIn() {
-  cy.visit('/');
+  cy.visit('/home');
   cy.waitPageLoader();
   cy.waitPageLoader2();
-  cy.get('[data-cy="dialog-overlay"]').click();
-  signOut();
+  cy.wait(1000);
+
+  cy.get('body').then($body =>{
+    if($body.find('[data-cy="dialog-overlay"]').length){
+      cy.get('[data-cy="dialog-overlay"]').click();
+    }
+  });
+
+  //Check if signed in
+  cy.get('[data-cy=sidebar-toggle]').click();
+  cy.get('body').then($body => {
+    if ($body.find('[data-cy=sidebar-logout-button]').length) {
+      cy.get('[data-cy=sidebar-logout-button]').click();
+      cy.wait(1000);
+    } else {
+      cy.get('[data-cy=sidebar-close]').click();
+    }
+  });
   cy.get('[data-cy=sidebar-toggle]').click();
   cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
   cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
   cy.get('[data-cy=sidebar-login-button]').click();
-  cy.waitPageLoader();
-  cy.waitPageLoader2();
+  //Instead of wait => wait till request has been done and page has fully loaded
+  cy.wait(10000);
 }
 
 const firstStepVal = {
@@ -197,6 +214,13 @@ const fileDataType = [
 // and this is an array of blank cells for each file column
 // each arrays index is in relation to the fileColumns array indexes
 const blankCells = [0, 0, 0, 0, 0, 0, 0, 0, 3, 11];
+
+beforeEach(() => {
+  // README keep in mind that Cypress clears the whole state before each test. => signIn() before each test.
+  // set this for skipping landing dialog
+  cy.setCookie('homeDialogShown', 'false');
+  cy.setCookie('cookieNotice', 'false');
+});
 
 describe('Datamapper e2e tests', function() {
   function selectItem(rowNumber, valNumber) {

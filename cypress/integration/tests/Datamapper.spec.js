@@ -344,7 +344,7 @@ describe('Datamapper e2e tests', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
     //Here we wait for the styling to be loaded
-    cy.wait(15000);
+    cy.wait(120000);
     cy.percySnapshot('Datamapper page - step 2');
   });
 

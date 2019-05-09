@@ -128,7 +128,7 @@ jobs:
 
   test_e2e:
     docker:
-      - image: cypress/base:8
+      - image: cypress/browsers:chrome69
     parallelism: 2
     working_directory: ~/zoom-v2-ui
     steps:
@@ -141,7 +141,7 @@ jobs:
           name: Set CYPRESS_baseUrl
           command: |
             echo 'export CYPRESS_baseUrl="$CYPRESS_BASEURL"' >> $BASH_ENV
-      - run: yarn e2e:percy:record:parallel
+      - run: yarn e2e:percy:record:parallel:chrome
 #        |
 #          if [ "${CIRCLE_BRANCH}" == "feature" ]; then
 #            yarn e2e

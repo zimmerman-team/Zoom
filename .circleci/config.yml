@@ -141,13 +141,12 @@ jobs:
           name: Set CYPRESS_baseUrl
           command: |
             echo 'export CYPRESS_baseUrl="$CYPRESS_BASEURL"' >> $BASH_ENV
-      - run: yarn e2e:percy:record:parallel:chrome
-#        |
-#          if [ "${CIRCLE_BRANCH}" == "feature" ]; then
-#            yarn e2e
-#          else
-#            yarn e2e --percy
-#          fi
+      - run: |
+          if [ "${CIRCLE_BRANCH}" == "feature" ]; then
+            yarn e2e:record:parallel:chrome
+          else
+            yarn e2e:percy:record:parallel:chrome
+          fi
 
 # WORKFLOWS
 workflows:
@@ -158,7 +157,6 @@ workflows:
       - build_deploy:
           requires:
             - checkout_repo
-# TODO: Uncomment when all tests are fixed
       - test_e2e:
           requires:
             - build_deploy

@@ -7,41 +7,6 @@ beforeEach(() => {
   cy.setCookie('cookieNotice', 'false');
 });
 
-function signOut() {
-  cy.clearCookies();
-  cy.clearLocalStorage();
-}
-
-function signIn() {
-  cy.visit('/home');
-  cy.waitPageLoader();
-  cy.waitPageLoader2();
-  cy.wait(1000);
-
-  cy.get('body').then($body =>{
-    if($body.find('[data-cy="dialog-overlay"]').length){
-      cy.get('[data-cy="dialog-overlay"]').click();
-    }
-  });
-
-  //Check if signed in
-  cy.get('[data-cy=sidebar-toggle]').click();
-  cy.get('body').then($body => {
-    if ($body.find('[data-cy=sidebar-logout-button]').length) {
-      cy.get('[data-cy=sidebar-logout-button]').click();
-      cy.wait(1000);
-    } else {
-      cy.get('[data-cy=sidebar-close]').click();
-    }
-  });
-  cy.get('[data-cy=sidebar-toggle]').click();
-  cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
-  cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
-  cy.get('[data-cy=sidebar-login-button]').click();
-  //Instead of wait => wait till request has been done and page has fully loaded
-  cy.wait(10000);
-}
-
 const firstStepVal = {
   title: 'Metadata title',
   desc: 'Metadata Description',
@@ -236,7 +201,7 @@ describe('Datamapper e2e tests', function() {
   }
 
   it('Page should contain first steps title', function() {
-    signIn();
+    cy.signIn();
     cy.waitPageLoader2();
     cy.waitPageLoader();
     cy.wait(2000);

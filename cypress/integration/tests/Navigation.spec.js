@@ -38,7 +38,7 @@ describe('Visiting all pages through navigation from home as not logged in', () 
 
 describe('Visiting all pages through navigation from home as logged in', () => {
   beforeEach(function() {
-    signIn();
+    cy.signIn();
     cy.visit('/');
     cy.get('[data-cy=dialog-overlay]').click();
     cy.get('[data-cy=sidebar-toggle]').click();

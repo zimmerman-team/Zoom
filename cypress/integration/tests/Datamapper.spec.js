@@ -343,6 +343,8 @@ describe('Datamapper e2e tests', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
+    //Here we wait for the styling to be loaded
+    cy.wait(15000);
     cy.percySnapshot('Datamapper page - step 2');
   });
 

@@ -1,12 +1,12 @@
 describe('About page E2E test', function() {
   it('Visit about page', function() {
     cy.visit('/About');
+    cy.get('[data-cy=cookie-notice]').click();
   });
 
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(5000);
     cy.percySnapshot('About page');
   });
 

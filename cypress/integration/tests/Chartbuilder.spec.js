@@ -48,7 +48,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(10000);
+    cy.wait(15000);
     cy.percySnapshot('Chartbuilder - Geomap');
   });
 
@@ -134,7 +134,7 @@ describe('Chartbuilder line chart fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(6000);
+    cy.wait(15000);
     cy.percySnapshot('Chartbuilder - Linechart');
   });
 });
@@ -215,7 +215,7 @@ describe('Chartbuilder bar chart fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(10000);
+    cy.wait(15000);
     cy.percySnapshot('Chartbuilder - Barchart');
   });
 });
@@ -230,7 +230,7 @@ describe('Chartbuilder country focus Kenya fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(10000);
+    cy.wait(15000);
     cy.percySnapshot('Chartbuilder - Kenya focus');
   });
 });
@@ -245,7 +245,7 @@ describe('Chartbuilder country focus Netherlands fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(10000);
+    cy.wait(15000);
     cy.percySnapshot('Chartbuilder - Netherlands focus');
   });
 });

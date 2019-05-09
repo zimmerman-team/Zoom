@@ -2,7 +2,7 @@ context('Sign in', () => {
   it('Visit Homepage', () => {
     cy.visit('/');
     cy.wait(1000);
-    cy.get('[data-cy="dialog-overlay"]').click({force: true});
+    cy.get('[data-cy="dialog-overlay"]').click();
   });
 
   it('Check if signed in', () => {
@@ -20,8 +20,10 @@ context('Sign in', () => {
   });
 
   it('Do sign-in procedure', () => {
+    cy.get('[data-cy=cookie-notice]').click();
     cy.get('[data-cy=sidebar-toggle]').click();
-    cy.wait(1000);
+    //Here we wait till the map is loaded
+    cy.wait(15000);
     cy.percySnapshot('Sidebar - login');
     cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
     cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
@@ -29,6 +31,8 @@ context('Sign in', () => {
     cy.wait(4000);
     cy.location('pathname').should('include', '/dashboard/charts');
     cy.get('[data-cy=sidebar-toggle]').click();
+    //Here we wait till the map is loaded
+    cy.wait(15000);
     cy.percySnapshot('Sidebar - logout');
     cy.get('[data-cy=sidebar-logout-button]').contains('Sign out');
   });

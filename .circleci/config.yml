@@ -140,13 +140,23 @@ jobs:
       - run:
           name: Set CYPRESS_baseUrl
           command: |
-            echo 'export CYPRESS_baseUrl="$CYPRESS_BASEURL"' >> $BASH_ENV
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              echo 'export CYPRESS_baseUrl="$REACT_APP_PROJECT_URL_STAGING"' >> $BASH_ENV
+            elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              echo 'export CYPRESS_baseUrl="$REACT_APP_PROJECT_URL_TEST"' >> $BASH_ENV
+            elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
+              echo 'export CYPRESS_baseUrl="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
+            else
+              echo 'export CYPRESS_baseUrl="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
+            fi
+            source $BASH_ENV
       - run: |
           if [ "${CIRCLE_BRANCH}" == "feature" ]; then
             yarn e2e:record:parallel:chrome
           else
             yarn e2e:percy:record:parallel:chrome
           fi
+          source $BASH_ENV
 
 # WORKFLOWS
 workflows:

@@ -10,6 +10,8 @@ import {
   CookieMessage,
   Spacer
 } from 'components/CookieNotice/CookieNotice.style';
+import ErrorBoundaryFallback from 'components/ErrorBoundaryFallback/ErrorBoundaryFallback';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const propTypes = {
   cookieText: PropTypes.string,
@@ -33,22 +35,26 @@ function CookieNotice(props) {
     visible &&
     /* if cookie is false, also hide */
     (cookie && (
-      <ComponentBase>
-        <CookieMessage>
-          {props.cookieText}
-          <CookieInfoLink to="/cookies">{props.cookieLinkText}</CookieInfoLink>
-        </CookieMessage>
-        <Spacer />
-        <CookieButton
-          data-cy="cookie-notice"
-          onClick={() => {
-            setCookie('false');
-            setVisibility(!visible);
-          }}
-        >
-          {props.cookieButtonText}
-        </CookieButton>
-      </ComponentBase>
+      <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+        <ComponentBase>
+          <CookieMessage>
+            {props.cookieText}
+            <CookieInfoLink to="/cookies">
+              {props.cookieLinkText}
+            </CookieInfoLink>
+          </CookieMessage>
+          <Spacer />
+          <CookieButton
+            data-cy="cookie-notice"
+            onClick={() => {
+              setCookie('false');
+              setVisibility(!visible);
+            }}
+          >
+            {props.cookieButtonText}
+          </CookieButton>
+        </ComponentBase>
+      </ErrorBoundary>
     ))
   );
 }

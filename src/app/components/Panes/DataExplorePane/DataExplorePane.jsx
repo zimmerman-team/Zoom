@@ -88,7 +88,8 @@ const propTypes = {
     PropTypes.array
   ]),
   selectCountry: PropTypes.func,
-  handleAxisSwitch: PropTypes.func,
+  /* todo: solve the issue of this prop sometimes receiving a boolean */
+  handleAxisSwitch: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
   selectRegion: PropTypes.func,
   selectYearRange: PropTypes.func,
   yearRange: PropTypes.array,

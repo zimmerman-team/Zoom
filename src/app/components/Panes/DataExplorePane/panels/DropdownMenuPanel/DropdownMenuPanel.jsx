@@ -29,7 +29,8 @@ const propTypes = {
   chartKeys: PropTypes.arrayOf(PropTypes.shape({})),
   panelDetails: PropTypes.arrayOf(
     PropTypes.shape({
-      indicator: PropTypes.string,
+      /* todo: resolve the issue of this prop receiving mixed data */
+      indicator: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
       addIndicator: PropTypes.func,
       sectionRemove: PropTypes.bool,
       sectionAdd: PropTypes.bool,
@@ -77,8 +78,6 @@ const defaultProps = {
 };
 
 const DropdownMenuPanel = props => {
-  // console.log('panelDetails', props.panelDetails);
-
   return (
     <React.Fragment>
       {props.panelDetails.map((detail, index) => {

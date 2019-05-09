@@ -45,10 +45,12 @@ Cypress.Commands.add('upload_file', (fileName, fileType = ' ', selector) => {
   });
 });
 
+//This is the circular progress loader icon
 Cypress.Commands.add('waitPageLoader', (timeout = 1750000) => {
   cy.get('[data-cy=loader]', { timeout }).should('not.be.visible');
 });
 
+//This is the "Loading" text that appears in the top-left corner
 Cypress.Commands.add('waitPageLoader2', (timeout = 1750000) => {
   cy.get('[data-cy=loader2]', { timeout }).should('not.be.visible');
 });

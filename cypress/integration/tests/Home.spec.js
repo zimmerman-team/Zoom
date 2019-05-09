@@ -21,7 +21,6 @@ describe('Home page navigation', function() {
   });
 
   it('Should be able to click away the cookie notice', function() {
-    cy.setCookie('cookieNotice',true);
     cy.get('[data-cy="cookie-notice"]').click();
     cy.get('[data-cy="cookie-notice"]').should('not.be.visible');
   });
@@ -55,7 +54,6 @@ describe('Home page map controls', function() {
 });
 
 describe('Home page geo map filters', function() {
-  // Contain is used in the next tests because third party library's created the DOM elements
   it('Navigates through geo map filters', function() {
     cy.get('[data-cy="geomap-filter-button"]').click();
   });
@@ -86,5 +84,6 @@ describe('Home page geo map filters', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
     cy.get('[data-cy="legendLayer-label"]').should('contain', 'aids related deaths');
+    cy.contains('europe');
   });
 });

@@ -402,6 +402,7 @@ describe('Datamapper e2e tests', function() {
     cy.get('[class*=Headings__BaseHeading]').should('contain', 'Upload CSV');
   });
 
+  //TODO: So the file uploading is not working on the test server, the promise is unresolved.
   // it('Check upload correct file and progress to the next step', function() {
   //   const fileName = 'CypressSample.csv';
   //   const fileType = 'text/csv';

@@ -133,9 +133,13 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
 
   it('Should map aids related deaths data on the geo map', function() {
     navigateToCreateGeo();
+    //Here we wait till the indicators are loaded.
+    cy.wait(2000);
     cy.contains('Select indicator').click();
     cy.contains('aids related deaths (unaids)').click();
-    cy.wait(5000);
+    //Here we wait till the data has been mapped
+    cy.waitPageLoader();
+    cy.wait(2000);
     cy.get('[data-cy="legendLayer-label"]').should(
       'contain',
       'aids related deaths (unaids)'
@@ -194,7 +198,6 @@ describe('Chartbuilder line chart fragment e2e', function() {
   });
 });
 
-//So yeah now that i think of it a fixture is defo needed
 describe('Chartbuilder table chart fragment e2e', function() {
   it('Should contain /tablechart in the url and map aids related deaths data', function() {
     signIn();
@@ -214,7 +217,7 @@ describe('Chartbuilder table chart fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(6000);
+    cy.wait(2000);
     cy.percySnapshot('Chartbuilder - Tablechart');
   });
 
@@ -254,7 +257,7 @@ describe('Chartbuilder table chart fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(6000);
+    cy.wait(2000);
     cy.percySnapshot('Chartbuilder - Tablechart empty state');
   });
 });

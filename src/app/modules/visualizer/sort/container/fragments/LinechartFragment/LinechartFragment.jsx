@@ -15,7 +15,7 @@ import ChartLegends from 'modules/visualizer/sort/container/fragments/common/Cha
 import LineChart from 'components/charts/recharts_linechart/LineChart';
 
 /* styles */
-import { FragmentBase } from '../VizContainer.style';
+import { FragmentBase } from 'modules/visualizer/sort/container/VizContainer.style';
 
 const Box = styled.div`
   width: 1024px;

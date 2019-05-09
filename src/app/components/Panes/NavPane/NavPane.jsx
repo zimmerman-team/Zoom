@@ -65,12 +65,16 @@ class NavPane extends React.Component {
             </NavPaneItem>
 
             {/*{this.props.user.role != 'Regular user' && (*/}
-            <NavPaneItem to="/mapper" data-cy="nav-pane-item-1">
-              <ItemIcon>
-                <SvgIconPointer />
-              </ItemIcon>
-              <ItemLabel>Convert data</ItemLabel>
-            </NavPaneItem>
+
+            {this.props.auth0Client.isAdministrator() ||
+            this.props.auth0Client.isSuperAdmin() ? (
+              <NavPaneItem to="/mapper" data-cy="nav-pane-item-1">
+                <ItemIcon>
+                  <SvgIconPointer />
+                </ItemIcon>
+                <ItemLabel>Convert data</ItemLabel>
+              </NavPaneItem>
+            ) : null}
             {/*)}*/}
 
             <NavPaneItem
@@ -120,6 +124,7 @@ class NavPane extends React.Component {
   };
 
   render() {
+    console.log(this.props.auth0Client.isAdministrator());
     return <ComponentBase>{this.renderPaneItems()}</ComponentBase>;
   }
 }

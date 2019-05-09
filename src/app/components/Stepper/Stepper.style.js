@@ -1,4 +1,4 @@
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 import Step from '@material-ui/core/Step';

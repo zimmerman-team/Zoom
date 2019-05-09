@@ -13,9 +13,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 // import Menu from '@material-ui/core/Menu';
-import { Menu } from 'grommet-icons';
+import { Menu } from 'grommet-icons/icons/Menu';
 import MainMenuDrawer from 'components/MainMenuDrawer/MainMenuDrawer';
-import { Box, Button, Image } from 'grommet';
+import { Box } from 'grommet/components/Box';
+import { Image } from 'grommet/components/Image';
 import theme from 'theme/Theme';
 
 const useStyles = makeStyles({

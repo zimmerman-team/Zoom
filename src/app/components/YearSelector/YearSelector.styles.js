@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import './YearSelector.css';
-import { Range } from 'rc-slider';
+import Range from 'rc-slider/es/Range';
 import theme from 'theme/Theme';
 
 export const YearLabel = styled.div`

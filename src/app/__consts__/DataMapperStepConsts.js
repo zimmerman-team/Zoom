@@ -42,5 +42,6 @@ export const step1InitialData = {
   manMapData: [],
   overviewData: [],
   errorColumns: [],
+  orgErrorColumns: [],
   environment: {}
 };

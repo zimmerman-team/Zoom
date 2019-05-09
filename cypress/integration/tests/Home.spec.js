@@ -8,7 +8,7 @@ describe('Home page navigation', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(15000);
+    cy.wait(60000);
     cy.percySnapshot('Home page - Dialog + Cookie notice');
   });
 
@@ -20,7 +20,7 @@ describe('Home page navigation', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(15000);
+    cy.wait(60000);
     cy.percySnapshot('Home page - Cookie notice');
   });
 
@@ -32,7 +32,7 @@ describe('Home page navigation', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(15000);
+    cy.wait(60000);
     cy.percySnapshot('Home page');
   });
 });
@@ -79,7 +79,7 @@ describe('Home page geo map datamapping', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(15000);
+    cy.wait(60000);
     cy.percySnapshot('Home page - Aids related deaths in South America');
   });
 });

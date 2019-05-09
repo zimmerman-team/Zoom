@@ -40,7 +40,6 @@ Cypress.Commands.add('upload_file', (fileName, fileType = ' ', selector) => {
         el.files = dataTransfer.files;
 
         cy.wrap(subject).trigger('change', { force: true });
-        // throw new Error('Promise error, wordt je toch moe van....')
       })
   });
 });

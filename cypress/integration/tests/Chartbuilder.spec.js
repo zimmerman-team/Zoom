@@ -96,7 +96,7 @@ describe('Create geo functionality', function() {
       'Country Focus Page Netherlands'
     );
     cy.get('[data-cy="nav-pane-item-3"]').should('have.text', 'Line chart');
-    cy.get('[data-cy="nav-pane-item-5"]').should('have.text', 'Table chart');
+    cy.get('[data-cy="nav-pane-item-4"]').should('have.text', 'Table chart');
     // cy.get('[data-cy="nav-pane-item-4"]').should('have.text', 'Bar chart');
     // cy.get('[data-cy="nav-pane-item-6"]').should('have.text', 'Donut chart');
   });
@@ -207,6 +207,8 @@ describe('Chartbuilder table chart fragment e2e', function() {
     cy.url().should('include', '/visualizer/tablechart');
 
     cy.get('[data-cy="year-2005"]').click();
+    //Here we wait till the indicators have loaded.
+    cy.wait(2000);
     cy.contains('Select indicator').click();
     cy.contains('aids related deaths (unaids)').click();
     cy.waitPageLoader();

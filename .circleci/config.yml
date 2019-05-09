@@ -128,7 +128,7 @@ jobs:
 
   test_e2e:
     docker:
-      - image: cypress/browsers:chrome67
+      - image: cypress/browsers:chrome69
     parallelism: 2
     working_directory: ~/zoom-v2-ui
     steps:

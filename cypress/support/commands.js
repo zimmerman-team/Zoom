@@ -27,6 +27,7 @@
 import 'cypress-testing-library/add-commands';
 import '@percy/cypress';
 
+// --------- File Upload ---------
 //https://github.com/cypress-io/cypress/issues/170
 Cypress.Commands.add('upload_file', (fileName, fileType = ' ', selector) => {
   cy.get(selector).then(subject => {
@@ -44,6 +45,7 @@ Cypress.Commands.add('upload_file', (fileName, fileType = ' ', selector) => {
   });
 });
 
+// --------- Sign In ---------
 //TODO: Refactor to login programmatically without using the UI, this would reduce the test time quite a bit.
 //https://docs.cypress.io/guides/references/best-practices.html#When-logging-in
 Cypress.Commands.add('signIn', (username = Cypress.env('username'), password = Cypress.env('password')) => {
@@ -78,6 +80,8 @@ Cypress.Commands.add('signIn', (username = Cypress.env('username'), password = C
   cy.wait(10000);
 });
 
+
+// --------- Loaders ---------
 //This is the circular progress loader icon
 Cypress.Commands.add('waitPageLoader', (timeout = 1750000) => {
   cy.get('[data-cy=loader]', { timeout }).should('not.be.visible');
@@ -86,4 +90,40 @@ Cypress.Commands.add('waitPageLoader', (timeout = 1750000) => {
 //This is the "Loading" text that appears in the top-left corner
 Cypress.Commands.add('waitPageLoader2', (timeout = 1750000) => {
   cy.get('[data-cy=loader2]', { timeout }).should('not.be.visible');
+});
+
+
+// --------- Sidebar Navigation ---------
+Cypress.Commands.add('navigateToCreateGeo', () => {
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="nav-pane-item-0"]').click();
+  cy.get('[data-cy="nav-pane-item-0"]').click();
+});
+
+Cypress.Commands.add('navigateToCountryFocusKenya', () => {
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="nav-pane-item-0"]').click();
+  cy.get('[data-cy="nav-pane-item-1"]').click();
+});
+
+
+Cypress.Commands.add('navigateToCountryFocusNetherlands', () => {
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="nav-pane-item-0"]').click();
+  cy.get('[data-cy="nav-pane-item-2"]').click();
+});
+
+
+Cypress.Commands.add('navigateToCreateLinechart', () => {
+  cy.get('[data-cy="appbar-right-button"]').click();
+  cy.get('[data-cy="nav-pane-item-0"]').click();
+  cy.get('[data-cy="nav-pane-item-3"]').click();
+});
+
+Cypress.Commands.add('navigateToTablechart', () => {
+  cy.visit('/visualizer/tablechart/vizID/edit');
+});
+
+Cypress.Commands.add('navigateToBarchart', () => {
+  cy.visit('/visualizer/barchart/vizID/edit');
 });

@@ -4,43 +4,9 @@ beforeEach(() => {
   cy.setCookie('cookieNotice', 'false');
 });
 
-function navigateToCreateGeo() {
-  cy.signIn();
-  cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="nav-pane-item-0"]').click();
-  cy.get('[data-cy="nav-pane-item-0"]').click();
-}
-
-function navigateToCreateLinechart() {
-  cy.signIn();
-  cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="nav-pane-item-0"]').click();
-  cy.get('[data-cy="nav-pane-item-3"]').click();
-}
-
-function navigateToTablechart() {
-  cy.visit('/visualizer/tablechart/vizID/edit');
-}
-
-function navigateToBarchart() {
-  cy.visit('/visualizer/barchart/vizID/edit');
-}
-
-function navigateToCountryFocusKenya() {
-  cy.signIn();
-  cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="nav-pane-item-0"]').click();
-  cy.get('[data-cy="nav-pane-item-1"]').click();
-}
-
-function navigateToCountryFocusNetherlands() {
-  cy.signIn();
-  cy.get('[data-cy="appbar-right-button"]').click();
-  cy.get('[data-cy="nav-pane-item-0"]').click();
-  cy.get('[data-cy="nav-pane-item-2"]').click();
-}
-
 describe('Create geo functionality', function() {
+  //This test will sometimes fail, the state here doesn't get cleared properly
+  //On the test server this bug does not occur.
   it("Shouldn't be able to create geo when not logged in", function() {
     cy.visit('/home');
     cy.wait(1000);
@@ -48,7 +14,7 @@ describe('Create geo functionality', function() {
   });
 
   it('Should display appropriate content per tab', function() {
-    signIn();
+    cy.signIn();
     cy.wait(2000);
     cy.get('[data-cy="appbar-right-button"]').click();
     cy.get('[data-cy="nav-pane-item-0"]').should('have.text', 'Create chart');
@@ -74,7 +40,8 @@ describe('Create geo functionality', function() {
 
 describe('Chartbuilder geomap chart fragment e2e', function() {
   it('Should include /geomap in the url', function() {
-    navigateToCreateGeo();
+    cy.signIn();
+    cy.navigateToCreateGeo();
     cy.url().should('include', '/visualizer/geomap');
   });
 
@@ -102,7 +69,8 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
   });
 
   it('Should map aids related deaths data on the geo map', function() {
-    navigateToCreateGeo();
+    cy.signIn();
+    cy.navigateToCreateGeo();
     //Here we wait till the indicators are loaded.
     cy.wait(2000);
     cy.contains('Select indicator').click();
@@ -130,7 +98,8 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
 
   //TODO: Implement when functionality has been implemented.
   it('Should be able to download to csv/xml/json ', function() {
-    navigateToCreateGeo();
+    cy.signIn();
+    cy.navigateToCreateGeo();
     cy.visit('/visualizer/geomap/vizID/download');
     cy.get('[data-cy="dowload-option-JSON"]').click();
     cy.get('[data-cy="dowload-option-CSV"]').click();
@@ -138,7 +107,8 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
   });
 
   it('Should publish the chart to public zoom library', function() {
-    navigateToCreateGeo();
+    cy.signIn();
+    cy.navigateToCreateGeo();
     cy.visit('/visualizer/geomap/vizID/visibility');
     cy.get('[data-cy="publish-chart-to-public"]').click();
     cy.visit('/public/chart-library');
@@ -148,7 +118,8 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
 
 describe('Chartbuilder line chart fragment e2e', function() {
   it('Should contain /linechart/ in the url', function() {
-    navigateToCreateLinechart();
+    cy.signIn();
+    cy.navigateToCreateLinechart();
     cy.url().should('include', '/visualizer/linechart');
   });
 
@@ -171,7 +142,7 @@ describe('Chartbuilder line chart fragment e2e', function() {
 describe('Chartbuilder table chart fragment e2e', function() {
   it('Should contain /tablechart in the url and map aids related deaths data', function() {
     cy.signIn();
-    navigateToTablechart();
+    cy.navigateToTablechart();
     cy.waitPageLoader2();
     cy.waitPageLoader();
     cy.url().should('include', '/visualizer/tablechart');
@@ -236,7 +207,8 @@ describe('Chartbuilder table chart fragment e2e', function() {
 
 describe('Chartbuilder bar chart fragment e2e', function() {
   it('Should contain /barchart in the url', function() {
-    navigateToBarchart();
+    cy.signIn();
+    cy.navigateToBarchart();
     cy.url().should('include', '/visualizer/barchart');
   });
 
@@ -250,7 +222,8 @@ describe('Chartbuilder bar chart fragment e2e', function() {
 
 describe('Chartbuilder country focus Kenya fragment e2e', function() {
   it('Should contain /focusKE in the url', function() {
-    navigateToCountryFocusKenya();
+    cy.signIn();
+    cy.navigateToCountryFocusKenya();
     cy.url().should('include', '/visualizer/focusKE');
   });
 
@@ -264,7 +237,8 @@ describe('Chartbuilder country focus Kenya fragment e2e', function() {
 
 describe('Chartbuilder country focus Netherlands fragment e2e', function() {
   it('Should contain /focusNL in the url', function() {
-    navigateToCountryFocusNetherlands();
+    cy.signIn();
+    cy.navigateToCountryFocusNetherlands();
     cy.url().should('include', '/visualizer/focusNL');
   });
 

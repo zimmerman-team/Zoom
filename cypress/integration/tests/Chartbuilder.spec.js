@@ -230,7 +230,6 @@ describe('Chartbuilder country focus Kenya fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(15000);
     cy.percySnapshot('Chartbuilder - Kenya focus');
   });
 });
@@ -245,7 +244,6 @@ describe('Chartbuilder country focus Netherlands fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(15000);
     cy.percySnapshot('Chartbuilder - Netherlands focus');
   });
 });

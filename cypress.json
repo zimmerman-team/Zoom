@@ -5,5 +5,5 @@
   "viewportHeight": 954,
   "env": {},
   "projectId": "pz1mie",
-  "pageLoadTimeout": 10000
+  "pageLoadTimeout": 60000
 }

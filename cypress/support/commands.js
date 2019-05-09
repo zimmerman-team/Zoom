@@ -45,6 +45,40 @@ Cypress.Commands.add('upload_file', (fileName, fileType = ' ', selector) => {
   });
 });
 
+//TODO: Refactor to login programmatically without using the UI, this would reduce the test time quite a bit.
+//https://docs.cypress.io/guides/references/best-practices.html#When-logging-in
+Cypress.Commands.add('signIn', (username = Cypress.env('username'), password = Cypress.env('password')) => {
+  cy.visit('/home');
+  cy.waitPageLoader();
+  cy.waitPageLoader2();
+  cy.wait(1000);
+
+  cy.get('body').then($body =>{
+    if($body.find('[data-cy="dialog-overlay"]').length){
+      cy.get('[data-cy="dialog-overlay"]').click();
+    }
+  });
+
+  //Check if signed in
+  cy.get('[data-cy=sidebar-toggle]').click();
+  cy.get('body').then($body => {
+    if ($body.find('[data-cy=sidebar-logout-button]').length) {
+      cy.get('[data-cy=sidebar-logout-button]').click();
+      cy.wait(1000);
+    } else {
+      cy.get('[data-cy=sidebar-close]').click();
+    }
+  });
+
+  cy.get('[data-cy=sidebar-toggle]').click();
+  cy.get('[data-cy=sidebar-login-email-input]').type(username);
+  cy.get('[data-cy=sidebar-pass-email-input]').type(password);
+  cy.get('[data-cy=sidebar-login-button]').click();
+
+  //Instead of wait => wait till request has been done and page has fully loaded
+  cy.wait(10000);
+});
+
 //This is the circular progress loader icon
 Cypress.Commands.add('waitPageLoader', (timeout = 1750000) => {
   cy.get('[data-cy=loader]', { timeout }).should('not.be.visible');

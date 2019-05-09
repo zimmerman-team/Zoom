@@ -96,9 +96,9 @@ describe('Create geo functionality', function() {
       'Country Focus Page Netherlands'
     );
     cy.get('[data-cy="nav-pane-item-3"]').should('have.text', 'Line chart');
-    cy.get('[data-cy="nav-pane-item-4"]').should('have.text', 'Bar chart');
     cy.get('[data-cy="nav-pane-item-5"]').should('have.text', 'Table chart');
-    cy.get('[data-cy="nav-pane-item-6"]').should('have.text', 'Donut chart');
+    // cy.get('[data-cy="nav-pane-item-4"]').should('have.text', 'Bar chart');
+    // cy.get('[data-cy="nav-pane-item-6"]').should('have.text', 'Donut chart');
   });
 });
 

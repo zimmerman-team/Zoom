@@ -52,8 +52,8 @@ Cypress.Commands.add('signIn', (username = Cypress.env('username'), password = C
   cy.visit('/home');
   cy.waitPageLoader();
   cy.waitPageLoader2();
-  cy.wait(1000);
 
+  cy.wait(4000);
   cy.get('body').then($body =>{
     if($body.find('[data-cy="dialog-overlay"]').length){
       cy.get('[data-cy="dialog-overlay"]').click();
@@ -65,7 +65,6 @@ Cypress.Commands.add('signIn', (username = Cypress.env('username'), password = C
   cy.get('body').then($body => {
     if ($body.find('[data-cy=sidebar-logout-button]').length) {
       cy.get('[data-cy=sidebar-logout-button]').click();
-      cy.wait(1000);
     } else {
       cy.get('[data-cy=sidebar-close]').click();
     }

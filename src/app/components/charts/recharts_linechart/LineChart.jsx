@@ -31,7 +31,7 @@ const LineChart = ({ data, chartKeys, xAxisKey, specOptions }) => {
     <ResponsiveContainer>
       <ReLineChart
         data={data}
-        margin={{ top: 30, right: 0, left: 0, bottom: 0 }}
+        margin={{ top: 30, right: 10, left: 10, bottom: 0 }}
       >
         <CartesianGrid />
         <XAxis
@@ -45,6 +45,12 @@ const LineChart = ({ data, chartKeys, xAxisKey, specOptions }) => {
           type={specOptions[graphKeys.leftYAxis]}
           tickCount={10}
           tick={{ fontSize: 10 }}
+          tickFormatter={tick =>
+            tick.toLocaleString(undefined, {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2
+            })
+          }
         />
         <YAxis
           tickCount={10}
@@ -52,6 +58,12 @@ const LineChart = ({ data, chartKeys, xAxisKey, specOptions }) => {
           orientation="right"
           tick={{ fontSize: 10 }}
           type={specOptions[graphKeys.rightYAxis]}
+          tickFormatter={tick =>
+            tick.toLocaleString(undefined, {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2
+            })
+          }
         />
         <Tooltip
           content={<TooltipContent xAxisKey={xAxisKey} />}

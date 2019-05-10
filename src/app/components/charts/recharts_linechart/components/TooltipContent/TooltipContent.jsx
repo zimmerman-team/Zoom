@@ -22,7 +22,13 @@ const TooltipContent = ({ active, payload, label, xAxisKey }) => {
           <Row key={p.dataKey}>
             <Rect theme={{ color: p.stroke }} />
             <ToolTipText>
-              {p.name}: <ToolTipValue>{p.value}</ToolTipValue>
+              {p.name}:{' '}
+              <ToolTipValue>
+                {p.value.toLocaleString(undefined, {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2
+                })}
+              </ToolTipValue>
             </ToolTipText>
           </Row>
         ))}

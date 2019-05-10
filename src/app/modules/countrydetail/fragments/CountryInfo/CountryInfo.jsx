@@ -68,6 +68,7 @@ const CountryInfo = props => {
               countryName={props.countryName}
             /> */}
             <HorizontalBarChart
+              showLegend={false}
               data={props.infoBarData}
               countryName={props.countryName}
             />

@@ -224,7 +224,7 @@ class App extends React.Component {
                     </Router>
                   );
                 }
-                return <div>Loading</div>;
+                return <div data-cy="loader2">Loading</div>;
               }}
             />
           </Grommet>

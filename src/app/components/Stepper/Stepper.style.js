@@ -50,7 +50,7 @@ export const materialStyles = uiTheme => ({
     }
   },
   connectorLine: {
-    transition: uiTheme.transitions.create('border-color')
+    // transition: uiTheme.transitions.create('border-color')
   },
 
   stepLabel: {

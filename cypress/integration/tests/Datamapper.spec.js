@@ -255,6 +255,7 @@ describe('Datamapper e2e tests', function() {
       cy.wait(500);
     });
 
+    //
     // oke and here we'll be adding a new name for the data source, unless a name like this already exists in the database
     // but either way, the dropdown should be adjusted according to this text input field
     // if the new name exists the dropdown should be selected as 'Add new'

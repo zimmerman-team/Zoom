@@ -19,6 +19,7 @@ describe('Home page navigation', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
+    cy.wait(3000);
     cy.percySnapshot('Home page - Cookie notice');
   });
 

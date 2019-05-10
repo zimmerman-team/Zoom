@@ -150,13 +150,15 @@ jobs:
               echo 'export CYPRESS_baseUrl="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
             fi
             source $BASH_ENV
-      - run: |
-          if [ "${CIRCLE_BRANCH}" == "feature" ]; then
-            yarn e2e:record:parallel:chrome
-          else
-            yarn e2e:percy:record:parallel:chrome
-          fi
-          source $BASH_ENV
+      - run:
+          name: Run E2E test
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "feature" ]; then
+              yarn e2e:record:parallel:chrome
+            else
+              yarn e2e:percy:record:parallel:chrome
+            fi
+            source $BASH_ENV
 
 # WORKFLOWS
 workflows:

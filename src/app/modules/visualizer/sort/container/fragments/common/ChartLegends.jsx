@@ -37,8 +37,7 @@ const ChartLegends = props => {
     <ComponentBase>
       {props.data.map(indicator => {
         return (
-          indicator.label &&
-          (
+          indicator.label && (
             <ChartLegendItem
               color={indicator.color}
               text={indicator.label}

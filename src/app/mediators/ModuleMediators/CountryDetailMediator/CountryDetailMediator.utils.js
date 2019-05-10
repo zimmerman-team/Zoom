@@ -7,6 +7,9 @@ import filter from 'lodash/filter';
 import theme from 'theme/Theme';
 import { split } from 'sentence-splitter';
 
+/* mock */
+import mock from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
+
 /*
   Formats project data so it would be acceptable
   for the project list component
@@ -134,16 +137,14 @@ export function formatBarChartInfoIndicators(
   let results = [];
   const barChartData = [];
 
-  // console.log(countryData);
-
   indicatorNames.forEach((name, index) => {
     if (index < 3) {
       const countryDataPoints = filter(countryData, ['indicatorName', name]);
       // const globalDataPoints = filter(globalData, ['indicatorName', name]);
 
       if (countryDataPoints.length > 0) {
-        let countryIndValue = sortBy(countryDataPoints, ['date']).reverse()[0]
-          .value;
+        const countryInd = sortBy(countryDataPoints, ['date']).reverse()[0];
+        const countryIndValue = countryInd.value;
         // countryDataPoints.forEach(point => {
         //   countryIndValue += point.value;
         // });
@@ -155,9 +156,22 @@ export function formatBarChartInfoIndicators(
         // });
 
         barChartData.push({
-          indicator: name,
+          indicator: `${
+            find(mock.lineChartInd, lci => lci.name.indexOf(name) > -1).name
+          } | ${countryInd.date}`,
           [countryName]: countryIndValue,
-          CountryColor: theme.color.chartColorTwo
+          [`${countryName}-formatted-value`]: countryIndValue.toLocaleString(
+            undefined,
+            {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2
+            }
+          ),
+          CountryColor: get(
+            find(mock.lineChartInd, lci => lci.name.indexOf(name) > -1),
+            'color',
+            theme.color.chartColorTwo
+          )
           // Global: globalIndValue,
           // GlobalColor: theme.color.chartColorThree
         });
@@ -242,12 +256,18 @@ export function formatLineChart2Data(indicatorData) {
     if (chartItemInd > -1) {
       lineChartData[chartItemInd] = {
         ...lineChartData[chartItemInd],
-        [item.indicatorName]: item.value
+        [find(
+          mock.lineChartInd,
+          lci => lci.name.indexOf(item.indicatorName) > -1
+        ).name]: item.value
       };
     } else {
       lineChartData.push({
         year: item.date,
-        [item.indicatorName]: item.value
+        [find(
+          mock.lineChartInd,
+          lci => lci.name.indexOf(item.indicatorName) > -1
+        ).name]: item.value
       });
     }
   });

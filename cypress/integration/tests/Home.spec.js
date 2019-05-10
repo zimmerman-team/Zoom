@@ -16,22 +16,9 @@ describe('Home page navigation', function() {
     cy.get('[data-cy=dialog-overlay]').should('not.be.visible');
   });
 
-  it('Should make a snapshot of the visual current state', function() {
-    cy.waitPageLoader();
-    cy.waitPageLoader2();
-    cy.wait(3000);
-    cy.percySnapshot('Home page - Cookie notice');
-  });
-
   it('Should be able to click away the cookie notice', function() {
     cy.get('[data-cy="cookie-notice"]').click();
     cy.get('[data-cy="cookie-notice"]').should('not.be.visible');
-  });
-
-  it('Should make a snapshot of the visual current state', function() {
-    cy.waitPageLoader();
-    cy.waitPageLoader2();
-    cy.percySnapshot('Home page');
   });
 });
 

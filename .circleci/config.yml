@@ -151,7 +151,7 @@ jobs:
             fi
             source $BASH_ENV
       - run:
-          name: "What is my CIRCLE_PULL_REQUEST string?"
+          name: "What is my CIRCLE_PULL_REQUEST string??"
           command: echo $CIRCLE_PULL_REQUEST
       - run:
           name: Run E2E test

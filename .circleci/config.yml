@@ -151,6 +151,9 @@ jobs:
             fi
             source $BASH_ENV
       - run:
+          name: "What branch am I on now?"
+          command: echo $CIRCLE_BRANCH
+      - run:
           name: Run E2E test
           command: |
             if [ "${CIRCLE_BRANCH}" == "feature" ]; then

@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet';
 
 import CountryInfo from 'modules/countrydetail/fragments/CountryInfo/CountryInfo';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
-import CivicSpace from 'app/modules/countrydetail/fragments/CivicSpace/CivicSpace';
+import CivicSpace from 'modules/countrydetail/fragments/CivicSpace/CivicSpace';
 import AidsEpidemic from 'modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic';
 import EconomicIndicators from 'modules/countrydetail/fragments/EconomicIndicators';
 import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTransactions';

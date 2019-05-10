@@ -310,6 +310,11 @@ class CountryDetailMediator extends React.Component {
         setIsSortByOpen={this.setIsSortByOpen}
         isSortByOpen={this.state.isSortByOpen}
         projectsLoading={this.state.projectsLoading}
+        civicSpace={get(
+          this.props.indicatorAggregations.civicSpace,
+          '[0].value',
+          0
+        )}
       />
     );
   };
@@ -356,6 +361,17 @@ export default createRefetchContainer(
         geolocationIso2_In: $countryCode
         indicatorName_In: $aidsEpIndicators
         filterName_In: $subInds
+      ) {
+        indicatorName
+        date
+        value
+      }
+      civicSpace: datapointsAggregation(
+        groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
+        orderBy: ["indicatorName"]
+        aggregation: ["Sum(value)"]
+        geolocationIso2_In: $countryCode
+        indicatorName_In: ["civicus score"]
       ) {
         indicatorName
         date

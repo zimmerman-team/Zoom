@@ -1,4 +1,10 @@
 const fs = require('fs');
+const isEqual = require('lodash/isEqual');
+
+const dataPath = __dirname
+  .substring(0, __dirname.indexOf('controllers') - 1)
+  .concat('/data/');
+
 /* consts */
 const config = require('../config/config');
 
@@ -63,7 +69,7 @@ function genUniqueName(model, name, orgName = undefined, incr = 1) {
 
 const ChartController = {
   test: (req, res) => {
-    res.send('SUCCESS');
+    res.send(__dirname);
   },
 
   // use this only if you have an empty database
@@ -188,7 +194,7 @@ const ChartController = {
             archived: false,
             name: { $regex: searchTitle, $options: 'i' }
           },
-          'created last_updated team type dataSources _id name _public'
+          'created last_updated teams type dataSources _id name _public'
         )
           .limit(pSize)
           .skip(p * pSize)
@@ -228,7 +234,7 @@ const ChartController = {
                   name: { $regex: searchTitle, $options: 'i' }
                 },
                 {
-                  team: author.team,
+                  teams: { $all: author.teams },
                   archived: false,
                   name: { $regex: searchTitle, $options: 'i' }
                 }
@@ -237,7 +243,7 @@ const ChartController = {
 
         Chart.find(
           query,
-          'created last_updated team _public type dataSources _id name archived'
+          'created last_updated teams _public type dataSources _id name archived'
         )
           .collation({ locale: 'en' })
           .sort(sort)
@@ -250,6 +256,7 @@ const ChartController = {
     });
   },
 
+  // This guys is not used, TODO: remove it most likely
   getTeamFeedCharts: function(req, res) {
     const { authId } = req.query;
 
@@ -329,7 +336,7 @@ const ChartController = {
                     console.log('saving this biggo gives error', err);
                     general.handleError(res, err);
                   } else {
-                    const fileUrl = `server/data/chartData${chartz.id}.txt`;
+                    const fileUrl = `${dataPath}chartData${chartz.id}.txt`;
                     fs.writeFile(fileUrl, JSON.stringify(data), fileError => {
                       if (fileError) {
                         console.log('fileError', fileError);
@@ -357,7 +364,7 @@ const ChartController = {
           } else if (author.equals(chart.author)) {
             genUniqueName(Chart, name, chart.name)
               .then(uniqueName => {
-                const fileUrl = `server/data/chartData${chart.id}.txt`;
+                const fileUrl = `${dataPath}chartData${chart.id}.txt`;
                 fs.writeFile(fileUrl, JSON.stringify(data), fileError => {
                   if (fileError) {
                     general.handleError(res, fileError);
@@ -428,7 +435,9 @@ const ChartController = {
                 // for the team just in case
                 // someone from another team would be able to duplicate
                 // this chart
-                const team = author.team === chart.team ? chart.team : '';
+                const teams = isEqual(author.teams, chart.teams)
+                  ? chart.teams
+                  : [];
 
                 const chartz = new Chart({
                   name: uniqueName,
@@ -436,7 +445,7 @@ const ChartController = {
                   dataSources: chart.dataSources,
                   description: chart.description,
                   _public: chart._public,
-                  team,
+                  teams,
                   data: chart.data,
                   descIntro: chart.descIntro,
 

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { FragmentContent, FragmentContainer } from 'components/sort/Fragments';
 import theme from 'theme/Theme';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import { scroller } from 'react-scroll';
 
 const NavigationContainer = styled(FragmentContainer)`

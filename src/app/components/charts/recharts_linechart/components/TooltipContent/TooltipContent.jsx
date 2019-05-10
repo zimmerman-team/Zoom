@@ -1,6 +1,13 @@
 /* base */
 import React from 'react';
-import { Container, Row, Title, Rect } from './TooltipContent.styles';
+import {
+  Container,
+  Row,
+  Title,
+  Rect,
+  ToolTipValue,
+  ToolTipText
+} from 'components/charts/TooltipContent.styles';
 
 const TooltipContent = ({ active, payload, label, xAxisKey }) => {
   if (active && payload) {
@@ -14,7 +21,15 @@ const TooltipContent = ({ active, payload, label, xAxisKey }) => {
         {payload.map(p => (
           <Row key={p.dataKey}>
             <Rect theme={{ color: p.stroke }} />
-            {p.dataKey}: <b>{p.value}</b>
+            <ToolTipText>
+              {p.name}:{' '}
+              <ToolTipValue>
+                {p.value.toLocaleString(undefined, {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2
+                })}
+              </ToolTipValue>
+            </ToolTipText>
           </Row>
         ))}
       </Container>

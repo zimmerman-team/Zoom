@@ -98,10 +98,14 @@ class CorrectErrorsMediator extends React.Component {
         const stepData = { ...this.props.stepData };
         stepData.overviewData = overviewData;
 
-        stepData.errorColumns = formatErrorColumns(
+        const errorColumns = formatErrorColumns(
           response.fileValidationResults.foundList,
           stepData.errorData.ignoredErrors
         );
+
+        stepData.errorColumns = errorColumns;
+
+        stepData.orgErrorColumns = errorColumns;
 
         this.props.dispatch(generalActions.saveStepDataRequest(stepData));
       }
@@ -412,7 +416,11 @@ class CorrectErrorsMediator extends React.Component {
 
       ignoredErrors.push(headerName);
     } else {
-      if (errColInd === -1) errorColumns.push(headerName);
+      if (
+        errColInd === -1 &&
+        this.props.stepData.orgErrorColumns.indexOf(headerName) !== -1
+      )
+        errorColumns.push(headerName);
 
       ignoredErrors.splice(headerInd, 1);
     }

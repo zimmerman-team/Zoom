@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { AppBar } from 'components/AppBar/AppBar';
 
 /* components */
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import {
   AidsFondLogo,
   MenuButton,

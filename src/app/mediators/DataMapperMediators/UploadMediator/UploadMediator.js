@@ -244,6 +244,7 @@ class UploadMediator extends React.Component {
       stepData.overviewData = overviewData;
       stepData.manMapData = manMapData;
       stepData.errorColumns = errorColumns;
+      stepData.orgErrorColumns = errorColumns;
       stepData.errorData = {
         ignoredErrors: []
       };

@@ -6,7 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 export default styled(({ ...props }) => (
   <NoSsr>
-    <CircularProgress size={100} {...props} />
+    <CircularProgress size={100} {...props} data-cy="loader" />
   </NoSsr>
 ))`
   && {

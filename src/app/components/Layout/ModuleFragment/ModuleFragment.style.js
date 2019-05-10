@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import theme from 'theme/Theme';
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 
 export const FragmentInfoButton = styled.div`
   height: 20px;

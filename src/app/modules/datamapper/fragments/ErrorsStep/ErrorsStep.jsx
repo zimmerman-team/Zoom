@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /* components */
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import FindReplace from 'modules/datamapper/fragments/ErrorsStep/components/FindReplace/FindReplace';
 import Pagination from 'components/Pagination/Pagination';
 import ZoomButton from 'components/ZoomButton/ZoomButton';

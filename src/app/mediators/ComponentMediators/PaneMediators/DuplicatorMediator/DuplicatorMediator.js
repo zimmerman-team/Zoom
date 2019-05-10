@@ -83,7 +83,7 @@ class DuplicatorMediator extends React.Component {
         authId: profile.sub,
         dataSources,
         _public: this.props.chartData._public,
-        team: this.props.chartData.team ? this.props.user.data.team : '',
+        teams: this.props.chartData.teams,
         chartId,
         name: this.props.chartData.name,
         description: this.props.chartData.desc,

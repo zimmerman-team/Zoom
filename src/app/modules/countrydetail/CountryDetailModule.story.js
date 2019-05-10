@@ -4,7 +4,7 @@ import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';
 import CountryInfo from 'modules/countrydetail/fragments/CountryInfo/CountryInfo';
 import AidsEpidemic from 'modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic';
 import EconomicIndicators from 'modules/countrydetail/fragments/EconomicIndicators';
-import CivicSpace from 'modules/countrydetail/fragments/CivicSpace';
+import CivicSpace from 'app/modules/countrydetail/fragments/CivicSpace/CivicSpace';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
 import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTransactions';
 import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';

@@ -2,7 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // import { projectsMockData } from '__mocks__/projectsMock';
-import { Box, RoutedButton } from 'grommet';
+import { Box } from 'grommet/components/Box';
+import { RoutedButton } from 'grommet/components/RoutedButton';
 import {
   Label,
   List,

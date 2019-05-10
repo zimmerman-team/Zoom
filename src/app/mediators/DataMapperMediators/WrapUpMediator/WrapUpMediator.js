@@ -372,7 +372,7 @@ class WrapUpMediator extends React.Component {
           name: this.props.metaData.title,
           dataSource:
             this.state.sourceName || this.props.metaData.dataSource.label,
-          team: '',
+          teams: [],
           public: this.props.metaData.shared === 'Yes'
         })
       );

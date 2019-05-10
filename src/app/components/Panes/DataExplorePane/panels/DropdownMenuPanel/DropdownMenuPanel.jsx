@@ -29,13 +29,15 @@ const propTypes = {
   chartKeys: PropTypes.arrayOf(PropTypes.shape({})),
   panelDetails: PropTypes.arrayOf(
     PropTypes.shape({
-      indicator: PropTypes.string,
+      /* todo: resolve the issue of this prop receiving mixed data */
+      indicator: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
       addIndicator: PropTypes.func,
       sectionRemove: PropTypes.bool,
       sectionAdd: PropTypes.bool,
       indicatorLabel: PropTypes.string,
       subIndicator: PropTypes.bool,
       categorise: PropTypes.bool,
+      indIndex: PropTypes.number,
       allFileSources: PropTypes.array,
       selectedSources: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
       selectDataSource: PropTypes.func,
@@ -59,6 +61,7 @@ const defaultProps = {
       subIndicator: false,
       sectionAdd: false,
       sectionRemove: false,
+      indIndex: -1,
       indicatorLabel: 'Indicator',
       categorise: false,
       allFileSources: [],
@@ -75,15 +78,17 @@ const defaultProps = {
 };
 
 const DropdownMenuPanel = props => {
-  // console.log('panelDetails', props.panelDetails);
-
   return (
     <React.Fragment>
       {props.panelDetails.map((detail, index) => {
         let defChecked = false;
 
-        if (detail.subIndicator && props.handleAxisSwitch) {
-          defChecked = find(props.chartKeys, ['name', detail.indicator]);
+        if (
+          detail.subIndicator &&
+          props.handleAxisSwitch &&
+          detail.indIndex !== -1
+        ) {
+          defChecked = props.chartKeys[detail.indIndex];
 
           // so right is true, left is false
           defChecked = defChecked && defChecked.orientation === 'right';
@@ -129,7 +134,11 @@ const DropdownMenuPanel = props => {
                   option1="Left Y-axis"
                   option2="Right Y-axis"
                   onSwitch={checked =>
-                    props.handleAxisSwitch(checked, detail.indicator)
+                    props.handleAxisSwitch(
+                      checked,
+                      detail.indicator,
+                      detail.indIndex
+                    )
                   }
                 />
               </SwitchContainer>

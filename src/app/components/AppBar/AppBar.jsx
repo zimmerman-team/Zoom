@@ -1,8 +1,8 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box } from 'grommet';
-import { Menu } from 'grommet-icons';
+import { Box } from 'grommet/components/Box';
+import { Menu } from 'grommet-icons/icons/Menu';
 import theme from 'theme/Theme';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -99,7 +99,7 @@ export class AppBar extends React.Component {
         authId: profile.sub,
         dataSources,
         _public: this.props.chartData._public,
-        teams: this.props.chartData.team ? this.props.user.data.teams : '',
+        teams: this.props.chartData.teams,
         chartId: this.props.chartData.chartId,
         name: this.props.chartData.name,
         description: this.props.chartData.desc,
@@ -251,6 +251,7 @@ export class AppBar extends React.Component {
           />
           <Link to="/">
             <AidsFondLogo
+              data-cy="home-logo"
               a11yTitle="Aidsfonds logo"
               fit="contain"
               alignSelf="center"

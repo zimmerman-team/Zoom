@@ -1,4 +1,4 @@
-import { Box, Button, DataTable, Text } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import theme from 'theme/Theme';
 import styled from 'styled-components';
 import { BaseParagraph } from 'components/sort/Paragraphs';

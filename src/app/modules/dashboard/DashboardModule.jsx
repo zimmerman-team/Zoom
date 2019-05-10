@@ -32,9 +32,10 @@ const propTypes = {
   loading: PropTypes.bool,
   users: PropTypes.arrayOf(PropTypes.shape({})),
   teams: PropTypes.arrayOf(PropTypes.shape({})),
-
   totalPages: PropTypes.number,
-  changePage: PropTypes.func
+  changePage: PropTypes.func,
+  isSuperAdmin: PropTypes.bool,
+  isAdministrator: PropTypes.bool
 };
 const defaultProps = {
   tabs: [],
@@ -53,7 +54,9 @@ const defaultProps = {
   trashCharts: [],
   activeTab: 'charts',
   totalPages: 0,
-  changePage: null
+  changePage: null,
+  isSuperAdmin: false,
+  isAdministrator: false
 };
 
 const DashboardModule = ({
@@ -76,7 +79,10 @@ const DashboardModule = ({
   changeSearchKeyword,
   navItems,
   totalPages,
-  changePage
+  changePage,
+  isSuperAdmin,
+  isAdministrator,
+  auth0Client
 }) => (
   <ModuleContainer>
     <Helmet>
@@ -110,12 +116,17 @@ const DashboardModule = ({
       activeTab={activeTab}
       sort={sort}
       navItems={navItems}
+      isAdministrator={isAdministrator}
+      isSuperAdmin={isSuperAdmin}
+      auth0Client={auth0Client}
     />
-    <Pagination
-      pageCount={totalPages}
-      changePage={changePage}
-      forcePage={page}
-    />
+    {totalPages > 0 && (
+      <Pagination
+        pageCount={totalPages}
+        changePage={changePage}
+        forcePage={page}
+      />
+    )}
   </ModuleContainer>
 );
 

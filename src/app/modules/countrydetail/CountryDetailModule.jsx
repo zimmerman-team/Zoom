@@ -2,13 +2,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import theme from 'theme/Theme';
 import { Helmet } from 'react-helmet';
 
 import CountryInfo from 'modules/countrydetail/fragments/CountryInfo/CountryInfo';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
-import CivicSpace from 'modules/countrydetail/fragments/CivicSpace';
+import CivicSpace from 'app/modules/countrydetail/fragments/CivicSpace/CivicSpace';
 import AidsEpidemic from 'modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic';
 import EconomicIndicators from 'modules/countrydetail/fragments/EconomicIndicators';
 import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTransactions';
@@ -118,7 +118,10 @@ const CountryDetailModule = props => {
       <EconomicIndicators />
 
       {/* Fragment 4: civic space */}
-      <CivicSpace background={theme.color.zoomGreyZero} />
+      <CivicSpace
+        value={props.civicSpace}
+        background={theme.color.zoomGreyZero}
+      />
 
       {/* Fragment 5: human rights */}
       <HumanRights />

@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import get from 'lodash/get';
 import Theme from 'theme/Theme';
 const ComponentBase = styled(Box)`

@@ -3,9 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 
-const propTypes = {};
-const defaultProps = {};
-
 const DataPaneContainer = styled(props => (
   <div style={{ display: props.display }} {...props}>
     {props.children}
@@ -27,8 +24,5 @@ const DataPaneContainer = styled(props => (
       0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
   }
 `;
-
-DataPaneContainer.propTypes = propTypes;
-DataPaneContainer.defaultProps = defaultProps;
 
 export default DataPaneContainer;

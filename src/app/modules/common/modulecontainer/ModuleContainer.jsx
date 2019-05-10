@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
 import theme from 'theme/Theme';
+import ErrorBoundary from 'react-error-boundary';
 
 /**
  * todo: Please write a short component description of what this component does

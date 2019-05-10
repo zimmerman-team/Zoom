@@ -127,13 +127,9 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
   const chartz = charts.charts ? charts.charts : charts;
 
   return chartz.map(chart => {
-    let shared = '';
-    if (chart.team.length > 0) shared = shared.concat(chart.team);
-    if (chart._public)
-      shared =
-        shared.length > 0
-          ? shared.concat(', ').concat('Public')
-          : shared.concat('Public');
+    let shared = chart.teams;
+    if (chart._public) shared.push('Public');
+    shared = shared.join(', ');
     let dataSources = '';
 
     chart.dataSources.forEach((source, index) => {
@@ -198,8 +194,8 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
 export function formatDatasets(datasets, history, remove) {
   return datasets.map(dataset => {
     let shared = '';
-    if (dataset.team.length > 0 && dataset.team !== 'none')
-      shared = shared.concat(dataset.team);
+    if (dataset.teams.length > 0 && dataset.teams !== 'none')
+      shared = shared.concat(dataset.teams.join(', '));
 
     if (dataset.public)
       shared =

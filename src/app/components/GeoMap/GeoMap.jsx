@@ -26,7 +26,8 @@ import {
   MapContainer,
   ControlsContainer
 } from './GeoMap.style';
-
+import ErrorBoundaryFallback from 'components/ErrorBoundaryFallback/ErrorBoundaryFallback';
+import { ErrorBoundary } from 'react-error-boundary';
 const MAPBOX_TOKEN =
   'pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw';
 
@@ -301,66 +302,54 @@ export class GeoMap extends Component {
 
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
+      <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+        <MapContainer data-cy="geo-map-container" id="home-geomap">
+          <ControlsContainer>
+            <MapControls
+              onZoomIn={this.handleZoomIn}
+              onZoomOut={this.handleZoomOut}
+              onFullScreen={this.handleFullscreen}
+            />
+          </ControlsContainer>
 
-      <MapContainer data-cy="geo-map-container" id="home-geomap">
-        <ControlsContainer>
-          <MapControls
-            onZoomIn={this.handleZoomIn}
-            onZoomOut={this.handleZoomOut}
-            onFullScreen={this.handleFullscreen}
-          />
-        </ControlsContainer>
-
-        {/*<YearContainer*/}
-        {/*style={*/}
-        {/*this.props.disableYear*/}
-        {/*? { pointerEvents: 'none', opacity: '0.4' }*/}
-        {/*: {}*/}
-        {/*}*/}
-        {/*>*/}
-        {/*<CustomYearSelector*/}
-        {/*selectedYear={this.props.selectedYear}*/}
-        {/*selectYear={this.props.selectYear}*/}
-        {/*/>*/}
-        {/*</YearContainer>*/}
-
-        <MapGL
-          {...viewport}
-          {...settings}
-          scrollZoom={true}
-          width="100%"
-          height="100%"
-          mapStyle={mapStyle}
-          onViewportChange={this._updateViewport}
-          onHover={this._setLayerInfo}
-          onClick={this._onCountryClick}
-          onLoad={this._handleMapLoaded}
-          mapboxApiAccessToken={MAPBOX_TOKEN}
-          // mapOptions={this.props.mapOptions}
-          ref={map => (this.mapRef = map)}
-          attributionControl
-          // bounds={ya}
-          // so commenting this out cause it causes the
-          // onHover to NOT receive features...
-          // dunno why though seems like just a bug in this react-map-gl library
-          // cause the on click does receive the features...
-          // reuseMaps
-        >
-          {/*So this is the layer tooltip, and we seperate it from the
+          <MapGL
+            {...viewport}
+            {...settings}
+            scrollZoom={true}
+            width="100%"
+            height="100%"
+            mapStyle={mapStyle}
+            onViewportChange={this._updateViewport}
+            onHover={this._setLayerInfo}
+            onClick={this._onCountryClick}
+            onLoad={this._handleMapLoaded}
+            mapboxApiAccessToken={MAPBOX_TOKEN}
+            // mapOptions={this.props.mapOptions}
+            ref={map => (this.mapRef = map)}
+            attributionControl
+            // bounds={ya}
+            // so commenting this out cause it causes the
+            // onHover to NOT receive features...
+            // dunno why though seems like just a bug in this react-map-gl library
+            // cause the on click does receive the features...
+            // reuseMaps
+          >
+            {/*So this is the layer tooltip, and we seperate it from the
               martker tooltip, cause its functionality as a tooltip is a bit different
               and also because we implement the layers a bit more differently
               than normal markers*/}
-          {this._showLayerInfo()}
+            {this._showLayerInfo()}
 
-          {this._showMarkerInfo()}
+            {this._showMarkerInfo()}
 
-          {markerArray}
+            {markerArray}
 
-          {/*contains zoom in/out and fullscreen toggle*/}
+            {/*contains zoom in/out and fullscreen toggle*/}
 
-          <LegendContainer>{legends}</LegendContainer>
-        </MapGL>
-      </MapContainer>
+            <LegendContainer>{legends}</LegendContainer>
+          </MapGL>
+        </MapContainer>
+      </ErrorBoundary>
     );
   }
 }

@@ -55,7 +55,6 @@ describe('Home page geo map datamapping', function() {
     cy.get('[data-cy="geo-map-container"]').click();
     cy.contains('Select indicator').click();
     cy.contains('aids related deaths').click();
-    cy.scrollTo('top');
     cy.waitPageLoader();
     cy.waitPageLoader2();
     cy.get('[data-cy="legendLayer-label"]').should('contain', 'aids related deaths');

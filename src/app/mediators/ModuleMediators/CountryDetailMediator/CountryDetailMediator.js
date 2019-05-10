@@ -123,7 +123,8 @@ class CountryDetailMediator extends React.Component {
     countryOrgDisbursements: [],
     excerpts: ['', ''],
     barChartIndicators: mock.barChartIndicators,
-    aidsEpIndicators: mock.lineChartInd.map(lci => lci.name),
+    aidsEpIndicators: mock.lineChartInd.map(lci => lci.name.split(' - ')[0]),
+    subIndicators: mock.subIndicators,
     aidsLineChartData: [],
     countryName: '',
     infoBarData: [],
@@ -134,6 +135,16 @@ class CountryDetailMediator extends React.Component {
 
   componentDidMount = () => {
     document.addEventListener('mousedown', this.handleClickOutside);
+    // We dispatch wiki api here, cause this is the place where we get the country name
+    const nonZoomCountryName = get(
+      mock.isoCountries,
+      [this.props.match.params.iso2.toUpperCase()],
+      ''
+    );
+    const wikiParams = this.state.wikiParams;
+    wikiParams.titles = nonZoomCountryName;
+    this.props.dispatch(actions.countryExcerptRequest(this.state.wikiParams));
+
     // We get countries related activities here
     const activityParams = this.state.activityParams;
     activityParams.recipient_country = this.props.match.params.iso2.toUpperCase();
@@ -190,7 +201,7 @@ class CountryDetailMediator extends React.Component {
       const countryName = get(
         this.props.indicatorAggregations,
         'country[0].geolocationTag',
-        'CountryNotFound'
+        ''
       );
       // Here we format the bar chart indicator data
       const infoBarData = formatBarChartInfoIndicators(
@@ -200,11 +211,6 @@ class CountryDetailMediator extends React.Component {
         countryName
       );
 
-      // We dispatch wiki api here, cause this is the place where we get the country name
-      const wikiParams = this.state.wikiParams;
-      wikiParams.titles = titleCase(countryName);
-      this.props.dispatch(actions.countryExcerptRequest(this.state.wikiParams));
-
       const aidsLineChartData = formatLineChart2Data(
         this.props.indicatorAggregations.aidsEpidemic
       );
@@ -212,8 +218,8 @@ class CountryDetailMediator extends React.Component {
       this.setState({
         infoBarData,
         countryName,
-        aidsLineChartData,
-        wikiParams
+        aidsLineChartData
+        // wikiParams
       });
     }
 
@@ -256,7 +262,8 @@ class CountryDetailMediator extends React.Component {
     this.props.relay.refetch({
       countryCode: [this.props.match.params.iso2.toLowerCase()],
       barChartIndicators: this.state.barChartIndicators,
-      aidsEpIndicators: this.state.aidsEpIndicators
+      aidsEpIndicators: this.state.aidsEpIndicators,
+      subInds: this.state.subIndicators
     });
   };
 
@@ -283,7 +290,7 @@ class CountryDetailMediator extends React.Component {
     }
   };
 
-  render() {
+  render = () => {
     return (
       <CountryDetailModule
         projectData={this.state.projectData}
@@ -305,7 +312,7 @@ class CountryDetailMediator extends React.Component {
         projectsLoading={this.state.projectsLoading}
       />
     );
-  }
+  };
 }
 
 const mapStateToProps = state => {
@@ -327,6 +334,7 @@ export default createRefetchContainer(
         countryCode: { type: "[String]", defaultValue: ["undefined"] }
         barChartIndicators: { type: "[String]", defaultValue: ["undefined"] }
         aidsEpIndicators: { type: "[String]", defaultValue: ["undefined"] }
+        subInds: { type: "[String]", defaultValue: ["undefined"] }
       ) {
       country: datapointsAggregation(
         groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
@@ -334,6 +342,7 @@ export default createRefetchContainer(
         aggregation: ["Sum(value)"]
         geolocationIso2_In: $countryCode
         indicatorName_In: $barChartIndicators
+        filterName_In: $subInds
       ) {
         indicatorName
         geolocationTag
@@ -346,6 +355,7 @@ export default createRefetchContainer(
         aggregation: ["Sum(value)"]
         geolocationIso2_In: $countryCode
         indicatorName_In: $aidsEpIndicators
+        filterName_In: $subInds
       ) {
         indicatorName
         date
@@ -358,12 +368,14 @@ export default createRefetchContainer(
       $countryCode: [String]
       $barChartIndicators: [String]
       $aidsEpIndicators: [String]
+      $subInds: [String]
     ) {
       ...CountryDetailMediator_indicatorAggregations
         @arguments(
           countryCode: $countryCode
           barChartIndicators: $barChartIndicators
           aidsEpIndicators: $aidsEpIndicators
+          subInds: $subInds
         )
     }
   `

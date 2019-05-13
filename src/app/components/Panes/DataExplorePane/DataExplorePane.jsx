@@ -89,7 +89,7 @@ const propTypes = {
   ]),
   selectCountry: PropTypes.func,
   /* todo: solve the issue of this prop sometimes receiving a boolean */
-  handleAxisSwitch: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
+  handleAxisSwitch: PropTypes.func,
   selectRegion: PropTypes.func,
   selectYearRange: PropTypes.func,
   yearRange: PropTypes.array,
@@ -155,7 +155,7 @@ class DataExplorePane extends React.Component {
         indIndex: index,
         sectionRemove: this.props.multipleInd,
         removeIndicator: () => this.props.removeIndicator(index),
-        indicator: true,
+        isIndicator: true,
         indicatorLabel: `Indicator ${labelNumb}`,
         categorise: true,
         placeHolderText: 'Select indicator',

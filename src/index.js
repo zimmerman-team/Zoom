@@ -22,12 +22,16 @@ import generalReducers from 'services/reducers/general';
 const sagaMiddleware = createSagaMiddleware();
 const history = createHistory();
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+      stateSanitizer: process.env.NODE_ENV !== 'development'
+    })
+  : compose;
 
 const persistConfig = {
   key: 'root',
   storage: storageSession,
-  whitelist: ['userPersist']
+  whitelist: ['open']
 };
 
 const store = createStore(

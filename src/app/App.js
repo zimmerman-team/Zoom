@@ -30,6 +30,10 @@ const theme = createMuiTheme({
     // So we have `transition: none;` everywhere
     create: () => 'none'
   },*/
+  typography: {
+    useNextVariants: true
+  },
+
   props: {
     // Name of the component ⚛️
     MuiButtonBase: {

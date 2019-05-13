@@ -3,7 +3,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'grommet/components/Box';
-
 /* custom components */
 import ZoomSelect from 'components/Select/ZoomSelect';
 import CheckboxesGroup from 'components/CheckboxesGroup/CheckboxesGroup';
@@ -12,30 +11,27 @@ import TextField from 'components/sort/TextField';
 import InputFieldLabel from 'components/InputFieldLabel/InputFieldLabel';
 import InputFieldDivider from 'components/Dividers/InputFieldDivider';
 import ChipInput from 'components/ChipInput/ChipInput';
-
 /* style */
 import { SectionHeading } from 'components/sort/Headings';
 import {
+  DataSourceTextCont,
   FieldContainer,
   ModuleContainer,
-  DataSourceTextCont,
-  SelectSurround,
-  TwoFieldContainer,
+  OrLabel,
   SelectContainer,
-  OrLabel
+  SelectSurround,
+  TwoFieldContainer
 } from './MetaData.style';
 import theme from 'theme/Theme';
-
 /* const data */
 import { step1InitialData } from '__consts__/DataMapperStepConsts';
 import {
-  options1,
-  options2,
   checkBoxOptions2,
   checkBoxOptions3,
   checkBoxOptions51,
+  dataSourceOptions,
   numberOptions,
-  dataSourceOptions
+  options2
 } from './MetaData.consts';
 import { nonSurveyChoice } from 'modules/datamapper/fragments/MetaData/MetaData.consts';
 

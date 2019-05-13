@@ -1,25 +1,18 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* components */
 import { Box } from 'grommet/components/Box';
 import { Element } from 'react-scroll/modules';
 import { SimpleText } from 'components/sort/Misc';
-import {
-  PageIntroInitial,
-  PageIntroSecondary
-} from 'components/sort/Paragraphs';
+import { PageIntroInitial, PageIntroSecondary } from 'components/sort/Paragraphs';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { CountryName } from 'modules/countrydetail/fragments/CountryInfo/CountryInfo.styles';
 import HorizontalBarChart from 'components/charts/barcharts/horizontal/HorizontalBarChart';
-
 /* theme */
 import theme from 'theme/Theme';
-
 /* mock */
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
-
 /* utils */
 import get from 'lodash/get';
 

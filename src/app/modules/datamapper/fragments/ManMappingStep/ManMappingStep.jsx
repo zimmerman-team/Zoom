@@ -1,35 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
-
 /* actions */
 import * as generalActions from 'services/actions/general';
-
 /* mock */
 import { uploadInitialstate } from '__consts__/UploadMediatorConst';
-
 /* utils */
 import findIndex from 'lodash/findIndex';
 import filter from 'lodash/filter';
 import keys from 'lodash/keys';
 import pickBy from 'lodash/pickBy';
-
 /* components */
 import { Box } from 'grommet/components/Box';
 import ZoomSelect from 'components/Select/ZoomSelect';
-
 /* styles */
 import {
   Cell,
-  ColHeader,
-  ZoomColHeader,
+  CellButton,
   CellLine,
   CellTextField,
-  CellButton,
-  ModuleContainer,
+  ColHeader,
+  ErrorLabel,
   ManMapTable,
   ManMapTitle,
-  ErrorLabel
+  ModuleContainer,
+  ZoomColHeader
 } from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.style';
 import CellValue from 'components/ZoomTable/CellValue';
 import theme from 'theme/Theme';

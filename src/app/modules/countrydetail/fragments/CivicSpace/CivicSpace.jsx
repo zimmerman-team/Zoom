@@ -5,13 +5,7 @@ import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll';
 import { Tooltip } from 'react-tippy';
-import {
-  Container,
-  Circle,
-  ItemContainer,
-  Text,
-  StateTooltip
-} from './CivicSpace.styles';
+import { Circle, Container, ItemContainer, StateTooltip, Text } from './CivicSpace.styles';
 
 const propTypes = {
   value: PropTypes.number,

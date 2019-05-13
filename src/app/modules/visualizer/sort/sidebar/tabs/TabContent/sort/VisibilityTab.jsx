@@ -14,7 +14,6 @@ import { connect } from 'react-redux';
 import get from 'lodash/get';
 import pull from 'lodash/pull';
 import find from 'lodash/find';
-
 /* actions */
 import * as actions from 'services/actions/general';
 import ZoomSelect from 'components/Select/ZoomSelect';

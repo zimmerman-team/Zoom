@@ -1,31 +1,26 @@
 /* base */
 import React from 'react';
 import { connect } from 'react-redux';
-
 /* actions */
 import * as actions from 'services/actions/general';
-
 /* components */
 import Stepper from 'components/Stepper/Stepper';
-
 /* utils */
 import {
-  checkEmptyFields,
-  addInEmptyFieldRows
+  addInEmptyFieldRows,
+  checkEmptyFields
 } from 'modules/datamapper/DataMapperModule.util';
 import find from 'lodash/find';
 import { ToastsStore } from 'react-toasts';
 import { Helmet } from 'react-helmet';
-
 /* styles */
 import {
   ModuleContainer,
-  ModuleHeader,
+  ModuleContent,
   ModuleFooter,
-  ModuleContent
+  ModuleHeader
 } from './DataMapperModule.styles';
 import { SimpleErrorText } from 'components/sort/Misc';
-
 /* fragments */
 import ManMappingStep from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep';
 import MetaDataMediator from 'mediators/DataMapperMediators/MetaDataMediator/MetaDataMediator';

@@ -4,11 +4,10 @@ import PropTypes from 'prop-types';
 /* components */
 import {
   AddUserForm,
+  Container,
   DropDownContainer,
   DropDownLabel,
-  Message,
-  SubmitButton,
-  Container
+  Message
 } from 'modules/UserManagement/AddUser/AddUserModule.styles';
 
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';

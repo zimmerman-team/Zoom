@@ -2,7 +2,7 @@
 import React from 'react';
 
 import ButtonContainer from './ButtonContainer';
-import { Textfield, ComponentBase } from './EditProfileForm.styles';
+import { ComponentBase, Textfield } from './EditProfileForm.styles';
 
 const EditProfileForm = () => {
   // [value, setValue() = initial value]

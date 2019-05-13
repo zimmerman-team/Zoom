@@ -3,17 +3,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { Route, BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
-
 /* components */
 import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';
 import VizContainer from 'modules/visualizer/sort/container/VizContainer';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
-
 /* utils */
 import { formatWindowTitle } from './VisualizerModule.utils';
 

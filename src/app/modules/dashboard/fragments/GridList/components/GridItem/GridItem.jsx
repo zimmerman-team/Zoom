@@ -3,18 +3,16 @@ import React from 'react';
 import shortId from 'shortid';
 import * as PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-
 /* utils */
 import map from 'lodash/map';
 import { formPath } from 'modules/dashboard/fragments/GridList/components/GridItem/GridItem.util';
-
 /* components...*/
 import GridItemText from './common/GridItemText';
 import GridItemToolbar from './common/GridItemToolbar';
 import {
+  BoxLink,
   ComponentBase,
   GridItemHeading,
-  BoxLink,
   GridItemInfoContainer
 } from './GridItem.styles';
 

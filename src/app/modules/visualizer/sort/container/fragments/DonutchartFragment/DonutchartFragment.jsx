@@ -3,20 +3,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-
 /* consts */
 import graphKeys from '__consts__/GraphStructKeyConst';
-
-/* styles */
-//import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
-
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import { ResponsivePie } from '@nivo/pie';
 import TooltipContent from 'modules/visualizer/sort/container/fragments/common/ToolTipContent';
-
 /* styles */
 import { FragmentBase } from 'modules/visualizer/sort/container/VizContainer.style';
+
+/* styles */
+//import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
 
 const Box = styled.div`
   width: 1024px;

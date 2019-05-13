@@ -44,7 +44,7 @@ const defaultProps = {
 
 const FormSelect = props => {
   const dropDownItem = item => {
-    if (props.multiple)
+    if (props.multiple) {
       return (
         <CheckBox
           key={item}
@@ -53,6 +53,7 @@ const FormSelect = props => {
           onChange={() => props.selectVal(item)}
         />
       );
+    }
     return <DropDownItem>{item.label}</DropDownItem>;
   };
 

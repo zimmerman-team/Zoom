@@ -51,8 +51,9 @@ class DashboardMediator extends React.Component {
   };
 
   componentDidUpdate = prevProps => {
-    if (!isEqual(this.props.user, prevProps.user) && this.props.user)
+    if (!isEqual(this.props.user, prevProps.user) && this.props.user) {
       this.reloadData('all');
+    }
 
     if (!isEqual(this.props.chartDeleted, prevProps.chartDeleted)) {
       this.reloadData();
@@ -90,16 +91,17 @@ class DashboardMediator extends React.Component {
     if (
       !isEqual(this.props.archivedCharts, prevProps.archivedCharts) &&
       this.props.archivedCharts.data
-    )
+    ) {
       this.setState({
         trashCharts: formatChartData(this.props.archivedCharts.data)
       });
+    }
 
     // we format the datasets
     if (
       !isEqual(this.props.userDatasets, prevProps.userDatasets) &&
       this.props.userDatasets.data
-    )
+    ) {
       this.setState({
         datasets: formatDatasets(
           this.props.userDatasets.data,
@@ -107,27 +109,33 @@ class DashboardMediator extends React.Component {
           this.deleteDataset
         )
       });
+    }
 
     // so we want to reaload all charts when a chart is duplicated so it would
     // show up in the dashboard
-    if (!isEqual(this.props.chartDuplicated, prevProps.chartDuplicated))
+    if (!isEqual(this.props.chartDuplicated, prevProps.chartDuplicated)) {
       this.reloadData();
+    }
 
     // we re-load the users
-    if (!isEqual(this.props.userDeleted, prevProps.userDeleted))
+    if (!isEqual(this.props.userDeleted, prevProps.userDeleted)) {
       this.reloadData();
+    }
 
     // we re-load the teams
-    if (!isEqual(this.props.teamDeleted, prevProps.teamDeleted))
+    if (!isEqual(this.props.teamDeleted, prevProps.teamDeleted)) {
       this.reloadData();
+    }
 
     // we re-load the datasets
-    if (!isEqual(this.props.datasetDeleted, prevProps.datasetDeleted))
+    if (!isEqual(this.props.datasetDeleted, prevProps.datasetDeleted)) {
       this.reloadData();
+    }
 
     // set page to 0 when changing tab
-    if (this.props.match.params.tab !== prevProps.match.params.tab)
+    if (this.props.match.params.tab !== prevProps.match.params.tab) {
       this.setState({ page: 0 });
+    }
 
     // so here we don't actually need make a new call for trash, cause after emptying
     // it should be empty, and when a data.message is returned, it means that
@@ -135,8 +143,9 @@ class DashboardMediator extends React.Component {
     if (
       !isEqual(this.props.chartTrashEmpty, prevProps.chartTrashEmpty) &&
       get(this.props.chartTrashEmpty, 'data.message', '').length > 0
-    )
+    ) {
       this.setState({ trashCharts: [] });
+    }
   };
 
   componentWillUnmount = () => {

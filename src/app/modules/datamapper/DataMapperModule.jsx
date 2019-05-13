@@ -77,13 +77,14 @@ class DataMapperModule extends React.Component {
       );
     }
 
-    if (this.state.step === 2)
+    if (this.state.step === 2) {
       return (
         !this.props.stepData.manMapData ||
         this.props.stepData.manMapData.length === 0
       );
+    }
 
-    if (this.state.step === 4)
+    if (this.state.step === 4) {
       // So here we check if the fourth steps data has been saved
       // and if it contains anything because what we actually save here
       // are the error that we retrieve for this step
@@ -92,6 +93,7 @@ class DataMapperModule extends React.Component {
       return (
         !this.state.stepsDisabled && this.props.stepData.errorColumns.length > 0
       );
+    }
 
     return false;
   }
@@ -110,19 +112,22 @@ class DataMapperModule extends React.Component {
         const metaDataEmptyFields = [];
 
         // we check if the title is empty
-        if (!stepData.metaData.title || stepData.metaData.title.length === 0)
+        if (!stepData.metaData.title || stepData.metaData.title.length === 0) {
           metaDataEmptyFields.push('title');
+        }
 
         // we check if the description is empty
-        if (!stepData.metaData.desc || stepData.metaData.desc.length === 0)
+        if (!stepData.metaData.desc || stepData.metaData.desc.length === 0) {
           metaDataEmptyFields.push('desc');
+        }
 
         // we check if the datasource is empty
         if (
           !stepData.metaData.dataSource.value ||
           stepData.metaData.dataSource.value.length === 0
-        )
+        ) {
           metaDataEmptyFields.push('dataSource');
+        }
 
         if (metaDataEmptyFields.length > 0) {
           ToastsStore.error(
@@ -130,10 +135,10 @@ class DataMapperModule extends React.Component {
           );
           props.dispatch(actions.saveStepDataRequest(stepData));
           return { metaDataEmptyFields };
-        } else {
-          return { metaDataEmptyFields, step: prevState.step + 1 };
         }
-      } else if (prevState.step === 2) {
+        return { metaDataEmptyFields, step: prevState.step + 1 };
+      }
+      if (prevState.step === 2) {
         if (!stepData.uploadData) {
           ToastsStore.error(
             <SimpleErrorText> Please upload a file </SimpleErrorText>
@@ -176,8 +181,9 @@ class DataMapperModule extends React.Component {
         if (
           find(manMapData, ['zoomModel', 'Mixed Value']) &&
           !find(manMapData, ['zoomModel', 'value_format'])
-        )
+        ) {
           manMapEmptyFormat = true;
+        }
 
         if (
           emptyFields.length > 0 ||
@@ -204,15 +210,16 @@ class DataMapperModule extends React.Component {
             manMapEmptyFields,
             manMapEmptyFormat
           };
-        } else if (manMapEmptyFormat) {
+        }
+        if (manMapEmptyFormat) {
           return { manMapEmptyFormat };
-        } else
-          return {
-            step: prevState.step + 1,
-            manMapEmptyFormat,
-            manMapEmptyFields: false,
-            manMapEmptyValue: false
-          };
+        }
+        return {
+          step: prevState.step + 1,
+          manMapEmptyFormat,
+          manMapEmptyFields: false,
+          manMapEmptyValue: false
+        };
       } else return { step: prevState.step + 1 };
     });
   }

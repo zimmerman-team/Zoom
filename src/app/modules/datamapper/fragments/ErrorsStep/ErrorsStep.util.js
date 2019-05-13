@@ -58,7 +58,7 @@ export function formatColumns(
     Object.keys(row).forEach((key, index) => {
       // because it seems to be the same as the index
       // and i think its just extra generated stuff from graphql
-      if (key !== 'line no.' && key !== 'checked')
+      if (key !== 'line no.' && key !== 'checked') {
         columns.push({
           property: key,
           header:
@@ -89,6 +89,7 @@ export function formatColumns(
             </ErrorCell>
           )
         });
+      }
     });
   }
 

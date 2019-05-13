@@ -39,8 +39,9 @@ class NavPane extends React.Component {
     if (
       this.props.location.pathname.indexOf('/dashboard') !== -1 &&
       item === paneTypes.pubPane
-    )
+    ) {
       this.props.history.push('/home');
+    }
   };
 
   renderPaneItems = () => {

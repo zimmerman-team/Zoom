@@ -35,8 +35,9 @@ const StyledTextField = styled(TextField)`
 
 class OutlinedInputAdornments extends React.Component {
   onEnterPressed(e) {
-    if (e.keyCode === 13 && this.props.onEnterPressed)
+    if (e.keyCode === 13 && this.props.onEnterPressed) {
       this.props.onEnterPressed();
+    }
   }
 
   render() {

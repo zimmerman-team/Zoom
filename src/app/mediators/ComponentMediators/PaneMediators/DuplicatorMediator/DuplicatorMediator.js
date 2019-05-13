@@ -67,8 +67,9 @@ class DuplicatorMediator extends React.Component {
         if (
           dataSources.indexOf(indData.dataSource) === -1 &&
           indData.dataSource
-        )
+        ) {
           dataSources.push(indData.dataSource);
+        }
       });
 
       const chartData = {

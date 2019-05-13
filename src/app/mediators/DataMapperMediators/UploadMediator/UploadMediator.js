@@ -123,11 +123,12 @@ class UploadMediator extends React.Component {
   }
 
   handleSourceCompleted(response) {
-    if (response)
+    if (response) {
       this.setState(
         { sourceId: response.fileSource.entryId },
         this.addMetaData
       );
+    }
   }
 
   handleSourceError(error) {
@@ -265,8 +266,9 @@ class UploadMediator extends React.Component {
     // otherwise we always use an existing file source from the first filesource list
     // to just be able to upload the file for following steps
     // more explenation about this step is above the class name
-    if (this.props.stepData.metaData.fileSources.length <= 0)
+    if (this.props.stepData.metaData.fileSources.length <= 0) {
       this.addDataSource(this.props.stepData.metaData.dataSource.value);
+    }
     // otherwise we just add the file to the first source
     else {
       this.setState(

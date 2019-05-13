@@ -26,6 +26,7 @@ const EditProfileForm = () => {
 
   // Determines whether button should be disabled
   function handleChange() {
+    /* todo: convert to map */
     for (let i = 0; i < values.length; i++) {
       if (values[i] !== '') {
         setIsDisabled(false);

@@ -50,6 +50,7 @@ const CookieModule = props => {
           <a
             href="https://www.google.com/policies/technologies/cookies/"
             target="_blank"
+            rel="noopener noreferrer"
           >
             https://www.google.com/policies/technologies/cookies/
           </a>
@@ -98,7 +99,11 @@ const CookieModule = props => {
           welkom. Hiervoor kun je bellen naar 020 - 344 63 81. We zijn
           bereikbaar op werkdagen van 7:00 tot 21:00 uur en op zaterdag van 9:00
           tot 17:00 uur. Of je kunt een e-mail sturen naar
-          <a href="mailto:donateurs@aidsfonds.nl" target="_blank">
+          <a
+            href="mailto:donateurs@aidsfonds.nl"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             donateurs@aidsfonds.nl
           </a>
           . Ook voor vragen over je donateurschap kun je ons hier altijd
@@ -113,7 +118,11 @@ const CookieModule = props => {
         <p>
           drs. Martin van Oostrom
           <br />
-          <a href="mailto:mvanoostrom@aidsfonds.nl" target="_blank">
+          <a
+            href="mailto:mvanoostrom@aidsfonds.nl"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             mvanoostrom@aidsfonds.nl
           </a>
           <br />
@@ -128,7 +137,11 @@ const CookieModule = props => {
 
         <p>
           Volledige{' '}
-          <a href="https://aidsfonds.nl/contact/privacy/" target="_blank">
+          <a
+            href="https://aidsfonds.nl/contact/privacy/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             privacy policy Aidsfonds
           </a>
         </p>

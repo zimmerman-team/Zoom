@@ -143,9 +143,10 @@ class ExplorePanelMediator extends React.Component {
       } else {
         selectedSources = [...this.state.selectedSources];
         const sourceIndex = selectedSources.indexOf(item.value);
-        if (sourceIndex === -1)
+        if (sourceIndex === -1) {
           // so if it doesn't exist we add it
           selectedSources.push(item.value);
+        }
         // if it does exist we remove it
         else selectedSources.splice(sourceIndex, 1);
       }

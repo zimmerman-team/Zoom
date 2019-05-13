@@ -31,9 +31,9 @@ import {
   checkBoxOptions51,
   dataSourceOptions,
   numberOptions,
-  options2
+  options2,
+  nonSurveyChoice
 } from './MetaData.consts';
-import { nonSurveyChoice } from 'modules/datamapper/fragments/MetaData/MetaData.consts';
 
 const propTypes = {
   /**
@@ -128,8 +128,9 @@ class MetaData extends React.Component {
       this.props.data.q3Text !== nextProps.data.q3Text ||
       this.props.data.q4Text !== nextProps.data.q4Text ||
       this.props.data.q51Text !== nextProps.data.q51Text
-    )
+    ) {
       return false;
+    }
 
     // console.log('SHOULD UPDATE');
     // if any other field is being changed rerendering is ooke
@@ -138,8 +139,9 @@ class MetaData extends React.Component {
 
   validateField(field) {
     let length = this.props.data[field].length === 0;
-    if (field === 'dataSource')
+    if (field === 'dataSource') {
       length = this.props.data[field].value.length === 0;
+    }
     return this.props.metaDataEmptyFields.indexOf(field) !== -1 && length;
   }
 

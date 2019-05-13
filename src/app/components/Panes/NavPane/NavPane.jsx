@@ -124,7 +124,7 @@ class NavPane extends React.Component {
   };
 
   render() {
-    console.log(this.props.auth0Client.isAdministrator());
+    // console.log(this.props.auth0Client.isAdministrator());
     return <ComponentBase>{this.renderPaneItems()}</ComponentBase>;
   }
 }

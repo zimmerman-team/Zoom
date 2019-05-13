@@ -6,7 +6,7 @@ import {
   ConditionMet,
   ConditionUnmet,
   StigmaList,
-  StigmaListItem,
+  StigmaListItem
 } from 'components/sort/Misc';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';

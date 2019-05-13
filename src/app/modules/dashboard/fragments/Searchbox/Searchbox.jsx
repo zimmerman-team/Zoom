@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/styles/withStyles';
 import InputAdornment from '@material-ui/core/InputAdornment';

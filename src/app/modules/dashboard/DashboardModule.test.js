@@ -2,19 +2,17 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import DashboardModule from 'modules/dashboard/DashboardModule';
-
 /* components */
 import {
+  HeaderGreeting,
+  HeaderIcon,
   ModuleContainer,
   PageHeading,
-  HeaderIcon,
-  HeaderGreeting,
   SearchBox,
   ViewContainer
 } from 'modules/dashboard/DashboardModule.styles';
 import SvgIconUser from 'assets/icons/IconUser';
 import TabContainer from 'modules/dashboard/fragments/TabContainer/TabContainer';
-
 /* consts */
 import tabs from '__consts__/DashboardTabsConsts';
 

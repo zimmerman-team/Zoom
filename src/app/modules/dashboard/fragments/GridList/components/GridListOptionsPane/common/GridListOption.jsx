@@ -4,12 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 /* componenets */
 import { Link as _Link } from 'react-router-dom';
-import {
-  IconButton,
-  IconLabel,
-  RemoveButton,
-  SortIconButton
-} from './GridListOption.styles';
+import { IconButton, IconLabel, RemoveButton, SortIconButton } from './GridListOption.styles';
 import SortbyDialog from '../../../../../../../components/Dialog/SortbyDialog/SortbyDialog';
 
 const sortByOptions = [

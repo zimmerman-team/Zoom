@@ -1,7 +1,6 @@
 /* base */
 import React from 'react';
 import { shallow } from 'enzyme';
-
 /* components */
 import GridItem from './GridItem';
 import { ComponentBase, GridItemHeading } from './GridItem.styles';

@@ -12,11 +12,9 @@ import MenuItem from '@material-ui/core/MenuItem/index';
 import FormControl from '@material-ui/core/FormControl/index';
 import themes from 'theme/Theme';
 import IconPointer from 'assets/icons/IconPointer';
-
 /* utils */
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
-
 /* consts */
 import { colorSet as colorSetz } from '__consts__/PaneConst';
 

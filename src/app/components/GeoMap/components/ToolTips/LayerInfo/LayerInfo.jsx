@@ -2,8 +2,8 @@ import React from 'react';
 import {
   ToolTipContainer,
   ToolTipLabel,
-  ToolTipTitle,
   ToolTipText,
+  ToolTipTitle,
   ValueContainer
 } from 'components/GeoMap/components/ToolTips/ToolTip.style';
 import { formatNumber } from 'utils/genericUtils';

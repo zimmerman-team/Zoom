@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
 /* components */
 import { Select } from 'grommet/components/Select';
 import { CheckBox } from 'grommet/components/CheckBox';

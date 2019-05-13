@@ -1,7 +1,6 @@
 /* base */
 import React from 'react';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
 
 const DataPaneContainer = styled(props => (
   <div style={{ display: props.display }} {...props}>

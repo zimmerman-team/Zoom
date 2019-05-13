@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   ComponentBase,
-  PointerContainer,
   LabelContainer,
+  PointerContainer,
   Span
 } from 'components/Select/components/SelectHeader/SelectHeader.styles';
 

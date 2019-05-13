@@ -1,21 +1,19 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* utils */
 import get from 'lodash/get';
-
 /* components */
 import {
-  BarsContainer,
   Bar,
   BarContainer,
   BarName,
-  Value,
-  LegendContainer,
+  BarsContainer,
   Legend,
   LegendColor,
-  LegendText
+  LegendContainer,
+  LegendText,
+  Value
 } from './HorizontalBarChart.styles';
 
 const propTypes = {

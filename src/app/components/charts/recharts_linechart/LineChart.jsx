@@ -1,19 +1,17 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* consts */
 import graphKeys from '__consts__/GraphStructKeyConst';
-
 /* components */
 import {
-  ResponsiveContainer,
-  LineChart as ReLineChart,
-  Line,
-  XAxis,
-  YAxis,
   CartesianGrid,
-  Tooltip
+  Line,
+  LineChart as ReLineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis
 } from 'recharts';
 import TooltipContent from './components/TooltipContent/TooltipContent';
 

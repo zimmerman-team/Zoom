@@ -2,24 +2,19 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import theme from 'theme/Theme';
-
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
-
 /* actions */
 import * as actions from 'services/actions/general';
-
 /* icons */
 import SvgIconPointer from 'assets/icons/IconPointer';
-import { createChartItems, convertDataItems } from './NavPane.const';
-
+import { convertDataItems, createChartItems } from './NavPane.const';
 /* styles */
 import {
-  NavPaneItem,
   ComponentBase,
+  ItemIcon,
   ItemLabel,
-  ItemIcon
+  NavPaneItem
 } from './NavPane.style';
 
 /* todo: re-assess logic in this component, seems somewhat convoluted */

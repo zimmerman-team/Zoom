@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* components */
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import TextField from 'components/sort/TextField';
 import ZoomButton from 'components/ZoomButton/ZoomButton';
-
 /* styles */
-import { ButtonsContainer, ButtonContainer } from './SimpleEditDialog.style';
+import { ButtonContainer, ButtonsContainer } from './SimpleEditDialog.style';
 
 const propTypes = {
   defaultText: PropTypes.string,

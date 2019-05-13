@@ -1,34 +1,30 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* components */
 import SelectHeader from 'components/Select/components/SelectHeader/SelectHeader';
 import { Tooltip } from 'react-tippy';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import DropDownCheckbox from 'components/DropDownCheckBox/DropDownCheckbox';
 import SearchField from 'components/Select/components/SearchField/SearchField';
-
 /* icons */
 import ResetIconSmall from 'assets/icons/ResetIconSmall';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import findIndex from 'lodash/findIndex';
-
 /* styles */
 import {
-  ComponentBase,
-  DropDownItem,
-  ResetContainer,
-  DropDownLabel,
-  DropDownContainer,
-  SelectAll,
-  OptionsContainer,
   CategoryItem,
-  ItemContainer,
+  ComponentBase,
+  DropDownContainer,
+  DropDownItem,
+  DropDownLabel,
+  EmptyOptions,
   InfoLabel,
-  EmptyOptions
+  ItemContainer,
+  OptionsContainer,
+  ResetContainer,
+  SelectAll
 } from 'components/Select/ZoomSelect.styles';
 
 const propTypes = {

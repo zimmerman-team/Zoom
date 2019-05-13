@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import useCookie from '@devhammed/use-cookie';
 
 import {
-  CookieButton,
   ComponentBase,
+  CookieButton,
   CookieInfoLink,
   CookieMessage,
   Spacer

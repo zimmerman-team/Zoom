@@ -558,8 +558,9 @@ class VizPaneMediator extends React.Component {
     return (
       <DataExplorePane
         handleAxisSwitch={
-          this.props.paneData.chartType === chartTypes.lineChart &&
-          this.handleAxisSwitch
+          this.props.paneData.chartType === chartTypes.lineChart
+            ? this.handleAxisSwitch
+            : null
         }
         multipleInd={
           this.props.paneData.chartType !== chartTypes.geoMap &&

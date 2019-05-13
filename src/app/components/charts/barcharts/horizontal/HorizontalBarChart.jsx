@@ -28,14 +28,16 @@ const propTypes = {
       KenyaColor: PropTypes.string,
       country: PropTypes.string
     })
-  )
+  ),
+  showLegend: PropTypes.bool
 };
 const defaultProps = {
   data: [],
-  countryName: 'Kenya'
+  countryName: '',
+  showLegend: true
 };
 
-const HorizontalBarChart = ({ data, countryName }) => (
+const HorizontalBarChart = ({ data, showLegend, countryName }) => (
   <React.Fragment>
     <BarsContainer>
       {data.map(item => (
@@ -45,17 +47,21 @@ const HorizontalBarChart = ({ data, countryName }) => (
             <Bar
               theme={{ width: `${item.percentage}%`, color: item.CountryColor }}
             />
-            <Value>{item[countryName]}</Value>
+            <Value>{item[`${countryName}-formatted-value`]}</Value>
           </BarContainer>
         </React.Fragment>
       ))}
     </BarsContainer>
-    <LegendContainer>
-      <Legend>
-        <LegendColor theme={{ color: get(data, '[0].CountryColor', '#fff') }} />
-        <LegendText>{countryName}</LegendText>
-      </Legend>
-    </LegendContainer>
+    {showLegend && (
+      <LegendContainer>
+        <Legend>
+          <LegendColor
+            theme={{ color: get(data, '[0].CountryColor', '#fff') }}
+          />
+          <LegendText>{countryName}</LegendText>
+        </Legend>
+      </LegendContainer>
+    )}
   </React.Fragment>
 );
 

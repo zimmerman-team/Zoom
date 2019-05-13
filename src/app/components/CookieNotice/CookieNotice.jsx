@@ -45,6 +45,7 @@ function CookieNotice(props) {
           </CookieMessage>
           <Spacer />
           <CookieButton
+            data-cy="cookie-notice"
             onClick={() => {
               setCookie('false');
               setVisibility(!visible);

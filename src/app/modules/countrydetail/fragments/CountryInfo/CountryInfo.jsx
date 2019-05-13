@@ -5,7 +5,10 @@ import PropTypes from 'prop-types';
 import { Box } from 'grommet/components/Box';
 import { Element } from 'react-scroll/modules';
 import { SimpleText } from 'components/sort/Misc';
-import { PageIntroInitial, PageIntroSecondary } from 'components/sort/Paragraphs';
+import {
+  PageIntroInitial,
+  PageIntroSecondary
+} from 'components/sort/Paragraphs';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { CountryName } from 'modules/countrydetail/fragments/CountryInfo/CountryInfo.styles';
 import HorizontalBarChart from 'components/charts/barcharts/horizontal/HorizontalBarChart';

@@ -8,8 +8,7 @@ import { connect } from 'react-redux';
 import paneTypes from '__consts__/PaneTypesConst';
 /* components */
 import GridList from 'modules/dashboard/fragments/GridList/GridList';
-import GridListOptionsPane
-  from 'modules/dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
+import GridListOptionsPane from 'modules/dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
 import NavPane from 'components/Panes/NavPane/NavPane';
 import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';

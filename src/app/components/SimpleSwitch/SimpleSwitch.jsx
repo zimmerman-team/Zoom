@@ -110,12 +110,14 @@ const propTypes = {
   classes: PropTypes.object,
   onSwitch: PropTypes.func,
   defaultCheck: PropTypes.bool,
+  disabled: PropTypes.bool,
   option1: PropTypes.string,
   option2: PropTypes.string
 };
 const defaultProps = {
   option1: 'empty 1',
   defaultCheck: false,
+  disabled: false,
   onSwitch: null,
   option2: 'empty 2'
 };
@@ -133,7 +135,11 @@ class SimpleSwitch extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <ComponentBase>
+      <ComponentBase
+        style={
+          this.props.disabled ? { pointerEvents: 'none', opacity: '0.4' } : {}
+        }
+      >
         <SwitchLabel>{this.props.option1}</SwitchLabel>
         <ZimSwitch
           classes={{

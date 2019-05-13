@@ -1,47 +1,62 @@
-.pagination{
+.pagination {
   list-style-type: none;
   display: flex;
   margin: 12px auto;
   padding: 0;
 }
 
-.page, .active-page, .nextPage, .prevPage{
+.pagination > li:nth-child(1)::after {
+  content: '';
+  height: 50%;
+  margin: 0 12px;
+  vertical-align: -1px;
+  display: inline-block;
+  border-right: 1px solid #a1a1a1;
+}
+
+.page,
+.active-page,
+.nextPage,
+.prevPage {
   cursor: pointer;
 }
 
-.page, .active-page{
+.page,
+.active-page {
   font-size: 14px;
   font-weight: 500;
   font-family: 'FFMarkProAF-Bold';
   color: #ff0100;
 }
 
-.page:after, .active-page:after {
-   content: ""; /* This is necessary for the pseudo element to work. */
-   display: inline-block;
-   height: 50%;
-   border-right: 1px solid #a1a1a1;
-   margin: 0 12px;
-   vertical-align: -1px;
- }
+.page:after,
+.active-page:after {
+  content: ''; /* This is necessary for the pseudo element to work. */
+  display: inline-block;
+  height: 50%;
+  border-right: 1px solid #a1a1a1;
+  margin: 0 12px;
+  vertical-align: -1px;
+}
 
-.active-page{
+.active-page {
   color: #0000ff;
 }
 
-.nextPage, .prevPage, .disabledLab{
+.nextPage,
+.prevPage,
+.disabledLab {
   font-size: 14px;
   font-weight: 500;
   font-family: 'FFMarkProAF-Bold';
   color: #ff0100;
-  margin-top: -1px;
+  /* margin-top: -1px; */
 }
 
-.prevPage{
+.prevPage {
   margin-right: 12px;
 }
 
-.disabledLab{
+.disabledLab {
   color: rgba(255, 1, 0, 0.31);
 }
-

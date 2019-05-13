@@ -87,30 +87,30 @@ export class AppBar extends React.Component {
       const profile = this.props.auth0Client.getProfile();
       const dataSources = [];
 
-      if (this.props.chartData.dataSource1)
-        dataSources.push(this.props.chartData.dataSource1);
-
-      if (
-        this.props.chartData.dataSource2 &&
-        dataSources.indexOf(this.props.chartData.dataSource2) === -1
-      )
-        dataSources.push(this.props.chartData.dataSource2);
+      this.props.chartData.selectedInd.forEach(indData => {
+        if (
+          dataSources.indexOf(indData.dataSource) === -1 &&
+          indData.dataSource
+        )
+          dataSources.push(indData.dataSource);
+      });
 
       const chartData = {
         authId: profile.sub,
         dataSources,
         _public: this.props.chartData._public,
-        teams: this.props.chartData.team ? this.props.user.data.teams : '',
+        teams: this.props.chartData.teams,
         chartId: this.props.chartData.chartId,
         name: this.props.chartData.name,
         description: this.props.chartData.desc,
         descIntro: this.props.chartData.descIntro,
         type: this.props.paneData.chartType,
-        data: this.props.chartData.indicators,
-        indicatorItems: [
-          {
-            indicator: this.props.chartData.selectedInd1,
-            subIndicators: this.props.chartData.selectedSubInd1,
+        data: this.props.chartData.data,
+        chartKeys: this.props.chartData.chartKeys,
+        indicatorItems: this.props.chartData.selectedInd.map(indData => {
+          return {
+            indicator: indData.indicator,
+            subIndicators: indData.selectedSubInd,
             // we also need to save the all sub indicators
             // for the datapanes default selections
             // because usually subindicators are refetched
@@ -118,24 +118,13 @@ export class AppBar extends React.Component {
             // and because we want to initially load in just the
             // data from zoombackend, we don't want to be refetching
             // anything
-            allSubIndicators: this.props.paneData.subIndicators1
-          },
-          {
-            indicator: this.props.chartData.selectedInd2,
-            subIndicators: this.props.chartData.selectedSubInd2,
-            // we also need to save the all sub indicators
-            // for the datapanes default selections
-            // because usually subindicators are refetched
-            // when an indicator is selected
-            // and because we want to initially load in just the
-            // data from zoombackend, we don't want to be refetching
-            // anything
-            allSubIndicators: this.props.paneData.subIndicators2
-          }
-        ],
+            allSubIndicators: indData.subIndicators
+          };
+        }),
         selectedSources: this.props.paneData.selectedSources,
         yearRange: this.props.paneData.yearRange,
         selectedYear: this.props.chartData.selectedYear,
+        selectedYears: this.props.chartData.selectedYears,
         selectedCountryVal: this.props.chartData.selectedCountryVal,
         selectedRegionVal: this.props.chartData.selectedRegionVal,
         specOptions: this.props.chartData.specOptions

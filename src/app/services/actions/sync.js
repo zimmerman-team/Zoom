@@ -15,3 +15,11 @@ export function setForgotPasswordEmailSent(value) {
     data: value
   };
 }
+
+export const CLEAR_USER_DATA = 'CLEAR_USER_DATA';
+
+export function clearUserData() {
+  return {
+    type: CLEAR_USER_DATA
+  };
+}

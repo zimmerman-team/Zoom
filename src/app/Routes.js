@@ -1,6 +1,8 @@
-import React, { lazy, Suspense } from 'react';
+import React, { Suspense } from 'react';
+import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 // Utils
+import get from 'lodash/get';
 import PageLoader from 'modules/common/pageloader/PageLoader';
 // always active
 
@@ -10,53 +12,96 @@ import ProfileSettingsModule from './modules/profilesettings/ProfileSettingsModu
 import DataMapperModule from 'modules/datamapper/DataMapperModule';
 
 // Modules lazy load
-const CountryDetailMediator = lazy(() =>
+/*const CountryDetailMediator = lazy(() =>
   import(
     'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator'
   )
-);
+);*/
+
+import CountryDetailMediator from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator';
+
+/*
 const HomeModuleMediator = lazy(() =>
   import('mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator')
 );
+*/
 
-const FocusModuleMediator = lazy(() =>
+import HomeModuleMediator from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator';
+
+/*const FocusModuleMediator = lazy(() =>
   import('mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator')
-);
+);*/
 
+import FocusModuleMediator from 'mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator';
+
+/*
 const VisualizerModuleMediator = lazy(() =>
   import(
     'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator'
   )
 );
+*/
 
+import VisualizerModuleMediator from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator';
+
+/*
 const IatiDetailMediator = lazy(() =>
   import('mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator')
 );
-const AddUserMediator = lazy(() =>
+*/
+
+import IatiDetailMediator from 'mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator';
+
+/*const AddUserMediator = lazy(() =>
   import('mediators/ModuleMediators/AddUserMediator/AddUserMediator')
-);
-const EditUserMediator = lazy(() =>
+);*/
+
+import AddUserMediator from 'mediators/ModuleMediators/AddUserMediator/AddUserMediator';
+
+/*const EditUserMediator = lazy(() =>
   import('mediators/ModuleMediators/EditUserMediator/EditUserMediator')
-);
-const CreateTeamMediator = lazy(() =>
+);*/
+
+import EditUserMediator from 'mediators/ModuleMediators/EditUserMediator/EditUserMediator';
+
+/*const CreateTeamMediator = lazy(() =>
   import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator')
-);
+);*/
+
+import CreateTeamMediator from 'mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator';
+
+/*
 const EditTeamMediator = lazy(() =>
   import('mediators/ModuleMediators/EditTeamMediator/EditTeamMediator')
 );
-const PublicDashMediator = lazy(() =>
+*/
+
+import EditTeamMediator from 'mediators/ModuleMediators/EditTeamMediator/EditTeamMediator';
+
+/*const PublicDashMediator = lazy(() =>
   import('mediators/DashboardMediators/PublicDashMediator')
-);
+);*/
 
-const DatasetMediator = lazy(() =>
+import PublicDashMediator from 'mediators/DashboardMediators/PublicDashMediator';
+
+/*const DatasetMediator = lazy(() =>
   import('mediators/ModuleMediators/DatasetMediator/DatasetMediator')
-);
+);*/
 
-const About = lazy(() => import('modules/about/About'));
+import DatasetMediator from 'mediators/ModuleMediators/DatasetMediator/DatasetMediator';
 
+// const About = lazy(() => import('modules/about/About'));
+
+import About from 'modules/about/About';
+import CookieModule from 'modules/CookieModule/CookieModule';
+
+/*
 const DashboardMediator = lazy(() =>
   import('mediators/DashboardMediators/DashboardMediator')
 );
+*/
+
+import DashboardMediator from 'mediators/DashboardMediators/DashboardMediator';
 
 // const ManMappingStep = lazy(() =>
 //   import('modules/datamapper/fragments/ManMappingStep/ManMappingStep')
@@ -146,14 +191,21 @@ const Routes = props => {
           <Route
             exact
             path="/edit-user/:userId"
-            render={() =>
-              props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
+            render={rProps => {
+              const isRegularUserEditSelf =
+                get(props.user.data, 'role', '') === 'Regular user' ||
+                get(props.user.data, 'role', '') === 'Moderator'
+                  ? get(props.user.data, 'authId', '') ===
+                    rProps.match.params.userId
+                  : false;
+              return props.auth0Client.isAuthenticated() &&
+                (props.auth0Client.isAdministrator() ||
+                  isRegularUserEditSelf) ? (
                 <EditUserMediator auth0Client={props.auth0Client} />
               ) : (
                 <Redirect to="/" />
-              )
-            }
+              );
+            }}
           />
           <Route
             exact
@@ -172,7 +224,7 @@ const Routes = props => {
             path="/create-team"
             render={() =>
               props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
+              props.auth0Client.isSuperAdmin() ? (
                 <CreateTeamMediator auth0Client={props.auth0Client} />
               ) : (
                 <Redirect to="/" />
@@ -219,6 +271,7 @@ const Routes = props => {
             }
           />
           <Route path="/about" render={() => <About />} />
+          <Route path="/cookies" render={() => <CookieModule />} />
           <Route
             path="/mapper"
             render={() =>
@@ -269,6 +322,14 @@ const Routes = props => {
   );
 };
 
+const mapStateToProps = state => {
+  return {
+    userUpdated: state.userUpdated,
+    userAdded: state.userAdded,
+    user: state.userPersist
+  };
+};
+
 Routes.propTypes = {};
 
-export default Routes;
+export default connect(mapStateToProps)(Routes);

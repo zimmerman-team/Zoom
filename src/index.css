@@ -18,6 +18,16 @@
   url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Bold.svg#svgFontName') format('svg'); /* Legacy iOS */
   }
 
+/*@font-face {*/
+  /*font-family: 'FFMarkProAF-Medium';*/
+  /*src: url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Medium.eot'); !* IE9 Compat Modes *!*/
+  /*src: url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Medium.eot?#iefix') format('embedded-opentype'), !* IE6-IE8 *!*/
+  /*url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Medium.woff2') format('woff2'), !* Super Modern Browsers *!*/
+  /*url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Medium.woff') format('woff'), !* Pretty Modern Browsers *!*/
+  /*url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Medium.ttf')  format('truetype'), !* Safari, Android, iOS *!*/
+  /*url('https://aidsfonds.nl/Assets/fonts/ffmark/FFMarkProAF-Medium.svg#svgFontName') format('svg'); !* Legacy iOS *!*/
+/*}*/
+
 body {
   margin: 0;
   padding: 0;

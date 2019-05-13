@@ -3,29 +3,34 @@ import PropTypes from 'prop-types';
 
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
+import { maxYear, minYear } from '__consts__/TimeLineConst';
 
 /* utils */
 import isEqual from 'lodash/isEqual';
+import { formatYearLabels } from 'utils/YearSelectUtil';
 
 /* styles */
 import {
   ComponentBase,
   YearLabel,
   SelectedYearLabel,
-  StartControl,
-  EndControl
+  Text
 } from './CustomYearSelector.style';
 
 const propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
-  selectedYear: PropTypes.string
+  selectedYear: PropTypes.string,
+
+  backgroundColor: PropTypes.string
 };
 
 const defaultProps = {
-  min: 1990,
-  max: 2019,
-  selectedYear: parseInt(initialState.yearPeriod[0], 10)
+  min: minYear,
+  max: maxYear,
+  selectedYear: parseInt(initialState.yearPeriod[0], 10),
+
+  backgroundColor: 'transparent'
 };
 
 class CustomYearSelector extends React.Component {
@@ -101,22 +106,28 @@ class CustomYearSelector extends React.Component {
     if (this.state.selectedYear === number)
       yearLabels = (
         <SelectedYearLabel
+          data-cy={`year-${number}`}
           onMouseDown={() => this.handleMouseDown()}
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
-          {number}
+          <Text>
+            {formatYearLabels(number, this.props.min, this.props.max)}
+          </Text>
         </SelectedYearLabel>
       );
     else
       yearLabels = (
         <YearLabel
+          data-cy={`year-${number}`}
           onClick={() => this.handleClick(number)}
           onMouseEnter={() => this.handleMouseEnter(number)}
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
-          {number}
+          <Text>
+            {formatYearLabels(number, this.props.min, this.props.max)}
+          </Text>
         </YearLabel>
       );
 
@@ -125,7 +136,10 @@ class CustomYearSelector extends React.Component {
 
   render() {
     return (
-      <ComponentBase ref={this.setWrapperRef}>
+      <ComponentBase
+        ref={this.setWrapperRef}
+        backgroundColor={this.props.backgroundColor}
+      >
         {this.state.numArray.map(this.renderYearLabels)}
       </ComponentBase>
     );

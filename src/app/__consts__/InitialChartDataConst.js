@@ -14,6 +14,17 @@ today = mm + '/' + dd + '/' + yyyy;
 // const currentYear = now.getFullYear();
 // const yearBefore = currentYear - 15;
 
+export const initIndItem = {
+  indicator: undefined,
+  // so these are all of the sub-indicators
+  // of the selected indicator
+  subIndicators: [],
+  // so this is the dataSource
+  // of the selected indicator
+  dataSource: undefined,
+  selectedSubInd: []
+};
+
 const initialState = {
   // so this variable is mainly used to control
   // the loading of data from zoombackend or DUCT
@@ -31,8 +42,9 @@ const initialState = {
   chartId: 'vizID',
   name: 'Chart',
   selectedYear: '2005',
+  selectedYears: formatYearParam([2000, 2010]),
   _public: false,
-  team: false,
+  teams: [],
   chartKeys:
     process.env.NODE_ENV === 'development'
       ? [
@@ -44,20 +56,40 @@ const initialState = {
         ]
       : [],
   // this is the actual data loaded into the chart
-  indicators: [],
-  dataSource1: undefined,
-  dataSource2: undefined,
-  selectedInd1:
-    process.env.NODE_ENV === 'development'
-      ? 'aids related deaths (unaids)'
-      : undefined,
-  selectedInd2: undefined,
+  data: [],
+  // so this array will basically store the data
+  // about the selected indicators and their sub-indicators
+  // and the indicator associated dataSource
+  selectedInd: [
+    {
+      indicator:
+        process.env.NODE_ENV === 'development'
+          ? 'aids related deaths (unaids)'
+          : undefined,
+      // so these are all of the sub-indicators
+      // of the selected indicator
+      subIndicators: [],
+      // so this is the dataSource
+      // of the selected indicator
+      dataSource:
+        process.env.NODE_ENV === 'development' ? 'UNAIDS 2018' : undefined,
+      selectedSubInd: []
+    },
+    {
+      indicator: undefined,
+      // so these are all of the sub-indicators
+      // of the selected indicator
+      subIndicators: [],
+      // so this is the dataSource
+      // of the selected indicator
+      dataSource: undefined,
+      selectedSubInd: []
+    }
+  ],
   selectedCountryVal: [],
   selectedCountryLabels: [],
   desc: '',
   descIntro: '',
-  selectedSubInd1: [],
-  selectedSubInd2: [],
   selectedRegionVal: [],
   selectedRegionLabels: [],
   // this is the variable for saving

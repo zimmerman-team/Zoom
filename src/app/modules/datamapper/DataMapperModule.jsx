@@ -95,9 +95,7 @@ class DataMapperModule extends React.Component {
       // and the user should be able to progress only if they've fixed
       // all the found errors
       return (
-        !this.state.stepsDisabled &&
-        (!this.props.stepData.errorData ||
-          this.props.stepData.errorData.errorsExists)
+        !this.state.stepsDisabled && this.props.stepData.errorColumns.length > 0
       );
 
     return false;
@@ -158,14 +156,10 @@ class DataMapperModule extends React.Component {
         // are the error that we retrieve for this step
         // and the user should be able to progress only if they've fixed
         // all the found errors
-        if (
-          !prevState.stepsDisabled &&
-          (!stepData.errorData || stepData.errorData.errorsExists)
-        ) {
+        if (!prevState.stepsDisabled && stepData.errorColumns.length > 0) {
           ToastsStore.error(
             <SimpleErrorText>
-              {' '}
-              Please make sure there are no errors before proceeding{' '}
+              Please correct errors before proceeding
             </SimpleErrorText>
           );
         } else {
@@ -302,7 +296,7 @@ class DataMapperModule extends React.Component {
     return (
       <ModuleContainer>
         <Helmet>
-          <title>Zoom - Datamapper</title>
+          <title>Zoom - Convert Data</title>
         </Helmet>
         <ModuleHeader>
           <Stepper

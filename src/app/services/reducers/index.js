@@ -1,15 +1,8 @@
 import update from 'immutability-helper';
 import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
+import * as syncActions from 'services/actions/sync';
 import * as nodeActions from 'services/actions/nodeBackend';
-import { CREATE_DUPLICATE_CHART_INITIAL } from 'services/actions/nodeBackend';
-import { CREATE_DUPLICATE_CHART_REQUEST } from 'services/actions/nodeBackend';
-import { CREATE_DUPLICATE_CHART_SUCCESS } from 'services/actions/nodeBackend';
-import { CREATE_DUPLICATE_CHART_FAILED } from 'services/actions/nodeBackend';
-import { DUPLICATE_CHART_INITIAL } from 'services/actions/nodeBackend';
-import { DELETE_DATASET_INITIAL } from 'services/actions/nodeBackend';
-import { DELETE_DATASET_REQUEST } from 'services/actions/nodeBackend';
-import { DELETE_DATASET_SUCCESS } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -259,6 +252,21 @@ function allUserCharts(state = initial, action) {
   }
 }
 
+function userPersist(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_USER_INITIAL:
+      if (!state.userPersist) return updateInitial(state);
+      return state;
+    case nodeActions.GET_USER_SUCCESS:
+      if (!state.userPersist) return updateSuccess(state, action);
+      return state;
+    case syncActions.CLEAR_USER_DATA:
+      return initial;
+    default:
+      return state;
+  }
+}
+
 function user(state = initial, action) {
   switch (action.type) {
     case nodeActions.GET_USER_INITIAL:
@@ -269,6 +277,8 @@ function user(state = initial, action) {
       return updateSuccess(state, action);
     case nodeActions.GET_USER_FAILED:
       return updateFailed(state, action);
+    case syncActions.CLEAR_USER_DATA:
+      return initial;
     default:
       return state;
   }
@@ -529,7 +539,39 @@ function datasetDeleted(state = initial, action) {
   }
 }
 
+function archivedCharts(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.ALL_ARCHIVED_CHARTS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.ALL_ARCHIVED_CHARTS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.ALL_ARCHIVED_CHARTS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.ALL_ARCHIVED_CHARTS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
+function chartTrashEmpty(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.EMPTY_CHART_TRASH_INITIAL:
+      return updateInitial(state);
+    case nodeActions.EMPTY_CHART_TRASH_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.EMPTY_CHART_TRASH_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.EMPTY_CHART_TRASH_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  chartTrashEmpty,
+  archivedCharts,
   datasetDeleted,
   chartDuplicated,
   dupChartCreated,
@@ -559,7 +601,8 @@ const reducers = {
   countryOrganisations,
   updateTeamAndUsersOfIt,
   groupDeleted,
-  userDeleted
+  userDeleted,
+  userPersist
 };
 
 export default reducers;

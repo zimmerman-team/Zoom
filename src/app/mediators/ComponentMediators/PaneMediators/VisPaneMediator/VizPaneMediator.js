@@ -516,7 +516,7 @@ class VizPaneMediator extends React.Component {
 
   // so this mainly controls the data for the linechart
   // cause you can switch the Y-axis of the data/indicator thats being shown
-  handleAxisSwitch(checked, indicator, index) {
+  handleAxisSwitch(checked, index) {
     // so if checked is false this the left axis will be selected
     // for this indicator otherwise its the right
     const { chartKeys } = this.props.chartData;

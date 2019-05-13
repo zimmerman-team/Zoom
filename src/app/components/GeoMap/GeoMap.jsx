@@ -28,8 +28,8 @@ import {
 } from './GeoMap.style';
 import ErrorBoundaryFallback from 'components/ErrorBoundaryFallback/ErrorBoundaryFallback';
 import { ErrorBoundary } from 'react-error-boundary';
-const MAPBOX_TOKEN =
-  'pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw';
+
+const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const propTypes = {
   latitude: PropTypes.number,

@@ -67,7 +67,7 @@ class CheckboxesGroup extends React.Component {
 
   isChecked(value) {
     // so we do this nonsense cause checked property excepts a boolean value
-    return find(this.props.values, ['label', value]) ? true : false;
+    return !!find(this.props.values, ['label', value]);
   }
 
   render() {

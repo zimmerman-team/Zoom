@@ -137,10 +137,10 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
       else dataSources = source;
     });
 
-    let onEdit = undefined;
-    let onView = undefined;
-    let onDuplicate = undefined;
-    let onDelete = undefined;
+    let onEdit;
+    let onView;
+    let onDuplicate;
+    let onDelete;
 
     if (duplicate) onDuplicate = () => duplicate(chart._id);
 

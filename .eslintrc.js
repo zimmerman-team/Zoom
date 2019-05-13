@@ -76,6 +76,8 @@ module.exports = {
     'no-unused-vars': 0,
     'no-use-before-define': 0,
     'react/forbid-prop-types': 0,
-    'react/no-unused-prop-types': 0
+    'react/no-unused-prop-types': 0,
+    'no-console': 0,
+    'object-shorthand': 0
   }
 };

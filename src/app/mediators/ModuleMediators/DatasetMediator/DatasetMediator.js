@@ -4,21 +4,17 @@ import { withRouter } from 'react-router';
 import { createRefetchContainer, graphql } from 'react-relay';
 import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
-
 /* mutations */
 import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
 import SurveyMutation from 'mediators/DataMapperMediators/WrapUpMediator/mutations/SurveyMutation';
 import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import find from 'lodash/find';
 import { fetchQuery } from 'relay-runtime';
-
 /* actions */
 import * as actions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
-
 /* consts */
 import { numberOptions } from 'modules/datamapper/fragments/MetaData/MetaData.consts';
 import { step1InitialData } from '__consts__/DataMapperStepConsts';

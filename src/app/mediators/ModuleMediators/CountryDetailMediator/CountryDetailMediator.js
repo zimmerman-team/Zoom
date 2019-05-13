@@ -5,25 +5,20 @@ import connect from 'react-redux/es/connect/connect';
 import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';
 import { createRefetchContainer, graphql } from 'react-relay';
 import { withRouter } from 'react-router';
-
 /* helpers */
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import {
-  titleCase,
   formatBarChartInfoIndicators,
-  // formatLineChartData,
+  formatLineChart2Data,
+  formatPieChartData,
   formatProjectData,
   formatWikiExcerpts,
-  getProjectCountNCommitment,
-  formatLineChart2Data,
-  formatPieChartData
+  getProjectCountNCommitment
 } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
-
 /* actions */
 import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
-
 /* mock */
 import mock from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
 

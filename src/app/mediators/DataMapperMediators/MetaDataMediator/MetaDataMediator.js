@@ -6,14 +6,11 @@ import PropTypes from 'prop-types';
 import MetaData from 'modules/datamapper/fragments/MetaData/MetaData';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { connect } from 'react-redux';
-
 /* actions */
 import * as actions from 'services/actions/general';
-
 /* utils */
 import findIndex from 'lodash/findIndex';
 import sortBy from 'lodash/sortBy';
-
 /* consts */
 import { step1InitialData } from '__consts__/DataMapperStepConsts';
 

@@ -2,20 +2,12 @@
 import React from 'react';
 import DuplicatorTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/DuplicatorTab';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-
 /* actions */
-import * as actions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
-
 /* utils */
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
-
 /* consts */
-import initialPaneState from '__consts__/InitialPaneDataConst';
-import initialState from '__consts__/InitialChartDataConst';
-
 /* components */
 import { ToastsStore } from 'react-toasts';
 import { SimpleErrorText } from 'components/sort/Misc';

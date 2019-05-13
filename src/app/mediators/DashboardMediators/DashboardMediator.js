@@ -4,27 +4,22 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createFragmentContainer, graphql } from 'react-relay';
-
 /* mutations */
 import DeleteFileMutation from 'mediators/DashboardMediators/mutations/DeleteFile';
-
 /* actions */
 import * as actions from 'services/actions/nodeBackend';
 import * as generalActions from 'services/actions/general';
-
 /* utils */
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import {
-  formatUsersTabData,
-  formatTeamsTabData,
   formatChartData,
-  formatDatasets
+  formatDatasets,
+  formatTeamsTabData,
+  formatUsersTabData
 } from 'utils/dashboardUtils';
-
 /* components */
 import DashboardModule from 'modules/dashboard/DashboardModule';
-
 /* consts */
 import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
 import paneTypes from '__consts__/PaneTypesConst';

@@ -6,15 +6,14 @@ import {
   formatCountryCenterData,
   formatCountryLayerData,
   formatCountryParam,
-  updatePercentiles,
-  formatLongLatData
+  formatLongLatData,
+  updatePercentiles
 } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
 import HomeModule from 'modules/home/HomeModule';
 import PropTypes from 'prop-types';
-
 /* consts */
 import { initialState } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.consts';
-import generalInitial, { initIndItem } from '__consts__/InitialChartDataConst';
+import generalInitial from '__consts__/InitialChartDataConst';
 import { connect } from 'react-redux';
 import * as actions from 'services/actions/general';
 

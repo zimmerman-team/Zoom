@@ -5,30 +5,24 @@ import React from 'react';
 import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
 import { ToastsStore } from 'react-toasts';
-
 /* mutations */
 import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
 import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
 import FileValidationMutation from 'mediators/DataMapperMediators/mutations/FileValidation';
-
 /* consts */
 import { step1InitialData } from '__consts__/DataMapperStepConsts';
-import { uploadInitialstate } from '__consts__/UploadMediatorConst';
-
 /* actions */
 import * as actions from 'services/actions';
 import * as generalActions from 'services/actions/general';
-
 /* components */
 import UploadStep from 'modules/datamapper/fragments/UploadStep/UploadStep';
 import { SimpleErrorText } from 'components/sort/Misc';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import {
-  formatOverviewData,
+  formatManData,
   formatModelOptions,
-  formatManData
+  formatOverviewData
 } from './UploadMediator.util';
 import { formatErrorColumns } from 'mediators/DataMapperMediators/ManualMappingMediator.util';
 

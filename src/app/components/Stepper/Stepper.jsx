@@ -15,9 +15,6 @@ import {
   stepButStyle,
   ButtonLabel,
   ButtonContainer,
-  Stepz,
-  StepzLabel,
-  StepLabelClass,
   StyledStepper,
   materialStyles
 } from './Stepper.style';

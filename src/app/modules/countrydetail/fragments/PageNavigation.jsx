@@ -64,7 +64,7 @@ const PageNavigation = props => {
       duration: 1000,
       delay: 100,
       smooth: true,
-      offset: -105, // Scrolls to element + 50 pixels down the page
+      offset: -105 // Scrolls to element + 50 pixels down the page
     });
   };
 

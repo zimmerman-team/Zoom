@@ -10,7 +10,7 @@ describe('Create geo functionality', function() {
   it("Shouldn't be able to create geo when not logged in", function() {
     cy.visit('/home');
     cy.wait(1000);
-    cy.get('[data-cy="appbar-right-button"]').should('not.have.text', 'Create')
+    cy.get('[data-cy="appbar-right-button"]').should('not.have.text', 'Create');
   });
 
   it('Should display appropriate content per tab', function() {
@@ -153,8 +153,11 @@ describe('Chartbuilder table chart fragment e2e', function() {
     cy.contains('Select indicator').click();
     cy.contains('aids related deaths (unaids)').click();
     cy.waitPageLoader();
-    cy.get('#MUIDataTableBodyRow-2 > :nth-child(5)').should("contain", "2005");
-    cy.get('#MUIDataTableBodyRow-2 > :nth-child(9)').should("contain", "aids related deaths (unaids)");
+    cy.get('#MUIDataTableBodyRow-2 > :nth-child(5)').should('contain', '2005');
+    cy.get('#MUIDataTableBodyRow-2 > :nth-child(9)').should(
+      'contain',
+      'aids related deaths (unaids)'
+    );
   });
 
   it('Should make a snapshot of the visual current state', function() {
@@ -165,25 +168,27 @@ describe('Chartbuilder table chart fragment e2e', function() {
   });
 
   it('Should sort on Geolocation', function() {
-    cy.get(":nth-child(2) > .MUIDataTableHeadCell-toolButton > .MUIDataTableHeadCell-data").click();
+    cy.get(
+      ':nth-child(2) > .MUIDataTableHeadCell-toolButton > .MUIDataTableHeadCell-data'
+    ).click();
     cy.waitPageLoader();
-    cy.get('tbody>tr').should("contain", "tonga")
+    cy.get('tbody>tr').should('contain', 'tonga');
   });
 
   it('Should only display Kenya data when searching "kenya"', function() {
     cy.get('[aria-label="Search"]').click();
-    cy.get(".MuiInputBase-root > .MuiInputBase-input").type("kenya");
+    cy.get('.MuiInputBase-root > .MuiInputBase-input').type('kenya');
     cy.waitPageLoader();
-    cy.get("tbody>tr").should("contain", "kenya");
+    cy.get('tbody>tr').should('contain', 'kenya');
   });
 
   it('Should be able to delete Kenya data from table', function() {
-    cy.get("tbody>tr").within(() => {
+    cy.get('tbody>tr').within(() => {
       cy.get('input[type="checkbox"]').click();
     });
     cy.get('[aria-label="Delete Selected Rows"]').click();
     cy.waitPageLoader();
-    cy.get("tbody>tr").should("contain", "Sorry, no matching records found");
+    cy.get('tbody>tr').should('contain', 'Sorry, no matching records found');
 
     cy.get('[aria-label="Search"]').click();
     cy.get('.MUIDataTableSearch-main').within(() => {
@@ -194,7 +199,7 @@ describe('Chartbuilder table chart fragment e2e', function() {
   it('Resetting all values should leave a empty datatable', function() {
     cy.get('[data-cy="data-explorer-panel-reset"]').click();
     cy.waitPageLoader();
-    cy.get("tbody>tr").should("contain", "Sorry, no matching records found");
+    cy.get('tbody>tr').should('contain', 'Sorry, no matching records found');
   });
 
   it('Should make a snapshot of the visual current state', function() {
@@ -247,4 +252,3 @@ describe('Chartbuilder country focus Netherlands fragment e2e', function() {
     cy.percySnapshot('Chartbuilder - Netherlands focus');
   });
 });
-

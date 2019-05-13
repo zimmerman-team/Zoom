@@ -57,7 +57,10 @@ describe('Home page geo map datamapping', function() {
     cy.contains('aids related deaths').click();
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.get('[data-cy="legendLayer-label"]').should('contain', 'aids related deaths');
+    cy.get('[data-cy="legendLayer-label"]').should(
+      'contain',
+      'aids related deaths'
+    );
     cy.contains('south america');
   });
 

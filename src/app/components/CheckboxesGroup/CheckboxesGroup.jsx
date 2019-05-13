@@ -18,36 +18,36 @@ const ZimmermanFormGroup = styled(FormGroup)`
 
 const propTypes = {
   options: PropTypes.array,
-  direction: PropTypes.string,
+  direction: PropTypes.string
 };
 const defaultProps = {
   options: [
     {
       label: 'Lorem ipsum dolor',
-      value: 'option1',
+      value: 'option1'
     },
     {
       label: 'Lorem ipsum dolor',
-      value: 'option2',
+      value: 'option2'
     },
     {
       label: 'Lorem ipsum dolor',
-      value: 'option3',
+      value: 'option3'
     },
     {
       label: 'Lorem ipsum dolor',
-      value: 'option4',
+      value: 'option4'
     },
     {
       label: 'Lorem ipsum dolor',
-      value: 'option5',
+      value: 'option5'
     },
     {
       label: 'Lorem ipsum dolor',
-      value: 'option6',
-    },
+      value: 'option6'
+    }
   ],
-  direction: 'row',
+  direction: 'row'
 };
 
 class CheckboxesGroup extends React.Component {
@@ -57,7 +57,7 @@ class CheckboxesGroup extends React.Component {
     option3: false,
     option4: false,
     option5: false,
-    option6: false,
+    option6: false
   };
 
   handleChange = name => event => {

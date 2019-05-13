@@ -68,7 +68,7 @@ const GridListOption = props => {
         </React.Fragment>
       );
     default:
-      if (props.label)
+      if (props.label) {
         return (
           <Link to={props.targetUrl} visibility={props.visibility}>
             <IconButton>
@@ -77,6 +77,7 @@ const GridListOption = props => {
             </IconButton>
           </Link>
         );
+      }
       return null;
   }
 };

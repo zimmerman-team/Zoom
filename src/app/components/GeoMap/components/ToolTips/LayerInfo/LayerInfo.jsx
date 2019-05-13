@@ -21,8 +21,9 @@ const layerInfo = hoverLayerInfo => {
     else if (
       hoverLayerInfo.properties.format !== 'number' &&
       hoverLayerInfo.properties.format
-    )
+    ) {
       nrFormat = ' '.concat(hoverLayerInfo.properties.format);
+    }
 
     return (
       <ToolTipContainer

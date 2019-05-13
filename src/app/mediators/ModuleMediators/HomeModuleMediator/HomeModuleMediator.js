@@ -357,9 +357,10 @@ class HomeModuleMediator extends Component {
       } else {
         selectedSubInd = [...this.state[subIndKey]];
         const subIndicatorIndex = selectedSubInd.indexOf(item.value);
-        if (subIndicatorIndex === -1)
+        if (subIndicatorIndex === -1) {
           // so if it doesn't exist we add it
           selectedSubInd.push(item.value);
+        }
         // if it does exist we remove it
         else selectedSubInd.splice(subIndicatorIndex, 1);
       }
@@ -394,9 +395,8 @@ class HomeModuleMediator extends Component {
           // so if it doesn't exist we add it
           selectedCountryVal.push(item.value);
           selectedCountryLabel.push(item.label);
-        }
-        // if it does exist we remove it
-        else {
+        } else {
+          // if it does exist we remove it
           selectedCountryVal.splice(countryIndex, 1);
           selectedCountryLabel.splice(countryIndex, 1);
         }
@@ -433,10 +433,8 @@ class HomeModuleMediator extends Component {
         if (regionIndex === -1) {
           selectedRegionVal.push(item.value);
           selectedRegionLabels.push(item.label);
-        }
-
-        // if it does exist we remove it
-        else {
+        } else {
+          // if it does exist we remove it
           selectedRegionVal.splice(regionIndex, 1);
           selectedRegionLabels.splice(regionIndex, 1);
         }

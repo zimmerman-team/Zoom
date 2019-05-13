@@ -115,7 +115,7 @@ class ErrorStep extends React.Component {
       !isEqual(this.props.data, prevProps.data) ||
       !isEqual(this.props.ignoredErrors, prevProps.ignoredErrors) ||
       !isEqual(this.props.errorCells, prevProps.errorCells)
-    )
+    ) {
       this.setState(
         {
           data: this.props.data,
@@ -130,6 +130,7 @@ class ErrorStep extends React.Component {
         },
         this.changeColors
       );
+    }
   }
 
   componentWillUnmount() {

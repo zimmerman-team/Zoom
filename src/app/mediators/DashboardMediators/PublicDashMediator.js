@@ -37,13 +37,14 @@ class PublicDashMediator extends React.Component {
     if (
       !isEqual(this.props.publicCharts, prevProps.publicCharts) &&
       this.props.publicCharts.data
-    )
+    ) {
       this.setState(prevState => {
         return {
           charts: formatChartData(this.props.publicCharts.data),
           pageCount: this.props.publicCharts.data.count / prevState.pageSize
         };
       });
+    }
   }
 
   reloadData() {

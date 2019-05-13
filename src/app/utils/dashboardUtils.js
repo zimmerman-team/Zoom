@@ -160,8 +160,9 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
 
     let author = '';
 
-    if (chart.author)
+    if (chart.author) {
       author = `${chart.author.firstName} ${chart.author.lastName}`;
+    }
 
     return {
       id: chart._id,
@@ -194,14 +195,16 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
 export function formatDatasets(datasets, history, remove) {
   return datasets.map(dataset => {
     let shared = '';
-    if (dataset.teams.length > 0 && dataset.teams !== 'none')
+    if (dataset.teams.length > 0 && dataset.teams !== 'none') {
       shared = shared.concat(dataset.teams.join(', '));
+    }
 
-    if (dataset.public)
+    if (dataset.public) {
       shared =
         shared.length > 0
           ? shared.concat(', ').concat('Public')
           : shared.concat('Public');
+    }
 
     return {
       id: dataset.datasetId,

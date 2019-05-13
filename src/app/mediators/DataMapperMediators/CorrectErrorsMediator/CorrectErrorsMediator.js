@@ -172,8 +172,9 @@ class CorrectErrorsMediator extends React.Component {
         });
 
         let repCol = null;
-        if (command.replace_pressed && command.filter_column_heading)
+        if (command.replace_pressed && command.filter_column_heading) {
           repCol = command.filter_column_heading;
+        }
 
         const errorCells = formatErrorCells(
           results.error_data.error_messages,
@@ -414,8 +415,9 @@ class CorrectErrorsMediator extends React.Component {
       if (
         errColInd === -1 &&
         this.props.stepData.orgErrorColumns.indexOf(headerName) !== -1
-      )
+      ) {
         errorColumns.push(headerName);
+      }
 
       ignoredErrors.splice(headerInd, 1);
     }

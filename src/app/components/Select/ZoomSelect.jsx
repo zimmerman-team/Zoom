@@ -159,10 +159,11 @@ class ZoomSelect extends React.Component {
   }
 
   selectAllClick() {
-    if (this.state.allSelected)
+    if (this.state.allSelected) {
       // so if selected all was checked and now it is to be unchecked
       // we reset the selected array like this
       this.props.selectVal('reset');
+    }
     // and if vice versa we pass in all the options as the value
     // and also pass in the array variable as true
     else this.props.selectVal(this.props.data, true);
@@ -177,12 +178,13 @@ class ZoomSelect extends React.Component {
     if (this.props.arraySelected) {
       // so if an option is selected and 'selected all' is not checked
       // we check it, as it is the functionality shown in the VD
-      if (this.props.arraySelected.length > 0)
+      if (this.props.arraySelected.length > 0) {
         this.setState({ allSelected: true });
-      else if (this.props.arraySelected.length === 0)
+      } else if (this.props.arraySelected.length === 0) {
         //  and if the selected array becomes 0 and the all selected was checked
         //  we uncheck it
         this.setState({ allSelected: false });
+      }
     }
   }
 
@@ -221,12 +223,13 @@ class ZoomSelect extends React.Component {
   // europe, regional -> europe
   trimSelectedValues(selectedValues) {
     const newSelectedValues = selectedValues;
-    if (selectedValues.length > 1)
+    if (selectedValues.length > 1) {
       selectedValues.forEach((val, index) => {
         if (val.includes(',')) {
           newSelectedValues[index] = val.substring(0, val.indexOf(','));
         }
       });
+    }
 
     return newSelectedValues;
   }
@@ -258,12 +261,13 @@ class ZoomSelect extends React.Component {
   }
 
   renderDropDownItem(item, index) {
-    if (item.value === 'category')
+    if (item.value === 'category') {
       return (
         <CategoryItem key={`dropDownItem-${index}`}>
           <DropDownLabel>{item.label}</DropDownLabel>
         </CategoryItem>
       );
+    }
     const itemDisabled = this.props.disabledValues.indexOf(item.value) !== -1;
     return (
       <DropDownItem
@@ -364,10 +368,12 @@ class ZoomSelect extends React.Component {
                         option.label
                           .toLowerCase()
                           .includes(this.state.searchWord.toLowerCase()))
-                    )
+                    ) {
                       return this.renderDropDownItem(option, index);
-                    else if (this.state.searchWord.length === 0)
+                    }
+                    if (this.state.searchWord.length === 0) {
                       return this.renderDropDownItem(option, index);
+                    }
                   })}
                 </OptionsContainer>
               </div>

@@ -231,9 +231,10 @@ class FocusModuleMediator extends Component {
     const selectedSubInd1 = [...this.state.selectedSubInd1];
     const subIndicatorIndex = selectedSubInd1.indexOf(item.value);
 
-    if (subIndicatorIndex === -1)
+    if (subIndicatorIndex === -1) {
       // so if it doesn't exist we add it
       selectedSubInd1.push(item.value);
+    }
     // if it does exist we remove it
     else selectedSubInd1.splice(subIndicatorIndex, 1);
 
@@ -244,9 +245,10 @@ class FocusModuleMediator extends Component {
     const selectedSubInd2 = [...this.state.selectedSubInd2];
     const subIndicatorIndex = selectedSubInd2.indexOf(item.value);
 
-    if (subIndicatorIndex === -1)
+    if (subIndicatorIndex === -1) {
       // so if it doesn't exist we add it
       selectedSubInd2.push(item.value);
+    }
     // if it does exist we remove it
     else selectedSubInd2.splice(subIndicatorIndex, 1);
 
@@ -270,9 +272,10 @@ class FocusModuleMediator extends Component {
       } else {
         selectedCountryVal = [...this.state.selectedCountryVal];
         const countryIndex = selectedCountryVal.indexOf(item.value);
-        if (countryIndex === -1)
+        if (countryIndex === -1) {
           // so if it doesn't exist we add it
           selectedCountryVal.push(item.value);
+        }
         // if it does exist we remove it
         else selectedCountryVal.splice(countryIndex, 1);
       }
@@ -295,9 +298,10 @@ class FocusModuleMediator extends Component {
         selectedRegionVal = [...this.state.selectedRegionVal];
         const regionIndex = selectedRegionVal.indexOf(item.value);
 
-        if (regionIndex === -1)
+        if (regionIndex === -1) {
           // so if it doesn't exist we add it
           selectedRegionVal.push(item.value);
+        }
         // if it does exist we remove it
         else selectedRegionVal.splice(regionIndex, 1);
       }

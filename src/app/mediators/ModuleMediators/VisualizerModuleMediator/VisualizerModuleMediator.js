@@ -164,21 +164,21 @@ class VisualizerModuleMediator extends Component {
     this.props.dispatch(nodeActions.getPublicChartInitial());
     this.props.dispatch(nodeActions.getChartInitial());
 
-    if (this.props.match.params.code !== 'vizID')
+    if (this.props.match.params.code !== 'vizID') {
       this.setState(
         {
           loading: true
         },
         this.loadChartData
       );
-    else {
+    } else {
       // and we store the chart type so it would be accessible to the visualizer mediator
       this.props.dispatch(
         actions.storePaneDataRequest({
           chartType: this.props.match.params.chart
         })
       );
-      if (chartTypes.lineChart === this.props.match.params.chart)
+      if (chartTypes.lineChart === this.props.match.params.chart) {
         // we also store the initial values for the linecharts
         // graphstructure pane
         // so yeah yAxis should initially be numbers
@@ -196,6 +196,7 @@ class VisualizerModuleMediator extends Component {
             }
           })
         );
+      }
     }
   }
 
@@ -237,8 +238,9 @@ class VisualizerModuleMediator extends Component {
     if (
       !isEqual(this.props.chartResults, prevProps.chartResults) &&
       this.props.chartResults
-    )
+    ) {
       this.storeChartToRedux();
+    }
 
     // TODO redo this check properly
     const {
@@ -273,8 +275,9 @@ class VisualizerModuleMediator extends Component {
           specOptions[graphKeys.aggregate] !==
             prevSpecOptions[graphKeys.aggregate])) &&
       restChart.changesMade
-    )
+    ) {
       this.refetch();
+    }
   }
 
   componentWillUnmount() {
@@ -415,10 +418,11 @@ class VisualizerModuleMediator extends Component {
         everytime one indicators data is called, though the whole flow of
         data formatting/saving would need to be changed*/
 
-    if (this.props.chartData.selectedInd.length > 0)
+    if (this.props.chartData.selectedInd.length > 0) {
       this.setState({
         loading: true
       });
+    }
 
     const indicatorData = [];
 

@@ -36,8 +36,9 @@ class SimpleEditDialog extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.defaultText !== this.props.defaultText)
+    if (prevProps.defaultText !== this.props.defaultText) {
       this.setState({ text: this.props.defaultText });
+    }
   }
 
   handleSave() {

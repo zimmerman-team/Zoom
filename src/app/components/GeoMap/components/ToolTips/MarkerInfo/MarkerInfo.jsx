@@ -38,8 +38,9 @@ const markerInfo = hoverMarkerInfo => {
     let nrFormat = ' ';
 
     if (hoverMarkerInfo.format === 'percentage') nrFormat = ' %';
-    else if (hoverMarkerInfo.format !== 'number' && hoverMarkerInfo.format)
+    else if (hoverMarkerInfo.format !== 'number' && hoverMarkerInfo.format) {
       nrFormat = ' '.concat(hoverMarkerInfo.format);
+    }
 
     return (
       <ToolTipContainer

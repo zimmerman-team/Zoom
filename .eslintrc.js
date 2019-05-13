@@ -52,6 +52,9 @@ module.exports = {
     'import/newline-after-import': 'warning',
     'react/prefer-stateless-function': 'off',
     'react/destructuring-assignment': 0,
+    'react/no-unused-state': 0,
+    'react/no-access-state-in-setstate': 0,
+    'react/require-default-props': 0,
     'import/no-named-as-default': 0,
     'import/no-named-as-default-member': 0,
     'no-unused-expressions': 0,
@@ -64,6 +67,15 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     'default-case': 0,
     'import/prefer-default-export': 0,
-    'spaced-comment': 0
+    'spaced-comment': 0,
+    curly: [2, 'multi-line'],
+    'brace-style': 'error',
+    'import/order': 0,
+    'import/first': 0,
+    // todo: enable on production
+    'no-unused-vars': 0,
+    'no-use-before-define': 0,
+    'react/forbid-prop-types': 0,
+    'react/no-unused-prop-types': 0
   }
 };

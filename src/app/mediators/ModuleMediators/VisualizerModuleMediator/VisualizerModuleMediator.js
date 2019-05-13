@@ -5,25 +5,23 @@ import { fetchQuery } from 'relay-runtime';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
 import {
+  aggrKeys,
+  formatBarChartKeys,
   formatBarData,
+  formatChartLegends,
   formatCountryParam,
   formatDate,
-  formatGeoData,
-  formatBarChartKeys,
-  formatLineData,
-  removeIds,
-  formatChartLegends,
-  formatTableData,
   formatDonutData,
+  formatGeoData,
+  formatLineData,
+  formatTableData,
   getChartKeys,
-  aggrKeys
+  removeIds
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
-
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
 import paneTypes from '__consts__/PaneTypesConst';
@@ -31,8 +29,7 @@ import chartTypes from '__consts__/ChartConst';
 import initialPaneState from '__consts__/InitialPaneDataConst';
 import { colorSet } from '__consts__/PaneConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
-import { axisOptions, aggrOptions } from '__consts__/GraphStructOptionConsts';
-
+import { aggrOptions, axisOptions } from '__consts__/GraphStructOptionConsts';
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
 import * as actions from 'services/actions/general';

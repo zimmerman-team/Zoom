@@ -6,7 +6,6 @@ import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
 import theme from 'theme/Theme';
 import { split } from 'sentence-splitter';
-
 /* mock */
 import mock from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
 

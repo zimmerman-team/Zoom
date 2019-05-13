@@ -5,14 +5,11 @@ import { fetchQuery } from 'relay-runtime';
 import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePane';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
-
 /* actions */
 import * as actions from 'services/actions/general';
-
 /* helpers */
 import sortBy from 'lodash/sortBy';
 import { formatYearParam, yearStrToArray } from 'utils/genericUtils';
-
 /* consts */
 import initialState, { initIndItem } from '__consts__/InitialChartDataConst';
 import chartTypes from '__consts__/ChartConst';

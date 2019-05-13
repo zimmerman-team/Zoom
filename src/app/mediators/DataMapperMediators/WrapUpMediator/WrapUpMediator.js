@@ -1,24 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
-
 /* actions */
 import * as generalActions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
-
 /* components */
 import WrapUpStep from 'modules/datamapper/fragments/WrapUpStep/WrapUpStep';
-
 /* mutations */
 import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
 import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
 import SurveyMutation from 'mediators/DataMapperMediators/WrapUpMediator/mutations/SurveyMutation';
 import MappingMutation from 'mediators/DataMapperMediators/WrapUpMediator/mutations/MappingMutation';
-
 /* consts */
 import { uploadInitialstate } from '__consts__/UploadMediatorConst';
 import { step1InitialData } from '__consts__/DataMapperStepConsts';
-
 /* utils */
 import { formatMapJson } from 'mediators/DataMapperMediators/WrapUpMediator/WrapUpMediator.util';
 

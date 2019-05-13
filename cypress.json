@@ -4,5 +4,6 @@
   "viewportWidth": 1680,
   "viewportHeight": 954,
   "env": {},
-  "projectId": "pz1mie"
+  "projectId": "pz1mie",
+  "pageLoadTimeout": 60000
 }

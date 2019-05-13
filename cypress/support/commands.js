@@ -27,6 +27,7 @@
 import 'cypress-testing-library/add-commands';
 import '@percy/cypress';
 
+//https://github.com/cypress-io/cypress/issues/170
 Cypress.Commands.add('upload_file', (fileName, fileType = ' ', selector) => {
   cy.get(selector).then(subject => {
     cy.fixture(fileName, 'base64')
@@ -37,6 +38,8 @@ Cypress.Commands.add('upload_file', (fileName, fileType = ' ', selector) => {
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(testFile);
         el.files = dataTransfer.files;
+
+        cy.wrap(subject).trigger('change', { force: true });
       });
   });
 });

@@ -9,8 +9,20 @@ import find from 'lodash/find';
 import { DropDownCont } from 'components/Panes/DataExplorePane/DataExplorerPane.style';
 import SimpleSwitch from 'components/SimpleSwitch/SimpleSwitch';
 
+/* icons */
+import SvgIconAdd from 'assets/icons/IconAdd';
+
 /* styles */
-import { ZoomSelect, SwitchContainer } from './DropdownMenuPanel.style';
+import {
+  ZoomSelect,
+  SwitchContainer,
+  IndicatorLabel,
+  AddSection,
+  AddContainer,
+  IndLabelContainer,
+  IndicatorRemove,
+  AddLabel
+} from './DropdownMenuPanel.style';
 
 const propTypes = {
   handleAxisSwitch: PropTypes.func,
@@ -18,14 +30,20 @@ const propTypes = {
   panelDetails: PropTypes.arrayOf(
     PropTypes.shape({
       indicator: PropTypes.string,
+      addIndicator: PropTypes.func,
+      sectionRemove: PropTypes.bool,
+      sectionAdd: PropTypes.bool,
+      indicatorLabel: PropTypes.string,
       subIndicator: PropTypes.bool,
       categorise: PropTypes.bool,
+      indIndex: PropTypes.number,
       allFileSources: PropTypes.array,
       selectedSources: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
       selectDataSource: PropTypes.func,
       multiple: PropTypes.bool,
       selectAll: PropTypes.bool,
       defaultAll: PropTypes.bool,
+      removeIndicator: PropTypes.func,
       placeHolderNumber: PropTypes.number,
       reset: PropTypes.func
     })
@@ -38,7 +56,12 @@ const defaultProps = {
   panelDetails: [
     {
       indicator: '',
+      addIndicator: null,
       subIndicator: false,
+      sectionAdd: false,
+      sectionRemove: false,
+      indIndex: -1,
+      indicatorLabel: 'Indicator',
       categorise: false,
       allFileSources: [],
       selectedSources: [],
@@ -46,6 +69,7 @@ const defaultProps = {
       multiple: false,
       selectAll: false,
       defaultAll: false,
+      removeIndicator: null,
       placeHolderNumber: undefined,
       reset: undefined
     }
@@ -53,13 +77,19 @@ const defaultProps = {
 };
 
 const DropdownMenuPanel = props => {
+  // console.log('panelDetails', props.panelDetails);
+
   return (
     <React.Fragment>
       {props.panelDetails.map((detail, index) => {
         let defChecked = false;
 
-        if (detail.subIndicator && props.handleAxisSwitch) {
-          defChecked = find(props.chartKeys, ['name', detail.indicator]);
+        if (
+          detail.subIndicator &&
+          props.handleAxisSwitch &&
+          detail.indIndex !== -1
+        ) {
+          defChecked = props.chartKeys[detail.indIndex];
 
           // so right is true, left is false
           defChecked = defChecked && defChecked.orientation === 'right';
@@ -67,8 +97,24 @@ const DropdownMenuPanel = props => {
 
         return (
           // FIXME: creating a key for this listItem messes up the indicator results.
-          <DropDownCont key={index}>
+          <DropDownCont
+            key={index}
+            style={{
+              marginTop: detail.indicator === true && index !== 0 ? '30px' : ''
+            }}
+          >
+            {detail.indicatorLabel && (
+              <IndLabelContainer>
+                <IndicatorLabel>{detail.indicatorLabel}</IndicatorLabel>
+                {detail.sectionRemove && (
+                  <IndicatorRemove onClick={detail.removeIndicator}>
+                    Remove
+                  </IndicatorRemove>
+                )}
+              </IndLabelContainer>
+            )}
             <ZoomSelect
+              data-cy={`datapane-select-${index}`}
               categorise={detail.categorise}
               multiple={detail.multiple}
               selectAll={detail.selectAll}
@@ -89,10 +135,22 @@ const DropdownMenuPanel = props => {
                   option1="Left Y-axis"
                   option2="Right Y-axis"
                   onSwitch={checked =>
-                    props.handleAxisSwitch(checked, detail.indicator)
+                    props.handleAxisSwitch(
+                      checked,
+                      detail.indicator,
+                      detail.indIndex
+                    )
                   }
                 />
               </SwitchContainer>
+            )}
+            {detail.sectionAdd && (
+              <AddSection onClick={() => detail.addIndicator()}>
+                <AddContainer>
+                  <SvgIconAdd />
+                  <AddLabel> Add Indicator</AddLabel>
+                </AddContainer>
+              </AddSection>
             )}
           </DropDownCont>
         );

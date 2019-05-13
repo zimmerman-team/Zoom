@@ -76,6 +76,9 @@ router.post('/duplicateChart', ChartController.duplicateById);
 router.post('/updateChart', ChartController.update);
 
 router.post('/deleteChart', ChartController.delete);
+
+// deletes all of users archived charts
+router.delete('/emptyChartTrash', ChartController.emptyTrash);
 /* -------------- CHART CONTROLLER END ------------------------ */
 
 /* -------------- USER CONTROLLER START ----------------------- */

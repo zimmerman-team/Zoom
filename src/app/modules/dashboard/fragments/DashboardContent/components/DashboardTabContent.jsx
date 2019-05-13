@@ -41,16 +41,25 @@ const propTypes = {
   tabContentName: PropTypes.string,
   charts: PropTypes.array,
   users: PropTypes.array,
+  trashCharts: PropTypes.array,
+  removeAll: PropTypes.func,
   loading: PropTypes.bool,
-  teams: PropTypes.array
+  teams: PropTypes.array,
+  isSuperAdmin: PropTypes.bool,
+  isAdministrator: PropTypes.bool
 };
+
 const defaultProps = {
   charts: [],
   data: [],
   users: [],
+  removeAll: null,
+  trashCharts: [],
   teams: [],
   loading: false,
-  tabContentName: 'Charts'
+  tabContentName: 'Charts',
+  isSuperAdmin: false,
+  isAdministrator: false
 };
 
 const DashboardTabContent = props => {
@@ -81,17 +90,18 @@ const DashboardTabContent = props => {
     case 'users':
       targetData = props.users;
       targetUrl = '/add-user';
-      leftOptionLabel = 'add user';
+      leftOptionLabel =
+        props.isAdministrator || props.isSuperAdmin ? 'add user' : null;
       tabContentName = 'Users';
       break;
     case 'teams':
       targetData = props.teams;
       targetUrl = '/create-team';
-      leftOptionLabel = 'create team';
+      leftOptionLabel = props.isSuperAdmin ? 'create team' : null;
       tabContentName = 'Teams';
       break;
     case 'trash':
-      targetData = '';
+      targetData = props.trashCharts;
       tabContentName = 'Trash';
       sortIsVisible = false;
       isRemoveOption = true;
@@ -102,8 +112,32 @@ const DashboardTabContent = props => {
       style={props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}}
     >
       {props.loading && <ProgressIcon />}
-      {isRemoveOption && (
+      {/*{isRemoveOption && (*/}
+      {/*<GridListOptionsPane*/}
+      {/*leftOptionLabel={leftOptionLabel}*/}
+      {/*sortIsVisible={sortIsVisible}*/}
+      {/*isRemoveOption={isRemoveOption}*/}
+      {/*isSortByOpen={props.isSortByOpen}*/}
+      {/*changeSortBy={props.changeSortBy}*/}
+      {/*setWrapperRef={props.setWrapperRef}*/}
+      {/*setIsSortByOpen={props.setIsSortByOpen}*/}
+      {/*activeTab={props.activeTab}*/}
+      {/*sort={props.sort}*/}
+      {/*tabs={props.tabs}*/}
+      {/*/>*/}
+      {/*)}*/}
+
+      {(props.dataPaneOpen === paneTypes.privPane ||
+        props.dataPaneOpen === paneTypes.createChart ||
+        props.dataPaneOpen === paneTypes.convertData) && (
+        <DataPaneContainer>
+          <NavPane />
+        </DataPaneContainer>
+      )}
+
+      <Box>
         <GridListOptionsPane
+          removeAll={props.removeAll}
           leftOptionLabel={leftOptionLabel}
           sortIsVisible={sortIsVisible}
           isRemoveOption={isRemoveOption}
@@ -114,38 +148,12 @@ const DashboardTabContent = props => {
           activeTab={props.activeTab}
           sort={props.sort}
           tabs={props.tabs}
+          targetUrl={targetUrl}
         />
-      )}
-
+        {targetData.length > 0 && <GridList items={targetData} />}
+      </Box>
       {targetData.length === 0 && (
         <Message>No item in {tabContentName}</Message>
-      )}
-
-      {(props.dataPaneOpen === paneTypes.privPane ||
-        props.dataPaneOpen === paneTypes.createChart ||
-        props.dataPaneOpen === paneTypes.convertData) && (
-        <DataPaneContainer>
-          <NavPane />
-        </DataPaneContainer>
-      )}
-
-      {targetData.length > 0 && (
-        <Box>
-          <GridListOptionsPane
-            leftOptionLabel={leftOptionLabel}
-            sortIsVisible={sortIsVisible}
-            isRemoveOption={isRemoveOption}
-            isSortByOpen={props.isSortByOpen}
-            changeSortBy={props.changeSortBy}
-            setWrapperRef={props.setWrapperRef}
-            setIsSortByOpen={props.setIsSortByOpen}
-            activeTab={props.activeTab}
-            sort={props.sort}
-            tabs={props.tabs}
-            targetUrl={targetUrl}
-          />
-          <GridList items={targetData} />
-        </Box>
       )}
     </ComponentBase>
   );

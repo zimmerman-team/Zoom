@@ -30,6 +30,7 @@ import {
   formatModelOptions,
   formatManData
 } from './UploadMediator.util';
+import { formatErrorColumns } from 'mediators/DataMapperMediators/ManualMappingMediator.util';
 
 const propTypes = {
   dataSource: PropTypes.shape({
@@ -62,6 +63,7 @@ const propTypes = {
         value: PropTypes.string
       })
     ),
+    errorColumns: PropTypes.arrayOf(PropTypes.string),
     manMapData: PropTypes.arrayOf(
       PropTypes.shape({
         lockedIn: PropTypes.boolean,
@@ -229,6 +231,10 @@ class UploadMediator extends React.Component {
         response.fileValidationResults.foundList
       );
 
+      const errorColumns = formatErrorColumns(
+        response.fileValidationResults.foundList
+      );
+
       const manMapData = formatManData(
         response.fileValidationResults.foundList,
         this.state.modelOptions
@@ -237,6 +243,11 @@ class UploadMediator extends React.Component {
       const stepData = { ...this.props.stepData };
       stepData.overviewData = overviewData;
       stepData.manMapData = manMapData;
+      stepData.errorColumns = errorColumns;
+      stepData.orgErrorColumns = errorColumns;
+      stepData.errorData = {
+        ignoredErrors: []
+      };
       this.props.dispatch(generalActions.saveStepDataRequest(stepData));
     }
   }

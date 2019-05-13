@@ -86,3 +86,9 @@ yarn-error.log
 
 **/__generated__/*
 .reg
+
+# exclude everything
+server/data/*
+
+# exception to the rule
+!server/data/.gitkeep

@@ -24,14 +24,22 @@ const propTypes = {
   visible: PropTypes.bool,
   /** contains data for generation of tab nav items and providing the tab content with the proper components */
   users: PropTypes.array,
+  trashCharts: PropTypes.array,
+  removeAll: PropTypes.func,
   loading: PropTypes.bool,
-  teams: PropTypes.array
+  teams: PropTypes.array,
+  isSuperAdmin: PropTypes.bool,
+  isAdministrator: PropTypes.bool
 };
 
 const defaultProps = {
   visible: true,
   loading: false,
-  loggedIn: true
+  removeAll: null,
+  trashCharts: [],
+  loggedIn: true,
+  isSuperAdmin: false,
+  isAdministrator: false
 };
 
 /*todo: implement show/hide based on material-ui drawer component*/
@@ -40,7 +48,10 @@ const DashboardContent = props => {
   return (
     <FragmentBase>
       {/** tab navigator */}
-      <DashboardTabNavigator navItems={props.navItems} />
+      <DashboardTabNavigator
+        navItems={props.navItems}
+        trashCount={props.trashCharts.length}
+      />
       {/** tab content */}
       <DashboardTabContent
         loading={props.loading}
@@ -48,6 +59,8 @@ const DashboardContent = props => {
         charts={props.charts}
         users={props.users}
         teams={props.teams}
+        removeAll={props.removeAll}
+        trashCharts={props.trashCharts}
         isSortByOpen={props.isSortByOpen}
         changeSortBy={props.changeSortBy}
         setWrapperRef={props.setWrapperRef}
@@ -55,6 +68,8 @@ const DashboardContent = props => {
         activeTab={props.activeTab}
         sort={props.sort}
         tabs={props.tabs}
+        isAdministrator={props.isAdministrator}
+        isSuperAdmin={props.isSuperAdmin}
       />
     </FragmentBase>
   );

@@ -9,12 +9,13 @@ import SimpleSelect from 'components/Panes/DataExplorePane/panels/GraphStructure
 import SimpleSwitch from 'components/SimpleSwitch/SimpleSwitch';
 
 /* consts */
+import chartTypes from '__consts__/ChartConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
 import {
   axisOptions,
   aggrOptions,
   rankOptions
-} from './GraphStructurePanel.const';
+} from '__consts__/GraphStructOptionConsts';
 
 /**
  *
@@ -40,10 +41,12 @@ const FilterContainer = styled.div`
 
 const propTypes = {
   specOptions: PropTypes.shape({}),
+  chartType: PropTypes.string,
   saveGraphOption: PropTypes.func
 };
 const defaultProps = {
   specOptions: {},
+  chartType: chartTypes.geoMap,
   saveGraphOption: null
 };
 
@@ -90,22 +93,36 @@ class GraphStructurePanel extends React.Component {
         {/* THIRD ROW //////////////////////////////////////////////////////// */}
         <FilterContainer>
           {/* AGGREGATE BY */}
-          <SimpleSelect label="Aggregate by" options={aggrOptions} />
+          <SimpleSelect
+            label="Aggregate by"
+            options={aggrOptions}
+            selectKey={graphKeys.aggregate}
+            defValue={this.props.specOptions[graphKeys.aggregate]}
+            onChange={this.props.saveGraphOption}
+          />
           {/* RANK BY */}
-          <SimpleSelect label="Rank by" options={rankOptions} />
+          <SimpleSelect
+            disabled={this.props.chartType === chartTypes.lineChart}
+            label="Rank by"
+            options={rankOptions}
+          />
         </FilterContainer>
 
         {/* FOURTH ROW /////////////////////////////////////////////////////// */}
         <FilterContainer>
           {/* STACKED VS GROUPED */}
-          <SimpleSwitch option1="Stacked" option2="Grouped" />
+          <SimpleSwitch
+            disabled={this.props.chartType === chartTypes.lineChart}
+            option1="Stacked"
+            option2="Grouped"
+          />
         </FilterContainer>
 
         {/* FIFTH ROW //////////////////////////////////////////////////////// */}
-        <FilterContainer>
-          {/* VERTICAL VS HORIZONTAL */}
-          <SimpleSwitch option1="Vertical" option2="Horizontal" />
-        </FilterContainer>
+        {/*<FilterContainer>*/}
+        {/*/!* VERTICAL VS HORIZONTAL *!/*/}
+        {/*<SimpleSwitch option1="Vertical" option2="Horizontal" />*/}
+        {/*</FilterContainer>*/}
 
         {/* SIXTH ROW //////////////////////////////////////////////////////// */}
 

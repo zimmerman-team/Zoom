@@ -4,34 +4,29 @@ import PropTypes from 'prop-types';
 import { Box } from 'grommet/components/Box';
 import { Menu } from 'grommet-icons/icons/Menu';
 import theme from 'theme/Theme';
-import { withRouter, Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
-
 /* components */
 import {
   AidsFondLogo,
-  MenuButton,
   ComponentBase,
-  PaneButton,
+  MenuButton,
   PaneButContainer,
+  PaneButton,
+  PaneButtonText,
   PaneButtonTextVar,
-  PaneButtonVar,
-  PaneButtonText
+  PaneButtonVar
 } from 'components/AppBar/AppBar.styles';
 import { ToastsStore } from 'react-toasts';
 import { SimpleErrorText } from 'components/sort/Misc';
-
 /* icons */
 import SvgIconPlus from 'assets/icons/IconPlus';
 import SvgIconCloseSmall from 'assets/icons/IconCloseSmaller';
 import SvgIconBack from 'assets/icons/IconBack';
-
 /* actions */
 import * as actions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';

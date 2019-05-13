@@ -4,27 +4,22 @@ import PropTypes from 'prop-types';
 import MapGL, { LinearInterpolator } from 'react-map-gl';
 import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
-
 /* utils */
 import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
 import { generateLegends, generateMarkers } from './GeoMap.util';
-
 /* styles */
 import { borderStyle, dataLayer } from './components/map-style';
-
 /* components */
 import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
 import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
-import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 import MapControls from 'components/GeoMap/components/MapControls/MapControls';
-import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 
 import MAP_STYLE from 'components/GeoMap/data/map-style-basic-v8';
 import {
+  ControlsContainer,
   LegendContainer,
-  MapContainer,
-  ControlsContainer
+  MapContainer
 } from './GeoMap.style';
 import ErrorBoundaryFallback from 'components/ErrorBoundaryFallback/ErrorBoundaryFallback';
 import { ErrorBoundary } from 'react-error-boundary';

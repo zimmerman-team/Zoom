@@ -1,20 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
 import { maxYear, minYear } from '__consts__/TimeLineConst';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import { formatYearLabels } from 'utils/YearSelectUtil';
-
 /* styles */
 import {
   ComponentBase,
-  YearLabel,
   SelectedYearLabel,
-  Text
+  Text,
+  YearLabel
 } from './CustomYearSelector.style';
 
 const propTypes = {

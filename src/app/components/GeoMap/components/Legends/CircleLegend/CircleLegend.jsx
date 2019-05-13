@@ -1,16 +1,14 @@
 import React from 'react';
 /* icon */
 import CircleMarkerIcon from 'assets/icons/CircleMarkerIcon';
-
 /* styles */
 import { LegendItem } from 'components/GeoMap/components/Legends/Legend.styles';
 import {
-  CircleNumber,
-  CircleLegendLabel,
   CircleLegendItem,
-  CircleLegendNum
+  CircleLegendLabel,
+  CircleLegendNum,
+  CircleNumber
 } from 'components/GeoMap/components/Legends/CircleLegend/CircleLegend.styles';
-
 /* utils */
 import { formatNumber } from 'utils/genericUtils';
 

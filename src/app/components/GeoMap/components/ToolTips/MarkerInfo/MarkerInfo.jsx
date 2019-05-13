@@ -2,10 +2,10 @@ import React from 'react';
 import { getMeasure } from 'components/GeoMap/components/Markers/CircleMarker/CircleMarker';
 import {
   ToolTipContainer,
-  ToolTipTitle,
   ToolTipLabel,
-  ValueContainer,
-  ToolTipText
+  ToolTipText,
+  ToolTipTitle,
+  ValueContainer
 } from 'components/GeoMap/components/ToolTips/ToolTip.style';
 import { formatNumber } from 'utils/genericUtils';
 

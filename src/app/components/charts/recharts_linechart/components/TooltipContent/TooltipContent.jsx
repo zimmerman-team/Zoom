@@ -2,11 +2,11 @@
 import React from 'react';
 import {
   Container,
+  Rect,
   Row,
   Title,
-  Rect,
-  ToolTipValue,
-  ToolTipText
+  ToolTipText,
+  ToolTipValue
 } from 'components/charts/TooltipContent.styles';
 
 const TooltipContent = ({ active, payload, label, xAxisKey }) => {

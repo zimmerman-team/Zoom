@@ -3,8 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import shortid from 'shortid';
-import DashboardTabNavItem
-  from 'modules/dashboard/fragments/DashboardContent/components/components/DashboardTabNavItem';
+import DashboardTabNavItem from 'modules/dashboard/fragments/DashboardContent/components/components/DashboardTabNavItem';
 //import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
 
 const ComponentBase = styled.div`

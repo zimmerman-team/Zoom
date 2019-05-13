@@ -1,5 +1,12 @@
 import React from 'react';
-import { Container, Rect, Row, Title, ToolTipText, ToolTipValue } from 'components/charts/TooltipContent.styles';
+import {
+  Container,
+  Rect,
+  Row,
+  Title,
+  ToolTipText,
+  ToolTipValue
+} from 'components/charts/TooltipContent.styles';
 
 const TooltipContent = ({ xKey, index, color, valueLabel, value }) => (
   <Container>

@@ -6,7 +6,13 @@ import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 
 import { PageHeading } from 'components/sort/Headings';
 import theme from 'theme/Theme';
-import { DetailList, DetailListItem, ItemInfo, ItemLabel, Tooltip } from './Header.styles';
+import {
+  DetailList,
+  DetailListItem,
+  ItemInfo,
+  ItemLabel,
+  Tooltip
+} from './Header.styles';
 
 const propTypes = {
   data: PropTypes.shape({

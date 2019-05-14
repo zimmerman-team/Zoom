@@ -26,9 +26,9 @@ const TreeMapHtmlNode = ({ node, style }) => {
         left: style.x,
         width: style.width,
         height: style.height,
-        background: Theme.color.treemapNode,
-        borderWidth: 2,
-        borderColor: Theme.color.tremapNodeBorderColor
+        background: style.color,
+        borderWidth: style.borderWidth,
+        borderColor: style.borderColor
       }}
     >
       {/* {!hideText && ( */}

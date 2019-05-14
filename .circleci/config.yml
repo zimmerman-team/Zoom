@@ -110,6 +110,8 @@ jobs:
               rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_TEST":~/zoom-v2-ui
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
               rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_DEV":~/zoom-v2-ui
+            elif [ "${CIRCLE_BRANCH}" == "production" ]; then
+              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_PROD":~/zoom-v2-ui
             else
               rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_DEV":~/zoom-v2-ui
             fi
@@ -122,6 +124,8 @@ jobs:
               ssh "$SSH_USER"@"$SSH_HOST_TEST" "cd ~/zoom-v2-ui/; git pull; yarn install; echo '"$SSH_TEST_PASS"' | sudo -S service supervisor restart"
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
               ssh "$SSH_USER"@"$SSH_HOST_DEV" "cd ~/zoom-v2-ui/; git pull; yarn install; echo '"$SSH_DEV_PASS"' | sudo -S service supervisor restart"
+            elif [ "${CIRCLE_BRANCH}" == "production" ]; then
+              ssh "$SSH_USER"@"$SSH_HOST_PROD" "cd ~/zoom-v2-ui/; git pull; yarn install; echo '"$SSH_PROD_PASS"' | sudo -S service supervisor restart"
             else
               ssh "$SSH_USER"@"$SSH_HOST_DEV" "cd ~/zoom-v2-ui/; git pull; yarn install; echo '"$SSH_DEV_PASS"' | sudo -S service supervisor restart"
             fi

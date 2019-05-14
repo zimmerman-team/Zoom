@@ -11,7 +11,7 @@ import isEqual from 'lodash/isEqual';
 /* components */
 import { SimpleErrorText } from 'components/sort/Misc';
 import PropTypes from 'prop-types';
-import Snackbar from '../../../../components/AppBar/AppBar';
+import Snackbar from 'components/Snackbar/Snackbar';
 
 const propTypes = {
   auth0Client: PropTypes.shape({}),

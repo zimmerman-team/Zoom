@@ -20,11 +20,13 @@ class AddUserMediator extends React.Component {
   };
 
   componentDidMount = () => {
-    this.props.auth0Client.getUserGroups().then(userGroups => {
-      this.setState({
-        userGroups: sortBy(userGroups, ['label'])
+    this.props.auth0Client
+      .getUserGroups(null, 'this.props.user', this.props.user.data)
+      .then(userGroups => {
+        this.setState({
+          userGroups: sortBy(userGroups, ['label'])
+        });
       });
-    });
     this.props.auth0Client.getUserRoles(this);
   };
 

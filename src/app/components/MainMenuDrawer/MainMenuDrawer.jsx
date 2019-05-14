@@ -47,7 +47,7 @@ class MainMenuDrawer extends React.Component {
               >
                 <SidebarNavListItem
                   type={item.type}
-                  loggedIn={this.props.auth0Client.isAuthenticated()}
+                  loggedIn={this.props.user.data !== null}
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>
                   <ZoomListItemText primary={item.label} />
@@ -83,7 +83,10 @@ class MainMenuDrawer extends React.Component {
           </div>
 
           <LoginBox>
-            <LoginForm auth0Client={this.props.auth0Client} />
+            <LoginForm
+              user={this.props.user}
+              auth0Client={this.props.auth0Client}
+            />
           </LoginBox>
         </Drawer>
       </React.Fragment>

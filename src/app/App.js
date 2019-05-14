@@ -111,8 +111,8 @@ class App extends React.Component {
     if (!isEqual(this.props.user, prevProps.user)) {
       if (this.props.user.data) {
         // so we update the user
-        auth0Client.getUserRole().then(role => {
-          auth0Client.getUserGroup().then(groups => {
+        auth0Client.getUserRole(this.props.user.data).then(role => {
+          auth0Client.getUserGroup(null, this.props.user.data).then(groups => {
             const profile = auth0Client.getProfile();
             this.props.dispatch(
               nodeActions.updateUserRequest({
@@ -141,32 +141,33 @@ class App extends React.Component {
 
         // but first we get them user roles and groups, cause they need to be retrieved
         // in a very weird way
-        auth0Client.getUserRole().then(role => {
-          auth0Client.getUserGroup().then(groups => {
-            const profile = auth0Client.getProfile();
-
-            // and we finally make the call to add the user
-            this.props.dispatch(
-              nodeActions.addUserRequest({
-                username: profile.nickname,
-                email: profile.email,
-                authId: profile.sub,
-                role,
-                avatar: profile.picture,
-                firstName: get(
-                  profile['https://auth.nyuki.io_user_metadata'],
-                  'firstName',
-                  ''
-                ),
-                lastName: get(
-                  profile['https://auth.nyuki.io_user_metadata'],
-                  'lastName',
-                  ''
-                ),
-                teams: groups.map(g => g.name)
-              })
-            );
-          });
+        const profile = auth0Client.getProfile();
+        auth0Client.getUserRole({ authId: profile.sub }).then(role => {
+          auth0Client
+            .getUserGroup(null, { authId: profile.sub })
+            .then(groups => {
+              // and we finally make the call to add the user
+              this.props.dispatch(
+                nodeActions.addUserRequest({
+                  username: profile.nickname,
+                  email: profile.email,
+                  authId: profile.sub,
+                  role,
+                  avatar: profile.picture,
+                  firstName: get(
+                    profile['https://auth.nyuki.io_user_metadata'],
+                    'firstName',
+                    ''
+                  ),
+                  lastName: get(
+                    profile['https://auth.nyuki.io_user_metadata'],
+                    'lastName',
+                    ''
+                  ),
+                  teams: groups.map(g => g.name)
+                })
+              );
+            });
         });
       }
     }
@@ -216,6 +217,7 @@ class App extends React.Component {
                         />
                         <MainMenuDrawer
                           auth0Client={auth0Client}
+                          user={this.props.user}
                           open={this.state.showSidebar}
                           toggleSideBar={() =>
                             this.setState({

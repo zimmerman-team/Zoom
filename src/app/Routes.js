@@ -317,6 +317,7 @@ const Routes = props => {
           />
 
           <Route
+            exact
             path="/iati-activity/:id"
             render={() => <IatiDetailMediator />}
           />

@@ -14,7 +14,6 @@ import {
   Heading,
   Value
 } from 'components/Lists/ProjectList/ProjectList.styles';
-import CountryDetailModule from '../../../modules/countrydetail/CountryDetailModule';
 
 const propTypes = {
   projectData: PropTypes.arrayOf(

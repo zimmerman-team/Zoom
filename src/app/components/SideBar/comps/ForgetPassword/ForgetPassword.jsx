@@ -3,15 +3,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import { connect } from 'react-redux';
-
 /* actions */
 import * as syncActions from 'services/actions/sync';
-
 /* components */
 import {
   ForgotPassLink,
-  TextField,
-  FormButton
+  FormButton,
+  TextField
 } from '../LoginForm/LoginForm.styles';
 
 const propTypes = {

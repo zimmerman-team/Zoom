@@ -108,10 +108,11 @@ export function formatCountryCenterData(indicators, indName) {
           format: indicator.valueFormatType,
           name: indicator.geolocationTag
         });
-      } else
+      } else {
         countryCenteredData[existCountryIndex].value =
           countryCenteredData[existCountryIndex].value +
           Math.round(indicator.value);
+      }
     }
   });
 
@@ -145,11 +146,13 @@ export function formatCountryParam(countryCodes, regionCountryCodes) {
   jointCountries = jointCountries.concat(countryCodes);
 
   regionCountryCodes.forEach(region => {
-    if (region !== 'select all')
+    if (region !== 'select all') {
       region.forEach(countryCode => {
-        if (jointCountries.indexOf(countryCode.iso2) === -1)
+        if (jointCountries.indexOf(countryCode.iso2) === -1) {
           jointCountries.push(countryCode.iso2);
+        }
       });
+    }
   });
 
   return jointCountries;

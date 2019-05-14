@@ -2,10 +2,10 @@ import React from 'react';
 import { getMeasure } from 'components/GeoMap/components/Markers/CircleMarker/CircleMarker';
 import {
   ToolTipContainer,
-  ToolTipTitle,
   ToolTipLabel,
-  ValueContainer,
-  ToolTipText
+  ToolTipText,
+  ToolTipTitle,
+  ValueContainer
 } from 'components/GeoMap/components/ToolTips/ToolTip.style';
 import { formatNumber } from 'utils/genericUtils';
 
@@ -38,8 +38,9 @@ const markerInfo = hoverMarkerInfo => {
     let nrFormat = ' ';
 
     if (hoverMarkerInfo.format === 'percentage') nrFormat = ' %';
-    else if (hoverMarkerInfo.format !== 'number' && hoverMarkerInfo.format)
+    else if (hoverMarkerInfo.format !== 'number' && hoverMarkerInfo.format) {
       nrFormat = ' '.concat(hoverMarkerInfo.format);
+    }
 
     return (
       <ToolTipContainer

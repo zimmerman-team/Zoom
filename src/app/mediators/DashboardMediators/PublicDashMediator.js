@@ -1,11 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PublicChartLibraryModule from 'modules/PublicChartLibrary/PublicChartLibraryModule';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import { formatChartData } from 'utils/dashboardUtils';
-
 /* actions */
 import * as actions from 'services/actions/nodeBackend';
 
@@ -39,13 +37,14 @@ class PublicDashMediator extends React.Component {
     if (
       !isEqual(this.props.publicCharts, prevProps.publicCharts) &&
       this.props.publicCharts.data
-    )
+    ) {
       this.setState(prevState => {
         return {
           charts: formatChartData(this.props.publicCharts.data),
           pageCount: this.props.publicCharts.data.count / prevState.pageSize
         };
       });
+    }
   }
 
   reloadData() {

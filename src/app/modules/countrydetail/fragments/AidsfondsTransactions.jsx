@@ -2,17 +2,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
 /* components */
 import Theme from 'theme/Theme';
 import { FragmentVisualisation } from 'components/sort/Fragments';
 import { Element } from 'react-scroll/modules';
 import PieChart from 'components/charts/piechart/PieChart';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-
 /* mock */
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
-
 /* utils */
 import get from 'lodash/get';
 

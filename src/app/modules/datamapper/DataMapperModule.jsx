@@ -1,31 +1,26 @@
 /* base */
 import React from 'react';
 import { connect } from 'react-redux';
-
 /* actions */
 import * as actions from 'services/actions/general';
-
 /* components */
 import Stepper from 'components/Stepper/Stepper';
+import Snackbar from 'components/Snackbar/Snackbar';
 
 /* utils */
 import {
-  checkEmptyFields,
-  addInEmptyFieldRows
+  addInEmptyFieldRows,
+  checkEmptyFields
 } from 'modules/datamapper/DataMapperModule.util';
 import find from 'lodash/find';
-import { ToastsStore } from 'react-toasts';
 import { Helmet } from 'react-helmet';
-
 /* styles */
 import {
   ModuleContainer,
-  ModuleHeader,
+  ModuleContent,
   ModuleFooter,
-  ModuleContent
+  ModuleHeader
 } from './DataMapperModule.styles';
-import { SimpleErrorText } from 'components/sort/Misc';
-
 /* fragments */
 import ManMappingStep from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep';
 import MetaDataMediator from 'mediators/DataMapperMediators/MetaDataMediator/MetaDataMediator';
@@ -53,7 +48,10 @@ class DataMapperModule extends React.Component {
       mapStepDisabled: false,
 
       metaDataEmptyFields: [],
-      stepsDisabled: false
+      stepsDisabled: false,
+
+      openSnackbar: false,
+      errorMessage: ''
     };
 
     this.nextStep = this.nextStep.bind(this);
@@ -82,13 +80,14 @@ class DataMapperModule extends React.Component {
       );
     }
 
-    if (this.state.step === 2)
+    if (this.state.step === 2) {
       return (
         !this.props.stepData.manMapData ||
         this.props.stepData.manMapData.length === 0
       );
+    }
 
-    if (this.state.step === 4)
+    if (this.state.step === 4) {
       // So here we check if the fourth steps data has been saved
       // and if it contains anything because what we actually save here
       // are the error that we retrieve for this step
@@ -97,6 +96,7 @@ class DataMapperModule extends React.Component {
       return (
         !this.state.stepsDisabled && this.props.stepData.errorColumns.length > 0
       );
+    }
 
     return false;
   }
@@ -115,24 +115,27 @@ class DataMapperModule extends React.Component {
         const metaDataEmptyFields = [];
 
         // we check if the title is empty
-        if (!stepData.metaData.title || stepData.metaData.title.length === 0)
+        if (!stepData.metaData.title || stepData.metaData.title.length === 0) {
           metaDataEmptyFields.push('title');
+        }
 
         // we check if the description is empty
-        if (!stepData.metaData.desc || stepData.metaData.desc.length === 0)
+        if (!stepData.metaData.desc || stepData.metaData.desc.length === 0) {
           metaDataEmptyFields.push('desc');
+        }
 
         // we check if the datasource is empty
         if (
           !stepData.metaData.dataSource.value ||
           stepData.metaData.dataSource.value.length === 0
-        )
+        ) {
           metaDataEmptyFields.push('dataSource');
+        }
 
         if (metaDataEmptyFields.length > 0) {
-          ToastsStore.error(
-            <SimpleErrorText> Please fill the required fields </SimpleErrorText>
-          );
+          this.setState({ openSnackbar: true });
+          this.setState({ errorMessage: 'Please fill the required fields' });
+
           props.dispatch(actions.saveStepDataRequest(stepData));
           return { metaDataEmptyFields };
         } else {
@@ -140,13 +143,11 @@ class DataMapperModule extends React.Component {
         }
       } else if (prevState.step === 2) {
         if (!stepData.uploadData) {
-          ToastsStore.error(
-            <SimpleErrorText> Please upload a file </SimpleErrorText>
-          );
+          this.setState({ openSnackbar: true });
+          this.setState({ errorMessage: 'Please upload a file' });
         } else if (!stepData.manMapData || stepData.manMapData.length === 0) {
-          ToastsStore.error(
-            <SimpleErrorText> File Uploading please wait... </SimpleErrorText>
-          );
+          this.setState({ openSnackbar: true });
+          this.setState({ errorMessage: 'File uploading please wait...' });
         } else {
           return { step: prevState.step + 1 };
         }
@@ -157,11 +158,10 @@ class DataMapperModule extends React.Component {
         // and the user should be able to progress only if they've fixed
         // all the found errors
         if (!prevState.stepsDisabled && stepData.errorColumns.length > 0) {
-          ToastsStore.error(
-            <SimpleErrorText>
-              Please correct errors before proceeding
-            </SimpleErrorText>
-          );
+          this.setState({ openSnackbar: true });
+          this.setState({
+            errorMessage: 'Please correct errors before proceeding'
+          });
         } else {
           return { step: prevState.step + 1 };
         }
@@ -181,8 +181,9 @@ class DataMapperModule extends React.Component {
         if (
           find(manMapData, ['zoomModel', 'Mixed Value']) &&
           !find(manMapData, ['zoomModel', 'value_format'])
-        )
+        ) {
           manMapEmptyFormat = true;
+        }
 
         if (
           emptyFields.length > 0 ||
@@ -209,15 +210,16 @@ class DataMapperModule extends React.Component {
             manMapEmptyFields,
             manMapEmptyFormat
           };
-        } else if (manMapEmptyFormat) {
+        }
+        if (manMapEmptyFormat) {
           return { manMapEmptyFormat };
-        } else
-          return {
-            step: prevState.step + 1,
-            manMapEmptyFormat,
-            manMapEmptyFields: false,
-            manMapEmptyValue: false
-          };
+        }
+        return {
+          step: prevState.step + 1,
+          manMapEmptyFormat,
+          manMapEmptyFields: false,
+          manMapEmptyValue: false
+        };
       } else return { step: prevState.step + 1 };
     });
   }
@@ -298,6 +300,11 @@ class DataMapperModule extends React.Component {
         <Helmet>
           <title>Zoom - Convert Data</title>
         </Helmet>
+        <Snackbar
+          message={this.state.errorMessage}
+          open={this.state.openSnackbar}
+          onClose={() => this.setState({ openSnackbar: false })}
+        />
         <ModuleHeader>
           <Stepper
             step={this.state.step}

@@ -1,16 +1,14 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* styles */
 import {
-  ModuleContainer,
   ErrorContainer,
+  ErrorItem,
   ErrorTitle,
-  ErrorItem
+  ModuleContainer
 } from './WrapUpStep.styles';
 import { SectionHeading } from 'components/sort/Headings';
-
 /* components */
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 

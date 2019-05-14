@@ -2,8 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Route, BrowserRouter as Router } from 'react-router-dom';
-
 // import { FragmentBase } from './DashboardTabContent.style';
 import DashboardTabNavigator from 'modules/dashboard/fragments/DashboardContent/components/DashboardTabNavigator';
 import DashboardTabContent from 'modules/dashboard/fragments/DashboardContent/components/DashboardTabContent';

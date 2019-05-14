@@ -2,13 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 // import { Provider } from 'react-redux';
 import JssProvider from 'react-jss/lib/JssProvider';
-import { createGenerateClassName } from '@material-ui/core/styles';
 import { BrowserRouter as Router, withRouter } from 'react-router-dom';
 import { graphql, QueryRenderer } from 'react-relay';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import auth0Client from 'auth/Auth';
 import Analytics from 'react-router-ga';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import {
+  createGenerateClassName,
+  MuiThemeProvider,
+  createMuiTheme
+} from '@material-ui/core/styles';
 import Cookies from 'universal-cookie';
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
@@ -42,12 +45,6 @@ const theme = createMuiTheme({
     }
   }
 });
-
-import {
-  ToastsContainer,
-  ToastsStore,
-  ToastsContainerPosition
-} from 'react-toasts';
 
 import MainMenuDrawer from 'components/MainMenuDrawer/MainMenuDrawer';
 import CookieNotice from 'components/CookieNotice/CookieNotice';
@@ -198,12 +195,6 @@ class App extends React.Component {
                     <Router>
                       <React.Fragment>
                         <CookieNotice />
-
-                        {/* todo: replace toasts with material-ui snackbar https://material-ui.com/demos/snackbars/ */}
-                        <ToastsContainer
-                          store={ToastsStore}
-                          position={ToastsContainerPosition.TOP_CENTER}
-                        />
                         <AppBar
                           toggleSideBar={() =>
                             this.setState({

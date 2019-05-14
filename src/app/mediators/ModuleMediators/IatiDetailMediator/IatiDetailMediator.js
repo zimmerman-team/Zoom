@@ -4,14 +4,11 @@ import { withRouter } from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
 import IatiDetailModule from 'modules/IATI_Detail/IatiDetail';
 import PropTypes from 'prop-types';
-
 /* helpers */
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
-
 /* actions */
 import * as oipaActions from 'services/actions/oipa';
-
 /* mock */
 import mock from 'mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator.mock';
 import formatActivityData from 'mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator.utils';

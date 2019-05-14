@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  EmptyInput,
+  CheckBoxStyle,
   ComponentBase,
-  CheckBoxStyle
+  EmptyInput
 } from 'components/CustomCheckBox/CustomCheckBox.styles';
 
 /*TODO: rename this component to something better*/

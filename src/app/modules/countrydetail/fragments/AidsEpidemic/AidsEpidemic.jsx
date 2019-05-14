@@ -6,7 +6,6 @@ import { countryDetailMockData } from '__mocks__/countryDetailMock';
 import LineChart2 from 'components/charts/recharts_linechart/LineChart';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';
-
 /* styles */
 import { ChartContainer } from 'modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic.style';
 

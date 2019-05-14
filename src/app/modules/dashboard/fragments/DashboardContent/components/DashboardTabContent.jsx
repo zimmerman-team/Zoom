@@ -4,10 +4,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 import { connect } from 'react-redux';
-
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
-
 /* components */
 import GridList from 'modules/dashboard/fragments/GridList/GridList';
 import GridListOptionsPane from 'modules/dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';

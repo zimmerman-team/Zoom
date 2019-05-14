@@ -1,24 +1,21 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* components */
 import { Box } from 'grommet/components/Box';
 import StepConnector from '@material-ui/core/StepConnector';
 import withStyles from '@material-ui/styles/withStyles';
 import ZoomButton from 'components/ZoomButton/ZoomButton';
-
 /* styles */
 import theme from 'theme/Theme';
 import {
-  ComponentBase,
-  stepButStyle,
-  ButtonLabel,
   ButtonContainer,
-  StyledStepper,
-  materialStyles
+  ButtonLabel,
+  ComponentBase,
+  materialStyles,
+  stepButStyle,
+  StyledStepper
 } from './Stepper.style';
-
 /* consts */
 import { steps } from './Stepper.const';
 import StepLabel from '@material-ui/core/StepLabel';

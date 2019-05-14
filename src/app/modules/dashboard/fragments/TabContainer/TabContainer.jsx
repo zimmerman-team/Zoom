@@ -1,12 +1,11 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* components */
 import Theme from 'theme/Theme';
 import {
-  Container,
   CenterTabs,
+  Container,
   Tab,
   TabBadge,
   TabText

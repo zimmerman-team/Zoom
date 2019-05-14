@@ -1,13 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { AppBar } from 'components/AppBar/AppBar';
-
 /* components */
 import { Box } from 'grommet/components/Box';
 import {
   AidsFondLogo,
-  MenuButton,
   ComponentBase,
+  MenuButton,
   PaneButton,
   PaneButtonText
 } from 'components/AppBar/AppBar.styles';

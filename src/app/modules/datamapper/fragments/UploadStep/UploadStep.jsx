@@ -1,21 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* styles */
 import {
-  ModuleContainer,
-  UploadContainer,
-  IconContainer,
-  TextContainer,
   BrowseLink,
   EmptyInput,
+  IconContainer,
+  ModuleContainer,
+  TextContainer,
+  UploadContainer,
   UploadedContainer
 } from 'modules/datamapper/fragments/UploadStep/UploadStep.styles';
 import theme from 'theme/Theme';
-
 /* icons */
 import IconUpload from 'assets/icons/IconUpload';
-
 /* component */
 import { SectionHeading } from 'components/sort/Headings';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';

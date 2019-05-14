@@ -1,6 +1,5 @@
 /* base */
 import React from 'react';
-
 /* components */
 import TableChart from 'components/charts/tablechart/TableChart';
 import { FragmentBase } from 'modules/visualizer/sort/container/VizContainer.style';

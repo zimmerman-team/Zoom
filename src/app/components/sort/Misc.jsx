@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Checkmark } from 'grommet-icons/icons/Checkmark';
 import { Close } from 'grommet-icons/icons/Close';
 import { Text } from 'grommet/components/Text';
+
 export const fragmentContentWidth = '1024px';
 
 /* Buttons */

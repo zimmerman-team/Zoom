@@ -1,9 +1,7 @@
 /* base */
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import theme from 'theme/Theme';
-
 /* components */
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpansionPanelContent from 'components/Panes/DataExplorePane/sort/ExpansionPanelContent';

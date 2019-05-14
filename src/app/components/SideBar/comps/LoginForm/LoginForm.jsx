@@ -2,29 +2,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
 /* actions */
 import * as syncActions from 'services/actions/sync';
-
 /* components */
 import theme from 'theme/Theme';
 import IconSignIn from 'assets/icons/IconSignIn';
 import {
   ComponentBase,
-  LoginHeader,
-  TextField,
+  ErrorMessage,
+  ErrorText,
   FormButton,
-  LoginHeaderLabel,
   InfoText,
   Link,
-  ErrorMessage,
-  ErrorText
+  LoginHeader,
+  LoginHeaderLabel,
+  TextField
 } from 'components/SideBar/comps/LoginForm/LoginForm.styles';
 import ForgetPassword from 'components/SideBar/comps/ForgetPassword/ForgetPassword';
-
 /* utils */
 import get from 'lodash/get';
-import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 
 const propTypes = {

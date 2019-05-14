@@ -4,21 +4,17 @@ import { withRouter } from 'react-router';
 import { createRefetchContainer, graphql } from 'react-relay';
 import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
-
 /* mutations */
 import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
 import SurveyMutation from 'mediators/DataMapperMediators/WrapUpMediator/mutations/SurveyMutation';
 import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import find from 'lodash/find';
 import { fetchQuery } from 'relay-runtime';
-
 /* actions */
 import * as actions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
-
 /* consts */
 import { numberOptions } from 'modules/datamapper/fragments/MetaData/MetaData.consts';
 import { step1InitialData } from '__consts__/DataMapperStepConsts';
@@ -152,8 +148,9 @@ class DatasetMediator extends React.Component {
             const q51 = [];
 
             actualSurveyData.dataCleaningTechniques.split(',').forEach(item => {
-              if (item.indexOf('None') === -1)
+              if (item.indexOf('None') === -1) {
                 q51.push({ label: item.trim(), value: item.trim() });
+              }
             });
 
             const surveyStepData = {
@@ -220,13 +217,17 @@ class DatasetMediator extends React.Component {
       !this.state.loadComponent &&
       !isEqual(this.props.stepData, prevProps.stepData) &&
       this.props.stepData.metaData.title.length > 0
-    )
+    ) {
       this.setState({ loadComponent: true });
+    }
 
     // and after the dataset gets updated
     // we redirect the user to the dashboard of datasets
-    if (!isEqual(this.props.datasetUpdated.data, prevProps.datasetUpdated.data))
+    if (
+      !isEqual(this.props.datasetUpdated.data, prevProps.datasetUpdated.data)
+    ) {
       this.props.history.push('/dashboard/data-sets');
+    }
   }
 
   componentWillUnmount() {
@@ -253,18 +254,19 @@ class DatasetMediator extends React.Component {
   }
 
   saveDataset() {
-    if (this.props.stepMetaData.surveyData === 'Yes')
+    if (this.props.stepMetaData.surveyData === 'Yes') {
       // we add the survey data
       this.updateSurveyData();
-    else if (this.props.stepMetaData.dataSource.key === 'other')
+    } else if (this.props.stepMetaData.dataSource.key === 'other') {
       this.updateDataSource(this.props.stepMetaData.dataSource.value);
+    }
     // otherwise we just add the existing source id
     // and then add the metadata
     else this.updateMetaData();
   }
 
   handleSourceCompleted(response) {
-    if (response)
+    if (response) {
       this.setState(
         {
           sourceId: response.fileSource.entryId,
@@ -272,6 +274,7 @@ class DatasetMediator extends React.Component {
         },
         this.updateMetaData
       );
+    }
   }
 
   handleSourceError(error) {
@@ -289,19 +292,20 @@ class DatasetMediator extends React.Component {
 
   handleSurveyCompleted(response, error) {
     if (error) console.log('error adding survey data:', error);
-    else if (response)
+    else if (response) {
       this.setState(
         {
           surveyId: response.surveyData.id
         },
         this.afterSurvey
       );
+    }
   }
 
   afterSurvey() {
-    if (this.props.stepMetaData.dataSource.key === 'other')
+    if (this.props.stepMetaData.dataSource.key === 'other') {
       this.updateDataSource(this.props.stepMetaData.dataSource.value);
-    else this.updateMetaData();
+    } else this.updateMetaData();
   }
 
   handleSurveyError(error) {

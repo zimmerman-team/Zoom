@@ -327,7 +327,7 @@ const mapStateToProps = state => {
   return {
     userUpdated: state.userUpdated,
     userAdded: state.userAdded,
-    user: state.userPersist
+    user: state.user
   };
 };
 

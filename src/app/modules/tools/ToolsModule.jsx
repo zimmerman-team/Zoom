@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Box } from 'grommet/components/Box';
 import { Tabs } from 'grommet/components/Tabs';
 import { Tab } from 'grommet/components/Tab';
-
 // import RichtTabTitle from './comps/RichtTabTitle';
 import { CircleInformation } from 'grommet-icons/icons/CircleInformation';
 import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePane';

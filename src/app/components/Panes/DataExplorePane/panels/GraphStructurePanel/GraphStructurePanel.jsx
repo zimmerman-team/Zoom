@@ -2,18 +2,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-
 /* components */
 import ColorSelect from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/ColorSelect/ColorSelect';
 import SimpleSelect from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/SimpleSelect/SimpleSelect';
 import SimpleSwitch from 'components/SimpleSwitch/SimpleSwitch';
-
 /* consts */
 import chartTypes from '__consts__/ChartConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
 import {
-  axisOptions,
   aggrOptions,
+  axisOptions,
   rankOptions
 } from '__consts__/GraphStructOptionConsts';
 

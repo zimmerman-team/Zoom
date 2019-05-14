@@ -4,30 +4,25 @@ import PropTypes from 'prop-types';
 import MapGL, { LinearInterpolator } from 'react-map-gl';
 import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
-
 /* utils */
 import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
+import MapControls from 'components/GeoMap/components/MapControls/MapControls';
+import MAP_STYLE from 'components/GeoMap/data/map-style-basic-v8';
+import ErrorBoundaryFallback from 'components/ErrorBoundaryFallback/ErrorBoundaryFallback';
+import { ErrorBoundary } from 'react-error-boundary';
 import { generateLegends, generateMarkers } from './GeoMap.util';
-
 /* styles */
 import { borderStyle, dataLayer } from './components/map-style';
-
 /* components */
 import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
 import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
-import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
-import MapControls from 'components/GeoMap/components/MapControls/MapControls';
-import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 
-import MAP_STYLE from 'components/GeoMap/data/map-style-basic-v8';
 import {
+  ControlsContainer,
   LegendContainer,
-  MapContainer,
-  ControlsContainer
+  MapContainer
 } from './GeoMap.style';
-import ErrorBoundaryFallback from 'components/ErrorBoundaryFallback/ErrorBoundaryFallback';
-import { ErrorBoundary } from 'react-error-boundary';
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
@@ -193,8 +188,9 @@ export class GeoMap extends Component {
   _updateViewport = viewport => {
     this.setState({ viewport });
 
-    if (this.props.chartMounted && this.props.saveViewport)
+    if (this.props.chartMounted && this.props.saveViewport) {
       this.props.saveViewport(viewport);
+    }
   };
 
   _setLayerInfo = event => {
@@ -229,8 +225,9 @@ export class GeoMap extends Component {
     const { features } = event;
 
     const feature = features && features.find(f => f.layer.id === 'layer');
-    if (feature && feature.properties.geolocationType === 'country')
+    if (feature && feature.properties.geolocationType === 'country') {
       this.props.outerHistory.push(`/country/${feature.properties.iso2}`);
+    }
   };
 
   _handleMapLoaded = event => {
@@ -251,7 +248,7 @@ export class GeoMap extends Component {
   }
 
   handleZoomOut() {
-    if (this.state.viewport.zoom >= this.state.settings.minZoom)
+    if (this.state.viewport.zoom >= this.state.settings.minZoom) {
       this._updateViewport({
         ...this.state.viewport,
         zoom:
@@ -259,6 +256,7 @@ export class GeoMap extends Component {
             ? this.state.viewport.zoom - 0.1
             : this.state.settings.minZoom
       });
+    }
   }
 
   handleFullscreen() {
@@ -315,7 +313,7 @@ export class GeoMap extends Component {
           <MapGL
             {...viewport}
             {...settings}
-            scrollZoom={true}
+            scrollZoom
             width="100%"
             height="100%"
             mapStyle={mapStyle}

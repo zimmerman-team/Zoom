@@ -3,14 +3,11 @@ import React from 'react';
 import filter from 'lodash/filter';
 import { withRouter } from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
-
 /* actions */
 import { updateTeamAndUsersOfItRequest } from 'services/actions/nodeBackend';
-
 /* components */
 import CreateTeamModule from 'modules/UserManagement/CreateTeam/CreateTeamModule';
 import { formatUsersData } from 'mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator.utils';
-
 /* utils */
 import find from 'lodash/find';
 import some from 'lodash/some';

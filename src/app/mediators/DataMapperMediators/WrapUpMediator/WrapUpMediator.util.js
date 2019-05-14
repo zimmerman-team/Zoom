@@ -49,9 +49,10 @@ export function formatMapJson(mappingJson, mapData, fileId) {
         mapJson.extra_information.empty_entries[
           `empty_${item.zoomModel}`
         ].type = 'country';
-      } else
+      } else {
         mapJson.extra_information.empty_entries[`empty_${item.zoomModel}`] =
           item.label;
+      }
     } else if (item.zoomModel === 'Longitude') {
       // we check if there's longitude or
       // latitude selected and we save, we need to check for this
@@ -66,13 +67,14 @@ export function formatMapJson(mappingJson, mapData, fileId) {
       // as they need to be processed seperatly as there
       // might be two values and the zoomModel selections
       // for these values are not actual zoomModel types
-      if (item.zoomModel.toLowerCase().indexOf('value') === -1)
+      if (item.zoomModel.toLowerCase().indexOf('value') === -1) {
         // and here we do the simple mapping
         // and we will be pushing an array
         // of selections into these mapping dicts
         // for there can be several columns
         // with the same zoomModel
         mapJson.mapping_dict[item.zoomModel].push(item.fileType);
+      }
     }
   });
 
@@ -88,8 +90,9 @@ export function formatMapJson(mappingJson, mapData, fileId) {
 
       const valueFormat = find(mapData, ['zoomModel', 'value_format']);
 
-      if (valueFormat)
+      if (valueFormat) {
         mapJson.mapping_dict.value_format.push(valueFormat.fileType);
+      }
     } else {
       // so ye here we push in the selected values column
       mapJson.mapping_dict.value.push(item.fileType);

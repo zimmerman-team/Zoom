@@ -24,7 +24,7 @@ import {
   PaneButtonVar,
   PaneButtonText
 } from 'components/AppBar/AppBar.styles';
-
+import Snackbar from 'components/Snackbar/Snackbar';
 /* icons */
 import SvgIconPlus from 'assets/icons/IconPlus';
 import SvgIconCloseSmall from 'assets/icons/IconCloseSmaller';
@@ -33,7 +33,6 @@ import SvgIconBack from 'assets/icons/IconBack';
 /* actions */
 import * as actions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
-import Snackbar from '../../modules/datamapper/DataMapperModule';
 
 const propTypes = {
   toggleSideBar: PropTypes.func

@@ -39,12 +39,6 @@ const theme = createMuiTheme({
   }
 });
 
-import {
-  ToastsContainer,
-  ToastsStore,
-  ToastsContainerPosition
-} from 'react-toasts';
-
 import MainMenuDrawer from 'components/MainMenuDrawer/MainMenuDrawer';
 import CookieNotice from 'components/CookieNotice/CookieNotice';
 
@@ -194,12 +188,6 @@ class App extends React.Component {
                     <Router>
                       <React.Fragment>
                         <CookieNotice />
-
-                        {/* todo: replace toasts with material-ui snackbar https://material-ui.com/demos/snackbars/ */}
-                        <ToastsContainer
-                          store={ToastsStore}
-                          position={ToastsContainerPosition.TOP_CENTER}
-                        />
                         <AppBar
                           toggleSideBar={() =>
                             this.setState({

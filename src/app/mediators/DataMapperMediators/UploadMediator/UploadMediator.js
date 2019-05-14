@@ -30,7 +30,7 @@ import {
   formatManData
 } from './UploadMediator.util';
 import { formatErrorColumns } from 'mediators/DataMapperMediators/ManualMappingMediator.util';
-import Snackbar from '../../../components/AppBar/AppBar';
+import Snackbar from '../../../components/Snackbar/Snackbar';
 
 const propTypes = {
   dataSource: PropTypes.shape({
@@ -96,8 +96,9 @@ class UploadMediator extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state =  props.stepData.uploadData ? props.stepData.uploadData : step1InitialData.uploadData;
-
+    this.state = props.stepData.uploadData
+      ? props.stepData.uploadData
+      : step1InitialData.uploadData;
 
     this.handleFileUpload = this.handleFileUpload.bind(this);
     this.handleSourceCompleted = this.handleSourceCompleted.bind(this);
@@ -110,6 +111,13 @@ class UploadMediator extends React.Component {
     this.handleValidationError = this.handleValidationError.bind(this);
     this.fileValidation = this.fileValidation.bind(this);
     this.afterFileInput = this.afterFileInput.bind(this);
+  }
+
+  componentWillMount() {
+    this.setState({
+      openSnackbar: false,
+      errorMessage: ''
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -317,23 +325,25 @@ class UploadMediator extends React.Component {
   }
 
   render() {
+    console.log('joe', this.state);
+
     return (
       <React.Fragment>
-      <Snackbar
-        message={this.state.errorMessage}
-        open={this.state.openSnackbar}
-        onClose={() => this.setState({ openSnackbar: false })}
-      />
-      <UploadStep
-        loading={
-          this.state.file.name &&
-          (!this.props.stepData.manMapData ||
-            this.props.stepData.manMapData.length === 0)
-        }
-        error={this.state.url === undefined}
-        file={this.state.file}
-        handleFileUpload={this.handleFileUpload}
-      />
+        <Snackbar
+          message={this.state.errorMessage}
+          open={this.state.openSnackbar}
+          onClose={() => this.setState({ openSnackbar: false })}
+        />
+        <UploadStep
+          loading={
+            this.state.file.name &&
+            (!this.props.stepData.manMapData ||
+              this.props.stepData.manMapData.length === 0)
+          }
+          error={this.state.url === undefined}
+          file={this.state.file}
+          handleFileUpload={this.handleFileUpload}
+        />
       </React.Fragment>
     );
   }

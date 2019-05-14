@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 // import { projectsMockData } from '__mocks__/projectsMock';
 import { Box } from 'grommet/components/Box';
-import { RoutedButton } from 'grommet/components/RoutedButton';
 import {
   Label,
   List,

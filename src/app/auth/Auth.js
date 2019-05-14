@@ -20,7 +20,6 @@ class Auth {
     this.addUser = this.addUser.bind(this);
     this.getProfile = this.getProfile.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
-    this.isAuthenticated = this.isAuthenticated.bind(this);
     this.getUserGroup = this.getUserGroup.bind(this);
     this.signIn = this.signIn.bind(this);
     this.signOut = this.signOut.bind(this);
@@ -61,8 +60,6 @@ class Auth {
     localStorage.setItem('auth_access_token', authResult.accessToken);
     localStorage.setItem('auth_id_token', authResult.idToken);
     localStorage.setItem('auth_expires_at', this.expiresAt);
-    this.getUserRole();
-    this.getUserGroup();
   }
 
   signOut() {
@@ -70,8 +67,6 @@ class Auth {
       localStorage.removeItem('auth_access_token');
       localStorage.removeItem('auth_id_token');
       localStorage.removeItem('auth_expires_at');
-      localStorage.removeItem('userRole');
-      localStorage.removeItem('userGroup');
       this.auth0.logout({
         returnTo: process.env.REACT_APP_PROJECT_URL,
         clientID: process.env.REACT_APP_CLIENT_ID
@@ -79,21 +74,6 @@ class Auth {
 
       resolve();
     });
-  }
-
-  isAuthenticated() {
-    const expiresAt = JSON.parse(localStorage.getItem('auth_expires_at'));
-    return new Date().getTime() < expiresAt;
-  }
-
-  isAdministrator() {
-    const userRole = localStorage.getItem('userRole');
-    return userRole === 'Administrator' || userRole === 'Super admin';
-  }
-
-  isSuperAdmin() {
-    const userRole = localStorage.getItem('userRole');
-    return userRole === 'Super admin';
   }
 
   silentAuth() {
@@ -129,103 +109,92 @@ class Auth {
     return this.idToken;
   }
 
-  getUserGroup(that = null) {
-    if (this.profile) {
-      return new Promise((resolve, reject) => {
-        axios
-          .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
-            client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
-            client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-            audience: 'urn:auth0-authz-api',
-            grant_type: 'client_credentials'
-          })
-          .then(response => {
-            axios
-              .get(
-                `${process.env.REACT_APP_AE_API_URL}/users/${
-                  this.profile.sub
-                }/groups`,
-                {
-                  headers: {
-                    Authorization: `${response.data.token_type} ${
-                      response.data.access_token
-                    }`
-                  }
-                }
-              )
-              .then(response2 => {
-                localStorage.setItem(
-                  'userGroup',
-                  JSON.stringify(response2.data)
-                );
-                if (that) {
-                  that.setState({
-                    group: response2.data
-                  });
-                }
-                resolve(response2.data);
-              })
-              .catch(error => {
-                reject(error);
-              });
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
-    }
+  getUserGroup(that = null, profileRedux) {
     return new Promise((resolve, reject) => {
-      resolve(JSON.parse(localStorage.getItem('userGroup')));
+      axios
+        .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+          client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+          client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+          audience: 'urn:auth0-authz-api',
+          grant_type: 'client_credentials'
+        })
+        .then(response => {
+          axios
+            .get(
+              `${process.env.REACT_APP_AE_API_URL}/users/${get(
+                this.profile,
+                'sub',
+                profileRedux.authId
+              )}/groups`,
+              {
+                headers: {
+                  Authorization: `${response.data.token_type} ${
+                    response.data.access_token
+                  }`
+                }
+              }
+            )
+            .then(response2 => {
+              if (that) {
+                that.setState({
+                  group: response2.data
+                });
+              }
+              resolve(response2.data);
+            })
+            .catch(error => {
+              reject(error);
+            });
+        })
+        .catch(error => {
+          reject(error);
+        });
     });
   }
 
-  getUserRole() {
-    if (this.profile) {
-      return new Promise((resolve, reject) => {
-        axios
-          .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
-            client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
-            client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
-            audience: 'urn:auth0-authz-api',
-            grant_type: 'client_credentials'
-          })
-          .then(response => {
-            axios
-              .get(
-                `${process.env.REACT_APP_AE_API_URL}/users/${
-                  this.profile.sub
-                }/roles`,
-                {
-                  headers: {
-                    Authorization: `${response.data.token_type} ${
-                      response.data.access_token
-                    }`
-                  }
-                }
-              )
-              .then(response2 => {
-                localStorage.setItem('userRole', response2.data[0].name);
-                resolve(response2.data[0].name);
-              })
-              .catch(error => {
-                reject(error);
-              });
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
-    }
+  getUserRole(profileRedux) {
     return new Promise((resolve, reject) => {
-      resolve(localStorage.getItem('userRole'));
+      axios
+        .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
+          client_id: process.env.REACT_APP_AE_API_CLIENT_ID,
+          client_secret: process.env.REACT_APP_AE_API_CLIENT_SECRET,
+          audience: 'urn:auth0-authz-api',
+          grant_type: 'client_credentials'
+        })
+        .then(response => {
+          axios
+            .get(
+              `${process.env.REACT_APP_AE_API_URL}/users/${get(
+                this.profile,
+                'sub',
+                profileRedux.authId
+              )}/roles`,
+              {
+                headers: {
+                  Authorization: `${response.data.token_type} ${
+                    response.data.access_token
+                  }`
+                }
+              }
+            )
+            .then(response2 => {
+              resolve(response2.data[0].name);
+            })
+            .catch(error => {
+              reject(error);
+            });
+        })
+        .catch(error => {
+          reject(error);
+        });
     });
   }
 
   /* User management actions */
 
-  getAllUsers(stateAction = null) {
-    return this.getUserRole().then(currentUserRole => {
-      return this.getUserGroup().then(currentUserGroups => {
+  getAllUsers(stateAction = null, profileRedux) {
+    return this.getUserRole(profileRedux).then(currentUserRole => {
+      return this.getUserGroup(null, profileRedux).then(currentUserGroups => {
         return new Promise(resolve => {
           axios
             .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {
@@ -302,9 +271,9 @@ class Auth {
     });
   }
 
-  getUserGroups(that = null, stateVar = 'userGroups') {
-    return this.getUserRole().then(currentUserRole => {
-      return this.getUserGroup().then(currentUserGroups => {
+  getUserGroups(that = null, stateVar = 'userGroups', profileRedux) {
+    return this.getUserRole(profileRedux).then(currentUserRole => {
+      return this.getUserGroup(null, profileRedux).then(currentUserGroups => {
         return new Promise(resolve => {
           axios
             .post(`${process.env.REACT_APP_AUTH_DOMAIN}/oauth/token`, {

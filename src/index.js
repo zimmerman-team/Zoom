@@ -31,7 +31,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
 const persistConfig = {
   key: 'root',
   storage: storageSession,
-  whitelist: ['open']
+  whitelist: ['open', 'user']
 };
 
 const store = createStore(

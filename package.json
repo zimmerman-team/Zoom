@@ -70,6 +70,7 @@
     "recharts": "^1.5.0",
     "redux": "4.0.1",
     "redux-persist": "^5.10.0",
+    "redux-persist-transform-encrypt": "^2.0.1",
     "redux-saga": "^0.16.2",
     "redux-scoped-reducer": "0.0.4",
     "relay-compiler": "3.0.0",

@@ -58,7 +58,8 @@ export class AppBar extends React.Component {
   componentDidUpdate(prevProps) {
     if (
       this.props.location.pathname !== prevProps.location.pathname ||
-      this.props.dataPaneOpen !== prevProps.dataPaneOpen
+      this.props.dataPaneOpen !== prevProps.dataPaneOpen ||
+      !isEqual(this.props.user.data, prevProps.user.data)
     ) {
       this.loadPaneButton();
     }
@@ -137,7 +138,7 @@ export class AppBar extends React.Component {
     let buttonLabel = '';
     let paneType = 'none';
 
-    if (this.props.user) {
+    if (this.props.user.data) {
       if (this.props.dataPaneOpen === paneTypes.none) {
         if (
           this.props.location.pathname.indexOf('/home') !== -1 ||

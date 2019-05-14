@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import shortid from 'shortid';
 import theme from 'theme/Theme';
 import { formPath } from 'modules/visualizer/VisualizerModule.utils';
 

@@ -2,25 +2,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createBrowserHistory } from 'history';
-
 /* consts */
 import chartTypes from '__consts__/ChartConst';
-
 /* utils */
-import isEqual from 'lodash/isEqual';
-
 /* icons */
 import IconRedIndicators from 'assets/icons/IconRedIndicators';
 import IconRedLocation from 'assets/icons/IconRedLocation';
 import IconRedPeriod from 'assets/icons/IconRedPeriod';
 import IconGraphStructure from 'assets/icons/data_explorer/IconGraphStructure';
 import ResetIcon from 'assets/icons/IconReset';
-
 /* styles */
 import {
   ComponentBase,
-  ResetContainer,
-  PanelAccordion
+  PanelAccordion,
+  ResetContainer
 } from './DataExplorerPane.style';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';

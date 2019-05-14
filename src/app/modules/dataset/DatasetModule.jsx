@@ -1,6 +1,5 @@
 import React from 'react';
 import MetaDataMediator from 'mediators/DataMapperMediators/MetaDataMediator/MetaDataMediator';
-
 /* styles */
 import {
   ButtonContainer,
@@ -9,11 +8,9 @@ import {
   ModuleContent,
   ModuleSection
 } from './DatasetModule.style';
-
 /* components */
 import ZoomButton from 'components/ZoomButton/ZoomButton';
 import PropTypes from 'prop-types';
-import { step1InitialData } from '__consts__/DataMapperStepConsts';
 
 const propTypes = {
   dropDownData: PropTypes.shape({

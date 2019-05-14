@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  TextContainer,
   NodeLabel,
   NodeValue,
-  TreeNodeBase,
+  TextContainer,
+  TreeNodeBase
 } from './TreeMapHtmlNode.styles';
 
 const TreeMapHtmlNode = ({ node, style }) => {
@@ -27,7 +27,7 @@ const TreeMapHtmlNode = ({ node, style }) => {
         height: style.height,
         background: style.color,
         borderWidth: style.borderWidth,
-        borderColor: style.borderColor,
+        borderColor: style.borderColor
       }}
     >
       {/* {!hideText && ( */}
@@ -64,7 +64,7 @@ TreeMapHtmlNode.propTypes = {
     x1: PropTypes.number,
     y: PropTypes.number,
     y0: PropTypes.number,
-    y1: PropTypes.number,
+    y1: PropTypes.number
   }),
   style: PropTypes.shape({
     borderColor: PropTypes.string,
@@ -75,12 +75,12 @@ TreeMapHtmlNode.propTypes = {
     orientLabel: PropTypes.bool,
     width: PropTypes.number,
     x: PropTypes.number,
-    y: PropTypes.number,
-  }),
+    y: PropTypes.number
+  })
 };
 TreeMapHtmlNode.defaultProps = {
   node: {},
-  style: {},
+  style: {}
 };
 
 export default TreeMapHtmlNode;

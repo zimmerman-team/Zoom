@@ -2,13 +2,10 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
-
 /* components */
 import EditUserModule from 'modules/UserManagement/EditUser/EditUserModule';
-
 /* actions */
 import { updateUserRequest } from 'services/actions/nodeBackend';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 

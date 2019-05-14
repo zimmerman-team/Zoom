@@ -2,16 +2,14 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import TabContainer from 'modules/dashboard/fragments/TabContainer/TabContainer';
-
 /* components */
 import {
-  Container,
   CenterTabs,
+  Container,
   Tab,
   TabBadge,
   TabText
 } from 'modules/dashboard/fragments/TabContainer/TabContainer.styles';
-
 /* consts */
 import tabs from '__consts__/DashboardTabsConsts';
 

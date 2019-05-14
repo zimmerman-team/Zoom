@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/styles/withStyles';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -36,8 +35,9 @@ const StyledTextField = styled(TextField)`
 
 class OutlinedInputAdornments extends React.Component {
   onEnterPressed(e) {
-    if (e.keyCode === 13 && this.props.onEnterPressed)
+    if (e.keyCode === 13 && this.props.onEnterPressed) {
       this.props.onEnterPressed();
+    }
   }
 
   render() {

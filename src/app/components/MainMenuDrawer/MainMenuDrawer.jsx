@@ -1,23 +1,22 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* material ui */
 import Drawer from '@material-ui/core/Drawer';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import IconClose from 'assets/icons/IconClose';
 
 import { data } from './TempDrawer.const';
-import IconCharts from 'assets/icons/IconCharts';
 import LoginForm from 'components/SideBar/comps/LoginForm/LoginForm';
 import {
+  LoginBox,
   SidebarClosButton,
   SidebarNavList,
   ZoomLink,
-  ZoomListItemText,
-  LoginBox
+  ZoomListItemText
 } from './TempDrawer.style';
 import SidebarNavListItem from './common/SidebarNavListItem';
+
 const propTypes = {
   open: PropTypes.bool,
   toggleSideBar: PropTypes.func,

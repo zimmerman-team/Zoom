@@ -46,9 +46,10 @@ export function checkIfErrors(errorMessages, ignoredErrors) {
   if (errorMessages) {
     // now we need to do this in an even weirder way
     // cause the data retrieved was made even weirder than before...
+    /* todo: convert to map */
     for (let i = 0; i < errorMessages.length; i++) {
       const errorMessage = errorMessages[i];
-
+      /* todo: convert to map */
       for (let key in errorMessage) {
         if (errorMessage.hasOwnProperty(key)) {
           // so here we get the column name

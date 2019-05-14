@@ -1,27 +1,22 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* utils */
-import find from 'lodash/find';
-
 /* components */
 import { DropDownCont } from 'components/Panes/DataExplorePane/DataExplorerPane.style';
 import SimpleSwitch from 'components/SimpleSwitch/SimpleSwitch';
-
 /* icons */
 import SvgIconAdd from 'assets/icons/IconAdd';
-
 /* styles */
 import {
-  ZoomSelect,
-  SwitchContainer,
-  IndicatorLabel,
-  AddSection,
   AddContainer,
-  IndLabelContainer,
+  AddLabel,
+  AddSection,
+  IndicatorLabel,
   IndicatorRemove,
-  AddLabel
+  IndLabelContainer,
+  SwitchContainer,
+  ZoomSelect
 } from './DropdownMenuPanel.style';
 
 const propTypes = {

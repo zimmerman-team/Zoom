@@ -5,14 +5,11 @@ import { fetchQuery } from 'relay-runtime';
 import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePane';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
-
 /* actions */
 import * as actions from 'services/actions/general';
-
 /* helpers */
 import sortBy from 'lodash/sortBy';
 import { formatYearParam, yearStrToArray } from 'utils/genericUtils';
-
 /* consts */
 import initialState, { initIndItem } from '__consts__/InitialChartDataConst';
 import chartTypes from '__consts__/ChartConst';
@@ -157,9 +154,10 @@ class VizPaneMediator extends React.Component {
       } else {
         selectedSources = [...this.state.selectedSources];
         const sourceIndex = selectedSources.indexOf(item.value);
-        if (sourceIndex === -1)
+        if (sourceIndex === -1) {
           // so if it doesn't exist we add it
           selectedSources.push(item.value);
+        }
         // if it does exist we remove it
         else selectedSources.splice(sourceIndex, 1);
       }
@@ -170,9 +168,9 @@ class VizPaneMediator extends React.Component {
     if (
       process.env.NODE_ENV === 'development' &&
       this.state.selectedSources.length > 0
-    )
+    ) {
       this.resetIndicators();
-    else if (process.env.NODE_ENV !== 'development') this.resetIndicators();
+    } else if (process.env.NODE_ENV !== 'development') this.resetIndicators();
 
     // and we store this so it would be accessible to the visualizer mediator
     this.props.dispatch(
@@ -181,12 +179,13 @@ class VizPaneMediator extends React.Component {
       })
     );
 
-    if (!this.props.chartData.chartMounted)
+    if (!this.props.chartData.chartMounted) {
       this.props.dispatch(
         actions.storeChartDataRequest({
           chartMounted: true
         })
       );
+    }
 
     this.changesMade();
   }
@@ -342,9 +341,10 @@ class VizPaneMediator extends React.Component {
         const subIndicatorIndex = selectedInd[index].selectedSubInd.indexOf(
           item.value
         );
-        if (subIndicatorIndex === -1)
+        if (subIndicatorIndex === -1) {
           // so if it doesn't exist we add it
           selectedInd[index].selectedSubInd.push(item.value);
+        }
         // if it does exist we remove it
         else selectedInd[index].selectedSubInd.splice(subIndicatorIndex, 1);
       }
@@ -506,12 +506,13 @@ class VizPaneMediator extends React.Component {
   // from the zoombackend(if ofcourse a saved chart is loaded, for editing purposes)
   // otherwise all the data comes from DUCT
   changesMade() {
-    if (!this.props.chartData.changesMade)
+    if (!this.props.chartData.changesMade) {
       this.props.dispatch(
         actions.storeChartDataRequest({
           changesMade: true
         })
       );
+    }
   }
 
   // so this mainly controls the data for the linechart
@@ -546,12 +547,13 @@ class VizPaneMediator extends React.Component {
           selectedYears: formatYearParam([startYear, endYear])
         })
       );
-    } else
+    } else {
       this.props.dispatch(
         actions.storeChartDataRequest({
           specOptions
         })
       );
+    }
   }
 
   render() {

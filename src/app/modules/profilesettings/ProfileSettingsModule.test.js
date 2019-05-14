@@ -1,7 +1,6 @@
 /* base */
 import React from 'react';
 import { shallow } from 'enzyme';
-
 /* components */
 import ProfileSettingsModule from './ProfileSettingsModule';
 import { ComponentBase } from './ProfileSettingsModule.styles';

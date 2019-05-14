@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 import { Route, withRouter } from 'react-router';
-
 /* consts */
 import graphKeys from '__consts__/GraphStructKeyConst';
 
@@ -14,7 +13,7 @@ import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFr
 import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment/LinechartFragment';
 import TablechartFragment from 'modules/visualizer/sort/container/fragments/TablechartFragment/TablechartFragment';
 import DonutchartFragment from 'modules/visualizer/sort/container/fragments/DonutchartFragment/DonutchartFragment';
-import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
+import { ComponentBase, PreviewTextContainer } from './VizContainer.style';
 import CustomYearSelector from '../../../../components/CustomYearSelector/CustomYearSelector';
 import { YearContainer } from '../../../../components/CustomYearSelector/CustomYearSelector.style';
 

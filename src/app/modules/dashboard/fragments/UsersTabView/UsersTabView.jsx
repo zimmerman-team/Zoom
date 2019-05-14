@@ -1,13 +1,12 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* components */
 import SvgIconPlus from 'assets/icons/IconPlus';
 import SvgIconSort from 'assets/icons/IconSort';
 import { NoItems } from 'modules/dashboard/DashboardModule.styles';
 import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
-import { ViewContainer, AddUserLink, ControlsRow } from './UsersTabView.styles';
+import { AddUserLink, ControlsRow, ViewContainer } from './UsersTabView.styles';
 import GridList from '../GridList/GridList';
 
 /* consts */

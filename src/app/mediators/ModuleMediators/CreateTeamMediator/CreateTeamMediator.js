@@ -2,10 +2,8 @@
 import React from 'react';
 import filter from 'lodash/filter';
 import { connect } from 'react-redux';
-
 /* actions */
 import { updateUsersTeamRequest } from 'services/actions/nodeBackend';
-
 /* components */
 import CreateTeamModule from 'modules/UserManagement/CreateTeam/CreateTeamModule';
 import { formatUsersData } from './CreateTeamMediator.utils';

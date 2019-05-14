@@ -102,6 +102,7 @@ const DashboardMediator = lazy(() =>
 */
 
 import DashboardMediator from 'mediators/DashboardMediators/DashboardMediator';
+import IatiDetail from './modules/IATI_Detail/IatiDetail';
 
 // const ManMappingStep = lazy(() =>
 //   import('modules/datamapper/fragments/ManMappingStep/ManMappingStep')
@@ -313,6 +314,11 @@ const Routes = props => {
             exact
             path="/profile-settings"
             render={() => <ProfileSettingsModule />}
+          />
+
+          <Route
+            path="/iati-activity/:id"
+            render={() => <IatiDetailMediator />}
           />
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />

@@ -11,18 +11,19 @@ const propTypes = {
       PropTypes.shape({
         color: PropTypes.string,
         loc: PropTypes.number,
-        name: PropTypes.string,
-      }),
+        name: PropTypes.string
+      })
     ),
     color: PropTypes.string,
-    name: PropTypes.string,
-  }),
+    name: PropTypes.string
+  })
 };
 const defaultProps = {
-  data: {},
+  data: {}
 };
 
 const TreeMap = props => {
+  console.log(props.data);
   return (
     <ComponentBase>
       <ResponsiveTreeMapHtml
@@ -32,14 +33,12 @@ const TreeMap = props => {
         innerPadding={2}
         outerPadding={2}
         tile="binary"
-        nodeComponent={({ node, style }) => (
-          <TreeMapHtmlNode node={node} style={style} />
-        )}
+        nodeComponent={nodeProps => <TreeMapHtmlNode {...nodeProps} />}
         margin={{
           top: 0,
           right: 0,
           bottom: 0,
-          left: 0,
+          left: 0
         }}
         colorBy={e => {
           return e.color;

@@ -1,17 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
+// import { Provider } from 'react-redux';
 import JssProvider from 'react-jss/lib/JssProvider';
+import { BrowserRouter as Router, withRouter } from 'react-router-dom';
+import { graphql, QueryRenderer } from 'react-relay';
+import { Environment, Network, RecordSource, Store } from 'relay-runtime';
+import auth0Client from 'auth/Auth';
+import Analytics from 'react-router-ga';
 import {
   createGenerateClassName,
   MuiThemeProvider,
   createMuiTheme
 } from '@material-ui/core/styles';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { graphql, QueryRenderer } from 'react-relay';
-import { Environment, Network, RecordSource, Store } from 'relay-runtime';
-import auth0Client from 'auth/Auth';
-import Analytics from 'react-router-ga';
-
+import Cookies from 'universal-cookie';
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
 
@@ -26,15 +27,6 @@ import { ZoomTheme } from 'styles/ZoomTheme';
 
 /* global app components */
 import AppBar from 'components/AppBar/AppBar';
-
-import {
-  ToastsContainer,
-  ToastsStore,
-  ToastsContainerPosition
-} from 'react-toasts';
-
-import MainMenuDrawer from 'components/MainMenuDrawer/MainMenuDrawer';
-import CookieNotice from 'components/CookieNotice/CookieNotice';
 
 const theme = createMuiTheme({
   /*transitions: {
@@ -53,6 +45,9 @@ const theme = createMuiTheme({
     }
   }
 });
+
+import MainMenuDrawer from 'components/MainMenuDrawer/MainMenuDrawer';
+import CookieNotice from 'components/CookieNotice/CookieNotice';
 
 const modernEnvironment = new Environment({
   network: Network.create(fetchQuery),
@@ -200,12 +195,6 @@ class App extends React.Component {
                     <Router>
                       <React.Fragment>
                         <CookieNotice />
-
-                        {/* todo: replace toasts with material-ui snackbar https://material-ui.com/demos/snackbars/ */}
-                        <ToastsContainer
-                          store={ToastsStore}
-                          position={ToastsContainerPosition.TOP_CENTER}
-                        />
                         <AppBar
                           toggleSideBar={() =>
                             this.setState({

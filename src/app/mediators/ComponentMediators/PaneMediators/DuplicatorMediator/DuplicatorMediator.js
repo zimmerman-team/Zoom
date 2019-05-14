@@ -59,7 +59,7 @@ class DuplicatorMediator extends React.Component {
 
   // TODO somehow make this funciton reusable cause the same one is used in AppBar.jsx
   saveChart(chartId = 'vizID') {
-    if (this.props.auth0Client.isAuthenticated()) {
+    if (this.props.user) {
       const profile = this.props.auth0Client.getProfile();
 
       const dataSources = [];

@@ -156,7 +156,7 @@ class DashboardMediator extends React.Component {
     if (initialLoad) {
       this.setState({ loadUsers: true });
       this.props.auth0Client
-        .getAllUsers(this.setUsers)
+        .getAllUsers(this.setUsers, this.props.user)
         .then(() => this.setState({ loadUsers: false }));
     } else {
       this.setUsers(this.state.allUsers, false);
@@ -199,10 +199,12 @@ class DashboardMediator extends React.Component {
   getAllTeams = initialLoad => {
     if (initialLoad) {
       this.setState({ loadUsers: true });
-      this.props.auth0Client.getUserGroups().then(res => {
-        this.setTeams(res, true);
-        this.setState({ loadUsers: false });
-      });
+      this.props.auth0Client
+        .getUserGroups(null, 'this.props.user', this.props.user)
+        .then(res => {
+          this.setTeams(res, true);
+          this.setState({ loadUsers: false });
+        });
     } else {
       this.setTeams(this.state.allTeams, false);
     }
@@ -467,8 +469,8 @@ class DashboardMediator extends React.Component {
         changeSearchKeyword={this.changeSearchKeyword}
         teams={this.state.teams}
         navItems={data(
-          this.props.auth0Client.isAdministrator(),
-          this.props.auth0Client.isSuperAdmin(),
+          get(this.props.user, 'role', '') === 'Administrator',
+          get(this.props.user, 'role', '') === 'Super admin',
           this.state.allUsers,
           this.state.allTeams,
           this.state.charts,
@@ -477,8 +479,8 @@ class DashboardMediator extends React.Component {
         totalPages={this.getViewPagesNumber()}
         changePage={this.changePage}
         greetingName={greetingName}
-        isAdministrator={this.props.auth0Client.isAdministrator()}
-        isSuperAdmin={this.props.auth0Client.isSuperAdmin()}
+        isAdministrator={get(this.props.user, 'role', '') === 'Administrator'}
+        isSuperAdmin={get(this.props.user, 'role', '') === 'Super admin'}
         auth0Client={this.props.auth0Client}
       />
     );

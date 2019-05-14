@@ -39,7 +39,9 @@ export default {
     errorCellColor: '#ff807f',
     snackbar: '#e74c4c',
     smallTextBlack: 'rgba(0, 0, 0, 0.7)', //text-dark-secondary
-    switchGreen: '#8ed59b'
+    switchGreen: '#8ed59b',
+    treemapNode: '#F7F8FA',
+    tremapNodeBorderColor: '#4f78d0'
 
     // fontDarkSecondary: 'rgba(0, 0, 0, 0.55)',
     // baseGrey: '#757575',

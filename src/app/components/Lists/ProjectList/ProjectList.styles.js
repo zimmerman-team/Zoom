@@ -39,6 +39,11 @@ export const Heading = styled(NavLink)`
   margin-bottom: 10px;
   line-height: 1.5;
   max-width: 100%;
+
+  a {
+    text-decoration: none;
+    color: ${theme.color.aidsFondsRed};
+  }
 `;
 
 export const DateContainer = styled(Box)``;

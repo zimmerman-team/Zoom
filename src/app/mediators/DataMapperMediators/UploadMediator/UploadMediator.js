@@ -300,21 +300,23 @@ class UploadMediator extends React.Component {
     // we save the uploaded file in state
     const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
 
-    const fileType = /[.]/.exec(file.name) ? /[^.]+$/.exec(file.name) : [''];
+    if (file) {
+      const fileType = /[.]/.exec(file.name) ? /[^.]+$/.exec(file.name) : [''];
 
-    if (fileType[0] !== 'csv') {
-      this.setState({ openSnackbar: true });
-      this.setState({ errorMessage: 'Only csv files are accepted' });
-      this.setState({ url: undefined });
-    } else if (file) {
-      this.setState({ file });
-      // and we upload the file to the server
-      const values = new FormData();
-      values.append('file', file);
-      this.props.dispatch(actions.uploadRequest(values));
-      // we also reset the manMapData when a new file is uploaded
-      // so that the loading icon would initiate
-      this.setState({ file }, this.afterFileUpload);
+      if (fileType[0] !== 'csv') {
+        this.setState({ openSnackbar: true });
+        this.setState({ errorMessage: 'Only csv files are accepted' });
+        this.setState({ url: undefined });
+      } else {
+        this.setState({ file });
+        // and we upload the file to the server
+        const values = new FormData();
+        values.append('file', file);
+        this.props.dispatch(actions.uploadRequest(values));
+        // we also reset the manMapData when a new file is uploaded
+        // so that the loading icon would initiate
+        this.setState({ file }, this.afterFileUpload);
+      }
     } else {
       this.setState({ openSnackbar: true });
       this.setState({ errorMessage: 'Some error uploading the file occurred' });

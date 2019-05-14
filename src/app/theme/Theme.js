@@ -37,6 +37,7 @@ export default {
     zoomBlack: '#000000',
     colHeadColor: '#9b9b9b',
     errorCellColor: '#ff807f',
+    snackbar: '#e74c4c',
     smallTextBlack: 'rgba(0, 0, 0, 0.7)', //text-dark-secondary
     switchGreen: '#8ed59b'
 

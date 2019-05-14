@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { ResponsiveTreeMapHtml } from '@nivo/treemap';
 import TreeMapHtmlNode from 'components/charts/treemap/TreeMapHtmlNode/TreeMapHtmlNode';
 import { ComponentBase } from './TreeMap.styles';
+import Theme from 'app/theme/Theme';
 
 const propTypes = {
   data: PropTypes.shape({
@@ -23,15 +24,15 @@ const defaultProps = {
 };
 
 const TreeMap = props => {
-  console.log(props.data);
   return (
     <ComponentBase>
       <ResponsiveTreeMapHtml
         root={props.data}
         identity="name"
         value="loc"
-        innerPadding={2}
-        outerPadding={2}
+        innerPadding={1}
+        colors={[Theme.color.treemapNode]}
+        outerPadding={1}
         tile="binary"
         nodeComponent={nodeProps => <TreeMapHtmlNode {...nodeProps} />}
         margin={{
@@ -45,6 +46,7 @@ const TreeMap = props => {
         }}
         borderColor="inherit:darker(0.3)"
         animate={false}
+        leavesOnly
       />
     </ComponentBase>
   );

@@ -182,7 +182,8 @@ const Routes = props => {
             path="/add-user"
             render={() =>
               props.user.data &&
-              get(props.user, 'data.role', '') === 'Administrator' ? (
+              (get(props.user, 'data.role', '') === 'Administrator' ||
+                get(props.user, 'data.role', '') === 'Super admin') ? (
                 <AddUserMediator
                   user={props.user.data}
                   auth0Client={props.auth0Client}
@@ -204,6 +205,7 @@ const Routes = props => {
                   : false;
               return props.user.data &&
                 (get(props.user, 'data.role', '') === 'Administrator' ||
+                  get(props.user, 'data.role', '') === 'Super admin' ||
                   isRegularUserEditSelf) ? (
                 <EditUserMediator auth0Client={props.auth0Client} />
               ) : (
@@ -216,7 +218,8 @@ const Routes = props => {
             path="/view-user/:userId"
             render={() =>
               props.user.data &&
-              get(props.user, 'data.role', '') === 'Administrator' ? (
+              (get(props.user, 'data.role', '') === 'Administrator' ||
+                get(props.user, 'data.role', '') === 'Super admin') ? (
                 <EditUserMediator auth0Client={props.auth0Client} viewOnly />
               ) : (
                 <Redirect to="/" />
@@ -240,7 +243,8 @@ const Routes = props => {
             path="/edit-team/:teamId"
             render={() =>
               props.user.data &&
-              get(props.user, 'data.role', '') === 'Administrator' ? (
+              (get(props.user, 'data.role', '') === 'Administrator' ||
+                get(props.user, 'data.role', '') === 'Super admin') ? (
                 <EditTeamMediator auth0Client={props.auth0Client} />
               ) : (
                 <Redirect to="/" />
@@ -252,7 +256,8 @@ const Routes = props => {
             path="/view-team/:teamId"
             render={() =>
               props.user.data &&
-              get(props.user, 'data.role', '') === 'Administrator' ? (
+              (get(props.user, 'data.role', '') === 'Administrator' ||
+                get(props.user, 'data.role', '') === 'Super admin') ? (
                 <EditTeamMediator auth0Client={props.auth0Client} viewOnly />
               ) : (
                 <Redirect to="/" />
@@ -280,7 +285,8 @@ const Routes = props => {
             path="/mapper"
             render={() =>
               props.user.data &&
-              get(props.user, 'data.role', '') === 'Administrator' ? (
+              (get(props.user, 'data.role', '') === 'Administrator' ||
+                get(props.user, 'data.role', '') === 'Super admin') ? (
                 <DataMapperModule
                   dropDownData={props}
                   fileCorrection={props}
@@ -295,7 +301,8 @@ const Routes = props => {
             path="/dataset/:id"
             render={() =>
               props.user.data &&
-              get(props.user, 'data.role', '') === 'Administrator' ? (
+              (get(props.user, 'data.role', '') === 'Administrator' ||
+                get(props.user, 'data.role', '') === 'Super admin') ? (
                 <DatasetMediator
                   dropDownData={props}
                   auth0Client={props.auth0Client}

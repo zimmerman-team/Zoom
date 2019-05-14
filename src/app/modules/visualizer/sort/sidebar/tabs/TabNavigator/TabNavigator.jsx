@@ -1,7 +1,6 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import shortid from 'shortid';
 
 import styled from 'styled-components';
 import TabNavigatorItem from 'modules/visualizer/sort/sidebar/tabs/TabNavigator/common/TabNavigatorItem';

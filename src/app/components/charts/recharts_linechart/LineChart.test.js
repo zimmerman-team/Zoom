@@ -1,16 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import LineChart from 'components/charts/recharts_linechart/LineChart';
-
 /* components */
 import {
-  ResponsiveContainer,
-  LineChart as ReLineChart,
-  Line,
-  XAxis,
-  YAxis,
   CartesianGrid,
-  Tooltip
+  Line,
+  LineChart as ReLineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis
 } from 'recharts';
 import mock from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
 

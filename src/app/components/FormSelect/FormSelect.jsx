@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
 /* components */
 import { Select } from 'grommet/components/Select';
 import { CheckBox } from 'grommet/components/CheckBox';
@@ -45,7 +44,7 @@ const defaultProps = {
 
 const FormSelect = props => {
   const dropDownItem = item => {
-    if (props.multiple)
+    if (props.multiple) {
       return (
         <CheckBox
           key={item}
@@ -54,6 +53,7 @@ const FormSelect = props => {
           onChange={() => props.selectVal(item)}
         />
       );
+    }
     return <DropDownItem>{item.label}</DropDownItem>;
   };
 

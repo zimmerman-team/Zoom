@@ -9,25 +9,20 @@ import PropTypes from 'prop-types';
 import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
 import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
 import FileValidationMutation from 'mediators/DataMapperMediators/mutations/FileValidation';
-
 /* consts */
 import { step1InitialData } from '__consts__/DataMapperStepConsts';
-import { uploadInitialstate } from '__consts__/UploadMediatorConst';
-
 /* actions */
 import * as actions from 'services/actions';
 import * as generalActions from 'services/actions/general';
-
 /* components */
 import UploadStep from 'modules/datamapper/fragments/UploadStep/UploadStep';
 import { SimpleErrorText } from 'components/sort/Misc';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import {
-  formatOverviewData,
+  formatManData,
   formatModelOptions,
-  formatManData
+  formatOverviewData
 } from './UploadMediator.util';
 import { formatErrorColumns } from 'mediators/DataMapperMediators/ManualMappingMediator.util';
 import Snackbar from '../../../components/Snackbar/Snackbar';
@@ -136,11 +131,12 @@ class UploadMediator extends React.Component {
   }
 
   handleSourceCompleted(response) {
-    if (response)
+    if (response) {
       this.setState(
         { sourceId: response.fileSource.entryId },
         this.addMetaData
       );
+    }
   }
 
   handleSourceError(error) {
@@ -278,8 +274,9 @@ class UploadMediator extends React.Component {
     // otherwise we always use an existing file source from the first filesource list
     // to just be able to upload the file for following steps
     // more explenation about this step is above the class name
-    if (this.props.stepData.metaData.fileSources.length <= 0)
+    if (this.props.stepData.metaData.fileSources.length <= 0) {
       this.addDataSource(this.props.stepData.metaData.dataSource.value);
+    }
     // otherwise we just add the file to the first source
     else {
       this.setState(
@@ -325,8 +322,6 @@ class UploadMediator extends React.Component {
   }
 
   render() {
-    console.log('joe', this.state);
-
     return (
       <React.Fragment>
         <Snackbar

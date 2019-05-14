@@ -14,7 +14,6 @@ import EconomicIndicators from 'modules/countrydetail/fragments/EconomicIndicato
 import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTransactions';
 import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';
 import Projects from 'modules/countrydetail/fragments/Projects/Projects';
-
 /* utils */
 import { capitalize } from './CountryDetailModule.utilis';
 

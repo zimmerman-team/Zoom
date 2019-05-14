@@ -7,10 +7,8 @@ import Cookies from 'universal-cookie';
 import { withRouter } from 'react-router';
 
 import { Helmet } from 'react-helmet';
-
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
-
 /* components */
 import GeoMap from 'components/GeoMap/GeoMap';
 import { ModuleContainer } from 'modules/home/HomeModule.styles';

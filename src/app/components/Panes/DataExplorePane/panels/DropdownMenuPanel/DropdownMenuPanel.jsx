@@ -1,27 +1,22 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* utils */
-import find from 'lodash/find';
-
 /* components */
 import { DropDownCont } from 'components/Panes/DataExplorePane/DataExplorerPane.style';
 import SimpleSwitch from 'components/SimpleSwitch/SimpleSwitch';
-
 /* icons */
 import SvgIconAdd from 'assets/icons/IconAdd';
-
 /* styles */
 import {
-  ZoomSelect,
-  SwitchContainer,
-  IndicatorLabel,
-  AddSection,
   AddContainer,
-  IndLabelContainer,
+  AddLabel,
+  AddSection,
+  IndicatorLabel,
   IndicatorRemove,
-  AddLabel
+  IndLabelContainer,
+  SwitchContainer,
+  ZoomSelect
 } from './DropdownMenuPanel.style';
 
 const propTypes = {
@@ -29,8 +24,7 @@ const propTypes = {
   chartKeys: PropTypes.arrayOf(PropTypes.shape({})),
   panelDetails: PropTypes.arrayOf(
     PropTypes.shape({
-      /* todo: resolve the issue of this prop receiving mixed data */
-      indicator: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+      isIndicator: PropTypes.bool,
       addIndicator: PropTypes.func,
       sectionRemove: PropTypes.bool,
       sectionAdd: PropTypes.bool,
@@ -56,7 +50,7 @@ const defaultProps = {
   chartKeys: [],
   panelDetails: [
     {
-      indicator: '',
+      isIndicator: false,
       addIndicator: null,
       subIndicator: false,
       sectionAdd: false,
@@ -99,7 +93,7 @@ const DropdownMenuPanel = props => {
           <DropDownCont
             key={index}
             style={{
-              marginTop: detail.indicator === true && index !== 0 ? '30px' : ''
+              marginTop: detail.isIndicator && index !== 0 ? '30px' : ''
             }}
           >
             {detail.indicatorLabel && (
@@ -134,11 +128,7 @@ const DropdownMenuPanel = props => {
                   option1="Left Y-axis"
                   option2="Right Y-axis"
                   onSwitch={checked =>
-                    props.handleAxisSwitch(
-                      checked,
-                      detail.indicator,
-                      detail.indIndex
-                    )
+                    props.handleAxisSwitch(checked, detail.indIndex)
                   }
                 />
               </SwitchContainer>

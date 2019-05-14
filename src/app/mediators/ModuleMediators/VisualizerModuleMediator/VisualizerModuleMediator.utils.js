@@ -1,7 +1,6 @@
 import findIndex from 'lodash/findIndex';
 import { scaleQuantile } from 'd3-scale';
 import { range } from 'd3-array';
-
 /* consts */
 import chartTypes from '__consts__/ChartConst';
 import { colorSet } from '__consts__/PaneConst';
@@ -115,17 +114,18 @@ export function formatCountryCenterData(indicators, indName, selectedSubInd) {
           value: Math.round(indicator.value),
           geolocationIso2: indicator.geolocationIso2,
           geolocationType: indicator.geolocationType,
-          maxValue,
-          minValue,
+          maxValue: 0,
+          minValue: 0,
           longitude: coord[0],
           latitude: coord[1],
           format: indicator.valueFormatType,
           name: indicator.geolocationTag
         });
-      } else
+      } else {
         countryCenteredData[existCountryIndex].value =
           countryCenteredData[existCountryIndex].value +
           Math.round(indicator.value);
+      }
     }
   });
 
@@ -159,11 +159,13 @@ export function formatCountryParam(countryCodes, regionCountryCodes) {
   jointCountries = jointCountries.concat(countryCodes);
 
   regionCountryCodes.forEach(region => {
-    if (region !== 'select all')
+    if (region !== 'select all') {
       region.forEach(countryCode => {
-        if (jointCountries.indexOf(countryCode.iso2) === -1)
+        if (jointCountries.indexOf(countryCode.iso2) === -1) {
           jointCountries.push(countryCode.iso2);
+        }
       });
+    }
   });
 
   return jointCountries;
@@ -220,18 +222,18 @@ export function removeIds(regionArray) {
 }
 
 function ordinal_suffix_of(i) {
-  const j = i % 10,
-    k = i % 100;
+  const j = i % 10;
+  const k = i % 100;
   if (j === 1 && k !== 11) {
-    return i + 'st';
+    return `${i}st`;
   }
   if (j === 2 && k !== 12) {
-    return i + 'nd';
+    return `${i}nd`;
   }
   if (j === 3 && k !== 13) {
-    return i + 'rd';
+    return `${i}rd`;
   }
-  return i + 'th';
+  return `${i}th`;
 }
 
 // formats date according to design
@@ -359,8 +361,9 @@ export function formatChartLegends(
     if (indItem && indItem.indName) {
       let key = indItem.indName;
 
-      if (findIndex(chartKeys, ['name', indItem.indName]) !== -1)
+      if (findIndex(chartKeys, ['name', indItem.indName]) !== -1) {
         key = indItem.indName.concat(` (${index})`);
+      }
 
       const orientation =
         currKeys.length > 0 && currKeys[index]
@@ -375,13 +378,14 @@ export function formatChartLegends(
       });
 
       if (colorInd + 1 < colors.length) colorInd += 1;
-    } else
+    } else {
       chartKeys.push({
         label: undefined,
         name: undefined,
         color: '',
         orientation: 'left'
       });
+    }
   });
 
   return chartKeys;
@@ -417,21 +421,22 @@ export function formatLineData(indicators, aggregate) {
 
         let aggrValue = indItem.date;
 
-        if (aggrKey === 'geolocationTag')
+        if (aggrKey === 'geolocationTag') {
           aggrValue =
             indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
               ? indItem.geolocationIso2
               : indItem.geolocationTag;
+        }
 
-        if (existItemInd === -1)
+        if (existItemInd === -1) {
           indicatorData.push({
             [aggrKey]: indItem[aggrKey],
             [aggregate]: aggrValue,
             [indName]: Math.round(indItem.value)
           });
-        else if (indicatorData[existItemInd][indName] !== undefined)
+        } else if (indicatorData[existItemInd][indName] !== undefined) {
           indicatorData[existItemInd][indName] += Math.round(indItem.value);
-        else indicatorData[existItemInd][indName] = Math.round(indItem.value);
+        } else indicatorData[existItemInd][indName] = Math.round(indItem.value);
       });
     }
   });
@@ -452,8 +457,9 @@ export function formatBarChartKeys(selectedInd) {
     if (indItem && indItem.indName) {
       let key = indItem.indName;
 
-      if (findIndex(chartKeys, ['key', indItem.indName]) !== -1)
+      if (findIndex(chartKeys, ['key', indItem.indName]) !== -1) {
         key = indItem.indName.concat(` (${index})`);
+      }
 
       chartKeys.push({
         key,
@@ -490,7 +496,7 @@ export function formatBarData(indicators, colors = colorSet[0].colors) {
           return indItem.geolocationTag === existing.geoName;
         });
 
-        if (existItemInd === -1)
+        if (existItemInd === -1) {
           barChartData.push({
             [`${indName}Label`]: `${indName} - ${indicator.selectedSubInd.join(
               ', '
@@ -505,9 +511,9 @@ export function formatBarData(indicators, colors = colorSet[0].colors) {
             [indName]: Math.round(indItem.value),
             [`${indName}Color`]: colors[colorInd]
           });
-        else if (barChartData[existItemInd][indName] !== undefined)
+        } else if (barChartData[existItemInd][indName] !== undefined) {
           barChartData[existItemInd][indName] += Math.round(indItem.value);
-        else {
+        } else {
           barChartData[existItemInd][indName] = Math.round(indItem.value);
           barChartData[existItemInd][`${indName}Color`] = colors[colorInd];
           barChartData[existItemInd][

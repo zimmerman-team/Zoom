@@ -2,20 +2,12 @@
 import React from 'react';
 import DuplicatorTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/DuplicatorTab';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-
 /* actions */
-import * as actions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
-
 /* utils */
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
-
 /* consts */
-import initialPaneState from '__consts__/InitialPaneDataConst';
-import initialState from '__consts__/InitialChartDataConst';
-
 /* components */
 import { SimpleErrorText } from 'components/sort/Misc';
 import PropTypes from 'prop-types';
@@ -76,8 +68,9 @@ class DuplicatorMediator extends React.Component {
         if (
           dataSources.indexOf(indData.dataSource) === -1 &&
           indData.dataSource
-        )
+        ) {
           dataSources.push(indData.dataSource);
+        }
       });
 
       const chartData = {
@@ -133,17 +126,17 @@ class DuplicatorMediator extends React.Component {
   render() {
     return (
       <React.Fragment>
-      <Snackbar
-        message="Unauthorizeed"
-        open={this.state.openSnackbar}
-        onClose={() => this.setState({ openSnackbar: false })}
-      />
-      <DuplicatorTab
-        handleSaveEdit={this.saveEdit}
-        handleDuplicate={this.saveChart}
-        duplName={get(this.props.dupChartCreated, 'data.name')}
-        duplID={get(this.props.dupChartCreated, 'data.id')}
-      />
+        <Snackbar
+          message="Unauthorizeed"
+          open={this.state.openSnackbar}
+          onClose={() => this.setState({ openSnackbar: false })}
+        />
+        <DuplicatorTab
+          handleSaveEdit={this.saveEdit}
+          handleDuplicate={this.saveChart}
+          duplName={get(this.props.dupChartCreated, 'data.name')}
+          duplID={get(this.props.dupChartCreated, 'data.id')}
+        />
       </React.Fragment>
     );
   }

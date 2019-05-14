@@ -6,7 +6,6 @@ import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
 import theme from 'theme/Theme';
 import { split } from 'sentence-splitter';
-
 /* mock */
 import mock from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
 
@@ -287,6 +286,7 @@ export function formatPieChartData(data, groupByType, valueType) {
 
 export function titleCase(str) {
   const splitStr = str.toLowerCase().split(' ');
+  /* todo: convert to map */
   for (let i = 0; i < splitStr.length; i++) {
     splitStr[i] =
       splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);

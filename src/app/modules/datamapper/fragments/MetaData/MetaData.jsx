@@ -3,7 +3,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'grommet/components/Box';
-
 /* custom components */
 import ZoomSelect from 'components/Select/ZoomSelect';
 import CheckboxesGroup from 'components/CheckboxesGroup/CheckboxesGroup';
@@ -12,32 +11,29 @@ import TextField from 'components/sort/TextField';
 import InputFieldLabel from 'components/InputFieldLabel/InputFieldLabel';
 import InputFieldDivider from 'components/Dividers/InputFieldDivider';
 import ChipInput from 'components/ChipInput/ChipInput';
-
 /* style */
 import { SectionHeading } from 'components/sort/Headings';
 import {
+  DataSourceTextCont,
   FieldContainer,
   ModuleContainer,
-  DataSourceTextCont,
-  SelectSurround,
-  TwoFieldContainer,
+  OrLabel,
   SelectContainer,
-  OrLabel
+  SelectSurround,
+  TwoFieldContainer
 } from './MetaData.style';
 import theme from 'theme/Theme';
-
 /* const data */
 import { step1InitialData } from '__consts__/DataMapperStepConsts';
 import {
-  options1,
-  options2,
   checkBoxOptions2,
   checkBoxOptions3,
   checkBoxOptions51,
+  dataSourceOptions,
   numberOptions,
-  dataSourceOptions
+  options2,
+  nonSurveyChoice
 } from './MetaData.consts';
-import { nonSurveyChoice } from 'modules/datamapper/fragments/MetaData/MetaData.consts';
 
 const propTypes = {
   /**
@@ -132,8 +128,9 @@ class MetaData extends React.Component {
       this.props.data.q3Text !== nextProps.data.q3Text ||
       this.props.data.q4Text !== nextProps.data.q4Text ||
       this.props.data.q51Text !== nextProps.data.q51Text
-    )
+    ) {
       return false;
+    }
 
     // console.log('SHOULD UPDATE');
     // if any other field is being changed rerendering is ooke
@@ -142,8 +139,9 @@ class MetaData extends React.Component {
 
   validateField(field) {
     let length = this.props.data[field].length === 0;
-    if (field === 'dataSource')
+    if (field === 'dataSource') {
       length = this.props.data[field].value.length === 0;
+    }
     return this.props.metaDataEmptyFields.indexOf(field) !== -1 && length;
   }
 

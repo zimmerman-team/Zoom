@@ -1,9 +1,7 @@
 /* base */
 import React from 'react';
-
 /* utils */
 import sortBy from 'lodash/sortBy';
-
 /* components */
 import AddUserModule from 'modules/UserManagement/AddUser/AddUserModule';
 

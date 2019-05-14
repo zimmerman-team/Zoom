@@ -6,11 +6,11 @@ import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll';
 import { Tooltip } from 'react-tippy';
 import {
-  Container,
   Circle,
+  Container,
   ItemContainer,
-  Text,
-  StateTooltip
+  StateTooltip,
+  Text
 } from './CivicSpace.styles';
 
 const propTypes = {

@@ -1,9 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import About from './About';
-
 // Components
-import { ModuleContainer, AboutTitle, Text, RedLink } from './About.styles';
+import { AboutTitle, ModuleContainer, RedLink, Text } from './About.styles';
 import {
   DescriptionParagraph,
   DescriptionParagraphBold

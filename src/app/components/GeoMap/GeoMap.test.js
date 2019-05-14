@@ -2,7 +2,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { GeoMap } from 'components/GeoMap/GeoMap';
-
 /* components */
 import MapGL from 'react-map-gl';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
@@ -10,9 +9,9 @@ import MapControls from 'components/GeoMap/components/MapControls/MapControls';
 import Fullscreen from 'react-full-screen';
 
 import {
+  ControlsContainer,
   LegendContainer,
-  MapContainer,
-  ControlsContainer
+  MapContainer
 } from './GeoMap.style';
 import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 

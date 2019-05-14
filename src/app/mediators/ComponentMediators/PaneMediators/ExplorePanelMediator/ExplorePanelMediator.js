@@ -5,16 +5,12 @@ import { fetchQuery } from 'relay-runtime';
 import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePane';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
 /* acitons */
 import * as actions from 'services/actions/general';
-
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
-
 /* helpers */
 import sortBy from 'lodash/sortBy';
-import isEqual from 'lodash/isEqual';
 
 import { yearStrToArray } from 'utils/genericUtils';
 // import findIndex from 'lodash/findIndex';
@@ -147,9 +143,10 @@ class ExplorePanelMediator extends React.Component {
       } else {
         selectedSources = [...this.state.selectedSources];
         const sourceIndex = selectedSources.indexOf(item.value);
-        if (sourceIndex === -1)
+        if (sourceIndex === -1) {
           // so if it doesn't exist we add it
           selectedSources.push(item.value);
+        }
         // if it does exist we remove it
         else selectedSources.splice(sourceIndex, 1);
       }

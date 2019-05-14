@@ -5,25 +5,23 @@ import { fetchQuery } from 'relay-runtime';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
 import {
+  aggrKeys,
+  formatBarChartKeys,
   formatBarData,
+  formatChartLegends,
   formatCountryParam,
   formatDate,
-  formatGeoData,
-  formatBarChartKeys,
-  formatLineData,
-  removeIds,
-  formatChartLegends,
-  formatTableData,
   formatDonutData,
+  formatGeoData,
+  formatLineData,
+  formatTableData,
   getChartKeys,
-  aggrKeys
+  removeIds
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
-
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
 import paneTypes from '__consts__/PaneTypesConst';
@@ -31,8 +29,7 @@ import chartTypes from '__consts__/ChartConst';
 import initialPaneState from '__consts__/InitialPaneDataConst';
 import { colorSet } from '__consts__/PaneConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
-import { axisOptions, aggrOptions } from '__consts__/GraphStructOptionConsts';
-
+import { aggrOptions, axisOptions } from '__consts__/GraphStructOptionConsts';
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
 import * as actions from 'services/actions/general';
@@ -167,21 +164,21 @@ class VisualizerModuleMediator extends Component {
     this.props.dispatch(nodeActions.getPublicChartInitial());
     this.props.dispatch(nodeActions.getChartInitial());
 
-    if (this.props.match.params.code !== 'vizID')
+    if (this.props.match.params.code !== 'vizID') {
       this.setState(
         {
           loading: true
         },
         this.loadChartData
       );
-    else {
+    } else {
       // and we store the chart type so it would be accessible to the visualizer mediator
       this.props.dispatch(
         actions.storePaneDataRequest({
           chartType: this.props.match.params.chart
         })
       );
-      if (chartTypes.lineChart === this.props.match.params.chart)
+      if (chartTypes.lineChart === this.props.match.params.chart) {
         // we also store the initial values for the linecharts
         // graphstructure pane
         // so yeah yAxis should initially be numbers
@@ -199,6 +196,7 @@ class VisualizerModuleMediator extends Component {
             }
           })
         );
+      }
     }
   }
 
@@ -240,8 +238,9 @@ class VisualizerModuleMediator extends Component {
     if (
       !isEqual(this.props.chartResults, prevProps.chartResults) &&
       this.props.chartResults
-    )
+    ) {
       this.storeChartToRedux();
+    }
 
     // TODO redo this check properly
     const {
@@ -276,8 +275,9 @@ class VisualizerModuleMediator extends Component {
           specOptions[graphKeys.aggregate] !==
             prevSpecOptions[graphKeys.aggregate])) &&
       restChart.changesMade
-    )
+    ) {
       this.refetch();
+    }
   }
 
   componentWillUnmount() {
@@ -418,10 +418,11 @@ class VisualizerModuleMediator extends Component {
         everytime one indicators data is called, though the whole flow of
         data formatting/saving would need to be changed*/
 
-    if (this.props.chartData.selectedInd.length > 0)
+    if (this.props.chartData.selectedInd.length > 0) {
       this.setState({
         loading: true
       });
+    }
 
     const indicatorData = [];
 

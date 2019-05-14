@@ -2,7 +2,7 @@
 import React from 'react';
 
 import ButtonContainer from './ButtonContainer';
-import { Textfield, ComponentBase } from './EditProfileForm.styles';
+import { ComponentBase, Textfield } from './EditProfileForm.styles';
 
 const EditProfileForm = () => {
   // [value, setValue() = initial value]
@@ -26,6 +26,7 @@ const EditProfileForm = () => {
 
   // Determines whether button should be disabled
   function handleChange() {
+    /* todo: convert to map */
     for (let i = 0; i < values.length; i++) {
       if (values[i] !== '') {
         setIsDisabled(false);

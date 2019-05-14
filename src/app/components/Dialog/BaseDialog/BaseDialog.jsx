@@ -25,7 +25,9 @@ const propTypes = {
   open: PropTypes.bool,
   title: PropTypes.string,
   message: PropTypes.string,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  buttonText: PropTypes.string,
+  buttonEnabled: PropTypes.bool
 };
 const defaultProps = {
   open: true,

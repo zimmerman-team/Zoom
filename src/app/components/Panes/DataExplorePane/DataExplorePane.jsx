@@ -2,25 +2,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createBrowserHistory } from 'history';
-
 /* consts */
 import chartTypes from '__consts__/ChartConst';
-
 /* utils */
-import isEqual from 'lodash/isEqual';
-
 /* icons */
 import IconRedIndicators from 'assets/icons/IconRedIndicators';
 import IconRedLocation from 'assets/icons/IconRedLocation';
 import IconRedPeriod from 'assets/icons/IconRedPeriod';
 import IconGraphStructure from 'assets/icons/data_explorer/IconGraphStructure';
 import ResetIcon from 'assets/icons/IconReset';
-
 /* styles */
 import {
   ComponentBase,
-  ResetContainer,
-  PanelAccordion
+  PanelAccordion,
+  ResetContainer
 } from './DataExplorerPane.style';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
@@ -89,7 +84,7 @@ const propTypes = {
   ]),
   selectCountry: PropTypes.func,
   /* todo: solve the issue of this prop sometimes receiving a boolean */
-  handleAxisSwitch: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
+  handleAxisSwitch: PropTypes.func,
   selectRegion: PropTypes.func,
   selectYearRange: PropTypes.func,
   yearRange: PropTypes.array,
@@ -155,7 +150,7 @@ class DataExplorePane extends React.Component {
         indIndex: index,
         sectionRemove: this.props.multipleInd,
         removeIndicator: () => this.props.removeIndicator(index),
-        indicator: true,
+        isIndicator: true,
         indicatorLabel: `Indicator ${labelNumb}`,
         categorise: true,
         placeHolderText: 'Select indicator',

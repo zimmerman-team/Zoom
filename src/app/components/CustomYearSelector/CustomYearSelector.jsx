@@ -1,20 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
 import { maxYear, minYear } from '__consts__/TimeLineConst';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import { formatYearLabels } from 'utils/YearSelectUtil';
-
 /* styles */
 import {
   ComponentBase,
-  YearLabel,
   SelectedYearLabel,
-  Text
+  Text,
+  YearLabel
 } from './CustomYearSelector.style';
 
 const propTypes = {
@@ -46,6 +43,7 @@ class CustomYearSelector extends React.Component {
     document.addEventListener('mouseover', this.handleMoveOutside);
     // we generate the year array here
     const numArray = [];
+    /* todo: convert to map */
     for (let i = this.props.min; i < this.props.max + 1; i++) {
       numArray.push(i.toString());
     }
@@ -103,7 +101,7 @@ class CustomYearSelector extends React.Component {
   renderYearLabels = (number, index) => {
     let yearLabels = '';
 
-    if (this.state.selectedYear === number)
+    if (this.state.selectedYear === number) {
       yearLabels = (
         <SelectedYearLabel
           data-cy={`year-${number}`}
@@ -116,7 +114,7 @@ class CustomYearSelector extends React.Component {
           </Text>
         </SelectedYearLabel>
       );
-    else
+    } else {
       yearLabels = (
         <YearLabel
           data-cy={`year-${number}`}
@@ -130,6 +128,7 @@ class CustomYearSelector extends React.Component {
           </Text>
         </YearLabel>
       );
+    }
 
     return yearLabels;
   };

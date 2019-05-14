@@ -1,31 +1,26 @@
 /* base */
 import React from 'react';
 import { connect } from 'react-redux';
-
 /* actions */
 import * as actions from 'services/actions/general';
-
 /* components */
 import Stepper from 'components/Stepper/Stepper';
 import Snackbar from 'components/Snackbar/Snackbar';
 
 /* utils */
 import {
-  checkEmptyFields,
-  addInEmptyFieldRows
+  addInEmptyFieldRows,
+  checkEmptyFields
 } from 'modules/datamapper/DataMapperModule.util';
 import find from 'lodash/find';
 import { Helmet } from 'react-helmet';
-
 /* styles */
 import {
   ModuleContainer,
-  ModuleHeader,
+  ModuleContent,
   ModuleFooter,
-  ModuleContent
+  ModuleHeader
 } from './DataMapperModule.styles';
-import { SimpleErrorText } from 'components/sort/Misc';
-
 /* fragments */
 import ManMappingStep from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep';
 import MetaDataMediator from 'mediators/DataMapperMediators/MetaDataMediator/MetaDataMediator';
@@ -69,10 +64,6 @@ class DataMapperModule extends React.Component {
     this.props.dispatch(actions.saveStepDataInitial());
   }
 
-  handleClose() {
-    this.setState({ openSnackbar: false });
-  }
-
   // basically checks if next button should be disabled
   // depending on the current step
   nextDisabled() {
@@ -89,13 +80,14 @@ class DataMapperModule extends React.Component {
       );
     }
 
-    if (this.state.step === 2)
+    if (this.state.step === 2) {
       return (
         !this.props.stepData.manMapData ||
         this.props.stepData.manMapData.length === 0
       );
+    }
 
-    if (this.state.step === 4)
+    if (this.state.step === 4) {
       // So here we check if the fourth steps data has been saved
       // and if it contains anything because what we actually save here
       // are the error that we retrieve for this step
@@ -104,6 +96,7 @@ class DataMapperModule extends React.Component {
       return (
         !this.state.stepsDisabled && this.props.stepData.errorColumns.length > 0
       );
+    }
 
     return false;
   }
@@ -122,19 +115,22 @@ class DataMapperModule extends React.Component {
         const metaDataEmptyFields = [];
 
         // we check if the title is empty
-        if (!stepData.metaData.title || stepData.metaData.title.length === 0)
+        if (!stepData.metaData.title || stepData.metaData.title.length === 0) {
           metaDataEmptyFields.push('title');
+        }
 
         // we check if the description is empty
-        if (!stepData.metaData.desc || stepData.metaData.desc.length === 0)
+        if (!stepData.metaData.desc || stepData.metaData.desc.length === 0) {
           metaDataEmptyFields.push('desc');
+        }
 
         // we check if the datasource is empty
         if (
           !stepData.metaData.dataSource.value ||
           stepData.metaData.dataSource.value.length === 0
-        )
+        ) {
           metaDataEmptyFields.push('dataSource');
+        }
 
         if (metaDataEmptyFields.length > 0) {
           this.setState({ openSnackbar: true });
@@ -185,8 +181,9 @@ class DataMapperModule extends React.Component {
         if (
           find(manMapData, ['zoomModel', 'Mixed Value']) &&
           !find(manMapData, ['zoomModel', 'value_format'])
-        )
+        ) {
           manMapEmptyFormat = true;
+        }
 
         if (
           emptyFields.length > 0 ||
@@ -213,15 +210,16 @@ class DataMapperModule extends React.Component {
             manMapEmptyFields,
             manMapEmptyFormat
           };
-        } else if (manMapEmptyFormat) {
+        }
+        if (manMapEmptyFormat) {
           return { manMapEmptyFormat };
-        } else
-          return {
-            step: prevState.step + 1,
-            manMapEmptyFormat,
-            manMapEmptyFields: false,
-            manMapEmptyValue: false
-          };
+        }
+        return {
+          step: prevState.step + 1,
+          manMapEmptyFormat,
+          manMapEmptyFields: false,
+          manMapEmptyValue: false
+        };
       } else return { step: prevState.step + 1 };
     });
   }

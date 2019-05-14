@@ -1,6 +1,5 @@
 /* base */
 import React from 'react';
-
 /* Component */
 import { ModuleContainer } from 'modules/dashboard/DashboardModule.styles';
 import DashboardHeader from '../dashboard/fragments/DashboardHeader/DashboardHeader';

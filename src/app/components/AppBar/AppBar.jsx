@@ -4,32 +4,28 @@ import PropTypes from 'prop-types';
 import { Box } from 'grommet/components/Box';
 import { Menu } from 'grommet-icons/icons/Menu';
 import theme from 'theme/Theme';
-import { withRouter, Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
-
 /* components */
 import {
   AidsFondLogo,
-  MenuButton,
   ComponentBase,
-  PaneButton,
+  MenuButton,
   PaneButContainer,
+  PaneButton,
+  PaneButtonText,
   PaneButtonTextVar,
-  PaneButtonVar,
-  PaneButtonText
+  PaneButtonVar
 } from 'components/AppBar/AppBar.styles';
 import Snackbar from 'components/Snackbar/Snackbar';
 /* icons */
 import SvgIconPlus from 'assets/icons/IconPlus';
 import SvgIconCloseSmall from 'assets/icons/IconCloseSmaller';
 import SvgIconBack from 'assets/icons/IconBack';
-
 /* actions */
 import * as actions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
@@ -49,7 +45,6 @@ export class AppBar extends React.Component {
       auth: true,
       anchorEl: null,
       paneButton: null,
-
       openSnackbar: false
     };
 
@@ -91,8 +86,9 @@ export class AppBar extends React.Component {
         if (
           dataSources.indexOf(indData.dataSource) === -1 &&
           indData.dataSource
-        )
+        ) {
           dataSources.push(indData.dataSource);
+        }
       });
 
       const chartData = {

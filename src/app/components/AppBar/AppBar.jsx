@@ -21,8 +21,7 @@ import {
   PaneButtonTextVar,
   PaneButtonVar
 } from 'components/AppBar/AppBar.styles';
-import { ToastsStore } from 'react-toasts';
-import { SimpleErrorText } from 'components/sort/Misc';
+import Snackbar from 'components/Snackbar/Snackbar';
 /* icons */
 import SvgIconPlus from 'assets/icons/IconPlus';
 import SvgIconCloseSmall from 'assets/icons/IconCloseSmaller';
@@ -45,7 +44,8 @@ export class AppBar extends React.Component {
     this.state = {
       auth: true,
       anchorEl: null,
-      paneButton: null
+      paneButton: null,
+      openSnackbar: false
     };
 
     this.closeSave = this.closeSave.bind(this);
@@ -128,7 +128,7 @@ export class AppBar extends React.Component {
 
       this.props.dispatch(nodeActions.createUpdateChartRequest(chartData));
     } else {
-      ToastsStore.error(<SimpleErrorText> Unauthorized </SimpleErrorText>);
+      this.setState({ openSnackbar: true });
     }
   }
 
@@ -239,6 +239,11 @@ export class AppBar extends React.Component {
         align="center"
       >
         <Box direction="row" justify="center">
+          <Snackbar
+            message="Unauthorizeed"
+            open={this.state.openSnackbar}
+            onClose={() => this.setState({ openSnackbar: false })}
+          />
           <MenuButton
             plain
             icon={<Menu color={theme.color.aidsFondsRed} />}

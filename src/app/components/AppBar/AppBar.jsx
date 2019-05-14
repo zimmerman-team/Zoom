@@ -137,7 +137,7 @@ export class AppBar extends React.Component {
     let buttonLabel = '';
     let paneType = 'none';
 
-    if (this.props.auth0Client.isAuthenticated()) {
+    if (this.props.auth0Client && this.props.auth0Client.isAuthenticated()) {
       if (this.props.dataPaneOpen === paneTypes.none) {
         if (
           this.props.location.pathname.indexOf('/home') !== -1 ||

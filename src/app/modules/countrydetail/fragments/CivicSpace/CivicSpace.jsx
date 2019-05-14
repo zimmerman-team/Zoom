@@ -32,8 +32,8 @@ const CivicSpace = props => {
         showInfoButton
       >
         <Container>
-          {countryDetailMockData.fragments[3].states.map((state, index) => (
-            <ItemContainer key={`country item ${index}`}>
+          {countryDetailMockData.fragments[3].states.map(state => (
+            <ItemContainer key={state.value}>
               <Tooltip
                 position="top"
                 trigger="mouseenter"

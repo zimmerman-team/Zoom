@@ -1,8 +1,10 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 // import { projectsMockData } from '__mocks__/projectsMock';
 import { Box } from 'grommet/components/Box';
+import { RoutedButton } from 'grommet/components/RoutedButton';
 import {
   Label,
   List,
@@ -11,7 +13,7 @@ import {
   SectorList,
   SectorListItem,
   Separator,
-  Heading,
+  TitleContainer,
   Value
 } from 'components/Lists/ProjectList/ProjectList.styles';
 
@@ -49,7 +51,11 @@ const ProjectList = props => {
     <List width="100%">
       {props.projectData.map(project => (
         <ListItem key={`project-${project.id}`}>
-          <Heading to={`/iati-activity/${project.id}`}>{project.title}</Heading>
+          {/* title container */}
+          <TitleContainer level="4" truncate>
+            <Link to={`/iati-activity/${project.id}`}>{project.title}</Link>
+          </TitleContainer>
+
           {/* mixed properties */}
           <Box>
             <PropertyContainer

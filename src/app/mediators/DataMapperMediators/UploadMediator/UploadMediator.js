@@ -4,7 +4,7 @@
 import React from 'react';
 import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
-import { ToastsStore } from 'react-toasts';
+
 /* mutations */
 import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
 import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
@@ -25,6 +25,7 @@ import {
   formatOverviewData
 } from './UploadMediator.util';
 import { formatErrorColumns } from 'mediators/DataMapperMediators/ManualMappingMediator.util';
+import Snackbar from '../../../components/Snackbar/Snackbar';
 
 const propTypes = {
   dataSource: PropTypes.shape({
@@ -105,6 +106,13 @@ class UploadMediator extends React.Component {
     this.handleValidationError = this.handleValidationError.bind(this);
     this.fileValidation = this.fileValidation.bind(this);
     this.afterFileInput = this.afterFileInput.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({
+      openSnackbar: false,
+      errorMessage: ''
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -295,9 +303,8 @@ class UploadMediator extends React.Component {
     const fileType = /[.]/.exec(file.name) ? /[^.]+$/.exec(file.name) : [''];
 
     if (fileType[0] !== 'csv') {
-      ToastsStore.error(
-        <SimpleErrorText> Only csv files are accepted </SimpleErrorText>
-      );
+      this.setState({ openSnackbar: true });
+      this.setState({ errorMessage: 'Only csv files are accepted' });
       this.setState({ url: undefined });
     } else if (file) {
       this.setState({ file });
@@ -309,26 +316,30 @@ class UploadMediator extends React.Component {
       // so that the loading icon would initiate
       this.setState({ file }, this.afterFileUpload);
     } else {
-      ToastsStore.error(
-        <SimpleErrorText>
-          Some error uploading the file occurred
-        </SimpleErrorText>
-      );
+      this.setState({ openSnackbar: true });
+      this.setState({ errorMessage: 'Some error uploading the file occurred' });
     }
   }
 
   render() {
     return (
-      <UploadStep
-        loading={
-          this.state.file.name &&
-          (!this.props.stepData.manMapData ||
-            this.props.stepData.manMapData.length === 0)
-        }
-        error={this.state.url === undefined}
-        file={this.state.file}
-        handleFileUpload={this.handleFileUpload}
-      />
+      <React.Fragment>
+        <Snackbar
+          message={this.state.errorMessage}
+          open={this.state.openSnackbar}
+          onClose={() => this.setState({ openSnackbar: false })}
+        />
+        <UploadStep
+          loading={
+            this.state.file.name &&
+            (!this.props.stepData.manMapData ||
+              this.props.stepData.manMapData.length === 0)
+          }
+          error={this.state.url === undefined}
+          file={this.state.file}
+          handleFileUpload={this.handleFileUpload}
+        />
+      </React.Fragment>
     );
   }
 }

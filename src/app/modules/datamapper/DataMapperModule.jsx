@@ -7,6 +7,7 @@ import * as actions from 'services/actions/general';
 
 /* components */
 import Stepper from 'components/Stepper/Stepper';
+import Snackbar from 'components/Snackbar/Snackbar';
 
 /* utils */
 import {
@@ -14,7 +15,6 @@ import {
   addInEmptyFieldRows
 } from 'modules/datamapper/DataMapperModule.util';
 import find from 'lodash/find';
-import { ToastsStore } from 'react-toasts';
 import { Helmet } from 'react-helmet';
 
 /* styles */
@@ -53,7 +53,10 @@ class DataMapperModule extends React.Component {
       mapStepDisabled: false,
 
       metaDataEmptyFields: [],
-      stepsDisabled: false
+      stepsDisabled: false,
+
+      openSnackbar: false,
+      errorMessage: ''
     };
 
     this.nextStep = this.nextStep.bind(this);
@@ -64,6 +67,10 @@ class DataMapperModule extends React.Component {
   componentWillUnmount() {
     // and we reset the values in the reducer
     this.props.dispatch(actions.saveStepDataInitial());
+  }
+
+  handleClose() {
+    this.setState({ openSnackbar: false });
   }
 
   // basically checks if next button should be disabled
@@ -130,9 +137,9 @@ class DataMapperModule extends React.Component {
           metaDataEmptyFields.push('dataSource');
 
         if (metaDataEmptyFields.length > 0) {
-          ToastsStore.error(
-            <SimpleErrorText> Please fill the required fields </SimpleErrorText>
-          );
+          this.setState({ openSnackbar: true });
+          this.setState({ errorMessage: 'Please fill the required fields' });
+
           props.dispatch(actions.saveStepDataRequest(stepData));
           return { metaDataEmptyFields };
         } else {
@@ -140,13 +147,11 @@ class DataMapperModule extends React.Component {
         }
       } else if (prevState.step === 2) {
         if (!stepData.uploadData) {
-          ToastsStore.error(
-            <SimpleErrorText> Please upload a file </SimpleErrorText>
-          );
+          this.setState({ openSnackbar: true });
+          this.setState({ errorMessage: 'Please upload a file' });
         } else if (!stepData.manMapData || stepData.manMapData.length === 0) {
-          ToastsStore.error(
-            <SimpleErrorText> File Uploading please wait... </SimpleErrorText>
-          );
+          this.setState({ openSnackbar: true });
+          this.setState({ errorMessage: 'File uploading please wait...' });
         } else {
           return { step: prevState.step + 1 };
         }
@@ -157,11 +162,10 @@ class DataMapperModule extends React.Component {
         // and the user should be able to progress only if they've fixed
         // all the found errors
         if (!prevState.stepsDisabled && stepData.errorColumns.length > 0) {
-          ToastsStore.error(
-            <SimpleErrorText>
-              Please correct errors before proceeding
-            </SimpleErrorText>
-          );
+          this.setState({ openSnackbar: true });
+          this.setState({
+            errorMessage: 'Please correct errors before proceeding'
+          });
         } else {
           return { step: prevState.step + 1 };
         }
@@ -298,6 +302,11 @@ class DataMapperModule extends React.Component {
         <Helmet>
           <title>Zoom - Convert Data</title>
         </Helmet>
+        <Snackbar
+          message={this.state.errorMessage}
+          open={this.state.openSnackbar}
+          onClose={() => this.setState({ openSnackbar: false })}
+        />
         <ModuleHeader>
           <Stepper
             step={this.state.step}

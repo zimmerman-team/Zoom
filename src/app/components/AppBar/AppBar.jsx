@@ -24,8 +24,6 @@ import {
   PaneButtonVar,
   PaneButtonText
 } from 'components/AppBar/AppBar.styles';
-import { ToastsStore } from 'react-toasts';
-import { SimpleErrorText } from 'components/sort/Misc';
 
 /* icons */
 import SvgIconPlus from 'assets/icons/IconPlus';
@@ -35,6 +33,7 @@ import SvgIconBack from 'assets/icons/IconBack';
 /* actions */
 import * as actions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
+import Snackbar from '../../modules/datamapper/DataMapperModule';
 
 const propTypes = {
   toggleSideBar: PropTypes.func
@@ -50,7 +49,9 @@ export class AppBar extends React.Component {
     this.state = {
       auth: true,
       anchorEl: null,
-      paneButton: null
+      paneButton: null,
+
+      openSnackbar: false
     };
 
     this.closeSave = this.closeSave.bind(this);
@@ -132,7 +133,7 @@ export class AppBar extends React.Component {
 
       this.props.dispatch(nodeActions.createUpdateChartRequest(chartData));
     } else {
-      ToastsStore.error(<SimpleErrorText> Unauthorized </SimpleErrorText>);
+      this.setState({ openSnackbar: true });
     }
   }
 
@@ -243,6 +244,11 @@ export class AppBar extends React.Component {
         align="center"
       >
         <Box direction="row" justify="center">
+          <Snackbar
+            message="Unauthorizeed"
+            open={this.state.openSnackbar}
+            onClose={() => this.setState({ openSnackbar: false })}
+          />
           <MenuButton
             plain
             icon={<Menu color={theme.color.aidsFondsRed} />}

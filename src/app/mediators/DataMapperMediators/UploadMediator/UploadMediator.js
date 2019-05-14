@@ -4,7 +4,6 @@
 import React from 'react';
 import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
-import { ToastsStore } from 'react-toasts';
 
 /* mutations */
 import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
@@ -31,6 +30,7 @@ import {
   formatManData
 } from './UploadMediator.util';
 import { formatErrorColumns } from 'mediators/DataMapperMediators/ManualMappingMediator.util';
+import Snackbar from '../../../components/AppBar/AppBar';
 
 const propTypes = {
   dataSource: PropTypes.shape({
@@ -96,9 +96,8 @@ class UploadMediator extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = props.stepData.uploadData
-      ? props.stepData.uploadData
-      : step1InitialData.uploadData;
+    this.state =  props.stepData.uploadData ? props.stepData.uploadData : step1InitialData.uploadData;
+
 
     this.handleFileUpload = this.handleFileUpload.bind(this);
     this.handleSourceCompleted = this.handleSourceCompleted.bind(this);
@@ -299,9 +298,8 @@ class UploadMediator extends React.Component {
     const fileType = /[.]/.exec(file.name) ? /[^.]+$/.exec(file.name) : [''];
 
     if (fileType[0] !== 'csv') {
-      ToastsStore.error(
-        <SimpleErrorText> Only csv files are accepted </SimpleErrorText>
-      );
+      this.setState({ openSnackbar: true });
+      this.setState({ errorMessage: 'Only csv files are accepted' });
       this.setState({ url: undefined });
     } else if (file) {
       this.setState({ file });
@@ -313,16 +311,19 @@ class UploadMediator extends React.Component {
       // so that the loading icon would initiate
       this.setState({ file }, this.afterFileUpload);
     } else {
-      ToastsStore.error(
-        <SimpleErrorText>
-          Some error uploading the file occurred
-        </SimpleErrorText>
-      );
+      this.setState({ openSnackbar: true });
+      this.setState({ errorMessage: 'Some error uploading the file occurred' });
     }
   }
 
   render() {
     return (
+      <React.Fragment>
+      <Snackbar
+        message={this.state.errorMessage}
+        open={this.state.openSnackbar}
+        onClose={() => this.setState({ openSnackbar: false })}
+      />
       <UploadStep
         loading={
           this.state.file.name &&
@@ -333,6 +334,7 @@ class UploadMediator extends React.Component {
         file={this.state.file}
         handleFileUpload={this.handleFileUpload}
       />
+      </React.Fragment>
     );
   }
 }

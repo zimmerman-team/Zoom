@@ -17,9 +17,9 @@ import initialPaneState from '__consts__/InitialPaneDataConst';
 import initialState from '__consts__/InitialChartDataConst';
 
 /* components */
-import { ToastsStore } from 'react-toasts';
 import { SimpleErrorText } from 'components/sort/Misc';
 import PropTypes from 'prop-types';
+import Snackbar from '../../../../components/AppBar/AppBar';
 
 const propTypes = {
   auth0Client: PropTypes.shape({}),
@@ -41,7 +41,8 @@ class DuplicatorMediator extends React.Component {
     super(props);
 
     this.state = {
-      duplId: undefined
+      duplId: undefined,
+      openSnackbar: false
     };
 
     this.saveChart = this.saveChart.bind(this);
@@ -116,7 +117,7 @@ class DuplicatorMediator extends React.Component {
 
       this.props.dispatch(nodeActions.createDuplicateChartRequest(chartData));
     } else {
-      ToastsStore.error(<SimpleErrorText> Unauthorized </SimpleErrorText>);
+      this.setState({ openSnackbar: true });
     }
   }
 
@@ -131,12 +132,19 @@ class DuplicatorMediator extends React.Component {
 
   render() {
     return (
+      <React.Fragment>
+      <Snackbar
+        message="Unauthorizeed"
+        open={this.state.openSnackbar}
+        onClose={() => this.setState({ openSnackbar: false })}
+      />
       <DuplicatorTab
         handleSaveEdit={this.saveEdit}
         handleDuplicate={this.saveChart}
         duplName={get(this.props.dupChartCreated, 'data.name')}
         duplID={get(this.props.dupChartCreated, 'data.id')}
       />
+      </React.Fragment>
     );
   }
 }

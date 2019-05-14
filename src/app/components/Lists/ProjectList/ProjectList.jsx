@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 // import { projectsMockData } from '__mocks__/projectsMock';
 import { Box } from 'grommet/components/Box';
-import { RoutedButton } from 'grommet/components/RoutedButton';
 import {
   Label,
   List,
@@ -12,9 +11,10 @@ import {
   SectorList,
   SectorListItem,
   Separator,
-  TitleContainer,
+  Heading,
   Value
 } from 'components/Lists/ProjectList/ProjectList.styles';
+import CountryDetailModule from '../../../modules/countrydetail/CountryDetailModule';
 
 const propTypes = {
   projectData: PropTypes.arrayOf(
@@ -50,15 +50,7 @@ const ProjectList = props => {
     <List width="100%">
       {props.projectData.map(project => (
         <ListItem key={`project-${project.id}`}>
-          {/* title container */}
-          <TitleContainer level="4" truncate>
-            <RoutedButton
-              label={project.title}
-              path={`/iati-activity/${project.id}`}
-              plain
-            />
-          </TitleContainer>
-
+          <Heading to={`/iati-activity/${project.id}`}>{project.title}</Heading>
           {/* mixed properties */}
           <Box>
             <PropertyContainer

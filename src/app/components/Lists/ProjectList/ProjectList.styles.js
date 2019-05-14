@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Box } from 'grommet/components/Box';
-import { Heading } from 'grommet/components/Heading';
+import { NavLink } from 'react-router-dom';
 import theme from 'theme/Theme';
 
 export const List = styled(Box)`
@@ -29,7 +29,8 @@ export const Value = styled.div`
   line-height: 1;
 `;
 
-export const TitleContainer = styled(Heading)`
+export const Heading = styled(NavLink)`
+  text-decoration: none;
   color: ${theme.color.aidsFondsRed};
   font-family: ${theme.font.zoomFontFamTwo};
   font-weight: normal;

@@ -7,6 +7,7 @@ import {
   TextContainer,
   TreeNodeBase
 } from './TreeMapHtmlNode.styles';
+import Theme from 'app/theme/Theme';
 
 const TreeMapHtmlNode = ({ node, style }) => {
   if (style.width <= 0 || style.height <= 0) return null;
@@ -25,9 +26,9 @@ const TreeMapHtmlNode = ({ node, style }) => {
         left: style.x,
         width: style.width,
         height: style.height,
-        background: style.color,
-        borderWidth: style.borderWidth,
-        borderColor: style.borderColor
+        background: Theme.color.treemapNode,
+        borderWidth: 2,
+        borderColor: Theme.color.tremapNodeBorderColor
       }}
     >
       {/* {!hideText && ( */}

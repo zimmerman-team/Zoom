@@ -108,7 +108,7 @@ class UploadMediator extends React.Component {
     this.afterFileInput = this.afterFileInput.bind(this);
   }
 
-  UNSAFE_componentWillMount() {
+  componentDidMount() {
     this.setState({
       openSnackbar: false,
       errorMessage: ''

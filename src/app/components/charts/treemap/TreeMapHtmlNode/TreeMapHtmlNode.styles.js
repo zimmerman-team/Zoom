@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-
 import theme from 'theme/Theme';
+
 /* todo: needs further tweaking from a design perspective and speccing from a business perspective */
 export const TextContainer = styled.div`
   display: flex;
@@ -19,8 +19,10 @@ export const NodeLabel = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: ${theme.font.zoomFontFamOne};
-  line-height: 1;
+  line-height: 1.5;
+  text-align: center;
 `;
+
 export const NodeValue = styled.span`
   user-select: none;
   font-family: ${theme.font.zoomFontFamOne};

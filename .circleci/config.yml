@@ -12,12 +12,13 @@ jobs:
       - restore_cache:
           keys:
             - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-cache-{{ .Branch }}
-            - yarn-cache-
       - run: yarn install
       - save_cache:
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths: node_modules
+          paths:
+            - node_modules
+            - ~/.cache
+
       - persist_to_workspace:
           root: .
           paths:
@@ -152,6 +153,8 @@ jobs:
 #          paths: node_modules
 
       # setting this env var to only test on dev server when deployed.
+      - run: sudo apt-get install tree
+      - run: tree
       - run:
           name: Set CYPRESS_baseUrl
           command: |

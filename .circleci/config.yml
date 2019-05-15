@@ -11,16 +11,15 @@ jobs:
           at: ~/zoom-v2-ui
       - restore_cache:
           keys:
-            - yar-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yar-cache
+            - dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run: yarn install
       - save_cache:
-          key: yar-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
-          - node_modules
-          - .cache
+          - ~/.yarn
+          - ~/.cache
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
             - .
             - .cache/Cypress

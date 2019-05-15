@@ -155,6 +155,7 @@ jobs:
 #          paths: node_modules
 
       # setting this env var to only test on dev server when deployed.
+      - run: echo 'export CYPRESS_CACHE_FOLDER=~/home/zoom-v2-ui/.cache/Cypress'
       - run:
           name: Set CYPRESS_baseUrl
           command: |

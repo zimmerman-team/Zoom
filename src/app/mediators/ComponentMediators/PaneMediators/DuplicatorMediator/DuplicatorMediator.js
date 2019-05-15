@@ -17,14 +17,12 @@ const propTypes = {
   auth0Client: PropTypes.shape({}),
   chartData: PropTypes.shape({}),
   paneData: PropTypes.shape({}),
-  user: PropTypes.shape({}),
   dupChartCreated: PropTypes.shape({})
 };
 const defaultProps = {
   auth0Client: {},
   chartData: {},
   paneData: {},
-  user: {},
   dupChartCreated: {}
 };
 
@@ -149,7 +147,6 @@ const mapStateToProps = state => {
   return {
     chartData: state.chartData.chartData,
     paneData: state.paneData.paneData,
-    user: state.user,
     dupChartCreated: state.dupChartCreated
   };
 };

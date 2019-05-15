@@ -9,6 +9,10 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/zoom-v2-ui
+      - run: pwd
+      - run: ls -d */
+      - run: sudo apt-get install tree
+      - run: tree
       - restore_cache:
           keys:
             - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}

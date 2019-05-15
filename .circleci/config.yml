@@ -17,15 +17,14 @@ jobs:
       - save_cache:
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
-            - ~/.yarn
-            - ~/.cache
+          - node_modules
+          - .cache
       - persist_to_workspace:
-          root: ~/
+          root: .
           paths:
-            - zoom-v2-ui/
+            - .
             - .cache/Cypress
-      - run: sudo apt-get install tree
-      - run: tree
+
 
   #  BUILD SOURCE AND DEPLOY TO SERVER
   build_deploy:
@@ -137,7 +136,7 @@ jobs:
 
   test_e2e:
     docker:
-      - image: cypress/browsers:chrome69
+      - image: circleci/node:10.13.0-browsers
     parallelism: 2
     working_directory: ~/zoom-v2-ui
     steps:

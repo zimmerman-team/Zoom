@@ -1,7 +1,6 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createBrowserHistory } from 'history';
 /* consts */
 import chartTypes from '__consts__/ChartConst';
 /* utils */

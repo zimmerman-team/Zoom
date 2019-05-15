@@ -4,19 +4,16 @@ jobs:
   checkout_repo:
     docker:
       - image: circleci/node:10.13.0
-    working_directory: ~/zoom-v2-ui
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/zoom-v2-ui
       - restore_cache:
           keys:
-            - ependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - pendency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run: yarn install
       - run: sudo apt-get install tree
       - run: tree
       - save_cache:
-          key: ependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: pendency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
           - .yarn
           - ./cache
@@ -31,11 +28,10 @@ jobs:
   build_deploy:
     docker:
       - image: circleci/node:10.13.0
-    working_directory: ~/zoom-v2-ui
     steps:
       - checkout
       - attach_workspace:
-          at: ~/zoom-v2-ui
+          at: ~/
       - run: sudo apt-get install python-dev
       - run: ./scripts/install-watchman.sh
       - run: yarn relay
@@ -139,10 +135,9 @@ jobs:
     docker:
       - image: circleci/node:10.13.0-browsers
     parallelism: 2
-    working_directory: ~/zoom-v2-ui
     steps:
       - attach_workspace:
-          at: ~/zoom-v2-ui
+          at: ~/
       # --ignore-engines is a temporarily fix for the module codacy-coverage not having updated their node version....
 #      - restore_cache:
 #          keys:

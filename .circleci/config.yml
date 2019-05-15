@@ -18,12 +18,13 @@ jobs:
           paths:
             - node_modules
             - ~/.cache
-
       - persist_to_workspace:
           root: .
           paths:
             - .
             - .cache/Cypress
+      - run: sudo apt-get install tree
+      - run: tree
 
   #  BUILD SOURCE AND DEPLOY TO SERVER
   build_deploy:
@@ -153,8 +154,6 @@ jobs:
 #          paths: node_modules
 
       # setting this env var to only test on dev server when deployed.
-      - run: sudo apt-get install tree
-      - run: tree
       - run:
           name: Set CYPRESS_baseUrl
           command: |

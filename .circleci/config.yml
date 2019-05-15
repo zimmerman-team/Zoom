@@ -4,14 +4,13 @@ jobs:
   checkout_repo:
     docker:
       - image: circleci/node:10.13.0
+    working_directory: ~/zoom-v2-ui
     steps:
       - checkout
       - restore_cache:
           keys:
             - pendency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run: yarn install
-      - run: sudo apt-get install tree
-      - run: tree
       - save_cache:
           key: pendency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
@@ -28,10 +27,11 @@ jobs:
   build_deploy:
     docker:
       - image: circleci/node:10.13.0
+    working_directory: ~/zoom-v2-ui
     steps:
       - checkout
       - attach_workspace:
-          at: ~/
+          at: ~/zoom-v2-ui
       - run: sudo apt-get install python-dev
       - run: ./scripts/install-watchman.sh
       - run: yarn relay
@@ -137,7 +137,7 @@ jobs:
     parallelism: 2
     steps:
       - attach_workspace:
-          at: ~/
+          at: ~/zoom-v2-ui
       # --ignore-engines is a temporarily fix for the module codacy-coverage not having updated their node version....
 #      - restore_cache:
 #          keys:
@@ -150,7 +150,6 @@ jobs:
 #          paths: node_modules
 
       # setting this env var to only test on dev server when deployed.
-      - run: echo 'export CYPRESS_CACHE_FOLDER=~/home/zoom-v2-ui/.cache/Cypress'
       - run:
           name: Set CYPRESS_baseUrl
           command: |

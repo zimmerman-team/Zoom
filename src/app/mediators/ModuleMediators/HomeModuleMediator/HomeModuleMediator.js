@@ -16,6 +16,7 @@ import { initialState } from 'mediators/ModuleMediators/HomeModuleMediator/HomeM
 import generalInitial from '__consts__/InitialChartDataConst';
 import { connect } from 'react-redux';
 import * as actions from 'services/actions/general';
+import { geoTypes } from '__consts__/GeolocationConst';
 
 const propTypes = {
   indicatorAggregations: PropTypes.shape({
@@ -169,11 +170,9 @@ class HomeModuleMediator extends Component {
     // TODO: make this work differently, this is currently i quick and dirty fix
     if (
       this.props.indicatorAggregations.indicators1[0] &&
-      this.props.indicatorAggregations.indicators1[0].geolocationTag &&
-      this.props.indicatorAggregations.indicators1[0].geolocationTag.indexOf(
-        ','
-      ) !== -1 &&
-      /\d/.test(this.props.indicatorAggregations.indicators1[0].geolocationTag)
+      this.props.indicatorAggregations.indicators1[0].geolocationType &&
+      this.props.indicatorAggregations.indicators1[0].geolocationType ===
+        geoTypes.pointBased
     ) {
       longLatData = formatLongLatData(
         this.props.indicatorAggregations.indicators1,

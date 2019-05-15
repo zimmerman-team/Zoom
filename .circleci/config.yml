@@ -19,12 +19,12 @@ jobs:
           key: ependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
           - .yarn
-          - .cache
+          - ./cache
       - persist_to_workspace:
           root: .
           paths:
             - .
-            - .cache/Cypress
+            - ./cache/Cypress
 
 
   #  BUILD SOURCE AND DEPLOY TO SERVER

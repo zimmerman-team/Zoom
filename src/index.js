@@ -12,6 +12,7 @@ import createSagaMiddleware from 'redux-saga';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore, persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
+import createEncryptor from 'redux-persist-transform-encrypt';
 
 import reducers from 'services/reducers';
 import mutationReducers from 'services/reducers/mutation';
@@ -28,10 +29,18 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     })
   : compose;
 
+const encryptor = createEncryptor({
+  secretKey: 'my-super-secret-key',
+  onError: error => {
+    // Handle the error
+  }
+});
+
 const persistConfig = {
   key: 'root',
   storage: storageSession,
-  whitelist: ['open']
+  whitelist: ['open', 'user'],
+  transforms: [encryptor]
 };
 
 const store = createStore(

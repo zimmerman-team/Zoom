@@ -113,10 +113,10 @@ export class LoginForm extends React.Component {
       borderStyle: this.state.error ? 'solid' : 'none',
       borderColor: this.state.error ? theme.color.aidsFondsRed : 'none'
     };
-    let headerText = this.props.auth0Client.isAuthenticated()
+    let headerText = this.props.user
       ? `Welcome ${greetingName}`
       : 'Sign in registered users';
-    if (!this.props.auth0Client.isAuthenticated()) {
+    if (!this.props.user) {
       headerText =
         this.state.view === 'login'
           ? 'Sign in registered users'
@@ -129,7 +129,7 @@ export class LoginForm extends React.Component {
           <LoginHeaderLabel size="small">{headerText}</LoginHeaderLabel>
         </LoginHeader>
 
-        {this.props.auth0Client.isAuthenticated() ? (
+        {this.props.user ? (
           <FormButton
             onClick={() => {
               this.props.auth0Client.signOut().then(() => {

@@ -20,7 +20,8 @@ export function data(
     {
       label: 'Data sets',
       path: `${Path}data-sets`,
-      count: dataSets.length
+      count: dataSets.length,
+      adminOnly: true
     },
     {
       label: 'Focus pages',
@@ -42,8 +43,8 @@ export function data(
   ];
 
   return filter(tabs, t => {
-    if (t.adminOnly) return isAdmin;
-    if (t.superAdminOnly) return isSuperAdmin;
+    if (t.adminOnly) return isAdmin || isSuperAdmin;
+    // if (t.superAdminOnly) return isSuperAdmin;
     return true;
   });
 }

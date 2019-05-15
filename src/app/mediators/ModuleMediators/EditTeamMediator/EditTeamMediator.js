@@ -49,7 +49,7 @@ class EditTeamMediator extends React.Component {
 
   getAllUsers = initialLoad => {
     if (initialLoad) {
-      this.props.auth0Client.getAllUsers(this.setUsers);
+      this.props.auth0Client.getAllUsers(this.setUsers, this.props.user);
     } else {
       this.setUsers(this.state.allUsers, false);
     }

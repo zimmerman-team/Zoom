@@ -36,7 +36,7 @@ class CreateTeamMediator extends React.Component {
 
   getAllUsers = initialLoad => {
     if (initialLoad) {
-      this.props.auth0Client.getAllUsers(this.setUsers);
+      this.props.auth0Client.getAllUsers(this.setUsers, this.props.user.data);
     } else {
       this.setUsers(this.state.allUsers, false);
     }
@@ -190,7 +190,8 @@ class CreateTeamMediator extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    usersTeam: state.usersTeam
+    usersTeam: state.usersTeam,
+    user: state.user
   };
 };
 

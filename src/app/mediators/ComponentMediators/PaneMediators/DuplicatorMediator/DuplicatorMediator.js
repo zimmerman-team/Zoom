@@ -9,9 +9,9 @@ import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 /* consts */
 /* components */
-import { ToastsStore } from 'react-toasts';
 import { SimpleErrorText } from 'components/sort/Misc';
 import PropTypes from 'prop-types';
+import Snackbar from 'components/Snackbar/Snackbar';
 
 const propTypes = {
   auth0Client: PropTypes.shape({}),
@@ -33,7 +33,8 @@ class DuplicatorMediator extends React.Component {
     super(props);
 
     this.state = {
-      duplId: undefined
+      duplId: undefined,
+      openSnackbar: false
     };
 
     this.saveChart = this.saveChart.bind(this);
@@ -58,7 +59,7 @@ class DuplicatorMediator extends React.Component {
 
   // TODO somehow make this funciton reusable cause the same one is used in AppBar.jsx
   saveChart(chartId = 'vizID') {
-    if (this.props.auth0Client.isAuthenticated()) {
+    if (this.props.user) {
       const profile = this.props.auth0Client.getProfile();
 
       const dataSources = [];
@@ -109,7 +110,7 @@ class DuplicatorMediator extends React.Component {
 
       this.props.dispatch(nodeActions.createDuplicateChartRequest(chartData));
     } else {
-      ToastsStore.error(<SimpleErrorText> Unauthorized </SimpleErrorText>);
+      this.setState({ openSnackbar: true });
     }
   }
 
@@ -124,12 +125,19 @@ class DuplicatorMediator extends React.Component {
 
   render() {
     return (
-      <DuplicatorTab
-        handleSaveEdit={this.saveEdit}
-        handleDuplicate={this.saveChart}
-        duplName={get(this.props.dupChartCreated, 'data.name')}
-        duplID={get(this.props.dupChartCreated, 'data.id')}
-      />
+      <React.Fragment>
+        <Snackbar
+          message="Unauthorizeed"
+          open={this.state.openSnackbar}
+          onClose={() => this.setState({ openSnackbar: false })}
+        />
+        <DuplicatorTab
+          handleSaveEdit={this.saveEdit}
+          handleDuplicate={this.saveChart}
+          duplName={get(this.props.dupChartCreated, 'data.name')}
+          duplID={get(this.props.dupChartCreated, 'data.id')}
+        />
+      </React.Fragment>
     );
   }
 }

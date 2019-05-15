@@ -11,11 +11,11 @@ jobs:
           at: ~/zoom-v2-ui
       - restore_cache:
           keys:
-            - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-cache
+            - yar-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yar-cache
       - run: yarn install
       - save_cache:
-          key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: yar-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
           - node_modules
           - .cache

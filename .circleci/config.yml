@@ -15,7 +15,7 @@ jobs:
           key: pendency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
           - .yarn
-          - ./cache
+          - ./.cache
       - persist_to_workspace:
           root: .
           paths:

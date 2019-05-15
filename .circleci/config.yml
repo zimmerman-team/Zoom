@@ -9,10 +9,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run: yarn install
       - save_cache:
-          key: dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
           - node_modules
           - ./.cache

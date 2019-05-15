@@ -63,7 +63,6 @@ export const SectorListItem = styled(Value)`
     content: ',';
     margin-right: 4px;
   }
-
   &:last-child {
     &:after {
       content: '';

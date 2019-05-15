@@ -135,6 +135,7 @@ jobs:
     docker:
       - image: circleci/node:10.13.0-browsers
     parallelism: 2
+    working_directory: ~/zoom-v2-ui
     steps:
       - attach_workspace:
           at: ~/zoom-v2-ui

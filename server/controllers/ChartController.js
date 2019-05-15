@@ -174,7 +174,7 @@ const ChartController = {
       });
   },
 
-  // this basically validates the user and gets all public charts
+  // this basically gets all public charts
   getPublic: (req, res) => {
     const { sortBy, pageSize, page, searchTitle } = req.query;
     Chart.countDocuments(
@@ -200,7 +200,7 @@ const ChartController = {
           .skip(p * pSize)
           .collation({ locale: 'en' })
           .sort(sort)
-          .populate('author', 'username authId')
+          .populate('author', 'username authId firstName lastName')
           .exec((chartError, charts) => {
             if (chartError) general.handleError(res, chartError);
             res.json({

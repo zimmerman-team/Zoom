@@ -16,6 +16,7 @@ import {
   ItemLabel,
   NavPaneItem
 } from './NavPane.style';
+import get from 'lodash/get';
 
 /* todo: re-assess logic in this component, seems somewhat convoluted */
 
@@ -62,8 +63,8 @@ class NavPane extends React.Component {
 
             {/*{this.props.user.role != 'Regular user' && (*/}
 
-            {this.props.auth0Client.isAdministrator() ||
-            this.props.auth0Client.isSuperAdmin() ? (
+            {get(this.props.user, 'role', '') === 'Administrator' ||
+            get(this.props.user, 'role', '') === 'Super admin' ? (
               <NavPaneItem to="/mapper" data-cy="nav-pane-item-1">
                 <ItemIcon>
                   <SvgIconPointer />

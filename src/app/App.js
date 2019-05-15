@@ -1,17 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
+// import { Provider } from 'react-redux';
 import JssProvider from 'react-jss/lib/JssProvider';
+import { BrowserRouter as Router, withRouter } from 'react-router-dom';
+import { graphql, QueryRenderer } from 'react-relay';
+import { Environment, Network, RecordSource, Store } from 'relay-runtime';
+import auth0Client from 'auth/Auth';
+import Analytics from 'react-router-ga';
 import {
   createGenerateClassName,
   MuiThemeProvider,
   createMuiTheme
 } from '@material-ui/core/styles';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { graphql, QueryRenderer } from 'react-relay';
-import { Environment, Network, RecordSource, Store } from 'relay-runtime';
-import auth0Client from 'auth/Auth';
-import Analytics from 'react-router-ga';
-
+import Cookies from 'universal-cookie';
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
 
@@ -26,15 +27,6 @@ import { ZoomTheme } from 'styles/ZoomTheme';
 
 /* global app components */
 import AppBar from 'components/AppBar/AppBar';
-
-import {
-  ToastsContainer,
-  ToastsStore,
-  ToastsContainerPosition
-} from 'react-toasts';
-
-import MainMenuDrawer from 'components/MainMenuDrawer/MainMenuDrawer';
-import CookieNotice from 'components/CookieNotice/CookieNotice';
 
 const theme = createMuiTheme({
   /*transitions: {
@@ -53,6 +45,9 @@ const theme = createMuiTheme({
     }
   }
 });
+
+import MainMenuDrawer from 'components/MainMenuDrawer/MainMenuDrawer';
+import CookieNotice from 'components/CookieNotice/CookieNotice';
 
 const modernEnvironment = new Environment({
   network: Network.create(fetchQuery),
@@ -111,8 +106,8 @@ class App extends React.Component {
     if (!isEqual(this.props.user, prevProps.user)) {
       if (this.props.user.data) {
         // so we update the user
-        auth0Client.getUserRole().then(role => {
-          auth0Client.getUserGroup().then(groups => {
+        auth0Client.getUserRole(this.props.user.data).then(role => {
+          auth0Client.getUserGroup(null, this.props.user.data).then(groups => {
             const profile = auth0Client.getProfile();
             this.props.dispatch(
               nodeActions.updateUserRequest({
@@ -141,32 +136,33 @@ class App extends React.Component {
 
         // but first we get them user roles and groups, cause they need to be retrieved
         // in a very weird way
-        auth0Client.getUserRole().then(role => {
-          auth0Client.getUserGroup().then(groups => {
-            const profile = auth0Client.getProfile();
-
-            // and we finally make the call to add the user
-            this.props.dispatch(
-              nodeActions.addUserRequest({
-                username: profile.nickname,
-                email: profile.email,
-                authId: profile.sub,
-                role,
-                avatar: profile.picture,
-                firstName: get(
-                  profile['https://auth.nyuki.io_user_metadata'],
-                  'firstName',
-                  ''
-                ),
-                lastName: get(
-                  profile['https://auth.nyuki.io_user_metadata'],
-                  'lastName',
-                  ''
-                ),
-                teams: groups.map(g => g.name)
-              })
-            );
-          });
+        const profile = auth0Client.getProfile();
+        auth0Client.getUserRole({ authId: profile.sub }).then(role => {
+          auth0Client
+            .getUserGroup(null, { authId: profile.sub })
+            .then(groups => {
+              // and we finally make the call to add the user
+              this.props.dispatch(
+                nodeActions.addUserRequest({
+                  username: profile.nickname,
+                  email: profile.email,
+                  authId: profile.sub,
+                  role,
+                  avatar: profile.picture,
+                  firstName: get(
+                    profile['https://auth.nyuki.io_user_metadata'],
+                    'firstName',
+                    ''
+                  ),
+                  lastName: get(
+                    profile['https://auth.nyuki.io_user_metadata'],
+                    'lastName',
+                    ''
+                  ),
+                  teams: groups.map(g => g.name)
+                })
+              );
+            });
         });
       }
     }
@@ -200,12 +196,6 @@ class App extends React.Component {
                     <Router>
                       <React.Fragment>
                         <CookieNotice />
-
-                        {/* todo: replace toasts with material-ui snackbar https://material-ui.com/demos/snackbars/ */}
-                        <ToastsContainer
-                          store={ToastsStore}
-                          position={ToastsContainerPosition.TOP_CENTER}
-                        />
                         <AppBar
                           toggleSideBar={() =>
                             this.setState({
@@ -216,6 +206,7 @@ class App extends React.Component {
                         />
                         <MainMenuDrawer
                           auth0Client={auth0Client}
+                          user={this.props.user}
                           open={this.state.showSidebar}
                           toggleSideBar={() =>
                             this.setState({

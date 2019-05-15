@@ -20,7 +20,9 @@ jobs:
           paths: node_modules
       - persist_to_workspace:
           root: .
-          paths: .
+          paths:
+            - .
+            - .cache/Cypress
 
   #  BUILD SOURCE AND DEPLOY TO SERVER
   build_deploy:

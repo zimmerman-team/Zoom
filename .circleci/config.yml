@@ -19,7 +19,7 @@ jobs:
             - node_modules
             - ~/.cache
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
             - .
             - .cache/Cypress

@@ -402,12 +402,14 @@ class VisualizerModuleMediator extends Component {
       // so we associate the sub-indicators with their respective indicator
       // cause the data retrieved in 'indicatorData' might not be aligned
       // in the same way as the selectedInd data is aligned
-      selectedInd[indItem.index].subIndicators = subIndicators;
+      selectedInd[indItem.index] = {
+        ...selectedInd[indItem.index],
+        subIndicators
+      };
     });
-
     // and we save the subindicator selection for the datapane
     this.props.dispatch(
-      actions.storePaneDataRequest({
+      actions.storeChartDataRequest({
         selectedInd
       })
     );

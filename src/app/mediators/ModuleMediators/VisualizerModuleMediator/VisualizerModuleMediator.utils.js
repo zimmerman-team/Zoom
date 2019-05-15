@@ -5,6 +5,7 @@ import { range } from 'd3-array';
 import chartTypes from '__consts__/ChartConst';
 import { colorSet } from '__consts__/PaneConst';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
+import { geoTypes } from '__consts__/GeolocationConst';
 
 // these are aggregation keys associated with graphql returned variables
 // 'geolocationTag' & 'date' are the graphql variables
@@ -274,9 +275,8 @@ export function formatGeoData(indAggregations) {
       // TODO: make this work differently, this is currently i quick and dirty fix
       if (
         aggregation.data[0] &&
-        aggregation.data[0].geolocationTag &&
-        aggregation.data[0].geolocationTag.indexOf(',') !== -1 &&
-        /\d/.test(aggregation.data[0].geolocationTag)
+        aggregation.data[0].geolocationType &&
+        aggregation.data[0].geolocationType === geoTypes.pointBased
       ) {
         // so if the tag contains some numbers divided by a comma
         // that means that its a long/lat aggregation

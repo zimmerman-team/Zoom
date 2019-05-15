@@ -139,15 +139,15 @@ jobs:
       - attach_workspace:
           at: ~/zoom-v2-ui
       # --ignore-engines is a temporarily fix for the module codacy-coverage not having updated their node version....
-      - restore_cache:
-          keys:
-            - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-cache-{{ .Branch }}
-            - yarn-cache-
-      - run: yarn add cypress --ignore-engines
-      - save_cache:
-          key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths: node_modules
+#      - restore_cache:
+#          keys:
+#            - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+#            - yarn-cache-{{ .Branch }}
+#            - yarn-cache-
+#      - run: yarn add cypress --ignore-engines
+#      - save_cache:
+#          key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+#          paths: node_modules
 
       # setting this env var to only test on dev server when deployed.
       - run:
@@ -163,9 +163,6 @@ jobs:
               echo 'export CYPRESS_baseUrl="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
             fi
             source $BASH_ENV
-      - run:
-          name: "What is my CIRCLE_PULL_REQUEST string"
-          command: echo $CIRCLE_PULL_REQUEST
       - run:
           name: Run E2E test
           # Here we check if the bash variable is unset, or set to a empty string

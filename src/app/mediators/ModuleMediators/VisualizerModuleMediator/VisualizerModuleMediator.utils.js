@@ -582,32 +582,68 @@ export function formatTableData(indicators) {
 
 export function formatDonutData(indicators, colors = colorSet[0].colors) {
   const chartData = [];
-  indicators.map((indicator, indIndex) => {
-    indicator.data.map(indItem => {
-      if (chartData[indIndex] === undefined) {
-        const colorInd =
-          indIndex < colors.length ? indIndex : colors.length - 1;
+  const donutChartLabels = [];
 
-        chartData.push({
-          id: `${indItem.indicatorName} ${indIndex}`,
-          label: `${indItem.indicatorName} - ${indicator.selectedSubInd.join(
-            ', '
-          )}`,
-          value: Math.round(indItem.value),
-          color: colors[colorInd]
-        });
-      } else chartData[indIndex].value += Math.round(indItem.value);
-    });
+  let colorInd = 0;
+
+  indicators.forEach((indicator, indIndex) => {
+    if (indicator.data[0]) {
+      let indName = indicator.data[0].indicatorName;
+      const existInd = donutChartLabels.indexOf(indName);
+
+      // so we need this logic for when a person would
+      // plot two indicators with the same name
+      // as the id needs to be unique, we just add
+      // the index as a suffix
+      if (existInd !== -1) indName = indName.concat(` (${indIndex})`);
+
+      donutChartLabels.push(indName);
+
+      indicator.data.forEach(indItem => {
+        const itemId = `${indName} - ${indItem.filterName}`;
+
+        const chartItemInd = findIndex(chartData, ['id', itemId]);
+
+        if (chartItemInd === -1) {
+          chartData.push({
+            id: itemId,
+            label: itemId,
+            value: Math.round(indItem.value),
+            color: colors[colorInd]
+          });
+
+          if (colorInd + 1 < colors.length) colorInd += 1;
+        } else chartData[chartItemInd].value += Math.round(indItem.value);
+      });
+    }
   });
 
   return chartData;
+}
+
+// so this key formatting works a bit different than other key formatting
+// cause this one can actually take in all data, cause each data item
+// is just a seperate part of the donut and each part should have a key/a legend
+export function formatDonutKeys(chartData) {
+  const chartKeys = [];
+
+  chartData.forEach(donutItem => {
+    chartKeys.push({
+      label: donutItem.label,
+      name: donutItem.id,
+      color: donutItem.color
+    });
+  });
+
+  return chartKeys;
 }
 
 export function getChartKeys(
   chartType,
   indicators,
   colors = colorSet[0].colors,
-  currKeys
+  currKeys,
+  data = []
 ) {
   switch (chartType) {
     case chartTypes.lineChart:
@@ -615,7 +651,7 @@ export function getChartKeys(
     case chartTypes.barChart:
       return formatBarChartKeys(indicators);
     case chartTypes.donutChart:
-      return formatChartLegends(indicators, colors, currKeys);
+      return formatDonutKeys(data);
     default:
       return [];
   }

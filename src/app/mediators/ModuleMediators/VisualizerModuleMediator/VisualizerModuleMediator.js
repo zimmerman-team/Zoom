@@ -16,6 +16,7 @@ import {
   formatCountryParam,
   formatDate,
   formatDonutData,
+  formatDonutKeys,
   formatGeoData,
   formatLineData,
   formatTableData,
@@ -105,6 +106,7 @@ const indicatorDataQuery = graphql`
         "geolocationPolygons"
         "geolocationCenterLongLat"
         "valueFormatType"
+        "filterName"
       ]
       aggregation: ["Sum(value)"]
       orderBy: $orderBy
@@ -122,6 +124,7 @@ const indicatorDataQuery = graphql`
       geolocationPolygons
       geolocationCenterLongLat
       valueFormatType
+      filterName
       date
       value
     }
@@ -371,11 +374,7 @@ class VisualizerModuleMediator extends Component {
           aggregationData,
           this.props.chartData.specOptions[graphKeys.colorPallet]
         );
-        chartKeys = formatChartLegends(
-          selectedInds,
-          this.props.chartData.specOptions[graphKeys.colorPallet],
-          this.props.chartData.chartKeys
-        );
+        chartKeys = formatDonutKeys(data);
         break;
       default:
         data = [];
@@ -612,7 +611,8 @@ class VisualizerModuleMediator extends Component {
             type,
             selectedInds,
             specOptions[graphKeys.colorPallet],
-            []
+            [],
+            this.props.chartResults.data
           ),
         specOptions
       })

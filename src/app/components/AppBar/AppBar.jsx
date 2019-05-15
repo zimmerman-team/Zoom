@@ -45,6 +45,7 @@ export class AppBar extends React.Component {
       auth: true,
       anchorEl: null,
       paneButton: null,
+      errorMessage: 'Error',
       openSnackbar: false
     };
 
@@ -67,11 +68,18 @@ export class AppBar extends React.Component {
     // so we only want to load the user to the dashboard after their
     // chart was saved
     // so that the edited chart would appear with the new data in the dashboard
-    if (
-      !isEqual(this.props.chartCreated, prevProps.chartCreated) &&
-      this.props.chartCreated.data
-    ) {
-      this.props.history.push('/dashboard');
+    if (!isEqual(this.props.chartCreated, prevProps.chartCreated)) {
+      if (this.props.chartCreated.data) {
+        this.props.history.push('/dashboard');
+      } else if (
+        this.props.chartCreated.error &&
+        this.props.chartCreated.error.result
+      ) {
+        this.setState({
+          openSnackbar: true,
+          errorMessage: JSON.stringify(this.props.chartCreated.error.result)
+        });
+      }
     }
   }
 
@@ -129,7 +137,7 @@ export class AppBar extends React.Component {
 
       this.props.dispatch(nodeActions.createUpdateChartRequest(chartData));
     } else {
-      this.setState({ openSnackbar: true });
+      this.setState({ openSnackbar: true, errorMessage: 'Unauthorized' });
     }
   }
 
@@ -241,7 +249,7 @@ export class AppBar extends React.Component {
       >
         <Box direction="row" justify="center">
           <Snackbar
-            message="Unauthorizeed"
+            message={this.state.errorMessage}
             open={this.state.openSnackbar}
             onClose={() => this.setState({ openSnackbar: false })}
           />

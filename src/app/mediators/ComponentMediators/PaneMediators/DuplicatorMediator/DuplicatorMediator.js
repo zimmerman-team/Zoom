@@ -32,6 +32,7 @@ class DuplicatorMediator extends React.Component {
 
     this.state = {
       duplId: undefined,
+      errorMessage: 'Error',
       openSnackbar: false
     };
 
@@ -41,17 +42,22 @@ class DuplicatorMediator extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (
-      !isEqual(
-        this.props.dupChartCreated.data,
-        prevProps.dupChartCreated.data
-      ) &&
-      this.props.dupChartCreated.data &&
-      this.state.duplId
+      !isEqual(this.props.dupChartCreated.data, prevProps.dupChartCreated.data)
     ) {
-      window.location = `/visualizer/${get(
-        this.props.dupChartCreated,
-        'data.chartType'
-      )}/${this.state.duplId}/edit`;
+      if (this.props.dupChartCreated.data && this.state.duplId) {
+        window.location = `/visualizer/${get(
+          this.props.dupChartCreated,
+          'data.chartType'
+        )}/${this.state.duplId}/edit`;
+      } else if (
+        this.props.dupChartCreated.error &&
+        this.props.dupChartCreated.error.result
+      ) {
+        this.setState({
+          openSnackbar: true,
+          errorMessage: JSON.stringify(this.props.dupChartCreated.error.result)
+        });
+      }
     }
   }
 
@@ -108,7 +114,7 @@ class DuplicatorMediator extends React.Component {
 
       this.props.dispatch(nodeActions.createDuplicateChartRequest(chartData));
     } else {
-      this.setState({ openSnackbar: true });
+      this.setState({ openSnackbar: true, errorMessage: 'Unauthorized' });
     }
   }
 
@@ -125,7 +131,7 @@ class DuplicatorMediator extends React.Component {
     return (
       <React.Fragment>
         <Snackbar
-          message="Unauthorizeed"
+          message={this.state.errorMessage}
           open={this.state.openSnackbar}
           onClose={() => this.setState({ openSnackbar: false })}
         />

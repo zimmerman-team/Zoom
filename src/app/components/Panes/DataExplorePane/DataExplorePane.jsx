@@ -168,7 +168,6 @@ class DataExplorePane extends React.Component {
         addIndicator: this.props.addIndicator,
         sectionAdd:
           index === this.props.selectedInd.length - 1 && this.props.multipleInd,
-        indicator: indItem.indicator,
         subIndicator: true,
         categorise: true,
         multiple: true,

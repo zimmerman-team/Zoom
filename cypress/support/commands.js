@@ -82,6 +82,28 @@ Cypress.Commands.add(
   }
 );
 
+Cypress.Commands.add('login', (overrides = {}) => {
+  Cypress.log({
+    name: 'loginViaAuth0'
+  });
+
+  const options = {
+    method: 'POST',
+    url: Cypress.env('auth_url'),
+    body: {
+      grant_type: 'password',
+      username: Cypress.env('auth_username'),
+      password: Cypress.env('auth_password'),
+      audience: Cypress.env('auth_audience'),
+      scope:
+        'openid profile email user_metadata read:current_user update:current_user_metadata read:users_app_metadata update:users_app_metadata read:groups update:groups',
+      client_id: Cypress.env('auth_client_id'),
+      client_secret: Cypress.env('auth_client_secret')
+    }
+  };
+  cy.request(options);
+});
+
 // --------- Loaders ---------
 //This is the circular progress loader icon
 Cypress.Commands.add('waitPageLoader', (timeout = 1750000) => {

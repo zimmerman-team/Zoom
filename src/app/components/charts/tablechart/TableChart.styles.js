@@ -39,7 +39,8 @@ export default () =>
       MUIDataTableHeadCell: {
         data: caption,
         fixedHeader: {
-          borderTop: `1px solid ${Theme.color.zoomGreyThirteen}`
+          borderTop: `1px solid ${Theme.color.zoomGreyThirteen}`,
+          zIndex: 0
         }
       },
       MuiTableRow: {

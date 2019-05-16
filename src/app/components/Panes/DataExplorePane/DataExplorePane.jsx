@@ -1,7 +1,6 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createBrowserHistory } from 'history';
 /* consts */
 import chartTypes from '__consts__/ChartConst';
 /* utils */
@@ -192,12 +191,10 @@ class DataExplorePane extends React.Component {
         so can't catch the did update prop change*/
     const indPanels = this.generateIndicatorPanels();
 
-    const history = createBrowserHistory();
-    const isGeoMap =
-      history.location.pathname.includes('geomap') ||
-      history.location.pathname.includes('focusNL') ||
-      history.location.pathname.includes('focusKE') ||
-      history.location.pathname.includes('home');
+    const graphStruct =
+      this.props.chartType === chartTypes.barChart ||
+      this.props.chartType === chartTypes.lineChart ||
+      this.props.chartType === chartTypes.donutChart;
 
     return (
       <ComponentBase style={{ display: this.props.display }}>
@@ -297,7 +294,7 @@ class DataExplorePane extends React.Component {
             />
           </ExpansionPanelContainer>
 
-          {!isGeoMap && (
+          {graphStruct && (
             <ExpansionPanelContainer
               icon={<IconGraphStructure />}
               label="Graph structure"

@@ -90,8 +90,7 @@ export default () =>
           color: `${Theme.color.aidsFondsBlue}!important`
         },
         headerCell: {
-          borderTop: `1px solid ${Theme.color.zoomGreyThirteen}`,
-          zIndex: 0
+          borderTop: `1px solid ${Theme.color.zoomGreyThirteen}`
         }
       },
       MuiTablePagination: {

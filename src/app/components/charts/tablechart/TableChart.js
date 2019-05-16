@@ -3,6 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MUIDataTable from 'mui-datatables';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+// import tableDataMock from './TableData.mock';
+// import tableColumnsMock from './TableColumns.mock';
 /* components */
 import getTheme from './TableChart.styles';
 
@@ -23,6 +25,8 @@ const propTypes = {
 };
 const defaultProps = {
   title: 'No title given',
+  // data: tableDataMock,
+  // columns: tableColumnsMock,
   data: [],
   columns: [],
   options

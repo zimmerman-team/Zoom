@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 /* mock */
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
@@ -9,6 +10,7 @@ import { ResponsiveBar } from '@nivo/bar';
 import TooltipContent from 'modules/visualizer/sort/container/fragments/common/ToolTipContent';
 /* styles */
 import { FragmentBase } from 'modules/visualizer/sort/container/VizContainer.style';
+import graphKeys from '__consts__/GraphStructKeyConst';
 
 const Box = styled.div`
   width: 100%;
@@ -53,7 +55,7 @@ const BarchartFragment = props => {
           )}
           padding={0.3}
           groupMode="grouped"
-          colors="nivo"
+          colors={props.specOptions[graphKeys.colorPallet]}
           colorBy="id"
           defs={[
             {
@@ -126,4 +128,10 @@ const BarchartFragment = props => {
 BarchartFragment.propTypes = propTypes;
 BarchartFragment.defaultProps = defaultProps;
 
-export default BarchartFragment;
+const mapStateToProps = state => {
+  return {
+    specOptions: state.chartData.chartData.specOptions
+  };
+};
+
+export default connect(mapStateToProps)(BarchartFragment);

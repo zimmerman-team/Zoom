@@ -449,8 +449,10 @@ export function formatLineData(indicators, aggregate) {
 // according to the selected indicator
 // array passed into it
 // *this is also formating the barchart by geolocation
-export function formatBarChartKeys(selectedInd) {
+export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
   const chartKeys = [];
+
+  let colorInd = 0;
 
   selectedInd.forEach((indItem, index) => {
     // this if is here so we dont push 'undefined' as a key
@@ -463,8 +465,11 @@ export function formatBarChartKeys(selectedInd) {
 
       chartKeys.push({
         key,
-        label: `${key} - ${indItem.subInd.join(', ')}`
+        label: `${key} - ${indItem.subInd.join(', ')}`,
+        color: colors[colorInd]
       });
+
+      if (colorInd + 1 < colors.length) colorInd += 1;
     }
   });
 
@@ -580,11 +585,9 @@ export function formatTableData(indicators) {
   };
 }
 
-export function formatDonutData(indicators, colors = colorSet[0].colors) {
+export function formatDonutData(indicators) {
   const chartData = [];
   const donutChartLabels = [];
-
-  let colorInd = 0;
 
   indicators.forEach((indicator, indIndex) => {
     if (indicator.data[0]) {
@@ -608,11 +611,8 @@ export function formatDonutData(indicators, colors = colorSet[0].colors) {
           chartData.push({
             id: itemId,
             label: itemId,
-            value: Math.round(indItem.value),
-            color: colors[colorInd]
+            value: Math.round(indItem.value)
           });
-
-          if (colorInd + 1 < colors.length) colorInd += 1;
         } else chartData[chartItemInd].value += Math.round(indItem.value);
       });
     }
@@ -621,18 +621,37 @@ export function formatDonutData(indicators, colors = colorSet[0].colors) {
   return chartData;
 }
 
-// so this key formatting works a bit different than other key formatting
-// cause this one can actually take in all data, cause each data item
-// is just a seperate part of the donut and each part should have a key/a legend
-export function formatDonutKeys(chartData) {
+// so here we gonna format the donut keys according to the
+// selectedInds, and the selected Sub inds, as we want to split
+// the pieces of the donut by the sub-indicator
+export function formatDonutKeys(selectedInds, colors) {
   const chartKeys = [];
+  const indNames = [];
 
-  chartData.forEach(donutItem => {
-    chartKeys.push({
-      label: donutItem.label,
-      name: donutItem.id,
-      color: donutItem.color
-    });
+  let colorInd = 0;
+  selectedInds.forEach((indItem, index) => {
+    // this if is here so we dont push 'undefined' as a key
+    if (indItem && indItem.indName) {
+      let name = indItem.indName;
+
+      if (indNames.indexOf(name) !== -1) {
+        name = indItem.indName.concat(` (${index})`);
+      }
+
+      indNames.push(name);
+
+      indItem.subInd.forEach(subInd => {
+        const itemId = `${name} - ${subInd}`;
+
+        chartKeys.push({
+          label: itemId,
+          name: itemId,
+          color: colors[colorInd]
+        });
+
+        if (colorInd + 1 < colors.length) colorInd += 1;
+      });
+    }
   });
 
   return chartKeys;
@@ -642,16 +661,15 @@ export function getChartKeys(
   chartType,
   indicators,
   colors = colorSet[0].colors,
-  currKeys,
-  data = []
+  currKeys
 ) {
   switch (chartType) {
     case chartTypes.lineChart:
       return formatChartLegends(indicators, colors, currKeys);
     case chartTypes.barChart:
-      return formatBarChartKeys(indicators);
+      return formatBarChartKeys(indicators, colors);
     case chartTypes.donutChart:
-      return formatDonutKeys(data);
+      return formatDonutKeys(indicators, colors);
     default:
       return [];
   }

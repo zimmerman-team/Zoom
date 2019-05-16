@@ -181,7 +181,11 @@ class VisualizerModuleMediator extends Component {
           chartType: this.props.match.params.chart
         })
       );
-      if (chartTypes.lineChart === this.props.match.params.chart) {
+      if (
+        chartTypes.lineChart === this.props.match.params.chart ||
+        chartTypes.barChart === this.props.match.params.chart ||
+        chartTypes.donutChart === this.props.match.params.chart
+      ) {
         // we also store the initial values for the linecharts
         // graphstructure pane
         // so yeah yAxis should initially be numbers
@@ -208,9 +212,6 @@ class VisualizerModuleMediator extends Component {
       this.loadChartData();
     }
 
-    // we update the key data with the colors
-    /* TODO: update the bar data correctly without
-        initiating a change in the saved data */
     if (
       !isEqual(
         this.props.chartData.specOptions[graphKeys.colorPallet],
@@ -224,7 +225,8 @@ class VisualizerModuleMediator extends Component {
         };
       });
 
-      const chartKeys = formatChartLegends(
+      const chartKeys = getChartKeys(
+        this.props.match.params.chart,
         selectedInds,
         this.props.chartData.specOptions[graphKeys.colorPallet],
         this.props.chartData.chartKeys
@@ -364,7 +366,10 @@ class VisualizerModuleMediator extends Component {
           aggregationData,
           this.props.chartData.specOptions[graphKeys.colorPallet]
         );
-        chartKeys = formatBarChartKeys(selectedInds);
+        chartKeys = formatBarChartKeys(
+          selectedInds,
+          this.props.chartData.specOptions[graphKeys.colorPallet]
+        );
         break;
       case chartTypes.tableChart:
         data = formatTableData(aggregationData);
@@ -374,7 +379,10 @@ class VisualizerModuleMediator extends Component {
           aggregationData,
           this.props.chartData.specOptions[graphKeys.colorPallet]
         );
-        chartKeys = formatDonutKeys(data);
+        chartKeys = formatDonutKeys(
+          selectedInds,
+          this.props.chartData.specOptions[graphKeys.colorPallet]
+        );
         break;
       default:
         data = [];
@@ -611,8 +619,7 @@ class VisualizerModuleMediator extends Component {
             type,
             selectedInds,
             specOptions[graphKeys.colorPallet],
-            [],
-            this.props.chartResults.data
+            []
           ),
         specOptions
       })

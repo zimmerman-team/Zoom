@@ -22,6 +22,7 @@ export const DropDownLabel = styled.div`
   font-family: ${theme.font.zoomFontFamOne};
   font-size: 14px;
   margin: auto 0;
+  text-transform: ${props => (props.capitalize ? 'capitalize' : '')};
 `;
 
 export const ComponentBase = styled.div`

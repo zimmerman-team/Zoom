@@ -30,6 +30,9 @@ const caption = {
 
 export default () =>
   createMuiTheme({
+    typography: {
+      useNextVariants: true
+    },
     overrides: {
       MuiTypography: {
         h6,

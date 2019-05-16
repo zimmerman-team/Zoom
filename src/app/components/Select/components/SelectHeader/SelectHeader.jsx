@@ -11,11 +11,13 @@ import IconPointer from 'assets/icons/IconPointer';
 
 const propTypes = {
   headerStyle: PropTypes.object,
-  arrowMargins: PropTypes.string
+  arrowMargins: PropTypes.string,
+  capitalize: PropTypes.bool
 };
 const defaultProps = {
   headerStyle: {},
-  arrowMargins: null
+  arrowMargins: null,
+  capitalize: false
 };
 
 const SelectHeader = props => (
@@ -24,6 +26,7 @@ const SelectHeader = props => (
     // data-cy="select-header"
     style={props.headerStyle ? props.headerStyle : ''}
     onClick={props.onClick}
+    capitalize={props.capitalize}
   >
     <input style={{ display: 'none' }} />
     <PointerContainer

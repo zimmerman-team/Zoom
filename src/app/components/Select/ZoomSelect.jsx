@@ -42,7 +42,8 @@ const propTypes = {
   selectAll: PropTypes.bool,
   defaultAll: PropTypes.bool,
   disabledValues: PropTypes.arrayOf(PropTypes.string),
-  dropDownWidth: PropTypes.number
+  dropDownWidth: PropTypes.number,
+  capitalize: PropTypes.bool
 };
 
 const defaultProps = {
@@ -56,7 +57,8 @@ const defaultProps = {
   search: true,
   selectAll: false,
   disabledValues: [],
-  dropDownWidth: undefined
+  dropDownWidth: undefined,
+  capitalize: false
 };
 
 class ZoomSelect extends React.Component {
@@ -264,7 +266,9 @@ class ZoomSelect extends React.Component {
     if (item.value === 'category') {
       return (
         <CategoryItem key={`dropDownItem-${index}`}>
-          <DropDownLabel>{item.label}</DropDownLabel>
+          <DropDownLabel capitalize={this.props.capitalize}>
+            {item.label}
+          </DropDownLabel>
         </CategoryItem>
       );
     }
@@ -291,7 +295,9 @@ class ZoomSelect extends React.Component {
             }
           />
         )}
-        <DropDownLabel>{item.label}</DropDownLabel>
+        <DropDownLabel capitalize={this.props.capitalize}>
+          {item.label}
+        </DropDownLabel>
       </DropDownItem>
     );
   }
@@ -304,6 +310,7 @@ class ZoomSelect extends React.Component {
         compBorder={this.props.border}
       >
         <SelectHeader
+          capitalize={this.props.capitalize}
           headerStyle={this.props.headerStyle}
           arrowMargins={this.props.arrowMargins}
           placeHolderNumber={this.placeHolderNumber(

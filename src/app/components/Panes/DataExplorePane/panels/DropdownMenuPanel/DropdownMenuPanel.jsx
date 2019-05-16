@@ -40,6 +40,7 @@ const propTypes = {
       defaultAll: PropTypes.bool,
       removeIndicator: PropTypes.func,
       placeHolderNumber: PropTypes.number,
+      capitalize: PropTypes.bool,
       reset: PropTypes.func
     })
   )
@@ -66,6 +67,7 @@ const defaultProps = {
       defaultAll: false,
       removeIndicator: null,
       placeHolderNumber: undefined,
+      capitalize: false,
       reset: undefined
     }
   ]
@@ -119,6 +121,7 @@ const DropdownMenuPanel = props => {
               arraySelected={detail.selectedSources}
               selectVal={detail.selectDataSource}
               valueSelected={detail.valueSelected}
+              capitalize={detail.capitalize}
             />
             {detail.subIndicator && props.handleAxisSwitch && (
               <SwitchContainer>

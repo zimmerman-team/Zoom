@@ -250,6 +250,7 @@ class DataExplorePane extends React.Component {
                   defaultAll: this.props.locationSelected,
                   selectedSources: this.props.selectedRegionVal,
                   valueSelected: this.props.selectedRegionLabels,
+                  capitalize: true,
                   reset: () => this.props.selectRegion('reset')
                 },
                 {
@@ -262,6 +263,7 @@ class DataExplorePane extends React.Component {
                   defaultAll: this.props.locationSelected,
                   selectedSources: this.props.selectedCountryVal,
                   valueSelected: this.props.selectedCountryLabel,
+                  capitalize: true,
                   reset: () => this.props.selectCountry('reset')
                 }
               ]}

@@ -208,6 +208,13 @@ class VisualizerModuleMediator extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // so here we will update the chartId in the chart data, with the newly loaded in
+    // duplicate chart, so yeah this if condition should only happen when a chart has been duplicated
+    // and then has been selected to be edited
+    if (this.props.match.params.code !== prevProps.match.params.code) {
+      this.loadChartData();
+    }
+
     if (!isEqual(this.props.user, prevProps.user) && this.props.user) {
       this.loadChartData();
     }
@@ -647,7 +654,7 @@ class VisualizerModuleMediator extends Component {
         publicPage={this.props.publicPage}
         outerHistory={this.props.history}
         chartType={this.props.paneData.chartType}
-        code={this.props.match.params.code}
+        code={this.props.chartData.chartId}
         loading={
           this.state.loading ||
           this.props.chartCreated.request ||

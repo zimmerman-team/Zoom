@@ -33,9 +33,12 @@ const ComponentBase = styled.div`
 
 const propTypes = {
   data: PropTypes.array,
+  outerHistory: PropTypes.shape({}),
   code: PropTypes.string
 };
-const defaultProps = {};
+const defaultProps = {
+  outerHistory: {}
+};
 
 /*todo: implement dropshadow */
 
@@ -63,6 +66,7 @@ class TabContent extends React.Component {
             section.component && (
               <PropsRoute
                 auth0Client={this.props.auth0Client}
+                outerHistory={this.props.outerHistory}
                 selectAll={this.props.selectAll}
                 dropDownData={this.props.dropDownData}
                 key={shortid.generate()}

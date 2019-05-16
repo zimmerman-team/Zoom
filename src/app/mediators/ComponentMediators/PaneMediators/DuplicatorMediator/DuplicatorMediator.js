@@ -2,6 +2,7 @@
 import React from 'react';
 import DuplicatorTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/DuplicatorTab';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
 /* utils */
@@ -9,19 +10,19 @@ import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 /* consts */
 /* components */
-import { SimpleErrorText } from 'components/sort/Misc';
-import PropTypes from 'prop-types';
 import Snackbar from 'components/Snackbar/Snackbar';
 
 const propTypes = {
   auth0Client: PropTypes.shape({}),
   chartData: PropTypes.shape({}),
+  outerHistory: PropTypes.shape({}),
   paneData: PropTypes.shape({}),
   dupChartCreated: PropTypes.shape({})
 };
 const defaultProps = {
   auth0Client: {},
   chartData: {},
+  outerHistory: {},
   paneData: {},
   dupChartCreated: {}
 };
@@ -45,12 +46,25 @@ class DuplicatorMediator extends React.Component {
       !isEqual(this.props.dupChartCreated.data, prevProps.dupChartCreated.data)
     ) {
       if (this.props.dupChartCreated.data && this.state.duplId) {
-        window.location = `/visualizer/${get(
+        const link = `/visualizer/${get(
           this.props.dupChartCreated,
           'data.chartType'
         )}/${this.state.duplId}/edit`;
+
+        // and we reinitialize the dupChart redux variable before
+        // pushing the duplicate chart into our visualizer routes
+        nodeActions.createDuplicateChartInitial();
+
+        // So this guy pushes the link to the data panes
+        // navigator history, so that the datapane would change accordingly
+        this.props.history.push(link);
+
+        // And this guy pushes the link to the visualizer module history
+        // so that everything in there would change accordingly.
+        this.props.outerHistory.push(link);
       } else if (
         this.props.dupChartCreated.error &&
+        this.props.dupChartCreated.error.status &&
         this.props.dupChartCreated.error.result
       ) {
         this.setState({
@@ -153,7 +167,8 @@ const mapStateToProps = state => {
   return {
     chartData: state.chartData.chartData,
     paneData: state.paneData.paneData,
-    dupChartCreated: state.dupChartCreated
+    dupChartCreated: state.dupChartCreated,
+    user: state.user.data
   };
 };
 

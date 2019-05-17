@@ -31,11 +31,9 @@ import '@percy/cypress';
 //https://github.com/cypress-io/cypress/issues/170
 Cypress.Commands.add('upload_file', (fileName, fileType = ' ', selector) => {
   cy.get(selector).then(subject => {
-    cy.log('GETTING THE SELECTOR WORKS FAM');
     cy.fixture(fileName, 'base64')
       .then(function() {
         Cypress.Blob.base64StringToBlob();
-        cy.log('WE HAVE THE BLOB ON THE SET');
       })
       .then(blob => {
         const el = subject[0];
@@ -43,7 +41,6 @@ Cypress.Commands.add('upload_file', (fileName, fileType = ' ', selector) => {
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(testFile);
         el.files = dataTransfer.files;
-        cy.log('AND WE COMING IN PERFECT');
 
         cy.wrap(subject).trigger('change', { force: true });
       });

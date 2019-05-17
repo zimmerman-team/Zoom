@@ -62,6 +62,83 @@ class Auth {
     localStorage.setItem('auth_expires_at', this.expiresAt);
   }
 
+  getUserGroupNode() {
+    if (this.profile && this.idToken) {
+      axios
+        .get(`/api/getUserGroup/?userId=${this.profile.sub}`, {
+          headers: { Authorization: `Bearer ${this.idToken}` }
+        })
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    }
+  }
+
+  getUserRoleNode() {
+    if (this.profile && this.idToken) {
+      axios
+        .get(`/api/getUserRole/?userId=${this.profile.sub}`, {
+          headers: { Authorization: `Bearer ${this.idToken}` }
+        })
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    }
+  }
+
+  getAllUsersNode() {
+    if (this.profile && this.idToken) {
+      axios
+        .get(`/api/getAllUsers/?userId=${this.profile.sub}`, {
+          headers: { Authorization: `Bearer ${this.idToken}` }
+        })
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    }
+  }
+
+  getUserGroupsNode() {
+    if (this.profile && this.idToken) {
+      axios
+        .get(`/api/getUserGroups/?userId=${this.profile.sub}`, {
+          headers: { Authorization: `Bearer ${this.idToken}` }
+        })
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    }
+  }
+
+  getUserRolesNode() {
+    if (this.profile && this.idToken) {
+      axios
+        .get(`/api/getUserRoles/?userId=${this.profile.sub}`, {
+          headers: { Authorization: `Bearer ${this.idToken}` }
+        })
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    }
+  }
+
+  getGroupNode() {
+    if (this.profile && this.idToken) {
+      axios
+        .get(`/api/getGroup/?groupId=a47623a9-bac0-435a-bc65-ca8192951c20`, {
+          headers: { Authorization: `Bearer ${this.idToken}` }
+        })
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    }
+  }
+
+  getUserNode() {
+    if (this.profile && this.idToken) {
+      axios
+        .get(`/api/getUserFromAuth/?userId=${this.profile.sub}`, {
+          headers: { Authorization: `Bearer ${this.idToken}` }
+        })
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    }
+  }
+
   signOut() {
     return new Promise((resolve, reject) => {
       localStorage.removeItem('auth_access_token');

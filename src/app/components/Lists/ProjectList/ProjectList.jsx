@@ -52,11 +52,16 @@ const ProjectList = props => {
         <ListItem key={`project-${project.id}`}>
           {/* title container */}
           <TitleContainer level="4" truncate>
-            <Link to={`/iati-activity/${project.id}`}>{project.title}</Link>
+            <Link
+              to={`/iati-activity/${project.id}`}
+              data-cy={`project-${project.id}`}
+            >
+              {project.title}
+            </Link>
           </TitleContainer>
 
           {/* mixed properties */}
-          <Box>
+          <Box data-cy="project-list">
             <PropertyContainer
               width="100%"
               direction="row"

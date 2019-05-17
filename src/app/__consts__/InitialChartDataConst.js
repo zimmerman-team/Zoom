@@ -50,7 +50,8 @@ const initialState = {
       ? [
           {
             color: 'hsl(23, 70%, 50%)',
-            name: 'aids related deaths (unaids)',
+            name:
+              'aids related deaths (unaids) - adolescents (10 to 19) realistic estimate',
             orientation: 'left'
           }
         ]
@@ -73,7 +74,10 @@ const initialState = {
       // of the selected indicator
       dataSource:
         process.env.NODE_ENV === 'development' ? 'UNAIDS 2018' : undefined,
-      selectedSubInd: []
+      selectedSubInd:
+        process.env.NODE_ENV === 'development'
+          ? ['adolescents (10 to 19) realistic estimate']
+          : []
     },
     {
       indicator: undefined,
@@ -86,6 +90,12 @@ const initialState = {
       selectedSubInd: []
     }
   ],
+  // so we use this 'indSelectedIndex' variable to detect
+  // when an indicator gets selected
+  // cause currently checking this change
+  // in selectedInd would be a very messy
+  // solution and might intil issues
+  indSelectedIndex: -1,
   selectedCountryVal: [],
   selectedCountryLabels: [],
   desc: '',

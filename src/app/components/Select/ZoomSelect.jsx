@@ -41,6 +41,7 @@ const propTypes = {
   search: PropTypes.bool,
   selectAll: PropTypes.bool,
   defaultAll: PropTypes.bool,
+  openDropDown: PropTypes.bool,
   disabledValues: PropTypes.arrayOf(PropTypes.string),
   dropDownWidth: PropTypes.number,
   capitalize: PropTypes.bool
@@ -54,6 +55,7 @@ const defaultProps = {
   placeHolderText: 'Has no indicators',
   placeHolderNumber: undefined,
   reset: undefined,
+  openDropDown: false,
   search: true,
   selectAll: false,
   disabledValues: [],
@@ -132,6 +134,13 @@ class ZoomSelect extends React.Component {
         this.props.selectVal(this.props.data, true);
         this.setState({ initialSelect: false });
       }
+    }
+
+    if (
+      this.props.openDropDown !== prevProps.openDropDown &&
+      this.props.openDropDown
+    ) {
+      this.setState({ open: true });
     }
   }
 

@@ -90,6 +90,7 @@
     "storybook": "start-storybook -s ./public -p 6006",
     "build-storybook": "build-storybook",
     "e2e": "cypress run",
+    "e2e:record:parallel": "cypress run --record --key d2ad6432-35fe-48a4-b5bf-8a98c4f8289a --parallel",
     "e2e:record:parallel:chrome": "cypress run --browser chrome --record --key d2ad6432-35fe-48a4-b5bf-8a98c4f8289a --parallel",
     "e2e:percy:record:parallel:chrome": "percy exec -- cypress run --browser chrome --record --key d2ad6432-35fe-48a4-b5bf-8a98c4f8289a --parallel",
     "e2e:percy:record:parallel": "percy exec -- cypress run --record --key d2ad6432-35fe-48a4-b5bf-8a98c4f8289a --parallel",

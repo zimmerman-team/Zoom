@@ -1,14 +1,5 @@
 {
-  "SectionFields": [
-    "Zoom in on",
-    "Aids epidemic",
-    "Economic indicators",
-    "Civic space",
-    "Human rights",
-    "Aidsfonds financial transactions",
-    "Projects"
-    ],
-  "NavigationFields": [
+  "TopBarNavigation": [
     "Summary",
     "Aids epidemic",
     "Economic indicators",
@@ -16,5 +7,31 @@
     "Human rights",
     "Financials",
     "Projects"
+  ],
+  "Headers": [
+     "Zoom in on Kenya",
+     "Aids epidemic",
+     "Economic indicators",
+     "Civic space",
+     "Human rights",
+     "Aidsfonds financial transactions",
+     "Projects with a total of"
+  ],
+
+  "ListItem":{
+    "header": "Bridging the Gaps: health and rights for key populations",
+    "labels": [
+       "Start date",
+       "End date",
+       "Reporting organisation",
+       "Project budget"
+    ],
+    "values": [
+       "2016-01-01",
+       "2020-12-31",
+       "Aids Fonds - STOP AIDS NOW! - Soa Aids Nederland",
+       "EUR 49,985,000"
   ]
+  }
 }
+

@@ -76,7 +76,11 @@ const PageNavigation = props => {
         <PageNavigationContainer>
           <PageNavList>
             {countryDetailMockData.fragments.map(item => (
-              <PageNavItem onClick={() => handleClick(item.id)} key={item.id}>
+              <PageNavItem
+                onClick={() => handleClick(item.id)}
+                key={item.id}
+                data-cy={`navbar-item-${item.id}`}
+              >
                 {item.id}
               </PageNavItem>
             ))}

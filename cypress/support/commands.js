@@ -93,6 +93,15 @@ Cypress.Commands.add('waitPageLoader2', (timeout = 1750000) => {
   cy.get('[data-cy=loader2]', { timeout }).should('not.be.visible');
 });
 
+// --------- Hover ---------
+Cypress.Commands.add('hover', (selectorHoverItem, selectorShowItem, n = 0) => {
+  cy.get(selectorHoverItem)
+    .eq(n)
+    .scrollIntoView()
+    .trigger('mouseover', { force: true });
+  cy.get(selectorShowItem).should('be.visible');
+});
+
 // --------- Sidebar Navigation ---------
 Cypress.Commands.add('navigateToCreateGeo', () => {
   cy.get('[data-cy="appbar-right-button"]').click();

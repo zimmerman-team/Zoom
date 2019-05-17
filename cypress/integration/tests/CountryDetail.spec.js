@@ -10,8 +10,9 @@ describe('Country detail page', () => {
   it('Should display the correct content for the Kenya page', () => {
     // Here we navigate to the country detail page
     cy.signIn();
-    cy.get('[data-cy="sidebar-toggle"]').click();
-    cy.get('[data-cy="sidebar-Country Detail"]').click();
+    cy.visit('/country/ke');
+    // cy.get('[data-cy="sidebar-toggle"]').click();
+    // cy.get('[data-cy="sidebar-Country Detail"]').click();
 
     // Here we take a Percy snapshot
     cy.waitPageLoader();

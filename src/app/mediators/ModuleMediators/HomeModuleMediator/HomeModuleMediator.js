@@ -127,6 +127,45 @@ class HomeModuleMediator extends Component {
     ) {
       this.refetch();
     }
+
+    // and once the subindicators are refetched we select the first one
+    if (
+      !isEqual(this.state.subIndicators1, prevState.subIndicators1) &&
+      this.state.subIndicators1.length > 0
+    ) {
+      // and we do it like this because when a new indicator is selected
+      // the selected sub indicators might be 0
+      // and ofcourse refetch
+      this.setState(
+        {
+          selectedSubInd1: [this.state.subIndicators1[0].value],
+          // and we set indSelectedIndex to -1 cause the selected
+          // indicators subindicator dropdown has already been opened
+          // and cause we use this index to control the dropdown opening
+          indSelectedIndex: -1
+        },
+        this.refetch
+      );
+    }
+
+    if (
+      !isEqual(this.state.subIndicators2, prevState.subIndicators2) &&
+      this.state.subIndicators2.length > 0
+    ) {
+      // and we do it like this because when a new indicator is selected
+      // the selected sub indicators might be 0
+      // and ofcourse refetch
+      this.setState(
+        {
+          selectedSubInd2: [this.state.subIndicators2[0].value],
+          // and we set indSelectedIndex to -1 cause the selected
+          // indicators subindicator dropdown has already been opened
+          // and cause we use this index to control the dropdown opening
+          indSelectedIndex: -1
+        },
+        this.refetch
+      );
+    }
   }
 
   componentWillUnmount() {
@@ -333,6 +372,7 @@ class HomeModuleMediator extends Component {
         {
           selectedYear: val.firstYear,
           [indKey]: val.value,
+          indSelectedIndex: index,
           subIndicators1: [],
           selectedSubInd1: []
         },
@@ -482,20 +522,23 @@ class HomeModuleMediator extends Component {
         // so these are all of the sub-indicators
         // of the selected indicator
         subIndicators: this.state.subIndicators1,
-        selectedSubInd: this.state.selectedSubInd1
+        selectedSubInd: this.state.selectedSubInd1,
+        openSubInd: this.state.openSubInd1
       },
       {
         indicator: this.state.selectedInd2,
         // so these are all of the sub-indicators
         // of the selected indicator
         subIndicators: this.state.subIndicators2,
-        selectedSubInd: this.state.selectedSubInd2
+        selectedSubInd: this.state.selectedSubInd2,
+        openSubInd: this.state.openSubInd2
       }
     ];
 
     return (
       <HomeModule
         selectedInd={selectedInd}
+        indSelectedIndex={this.state.indSelectedIndex}
         loading={this.state.loading}
         data={this.state.data}
         dropDownData={this.props.dropDownData}

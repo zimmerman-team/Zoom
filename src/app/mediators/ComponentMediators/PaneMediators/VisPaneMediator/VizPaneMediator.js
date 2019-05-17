@@ -305,6 +305,7 @@ class VizPaneMediator extends React.Component {
         this.props.dispatch(
           actions.storeChartDataRequest({
             selectedInd,
+            indSelectedIndex: index,
             selectedYear: val.firstYear
           })
         );
@@ -581,13 +582,13 @@ class VizPaneMediator extends React.Component {
         // okay so we use this variable to change the
         // to disable the geolocation dropdowns being defaultly selected
         locationSelected={!this.props.chartData.chartMounted}
-        changesMade={this.props.chartData.changesMade}
         selectedInd={this.props.chartData.selectedInd}
         chartKeys={this.props.chartData.chartKeys}
         addIndicator={this.addIndicator}
         removeIndicator={this.removeIndicator}
         selectInd={this.selectInd}
         selectSubInd={this.selectSubInd}
+        indSelectedIndex={this.props.chartData.indSelectedIndex}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.props.chartData.selectedCountryVal}
         selectedCountryLabel={this.props.chartData.selectedCountryLabels}

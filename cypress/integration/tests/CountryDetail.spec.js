@@ -9,8 +9,7 @@ describe('Country detail page', () => {
 
   it('Should display the correct content for the Kenya page', () => {
     // Here we navigate to the country detail page
-    cy.visit('/');
-    cy.get('[data-cy="dialog-overlay"]').click();
+    cy.signIn();
     cy.get('[data-cy="sidebar-toggle"]').click();
     cy.get('[data-cy="sidebar-Country Detail"]').click();
 

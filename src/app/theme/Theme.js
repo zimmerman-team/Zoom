@@ -14,6 +14,7 @@ export default {
     aidsFondsRed: '#ff0100',
     aidsFondsWhite: '#ffffff',
     aidsFondsWhiteOpacity: 'rgba(255, 255, 255, 0.7)',
+    aidsFondsGreyOpacity: 'rgba(239, 239, 239, 0.7)',
     toolTipColor: '#414141',
     chartColorOne: '#FFCE7F',
     chartColorTwo: '#5376F3',

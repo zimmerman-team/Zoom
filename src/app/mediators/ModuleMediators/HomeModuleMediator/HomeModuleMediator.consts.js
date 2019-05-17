@@ -6,6 +6,7 @@ export const initialState = {
       : undefined,
   selectedInd2: undefined,
   subIndicators1: [],
+  indSelectedIndex: -1,
   subIndicators2: [],
   selectedCountryVal: [],
   selectedCountryLabel: [],

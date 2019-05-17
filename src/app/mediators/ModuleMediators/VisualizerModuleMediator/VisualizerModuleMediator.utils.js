@@ -432,7 +432,8 @@ export function formatLineData(indicators, aggregate) {
           indicatorData.push({
             [aggrKey]: indItem[aggrKey],
             [aggregate]: aggrValue,
-            [indName]: Math.round(indItem.value)
+            [indName]: Math.round(indItem.value),
+            format: indItem.valueFormatType
           });
         } else if (indicatorData[existItemInd][indName] !== undefined) {
           indicatorData[existItemInd][indName] += Math.round(indItem.value);
@@ -514,7 +515,8 @@ export function formatBarData(indicators, colors = colorSet[0].colors) {
                 : indItem.geolocationTag,
 
             [indName]: Math.round(indItem.value),
-            [`${indName}Color`]: colors[colorInd]
+            [`${indName}Color`]: colors[colorInd],
+            [`${indName}Format`]: indItem.valueFormatType
           });
         } else if (barChartData[existItemInd][indName] !== undefined) {
           barChartData[existItemInd][indName] += Math.round(indItem.value);
@@ -524,6 +526,8 @@ export function formatBarData(indicators, colors = colorSet[0].colors) {
           barChartData[existItemInd][
             `${indName}Label`
           ] = `${indName} - ${indicator.selectedSubInd.join(', ')}`;
+          barChartData[existItemInd][`${indName}Format`] =
+            indItem.valueFormatType;
         }
       });
 
@@ -611,7 +615,8 @@ export function formatDonutData(indicators) {
           chartData.push({
             id: itemId,
             label: itemId,
-            value: Math.round(indItem.value)
+            value: Math.round(indItem.value),
+            format: indItem.valueFormatType
           });
         } else chartData[chartItemInd].value += Math.round(indItem.value);
       });

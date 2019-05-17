@@ -452,6 +452,7 @@ const ChartController = {
                   // so the type of chart
                   type: chart.type,
 
+                  chartKeys: chart.chartKeys,
                   /* indicators/ sub-indicators of chart */
                   indicatorItems: chart.indicatorItems,
 
@@ -459,8 +460,10 @@ const ChartController = {
                   yearRange: chart.yearRange,
 
                   selectedYear: chart.selectedYear,
+                  selectedYears: chart.selectedYears,
                   selectedCountryVal: chart.selectedCountryVal,
-                  selectedRegionVal: chart.selectedRegionVal
+                  selectedRegionVal: chart.selectedRegionVal,
+                  specOptions: chart.specOptions
                 });
 
                 chartz.save(err => {

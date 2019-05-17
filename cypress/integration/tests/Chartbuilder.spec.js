@@ -172,7 +172,7 @@ describe('Chartbuilder table chart fragment e2e', function() {
       ':nth-child(2) > .MUIDataTableHeadCell-toolButton > .MUIDataTableHeadCell-data'
     ).click();
     cy.waitPageLoader();
-    cy.get('tbody>tr').should('contain', 'tonga');
+    cy.get('tbody>tr').should('contain', 'togo');
   });
 
   it('Should only display Kenya data when searching "kenya"', function() {

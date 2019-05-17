@@ -64,6 +64,7 @@ const LineChart = ({ data, chartKeys, xAxisKey, specOptions }) => {
           }
         />
         <Tooltip
+          data-cy="linechart-tooltip"
           content={<TooltipContent xAxisKey={xAxisKey} />}
           cursor={{ stroke: 'grey', strokeWidth: 1 }}
         />

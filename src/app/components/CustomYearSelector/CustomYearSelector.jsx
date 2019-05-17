@@ -17,17 +17,13 @@ import {
 const propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
-  selectedYear: PropTypes.string,
-
-  backgroundColor: PropTypes.string
+  selectedYear: PropTypes.string
 };
 
 const defaultProps = {
   min: minYear,
   max: maxYear,
-  selectedYear: parseInt(initialState.yearPeriod[0], 10),
-
-  backgroundColor: 'transparent'
+  selectedYear: parseInt(initialState.yearPeriod[0], 10)
 };
 
 class CustomYearSelector extends React.Component {
@@ -135,10 +131,7 @@ class CustomYearSelector extends React.Component {
 
   render() {
     return (
-      <ComponentBase
-        ref={this.setWrapperRef}
-        backgroundColor={this.props.backgroundColor}
-      >
+      <ComponentBase ref={this.setWrapperRef}>
         {this.state.numArray.map(this.renderYearLabels)}
       </ComponentBase>
     );

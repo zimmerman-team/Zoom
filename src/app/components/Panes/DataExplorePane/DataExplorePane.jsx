@@ -39,7 +39,6 @@ const propTypes = {
   ),
   chartKeys: PropTypes.arrayOf(PropTypes.shape({})),
   regionAmount: PropTypes.number,
-  changesMade: PropTypes.bool,
   indNames: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
@@ -93,6 +92,7 @@ const propTypes = {
   selectSubInd: PropTypes.func,
   subInd1AllSelected: PropTypes.bool,
   subInd2AllSelected: PropTypes.bool,
+  indSelectedIndex: PropTypes.number,
   addIndicator: PropTypes.func,
   removeIndicator: PropTypes.func,
   locationSelected: PropTypes.bool,
@@ -109,9 +109,9 @@ const defaultProps = {
   locationSelected: true,
   subInd1AllSelected: true,
   subInd2AllSelected: true,
+  indSelectedIndex: -1,
   multipleInd: false,
   chartType: chartTypes.geoMap,
-  changesMade: true,
   addIndicator: null,
   specOptions: {},
   chartKeys: [],
@@ -171,11 +171,11 @@ class DataExplorePane extends React.Component {
         categorise: true,
         multiple: true,
         selectAll: true,
+        defaultAll: false,
+        openSubInd: this.props.indSelectedIndex === index,
         placeHolderText: 'Select sub indicator',
         selectDataSource: (val, isArray) =>
           this.props.selectSubInd(val, isArray, index),
-        defaultAll:
-          this.props.changesMade && indItem.selectedSubInd.length === 0,
         allFileSources: indItem.subIndicators,
         selectedSources: indItem.selectedSubInd
       });

@@ -137,7 +137,7 @@ jobs:
           # Here we check if the bash variable is unset, or set to a empty string
           command: |
             if [ -z "${CIRCLE_PULL_REQUEST}" ]; then
-              yarn e2e:record:parallel:chrome
+              yarn e2e:record:parallel
             else
               yarn e2e:percy:record:parallel:chrome
             fi

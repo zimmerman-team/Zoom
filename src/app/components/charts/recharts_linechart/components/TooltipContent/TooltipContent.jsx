@@ -18,20 +18,30 @@ const TooltipContent = ({ active, payload, label, xAxisKey }) => {
         <Title>
           {xAxisLabel}: <b>{label}</b>
         </Title>
-        {payload.map(p => (
-          <Row key={p.dataKey}>
-            <Rect theme={{ color: p.stroke }} />
-            <ToolTipText>
-              {p.name}:{' '}
-              <ToolTipValue>
-                {p.value.toLocaleString(undefined, {
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 2
-                })}
-              </ToolTipValue>
-            </ToolTipText>
-          </Row>
-        ))}
+        {payload.map(p => {
+          let nrFormat = ' ';
+
+          if (p.payload.format === 'percentage') nrFormat = ' %';
+          else if (p.payload.format !== 'number' && p.payload.format) {
+            nrFormat = ' '.concat(p.payload.format);
+          }
+
+          return (
+            <Row key={p.dataKey}>
+              <Rect theme={{ color: p.stroke }} />
+              <ToolTipText>
+                {p.name}:{' '}
+                <ToolTipValue>
+                  {p.value.toLocaleString(undefined, {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2
+                  })}
+                  {nrFormat}
+                </ToolTipValue>
+              </ToolTipText>
+            </Row>
+          );
+        })}
       </Container>
     );
   }

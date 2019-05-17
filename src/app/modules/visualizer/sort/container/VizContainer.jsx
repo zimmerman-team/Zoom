@@ -5,6 +5,7 @@ import connect from 'react-redux/es/connect/connect';
 import { Route, withRouter } from 'react-router';
 /* consts */
 import graphKeys from '__consts__/GraphStructKeyConst';
+import chartTypes from '__consts__/ChartConst';
 
 import ContextPreview from 'components/ContextPreview/ContextPreview';
 import BarchartFragment from 'modules/visualizer/sort/container/fragments/BarchartFragment/BarchartFragment';
@@ -19,6 +20,9 @@ import { YearContainer } from '../../../../components/CustomYearSelector/CustomY
 
 import YearRangeSelector from 'components/YearRangeSelector/YearRangeSelector';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
+
+/* style */
+import theme from 'theme/Theme';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -79,6 +83,13 @@ class VizContainer extends React.Component {
   }
 
   render() {
+    const yearBackgrCol =
+      this.props.chartType === chartTypes.geoMap ||
+      this.props.chartType === chartTypes.focusKE ||
+      this.props.chartType === chartTypes.focusNL
+        ? theme.color.aidsFondsWhiteOpacity
+        : theme.color.aidsFondsGreyOpacity;
+
     return (
       <ComponentBase
         mode={
@@ -160,7 +171,7 @@ class VizContainer extends React.Component {
             mode={this.state.preview}
           />
 
-          <YearContainer bottom="24px">
+          <YearContainer bottom="24px" backgroundColor={yearBackgrCol}>
             {/* so the second item in the aggrOptions array is the year aggregation option*/}
             {this.props.chartData.specOptions[graphKeys.aggregate] ===
             aggrOptions[1].value ? (

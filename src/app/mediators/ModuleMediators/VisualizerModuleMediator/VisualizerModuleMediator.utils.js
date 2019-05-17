@@ -377,7 +377,11 @@ export function formatChartLegends(
         orientation
       });
 
-      if (colorInd + 1 < colors.length) colorInd += 1;
+      if (colorInd + 1 < colors.length) {
+        colorInd += 1;
+      } else {
+        colorInd = 0;
+      }
     } else {
       chartKeys.push({
         label: undefined,
@@ -470,7 +474,11 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
         color: colors[colorInd]
       });
 
-      if (colorInd + 1 < colors.length) colorInd += 1;
+      if (colorInd + 1 < colors.length) {
+        colorInd += 1;
+      } else {
+        colorInd = 0;
+      }
     }
   });
 
@@ -654,7 +662,11 @@ export function formatDonutKeys(selectedInds, colors) {
           color: colors[colorInd]
         });
 
-        if (colorInd + 1 < colors.length) colorInd += 1;
+        if (colorInd + 1 < colors.length) {
+          colorInd += 1;
+        } else {
+          colorInd = 0;
+        }
       });
     }
   });

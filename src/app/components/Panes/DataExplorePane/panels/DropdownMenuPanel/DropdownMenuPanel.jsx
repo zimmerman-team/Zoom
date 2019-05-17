@@ -38,6 +38,7 @@ const propTypes = {
       multiple: PropTypes.bool,
       selectAll: PropTypes.bool,
       defaultAll: PropTypes.bool,
+      openSubInd: PropTypes.bool,
       removeIndicator: PropTypes.func,
       placeHolderNumber: PropTypes.number,
       capitalize: PropTypes.bool,
@@ -64,6 +65,7 @@ const defaultProps = {
       selectDataSource: undefined,
       multiple: false,
       selectAll: false,
+      openSubInd: false,
       defaultAll: false,
       removeIndicator: null,
       placeHolderNumber: undefined,
@@ -114,6 +116,7 @@ const DropdownMenuPanel = props => {
               multiple={detail.multiple}
               selectAll={detail.selectAll}
               defaultAll={detail.defaultAll}
+              openDropDown={detail.subIndicator && detail.openSubInd}
               reset={detail.reset}
               placeHolderText={detail.placeHolderText}
               placeHolderNumber={detail.placeHolderNumber}

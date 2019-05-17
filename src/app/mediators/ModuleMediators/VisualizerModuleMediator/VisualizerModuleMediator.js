@@ -404,6 +404,11 @@ class VisualizerModuleMediator extends Component {
       })
     );
 
+    // so we will use this variable to control when we want to refetch data
+    // cause we only want to refetch data when a subindicator is selected
+    // by our code below.
+    let refetch = false;
+
     // formatting the subindicator data commences!
     indicatorData.forEach(indItem => {
       let subIndicators = indItem.subIndicators.edges.map(indicator => {
@@ -413,20 +418,43 @@ class VisualizerModuleMediator extends Component {
       // and we sort them
       subIndicators = sortBy(subIndicators, ['label']);
 
+      let selectedSubInd = selectedInd[indItem.index].selectedSubInd;
+
+      if (this.props.chartData.indSelectedIndex === indItem.index) {
+        // so if its a new indicator that gets selected
+        // the selectedSubInds will be empty
+        selectedSubInd = [];
+        // and we just push in the first sub-indicator from the ones retrieved
+        selectedSubInd.push(subIndicators[0].value);
+        // and ofcourse we refetch the data
+        refetch = true;
+      }
+
       // so we associate the sub-indicators with their respective indicator
       // cause the data retrieved in 'indicatorData' might not be aligned
       // in the same way as the selectedInd data is aligned
       selectedInd[indItem.index] = {
         ...selectedInd[indItem.index],
+        selectedSubInd,
         subIndicators
       };
     });
+
     // and we save the subindicator selection for the datapane
     this.props.dispatch(
       actions.storeChartDataRequest({
+        // so basically indSelectedIndex gets reset here
+        // because we only need it to catch the first time its selected
+        // and when new subindicators are retrieved, so we do it up there ^
+        // and we can reset it here
+        indSelectedIndex: -1,
         selectedInd
       })
     );
+
+    if (refetch) {
+      this.refetch();
+    }
   }
 
   refetch() {
@@ -647,6 +675,8 @@ class VisualizerModuleMediator extends Component {
   }
 
   render() {
+    // console.log('this.props.chartData', this.props.chartData);
+
     return (
       <VisualizerModule
         saveViewport={this.saveViewport}

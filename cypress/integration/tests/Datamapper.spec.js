@@ -367,18 +367,18 @@ describe('Datamapper e2e tests', function() {
   });
 
   //TODO: So the file uploading is not working on the test server, the promise is unresolved.
-  // it('Check upload correct file and progress to the next step', function() {
-  //   const fileName = 'CypressSample.csv';
-  //   const fileType = 'text/csv';
-  //   const fileInput = 'input[type=file]';
-  //   cy.upload_file(fileName, fileType, fileInput);
-  //
-  //   // So the step should show the uploaded file
-  //   cy.contains(fileName);
-  //   cy.waitPageLoader();
-  //   cy.waitPageLoader2();
-  //   cy.contains('next').click();
-  // });
+  it('Check upload correct file and progress to the next step', function() {
+    const fileName = 'CypressSample.csv';
+    const fileType = 'text/csv';
+    const fileInput = 'input[type=file]';
+    cy.upload_file(fileName, fileType, fileInput);
+    cy.wait(10000000000000);
+    // So the step should show the uploaded file
+    cy.contains(fileName);
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
+    cy.contains('next').click();
+  });
   //
   // it('Check if its the overview step', function() {
   //   cy.get('[class*=Headings__BaseHeading]').should('contain', 'Overview');

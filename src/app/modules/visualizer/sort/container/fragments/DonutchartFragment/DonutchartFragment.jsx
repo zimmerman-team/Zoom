@@ -81,6 +81,7 @@ const DonutchartFragment = props => {
               color={payload.color}
               valueLabel={payload.label}
               value={payload.value}
+              format={payload.format}
             />
           )}
           // tooltipFormat={l => {

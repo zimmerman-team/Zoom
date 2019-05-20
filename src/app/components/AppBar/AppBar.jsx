@@ -88,7 +88,6 @@ export class AppBar extends React.Component {
     if (this.props.user) {
       this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
 
-      const profile = this.props.auth0Client.getProfile();
       const dataSources = [];
 
       this.props.chartData.selectedInd.forEach(indData => {
@@ -101,7 +100,7 @@ export class AppBar extends React.Component {
       });
 
       const chartData = {
-        authId: profile.sub,
+        authId: this.props.user.authId,
         dataSources,
         _public: this.props.chartData._public,
         teams: this.props.chartData.teams,
@@ -283,7 +282,7 @@ const mapStateToProps = state => {
   return {
     chartData: state.chartData.chartData,
     paneData: state.paneData.paneData,
-    user: state.user,
+    user: state.currentUser,
     chartCreated: state.chartCreated,
     dataPaneOpen: state.dataPaneOpen.open
   };

@@ -220,7 +220,7 @@ VisibilityTab.defaultProps = defaultProps;
 const mapStateToProps = state => {
   return {
     chartData: state.chartData.chartData,
-    user: state.user.data
+    user: state.currentUser.data
   };
 };
 

@@ -28,7 +28,7 @@ module.exports = {
       .catch(error => error);
   },
   addUserToGroup: (userId, groupId) => {
-    this.getAccessToken('auth_ext').then(token => {
+    module.exports.getAccessToken('auth_ext').then(token => {
       axios
         .patch(
           `${process.env.REACT_APP_AE_API_URL}/users/${userId}/groups`,
@@ -48,7 +48,7 @@ module.exports = {
     });
   },
   assignRoleToUser: (userId, roleId) => {
-    this.getAccessToken('auth_ext').then(token => {
+    module.exports.getAccessToken('auth_ext').then(token => {
       axios
         .patch(
           `${process.env.REACT_APP_AE_API_URL}/users/${userId}/roles`,
@@ -68,7 +68,8 @@ module.exports = {
     });
   },
   sendWelcomeEmail: (userId, name, surname, email) => {
-    this.getAccessToken('management')
+    module.exports
+      .getAccessToken('management')
       .then(token => {
         const redirectUrl = `${
           process.env.REACT_APP_PROJECT_URL.includes('localhost')

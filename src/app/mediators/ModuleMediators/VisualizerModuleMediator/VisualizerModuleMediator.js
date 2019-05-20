@@ -228,6 +228,7 @@ class VisualizerModuleMediator extends Component {
       const selectedInds = this.props.chartData.selectedInd.map(indItem => {
         return {
           indName: indItem.indicator,
+          subIndAggr: indItem.aggregate,
           subInd: indItem.selectedSubInd
         };
       });
@@ -264,6 +265,7 @@ class VisualizerModuleMediator extends Component {
       team,
       specOptions,
       chartKeys,
+      noRefetch,
       ...restChart
     } = this.props.chartData;
     const {
@@ -275,6 +277,7 @@ class VisualizerModuleMediator extends Component {
       specOptions: prevSpecOptions,
       chartKeys: prevchartKeys,
       data: prevData,
+      noRefetch: prevRefetch,
       ...prevRestChart
     } = prevProps.chartData;
 
@@ -286,9 +289,19 @@ class VisualizerModuleMediator extends Component {
         (specOptions[graphKeys.aggregate] &&
           specOptions[graphKeys.aggregate] !==
             prevSpecOptions[graphKeys.aggregate])) &&
-      restChart.changesMade
+      restChart.changesMade &&
+      !noRefetch
     ) {
       this.refetch();
+    } else if (noRefetch) {
+      // and for that one change in data when we didnt need to refetch
+      // we change the noRefetch back to false, as for some other changes in the chartData
+      // we might want to refetch
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          noRefetch: false
+        })
+      );
     }
   }
 
@@ -331,7 +344,8 @@ class VisualizerModuleMediator extends Component {
       // the actual index was stored when initially this 'indicatorData' was formed
       aggregationData[indItem.index] = {
         data: indItem.indAggregation,
-        selectedSubInd: selectedInd[indItem.index].selectedSubInd
+        selectedSubInd: selectedInd[indItem.index].selectedSubInd,
+        subIndAggr: selectedInd[indItem.index].aggregate
       };
     });
 
@@ -340,6 +354,7 @@ class VisualizerModuleMediator extends Component {
     const selectedInds = selectedInd.map(indItem => {
       return {
         indName: indItem.indicator,
+        subIndAggr: indItem.aggregate,
         subInd: indItem.selectedSubInd
       };
     });
@@ -619,12 +634,14 @@ class VisualizerModuleMediator extends Component {
     const selectedInd = indicatorItems.map((indItem, index) => {
       selectedInds.push({
         indName: indItem.indicator,
+        subIndAggr: indItem.aggregate,
         subInds: indItem.selectedSubInd
       });
       return {
         indicator: indItem.indicator,
         subIndicators: indItem.allSubIndicators,
         selectedSubInd: indItem.subIndicators,
+        aggregate: indItem.aggregate,
         dataSource: dataSources[index]
       };
     });
@@ -675,8 +692,6 @@ class VisualizerModuleMediator extends Component {
   }
 
   render() {
-    // console.log('this.props.chartData', this.props.chartData);
-
     return (
       <VisualizerModule
         saveViewport={this.saveViewport}

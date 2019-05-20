@@ -128,7 +128,7 @@ class NavPane extends React.Component {
 const mapStateToProps = state => {
   return {
     dataPaneOpen: state.dataPaneOpen.open,
-    user: state.user.data
+    user: state.currentUser.data
   };
 };
 

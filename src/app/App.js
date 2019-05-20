@@ -13,8 +13,11 @@ import {
   createMuiTheme
 } from '@material-ui/core/styles';
 import Cookies from 'universal-cookie';
+
 /* actions */
-import * as nodeActions from 'services/actions/nodeBackend';
+import { setUserIdToken } from 'services/actions/sync';
+import { getUserRequest } from 'services/actions/nodeBackend';
+import { getCurrentUserRequest } from 'services/actions/authNodeBackend';
 
 /* utils */
 import get from 'lodash/get';
@@ -92,79 +95,29 @@ class App extends React.Component {
     try {
       auth0Client.silentAuth().then(results => {
         this.props.dispatch(
-          nodeActions.getUserRequest({ authId: results.idTokenPayload.sub })
+          getCurrentUserRequest(
+            {
+              userId: results.idTokenPayload.sub
+            },
+            { Authorization: `Bearer ${results.idToken}` }
+          )
         );
+        this.props.dispatch(setUserIdToken(results.idToken));
+        // this.props.dispatch(
+        //   getUserRequest({ authId: results.idTokenPayload.sub })
+        // );
         this.forceUpdate();
       });
-    } catch (err) {}
+    } catch (err) {
+      // console.log(err);
+    }
   };
 
   componentDidUpdate = prevProps => {
-    // so this basically either adds a new user that has
-    // signed in or updates their username and email
-
-    if (!isEqual(this.props.user, prevProps.user)) {
-      if (this.props.user.data) {
-        // so we update the user
-        auth0Client.getUserRole(this.props.user.data).then(role => {
-          auth0Client.getUserGroup(null, this.props.user.data).then(groups => {
-            const profile = auth0Client.getProfile();
-            this.props.dispatch(
-              nodeActions.updateUserRequest({
-                firstName: get(
-                  profile['https://auth.nyuki.io_user_metadata'],
-                  'firstName',
-                  ''
-                ),
-                lastName: get(
-                  profile['https://auth.nyuki.io_user_metadata'],
-                  'lastName',
-                  ''
-                ),
-                username: profile.nickname,
-                email: profile.email,
-                authId: profile.sub,
-                role,
-                teams: groups.map(g => g.name)
-              })
-            );
-          });
-        });
-      } else if (this.props.user.error.status === 404) {
-        // so if a user was not found in our zoom backend after signing in ^
-        // we add it as a new user
-
-        // but first we get them user roles and groups, cause they need to be retrieved
-        // in a very weird way
-        const profile = auth0Client.getProfile();
-        auth0Client.getUserRole({ authId: profile.sub }).then(role => {
-          auth0Client
-            .getUserGroup(null, { authId: profile.sub })
-            .then(groups => {
-              // and we finally make the call to add the user
-              this.props.dispatch(
-                nodeActions.addUserRequest({
-                  username: profile.nickname,
-                  email: profile.email,
-                  authId: profile.sub,
-                  role,
-                  avatar: profile.picture,
-                  firstName: get(
-                    profile['https://auth.nyuki.io_user_metadata'],
-                    'firstName',
-                    ''
-                  ),
-                  lastName: get(
-                    profile['https://auth.nyuki.io_user_metadata'],
-                    'lastName',
-                    ''
-                  ),
-                  teams: groups.map(g => g.name)
-                })
-              );
-            });
-        });
-      }
+    if (!isEqual(this.props.currentUser, prevProps.currentUser)) {
+      this.props.dispatch(
+        getUserRequest({ authId: this.props.currentUser.authId })
+      );
     }
   };
 

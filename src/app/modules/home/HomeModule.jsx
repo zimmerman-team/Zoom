@@ -85,13 +85,6 @@ export class HomeModule extends Component {
             <BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />
           )}
 
-          <button
-            style={{ position: 'absolute', zIndex: 10000 }}
-            onClick={() => this.props.auth0Client.getUserNode()}
-          >
-            click
-          </button>
-
           <GeoMap
             outerHistory={this.props.history}
             indicatorData={data}

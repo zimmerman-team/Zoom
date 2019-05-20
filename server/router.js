@@ -10,9 +10,10 @@ const ChartController = require('./controllers/ChartController');
 const UserController = require('./controllers/UserController');
 const DatasetController = require('./controllers/DatasetController');
 const EmailController = require('./controllers/EmailController');
-const AuthController = require('./controllers/AuthController');
+const AuthUserController = require('./controllers/AuthUserController');
+const AuthGroupController = require('./controllers/AuthGroupController');
+const AuthRoleController = require('./controllers/AuthRoleController');
 
-// TODO this still needs to be set up properly currently getting some error when doing an axios call
 // Authentication middleware. When used, the
 // Access Token must exist and be verified against
 // the Auth0 JSON Web Key Set
@@ -34,15 +35,6 @@ const checkJwt = jwt({
   issuer: `https://${process.env.REACT_APP_AUTH_CUSTOM_DOMAIN}/`,
   algorithms: ['RS256']
 });
-
-// So this is how the call would be done on the frontend
-// axios
-//   .get('/api/getTest', {
-//     headers: {
-//       Authorization: `Bearer ${this.props.auth0Client.getIdToken()}`
-//     }
-//   })
-//   .then(result => console.log(result));
 
 // so this should only be uncommented and used if you have
 // a clean database, and just need some data init
@@ -132,22 +124,32 @@ router.get('/redirectToHome', (req, res) => {
   res.redirect(`${process.env.REACT_APP_PROJECT_URL}/home/#`);
 });
 
-router.get('/getUserGroup', checkJwt, AuthController.getUserGroup);
+router.get('/getUserGroup', checkJwt, AuthGroupController.getUserGroup);
 
-router.get('/getUserRole', checkJwt, AuthController.getUserRole);
+router.get('/getUserRole', checkJwt, AuthRoleController.getUserRole);
 
-router.get('/getAllUsers', checkJwt, AuthController.getAllUsers);
+router.get('/getAllUsers', checkJwt, AuthUserController.getAllUsers);
 
-router.get('/getUserGroups', checkJwt, AuthController.getUserGroups);
+router.get('/getUserGroups', checkJwt, AuthGroupController.getUserGroups);
 
-router.get('/getUserRoles', checkJwt, AuthController.getUserRoles);
+router.get('/getUserRoles', checkJwt, AuthRoleController.getUserRoles);
 
-router.post('/addUserToGroup', checkJwt, AuthController.addUserToGroup);
+router.post('/addUserToGroup', checkJwt, AuthGroupController.addUserToGroup);
 
-router.get('/getGroup', checkJwt, AuthController.getGroup);
+router.get('/getGroup', checkJwt, AuthGroupController.getGroup);
 
-router.get('/editGroup', checkJwt, AuthController.editGroup);
+router.post('/editGroup', checkJwt, AuthGroupController.editGroup);
 
-router.get('/getUserFromAuth', checkJwt, AuthController.getUser);
+router.delete('/deleteGroup', checkJwt, AuthGroupController.deleteGroup);
+
+router.get('/getUserFromAuth', checkJwt, AuthUserController.getUser);
+
+router.delete('/deleteUser', checkJwt, AuthUserController.deleteUser);
+
+router.post('/editUser', checkJwt, AuthUserController.editUser);
+
+router.post('/addUser', checkJwt, AuthUserController.addUser);
+
+router.post('/addGroup', checkJwt, AuthGroupController.addGroup);
 
 module.exports = router;

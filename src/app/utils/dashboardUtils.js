@@ -17,7 +17,7 @@ export function formatUsersTabData(
   let allUsers = data;
 
   if (initialLoad) {
-    allUsers = data.users.map(d => {
+    allUsers = data.map(d => {
       const title = !isEmpty(d.user_metadata)
         ? `${get(d.user_metadata, 'firstName', '')} ${get(
             d.user_metadata,

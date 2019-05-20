@@ -1,23 +1,26 @@
 /* base */
 import React from 'react';
-import filter from 'lodash/filter';
 import { withRouter } from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
 /* actions */
-import { updateTeamAndUsersOfItRequest } from 'services/actions/nodeBackend';
+import {
+  getGroupRequest,
+  editGroupInitial,
+  editGroupRequest,
+  getAllUsersRequest
+} from 'services/actions/authNodeBackend';
 /* components */
 import CreateTeamModule from 'modules/UserManagement/CreateTeam/CreateTeamModule';
 import { formatUsersData } from 'mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator.utils';
 /* utils */
+import get from 'lodash/get';
 import find from 'lodash/find';
 import some from 'lodash/some';
+import filter from 'lodash/filter';
 import isEqual from 'lodash/isEqual';
 
 class EditTeamMediator extends React.Component {
   state = {
-    loading: false,
-    success: false,
-    errorMessage: null,
     secondaryInfoMessage: null,
     name: '',
     description: '',
@@ -34,22 +37,55 @@ class EditTeamMediator extends React.Component {
   };
 
   componentDidMount = () => {
-    this.props.auth0Client.getGroup(this.props.match.params.teamId, this);
-    this.props.auth0Client.getGroupMembers(
-      this.props.match.params.teamId,
-      this
-    );
+    this.getGroupInfo();
     this.getAllUsers(true);
     document.addEventListener('mousedown', this.handleClickOutside);
   };
 
+  componentDidUpdate = prevProps => {
+    // Get all users from back-end through auth0
+    if (!isEqual(this.props.allUsers, prevProps.allUsers)) {
+      this.setUsers(this.props.allUsers.data || []);
+    }
+
+    // Get all group info and existing users from back-end through auth0
+    if (!isEqual(this.props.group, prevProps.group) && this.props.group.data) {
+      this.setState({
+        name: this.props.group.data.name,
+        oldTeamName: this.props.group.data.name,
+        description: this.props.group.data.description,
+        initialGroupUsers: [...this.props.group.data.users],
+        users: [...this.props.group.data.users]
+      });
+    }
+  };
+
   componentWillUnmount = () => {
+    this.props.dispatch(editGroupInitial());
     document.removeEventListener('mousedown', this.handleClickOutside);
+  };
+
+  getGroupInfo = () => {
+    this.props.dispatch(
+      getGroupRequest(
+        {
+          groupId: this.props.match.params.teamId
+        },
+        { Authorization: `Bearer ${this.props.user.idToken}` }
+      )
+    );
   };
 
   getAllUsers = initialLoad => {
     if (initialLoad) {
-      this.props.auth0Client.getAllUsers(this.setUsers, this.props.user);
+      this.props.dispatch(
+        getAllUsersRequest(
+          {
+            userId: this.props.user.authId
+          },
+          { Authorization: `Bearer ${this.props.user.idToken}` }
+        )
+      );
     } else {
       this.setUsers(this.state.allUsers, false);
     }
@@ -67,7 +103,7 @@ class EditTeamMediator extends React.Component {
       allUsers: result.allUsers,
       paginatedUsers: result.paginatedUsers,
       totalPages: initialLoad
-        ? Math.ceil(data.users.length / 10)
+        ? Math.ceil(data.length / 10)
         : prevState.totalPages
     }));
   };
@@ -149,7 +185,6 @@ class EditTeamMediator extends React.Component {
 
   submitForm = e => {
     e.preventDefault();
-    this.setState({ loading: true });
 
     const usersToAdd =
       this.state.initialGroupUsers.length === 0
@@ -161,49 +196,28 @@ class EditTeamMediator extends React.Component {
       return !find(this.state.users, user => user === igu.user_id);
     });
 
-    this.props.auth0Client
-      .editGroup(
-        this.props.match.params.teamId,
-        this.state.name,
-        this.state.description,
-        usersToDelete.map(user => user.user_id),
-        usersToAdd,
-        this
+    this.props.dispatch(
+      editGroupRequest(
+        {
+          groupId: this.props.match.params.teamId,
+          name: this.state.name,
+          description: this.state.description,
+          usersToRemove: usersToDelete,
+          usersToAdd: usersToAdd,
+          user: {
+            authId: this.props.user.authId
+          },
+          team: {
+            oldName: this.state.oldTeamName,
+            newName: this.state.name
+          }
+        },
+        { Authorization: `Bearer ${this.props.user.idToken}` }
       )
-      .then(() => {
-        // and after everything has been succesfully done on auth0
-        // we make the changes in the zoom node
-        this.props.dispatch(
-          updateTeamAndUsersOfItRequest({
-            user: {
-              authId: this.props.user.authId
-            },
-            team: {
-              oldName: this.state.oldTeamName,
-              newName: this.state.name
-            },
-            usersToAdd: usersToAdd.map(authId => {
-              return { authId };
-            }),
-            usersToDelete: usersToDelete.map(user => {
-              return { authId: user.user_id };
-            })
-          })
-        );
-        this.props.auth0Client.getGroupMembers(
-          this.props.match.params.teamId,
-          this
-        );
-        this.setState(prevState => ({
-          loading: false,
-          oldTeamName: prevState.name
-        }));
-
-        setTimeout(() => this.setState({ success: false }), 3000);
-      });
+    );
   };
 
-  render() {
+  render = () => {
     return (
       <CreateTeamModule
         pageTitle={this.props.viewOnly ? 'View team' : 'Edit team'}
@@ -214,10 +228,18 @@ class EditTeamMediator extends React.Component {
         changeName={this.changeName}
         totalPages={this.state.totalPages}
         changeSearchKeyword={this.changeSearchKeyword}
-        success={this.state.success}
-        loading={this.state.loading}
+        success={this.props.editGroup.success}
+        errorMessage={
+          get(this.props.editGroup.error, 'result', false)
+            ? this.props.editGroup.error.result
+            : ''
+        }
+        loading={
+          this.props.allUsers.request ||
+          this.props.group.request ||
+          this.props.editGroup.request
+        }
         secondaryInfoMessage={this.state.secondaryInfoMessage}
-        errorMessage={this.state.errorMessage}
         addRemoveUser={this.addRemoveUser}
         addRemoveAllUsers={this.addRemoveAllUsers}
         changePage={this.changePage}
@@ -238,13 +260,16 @@ class EditTeamMediator extends React.Component {
         }
       />
     );
-  }
+  };
 }
 
 const mapStateToProps = state => {
   return {
+    group: state.loadedGroup,
+    allUsers: state.allUsers,
     usersTeam: state.usersTeam,
-    user: state.user.data
+    user: state.currentUser.data,
+    editGroup: state.editGroup
   };
 };
 

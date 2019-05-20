@@ -32,7 +32,9 @@ import '@percy/cypress';
 Cypress.Commands.add('upload_file', (fileName, fileType = ' ', selector) => {
   cy.get(selector).then(subject => {
     cy.fixture(fileName, 'base64')
-      .then(Cypress.Blob.base64StringToBlob)
+      .then(function() {
+        Cypress.Blob.base64StringToBlob();
+      })
       .then(blob => {
         const el = subject[0];
         const testFile = new File([blob], fileName, { type: fileType });

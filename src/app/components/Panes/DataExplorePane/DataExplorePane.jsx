@@ -98,6 +98,7 @@ const propTypes = {
   locationSelected: PropTypes.bool,
   multipleInd: PropTypes.bool,
   saveGraphOption: PropTypes.func,
+  subIndAggrToggle: PropTypes.func,
   resetAll: PropTypes.func
 };
 
@@ -128,6 +129,7 @@ const defaultProps = {
   selectRegion: null,
   selectInd: null,
   selectSubInd: null,
+  subIndAggrToggle: null,
   resetAll: null
 };
 
@@ -172,6 +174,7 @@ class DataExplorePane extends React.Component {
         multiple: true,
         selectAll: true,
         defaultAll: false,
+        aggrCheck: indItem.aggregate,
         openSubInd: this.props.indSelectedIndex === index,
         placeHolderText: 'Select sub indicator',
         selectDataSource: (val, isArray) =>
@@ -186,7 +189,7 @@ class DataExplorePane extends React.Component {
 
   render() {
     /* TODO: put this in the state so that it wouldn't
-        everytime when unneeded changes are made
+        render everytime when unneeded changes are made
         right now there some referencing bs happening
         so can't catch the did update prop change*/
     const indPanels = this.generateIndicatorPanels();
@@ -291,7 +294,9 @@ class DataExplorePane extends React.Component {
           >
             <DropdownMenuPanel
               handleAxisSwitch={this.props.handleAxisSwitch}
+              subIndAggrToggle={this.props.subIndAggrToggle}
               chartKeys={this.props.chartKeys}
+              aggrToggle={this.props.chartType !== chartTypes.tableChart}
               panelDetails={indPanels}
             />
           </ExpansionPanelContainer>

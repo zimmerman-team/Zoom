@@ -19,6 +19,7 @@ export const initIndItem = {
   // so these are all of the sub-indicators
   // of the selected indicator
   subIndicators: [],
+  aggregate: false,
   // so this is the dataSource
   // of the selected indicator
   dataSource: undefined,
@@ -44,6 +45,7 @@ const initialState = {
   selectedYear: '2005',
   selectedYears: formatYearParam([2000, 2010]),
   _public: false,
+  noRefetch: false,
   teams: [],
   chartKeys:
     process.env.NODE_ENV === 'development'
@@ -52,6 +54,9 @@ const initialState = {
             color: 'hsl(23, 70%, 50%)',
             name:
               'aids related deaths (unaids) - adolescents (10 to 19) realistic estimate',
+            label:
+              'aids related deaths (unaids) - adolescents (10 to 19) realistic estimate',
+            indIndex: 0,
             orientation: 'left'
           }
         ]
@@ -77,7 +82,11 @@ const initialState = {
       selectedSubInd:
         process.env.NODE_ENV === 'development'
           ? ['adolescents (10 to 19) realistic estimate']
-          : []
+          : [],
+      // this variable mainly controls the data formating for charts
+      // as in if the data should be formated by adding the sub-indicator
+      // values, or if they should be seperated into different legends
+      aggregate: false
     },
     {
       indicator: undefined,
@@ -87,7 +96,11 @@ const initialState = {
       // so this is the dataSource
       // of the selected indicator
       dataSource: undefined,
-      selectedSubInd: []
+      selectedSubInd: [],
+      // this variable mainly controls the data formating for charts
+      // as in if the data should be formated by adding the sub-indicator
+      // values, or if they should be seperated into different legends
+      aggregate: false
     }
   ],
   // so we use this 'indSelectedIndex' variable to detect

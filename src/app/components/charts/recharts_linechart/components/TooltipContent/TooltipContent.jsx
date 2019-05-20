@@ -21,9 +21,12 @@ const TooltipContent = ({ active, payload, label, xAxisKey }) => {
         {payload.map(p => {
           let nrFormat = ' ';
 
-          if (p.payload.format === 'percentage') nrFormat = ' %';
-          else if (p.payload.format !== 'number' && p.payload.format) {
-            nrFormat = ' '.concat(p.payload.format);
+          if (p.payload[`${p.dataKey}Format`] === 'percentage') nrFormat = ' %';
+          else if (
+            p.payload[`${p.dataKey}Format`] !== 'number' &&
+            p.payload[`${p.dataKey}Format`]
+          ) {
+            nrFormat = ' '.concat(p.payload[`${p.dataKey}Format`]);
           }
 
           return (

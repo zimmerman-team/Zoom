@@ -37,8 +37,12 @@ const AuthUserController = {
                   []
                 );
                 for (let a = 0; a < dUserGroups.length; a++) {
-                  for (let b = 0; b < get(currentUser, 'length', 0); b++) {
-                    if (currentUser[b].name === dUserGroups[a]) {
+                  for (
+                    let b = 0;
+                    b < get(currentUser.teams, 'length', 0);
+                    b++
+                  ) {
+                    if (currentUser.teams[b] === dUserGroups[a]) {
                       pass = true;
                       break;
                     }
@@ -58,8 +62,14 @@ const AuthUserController = {
             return res.json(result);
           })
           .catch(error => {
-            console.error(error);
-            return res.error(error);
+            console.log(
+              `${error.response.data.statusCode}: ${
+                error.response.data.message
+              }`
+            );
+            return res
+              .status(error.response.data.statusCode)
+              .send(error.response.data.message);
           });
       });
     });
@@ -182,7 +192,14 @@ const AuthUserController = {
             });
           })
           .catch(error => {
-            return res.error(error.response.data.message);
+            console.log(
+              `${error.response.data.statusCode}: ${
+                error.response.data.message
+              }`
+            );
+            return res
+              .status(error.response.data.statusCode)
+              .send(error.response.data.message);
           });
       });
     });

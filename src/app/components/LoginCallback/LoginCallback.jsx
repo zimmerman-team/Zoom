@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import auth0Client from 'auth/Auth';
-import { connect } from 'react-redux';
+import React from 'react';
 import isEqual from 'lodash/isEqual';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { setUserIdToken } from 'services/actions/sync';
 import { getCurrentUserRequest } from 'services/actions/authNodeBackend';
 
-class Callback extends Component {
-  componentDidMount() {
-    auth0Client.handleAuthentication().then(results => {
+class Callback extends React.Component {
+  componentDidMount = () => {
+    this.props.auth0Client.handleAuthentication().then(results => {
+      this.props.dispatch(setUserIdToken(results.idToken));
       this.props.dispatch(
         getCurrentUserRequest(
           {
@@ -17,7 +18,7 @@ class Callback extends Component {
         )
       );
     });
-  }
+  };
 
   componentDidUpdate(prevProps) {
     if (!isEqual(prevProps.user.data, this.props.user.data))

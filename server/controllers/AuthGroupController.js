@@ -20,7 +20,12 @@ const AuthGroupController = {
           res.json(res2.data);
         })
         .catch(error => {
-          res.json(error);
+          console.log(
+            `${error.response.data.statusCode}: ${error.response.data.message}`
+          );
+          return res
+            .status(error.response.data.statusCode)
+            .send(error.response.data.message);
         });
     });
   },
@@ -42,7 +47,7 @@ const AuthGroupController = {
                 let pass = false;
 
                 for (let b = 0; b < get(currentUser.teams, 'length', 0); b++) {
-                  if (currentUser.teams[b].name === g.name) {
+                  if (currentUser.teams[b] === g.name) {
                     pass = true;
                     break;
                   }
@@ -61,7 +66,14 @@ const AuthGroupController = {
             );
           })
           .catch(error => {
-            return res.json(error);
+            console.log(
+              `${error.response.data.statusCode}: ${
+                error.response.data.message
+              }`
+            );
+            return res
+              .status(error.response.data.statusCode)
+              .send(error.response.data.message);
           });
       });
     });
@@ -84,7 +96,12 @@ const AuthGroupController = {
           return res.json('success');
         })
         .catch(error => {
-          return res.json(error);
+          console.log(
+            `${error.response.data.statusCode}: ${error.response.data.message}`
+          );
+          return res
+            .status(error.response.data.statusCode)
+            .send(error.response.data.message);
         });
     });
   },

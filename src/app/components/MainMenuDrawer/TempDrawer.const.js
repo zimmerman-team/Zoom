@@ -37,7 +37,7 @@ export const data = [
     path: `${pathPrefix}iati`,
     icon: <IconCharts />,
     env: 'development',
-    atype: 'private'
+    type: 'private'
   },
   //////////////////////////////////////////////////////////////////////////////
   // DATA MAPPER

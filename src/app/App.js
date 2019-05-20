@@ -103,9 +103,6 @@ class App extends React.Component {
           )
         );
         this.props.dispatch(setUserIdToken(results.idToken));
-        // this.props.dispatch(
-        //   getUserRequest({ authId: results.idTokenPayload.sub })
-        // );
         this.forceUpdate();
       });
     } catch (err) {
@@ -155,11 +152,10 @@ class App extends React.Component {
                               showSidebar: !this.state.showSidebar
                             })
                           }
-                          auth0Client={auth0Client}
                         />
                         <MainMenuDrawer
-                          auth0Client={auth0Client}
                           user={this.props.user}
+                          auth0Client={auth0Client}
                           open={this.state.showSidebar}
                           toggleSideBar={() =>
                             this.setState({
@@ -186,9 +182,9 @@ class App extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    userUpdated: state.userUpdated,
     userAdded: state.userAdded,
-    user: state.user
+    user: state.currentUser.data,
+    userUpdated: state.userUpdated
   };
 };
 

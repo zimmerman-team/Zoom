@@ -100,7 +100,7 @@ export class AppBar extends React.Component {
       });
 
       const chartData = {
-        authId: this.props.user.authId,
+        authId: this.props.user.data.authId,
         dataSources,
         _public: this.props.chartData._public,
         teams: this.props.chartData.teams,

@@ -17,7 +17,12 @@ const AuthRoleController = {
           return res.json(res2.data[0].name);
         })
         .catch(error => {
-          return res.json(error);
+          console.log(
+            `${error.response.data.statusCode}: ${error.response.data.message}`
+          );
+          return res
+            .status(error.response.data.statusCode)
+            .send(error.response.data.message);
         });
     });
   },
@@ -46,7 +51,14 @@ const AuthRoleController = {
             );
           })
           .catch(error => {
-            return res.json(error);
+            console.log(
+              `${error.response.data.statusCode}: ${
+                error.response.data.message
+              }`
+            );
+            return res
+              .status(error.response.data.statusCode)
+              .send(error.response.data.message);
           });
       });
     });
@@ -69,7 +81,12 @@ const AuthRoleController = {
           return res.json('success');
         })
         .catch(error => {
-          return res.json(error);
+          console.log(
+            `${error.response.data.statusCode}: ${error.response.data.message}`
+          );
+          return res
+            .status(error.response.data.statusCode)
+            .send(error.response.data.message);
         });
     });
   }

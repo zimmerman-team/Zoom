@@ -121,9 +121,9 @@ const ZoomSwitch = styled(Switch)`
 `;
 
 function VisibilityTab(props) {
-  const options = get(props.user, 'teams', []).map(team => ({
-    value: team,
-    label: team
+  const options = get(props.user, 'groups', []).map(team => ({
+    value: team.name,
+    label: team.name
   }));
   const classes = useStyles();
 

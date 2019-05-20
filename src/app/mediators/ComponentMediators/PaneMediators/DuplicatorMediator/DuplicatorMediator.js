@@ -107,6 +107,7 @@ class DuplicatorMediator extends React.Component {
           return {
             indicator: indData.indicator,
             subIndicators: indData.selectedSubInd,
+            aggregate: indData.aggregate,
             // we also need to save the all sub indicators
             // for the datapanes default selections
             // because usually subindicators are refetched

@@ -37,13 +37,13 @@ const BarchartFragment = props => {
           keys={props.chartKeys.map(item => {
             return item.key;
           })}
-          indexBy="geolocation"
           margin={{
-            top: 20,
-            right: 0,
-            bottom: 25,
+            top: 0,
+            right: 20,
+            bottom: 30,
             left: 30
           }}
+          indexBy={props.specOptions[graphKeys.aggregate]}
           tooltip={payload => (
             <TooltipContent
               xKey={payload.indexValue}
@@ -55,7 +55,9 @@ const BarchartFragment = props => {
             />
           )}
           padding={0.3}
-          groupMode="grouped"
+          groupMode={
+            props.specOptions[graphKeys.grouped] ? 'grouped' : 'stacked'
+          }
           colors={props.specOptions[graphKeys.colorPallet]}
           colorBy="id"
           defs={[
@@ -92,6 +94,8 @@ const BarchartFragment = props => {
           //     id: 'lines'
           //   }
           // ]}
+
+          layout="horizontal"
           borderColor="inherit:darker(1.6)"
           axisTop={null}
           axisRight={null}

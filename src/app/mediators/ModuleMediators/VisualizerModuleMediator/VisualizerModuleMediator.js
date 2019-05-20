@@ -192,15 +192,22 @@ class VisualizerModuleMediator extends Component {
         // and xAxis should initially be the categories
         // and the color pallet should be the first color
         // set from the consts
+
+        const specOptions = {
+          [graphKeys.leftYAxis]: axisOptions[0].value,
+          [graphKeys.rightYAxis]: axisOptions[0].value,
+          [graphKeys.xAxis]: axisOptions[1].value,
+          [graphKeys.colorPallet]: colorSet[0].colors,
+          [graphKeys.aggregate]: aggrOptions[0].value
+        };
+
+        if (chartTypes.barChart === this.props.match.params.chart) {
+          specOptions[graphKeys.grouped] = false;
+        }
+
         this.props.dispatch(
           actions.storeChartDataRequest({
-            specOptions: {
-              [graphKeys.leftYAxis]: axisOptions[0].value,
-              [graphKeys.rightYAxis]: axisOptions[0].value,
-              [graphKeys.xAxis]: axisOptions[1].value,
-              [graphKeys.colorPallet]: colorSet[0].colors,
-              [graphKeys.aggregate]: aggrOptions[0].value
-            }
+            specOptions
           })
         );
       }

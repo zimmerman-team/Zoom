@@ -111,6 +111,9 @@ class GraphStructurePanel extends React.Component {
           {/* STACKED VS GROUPED */}
           <SimpleSwitch
             disabled={this.props.chartType === chartTypes.lineChart}
+            defaultCheck={this.props.specOptions[graphKeys.grouped]}
+            selectKey={graphKeys.grouped}
+            onSwitch={this.props.saveGraphOption}
             option1="Stacked"
             option2="Grouped"
           />

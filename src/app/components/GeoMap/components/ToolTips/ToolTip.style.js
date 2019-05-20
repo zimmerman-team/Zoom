@@ -16,6 +16,7 @@ export const ToolTipContainer = styled(Popup)`
 `;
 
 export const ToolTipLabel = styled.div`
+  margin-top: 4px;
   color: ${theme.color.zoomBlack};
   font-family: ${theme.font.zoomFontFamTwo};
   font-size: 14px;
@@ -30,11 +31,12 @@ export const ToolTipText = styled.span`
 
 export const ValueContainer = styled.div`
   display: flex;
+  flex-direction: column;
   margin-bottom: 14px;
 `;
 
 export const ToolTipTitle = styled(ToolTipLabel)`
   font-family: ${theme.font.zoomFontFamOne};
   font-size: 21px;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 `;

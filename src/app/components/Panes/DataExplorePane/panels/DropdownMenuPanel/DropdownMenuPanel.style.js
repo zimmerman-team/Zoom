@@ -8,6 +8,7 @@ export const ZoomSelect = styled(_ZoomSelect)`
 
 export const SwitchContainer = styled.div`
   background-color: ${theme.color.zoomGreyZero};
+  display: flex;
 `;
 
 export const IndicatorLabel = styled.div`

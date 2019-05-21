@@ -250,7 +250,6 @@ class DashboardMediator extends React.Component {
       this.state.page,
       this.state.sort,
       this.state.searchKeyword,
-      this.state.allUsers,
       this.editTeam,
       this.deleteTeam,
       this.viewTeam

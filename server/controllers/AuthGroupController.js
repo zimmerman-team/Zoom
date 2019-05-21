@@ -4,6 +4,7 @@ const authUtils = require('../utils/auth');
 const general = require('./generalResponse');
 const User = require('../models/User');
 const get = require('lodash/get');
+const find = require('lodash/find');
 const filter = require('lodash/filter');
 
 const AuthGroupController = {
@@ -55,15 +56,28 @@ const AuthGroupController = {
                 return pass;
               });
             }
-            return res.json(
-              result.map(g => {
-                return {
-                  ...g,
-                  label: g.name,
-                  value: g._id
-                };
-              })
-            );
+            User.find({})
+              .lean()
+              .exec((err, users) => {
+                return res.json(
+                  result.map(g => {
+                    const creator = find(users, {
+                      authId: get(g, 'description', ',').split(',')[1]
+                    });
+                    return {
+                      ...g,
+                      label: g.name,
+                      value: g._id,
+                      date: get(g, 'description', ',').split(',')[0],
+                      createdBy: `${get(creator, 'firstName', '')} ${get(
+                        creator,
+                        'lastName',
+                        ''
+                      )}`
+                    };
+                  })
+                );
+              });
           })
           .catch(error => {
             console.log(

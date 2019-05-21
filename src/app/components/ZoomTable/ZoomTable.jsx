@@ -11,6 +11,7 @@ export default styled(props => (
   </NoSsr>
 ))`
   && {
+    width: 100%;
     & th {
       border: 2px solid ${theme.color.zoomGreyNine};
       border-bottom: 0;

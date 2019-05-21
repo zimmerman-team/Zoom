@@ -32,7 +32,9 @@ import '@percy/cypress';
 Cypress.Commands.add('upload_file', (fileName, fileType = ' ', selector) => {
   cy.get(selector).then(subject => {
     cy.fixture(fileName, 'base64')
-      .then(Cypress.Blob.base64StringToBlob)
+      .then(function() {
+        Cypress.Blob.base64StringToBlob();
+      })
       .then(blob => {
         const el = subject[0];
         const testFile = new File([blob], fileName, { type: fileType });
@@ -91,6 +93,15 @@ Cypress.Commands.add('waitPageLoader', (timeout = 1750000) => {
 //This is the "Loading" text that appears in the top-left corner
 Cypress.Commands.add('waitPageLoader2', (timeout = 1750000) => {
   cy.get('[data-cy=loader2]', { timeout }).should('not.be.visible');
+});
+
+// --------- Hover ---------
+Cypress.Commands.add('hover', (selectorHoverItem, selectorShowItem, n = 0) => {
+  cy.get(selectorHoverItem)
+    .eq(n)
+    .scrollIntoView()
+    .trigger('mouseover', { force: true });
+  cy.get(selectorShowItem).should('be.visible');
 });
 
 // --------- Sidebar Navigation ---------

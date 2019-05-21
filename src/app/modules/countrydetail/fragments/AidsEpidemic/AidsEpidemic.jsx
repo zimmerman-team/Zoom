@@ -39,7 +39,7 @@ const AidsEpidemic = props => {
         title={countryDetailMockData.fragments[1].title}
         showInfoButton
       >
-        <ChartContainer>
+        <ChartContainer data-cy="aids-chart">
           {/* <LineChart data={props.aidsLineChartData} /> */}
           <LineChart2
             chartKeys={props.indicators}

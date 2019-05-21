@@ -80,7 +80,7 @@ const Projects = props => {
         props.projectInfo.commitment
       } commitment`;
   return (
-    <Element name="Projects">
+    <Element name="Projects" data-cy="project-fragment">
       <ModuleFragment
         title={title}
         description={countryDetailMockData.fragments[6].description[0]}
@@ -98,7 +98,7 @@ const Projects = props => {
             />
           </div>
         </ControlsRow>
-        <ProjectList projectData={props.projectData} />
+        <ProjectList projectData={props.projectData} data-cy="project-list" />
       </ModuleFragment>
     </Element>
   );

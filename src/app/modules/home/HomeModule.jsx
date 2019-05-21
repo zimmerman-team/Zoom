@@ -7,6 +7,7 @@ import Cookies from 'universal-cookie';
 import { withRouter } from 'react-router';
 
 import { Helmet } from 'react-helmet';
+
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
 /* components */
@@ -101,10 +102,10 @@ export class HomeModule extends Component {
                 ? { pointerEvents: 'none', opacity: '0.4' }
                 : {}
             }
+            backgroundColor={Theme.color.aidsFondsWhiteOpacity}
             bottom="56px"
           >
             <CustomYearSelector
-              backgroundColor={Theme.color.aidsFondsWhiteOpacity}
               selectedYear={this.props.selectedYear}
               selectYear={this.props.selectYear}
             />

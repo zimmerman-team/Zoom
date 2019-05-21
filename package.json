@@ -32,6 +32,7 @@
     "graphql": "^14.2.1",
     "grommet": "2.5.5",
     "grommet-icons": "4.2.0",
+    "helmet": "^3.18.0",
     "immutability-helper": "3.0.0",
     "immutable": "^4.0.0-rc.12",
     "is-hotkey": "^0.1.4",

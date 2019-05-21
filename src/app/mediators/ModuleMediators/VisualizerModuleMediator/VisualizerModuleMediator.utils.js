@@ -7,6 +7,9 @@ import { colorSet } from '__consts__/PaneConst';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 import { geoTypes } from '__consts__/GeolocationConst';
 
+/* utils */
+import sortBy from 'lodash/sortBy';
+
 // these are aggregation keys associated with graphql returned variables
 // 'geolocationTag' & 'date' are the graphql variables
 export const aggrKeys = {
@@ -679,9 +682,17 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
   return chartKeys;
 }
 
-export function formatBarData(indicators, colors = colorSet[0].colors) {
+export function formatBarData(
+  indicators,
+  aggregate,
+  rankBy,
+  horizontal,
+  colors = colorSet[0].colors
+) {
   const barChartData = [];
   const barChartKeys = [];
+
+  const aggrKey = aggrKeys[aggregate];
 
   let colorInd = 0;
   indicators.forEach((indicator, index) => {
@@ -701,8 +712,17 @@ export function formatBarData(indicators, colors = colorSet[0].colors) {
         // yeah and cause we might receive data with the same geolocation name
         // we add in the values for that geolocation so it wouldn't be repeated over and over
         const existItemInd = findIndex(barChartData, existing => {
-          return indItem.geolocationTag === existing.geoName;
+          return indItem[aggrKey] === existing[aggrKey];
         });
+
+        let aggrValue = indItem.date;
+
+        if (aggrKey === 'geolocationTag') {
+          aggrValue =
+            indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
+              ? indItem.geolocationIso2.toUpperCase()
+              : indItem.geolocationTag;
+        }
 
         let itemId = `${indName} - ${indItem.filterName}`;
         let label = itemId;
@@ -714,21 +734,23 @@ export function formatBarData(indicators, colors = colorSet[0].colors) {
 
         if (existItemInd === -1) {
           barChartData.push({
+            // so this variable will basically be used for sorting
+            // by biggest or lowest value, of joined bars
+            allValSum: Math.round(indItem.value),
             [`${itemId}Label`]: label,
-            geoName: indItem.geolocationTag,
 
-            geolocation:
-              indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
-                ? indItem.geolocationIso2.toUpperCase()
-                : indItem.geolocationTag,
+            [aggrKey]: indItem[aggrKey],
+            [aggregate]: aggrValue,
 
             [itemId]: Math.round(indItem.value),
             [`${itemId}Color`]: colors[colorInd],
             [`${itemId}Format`]: indItem.valueFormatType
           });
         } else if (barChartData[existItemInd][itemId] !== undefined) {
+          barChartData[existItemInd].allValSum += Math.round(indItem.value);
           barChartData[existItemInd][itemId] += Math.round(indItem.value);
         } else {
+          barChartData[existItemInd].allValSum += Math.round(indItem.value);
           barChartData[existItemInd][itemId] = Math.round(indItem.value);
           barChartData[existItemInd][`${itemId}Color`] = colors[colorInd];
           barChartData[existItemInd][`${itemId}Label`] = label;
@@ -741,7 +763,18 @@ export function formatBarData(indicators, colors = colorSet[0].colors) {
     }
   });
 
-  return barChartData;
+  let sortedData = [];
+
+  if ((rankBy === 'high' && horizontal) || (rankBy === 'low' && !horizontal)) {
+    sortedData = sortBy(barChartData, ['allValSum']);
+  } else if (
+    (rankBy === 'high' && !horizontal) ||
+    (rankBy === 'low' && horizontal)
+  ) {
+    sortedData = sortBy(barChartData, ['allValSum']).reverse();
+  }
+
+  return sortedData;
 }
 
 export function formatTableData(indicators) {

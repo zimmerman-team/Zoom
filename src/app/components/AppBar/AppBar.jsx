@@ -85,7 +85,7 @@ export class AppBar extends React.Component {
 
   // TODO somehow make this funciton reusable cause the same one is used in DuplicatorMediator.js
   closeSave() {
-    if (this.props.user) {
+    if (this.props.user.data) {
       this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
 
       const dataSources = [];

@@ -204,6 +204,10 @@ class VisualizerModuleMediator extends Component {
           specOptions[graphKeys.horizont] = true;
         }
 
+        if (chartTypes.donutChart === this.props.match.params.chart) {
+          specOptions[graphKeys.aggrCountry] = false;
+        }
+
         this.props.dispatch(
           actions.storeChartDataRequest({
             specOptions
@@ -292,6 +296,8 @@ class VisualizerModuleMediator extends Component {
     // or other data not related stuff changes
     if (
       (!isEqual(restChart, prevRestChart) ||
+        specOptions[graphKeys.aggrCountry] !==
+          prevSpecOptions[graphKeys.aggrCountry] ||
         (specOptions[graphKeys.aggregate] &&
           specOptions[graphKeys.aggregate] !==
             prevSpecOptions[graphKeys.aggregate])) &&
@@ -442,7 +448,7 @@ class VisualizerModuleMediator extends Component {
       case chartTypes.donutChart:
         data = formatDonutData(
           aggregationData,
-          this.props.chartData.specOptions[graphKeys.colorPallet]
+          this.props.chartData.specOptions[graphKeys.aggrCountry]
         );
         chartKeys = formatDonutKeys(
           selectedInds,

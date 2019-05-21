@@ -596,6 +596,13 @@ class VizPaneMediator extends React.Component {
           selectedYears: formatYearParam([startYear, endYear])
         })
       );
+    } else if (key === graphKeys.aggrCountry) {
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          changesMade: true,
+          specOptions
+        })
+      );
     } else {
       this.props.dispatch(
         actions.storeChartDataRequest({

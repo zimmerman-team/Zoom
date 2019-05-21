@@ -45,7 +45,6 @@ const DonutchartFragment = props => {
           animate
           /* todo: currently indicator data is empty, needs to get data */
           data={props.indicatorData}
-          indexBy="geolocation"
           margin={{
             top: 40,
             right: 80,
@@ -56,7 +55,7 @@ const DonutchartFragment = props => {
           padAngle={0.7}
           cornerRadius={4}
           colors={props.donutColors}
-          colorBy="id"
+          colorBy="key"
           borderWidth={1}
           borderColor="inherit:darker(0.2)"
           enableSlicesLabels={false}
@@ -70,13 +69,16 @@ const DonutchartFragment = props => {
           motionStiffness={90}
           motionDamping={15}
           radialLabel={item => {
-            if (item.label.length > 13) {
-              return `${item.label.substr(0, 13)}...`;
+            const radLab = item.geoName || item.label;
+
+            if (radLab.length > 13) {
+              return `${radLab.substr(0, 13)}...`;
             }
-            return item.label;
+            return radLab;
           }}
           tooltip={payload => (
             <TooltipContent
+              xKey={payload.geoName}
               index={payload.id}
               color={payload.color}
               valueLabel={payload.label}

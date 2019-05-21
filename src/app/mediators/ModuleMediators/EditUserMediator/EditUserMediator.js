@@ -5,13 +5,11 @@ import connect from 'react-redux/es/connect/connect';
 /* components */
 import EditUserModule from 'modules/UserManagement/EditUser/EditUserModule';
 /* actions */
-import { updateUserRequest } from 'services/actions/nodeBackend';
 import {
   getAuthUserRequest,
   editAuthUserRequest
 } from 'services/actions/authNodeBackend';
 /* utils */
-import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 
 class EditUserMediator extends React.Component {

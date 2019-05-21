@@ -13,14 +13,12 @@ import isEqual from 'lodash/isEqual';
 import Snackbar from 'components/Snackbar/Snackbar';
 
 const propTypes = {
-  auth0Client: PropTypes.shape({}),
   chartData: PropTypes.shape({}),
   outerHistory: PropTypes.shape({}),
   paneData: PropTypes.shape({}),
   dupChartCreated: PropTypes.shape({})
 };
 const defaultProps = {
-  auth0Client: {},
   chartData: {},
   outerHistory: {},
   paneData: {},

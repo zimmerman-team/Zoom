@@ -151,18 +151,21 @@ const AuthUserController = {
                   userData.nickname
                 )
                   userFound.username = userData.nickname;
-                if (userFound.email !== userData.email && userData.email)
+                if (userFound.email !== userData.email && userData.email) {
                   userFound.email = userData.email;
+                }
                 if (
                   userFound.firstName !== userData.user_metadata.firstName &&
-                  user.user_metadata.firstName
-                )
+                  userData.user_metadata.firstName
+                ) {
                   userFound.firstName = userData.user_metadata.firstName;
+                }
                 if (
                   userFound.lastName !== userData.user_metadata.lastName &&
-                  user.user_metadata.lastName
-                )
+                  userData.user_metadata.lastName
+                ) {
                   userFound.lastName = userData.user_metadata.lastName;
+                }
                 if (userFound.role !== role && role) {
                   userFound.role = role;
                 }

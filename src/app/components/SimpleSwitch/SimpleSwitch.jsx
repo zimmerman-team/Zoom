@@ -112,6 +112,7 @@ const propTypes = {
   disabled: PropTypes.bool,
   label: PropTypes.string,
   option1: PropTypes.string,
+  selectKey: PropTypes.string,
   option2: PropTypes.string
 };
 const defaultProps = {
@@ -120,6 +121,7 @@ const defaultProps = {
   defaultCheck: false,
   disabled: false,
   onSwitch: null,
+  selectKey: 'key',
   option2: 'empty 2'
 };
 
@@ -130,7 +132,8 @@ class SimpleSwitch extends React.Component {
 
   handleChange = name => event => {
     this.setState({ [name]: event.target.checked });
-    this.props.onSwitch && this.props.onSwitch(event.target.checked);
+    this.props.onSwitch &&
+      this.props.onSwitch(event.target.checked, this.props.selectKey);
   };
 
   render() {

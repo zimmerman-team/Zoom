@@ -1,14 +1,3 @@
-export const axisOptions = [
-  {
-    label: 'Number',
-    value: 'number'
-  },
-  {
-    label: 'Category',
-    value: 'category'
-  }
-];
-
 export const aggrOptions = [
   {
     label: 'Geolocation',
@@ -22,11 +11,11 @@ export const aggrOptions = [
 
 export const rankOptions = [
   {
-    label: 'Male',
-    value: 'male'
+    label: 'High',
+    value: 'high'
   },
   {
-    label: 'Female',
-    value: 'female'
+    label: 'Low',
+    value: 'low'
   }
 ];

@@ -71,15 +71,9 @@ class LineChart extends React.Component {
           margin={{ top: 30, right: 10, left: 10, bottom: 0 }}
         >
           <CartesianGrid />
-          <XAxis
-            dataKey={xAxisKey}
-            type={specOptions[graphKeys.xAxis]}
-            interval={0}
-            tick={{ fontSize: 10 }}
-          />
+          <XAxis dataKey={xAxisKey} interval={0} tick={{ fontSize: 10 }} />
           <YAxis
             yAxisId="left"
-            type={specOptions[graphKeys.leftYAxis]}
             tickCount={10}
             tick={{ fontSize: 10 }}
             tickFormatter={tick =>
@@ -94,7 +88,6 @@ class LineChart extends React.Component {
             yAxisId="right"
             orientation="right"
             tick={{ fontSize: 10 }}
-            type={specOptions[graphKeys.rightYAxis]}
             tickFormatter={tick =>
               tick.toLocaleString(undefined, {
                 minimumFractionDigits: 0,

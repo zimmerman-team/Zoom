@@ -30,7 +30,7 @@ import chartTypes from '__consts__/ChartConst';
 import initialPaneState from '__consts__/InitialPaneDataConst';
 import { colorSet } from '__consts__/PaneConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
-import { aggrOptions, axisOptions } from '__consts__/GraphStructOptionConsts';
+import { aggrOptions, rankOptions } from '__consts__/GraphStructOptionConsts';
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
 import * as actions from 'services/actions/general';
@@ -192,15 +192,21 @@ class VisualizerModuleMediator extends Component {
         // and xAxis should initially be the categories
         // and the color pallet should be the first color
         // set from the consts
+
+        const specOptions = {
+          [graphKeys.colorPallet]: colorSet[1].colors,
+          [graphKeys.aggregate]: aggrOptions[0].value
+        };
+
+        if (chartTypes.barChart === this.props.match.params.chart) {
+          specOptions[graphKeys.grouped] = false;
+          specOptions[graphKeys.rankBy] = rankOptions[0].value;
+          specOptions[graphKeys.horizont] = true;
+        }
+
         this.props.dispatch(
           actions.storeChartDataRequest({
-            specOptions: {
-              [graphKeys.leftYAxis]: axisOptions[0].value,
-              [graphKeys.rightYAxis]: axisOptions[0].value,
-              [graphKeys.xAxis]: axisOptions[1].value,
-              [graphKeys.colorPallet]: colorSet[0].colors,
-              [graphKeys.aggregate]: aggrOptions[0].value
-            }
+            specOptions
           })
         );
       }
@@ -303,6 +309,40 @@ class VisualizerModuleMediator extends Component {
         })
       );
     }
+
+    // so if the rankBy changes we only change the sorting of the chart
+    // cause we don't need to refetch anything cause its all on the frontend
+    if (
+      (specOptions[graphKeys.rankBy] !== prevSpecOptions[graphKeys.rankBy] &&
+        prevSpecOptions[graphKeys.rankBy]) ||
+      specOptions[graphKeys.horizont] !== prevSpecOptions[graphKeys.horizont]
+    ) {
+      let barChartData = [];
+
+      if (
+        (specOptions[graphKeys.rankBy] === 'high' &&
+          specOptions[graphKeys.horizont]) ||
+        (specOptions[graphKeys.rankBy] === 'low' &&
+          !specOptions[graphKeys.horizont])
+      ) {
+        barChartData = sortBy(this.props.chartData.data, ['allValSum']);
+      } else if (
+        (specOptions[graphKeys.rankBy] === 'high' &&
+          !specOptions[graphKeys.horizont]) ||
+        (specOptions[graphKeys.rankBy] === 'low' &&
+          specOptions[graphKeys.horizont])
+      ) {
+        barChartData = sortBy(this.props.chartData.data, [
+          'allValSum'
+        ]).reverse();
+      }
+
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          data: barChartData
+        })
+      );
+    }
   }
 
   componentWillUnmount() {
@@ -386,6 +426,9 @@ class VisualizerModuleMediator extends Component {
       case chartTypes.barChart:
         data = formatBarData(
           aggregationData,
+          this.props.chartData.specOptions[graphKeys.aggregate],
+          this.props.chartData.specOptions[graphKeys.rankBy],
+          this.props.chartData.specOptions[graphKeys.horizont],
           this.props.chartData.specOptions[graphKeys.colorPallet]
         );
         chartKeys = formatBarChartKeys(
@@ -432,7 +475,6 @@ class VisualizerModuleMediator extends Component {
 
       // and we sort them
       subIndicators = sortBy(subIndicators, ['label']);
-
       let selectedSubInd = selectedInd[indItem.index].selectedSubInd;
 
       if (this.props.chartData.indSelectedIndex === indItem.index) {

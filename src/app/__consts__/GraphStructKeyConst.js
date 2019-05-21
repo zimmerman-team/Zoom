@@ -3,7 +3,8 @@ const graphKeys = {
   aggregate: 'aggregate',
   grouped: 'grouped',
   horizont: 'horizont',
-  rankBy: 'rankBy'
+  rankBy: 'rankBy',
+  aggrCountry: 'aggrCountry'
 };
 
 export default graphKeys;

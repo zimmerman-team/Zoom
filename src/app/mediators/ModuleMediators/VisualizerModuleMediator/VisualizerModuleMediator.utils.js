@@ -828,7 +828,7 @@ export function formatTableData(indicators) {
   };
 }
 
-export function formatDonutData(indicators) {
+export function formatDonutData(indicators, aggrCountry) {
   const chartData = [];
   const donutChartLabels = [];
 
@@ -845,7 +845,7 @@ export function formatDonutData(indicators) {
 
       donutChartLabels.push(indName);
 
-      indicator.data.forEach(indItem => {
+      indicator.data.forEach((indItem, itemIndex) => {
         let itemId = `${indName} - ${indItem.filterName}`;
         let label = itemId;
 
@@ -854,16 +854,37 @@ export function formatDonutData(indicators) {
           label = `${indName} - ${indicator.selectedSubInd.join(', ')}`;
         }
 
-        const chartItemInd = findIndex(chartData, ['id', itemId]);
+        const chartItemInd = findIndex(chartData, chartItem => {
+          if (aggrCountry) {
+            return chartItem.key === itemId;
+          }
+
+          return (
+            chartItem.key === itemId &&
+            chartItem.geolocationTag === indItem.geolocationTag
+          );
+        });
 
         if (chartItemInd === -1) {
+          let geoName = null;
+
+          if (!aggrCountry) {
+            geoName = indItem.geolocationTag;
+            geoName = geoName.charAt(0).toUpperCase() + geoName.slice(1);
+          }
+
           chartData.push({
-            id: itemId,
+            geoName,
+            geolocationTag: indItem.geolocationTag,
+            id: `${itemId} ${itemIndex}`,
+            key: `${itemId}`,
             label,
             value: Math.round(indItem.value),
             format: indItem.valueFormatType
           });
-        } else chartData[chartItemInd].value += Math.round(indItem.value);
+        } else {
+          chartData[chartItemInd].value += Math.round(indItem.value);
+        }
       });
     }
   });

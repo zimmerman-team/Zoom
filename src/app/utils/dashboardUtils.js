@@ -68,7 +68,6 @@ export function formatTeamsTabData(
   page,
   sort,
   search,
-  users,
   onEdit,
   onDelete,
   onView
@@ -77,17 +76,12 @@ export function formatTeamsTabData(
 
   if (initialLoad) {
     allTeams = data.map(d => {
-      const values = get(d, 'description', '').split(',');
       return {
         id: d._id,
         title: get(d, 'name', ''),
         info: {
-          'Created by': get(
-            find(users, user => user.id === get(values, '[1]', '')),
-            'title',
-            ''
-          ),
-          'Publication date': get(values, '[0]', ''),
+          'Created by': get(d, 'createdBy', ''),
+          'Publication date': get(d, 'date', ''),
           Organisations: ''
         },
         onEdit: () => onEdit(d._id),

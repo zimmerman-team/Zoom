@@ -42,7 +42,11 @@ const AuthUserController = {
                     b < get(currentUser.teams, 'length', 0);
                     b++
                   ) {
-                    if (currentUser.teams[b] === dUserGroups[a]) {
+                    if (
+                      currentUser.teams[b] === dUserGroups[a] &&
+                      get(d, 'app_metadata.authorization.roles[0]', '') !==
+                        'Super admin'
+                    ) {
                       pass = true;
                       break;
                     }

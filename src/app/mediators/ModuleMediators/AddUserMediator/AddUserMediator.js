@@ -55,6 +55,18 @@ class AddUserMediator extends React.Component {
     if (!isEqual(this.props.groups, prevProps.groups)) {
       this.setState({ userGroups: sortBy(this.props.groups.data, ['label']) });
     }
+    if (
+      this.props.addUser.success !== prevProps.addUser.success &&
+      this.props.addUser.success
+    ) {
+      this.setState({
+        email: '',
+        lastName: '',
+        firstName: '',
+        userRole: { label: '', value: '', _id: '' },
+        organisation: { label: '', value: '', _id: '' }
+      });
+    }
   };
 
   componentWillUnmount = () => {

@@ -41,6 +41,15 @@ class CreateTeamMediator extends React.Component {
     if (!isEqual(this.props.allUsers, prevProps.allUsers)) {
       this.setUsers(this.props.allUsers.data || []);
     }
+    if (
+      this.props.addGroup.success !== prevProps.addGroup.success &&
+      this.props.addGroup.success
+    ) {
+      this.setState({
+        name: '',
+        users: []
+      });
+    }
   };
 
   componentWillUnmount = () => {

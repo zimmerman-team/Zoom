@@ -190,10 +190,10 @@ class EditTeamMediator extends React.Component {
       this.state.initialGroupUsers.length === 0
         ? this.state.users
         : filter(this.state.users, user => {
-            return !some(this.state.initialGroupUsers, { user_id: user });
+            return !some(this.state.initialGroupUsers, igu => igu === user);
           });
     const usersToDelete = filter(this.state.initialGroupUsers, igu => {
-      return !find(this.state.users, user => user === igu.user_id);
+      return !find(this.state.users, user => user === igu);
     });
 
     this.props.dispatch(

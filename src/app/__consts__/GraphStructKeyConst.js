@@ -1,10 +1,9 @@
 const graphKeys = {
-  leftYAxis: 'leftYAxis',
-  rightYAxis: 'rightYAxis',
-  xAxis: 'xAxis',
   colorPallet: 'colorPallet',
   aggregate: 'aggregate',
-  grouped: 'grouped'
+  grouped: 'grouped',
+  horizont: 'horizont',
+  rankBy: 'rankBy'
 };
 
 export default graphKeys;

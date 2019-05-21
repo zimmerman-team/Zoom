@@ -7,6 +7,9 @@ import { colorSet } from '__consts__/PaneConst';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 import { geoTypes } from '__consts__/GeolocationConst';
 
+/* utils */
+import sortBy from 'lodash/sortBy';
+
 // these are aggregation keys associated with graphql returned variables
 // 'geolocationTag' & 'date' are the graphql variables
 export const aggrKeys = {
@@ -682,6 +685,8 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
 export function formatBarData(
   indicators,
   aggregate,
+  rankBy,
+  horizontal,
   colors = colorSet[0].colors
 ) {
   const barChartData = [];
@@ -729,6 +734,9 @@ export function formatBarData(
 
         if (existItemInd === -1) {
           barChartData.push({
+            // so this variable will basically be used for sorting
+            // by biggest or lowest value, of joined bars
+            allValSum: Math.round(indItem.value),
             [`${itemId}Label`]: label,
 
             [aggrKey]: indItem[aggrKey],
@@ -739,8 +747,10 @@ export function formatBarData(
             [`${itemId}Format`]: indItem.valueFormatType
           });
         } else if (barChartData[existItemInd][itemId] !== undefined) {
+          barChartData[existItemInd].allValSum += Math.round(indItem.value);
           barChartData[existItemInd][itemId] += Math.round(indItem.value);
         } else {
+          barChartData[existItemInd].allValSum += Math.round(indItem.value);
           barChartData[existItemInd][itemId] = Math.round(indItem.value);
           barChartData[existItemInd][`${itemId}Color`] = colors[colorInd];
           barChartData[existItemInd][`${itemId}Label`] = label;
@@ -753,7 +763,18 @@ export function formatBarData(
     }
   });
 
-  return barChartData;
+  let sortedData = [];
+
+  if ((rankBy === 'high' && horizontal) || (rankBy === 'low' && !horizontal)) {
+    sortedData = sortBy(barChartData, ['allValSum']);
+  } else if (
+    (rankBy === 'high' && !horizontal) ||
+    (rankBy === 'low' && horizontal)
+  ) {
+    sortedData = sortBy(barChartData, ['allValSum']).reverse();
+  }
+
+  return sortedData;
 }
 
 export function formatTableData(indicators) {

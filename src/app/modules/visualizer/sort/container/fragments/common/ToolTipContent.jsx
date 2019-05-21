@@ -24,7 +24,9 @@ const TooltipContent = ({
     nrFormat = ' '.concat(format);
   }
 
-  const capitalType = aggrType.charAt(0).toUpperCase() + aggrType.slice(1);
+  const capitalType = aggrType
+    ? aggrType.charAt(0).toUpperCase() + aggrType.slice(1)
+    : 'Geo';
 
   return (
     <Container>

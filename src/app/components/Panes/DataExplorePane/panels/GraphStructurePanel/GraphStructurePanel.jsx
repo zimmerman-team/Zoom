@@ -53,51 +53,73 @@ class GraphStructurePanel extends React.Component {
     return (
       <ComponentBase>
         {/* FIRST ROW //////////////////////////////////////////////////////// */}
-        <FilterContainer>
-          {/* AGGREGATE BY */}
-          <SimpleSelect
-            label="Aggregate by"
-            options={aggrOptions}
-            selectKey={graphKeys.aggregate}
-            defValue={this.props.specOptions[graphKeys.aggregate]}
-            onChange={this.props.saveGraphOption}
-          />
-          {/* RANK BY */}
-          <SimpleSelect
-            disabled={this.props.chartType === chartTypes.lineChart}
-            selectKey={graphKeys.rankBy}
-            defValue={this.props.specOptions[graphKeys.rankBy]}
-            onChange={this.props.saveGraphOption}
-            label="Rank by"
-            options={rankOptions}
-          />
-        </FilterContainer>
+        {this.props.chartType === chartTypes.barChart && (
+          <FilterContainer>
+            {/* AGGREGATE BY */}
+
+            <SimpleSelect
+              label="Aggregate by"
+              options={aggrOptions}
+              selectKey={graphKeys.aggregate}
+              defValue={this.props.specOptions[graphKeys.aggregate]}
+              onChange={this.props.saveGraphOption}
+            />
+
+            {/* RANK BY */}
+            <SimpleSelect
+              selectKey={graphKeys.rankBy}
+              defValue={this.props.specOptions[graphKeys.rankBy]}
+              onChange={this.props.saveGraphOption}
+              label="Rank by"
+              options={rankOptions}
+            />
+          </FilterContainer>
+        )}
 
         {/* SECOND ROW /////////////////////////////////////////////////////// */}
-        <FilterContainer>
-          {/* STACKED VS GROUPED */}
-          <SimpleSwitch
-            disabled={this.props.chartType === chartTypes.lineChart}
-            defaultCheck={this.props.specOptions[graphKeys.grouped]}
-            selectKey={graphKeys.grouped}
-            onSwitch={this.props.saveGraphOption}
-            option1="Stacked"
-            option2="Grouped"
-          />
-        </FilterContainer>
+        {this.props.chartType === chartTypes.barChart && (
+          <FilterContainer>
+            {/* STACKED VS GROUPED */}
+
+            <SimpleSwitch
+              defaultCheck={this.props.specOptions[graphKeys.grouped]}
+              selectKey={graphKeys.grouped}
+              onSwitch={this.props.saveGraphOption}
+              option1="Stacked"
+              option2="Grouped"
+            />
+          </FilterContainer>
+        )}
 
         {/* THIRD ROW //////////////////////////////////////////////////////// */}
-        <FilterContainer>
-          {/* VERTICAL VS HORIZONTAL */}
-          <SimpleSwitch
-            disabled={this.props.chartType === chartTypes.lineChart}
-            defaultCheck={this.props.specOptions[graphKeys.horizont]}
-            selectKey={graphKeys.horizont}
-            onSwitch={this.props.saveGraphOption}
-            option1="Vertical"
-            option2="Horizontal"
-          />
-        </FilterContainer>
+        {this.props.chartType === chartTypes.barChart && (
+          <FilterContainer>
+            {/* VERTICAL VS HORIZONTAL */}
+
+            <SimpleSwitch
+              defaultCheck={this.props.specOptions[graphKeys.horizont]}
+              selectKey={graphKeys.horizont}
+              onSwitch={this.props.saveGraphOption}
+              option1="Vertical"
+              option2="Horizontal"
+            />
+          </FilterContainer>
+        )}
+
+        {/* FOURTH ROW //////////////////////////////////////////////////////// */}
+        {this.props.chartType === chartTypes.donutChart && (
+          <FilterContainer>
+            {/* Aggregated by country disaggregated by country */}
+
+            <SimpleSwitch
+              defaultCheck={this.props.specOptions[graphKeys.aggrCountry]}
+              selectKey={graphKeys.aggrCountry}
+              onSwitch={this.props.saveGraphOption}
+              option1="Split Countries"
+              option2="Aggregate Countries"
+            />
+          </FilterContainer>
+        )}
 
         <FilterContainer>
           {/* X-AXIS */}

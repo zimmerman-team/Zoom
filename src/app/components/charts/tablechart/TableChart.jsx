@@ -3,6 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MUIDataTable from 'mui-datatables';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+
+/* consts */
+import { noData } from 'modules/visualizer/sort/container/fragments/TablechartFragment/TableChartFragment.const';
+
 /* components */
 import getTheme from './TableChart.styles';
 
@@ -23,7 +27,7 @@ const propTypes = {
 };
 const defaultProps = {
   title: 'No title given',
-  data: [],
+  data: noData,
   columns: [],
   options
 };

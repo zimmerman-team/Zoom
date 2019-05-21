@@ -50,6 +50,7 @@ const BarchartFragment = props => {
               index={payload.index}
               color={payload.color}
               valueLabel={payload.data[`${payload.id}Label`]}
+              format={payload.data[`${payload.id}Format`]}
               value={payload.value}
             />
           )}

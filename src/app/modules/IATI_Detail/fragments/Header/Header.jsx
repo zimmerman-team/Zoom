@@ -74,7 +74,7 @@ class Header extends React.Component {
           </DetailList>
         </ModuleFragment>
         <ModuleFragment>
-          <PageHeading>{this.props.data.title}</PageHeading>
+          <PageHeading data-cy="header">{this.props.data.title}</PageHeading>
         </ModuleFragment>
         <ModuleFragment background={theme.color.zoomGreyZero}>
           <DetailList>

@@ -107,6 +107,7 @@ class HomeModuleMediator extends Component {
     this.selectCountry = this.selectCountry.bind(this);
     this.selectRegion = this.selectRegion.bind(this);
     this.resetAll = this.resetAll.bind(this);
+    this.subIndAggrToggle = this.subIndAggrToggle.bind(this);
     this.getCountriesByRegion = this.getCountriesByRegion.bind(this);
   }
 
@@ -115,7 +116,9 @@ class HomeModuleMediator extends Component {
       !isEqual(
         this.props.indicatorAggregations,
         prevProps.indicatorAggregations
-      )
+      ) ||
+      this.state.subIndAggr1 !== prevState.subIndAggr1 ||
+      this.state.subIndAggr2 !== prevState.subIndAggr2
     ) {
       this.updateIndicators();
     }
@@ -126,6 +129,45 @@ class HomeModuleMediator extends Component {
       this.state.selectedInd2 !== prevState.selectedInd2
     ) {
       this.refetch();
+    }
+
+    // and once the subindicators are refetched we select the first one
+    if (
+      !isEqual(this.state.subIndicators1, prevState.subIndicators1) &&
+      this.state.subIndicators1.length > 0
+    ) {
+      // and we do it like this because when a new indicator is selected
+      // the selected sub indicators might be 0
+      // and ofcourse refetch
+      this.setState(
+        {
+          selectedSubInd1: [this.state.subIndicators1[0].value],
+          // and we set indSelectedIndex to -1 cause the selected
+          // indicators subindicator dropdown has already been opened
+          // and cause we use this index to control the dropdown opening
+          indSelectedIndex: -1
+        },
+        this.refetch
+      );
+    }
+
+    if (
+      !isEqual(this.state.subIndicators2, prevState.subIndicators2) &&
+      this.state.subIndicators2.length > 0
+    ) {
+      // and we do it like this because when a new indicator is selected
+      // the selected sub indicators might be 0
+      // and ofcourse refetch
+      this.setState(
+        {
+          selectedSubInd2: [this.state.subIndicators2[0].value],
+          // and we set indSelectedIndex to -1 cause the selected
+          // indicators subindicator dropdown has already been opened
+          // and cause we use this index to control the dropdown opening
+          indSelectedIndex: -1
+        },
+        this.refetch
+      );
     }
   }
 
@@ -177,14 +219,16 @@ class HomeModuleMediator extends Component {
       longLatData = formatLongLatData(
         this.props.indicatorAggregations.indicators1,
         this.state.selectedInd1,
-        this.state.selectedSubInd1
+        this.state.selectedSubInd1,
+        this.state.subIndAggr1
       );
       longLatSubind = this.state.selectedSubInd1.join(', ');
     } else {
       countryLayerData = formatCountryLayerData(
         this.props.indicatorAggregations.indicators1,
         this.state.selectedInd1,
-        this.state.selectedSubInd1
+        this.state.selectedSubInd1,
+        this.state.subIndAggr1
       );
     }
 
@@ -203,14 +247,16 @@ class HomeModuleMediator extends Component {
       longLatData = formatLongLatData(
         this.props.indicatorAggregations.indicators2,
         this.state.selectedInd2,
-        this.state.selectedSubInd2
+        this.state.selectedSubInd2,
+        this.state.subIndAggr2
       );
       longLatSubind = this.state.selectedSubInd2.join(', ');
     } else {
       countryCircleData = formatCountryCenterData(
         this.props.indicatorAggregations.indicators2,
         this.state.selectedInd2,
-        this.state.selectedSubInd2
+        this.state.selectedSubInd2,
+        this.state.subIndAggr2
       );
     }
 
@@ -333,6 +379,7 @@ class HomeModuleMediator extends Component {
         {
           selectedYear: val.firstYear,
           [indKey]: val.value,
+          indSelectedIndex: index,
           subIndicators1: [],
           selectedSubInd1: []
         },
@@ -366,6 +413,14 @@ class HomeModuleMediator extends Component {
     }
 
     this.setState({ [subIndKey]: selectedSubInd }, this.refetch);
+  }
+
+  // this function basically toggles the aggregations and disaggregations
+  // of the indicator data
+  subIndAggrToggle(checked, index) {
+    const subIndKey = `subIndAggr${index + 1}`;
+
+    this.setState({ [subIndKey]: checked }, this.refetch);
   }
 
   selectYear(val) {
@@ -482,20 +537,26 @@ class HomeModuleMediator extends Component {
         // so these are all of the sub-indicators
         // of the selected indicator
         subIndicators: this.state.subIndicators1,
-        selectedSubInd: this.state.selectedSubInd1
+        aggregate: this.state.subIndAggr1,
+        selectedSubInd: this.state.selectedSubInd1,
+        openSubInd: this.state.openSubInd1
       },
       {
         indicator: this.state.selectedInd2,
         // so these are all of the sub-indicators
         // of the selected indicator
         subIndicators: this.state.subIndicators2,
-        selectedSubInd: this.state.selectedSubInd2
+        aggregate: this.state.subIndAggr2,
+        selectedSubInd: this.state.selectedSubInd2,
+        openSubInd: this.state.openSubInd2
       }
     ];
 
     return (
       <HomeModule
+        subIndAggrToggle={this.subIndAggrToggle}
         selectedInd={selectedInd}
+        indSelectedIndex={this.state.indSelectedIndex}
         loading={this.state.loading}
         data={this.state.data}
         dropDownData={this.props.dropDownData}
@@ -549,6 +610,7 @@ export default createRefetchContainer(
           "geolocationIso2"
           "comment"
           "geolocationPolygons"
+          "filterName"
           "valueFormatType"
         ]
         orderBy: ["indicatorName"]
@@ -566,6 +628,7 @@ export default createRefetchContainer(
         geolocationType
         geolocationPolygons
         valueFormatType
+        filterName
         date
         value
       }
@@ -577,6 +640,7 @@ export default createRefetchContainer(
           "geolocationType"
           "geolocationIso2"
           "comment"
+          "filterName"
           "geolocationCenterLongLat"
           "valueFormatType"
         ]
@@ -593,6 +657,7 @@ export default createRefetchContainer(
         comment
         geolocationTag
         geolocationType
+        filterName
         geolocationCenterLongLat
         valueFormatType
         date

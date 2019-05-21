@@ -100,6 +100,7 @@ class VizPaneMediator extends React.Component {
     this.changesMade = this.changesMade.bind(this);
     this.getCountriesByRegion = this.getCountriesByRegion.bind(this);
     this.handleAxisSwitch = this.handleAxisSwitch.bind(this);
+    this.subIndAggrToggle = this.subIndAggrToggle.bind(this);
     this.saveGraphOption = this.saveGraphOption.bind(this);
     this.addIndicator = this.addIndicator.bind(this);
     this.removeIndicator = this.removeIndicator.bind(this);
@@ -263,6 +264,7 @@ class VizPaneMediator extends React.Component {
         indicator: indItem.indicator,
         subIndicators: indItem.subIndicators,
         dataSource: indItem.dataSource,
+        aggregate: indItem.aggregate,
         selectedSubInd: [...indItem.selectedSubInd]
       });
     });
@@ -305,6 +307,7 @@ class VizPaneMediator extends React.Component {
         this.props.dispatch(
           actions.storeChartDataRequest({
             selectedInd,
+            indSelectedIndex: index,
             selectedYear: val.firstYear
           })
         );
@@ -325,6 +328,7 @@ class VizPaneMediator extends React.Component {
       selectedInd.push({
         indicator: indItem.indicator,
         subIndicators: indItem.subIndicators,
+        aggregate: indItem.aggregate,
         dataSource: indItem.dataSource,
         selectedSubInd: [...indItem.selectedSubInd]
       });
@@ -520,13 +524,58 @@ class VizPaneMediator extends React.Component {
   handleAxisSwitch(checked, index) {
     // so if checked is false this the left axis will be selected
     // for this indicator otherwise its the right
-    const { chartKeys } = this.props.chartData;
+    const chartKeyz = [...this.props.chartData.chartKeys];
 
-    chartKeys[index].orientation = checked ? 'right' : 'left';
+    // now because we have some new logic in our datas
+    // where we can have aggregated indicators by their sub inds
+    // and we can have disagregated indicators by their subinds
+    // and have seperate legends for each, we need to get all chartKeys
+    // which are associated with that disagregated subindicator
+    // and when the axis has been switched, all of the sub-indicator
+    // legends need to switch, cause they all are under the same indicator
+    const chartKeys = [];
+
+    chartKeyz.forEach(chartKey => {
+      let chartKeyItem = chartKey;
+
+      if (chartKey.indIndex === index) {
+        chartKeyItem = {
+          ...chartKey,
+          orientation: checked ? 'right' : 'left'
+        };
+      }
+
+      chartKeys.push(chartKeyItem);
+    });
 
     this.props.dispatch(
       actions.storeChartDataRequest({
         chartKeys
+      })
+    );
+  }
+
+  // this function basically toggles the aggregations and disaggregations
+  // of the indicator data
+  subIndAggrToggle(checked, index) {
+    const selectedInd = [...this.props.chartData.selectedInd];
+
+    selectedInd[index] = {
+      ...selectedInd[index],
+      aggregate: checked
+    };
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        selectedInd,
+        // so this variable is true then a refetch of data will not happen,
+        // because it makes sense to not regetch data when aggregation
+        // for a not selected indicator has been done, cause there's
+        // nothing to reagregate
+        noRefetch: !(
+          selectedInd[index].indicator &&
+          selectedInd[index].selectedSubInd.length > 0
+        )
       })
     );
   }
@@ -569,6 +618,7 @@ class VizPaneMediator extends React.Component {
           this.props.paneData.chartType !== chartTypes.focusNL &&
           this.props.paneData.chartType !== chartTypes.focusKE
         }
+        subIndAggrToggle={this.subIndAggrToggle}
         chartType={this.props.paneData.chartType}
         specOptions={this.props.chartData.specOptions}
         saveGraphOption={this.saveGraphOption}
@@ -581,13 +631,13 @@ class VizPaneMediator extends React.Component {
         // okay so we use this variable to change the
         // to disable the geolocation dropdowns being defaultly selected
         locationSelected={!this.props.chartData.chartMounted}
-        changesMade={this.props.chartData.changesMade}
         selectedInd={this.props.chartData.selectedInd}
         chartKeys={this.props.chartData.chartKeys}
         addIndicator={this.addIndicator}
         removeIndicator={this.removeIndicator}
         selectInd={this.selectInd}
         selectSubInd={this.selectSubInd}
+        indSelectedIndex={this.props.chartData.indSelectedIndex}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.props.chartData.selectedCountryVal}
         selectedCountryLabel={this.props.chartData.selectedCountryLabels}

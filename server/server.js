@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const helmet = require('helmet');
 const config = require('./config/config');
 const router = require('./router');
 const app = express();
@@ -25,6 +26,8 @@ mongoose
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 app.use(bodyParser.json({ limit: '2gb', extended: true }));
 app.use(cors());
+app.use(helmet());
+app.disable('x-powered-by');
 
 // append /api for our http requests
 app.use('/api', router);

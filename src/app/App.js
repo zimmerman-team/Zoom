@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 // import { Provider } from 'react-redux';
 import JssProvider from 'react-jss/lib/JssProvider';
-import { BrowserRouter as Router, withRouter } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { graphql, QueryRenderer } from 'react-relay';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import auth0Client from 'auth/Auth';
@@ -12,7 +12,6 @@ import {
   MuiThemeProvider,
   createMuiTheme
 } from '@material-ui/core/styles';
-import Cookies from 'universal-cookie';
 
 /* actions */
 import { setUserIdToken } from 'services/actions/sync';
@@ -20,7 +19,6 @@ import { getUserRequest } from 'services/actions/nodeBackend';
 import { getCurrentUserRequest } from 'services/actions/authNodeBackend';
 
 /* utils */
-import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 
 // Routes

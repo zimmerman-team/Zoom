@@ -59,7 +59,6 @@ const DonutchartFragment = props => {
           cornerRadius={4}
           colors={props.donutColors}
           colorBy={d => {
-            console.log('colorings');
             const chartItem = find(props.chartKeys, ['name', d.label]);
             if (chartItem) {
               return chartItem.color;

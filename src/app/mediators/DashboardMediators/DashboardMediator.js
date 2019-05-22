@@ -237,6 +237,16 @@ class DashboardMediator extends React.Component {
           )
         );
       }
+    } else {
+      this.props.dispatch(
+        deleteAuthUserRequest(
+          {
+            delId: delId,
+            userId: this.props.user.authId
+          },
+          { Authorization: `Bearer ${this.props.user.idToken}` }
+        )
+      );
     }
   };
 

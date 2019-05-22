@@ -198,6 +198,10 @@ class VisualizerModuleMediator extends Component {
           [graphKeys.aggregate]: aggrOptions[0].value
         };
 
+        if (chartTypes.lineChart === this.props.match.params.chart) {
+          specOptions[graphKeys.aggregate] = aggrOptions[1].value;
+        }
+
         if (chartTypes.barChart === this.props.match.params.chart) {
           specOptions[graphKeys.grouped] = false;
           specOptions[graphKeys.rankBy] = rankOptions[0].value;

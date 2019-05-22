@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* base */
 import React from 'react';
 import { withRouter } from 'react-router-dom';
@@ -7,6 +8,7 @@ import {
   getGroupRequest,
   editGroupInitial,
   editGroupRequest,
+  getGroupsRequest,
   getAllUsersRequest
 } from 'services/actions/authNodeBackend';
 /* components */
@@ -33,7 +35,8 @@ class EditTeamMediator extends React.Component {
     totalPages: 0,
     isSortByOpen: false,
     initialGroupUsers: [],
-    paginatedUsers: []
+    paginatedUsers: [],
+    addedOrRemovedSelf: false
   };
 
   componentDidMount = () => {
@@ -58,6 +61,17 @@ class EditTeamMediator extends React.Component {
         users: [...this.props.group.data.users]
       });
     }
+
+    if (
+      this.props.editGroup.success !== prevProps.editGroup.success &&
+      this.props.editGroup.success
+    ) {
+      if (this.state.addedOrRemovedSelf) {
+        window.location.replace(
+          `${process.env.REACT_APP_PROJECT_URL}/dashboard`
+        );
+      }
+    }
   };
 
   componentWillUnmount = () => {
@@ -70,6 +84,17 @@ class EditTeamMediator extends React.Component {
       getGroupRequest(
         {
           groupId: this.props.match.params.teamId
+        },
+        { Authorization: `Bearer ${this.props.user.idToken}` }
+      )
+    );
+  };
+
+  getAllTeams = () => {
+    this.props.dispatch(
+      getGroupsRequest(
+        {
+          userId: this.props.user.authId
         },
         { Authorization: `Bearer ${this.props.user.idToken}` }
       )
@@ -196,25 +221,57 @@ class EditTeamMediator extends React.Component {
       return !find(this.state.users, user => user === igu);
     });
 
-    this.props.dispatch(
-      editGroupRequest(
-        {
-          groupId: this.props.match.params.teamId,
-          name: this.state.name,
-          description: this.state.description,
-          usersToRemove: usersToDelete,
-          usersToAdd: usersToAdd,
-          user: {
-            authId: this.props.user.authId
+    if (some(usersToDelete, u => u === this.props.user.authId)) {
+      if (
+        window.confirm(
+          'You are about to remove yourself from the team! Are you sure?'
+        )
+      ) {
+        this.setState({ addedOrRemovedSelf: true });
+        this.props.dispatch(
+          editGroupRequest(
+            {
+              groupId: this.props.match.params.teamId,
+              name: this.state.name,
+              description: this.state.description,
+              usersToRemove: usersToDelete,
+              usersToAdd: usersToAdd,
+              user: {
+                authId: this.props.user.authId
+              },
+              team: {
+                oldName: this.state.oldTeamName,
+                newName: this.state.name
+              }
+            },
+            { Authorization: `Bearer ${this.props.user.idToken}` }
+          )
+        );
+      }
+    } else {
+      this.props.dispatch(
+        editGroupRequest(
+          {
+            groupId: this.props.match.params.teamId,
+            name: this.state.name,
+            description: this.state.description,
+            usersToRemove: usersToDelete,
+            usersToAdd: usersToAdd,
+            user: {
+              authId: this.props.user.authId
+            },
+            team: {
+              oldName: this.state.oldTeamName,
+              newName: this.state.name
+            }
           },
-          team: {
-            oldName: this.state.oldTeamName,
-            newName: this.state.name
-          }
-        },
-        { Authorization: `Bearer ${this.props.user.idToken}` }
-      )
-    );
+          { Authorization: `Bearer ${this.props.user.idToken}` }
+        )
+      );
+      if (some(usersToAdd, u => u === this.props.user.authId)) {
+        this.setState({ addedOrRemovedSelf: true });
+      }
+    }
   };
 
   render = () => {

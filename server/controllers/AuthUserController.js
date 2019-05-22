@@ -55,6 +55,13 @@ const AuthUserController = {
                 }
                 return pass;
               });
+              if (result.length === 0) {
+                const currentUserEmail = currentUser.email;
+                const currentUserAuth0 = find(res2.data.users, {
+                  email: currentUserEmail
+                });
+                result = [currentUserAuth0];
+              }
             }
             if (currentUser.role === 'Regular user') {
               const currentUserEmail = currentUser.email;

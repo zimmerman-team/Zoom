@@ -102,7 +102,9 @@ class AddUserMediator extends React.Component {
           name: this.state.firstName,
           surname: this.state.lastName,
           groupId: this.state.organisation._id,
-          roleId: this.state.userRole._id
+          roleId: this.state.userRole._id,
+          groupName: this.state.organisation.name,
+          roleName: this.state.userRole.name
         },
         { Authorization: `Bearer ${this.props.user.idToken}` }
       )

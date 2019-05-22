@@ -213,7 +213,15 @@ const AuthUserController = {
   },
 
   addUser: (req, res) => {
-    const { email, name, surname, groupId, roleId } = req.body;
+    const {
+      email,
+      name,
+      surname,
+      groupId,
+      roleId,
+      groupName,
+      roleName
+    } = req.body;
     authUtils.getAccessToken('management').then(token => {
       axios
         .post(
@@ -232,6 +240,12 @@ const AuthUserController = {
             user_metadata: {
               firstName: name,
               lastName: surname
+            },
+            app_metadata: {
+              authorization: {
+                groups: [groupName],
+                roles: [roleName]
+              }
             }
           },
           {

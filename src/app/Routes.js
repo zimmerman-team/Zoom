@@ -270,7 +270,11 @@ const Routes = props => {
           <Route
             path="/dashboard/:tab"
             render={() =>
-              props.user.data ? <DashboardMediator /> : <Redirect to="/" />
+              props.user.data ? (
+                <DashboardMediator auth0Client={auth0Client} />
+              ) : (
+                <Redirect to="/" />
+              )
             }
           />
           <Route path="/about" render={() => <About />} />

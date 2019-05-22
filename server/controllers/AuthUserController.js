@@ -6,6 +6,7 @@ const general = require('./generalResponse');
 const User = require('../models/User');
 
 const get = require('lodash/get');
+const some = require('lodash/some');
 const find = require('lodash/find');
 const filter = require('lodash/filter');
 const isEqual = require('lodash/isEqual');
@@ -14,74 +15,83 @@ const AuthUserController = {
   getAllUsers: (req, res) => {
     const { userId } = req.query;
     authUtils.getUser(userId).then(currentUser => {
-      authUtils.getAccessToken('management').then(token => {
-        axios
-          .get(
-            `${
-              process.env.REACT_APP_AUTH_DOMAIN
-            }/api/v2/users?include_totals=true&q=identities.connection:"Username-Password-Authentication"`,
-            {
-              headers: {
-                Authorization: token
-              }
-            }
-          )
-          .then(res2 => {
-            let result = res2.data.users;
-            if (currentUser.role === 'Administrator') {
-              result = filter(res2.data.users, d => {
-                let pass = false;
-                const dUserGroups = get(
-                  d,
-                  'app_metadata.authorization.groups',
-                  []
-                );
-                for (let a = 0; a < dUserGroups.length; a++) {
-                  for (
-                    let b = 0;
-                    b < get(currentUser.teams, 'length', 0);
-                    b++
-                  ) {
-                    if (
-                      currentUser.teams[b] === dUserGroups[a] &&
-                      get(d, 'app_metadata.authorization.roles[0]', '') !==
-                        'Super admin'
+      authUtils.getAccessToken('management').then(token1 => {
+        authUtils.getAccessToken('auth_ext').then(token2 => {
+          axios
+            .all([
+              axios.get(
+                `${
+                  process.env.REACT_APP_AUTH_DOMAIN
+                }/api/v2/users?include_totals=true&q=identities.connection:"Username-Password-Authentication"`,
+                {
+                  headers: {
+                    Authorization: token1
+                  }
+                }
+              ),
+              axios.get(`${process.env.REACT_APP_AE_API_URL}/groups`, {
+                headers: {
+                  Authorization: token2
+                }
+              })
+            ])
+            .then(response => {
+              let result = response[0].data.users;
+              const groups = response[1].data.groups;
+              if (currentUser.role === 'Administrator') {
+                result = filter(response[0].data.users, d => {
+                  let pass = false;
+                  const dUserGroups = filter(groups, gr =>
+                    some(gr.members, member => member === currentUser.authId)
+                  );
+                  for (let c1 = 0; c1 < dUserGroups.length; c1++) {
+                    for (
+                      let c2 = 0;
+                      c2 < dUserGroups[c1].members.length;
+                      c2++
                     ) {
-                      pass = true;
-                      break;
+                      if (
+                        dUserGroups[c1].members[c2] === d.user_id &&
+                        get(d, 'app_metadata.authorization.roles[0]', '') !==
+                          'Super admin'
+                      ) {
+                        pass = true;
+                        break;
+                      }
+                      if (pass) break;
                     }
                   }
-                  if (pass) break;
+
+                  return pass;
+                });
+                if (result.length === 0) {
+                  const currentUserEmail = currentUser.email;
+                  const currentUserAuth0 = find(response[0].data.users, {
+                    email: currentUserEmail
+                  });
+                  result = [currentUserAuth0];
                 }
-                return pass;
-              });
-              if (result.length === 0) {
+              }
+              if (currentUser.role === 'Regular user') {
                 const currentUserEmail = currentUser.email;
-                const currentUserAuth0 = find(res2.data.users, {
+                const currentUserAuth0 = find(response[0].data.users, {
                   email: currentUserEmail
                 });
                 result = [currentUserAuth0];
               }
-            }
-            if (currentUser.role === 'Regular user') {
-              const currentUserEmail = currentUser.email;
-              const currentUserAuth0 = find(res2.data.users, {
-                email: currentUserEmail
-              });
-              result = [currentUserAuth0];
-            }
-            return res.json(result);
-          })
-          .catch(error => {
-            console.log(
-              `${error.response.data.statusCode}: ${
-                error.response.data.message
-              }`
-            );
-            return res
-              .status(error.response.data.statusCode)
-              .send(error.response.data.message);
-          });
+              return res.json(result);
+            })
+            .catch(error => {
+              console.log(
+                `${error.response.data.statusCode}: ${
+                  error.response.data.message
+                }`
+              );
+              return res
+                .status(error.response.data.statusCode)
+                .send(error.response.data.message);
+            });
+        });
       });
     });
   },

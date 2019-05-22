@@ -15,7 +15,7 @@ describe('Create geo functionality', function() {
 
   it('Should display appropriate content per tab', function() {
     cy.signIn();
-    cy.wait(4000);
+    cy.wait(10000);
     cy.get('[data-cy="appbar-right-button"]').click();
     cy.get('[data-cy="nav-pane-item-0"]').should('have.text', 'Create chart');
     cy.get('[data-cy="nav-pane-item-1"]').should('have.text', 'Convert data');

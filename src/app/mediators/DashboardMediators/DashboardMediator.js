@@ -7,6 +7,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 /* mutations */
 import DeleteFileMutation from 'mediators/DashboardMediators/mutations/DeleteFile';
 /* actions */
+import * as syncActions from 'services/actions/sync';
 import * as actions from 'services/actions/nodeBackend';
 import * as generalActions from 'services/actions/general';
 import {
@@ -43,7 +44,8 @@ class DashboardMediator extends React.Component {
     loadUsers: false,
     isSortByOpen: false,
     allUsers: [],
-    allTeams: []
+    allTeams: [],
+    deletedSelf: false
   };
 
   componentDidMount = () => {
@@ -128,7 +130,13 @@ class DashboardMediator extends React.Component {
       !isEqual(this.props.deleteUser, prevProps.deleteUser) &&
       this.props.deleteUser.success
     ) {
-      this.reloadData();
+      if (this.state.deletedSelf) {
+        this.props.auth0Client.signOut().then(() => {
+          this.props.dispatch(syncActions.clearUserData());
+        });
+      } else {
+        this.reloadData();
+      }
     }
 
     // we re-load the teams
@@ -215,15 +223,21 @@ class DashboardMediator extends React.Component {
   };
 
   deleteUser = delId => {
-    this.props.dispatch(
-      deleteAuthUserRequest(
-        {
-          delId: delId,
-          userId: this.props.user.authId
-        },
-        { Authorization: `Bearer ${this.props.user.idToken}` }
-      )
-    );
+    if (delId === this.props.user.authId) {
+      // eslint-disable-next-line no-alert
+      if (window.confirm('You are about to delete yourself! Are you sure?')) {
+        this.setState({ deletedSelf: true });
+        this.props.dispatch(
+          deleteAuthUserRequest(
+            {
+              delId: delId,
+              userId: this.props.user.authId
+            },
+            { Authorization: `Bearer ${this.props.user.idToken}` }
+          )
+        );
+      }
+    }
   };
 
   getAllTeams = initialLoad => {

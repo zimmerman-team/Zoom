@@ -3,6 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+/* utils */
+import find from 'lodash/find';
 /* consts */
 import graphKeys from '__consts__/GraphStructKeyConst';
 /* components */
@@ -51,11 +53,19 @@ const DonutchartFragment = props => {
             bottom: 80,
             left: 80
           }}
+          // aids related deaths (unaids) - adolescents (10 to 19) realistic estimate
           innerRadius={0.65}
           padAngle={0.7}
           cornerRadius={4}
           colors={props.donutColors}
-          colorBy="key"
+          colorBy={d => {
+            console.log('colorings');
+            const chartItem = find(props.chartKeys, ['name', d.label]);
+            if (chartItem) {
+              return chartItem.color;
+            }
+            return '#38bcb2';
+          }}
           borderWidth={1}
           borderColor="inherit:darker(0.2)"
           enableSlicesLabels={false}

@@ -3,7 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-/* mock */
+
+/* utils */
+import find from 'lodash/find';
+
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import { ResponsiveBar } from '@nivo/bar';
@@ -68,8 +71,13 @@ const BarchartFragment = props => {
           groupMode={
             props.specOptions[graphKeys.grouped] ? 'grouped' : 'stacked'
           }
-          colors={props.specOptions[graphKeys.colorPallet]}
-          colorBy="id"
+          colorBy={d => {
+            const chartItem = find(props.chartKeys, ['key', d.id]);
+            if (chartItem) {
+              return chartItem.color;
+            }
+            return '#38bcb2';
+          }}
           defs={[
             {
               id: 'dots',

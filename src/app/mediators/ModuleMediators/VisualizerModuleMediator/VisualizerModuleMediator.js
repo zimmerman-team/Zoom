@@ -645,14 +645,16 @@ class VisualizerModuleMediator extends Component {
     if (this.props.publicPage) {
       this.props.dispatch(
         nodeActions.getPublicChartRequest({
-          chartId: this.props.match.params.code
+          chartId: this.props.match.params.code,
+          type: this.props.match.params.chart
         })
       );
     } else if (this.props.match.params.code !== 'vizID' && this.props.user) {
       this.props.dispatch(
         nodeActions.getChartRequest({
           authId: this.props.user.authId,
-          chartId: this.props.match.params.code
+          chartId: this.props.match.params.code,
+          type: this.props.match.params.chart
         })
       );
     }

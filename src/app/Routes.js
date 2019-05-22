@@ -214,15 +214,22 @@ const Routes = props => {
           <Route
             exact
             path="/view-user/:userId"
-            render={() =>
-              props.user.data &&
-              (get(props.user, 'data.role', '') === 'Administrator' ||
-                get(props.user, 'data.role', '') === 'Super admin') ? (
+            render={rProps => {
+              const isRegularUserEditSelf =
+                get(props.user.data, 'role', '') === 'Regular user' ||
+                get(props.user.data, 'role', '') === 'Moderator'
+                  ? get(props.user.data, 'authId', '') ===
+                    rProps.match.params.userId
+                  : false;
+              return props.user.data &&
+                (get(props.user, 'data.role', '') === 'Administrator' ||
+                  get(props.user, 'data.role', '') === 'Super admin' ||
+                  isRegularUserEditSelf) ? (
                 <EditUserMediator viewOnly />
               ) : (
                 <Redirect to="/" />
-              )
-            }
+              );
+            }}
           />
           <Route
             exact

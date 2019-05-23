@@ -263,7 +263,7 @@ class HomeModuleMediator extends Component {
     const data = [];
 
     if (countryLayerData.features && countryLayerData.features.length > 0) {
-      updatePercentiles(countryLayerData, f => f.properties.value);
+      updatePercentiles(countryLayerData);
 
       data.push({
         type: 'layer',

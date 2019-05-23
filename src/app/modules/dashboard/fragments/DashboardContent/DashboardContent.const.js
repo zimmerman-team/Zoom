@@ -2,15 +2,7 @@ import filter from 'lodash/filter';
 
 const Path = '/dashboard/';
 
-export function data(
-  isAdmin,
-  isSuperAdmin,
-  users,
-  teams,
-  charts,
-  dataSets,
-  focusPages
-) {
+export function data(isAdmin, isSuperAdmin, users, teams, charts, dataSets) {
   const tabs = [
     {
       label: 'Charts',
@@ -22,11 +14,6 @@ export function data(
       path: `${Path}data-sets`,
       count: dataSets.length,
       adminOnly: true
-    },
-    {
-      label: 'Focus pages',
-      path: `${Path}focus-pages`,
-      count: 0
     },
     {
       label: 'Users',

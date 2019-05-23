@@ -39,6 +39,7 @@ const propTypes = {
       allFileSources: PropTypes.array,
       selectedSources: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
       selectDataSource: PropTypes.func,
+      selectedRegionCodes: PropTypes.arrayOf(PropTypes.string),
       multiple: PropTypes.bool,
       selectAll: PropTypes.bool,
       defaultAll: PropTypes.bool,
@@ -70,6 +71,7 @@ const defaultProps = {
       allFileSources: [],
       selectedSources: [],
       selectDataSource: undefined,
+      selectedRegionCodes: null,
       multiple: false,
       selectAll: false,
       openSubInd: false,
@@ -129,6 +131,7 @@ const DropdownMenuPanel = props => {
               selectAll={detail.selectAll}
               defaultAll={detail.defaultAll}
               openDropDown={detail.subIndicator && detail.openSubInd}
+              selectedRegionCodes={detail.selectedRegionCodes}
               reset={detail.reset}
               placeHolderText={detail.placeHolderText}
               placeHolderNumber={detail.placeHolderNumber}

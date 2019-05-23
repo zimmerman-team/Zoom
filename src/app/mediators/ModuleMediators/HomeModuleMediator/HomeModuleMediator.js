@@ -468,6 +468,7 @@ class HomeModuleMediator extends Component {
     // Adding labels to selectedRegionVal would break to many things,
     // therefor chose to do it in a separate var. WET solution..
     let selectedRegionLabels = [];
+    let selectedRegionCodes = [];
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
@@ -476,27 +477,34 @@ class HomeModuleMediator extends Component {
         item.forEach(it => {
           selectedRegionVal.push(it.value);
           selectedRegionLabels.push(it.label);
+          selectedRegionCodes.push(it.codeVal);
         });
       } else {
         selectedRegionVal = [...this.state.selectedRegionVal];
         selectedRegionLabels = [...this.state.selectedRegionLabels];
+        selectedRegionCodes = [...this.state.selectedRegionCodes];
 
-        const regionIndex = selectedRegionVal.indexOf(item.value);
+        const regionIndex = selectedRegionCodes.indexOf(item.codeVal);
 
         // so if it doesn't exist we add it
         if (regionIndex === -1) {
           selectedRegionVal.push(item.value);
           selectedRegionLabels.push(item.label);
+          selectedRegionCodes.push(item.codeVal);
         } else {
           // if it does exist we remove it
           selectedRegionVal.splice(regionIndex, 1);
           selectedRegionLabels.splice(regionIndex, 1);
+          selectedRegionCodes.splice(regionIndex, 1);
         }
       }
     }
 
     this.selectCountry(this.getCountriesByRegion(selectedRegionVal), true);
-    this.setState({ selectedRegionLabels, selectedRegionVal }, this.refetch);
+    this.setState(
+      { selectedRegionLabels, selectedRegionVal, selectedRegionCodes },
+      this.refetch
+    );
   }
 
   //Compares the selectedRegions with all the countries, to output only countries that are in that region.
@@ -566,6 +574,7 @@ class HomeModuleMediator extends Component {
         selectRegion={this.selectRegion}
         selectedRegionVal={this.state.selectedRegionVal}
         selectedRegionLabels={this.state.selectedRegionLabels}
+        selectedRegionCodes={this.state.selectedRegionCodes}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.state.selectedCountryVal}
         selectedCountryLabel={this.state.selectedCountryLabel}

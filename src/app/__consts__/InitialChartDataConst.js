@@ -115,6 +115,7 @@ const initialState = {
   descIntro: '',
   selectedRegionVal: [],
   selectedRegionLabels: [],
+  selectedRegionCodes: [],
   // this is the variable for saving
   // specific chart options
   // like the graph structure options

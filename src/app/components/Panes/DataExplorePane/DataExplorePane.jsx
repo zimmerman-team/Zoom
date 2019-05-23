@@ -76,6 +76,7 @@ const propTypes = {
       })
     )
   ),
+  selectedRegionCodes: PropTypes.arrayOf(PropTypes.string),
   selectedRegionLabels: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.array
@@ -124,6 +125,7 @@ const defaultProps = {
   selectedCountryVal: [],
   selectedCountryLabels: [],
   selectedRegionVal: [],
+  selectedRegionCodes: [],
   selectedRegionLabels: [],
   selectCountry: null,
   selectRegion: null,
@@ -252,6 +254,7 @@ class DataExplorePane extends React.Component {
                   allFileSources: this.props.regions,
                   defaultAll: this.props.locationSelected,
                   selectedSources: this.props.selectedRegionVal,
+                  selectedRegionCodes: this.props.selectedRegionCodes,
                   valueSelected: this.props.selectedRegionLabels,
                   capitalize: true,
                   reset: () => this.props.selectRegion('reset')

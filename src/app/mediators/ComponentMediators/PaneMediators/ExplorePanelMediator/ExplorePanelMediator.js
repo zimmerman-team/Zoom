@@ -97,7 +97,11 @@ class ExplorePanelMediator extends React.Component {
       allCountries = sortBy(allCountries, ['label']);
 
       let allRegions = this.props.dropDownData.allRegions.edges.map(region => {
-        return { label: region.node.name, value: region.node.country };
+        return {
+          label: region.node.name,
+          value: region.node.country,
+          codeVal: region.node.code
+        };
       });
 
       allRegions = sortBy(allRegions, ['label']);
@@ -256,6 +260,7 @@ export default createFragmentContainer(
         edges {
           node {
             name
+            code
             country {
               iso2
             }

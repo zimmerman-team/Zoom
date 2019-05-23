@@ -116,7 +116,11 @@ class VizPaneMediator extends React.Component {
     allCountries = sortBy(allCountries, ['label']);
 
     let allRegions = this.props.dropDownData.allRegions.edges.map(indicator => {
-      return { label: indicator.node.name, value: indicator.node.country };
+      return {
+        label: indicator.node.name,
+        value: indicator.node.country,
+        codeVal: indicator.node.code
+      };
     });
 
     allRegions = sortBy(allRegions, ['label']);
@@ -408,6 +412,7 @@ class VizPaneMediator extends React.Component {
   selectRegion(item, array = false) {
     let selectedRegionVal = [];
     let selectedRegionLabels = [];
+    let selectedRegionCodes = [];
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
@@ -416,20 +421,24 @@ class VizPaneMediator extends React.Component {
         item.forEach(it => {
           selectedRegionVal.push(it.value);
           selectedRegionLabels.push(it.label);
+          selectedRegionCodes.push(it.codeVal);
         });
       } else {
         selectedRegionVal = [...this.props.chartData.selectedRegionVal];
         selectedRegionLabels = [...this.props.chartData.selectedRegionLabels];
-        const regionIndex = selectedRegionVal.indexOf(item.value);
+        selectedRegionCodes = [...this.props.chartData.selectedRegionCodes];
+        const regionIndex = selectedRegionCodes.indexOf(item.codeVal);
 
         if (regionIndex === -1) {
           // so if it doesn't exist we add it
           selectedRegionVal.push(item.value);
           selectedRegionLabels.push(item.label);
+          selectedRegionCodes.push(item.codeVal);
         } else {
           // if it does exist we remove it
           selectedRegionVal.splice(regionIndex, 1);
           selectedRegionLabels.splice(regionIndex, 1);
+          selectedRegionCodes.splice(regionIndex, 1);
         }
       }
     }
@@ -437,7 +446,8 @@ class VizPaneMediator extends React.Component {
     this.props.dispatch(
       actions.storeChartDataRequest({
         selectedRegionVal,
-        selectedRegionLabels
+        selectedRegionLabels,
+        selectedRegionCodes
       })
     );
 
@@ -649,6 +659,7 @@ class VizPaneMediator extends React.Component {
         selectedCountryVal={this.props.chartData.selectedCountryVal}
         selectedCountryLabel={this.props.chartData.selectedCountryLabels}
         selectedRegionVal={this.props.chartData.selectedRegionVal}
+        selectedRegionCodes={this.props.chartData.selectedRegionCodes}
         selectedRegionLabels={this.props.chartData.selectedRegionLabels}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
@@ -692,6 +703,7 @@ export default createFragmentContainer(
         edges {
           node {
             name
+            code
             country {
               iso2
             }

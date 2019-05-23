@@ -42,6 +42,7 @@ const propTypes = {
   selectAll: PropTypes.bool,
   defaultAll: PropTypes.bool,
   openDropDown: PropTypes.bool,
+  selectedRegionCodes: PropTypes.arrayOf(PropTypes.string),
   disabledValues: PropTypes.arrayOf(PropTypes.string),
   dropDownWidth: PropTypes.number,
   capitalize: PropTypes.bool
@@ -54,6 +55,7 @@ const defaultProps = {
   placeHolder: 'Has no indicators',
   placeHolderText: 'Has no indicators',
   placeHolderNumber: undefined,
+  selectedRegionCodes: null,
   reset: undefined,
   openDropDown: false,
   search: true,
@@ -282,6 +284,32 @@ class ZoomSelect extends React.Component {
       );
     }
     const itemDisabled = this.props.disabledValues.indexOf(item.value) !== -1;
+
+    let checked = false;
+
+    // so for regions because some regions in our system
+    // have 0 country values associated with them,
+    // and because generally we should be checking things by codes or ids
+    // we need to redo the checked part for the regions, cause the selected
+    // values currently are associated country values
+    // so we'll do the checked checking for regions by their codes,
+    // and not their values
+    if (this.props.selectedRegionCodes) {
+      checked =
+        findIndex(this.props.selectedRegionCodes, arrItemn => {
+          return item.codeVal === arrItemn;
+        }) !== -1;
+    } else {
+      // and this is the normal checking
+      checked =
+        findIndex(this.props.arraySelected, arrItemn => {
+          if (item.value instanceof Array) {
+            return isEqual(item.value, arrItemn);
+          }
+          return item.value === arrItemn;
+        }) !== -1;
+    }
+
     return (
       <DropDownItem
         style={{
@@ -292,18 +320,7 @@ class ZoomSelect extends React.Component {
         key={`dropDownItem-${index}`}
         onClick={() => this.handleItemClick(item)}
       >
-        {this.props.multiple && (
-          <DropDownCheckbox
-            checked={
-              findIndex(this.props.arraySelected, arrItemn => {
-                if (item.value instanceof Array) {
-                  return isEqual(item.value, arrItemn);
-                }
-                return item.value === arrItemn;
-              }) !== -1
-            }
-          />
-        )}
+        {this.props.multiple && <DropDownCheckbox checked={checked} />}
         <DropDownLabel capitalize={this.props.capitalize}>
           {item.label}
         </DropDownLabel>

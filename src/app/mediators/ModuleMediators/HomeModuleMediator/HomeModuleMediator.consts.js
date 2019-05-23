@@ -15,5 +15,6 @@ export const initialState = {
   selectedSubInd1: [],
   selectedSubInd2: [],
   selectedRegionVal: [],
-  selectedRegionLabels: []
+  selectedRegionLabels: [],
+  selectedRegionCodes: []
 };

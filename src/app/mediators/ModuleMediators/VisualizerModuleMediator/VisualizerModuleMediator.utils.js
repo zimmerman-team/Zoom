@@ -1,6 +1,4 @@
 import findIndex from 'lodash/findIndex';
-import { scaleQuantile } from 'd3-scale';
-import { range } from 'd3-array';
 /* consts */
 import chartTypes from '__consts__/ChartConst';
 import { colorSet } from '__consts__/PaneConst';
@@ -18,16 +16,30 @@ export const aggrKeys = {
 };
 
 // Updates layer percentiles depending on the value
-export function updatePercentiles(featureCollection, accessor) {
-  const { features } = featureCollection;
-  const scale = scaleQuantile()
-    .domain(features.map(accessor))
-    .range(range(9));
-  features.forEach(f => {
-    const value = accessor(f);
-    f.properties.value = value;
-    f.properties.percentile = scale(value);
-  });
+// and updates the unique value amount that will be used
+// to determine the amount of color stops
+export function updatePercentiles(featureCollection) {
+  let { features } = featureCollection;
+
+  let uniqCount = 0;
+
+  if (features.length > 0) {
+    // so first we sort the values from lowest to highest
+    features = sortBy(features, ['properties.value']);
+
+    // so we'll start with the first lowest value
+    let currentValue = features[0].properties.value;
+    // and then we give percentile values to features
+    features.forEach(f => {
+      if (currentValue !== f.properties.value) {
+        uniqCount += 1;
+        currentValue = f.properties.value;
+      }
+      f.properties.percentile = uniqCount;
+    });
+  }
+
+  featureCollection.uniqCount = uniqCount;
 }
 
 export function formatCountryLayerData(
@@ -439,7 +451,7 @@ export function formatGeoData(indAggregations) {
 
         // and we push them into the indicatorData array for the geomap
         if (countryLayerData.features && countryLayerData.features.length > 0) {
-          updatePercentiles(countryLayerData, f => f.properties.value);
+          updatePercentiles(countryLayerData);
 
           geomapData.push({
             type: 'layer',

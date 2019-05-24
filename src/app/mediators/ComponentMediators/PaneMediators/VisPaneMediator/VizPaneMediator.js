@@ -482,7 +482,8 @@ class VizPaneMediator extends React.Component {
 
     this.props.dispatch(
       actions.storeChartDataRequest({
-        selectedInd
+        selectedInd,
+        noRefetch: true
       })
     );
 
@@ -492,11 +493,17 @@ class VizPaneMediator extends React.Component {
   removeIndicator(index) {
     const selectedInd = [...this.props.chartData.selectedInd];
 
+    const noRefetch = !(
+      selectedInd[index].indicator &&
+      selectedInd[index].selectedSubInd.length > 0
+    );
+
     selectedInd.splice(index, 1);
 
     this.props.dispatch(
       actions.storeChartDataRequest({
-        selectedInd
+        selectedInd,
+        noRefetch
       })
     );
 

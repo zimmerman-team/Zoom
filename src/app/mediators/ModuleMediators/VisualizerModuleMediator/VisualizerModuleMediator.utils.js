@@ -695,21 +695,26 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
 }
 
 export function formatBarData(
+  currIndKeys,
+  currData,
   indicators,
   aggregate,
   rankBy,
   horizontal,
   colors = colorSet[0].colors
 ) {
-  const barChartData = [];
-  const barChartKeys = [];
+  const barChartData = [...currData];
+
+  // so this variable will help us form keys
+  // for the bar chart
+  const barIndKeys = [...currIndKeys];
 
   const aggrKey = aggrKeys[aggregate];
 
   let colorInd = 0;
   indicators.forEach((indicator, index) => {
     if (indicator.data.length > 0) {
-      const existInd = barChartKeys.indexOf(indicator.data[0].indicatorName);
+      const existInd = barIndKeys.indexOf(indicator.data[0].indicatorName);
       let indName = indicator.data[0].indicatorName;
 
       // so we need this logic for when a person would
@@ -718,7 +723,7 @@ export function formatBarData(
       // the index as a suffix
       if (existInd !== -1) indName = indName.concat(` (${index})`);
 
-      barChartKeys.push(indName);
+      barIndKeys.push(indName);
 
       indicator.data.forEach(indItem => {
         // yeah and cause we might receive data with the same geolocation name
@@ -786,7 +791,12 @@ export function formatBarData(
     sortedData = sortBy(barChartData, ['allValSum']).reverse();
   }
 
-  return sortedData;
+  console.log('sortedData', sortedData);
+
+  return {
+    data: sortedData,
+    indKeys: barIndKeys
+  };
 }
 
 export function formatTableData(indicators) {

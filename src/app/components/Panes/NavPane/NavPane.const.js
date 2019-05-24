@@ -33,24 +33,24 @@ export const createChartItems = [
     label: 'Line chart',
     navTo: '/visualizer/linechart/vizID/edit'
   },
-  /*{
+  {
     label: 'Bar chart',
     navTo: '/visualizer/barchart/vizID/edit'
-  },*/
+  },
   {
     label: 'Table chart',
     navTo: '/visualizer/tablechart/vizID/edit'
-  }
-  /*{
+  },
+  {
     label: 'Donut chart',
-    // navTo: '/visualizer/donutchart/vizID/edit',
-    style: {
-      color: theme.color.zoomGreyEleven,
-      cursor: 'default',
-      fill: theme.color.zoomGreyEleven,
-      backgroundColor: theme.color.aidsFondsWhite
-    }
-  }*/
+    navTo: '/visualizer/donutchart/vizID/edit'
+    // style: {
+    //   color: theme.color.zoomGreyEleven,
+    //   cursor: 'default',
+    //   fill: theme.color.zoomGreyEleven,
+    //   backgroundColor: theme.color.aidsFondsWhite
+    // }
+  }
 ];
 
 export const convertDataItems = [

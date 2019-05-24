@@ -154,6 +154,9 @@ class VisualizerModuleMediator extends Component {
     this.loadChartData = this.loadChartData.bind(this);
     this.storeChartToRedux = this.storeChartToRedux.bind(this);
     this.selectYearRange = this.selectYearRange.bind(this);
+    this.updateChartColor = this.updateChartColor.bind(this);
+    this.updateRankBy = this.updateRankBy.bind(this);
+    this.storeInitialChartOptions = this.storeInitialChartOptions.bind(this);
   }
 
   componentDidMount() {
@@ -186,37 +189,7 @@ class VisualizerModuleMediator extends Component {
         chartTypes.barChart === this.props.match.params.chart ||
         chartTypes.donutChart === this.props.match.params.chart
       ) {
-        // we also store the initial values for the linecharts
-        // graphstructure pane
-        // so yeah yAxis should initially be numbers
-        // and xAxis should initially be the categories
-        // and the color pallet should be the first color
-        // set from the consts
-
-        const specOptions = {
-          [graphKeys.colorPallet]: colorSet[1].colors,
-          [graphKeys.aggregate]: aggrOptions[0].value
-        };
-
-        if (chartTypes.lineChart === this.props.match.params.chart) {
-          specOptions[graphKeys.aggregate] = aggrOptions[1].value;
-        }
-
-        if (chartTypes.barChart === this.props.match.params.chart) {
-          specOptions[graphKeys.grouped] = false;
-          specOptions[graphKeys.rankBy] = rankOptions[0].value;
-          specOptions[graphKeys.horizont] = true;
-        }
-
-        if (chartTypes.donutChart === this.props.match.params.chart) {
-          specOptions[graphKeys.aggrCountry] = false;
-        }
-
-        this.props.dispatch(
-          actions.storeChartDataRequest({
-            specOptions
-          })
-        );
+        this.storeInitialChartOptions();
       }
     }
   }
@@ -239,26 +212,7 @@ class VisualizerModuleMediator extends Component {
         prevProps.chartData.specOptions[graphKeys.colorPallet]
       )
     ) {
-      const selectedInds = this.props.chartData.selectedInd.map(indItem => {
-        return {
-          indName: indItem.indicator,
-          subIndAggr: indItem.aggregate,
-          subInd: indItem.selectedSubInd
-        };
-      });
-
-      const chartKeys = getChartKeys(
-        this.props.match.params.chart,
-        selectedInds,
-        this.props.chartData.specOptions[graphKeys.colorPallet],
-        this.props.chartData.chartKeys
-      );
-
-      this.props.dispatch(
-        actions.storeChartDataRequest({
-          chartKeys
-        })
-      );
+      this.updateChartColor();
     }
 
     // and we load in the chart data retrieved from the node backend
@@ -280,6 +234,7 @@ class VisualizerModuleMediator extends Component {
       specOptions,
       chartKeys,
       noRefetch,
+      indKeys,
       ...restChart
     } = this.props.chartData;
     const {
@@ -292,6 +247,7 @@ class VisualizerModuleMediator extends Component {
       chartKeys: prevchartKeys,
       data: prevData,
       noRefetch: prevRefetch,
+      indKeys: previndKeys,
       ...prevRestChart
     } = prevProps.chartData;
 
@@ -308,7 +264,7 @@ class VisualizerModuleMediator extends Component {
       restChart.changesMade &&
       !noRefetch
     ) {
-      this.refetch();
+      this.refetch(this.props.chartData.indSelectedIndex);
     } else if (noRefetch) {
       // and for that one change in data when we didnt need to refetch
       // we change the noRefetch back to false, as for some other changes in the chartData
@@ -327,31 +283,7 @@ class VisualizerModuleMediator extends Component {
         prevSpecOptions[graphKeys.rankBy]) ||
       specOptions[graphKeys.horizont] !== prevSpecOptions[graphKeys.horizont]
     ) {
-      let barChartData = [];
-
-      if (
-        (specOptions[graphKeys.rankBy] === 'high' &&
-          specOptions[graphKeys.horizont]) ||
-        (specOptions[graphKeys.rankBy] === 'low' &&
-          !specOptions[graphKeys.horizont])
-      ) {
-        barChartData = sortBy(this.props.chartData.data, ['allValSum']);
-      } else if (
-        (specOptions[graphKeys.rankBy] === 'high' &&
-          !specOptions[graphKeys.horizont]) ||
-        (specOptions[graphKeys.rankBy] === 'low' &&
-          specOptions[graphKeys.horizont])
-      ) {
-        barChartData = sortBy(this.props.chartData.data, [
-          'allValSum'
-        ]).reverse();
-      }
-
-      this.props.dispatch(
-        actions.storeChartDataRequest({
-          data: barChartData
-        })
-      );
+      this.updateRankBy(specOptions);
     }
   }
 
@@ -377,11 +309,96 @@ class VisualizerModuleMediator extends Component {
     this.props.dispatch(nodeActions.createDuplicateChartInitial());
   }
 
+  storeInitialChartOptions() {
+    // we also store the initial values for the linecharts
+    // graphstructure pane
+    // so yeah yAxis should initially be numbers
+    // and xAxis should initially be the categories
+    // and the color pallet should be the first color
+    // set from the consts
+
+    const specOptions = {
+      [graphKeys.colorPallet]: colorSet[1].colors,
+      [graphKeys.aggregate]: aggrOptions[0].value
+    };
+
+    if (chartTypes.lineChart === this.props.match.params.chart) {
+      specOptions[graphKeys.aggregate] = aggrOptions[1].value;
+    }
+
+    if (chartTypes.barChart === this.props.match.params.chart) {
+      specOptions[graphKeys.grouped] = false;
+      specOptions[graphKeys.rankBy] = rankOptions[0].value;
+      specOptions[graphKeys.horizont] = true;
+    }
+
+    if (chartTypes.donutChart === this.props.match.params.chart) {
+      specOptions[graphKeys.aggrCountry] = false;
+    }
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        specOptions
+      })
+    );
+  }
+
+  updateRankBy(specOptions) {
+    let barChartData = [];
+
+    if (
+      (specOptions[graphKeys.rankBy] === 'high' &&
+        specOptions[graphKeys.horizont]) ||
+      (specOptions[graphKeys.rankBy] === 'low' &&
+        !specOptions[graphKeys.horizont])
+    ) {
+      barChartData = sortBy(this.props.chartData.data, ['allValSum']);
+    } else if (
+      (specOptions[graphKeys.rankBy] === 'high' &&
+        !specOptions[graphKeys.horizont]) ||
+      (specOptions[graphKeys.rankBy] === 'low' &&
+        specOptions[graphKeys.horizont])
+    ) {
+      barChartData = sortBy(this.props.chartData.data, ['allValSum']).reverse();
+    }
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        data: barChartData
+      })
+    );
+  }
+
+  updateChartColor() {
+    const selectedInds = this.props.chartData.selectedInd.map(indItem => {
+      return {
+        indName: indItem.indicator,
+        subIndAggr: indItem.aggregate,
+        subInd: indItem.selectedSubInd
+      };
+    });
+
+    const chartKeys = getChartKeys(
+      this.props.match.params.chart,
+      selectedInds,
+      this.props.chartData.specOptions[graphKeys.colorPallet],
+      this.props.chartData.chartKeys
+    );
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        chartKeys
+      })
+    );
+  }
+
   updateIndicators(indicatorData) {
     // this will be used for some extra formatting things
     // concerning chart keys and also for saving the subIndicators
     // of the appropriate indicators
     const selectedInd = [...this.props.chartData.selectedInd];
+
+    const indSelectedIndex = this.props.chartData.indSelectedIndex;
 
     const aggregationData = [];
 
@@ -411,6 +428,9 @@ class VisualizerModuleMediator extends Component {
 
     let data = [];
     let chartKeys = [];
+    // this is a variable that will be used
+    // to add/update/remove data from/to the chart data
+    let indKeys = [];
 
     switch (this.props.match.params.chart) {
       case chartTypes.geoMap:
@@ -433,19 +453,26 @@ class VisualizerModuleMediator extends Component {
           this.props.chartData.specOptions[graphKeys.aggregate]
         );
         break;
-      case chartTypes.barChart:
-        data = formatBarData(
+      case chartTypes.barChart: {
+        const barData = formatBarData(
+          this.props.chartData.indKeys,
+          this.props.chartData.data,
           aggregationData,
           this.props.chartData.specOptions[graphKeys.aggregate],
           this.props.chartData.specOptions[graphKeys.rankBy],
           this.props.chartData.specOptions[graphKeys.horizont],
           this.props.chartData.specOptions[graphKeys.colorPallet]
         );
+
+        data = barData.data;
+        indKeys = barData.indKeys;
+
         chartKeys = formatBarChartKeys(
           selectedInds,
           this.props.chartData.specOptions[graphKeys.colorPallet]
         );
         break;
+      }
       case chartTypes.tableChart:
         data = formatTableData(aggregationData);
         break;
@@ -464,14 +491,6 @@ class VisualizerModuleMediator extends Component {
         break;
     }
 
-    // and we save the chart data
-    this.props.dispatch(
-      actions.storeChartDataRequest({
-        chartKeys,
-        data
-      })
-    );
-
     // so we will use this variable to control when we want to refetch data
     // cause we only want to refetch data when a subindicator is selected
     // by our code below.
@@ -487,7 +506,7 @@ class VisualizerModuleMediator extends Component {
       subIndicators = sortBy(subIndicators, ['label']);
       let selectedSubInd = selectedInd[indItem.index].selectedSubInd;
 
-      if (this.props.chartData.indSelectedIndex === indItem.index) {
+      if (indSelectedIndex === indItem.index) {
         // so if its a new indicator that gets selected
         // the selectedSubInds will be empty
         selectedSubInd = [];
@@ -515,32 +534,39 @@ class VisualizerModuleMediator extends Component {
         // and when new subindicators are retrieved, so we do it up there ^
         // and we can reset it here
         indSelectedIndex: -1,
-        selectedInd
+        selectedInd,
+        chartKeys,
+        indKeys,
+        data
       })
     );
 
     if (refetch) {
-      this.refetch();
+      this.refetch(indSelectedIndex);
     }
   }
 
-  refetch() {
-    /* TODO: we can up the speed of this by not calling all of the indicators
-        everytime one indicators data is called, though the whole flow of
-        data formatting/saving would need to be changed*/
-
-    if (this.props.chartData.selectedInd.length > 0) {
-      this.setState({
-        loading: true
-      });
-    }
-
+  refetch(index) {
     const indicatorData = [];
 
     let datePeriod = [];
     let orderBy = [];
 
-    if (this.props.chartData.selectedInd.length > 0) {
+    // so if an indicators data is selected we will receive an
+    // index of the indicator, and if indicators index is -1
+    // that means that some other data has been changed which should apply
+    // for all of the indicators
+
+    const selectedInds =
+      index !== -1
+        ? [this.props.chartData.selectedInd[index]]
+        : this.props.chartData.selectedInd;
+
+    if (selectedInds.length > 0) {
+      this.setState({
+        loading: true
+      });
+
       if (
         this.props.paneData.chartType === chartTypes.lineChart ||
         this.props.paneData.chartType === chartTypes.barChart
@@ -563,54 +589,56 @@ class VisualizerModuleMediator extends Component {
         datePeriod = [this.props.chartData.selectedYear];
         orderBy = [aggrKeys[aggrOptions[0].value]];
       }
-    }
 
-    this.props.chartData.selectedInd.forEach((indItem, index) => {
-      const indicator = indItem.indicator;
+      selectedInds.forEach((indItem, indIndex) => {
+        const currIndex = index !== -1 ? index : indIndex;
 
-      const subInds =
-        indItem.selectedSubInd.length > 0 ? indItem.selectedSubInd : ['null'];
+        const indicator = indItem.indicator;
 
-      // We forming the param for countries from the selected countries of a region
-      // and single selected countries
-      const countriesISO2 = formatCountryParam(
-        this.props.chartData.selectedCountryVal,
-        this.props.chartData.selectedRegionVal
-      );
+        const subInds =
+          indItem.selectedSubInd.length > 0 ? indItem.selectedSubInd : ['null'];
 
-      // so this variable basically controlls the filter param for data points
-      // that don't have/do have geolocationIso2 field
-      const iso2Undef = countriesISO2.indexOf('undefined') !== -1;
+        // We forming the param for countries from the selected countries of a region
+        // and single selected countries
+        const countriesISO2 = formatCountryParam(
+          this.props.chartData.selectedCountryVal,
+          this.props.chartData.selectedRegionVal
+        );
 
-      const refetchVars = {
-        indicator: [indicator],
-        indicatorStr: indicator || 'null',
-        subInds,
-        datePeriod,
-        countriesISO2,
-        OR_GeolocationIso2_Is_Null: iso2Undef,
-        orderBy
-      };
+        // so this variable basically controlls the filter param for data points
+        // that don't have/do have geolocationIso2 field
+        const iso2Undef = countriesISO2.indexOf('undefined') !== -1;
 
-      fetchQuery(
-        this.props.relay.environment,
-        indicatorDataQuery,
-        refetchVars
-      ).then(data => {
-        indicatorData.push({
-          index,
-          indAggregation: data.indicators,
-          subIndicators: data.subIndicators
+        const refetchVars = {
+          indicator: [indicator],
+          indicatorStr: indicator || 'null',
+          subInds,
+          datePeriod,
+          countriesISO2,
+          OR_GeolocationIso2_Is_Null: iso2Undef,
+          orderBy
+        };
+
+        fetchQuery(
+          this.props.relay.environment,
+          indicatorDataQuery,
+          refetchVars
+        ).then(data => {
+          indicatorData.push({
+            index: currIndex,
+            indAggregation: data.indicators,
+            subIndicators: data.subIndicators
+          });
+
+          // so we only update the indicators when we've retrieved the same
+          // amount of indicator data as we have indicators selected
+          if (indicatorData.length === selectedInds.length) {
+            this.setState({ loading: false });
+            this.updateIndicators(indicatorData);
+          }
         });
-
-        // so we only update the indicators when we've retrieved the same
-        // amount of indicator data as we have indicators selected
-        if (indicatorData.length === this.props.chartData.selectedInd.length) {
-          this.setState({ loading: false });
-          this.updateIndicators(indicatorData);
-        }
       });
-    });
+    }
   }
 
   selectYear(val) {
@@ -677,6 +705,7 @@ class VisualizerModuleMediator extends Component {
       dataSources,
       _public,
       teams,
+      indKeys,
       descIntro,
       specOptions,
       created,
@@ -727,6 +756,7 @@ class VisualizerModuleMediator extends Component {
             specOptions[graphKeys.colorPallet],
             []
           ),
+        indKeys,
         specOptions
       })
     );

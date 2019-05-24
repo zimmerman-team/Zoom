@@ -103,6 +103,7 @@ class DuplicatorMediator extends React.Component {
         type: this.props.paneData.chartType,
         data: this.props.chartData.data,
         chartKeys: this.props.chartData.chartKeys,
+        indKeys: this.props.chartData.indKeys,
         indicatorItems: this.props.chartData.selectedInd.map(indData => {
           return {
             indicator: indData.indicator,

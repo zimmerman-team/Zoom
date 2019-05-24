@@ -283,6 +283,7 @@ const ChartController = {
       type,
       descIntro,
       chartKeys,
+      indKeys,
       indicatorItems,
       selectedSources,
       yearRange,
@@ -318,6 +319,7 @@ const ChartController = {
                   type,
 
                   chartKeys,
+                  indKeys,
                   /* indicators/ sub-indicators of chart */
                   indicatorItems,
 
@@ -384,6 +386,8 @@ const ChartController = {
                     chart.teams = teams;
 
                     chart.chartKeys = chartKeys;
+                    chart.indKeys = indKeys;
+
                     /* indicators/ sub-indicators of chart */
                     chart.indicatorItems = indicatorItems;
 
@@ -453,6 +457,7 @@ const ChartController = {
                   type: chart.type,
 
                   chartKeys: chart.chartKeys,
+                  indKeys: chart.indKeys,
                   /* indicators/ sub-indicators of chart */
                   indicatorItems: chart.indicatorItems,
 

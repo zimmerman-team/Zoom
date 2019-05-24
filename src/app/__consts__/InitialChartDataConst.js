@@ -61,6 +61,7 @@ const initialState = {
           }
         ]
       : [],
+  indKeys: [],
   // this is the actual data loaded into the chart
   data: [],
   // so this array will basically store the data
@@ -108,7 +109,7 @@ const initialState = {
   // cause currently checking this change
   // in selectedInd would be a very messy
   // solution and might intil issues
-  indSelectedIndex: -1,
+  indSelectedIndex: process.env.NODE_ENV === 'development' ? 0 : -1,
   selectedCountryVal: [],
   selectedCountryLabels: [],
   desc: '',

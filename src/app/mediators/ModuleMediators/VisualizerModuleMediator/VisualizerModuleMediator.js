@@ -479,7 +479,8 @@ class VisualizerModuleMediator extends Component {
         console.log('BAR DATA FORMED!');
 
         const barData = formatBarData(
-          indSelectedIndex === -1,
+          indSelectedIndex,
+          this.props.chartData.chartKeys,
           this.props.chartData.indKeys,
           this.props.chartData.data,
           aggregationData,
@@ -578,19 +579,20 @@ class VisualizerModuleMediator extends Component {
     );
 
     if (refetch) {
+      const refetchAll = this.props.chartData.refetchAll;
       // and we also pass in the currently formed selcted inds
       // with the updated subindicators in them,
       // just in case our redux is saving of selectedInd
       // is slower than the execution of this refetch
-      this.refetch(indSelectedIndex, selectedInd);
+      this.refetch(indSelectedIndex, selectedInd, refetchAll);
     }
   }
 
   refetch(
     index = this.props.chartData.indSelectedIndex,
-    selectedInd = this.props.chartData.selectedInd
+    selectedInd = this.props.chartData.selectedInd,
+    refetchAll = false
   ) {
-    console.log('REFETCH INDEX', index);
     const indicatorData = [];
 
     let datePeriod = [];
@@ -601,7 +603,9 @@ class VisualizerModuleMediator extends Component {
     // that means that some other data has been changed which should apply
     // for all of the indicators
 
-    const selectedInds = index !== -1 ? [selectedInd[index]] : selectedInd;
+    const refetchOne = index !== -1 && !refetchAll;
+
+    const selectedInds = refetchOne ? [selectedInd[index]] : selectedInd;
 
     if (selectedInds.length > 0) {
       this.setState({
@@ -632,7 +636,7 @@ class VisualizerModuleMediator extends Component {
       }
 
       selectedInds.forEach((indItem, indIndex) => {
-        const currIndex = index !== -1 ? index : indIndex;
+        const currIndex = refetchOne ? index : indIndex;
 
         const indicator = indItem.indicator;
 
@@ -676,7 +680,7 @@ class VisualizerModuleMediator extends Component {
           if (indicatorData.length === selectedInds.length) {
             this.setState({ loading: false });
 
-            const updateIndIndex = index !== -1 ? index : -1;
+            const updateIndIndex = refetchOne ? index : -1;
             this.updateIndicators(indicatorData, updateIndIndex);
           }
         });

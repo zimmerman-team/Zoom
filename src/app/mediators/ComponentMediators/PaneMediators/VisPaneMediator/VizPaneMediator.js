@@ -15,6 +15,7 @@ import initialState, { initIndItem } from '__consts__/InitialChartDataConst';
 import chartTypes from '__consts__/ChartConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
 import { maxYear } from '__consts__/TimeLineConst';
+import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 
 const propTypes = {
   dropDownData: PropTypes.shape({
@@ -312,6 +313,12 @@ class VizPaneMediator extends React.Component {
         // indicators data point, so
         this.props.dispatch(
           actions.storeChartDataRequest({
+            // so the year reselection functionality only works with geolocations thats why we
+            // refetch all indicators only when the aggregate option IS geolocation
+            refetchAll:
+              this.props.chartData.specOptions[graphKeys.aggregate] ===
+                aggrOptions[0].value &&
+              this.props.chartData.selectedYear !== val.firstYear,
             selectedInd,
             indicatorSelected: true,
             indSelectedIndex: index,

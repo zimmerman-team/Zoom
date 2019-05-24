@@ -223,67 +223,84 @@ class VisualizerModuleMediator extends Component {
       this.storeChartToRedux();
     }
 
-    // TODO redo this check properly
-    const {
-      data,
-      name,
-      desc,
-      descIntro,
-      _public,
-      team,
-      specOptions,
-      chartKeys,
-      noRefetch,
-      indKeys,
-      ...restChart
-    } = this.props.chartData;
-    const {
-      name: prevName,
-      desc: prevDesc,
-      descIntro: prevDescIntro,
-      _public: prevPublc,
-      team: prevTeam,
-      specOptions: prevSpecOptions,
-      chartKeys: prevchartKeys,
-      data: prevData,
-      noRefetch: prevRefetch,
-      indKeys: previndKeys,
-      ...prevRestChart
-    } = prevProps.chartData;
-
-    // so we refetch data when chartData changes
-    // and we dont want to refetch data when only the name/description of the chart is changed
-    // or other data not related stuff changes
     if (
-      (!isEqual(restChart, prevRestChart) ||
-        specOptions[graphKeys.aggrCountry] !==
-          prevSpecOptions[graphKeys.aggrCountry] ||
-        (specOptions[graphKeys.aggregate] &&
-          specOptions[graphKeys.aggregate] !==
-            prevSpecOptions[graphKeys.aggregate])) &&
-      restChart.changesMade &&
-      !noRefetch
+      this.props.chartData.refetch !== prevProps.chartData.refetch &&
+      this.props.chartData.refetch
     ) {
-      this.refetch(this.props.chartData.indSelectedIndex);
-    } else if (noRefetch) {
-      // and for that one change in data when we didnt need to refetch
-      // we change the noRefetch back to false, as for some other changes in the chartData
-      // we might want to refetch
+      this.refetch();
+      // and ofcourse after refetching the data
+      // we reset the refetch variable back to false
+      // as the data has already been fetched
       this.props.dispatch(
         actions.storeChartDataRequest({
-          noRefetch: false
+          refetch: false
         })
       );
     }
 
+    // // TODO redo this check properly
+    // const {
+    //   data,
+    //   name,
+    //   desc,
+    //   descIntro,
+    //   _public,
+    //   team,
+    //   specOptions,
+    //   chartKeys,
+    //   noRefetch,
+    //   indKeys,
+    //   ...restChart
+    // } = this.props.chartData;
+    // const {
+    //   name: prevName,
+    //   desc: prevDesc,
+    //   descIntro: prevDescIntro,
+    //   _public: prevPublc,
+    //   team: prevTeam,
+    //   specOptions: prevSpecOptions,
+    //   chartKeys: prevchartKeys,
+    //   data: prevData,
+    //   noRefetch: prevRefetch,
+    //   indKeys: previndKeys,
+    //   ...prevRestChart
+    // } = prevProps.chartData;
+    //
+    // // so we refetch data when chartData changes
+    // // and we dont want to refetch data when only the name/description of the chart is changed
+    // // or other data not related stuff changes
+    // if (
+    //   (!isEqual(restChart, prevRestChart) ||
+    //     specOptions[graphKeys.aggrCountry] !==
+    //       prevSpecOptions[graphKeys.aggrCountry] ||
+    //     (specOptions[graphKeys.aggregate] &&
+    //       specOptions[graphKeys.aggregate] !==
+    //         prevSpecOptions[graphKeys.aggregate])) &&
+    //   restChart.changesMade &&
+    //   !noRefetch
+    // ) {
+    //   // this.refetch(this.props.chartData.indSelectedIndex);
+    // } else if (noRefetch) {
+    //   // and for that one change in data when we didnt need to refetch
+    //   // we change the noRefetch back to false, as for some other changes in the chartData
+    //   // we might want to refetch
+    //   this.props.dispatch(
+    //     actions.storeChartDataRequest({
+    //       noRefetch: false
+    //     })
+    //   );
+    // }
+
     // so if the rankBy changes we only change the sorting of the chart
     // cause we don't need to refetch anything cause its all on the frontend
     if (
-      (specOptions[graphKeys.rankBy] !== prevSpecOptions[graphKeys.rankBy] &&
-        prevSpecOptions[graphKeys.rankBy]) ||
-      specOptions[graphKeys.horizont] !== prevSpecOptions[graphKeys.horizont]
+      (this.props.chartData.specOptions[graphKeys.rankBy] !==
+        prevProps.chartData.specOptions[graphKeys.rankBy] &&
+        prevProps.chartData.specOptions[graphKeys.rankBy]) ||
+      this.props.chartData.specOptions[graphKeys.horizont] !==
+        prevProps.chartData.specOptions[graphKeys.horizont]
     ) {
-      this.updateRankBy(specOptions);
+      this.updateRankBy(this.props.chartData.specOptions);
     }
   }
 
@@ -338,7 +355,11 @@ class VisualizerModuleMediator extends Component {
 
     this.props.dispatch(
       actions.storeChartDataRequest({
-        specOptions
+        specOptions,
+        // so we refetch data for development environment
+        // cause we want that default indicator to be selected
+        // always
+        refetch: process.env.NODE_ENV === 'development'
       })
     );
   }
@@ -392,13 +413,14 @@ class VisualizerModuleMediator extends Component {
     );
   }
 
-  updateIndicators(indicatorData) {
+  updateIndicators(
+    indicatorData,
+    indSelectedIndex = this.props.chartData.indSelectedIndex
+  ) {
     // this will be used for some extra formatting things
     // concerning chart keys and also for saving the subIndicators
     // of the appropriate indicators
     const selectedInd = [...this.props.chartData.selectedInd];
-
-    const indSelectedIndex = this.props.chartData.indSelectedIndex;
 
     const aggregationData = [];
 
@@ -454,7 +476,10 @@ class VisualizerModuleMediator extends Component {
         );
         break;
       case chartTypes.barChart: {
+        console.log('BAR DATA FORMED!');
+
         const barData = formatBarData(
+          indSelectedIndex === -1,
           this.props.chartData.indKeys,
           this.props.chartData.data,
           aggregationData,
@@ -496,44 +521,55 @@ class VisualizerModuleMediator extends Component {
     // by our code below.
     let refetch = false;
 
-    // formatting the subindicator data commences!
-    indicatorData.forEach(indItem => {
-      let subIndicators = indItem.subIndicators.edges.map(indicator => {
-        return { label: indicator.node.name, value: indicator.node.name };
+    // and we want to reformat the subindicators ONLY
+    // when an indicator is selected, like reformat as in
+    // load in the subindicators as selectable options
+    if (this.props.chartData.indicatorSelected) {
+      // formatting the subindicator data commences!
+      indicatorData.forEach(indItem => {
+        let subIndicators = indItem.subIndicators.edges.map(indicator => {
+          return { label: indicator.node.name, value: indicator.node.name };
+        });
+
+        // and we sort them
+        subIndicators = sortBy(subIndicators, ['label']);
+        let selectedSubInd = selectedInd[indItem.index].selectedSubInd;
+
+        if (indSelectedIndex === indItem.index) {
+          // so if its a new indicator that gets selected
+          // the selectedSubInds will be empty
+          selectedSubInd = [];
+          // and we just push in the first sub-indicator from the ones retrieved
+          selectedSubInd.push(subIndicators[0].value);
+          // and ofcourse we refetch the data
+          refetch = true;
+        }
+
+        // so we associate the sub-indicators with their respective indicator
+        // cause the data retrieved in 'indicatorData' might not be aligned
+        // in the same way as the selectedInd data is aligned
+        selectedInd[indItem.index] = {
+          ...selectedInd[indItem.index],
+          selectedSubInd,
+          subIndicators
+        };
       });
-
-      // and we sort them
-      subIndicators = sortBy(subIndicators, ['label']);
-      let selectedSubInd = selectedInd[indItem.index].selectedSubInd;
-
-      if (indSelectedIndex === indItem.index) {
-        // so if its a new indicator that gets selected
-        // the selectedSubInds will be empty
-        selectedSubInd = [];
-        // and we just push in the first sub-indicator from the ones retrieved
-        selectedSubInd.push(subIndicators[0].value);
-        // and ofcourse we refetch the data
-        refetch = true;
-      }
-
-      // so we associate the sub-indicators with their respective indicator
-      // cause the data retrieved in 'indicatorData' might not be aligned
-      // in the same way as the selectedInd data is aligned
-      selectedInd[indItem.index] = {
-        ...selectedInd[indItem.index],
-        selectedSubInd,
-        subIndicators
-      };
-    });
+    }
 
     // and we save the subindicator selection for the datapane
     this.props.dispatch(
       actions.storeChartDataRequest({
         // so basically indSelectedIndex gets reset here
+        // because we've updated the indicator
+        indSelectedIndex: -1,
+        // so basically indicatorSelected gets reset here
         // because we only need it to catch the first time its selected
         // and when new subindicators are retrieved, so we do it up there ^
         // and we can reset it here
-        indSelectedIndex: -1,
+        indicatorSelected: false,
+        // so because we already do our own created refetch below
+        // we don't want to do a refetch cause of this change to the
+        // chart data
         selectedInd,
         chartKeys,
         indKeys,
@@ -542,11 +578,19 @@ class VisualizerModuleMediator extends Component {
     );
 
     if (refetch) {
-      this.refetch(indSelectedIndex);
+      // and we also pass in the currently formed selcted inds
+      // with the updated subindicators in them,
+      // just in case our redux is saving of selectedInd
+      // is slower than the execution of this refetch
+      this.refetch(indSelectedIndex, selectedInd);
     }
   }
 
-  refetch(index) {
+  refetch(
+    index = this.props.chartData.indSelectedIndex,
+    selectedInd = this.props.chartData.selectedInd
+  ) {
+    console.log('REFETCH INDEX', index);
     const indicatorData = [];
 
     let datePeriod = [];
@@ -557,10 +601,7 @@ class VisualizerModuleMediator extends Component {
     // that means that some other data has been changed which should apply
     // for all of the indicators
 
-    const selectedInds =
-      index !== -1
-        ? [this.props.chartData.selectedInd[index]]
-        : this.props.chartData.selectedInd;
+    const selectedInds = index !== -1 ? [selectedInd[index]] : selectedInd;
 
     if (selectedInds.length > 0) {
       this.setState({
@@ -634,7 +675,9 @@ class VisualizerModuleMediator extends Component {
           // amount of indicator data as we have indicators selected
           if (indicatorData.length === selectedInds.length) {
             this.setState({ loading: false });
-            this.updateIndicators(indicatorData);
+
+            const updateIndIndex = index !== -1 ? index : -1;
+            this.updateIndicators(indicatorData, updateIndIndex);
           }
         });
       });
@@ -647,6 +690,7 @@ class VisualizerModuleMediator extends Component {
     this.props.dispatch(
       actions.storeChartDataRequest({
         selectedYear: val,
+        refetch: true,
         changesMade: true
       })
     );
@@ -656,6 +700,7 @@ class VisualizerModuleMediator extends Component {
     this.props.dispatch(
       actions.storeChartDataRequest({
         selectedYears: array,
+        refetch: true,
         changesMade: true
       })
     );

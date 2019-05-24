@@ -695,6 +695,7 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
 }
 
 export function formatBarData(
+  resetData,
   currIndKeys,
   currData,
   indicators,
@@ -703,16 +704,24 @@ export function formatBarData(
   horizontal,
   colors = colorSet[0].colors
 ) {
-  const barChartData = [...currData];
+  console.log('resetData', resetData);
+
+  const barChartData = resetData ? [] : [...currData];
 
   // so this variable will help us form keys
   // for the bar chart
-  const barIndKeys = [...currIndKeys];
+  const barIndKeys = resetData ? [] : [...currIndKeys];
+
+  console.log('currData', currData);
+  console.log('currIndKeys', currIndKeys);
+  console.log('indicators', indicators);
 
   const aggrKey = aggrKeys[aggregate];
 
   let colorInd = 0;
   indicators.forEach((indicator, index) => {
+    console.log('indicator', indicator);
+    console.log('index', index);
     if (indicator.data.length > 0) {
       const existInd = barIndKeys.indexOf(indicator.data[0].indicatorName);
       let indName = indicator.data[0].indicatorName;
@@ -792,6 +801,7 @@ export function formatBarData(
   }
 
   console.log('sortedData', sortedData);
+  console.log('barIndKeys', barIndKeys);
 
   return {
     data: sortedData,

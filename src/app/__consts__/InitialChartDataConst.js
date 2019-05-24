@@ -45,7 +45,7 @@ const initialState = {
   selectedYear: '2005',
   selectedYears: formatYearParam([2000, 2010]),
   _public: false,
-  noRefetch: false,
+  refetch: false,
   teams: [],
   chartKeys:
     process.env.NODE_ENV === 'development'
@@ -110,6 +110,7 @@ const initialState = {
   // in selectedInd would be a very messy
   // solution and might intil issues
   indSelectedIndex: process.env.NODE_ENV === 'development' ? 0 : -1,
+  indicatorSelected: false,
   selectedCountryVal: [],
   selectedCountryLabels: [],
   desc: '',

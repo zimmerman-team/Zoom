@@ -46,6 +46,12 @@ const initialState = {
   selectedYears: formatYearParam([2000, 2010]),
   _public: false,
   refetch: false,
+  // so this variable will be used in special cases
+  // where one indicator is selected but all indicators
+  // still need to be refetched, this will be used
+  // for example with the reselect data year functionality
+  // when an indicator is selected
+  refetchAll: false,
   teams: [],
   chartKeys:
     process.env.NODE_ENV === 'development'
@@ -80,10 +86,7 @@ const initialState = {
       // of the selected indicator
       dataSource:
         process.env.NODE_ENV === 'development' ? 'UNAIDS 2018' : undefined,
-      selectedSubInd:
-        process.env.NODE_ENV === 'development'
-          ? ['adolescents (10 to 19) realistic estimate']
-          : [],
+      selectedSubInd: [],
       // this variable mainly controls the data formating for charts
       // as in if the data should be formated by adding the sub-indicator
       // values, or if they should be seperated into different legends
@@ -110,7 +113,7 @@ const initialState = {
   // in selectedInd would be a very messy
   // solution and might intil issues
   indSelectedIndex: process.env.NODE_ENV === 'development' ? 0 : -1,
-  indicatorSelected: false,
+  indicatorSelected: process.env.NODE_ENV === 'development',
   selectedCountryVal: [],
   selectedCountryLabels: [],
   desc: '',

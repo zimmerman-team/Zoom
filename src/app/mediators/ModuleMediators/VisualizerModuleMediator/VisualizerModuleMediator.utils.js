@@ -1,4 +1,3 @@
-import findIndex from 'lodash/findIndex';
 /* consts */
 import chartTypes from '__consts__/ChartConst';
 import { colorSet } from '__consts__/PaneConst';
@@ -7,6 +6,8 @@ import { geoTypes } from '__consts__/GeolocationConst';
 
 /* utils */
 import sortBy from 'lodash/sortBy';
+import filter from 'lodash/filter';
+import findIndex from 'lodash/findIndex';
 
 // these are aggregation keys associated with graphql returned variables
 // 'geolocationTag' & 'date' are the graphql variables
@@ -659,10 +660,14 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
 
       if (indItem.subIndAggr) {
         chartKeys.push({
+          indIndexedName: indName,
           key: indName,
           indName,
           label: `${indName} - ${indItem.subInd.join(', ')}`,
-          color: colors[colorInd]
+          color: colors[colorInd],
+          // this will be used for data manipulation
+          // to optimise indicator data refetching
+          indIndex: index
         });
 
         if (colorInd + 1 < colors.length) {
@@ -677,8 +682,12 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
           chartKeys.push({
             key,
             indName: key,
+            indIndexedName: indName,
             label: key,
-            color: colors[colorInd]
+            color: colors[colorInd],
+            // this will be used for data manipulation
+            // to optimise indicator data refetching
+            indIndex: index
           });
 
           if (colorInd + 1 < colors.length) {
@@ -695,7 +704,8 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
 }
 
 export function formatBarData(
-  resetData,
+  indSelectedIndex,
+  currChartKeys,
   currIndKeys,
   currData,
   indicators,
@@ -704,24 +714,55 @@ export function formatBarData(
   horizontal,
   colors = colorSet[0].colors
 ) {
-  console.log('resetData', resetData);
-
-  const barChartData = resetData ? [] : [...currData];
+  let barChartData = [];
 
   // so this variable will help us form keys
   // for the bar chart
-  const barIndKeys = resetData ? [] : [...currIndKeys];
+  let barIndKeys = [];
 
-  console.log('currData', currData);
-  console.log('currIndKeys', currIndKeys);
-  console.log('indicators', indicators);
+  console.log('indSelectedIndex', indSelectedIndex);
+  console.log('currChartKeys', currChartKeys);
+
+  if (indSelectedIndex !== -1) {
+    barChartData = [...currData];
+    barIndKeys = [...currIndKeys];
+
+    // so basically if an indicator or data associated
+    // with ONLY that indicator
+    // has been changed we remove the current data of this
+    // indicator cause we have recalled all of it and need to
+    // replace it
+    let keysToRemove = filter(currChartKeys, ['indIndex', indSelectedIndex]);
+
+    if (keysToRemove.length > 0) {
+      keysToRemove.forEach(keyItem => {
+        barChartData.forEach(item => {
+          if (item[keyItem.key]) {
+            // so if the key exists we first substract its
+            // value from the 'allValSum' item so that
+            // bar sorting would still work properly
+            item.allValSum -= item[keyItem.key];
+            // and then we just delete it
+            delete item[keyItem.key];
+          }
+        });
+
+        const remIndKeyIndex = barIndKeys.indexOf(keyItem.indIndexedName);
+
+        if (remIndKeyIndex !== -1) {
+          // and also we remove the indicator key item
+          barIndKeys.splice(remIndKeyIndex, 1);
+        }
+      });
+    }
+  }
+
+  console.log('barChartData', barChartData);
 
   const aggrKey = aggrKeys[aggregate];
 
   let colorInd = 0;
   indicators.forEach((indicator, index) => {
-    console.log('indicator', indicator);
-    console.log('index', index);
     if (indicator.data.length > 0) {
       const existInd = barIndKeys.indexOf(indicator.data[0].indicatorName);
       let indName = indicator.data[0].indicatorName;

@@ -238,59 +238,6 @@ class VisualizerModuleMediator extends Component {
       );
     }
 
-    // // TODO redo this check properly
-    // const {
-    //   data,
-    //   name,
-    //   desc,
-    //   descIntro,
-    //   _public,
-    //   team,
-    //   specOptions,
-    //   chartKeys,
-    //   noRefetch,
-    //   indKeys,
-    //   ...restChart
-    // } = this.props.chartData;
-    // const {
-    //   name: prevName,
-    //   desc: prevDesc,
-    //   descIntro: prevDescIntro,
-    //   _public: prevPublc,
-    //   team: prevTeam,
-    //   specOptions: prevSpecOptions,
-    //   chartKeys: prevchartKeys,
-    //   data: prevData,
-    //   noRefetch: prevRefetch,
-    //   indKeys: previndKeys,
-    //   ...prevRestChart
-    // } = prevProps.chartData;
-    //
-    // // so we refetch data when chartData changes
-    // // and we dont want to refetch data when only the name/description of the chart is changed
-    // // or other data not related stuff changes
-    // if (
-    //   (!isEqual(restChart, prevRestChart) ||
-    //     specOptions[graphKeys.aggrCountry] !==
-    //       prevSpecOptions[graphKeys.aggrCountry] ||
-    //     (specOptions[graphKeys.aggregate] &&
-    //       specOptions[graphKeys.aggregate] !==
-    //         prevSpecOptions[graphKeys.aggregate])) &&
-    //   restChart.changesMade &&
-    //   !noRefetch
-    // ) {
-    //   // this.refetch(this.props.chartData.indSelectedIndex);
-    // } else if (noRefetch) {
-    //   // and for that one change in data when we didnt need to refetch
-    //   // we change the noRefetch back to false, as for some other changes in the chartData
-    //   // we might want to refetch
-    //   this.props.dispatch(
-    //     actions.storeChartDataRequest({
-    //       noRefetch: false
-    //     })
-    //   );
-    // }
-
     // so if the rankBy changes we only change the sorting of the chart
     // cause we don't need to refetch anything cause its all on the frontend
     if (
@@ -464,20 +411,28 @@ class VisualizerModuleMediator extends Component {
       case chartTypes.focusNL:
         data = formatGeoData(aggregationData);
         break;
-      case chartTypes.lineChart:
+      case chartTypes.lineChart: {
+        const lineData = formatLineData(
+          indSelectedIndex,
+          this.props.chartData.chartKeys,
+          this.props.chartData.indKeys,
+          this.props.chartData.data,
+          aggregationData,
+          this.props.chartData.specOptions[graphKeys.aggregate]
+        );
+
+        data = lineData.data;
+        indKeys = lineData.indKeys;
+
         chartKeys = formatChartLegends(
           selectedInds,
           this.props.chartData.specOptions[graphKeys.colorPallet],
           this.props.chartData.chartKeys
         );
-        data = formatLineData(
-          aggregationData,
-          this.props.chartData.specOptions[graphKeys.aggregate]
-        );
-        break;
-      case chartTypes.barChart: {
-        console.log('BAR DATA FORMED!');
 
+        break;
+      }
+      case chartTypes.barChart: {
         const barData = formatBarData(
           indSelectedIndex,
           this.props.chartData.chartKeys,
@@ -502,16 +457,26 @@ class VisualizerModuleMediator extends Component {
       case chartTypes.tableChart:
         data = formatTableData(aggregationData);
         break;
-      case chartTypes.donutChart:
-        data = formatDonutData(
+      case chartTypes.donutChart: {
+        const donutData = formatDonutData(
+          this.props.chartData.indicatorSelected,
+          indSelectedIndex,
+          this.props.chartData.chartKeys,
+          this.props.chartData.indKeys,
+          this.props.chartData.data,
           aggregationData,
           this.props.chartData.specOptions[graphKeys.aggrCountry]
         );
+
+        data = donutData.data;
+        indKeys = donutData.indKeys;
+
         chartKeys = formatDonutKeys(
           selectedInds,
           this.props.chartData.specOptions[graphKeys.colorPallet]
         );
         break;
+      }
       default:
         data = [];
         break;
@@ -595,15 +560,19 @@ class VisualizerModuleMediator extends Component {
   ) {
     const indicatorData = [];
 
-    let datePeriod = [];
-    let orderBy = [];
+    let datePeriod = [this.props.chartData.selectedYear];
+    let orderBy = ['date'];
 
     // so if an indicators data is selected we will receive an
     // index of the indicator, and if indicators index is -1
     // that means that some other data has been changed which should apply
     // for all of the indicators
-
-    const refetchOne = index !== -1 && !refetchAll;
+    const refetchOne =
+      index !== -1 &&
+      !refetchAll &&
+      (this.props.paneData.chartType === chartTypes.donutChart ||
+        this.props.paneData.chartType === chartTypes.lineChart ||
+        this.props.paneData.chartType === chartTypes.barChart);
 
     const selectedInds = refetchOne ? [selectedInd[index]] : selectedInd;
 
@@ -616,23 +585,20 @@ class VisualizerModuleMediator extends Component {
         this.props.paneData.chartType === chartTypes.lineChart ||
         this.props.paneData.chartType === chartTypes.barChart
       ) {
+        orderBy = [
+          aggrKeys[this.props.chartData.specOptions[graphKeys.aggregate]]
+        ];
+
         // so the first option in the axis options is 'geo' so if aggregated by geolocation
         // the user can only select one year and the order is by 'geolocationTag'
         // and if aggregated by year, which is the other option, the user can select
         // a range of years by which to aggregate and the orderBy is by 'date'
         if (
           this.props.chartData.specOptions[graphKeys.aggregate] ===
-          aggrOptions[0].value
+          aggrOptions[1].value
         ) {
-          datePeriod = [this.props.chartData.selectedYear];
-          orderBy = [aggrKeys[aggrOptions[0].value]];
-        } else {
           datePeriod = this.props.chartData.selectedYears;
-          orderBy = [aggrKeys[aggrOptions[1].value]];
         }
-      } else {
-        datePeriod = [this.props.chartData.selectedYear];
-        orderBy = [aggrKeys[aggrOptions[0].value]];
       }
 
       selectedInds.forEach((indItem, indIndex) => {
@@ -794,6 +760,7 @@ class VisualizerModuleMediator extends Component {
         selectedCountryVal,
         desc: description,
         selectedInd,
+        indicatorSelected: false,
         authorName: author.username,
         createdDate: formatDate(created),
         selectedRegionVal: removeIds(selectedRegionVal),

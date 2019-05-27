@@ -529,6 +529,7 @@ export function formatChartLegends(
           name: indName,
           color: colors[colorInd],
           indIndex: index,
+          indIndexedName: indName,
           orientation
         });
 
@@ -546,6 +547,7 @@ export function formatChartLegends(
             name: key,
             color: colors[colorInd],
             indIndex: index,
+            indIndexedName: indName,
             orientation
           });
 
@@ -575,11 +577,52 @@ export function formatChartLegends(
 // it would be wats shown on the x Axis of the linechart
 // and the subIndAggr will be used to aggregate or disaggregate by the
 // indicators selected Sub indicators
-export function formatLineData(indicators, aggregate) {
-  const aggrKey = aggrKeys[aggregate];
+export function formatLineData(
+  indSelectedIndex,
+  currChartKeys,
+  currIndKeys,
+  currData,
+  indicators,
+  aggregate
+) {
+  let indicatorData = [];
 
-  const indicatorData = [];
-  const indicatorNames = [];
+  // so this variable will help us form keys
+  // for the line chart
+  let indicatorNames = [];
+
+  if (indSelectedIndex !== -1) {
+    indicatorData = [...currData];
+    indicatorNames = [...currIndKeys];
+
+    // so basically if an indicator or data associated
+    // with ONLY that indicator
+    // has been changed we remove the current data of this
+    // indicator cause we have recalled all of it and need to
+    // replace it
+    let keysToRemove = filter(currChartKeys, ['indIndex', indSelectedIndex]);
+
+    if (keysToRemove.length > 0) {
+      keysToRemove.forEach(keyItem => {
+        indicatorData.forEach(item => {
+          if (item[keyItem.name]) {
+            // and then we just delete it
+            delete item[keyItem.name];
+            delete item[`${keyItem.name}Format`];
+          }
+        });
+
+        const remIndKeyIndex = indicatorNames.indexOf(keyItem.indIndexedName);
+
+        if (remIndKeyIndex !== -1) {
+          // and also we remove the indicator key item
+          indicatorNames.splice(remIndKeyIndex, 1);
+        }
+      });
+    }
+  }
+
+  const aggrKey = aggrKeys[aggregate];
 
   indicators.forEach((indicator, index) => {
     if (indicator.data.length > 0) {
@@ -633,7 +676,15 @@ export function formatLineData(indicators, aggregate) {
     }
   });
 
-  return indicatorData;
+  // so yeah because of optimisation we want to sort this data
+  // on the frontend
+  // eventuallyy this whole data will be coming from the backend
+  // so no need to worry
+
+  return {
+    data: sortBy(indicatorData, [aggregate]),
+    indKeys: indicatorNames
+  };
 }
 
 // so this function basically formats the
@@ -720,9 +771,6 @@ export function formatBarData(
   // for the bar chart
   let barIndKeys = [];
 
-  console.log('indSelectedIndex', indSelectedIndex);
-  console.log('currChartKeys', currChartKeys);
-
   if (indSelectedIndex !== -1) {
     barChartData = [...currData];
     barIndKeys = [...currIndKeys];
@@ -756,8 +804,6 @@ export function formatBarData(
       });
     }
   }
-
-  console.log('barChartData', barChartData);
 
   const aggrKey = aggrKeys[aggregate];
 
@@ -841,9 +887,6 @@ export function formatBarData(
     sortedData = sortBy(barChartData, ['allValSum']).reverse();
   }
 
-  console.log('sortedData', sortedData);
-  console.log('barIndKeys', barIndKeys);
-
   return {
     data: sortedData,
     indKeys: barIndKeys
@@ -901,9 +944,62 @@ export function formatTableData(indicators) {
   };
 }
 
-export function formatDonutData(indicators, aggrCountry) {
-  const chartData = [];
-  const donutChartLabels = [];
+export function formatDonutData(
+  prevChart,
+  indSelectedIndex,
+  currChartKeys,
+  currIndKeys,
+  currData,
+  indicators,
+  aggrCountry
+) {
+  let chartData = [];
+
+  // so this variable will help us form keys
+  // for the bar chart
+  let donutChartLabels = [];
+
+  if (indSelectedIndex !== -1) {
+    donutChartLabels = [...currIndKeys];
+
+    // so basically if an indicator or data associated
+    // with ONLY that indicator
+    // has been changed we remove the current data of this
+    // indicator cause we have recalled all of it and need to
+    // replace it
+    const keysToRemove = filter(currChartKeys, ['indIndex', indSelectedIndex]);
+
+    if (keysToRemove.length > 0) {
+      currData.forEach(item => {
+        let pushItem = true;
+
+        for (let i = 0; i < keysToRemove.length; i += 1) {
+          if (item.label === keysToRemove[i].name) {
+            // so if the items key exist in the keysToremove
+            // we want to NOT push the item in
+
+            pushItem = false;
+            break;
+          }
+        }
+
+        if (pushItem) {
+          chartData.push(item);
+        }
+      });
+
+      keysToRemove.forEach(keyItem => {
+        const remIndKeyIndex = donutChartLabels.indexOf(keyItem.indIndexedName);
+
+        if (remIndKeyIndex !== -1) {
+          // and also we remove the indicator key item
+          donutChartLabels.splice(remIndKeyIndex, 1);
+        }
+      });
+    } else {
+      chartData = [...currData];
+    }
+  }
 
   indicators.forEach((indicator, indIndex) => {
     if (indicator.data[0]) {
@@ -962,7 +1058,10 @@ export function formatDonutData(indicators, aggrCountry) {
     }
   });
 
-  return chartData;
+  return {
+    data: chartData,
+    indKeys: donutChartLabels
+  };
 }
 
 // so here we gonna format the donut keys according to the
@@ -990,6 +1089,8 @@ export function formatDonutKeys(selectedInds, colors) {
         chartKeys.push({
           label: itemId,
           name: itemId,
+          indIndex: index,
+          indIndexedName: name,
           color: colors[colorInd]
         });
 
@@ -1005,6 +1106,8 @@ export function formatDonutKeys(selectedInds, colors) {
           chartKeys.push({
             label: itemId,
             name: itemId,
+            indIndex: index,
+            indIndexedName: name,
             color: colors[colorInd]
           });
 

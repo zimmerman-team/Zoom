@@ -97,6 +97,7 @@ const propTypes = {
   addIndicator: PropTypes.func,
   removeIndicator: PropTypes.func,
   locationSelected: PropTypes.bool,
+  indicatorSelected: PropTypes.bool,
   multipleInd: PropTypes.bool,
   saveGraphOption: PropTypes.func,
   subIndAggrToggle: PropTypes.func,
@@ -109,6 +110,7 @@ const defaultProps = {
   handleAxisSwitch: null,
   removeIndicator: null,
   locationSelected: true,
+  indicatorSelected: false,
   subInd1AllSelected: true,
   subInd2AllSelected: true,
   indSelectedIndex: -1,
@@ -177,7 +179,10 @@ class DataExplorePane extends React.Component {
         selectAll: true,
         defaultAll: false,
         aggrCheck: indItem.aggregate,
-        openSubInd: this.props.indSelectedIndex === index,
+        openSubInd:
+          this.props.indicatorSelected && this.props.indSelectedIndex === index
+            ? index
+            : -1,
         placeHolderText: 'Select sub indicator',
         selectDataSource: (val, isArray) =>
           this.props.selectSubInd(val, isArray, index),

@@ -597,6 +597,7 @@ class VizPaneMediator extends React.Component {
 
     this.props.dispatch(
       actions.storeChartDataRequest({
+        indSelectedIndex: index,
         selectedInd,
         refetch:
           selectedInd[index].indicator &&
@@ -672,6 +673,7 @@ class VizPaneMediator extends React.Component {
         selectInd={this.selectInd}
         selectSubInd={this.selectSubInd}
         indSelectedIndex={this.props.chartData.indSelectedIndex}
+        indicatorSelected={this.props.chartData.indicatorSelected}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.props.chartData.selectedCountryVal}
         selectedCountryLabel={this.props.chartData.selectedCountryLabels}

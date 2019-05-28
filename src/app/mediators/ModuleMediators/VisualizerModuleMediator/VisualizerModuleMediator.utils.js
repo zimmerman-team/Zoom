@@ -2,12 +2,12 @@
 import chartTypes from '__consts__/ChartConst';
 import { colorSet } from '__consts__/PaneConst';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
-import { geoTypes } from '__consts__/GeolocationConst';
 
 /* utils */
 import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
 import findIndex from 'lodash/findIndex';
+import randomColor from 'randomcolor';
 
 // these are aggregation keys associated with graphql returned variables
 // 'geolocationTag' & 'date' are the graphql variables
@@ -465,10 +465,9 @@ export function formatGeoData(indAggregations) {
         if (longLatData.length > 0) {
           geomapData.push({
             type: 'location',
+            color: randomColor(),
             data: longLatData,
-            legendName: `POI: ${indName} - ${aggregation.selectedSubInd.join(
-              ', '
-            )}`
+            legendName: `${indName} - ${aggregation.selectedSubInd.join(', ')}`
           });
         }
       }

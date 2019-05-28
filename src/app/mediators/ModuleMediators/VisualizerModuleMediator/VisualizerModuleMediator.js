@@ -587,7 +587,10 @@ class VisualizerModuleMediator extends Component {
     const refetchOne =
       index !== -1 &&
       !refetchAll &&
-      this.props.paneData.chartType !== chartTypes.tableChart;
+      this.props.paneData.chartType !== chartTypes.tableChart &&
+      this.props.paneData.chartType !== chartTypes.geoMap &&
+      this.props.paneData.chartType !== chartTypes.focusKE &&
+      this.props.paneData.chartType !== chartTypes.focusNL;
     const selectedInds = refetchOne ? [selectedInd[index]] : selectedInd;
 
     if (selectedInds.length > 0) {
@@ -662,7 +665,10 @@ class VisualizerModuleMediator extends Component {
 
             const updateIndIndex =
               refetchOne ||
-              this.props.paneData.chartType === chartTypes.tableChart
+              this.props.paneData.chartType === chartTypes.tableChart ||
+              this.props.paneData.chartType === chartTypes.geoMap ||
+              this.props.paneData.chartType === chartTypes.focusNL ||
+              this.props.paneData.chartType === chartTypes.focusKE
                 ? index
                 : -1;
             this.updateIndicators(indicatorData, updateIndIndex);

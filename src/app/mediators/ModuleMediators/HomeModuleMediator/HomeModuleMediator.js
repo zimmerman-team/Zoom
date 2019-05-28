@@ -17,6 +17,9 @@ import generalInitial from '__consts__/InitialChartDataConst';
 import { connect } from 'react-redux';
 import * as actions from 'services/actions/general';
 import { geoTypes } from '__consts__/GeolocationConst';
+import initialPaneState from '__consts__/InitialPaneDataConst';
+import paneTypes from '__consts__/PaneTypesConst';
+import * as nodeActions from 'services/actions/nodeBackend';
 
 const propTypes = {
   indicatorAggregations: PropTypes.shape({
@@ -172,14 +175,17 @@ class HomeModuleMediator extends Component {
   }
 
   componentWillUnmount() {
+    // AAAND when this component unmounts we reset the chart and pane variables in redux
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        ...initialState
+      })
+    );
+
     this.props.dispatch(
       actions.storePaneDataRequest({
-        allCountries: [],
-        allRegions: [],
-        selectedSources: [],
-        yearRange: '1992,2018',
-        subIndicators1: [],
-        subIndicators2: []
+        ...initialPaneState
       })
     );
   }

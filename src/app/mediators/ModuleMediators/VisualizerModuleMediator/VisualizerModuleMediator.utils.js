@@ -402,7 +402,7 @@ export function formatDate(created) {
   )} ${date.getFullYear()}`;
 }
 
-export function formatGeoData(indSelectedIndex, currData, indAggregations) {
+export function formatGeoData(indAggregations) {
   let longLatData = [];
   let countryLayerData = {};
   const geomapData = [];
@@ -412,35 +412,8 @@ export function formatGeoData(indSelectedIndex, currData, indAggregations) {
     if (aggregation.data && aggregation.data[0]) {
       const indName = aggregation.data[0].indicatorName;
 
-      // so we check here if the retrieved data is long lat
-      // and then format it differently
-      // TODO: make this work differently, this is currently i quick and dirty fix
-      if (
-        aggregation.data[0] &&
-        aggregation.data[0].geolocationType &&
-        aggregation.data[0].geolocationType === geoTypes.pointBased
-      ) {
-        // so if the tag contains some numbers divided by a comma
-        // that means that its a long/lat aggregation
-        // and it then overrides the other legend types on the geomap
-        longLatData = formatLongLatData(
-          aggregation.data,
-          indName,
-          aggregation.selectedSubInd,
-          aggregation.subIndAggr
-        );
-
-        // and we push them into the indicatorData array for the geomap
-        if (longLatData.length > 0) {
-          geomapData.push({
-            type: 'location',
-            data: longLatData,
-            legendName: `POI: ${indName} - ${aggregation.selectedSubInd.join(
-              ', '
-            )}`
-          });
-        }
-      } else if (index === 0) {
+      // so the first data item is layer legend
+      if (index === 0) {
         // so for the first indicator aggregation on the geomap
         // we form the layers
         countryLayerData = formatCountryLayerData(
@@ -461,6 +434,7 @@ export function formatGeoData(indSelectedIndex, currData, indAggregations) {
           });
         }
       } else if (index === 1) {
+        // the second is circle legend
         // and for the second indicator aggregation on the geomap
         // we format the center data
         countryCircleData = formatCountryCenterData(
@@ -478,12 +452,26 @@ export function formatGeoData(indSelectedIndex, currData, indAggregations) {
             legendName: ` ${indName} - ${aggregation.selectedSubInd.join(', ')}`
           });
         }
+      } else {
+        // all others are long/lat indicators
+        longLatData = formatLongLatData(
+          aggregation.data,
+          indName,
+          aggregation.selectedSubInd,
+          aggregation.subIndAggr
+        );
+
+        // and we push them into the indicatorData array for the geomap
+        if (longLatData.length > 0) {
+          geomapData.push({
+            type: 'location',
+            data: longLatData,
+            legendName: `POI: ${indName} - ${aggregation.selectedSubInd.join(
+              ', '
+            )}`
+          });
+        }
       }
-      // else {
-      //   // here we'll format mainly the long/lat data
-      //   // when this functionality for the geomap will
-      //   // be addressed
-      // }
     }
   });
 

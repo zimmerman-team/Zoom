@@ -528,6 +528,7 @@ export function formatChartLegends(
           label: `${indName} - ${indItem.subInd.join(', ')}`,
           name: indName,
           color: colors[colorInd],
+          dataSource: indItem.dataSource,
           indIndex: index,
           indIndexedName: indName,
           orientation
@@ -546,6 +547,7 @@ export function formatChartLegends(
             label: key,
             name: key,
             color: colors[colorInd],
+            dataSource: indItem.dataSource,
             indIndex: index,
             indIndexedName: indName,
             orientation
@@ -713,6 +715,7 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
         chartKeys.push({
           indIndexedName: indName,
           key: indName,
+          dataSource: indItem.dataSource,
           indName,
           label: `${indName} - ${indItem.subInd.join(', ')}`,
           color: colors[colorInd],
@@ -732,6 +735,7 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
 
           chartKeys.push({
             key,
+            dataSource: indItem.dataSource,
             indName: key,
             indIndexedName: indName,
             label: key,
@@ -1091,6 +1095,7 @@ export function formatDonutKeys(selectedInds, colors) {
           name: itemId,
           indIndex: index,
           indIndexedName: name,
+          dataSource: indItem.dataSource,
           color: colors[colorInd]
         });
 
@@ -1108,6 +1113,7 @@ export function formatDonutKeys(selectedInds, colors) {
             name: itemId,
             indIndex: index,
             indIndexedName: name,
+            dataSource: indItem.dataSource,
             color: colors[colorInd]
           });
 

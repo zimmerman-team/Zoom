@@ -15,6 +15,7 @@ import initialState, { initIndItem } from '__consts__/InitialChartDataConst';
 import chartTypes from '__consts__/ChartConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
 import { maxYear } from '__consts__/TimeLineConst';
+import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 
 const propTypes = {
   dropDownData: PropTypes.shape({
@@ -276,6 +277,7 @@ class VizPaneMediator extends React.Component {
     if (val === 'resetAll') {
       this.props.dispatch(
         actions.storeChartDataRequest({
+          refetch: true,
           selectedInd: selectedInd.map((indItem, ind) => {
             if (ind === 0 && process.env.NODE_ENV === 'development') {
               return {
@@ -300,7 +302,8 @@ class VizPaneMediator extends React.Component {
         selectedInd[index].dataSource = undefined;
         this.props.dispatch(
           actions.storeChartDataRequest({
-            selectedInd
+            selectedInd,
+            refetch: true
           })
         );
       } else {
@@ -310,8 +313,16 @@ class VizPaneMediator extends React.Component {
         // indicators data point, so
         this.props.dispatch(
           actions.storeChartDataRequest({
+            // so the year reselection functionality only works with geolocations thats why we
+            // refetch all indicators only when the aggregate option IS geolocation
+            refetchAll:
+              this.props.chartData.specOptions[graphKeys.aggregate] ===
+                aggrOptions[0].value &&
+              this.props.chartData.selectedYear !== val.firstYear,
             selectedInd,
+            indicatorSelected: true,
             indSelectedIndex: index,
+            refetch: true,
             selectedYear: val.firstYear
           })
         );
@@ -363,6 +374,8 @@ class VizPaneMediator extends React.Component {
     // so we set the values for chart data
     this.props.dispatch(
       actions.storeChartDataRequest({
+        indSelectedIndex: index,
+        refetch: true,
         selectedInd
       })
     );
@@ -402,7 +415,8 @@ class VizPaneMediator extends React.Component {
     this.props.dispatch(
       actions.storeChartDataRequest({
         selectedCountryVal,
-        selectedCountryLabels
+        selectedCountryLabels,
+        refetch: true
       })
     );
 
@@ -447,7 +461,8 @@ class VizPaneMediator extends React.Component {
       actions.storeChartDataRequest({
         selectedRegionVal,
         selectedRegionLabels,
-        selectedRegionCodes
+        selectedRegionCodes,
+        refetch: true
       })
     );
 
@@ -492,11 +507,16 @@ class VizPaneMediator extends React.Component {
   removeIndicator(index) {
     const selectedInd = [...this.props.chartData.selectedInd];
 
+    const refetch =
+      selectedInd[index].indicator &&
+      selectedInd[index].selectedSubInd.length > 0;
+
     selectedInd.splice(index, 1);
 
     this.props.dispatch(
       actions.storeChartDataRequest({
-        selectedInd
+        selectedInd,
+        refetch
       })
     );
 
@@ -577,15 +597,11 @@ class VizPaneMediator extends React.Component {
 
     this.props.dispatch(
       actions.storeChartDataRequest({
+        indSelectedIndex: index,
         selectedInd,
-        // so this variable is true then a refetch of data will not happen,
-        // because it makes sense to not regetch data when aggregation
-        // for a not selected indicator has been done, cause there's
-        // nothing to reagregate
-        noRefetch: !(
+        refetch:
           selectedInd[index].indicator &&
           selectedInd[index].selectedSubInd.length > 0
-        )
       })
     );
   }
@@ -603,6 +619,7 @@ class VizPaneMediator extends React.Component {
         actions.storeChartDataRequest({
           specOptions,
           changesMade: true,
+          refetch: true,
           selectedYears: formatYearParam([startYear, endYear])
         })
       );
@@ -610,6 +627,7 @@ class VizPaneMediator extends React.Component {
       this.props.dispatch(
         actions.storeChartDataRequest({
           changesMade: true,
+          refetch: true,
           specOptions
         })
       );
@@ -655,6 +673,7 @@ class VizPaneMediator extends React.Component {
         selectInd={this.selectInd}
         selectSubInd={this.selectSubInd}
         indSelectedIndex={this.props.chartData.indSelectedIndex}
+        indicatorSelected={this.props.chartData.indicatorSelected}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.props.chartData.selectedCountryVal}
         selectedCountryLabel={this.props.chartData.selectedCountryLabels}

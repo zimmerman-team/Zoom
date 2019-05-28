@@ -402,7 +402,7 @@ export function formatDate(created) {
   )} ${date.getFullYear()}`;
 }
 
-export function formatGeoData(indAggregations) {
+export function formatGeoData(indSelectedIndex, currData, indAggregations) {
   let longLatData = [];
   let countryLayerData = {};
   const geomapData = [];

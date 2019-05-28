@@ -403,13 +403,25 @@ class VisualizerModuleMediator extends Component {
 
     switch (this.props.match.params.chart) {
       case chartTypes.geoMap:
-        data = formatGeoData(aggregationData);
+        data = formatGeoData(
+          indSelectedIndex,
+          this.props.chartData.data,
+          aggregationData
+        );
         break;
       case chartTypes.focusKE:
-        data = formatGeoData(aggregationData);
+        data = formatGeoData(
+          indSelectedIndex,
+          this.props.chartData.data,
+          aggregationData
+        );
         break;
       case chartTypes.focusNL:
-        data = formatGeoData(aggregationData);
+        data = formatGeoData(
+          indSelectedIndex,
+          this.props.chartData.data,
+          aggregationData
+        );
         break;
       case chartTypes.lineChart: {
         const lineData = formatLineData(
@@ -570,9 +582,10 @@ class VisualizerModuleMediator extends Component {
     const refetchOne =
       index !== -1 &&
       !refetchAll &&
-      (this.props.paneData.chartType === chartTypes.donutChart ||
-        this.props.paneData.chartType === chartTypes.lineChart ||
-        this.props.paneData.chartType === chartTypes.barChart);
+      this.props.paneData.chartType !== chartTypes.tableChart &&
+      this.props.paneData.chartType !== chartTypes.geoMap &&
+      this.props.paneData.chartType !== chartTypes.focusKE &&
+      this.props.paneData.chartType !== chartTypes.focusNL;
 
     const selectedInds = refetchOne ? [selectedInd[index]] : selectedInd;
 
@@ -646,7 +659,14 @@ class VisualizerModuleMediator extends Component {
           if (indicatorData.length === selectedInds.length) {
             this.setState({ loading: false });
 
-            const updateIndIndex = refetchOne ? index : -1;
+            const updateIndIndex =
+              refetchOne ||
+              this.props.paneData.chartType === chartTypes.tableChart ||
+              this.props.paneData.chartType === chartTypes.geoMap ||
+              this.props.paneData.chartType === chartTypes.focusKE ||
+              this.props.paneData.chartType === chartTypes.focusNL
+                ? index
+                : -1;
             this.updateIndicators(indicatorData, updateIndIndex);
           }
         });

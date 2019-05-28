@@ -18,6 +18,7 @@ import { maxYear } from '__consts__/TimeLineConst';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 
 const propTypes = {
+  display: PropTypes.string,
   dropDownData: PropTypes.shape({
     exploreIndicators: PropTypes.shape({
       edges: PropTypes.arrayOf(
@@ -42,6 +43,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+  display: 'block',
   dropDownData: {}
 };
 
@@ -648,11 +650,6 @@ class VizPaneMediator extends React.Component {
             ? this.handleAxisSwitch
             : null
         }
-        multipleInd={
-          this.props.paneData.chartType !== chartTypes.geoMap &&
-          this.props.paneData.chartType !== chartTypes.focusNL &&
-          this.props.paneData.chartType !== chartTypes.focusKE
-        }
         subIndAggrToggle={this.subIndAggrToggle}
         chartType={this.props.paneData.chartType}
         specOptions={this.props.chartData.specOptions}
@@ -684,6 +681,7 @@ class VizPaneMediator extends React.Component {
         resetAll={this.resetAll}
         selectYearRange={this.selectYearRange}
         yearRange={yearStrToArray(this.state.yearRange)}
+        display={this.props.display}
       />
     );
   }

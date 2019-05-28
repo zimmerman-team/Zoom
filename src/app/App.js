@@ -180,7 +180,6 @@ class App extends React.Component {
                   ...ExplorePanelMediator_dropDownData
                   ...VizPaneMediator_dropDownData
                   ...HomeModuleMediator_indicatorAggregations
-                  ...VisualizerModuleMediator_indicatorAggregations
                   ...CountryDetailMediator_indicatorAggregations
                   ...MetaDataMediator_dropDownData
                   ...CorrectErrorsMediator_fileCorrection

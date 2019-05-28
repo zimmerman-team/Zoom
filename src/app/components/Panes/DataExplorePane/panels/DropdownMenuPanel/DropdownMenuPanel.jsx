@@ -29,9 +29,9 @@ const propTypes = {
     PropTypes.shape({
       isIndicator: PropTypes.bool,
       addIndicator: PropTypes.func,
-      sectionRemove: PropTypes.bool,
       sectionAdd: PropTypes.bool,
       aggrCheck: PropTypes.bool,
+      addIndLabel: PropTypes.string,
       indicatorLabel: PropTypes.string,
       subIndicator: PropTypes.bool,
       categorise: PropTypes.bool,
@@ -63,8 +63,8 @@ const defaultProps = {
       addIndicator: null,
       subIndicator: false,
       sectionAdd: false,
+      addIndLabel: 'Add Indicator',
       aggrCheck: false,
-      sectionRemove: false,
       indIndex: -1,
       indicatorLabel: 'Indicator',
       categorise: false,
@@ -117,11 +117,9 @@ const DropdownMenuPanel = props => {
             {detail.indicatorLabel && (
               <IndLabelContainer>
                 <IndicatorLabel>{detail.indicatorLabel}</IndicatorLabel>
-                {detail.sectionRemove && (
-                  <IndicatorRemove onClick={detail.removeIndicator}>
-                    Remove
-                  </IndicatorRemove>
-                )}
+                <IndicatorRemove onClick={detail.removeIndicator}>
+                  Remove
+                </IndicatorRemove>
               </IndLabelContainer>
             )}
             <ZoomSelect
@@ -170,7 +168,7 @@ const DropdownMenuPanel = props => {
               <AddSection onClick={() => detail.addIndicator()}>
                 <AddContainer>
                   <SvgIconAdd />
-                  <AddLabel> Add Indicator</AddLabel>
+                  <AddLabel>{detail.addIndLabel}</AddLabel>
                 </AddContainer>
               </AddSection>
             )}

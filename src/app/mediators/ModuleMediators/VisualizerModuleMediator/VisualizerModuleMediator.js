@@ -5,6 +5,7 @@ import { fetchQuery } from 'relay-runtime';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
+
 /* utils */
 import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
@@ -42,6 +43,7 @@ const propTypes = {
   user: PropTypes.shape({}),
   paneData: PropTypes.shape({}),
   auth0Client: PropTypes.shape({}),
+  home: PropTypes.bool,
   publicPage: PropTypes.bool,
   dropDownData: PropTypes.shape({
     allIndicators: PropTypes.shape({
@@ -72,6 +74,7 @@ const defaultProps = {
   chartResults: {},
   publicChart: {},
   auth0Client: {},
+  home: false,
   chartData: {},
   user: {},
   paneData: {},
@@ -161,7 +164,9 @@ class VisualizerModuleMediator extends Component {
 
   componentDidMount() {
     // so yeah with this we update the top bar pane with correct data
-    this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.visualizer));
+    if (!this.props.home) {
+      this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.visualizer));
+    }
 
     // we also want to reset the previously created/updated chart
     this.props.dispatch(nodeActions.createUpdateChartInitial());
@@ -170,7 +175,14 @@ class VisualizerModuleMediator extends Component {
     this.props.dispatch(nodeActions.getPublicChartInitial());
     this.props.dispatch(nodeActions.getChartInitial());
 
-    if (this.props.match.params.code !== 'vizID') {
+    if (this.props.home) {
+      // and we store the chart type so it would be accessible to the visualizer mediator
+      this.props.dispatch(
+        actions.storePaneDataRequest({
+          chartType: chartTypes.geoMap
+        })
+      );
+    } else if (this.props.match.params.code !== 'vizID') {
       this.setState(
         {
           loading: true
@@ -402,97 +414,89 @@ class VisualizerModuleMediator extends Component {
     // to add/update/remove data from/to the chart data
     let indKeys = [];
 
-    switch (this.props.match.params.chart) {
-      case chartTypes.geoMap:
-        data = formatGeoData(
-          indSelectedIndex,
-          this.props.chartData.data,
-          aggregationData
-        );
-        break;
-      case chartTypes.focusKE:
-        data = formatGeoData(
-          indSelectedIndex,
-          this.props.chartData.data,
-          aggregationData
-        );
-        break;
-      case chartTypes.focusNL:
-        data = formatGeoData(
-          indSelectedIndex,
-          this.props.chartData.data,
-          aggregationData
-        );
-        break;
-      case chartTypes.lineChart: {
-        const lineData = formatLineData(
-          indSelectedIndex,
-          this.props.chartData.chartKeys,
-          this.props.chartData.indKeys,
-          this.props.chartData.data,
-          aggregationData,
-          this.props.chartData.specOptions[graphKeys.aggregate]
-        );
+    if (this.props.home) {
+      data = formatGeoData(aggregationData);
+    } else {
+      switch (this.props.match.params.chart) {
+        case chartTypes.geoMap:
+          data = formatGeoData(aggregationData);
+          break;
+        case chartTypes.focusKE:
+          data = formatGeoData(aggregationData);
+          break;
+        case chartTypes.focusNL:
+          data = formatGeoData(aggregationData);
+          break;
+        case chartTypes.lineChart: {
+          const lineData = formatLineData(
+            indSelectedIndex,
+            this.props.chartData.chartKeys,
+            this.props.chartData.indKeys,
+            this.props.chartData.data,
+            aggregationData,
+            this.props.chartData.specOptions[graphKeys.aggregate]
+          );
 
-        data = lineData.data;
-        indKeys = lineData.indKeys;
+          data = lineData.data;
+          indKeys = lineData.indKeys;
 
-        chartKeys = formatChartLegends(
-          selectedInds,
-          this.props.chartData.specOptions[graphKeys.colorPallet],
-          this.props.chartData.chartKeys
-        );
+          chartKeys = formatChartLegends(
+            selectedInds,
+            this.props.chartData.specOptions[graphKeys.colorPallet],
+            this.props.chartData.chartKeys
+          );
 
-        break;
+          break;
+        }
+        case chartTypes.barChart: {
+          const barData = formatBarData(
+            indSelectedIndex,
+            this.props.chartData.chartKeys,
+            this.props.chartData.indKeys,
+            this.props.chartData.data,
+            aggregationData,
+            this.props.chartData.specOptions[graphKeys.aggregate],
+            this.props.chartData.specOptions[graphKeys.rankBy],
+            this.props.chartData.specOptions[graphKeys.horizont],
+            this.props.chartData.specOptions[graphKeys.colorPallet]
+          );
+
+          data = barData.data;
+          indKeys = barData.indKeys;
+
+          chartKeys = formatBarChartKeys(
+            selectedInds,
+            this.props.chartData.specOptions[graphKeys.colorPallet]
+          );
+          break;
+        }
+        case chartTypes.tableChart:
+          data = formatTableData(aggregationData);
+          break;
+        case chartTypes.donutChart: {
+          const donutData = formatDonutData(
+            this.props.chartData.indicatorSelected,
+            indSelectedIndex,
+            this.props.chartData.chartKeys,
+            this.props.chartData.indKeys,
+            this.props.chartData.data,
+            aggregationData,
+            this.props.chartData.specOptions[graphKeys.aggrCountry]
+          );
+
+          data = donutData.data;
+          indKeys = donutData.indKeys;
+
+          chartKeys = formatDonutKeys(
+            selectedInds,
+            this.props.chartData.specOptions[graphKeys.colorPallet]
+          );
+          break;
+        }
+        default:
+          data = [];
+          break;
       }
-      case chartTypes.barChart: {
-        const barData = formatBarData(
-          indSelectedIndex,
-          this.props.chartData.chartKeys,
-          this.props.chartData.indKeys,
-          this.props.chartData.data,
-          aggregationData,
-          this.props.chartData.specOptions[graphKeys.aggregate],
-          this.props.chartData.specOptions[graphKeys.rankBy],
-          this.props.chartData.specOptions[graphKeys.horizont],
-          this.props.chartData.specOptions[graphKeys.colorPallet]
-        );
-
-        data = barData.data;
-        indKeys = barData.indKeys;
-
-        chartKeys = formatBarChartKeys(
-          selectedInds,
-          this.props.chartData.specOptions[graphKeys.colorPallet]
-        );
-        break;
-      }
-      case chartTypes.tableChart:
-        data = formatTableData(aggregationData);
-        break;
-      case chartTypes.donutChart: {
-        const donutData = formatDonutData(
-          this.props.chartData.indicatorSelected,
-          indSelectedIndex,
-          this.props.chartData.chartKeys,
-          this.props.chartData.indKeys,
-          this.props.chartData.data,
-          aggregationData,
-          this.props.chartData.specOptions[graphKeys.aggrCountry]
-        );
-
-        data = donutData.data;
-        indKeys = donutData.indKeys;
-
-        chartKeys = formatDonutKeys(
-          selectedInds,
-          this.props.chartData.specOptions[graphKeys.colorPallet]
-        );
-        break;
-      }
-      default:
-        data = [];
-        break;
     }
 
     // so we will use this variable to control when we want to refetch data
@@ -583,11 +587,7 @@ class VisualizerModuleMediator extends Component {
     const refetchOne =
       index !== -1 &&
       !refetchAll &&
-      this.props.paneData.chartType !== chartTypes.tableChart &&
-      this.props.paneData.chartType !== chartTypes.geoMap &&
-      this.props.paneData.chartType !== chartTypes.focusKE &&
-      this.props.paneData.chartType !== chartTypes.focusNL;
-
+      this.props.paneData.chartType !== chartTypes.tableChart;
     const selectedInds = refetchOne ? [selectedInd[index]] : selectedInd;
 
     if (selectedInds.length > 0) {
@@ -662,10 +662,7 @@ class VisualizerModuleMediator extends Component {
 
             const updateIndIndex =
               refetchOne ||
-              this.props.paneData.chartType === chartTypes.tableChart ||
-              this.props.paneData.chartType === chartTypes.geoMap ||
-              this.props.paneData.chartType === chartTypes.focusKE ||
-              this.props.paneData.chartType === chartTypes.focusNL
+              this.props.paneData.chartType === chartTypes.tableChart
                 ? index
                 : -1;
             this.updateIndicators(indicatorData, updateIndIndex);
@@ -815,6 +812,7 @@ class VisualizerModuleMediator extends Component {
   render() {
     return (
       <VisualizerModule
+        home={this.props.home}
         saveViewport={this.saveViewport}
         chartKeys={this.props.chartData.chartKeys}
         publicPage={this.props.publicPage}
@@ -848,7 +846,8 @@ const mapStateToProps = state => {
     user: state.user.data,
     dupChartCreated: state.dupChartCreated,
     chartCreated: state.chartCreated,
-    paneData: state.paneData.paneData
+    paneData: state.paneData.paneData,
+    dataPaneOpen: state.dataPaneOpen.open
   };
 };
 

@@ -21,12 +21,12 @@ import DataMapperModule from 'modules/datamapper/DataMapperModule';
 import CountryDetailMediator from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator';
 
 /*
-const HomeModuleMediator = lazy(() =>
-  import('mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator')
+const HomeModule = lazy(() =>
+  import('modules/home/HomeModule')
 );
 */
 
-import HomeModuleMediator from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator';
+import HomeModule from 'modules/home/HomeModule';
 
 /*const FocusModuleMediator = lazy(() =>
   import('mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator')
@@ -119,8 +119,7 @@ const Routes = props => {
             exact
             path="/home"
             render={() => (
-              <HomeModuleMediator
-                indicatorAggregations={props}
+              <HomeModule
                 dropDownData={props}
                 auth0Client={props.auth0Client}
               />
@@ -143,7 +142,6 @@ const Routes = props => {
             render={() =>
               props.user ? (
                 <VisualizerModuleMediator
-                  indicatorAggregations={props}
                   dropDownData={props}
                   auth0Client={props.auth0Client}
                 />
@@ -159,7 +157,6 @@ const Routes = props => {
             render={() => (
               <VisualizerModuleMediator
                 publicPage
-                indicatorAggregations={props}
                 dropDownData={props}
                 auth0Client={props.auth0Client}
               />

@@ -40,7 +40,11 @@ export function getFocus(chartType) {
   }
 }
 
-export function formatWindowTitle(chartType) {
+export function formatWindowTitle(chartType, home) {
+  if (home) {
+    return 'Zoom - Home';
+  }
+
   switch (chartType) {
     case 'focusNL':
       return 'Zoom - Create Country Focus Page NL';

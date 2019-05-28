@@ -527,6 +527,7 @@ export function formatChartLegends(
           label: `${indName} - ${indItem.subInd.join(', ')}`,
           name: indName,
           color: colors[colorInd],
+          dataSource: indItem.dataSource,
           indIndex: index,
           orientation
         });
@@ -544,6 +545,7 @@ export function formatChartLegends(
             label: key,
             name: key,
             color: colors[colorInd],
+            dataSource: indItem.dataSource,
             indIndex: index,
             orientation
           });
@@ -660,6 +662,7 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
       if (indItem.subIndAggr) {
         chartKeys.push({
           key: indName,
+          dataSource: indItem.dataSource,
           indName,
           label: `${indName} - ${indItem.subInd.join(', ')}`,
           color: colors[colorInd]
@@ -676,6 +679,7 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
 
           chartKeys.push({
             key,
+            dataSource: indItem.dataSource,
             indName: key,
             label: key,
             color: colors[colorInd]
@@ -929,7 +933,8 @@ export function formatDonutKeys(selectedInds, colors) {
         chartKeys.push({
           label: itemId,
           name: itemId,
-          color: colors[colorInd]
+          color: colors[colorInd],
+          dataSource: indItem.dataSource
         });
 
         if (colorInd + 1 < colors.length) {
@@ -944,7 +949,8 @@ export function formatDonutKeys(selectedInds, colors) {
           chartKeys.push({
             label: itemId,
             name: itemId,
-            color: colors[colorInd]
+            color: colors[colorInd],
+            dataSource: indItem.dataSource
           });
 
           if (colorInd + 1 < colors.length) {

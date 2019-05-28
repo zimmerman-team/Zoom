@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 /* acitons */
 import * as actions from 'services/actions/general';
 /* consts */
-import initialState from '__consts__/InitialChartDataConst';
+import initialState, { initIndItem } from '__consts__/InitialChartDataConst';
 /* helpers */
 import sortBy from 'lodash/sortBy';
 
@@ -168,6 +168,35 @@ class ExplorePanelMediator extends React.Component {
     this.setState({ yearRange }, this.refetch);
   }
 
+  addIndicator() {
+    const selectedInd = [...this.props.chartData.selectedInd];
+
+    selectedInd.push(initIndItem);
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        selectedInd
+      })
+    );
+  }
+
+  removeIndicator(index) {
+    const selectedInd = [...this.props.chartData.selectedInd];
+
+    const refetch =
+      selectedInd[index].indicator &&
+      selectedInd[index].selectedSubInd.length > 0;
+
+    selectedInd.splice(index, 1);
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        selectedInd,
+        refetch
+      })
+    );
+  }
+
   refetch(
     selectedSources = this.state.selectedSources,
     year_Range = this.state.yearRange
@@ -237,8 +266,15 @@ class ExplorePanelMediator extends React.Component {
 ExplorePanelMediator.propTypes = propTypes;
 ExplorePanelMediator.defaultProps = defaultProps;
 
+const mapStateToProps = state => {
+  return {
+    chartData: state.chartData.chartData,
+    paneData: state.paneData.paneData
+  };
+};
+
 export default createFragmentContainer(
-  connect(null)(ExplorePanelMediator),
+  connect(mapStateToProps)(ExplorePanelMediator),
   graphql`
     fragment ExplorePanelMediator_dropDownData on Query {
       allCountries {

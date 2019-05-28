@@ -98,7 +98,6 @@ const propTypes = {
   removeIndicator: PropTypes.func,
   locationSelected: PropTypes.bool,
   indicatorSelected: PropTypes.bool,
-  multipleInd: PropTypes.bool,
   saveGraphOption: PropTypes.func,
   subIndAggrToggle: PropTypes.func,
   resetAll: PropTypes.func
@@ -114,7 +113,6 @@ const defaultProps = {
   subInd1AllSelected: true,
   subInd2AllSelected: true,
   indSelectedIndex: -1,
-  multipleInd: false,
   chartType: chartTypes.geoMap,
   addIndicator: null,
   specOptions: {},
@@ -150,13 +148,37 @@ class DataExplorePane extends React.Component {
 
       labelNumb = labelNumb.length > 1 ? labelNumb : '0'.concat(labelNumb);
 
+      const isGeoChart =
+        this.props.chartType === chartTypes.focusNL ||
+        this.props.chartType === chartTypes.geoMap ||
+        this.props.chartType === chartTypes.focusKE;
+
+      let addIndLabel = 'Add Indicator';
+
+      let indicatorLabel = `Indicator ${labelNumb}`;
+
+      if (isGeoChart) {
+        addIndLabel = 'Add Long/Lat Indicator';
+
+        switch (index) {
+          case 0:
+            indicatorLabel = indicatorLabel.concat(' (layer)');
+            break;
+          case 1:
+            indicatorLabel = indicatorLabel.concat(' (bubble)');
+            break;
+          default:
+            indicatorLabel = indicatorLabel.concat(' (flag)');
+            break;
+        }
+      }
+
       // we push in the indicator dropdown data
       indPanels.push({
         indIndex: index,
-        sectionRemove: this.props.multipleInd,
         removeIndicator: () => this.props.removeIndicator(index),
         isIndicator: true,
-        indicatorLabel: `Indicator ${labelNumb}`,
+        indicatorLabel,
         categorise: true,
         placeHolderText: 'Select indicator',
         placeHolderNumber: this.props.indNames.length,
@@ -171,8 +193,8 @@ class DataExplorePane extends React.Component {
       indPanels.push({
         indIndex: index,
         addIndicator: this.props.addIndicator,
-        sectionAdd:
-          index === this.props.selectedInd.length - 1 && this.props.multipleInd,
+        addIndLabel,
+        sectionAdd: index === this.props.selectedInd.length - 1,
         subIndicator: true,
         categorise: true,
         multiple: true,

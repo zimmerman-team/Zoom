@@ -109,9 +109,9 @@ export class GeoMap extends Component {
     ) {
       this.setState({
         viewport: {
+          ...this.state.viewport,
           latitude: this.props.focus.latitude,
           longitude: this.props.focus.longitude,
-
           zoom: this.props.focus.zoom
         }
       });
@@ -123,7 +123,14 @@ export class GeoMap extends Component {
       this.props.viewport.zoom !== undefined
     ) {
       this.setState({
-        viewport: this.props.viewport
+        viewport: {
+          ...this.props.viewport,
+          // oke so we want this to always be passed in like this
+          // for everything to work properly
+          // cause sometimes saved data from the backend
+          // passes this in as NOT a function
+          transitionInterpolator: new LinearInterpolator()
+        }
       });
     }
   }

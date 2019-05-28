@@ -48,6 +48,8 @@ const defaultProps = {
 };
 
 const LinechartFragment = props => {
+  console.log('props.chartKeys', props.chartKeys);
+
   return (
     <FragmentBase>
       <Box>

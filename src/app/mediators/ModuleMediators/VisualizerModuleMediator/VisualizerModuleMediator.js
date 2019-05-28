@@ -390,6 +390,7 @@ class VisualizerModuleMediator extends Component {
     const selectedInds = selectedInd.map(indItem => {
       return {
         indName: indItem.indicator,
+        dataSource: indItem.dataSource,
         subIndAggr: indItem.aggregate,
         subInd: indItem.selectedSubInd
       };

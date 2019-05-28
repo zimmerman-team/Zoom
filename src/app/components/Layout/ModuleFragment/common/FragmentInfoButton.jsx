@@ -35,7 +35,6 @@ const FragmentInfoButton = props => {
           </InvContainer>
         }
         position="top"
-        trigger="click"
       >
         <InfoIcon />
       </Tooltip>

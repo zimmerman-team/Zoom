@@ -47,6 +47,19 @@ class Auth {
     localStorage.setItem('auth_expires_at', this.expiresAt);
   };
 
+  forgetPassword = (email, reduxAction) => {
+    this.auth0.changePassword(
+      {
+        email,
+        connection: 'Username-Password-Authentication'
+      },
+      err => {
+        // console.log(err);
+        reduxAction && reduxAction();
+      }
+    );
+  };
+
   signOut = () => {
     return new Promise((resolve, reject) => {
       localStorage.removeItem('auth_access_token');

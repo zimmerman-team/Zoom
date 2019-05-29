@@ -144,7 +144,7 @@ const Routes = props => {
             exact
             path="/visualizer/:chart/:code/:tab"
             render={() =>
-              props.user ? (
+              props.user.data ? (
                 <VisualizerModuleMediator
                   indicatorAggregations={props}
                   dropDownData={props}

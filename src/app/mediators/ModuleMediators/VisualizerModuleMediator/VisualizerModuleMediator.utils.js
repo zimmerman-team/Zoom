@@ -2,7 +2,6 @@
 import chartTypes from '__consts__/ChartConst';
 import { colorSet } from '__consts__/PaneConst';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
-import { geoTypes } from '__consts__/GeolocationConst';
 
 /* utils */
 import sortBy from 'lodash/sortBy';
@@ -407,6 +406,8 @@ export function formatGeoData(indAggregations) {
   let countryLayerData = {};
   const geomapData = [];
   let countryCircleData = [];
+  let colorInd = 0;
+  const colors = colorSet[1].colors;
 
   indAggregations.forEach((aggregation, index) => {
     if (aggregation.data && aggregation.data[0]) {
@@ -465,11 +466,16 @@ export function formatGeoData(indAggregations) {
         if (longLatData.length > 0) {
           geomapData.push({
             type: 'location',
+            color: colors[colorInd],
             data: longLatData,
-            legendName: `POI: ${indName} - ${aggregation.selectedSubInd.join(
-              ', '
-            )}`
+            legendName: `${indName} - ${aggregation.selectedSubInd.join(', ')}`
           });
+
+          if (colorInd + 1 < colors.length) {
+            colorInd += 1;
+          } else {
+            colorInd = 0;
+          }
         }
       }
     }

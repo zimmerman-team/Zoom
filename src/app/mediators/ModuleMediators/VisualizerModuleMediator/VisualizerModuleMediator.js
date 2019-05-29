@@ -518,7 +518,7 @@ class VisualizerModuleMediator extends Component {
         subIndicators = sortBy(subIndicators, ['label']);
         let selectedSubInd = selectedInd[indItem.index].selectedSubInd;
 
-        if (indSelectedIndex === indItem.index) {
+        if (indSelectedIndex === indItem.index && subIndicators[0]) {
           // so if its a new indicator that gets selected
           // the selectedSubInds will be empty
           selectedSubInd = [];

@@ -2,18 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
-  fill: PropTypes.string
+  fill: PropTypes.string,
+  height: PropTypes.number,
+  width: PropTypes.number
 };
 
 const defaultProps = {
-  fill: '#00f'
+  fill: '#00f',
+  height: 14,
+  width: 16
 };
 
 const FlagIcon = props => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="14"
+    width={props.width}
+    height={props.height}
     viewBox="0 0 16 14"
   >
     <path

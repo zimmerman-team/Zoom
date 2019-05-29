@@ -19,18 +19,20 @@ export function generateMarkers(indicatorData, setMarkerInfo) {
 
   indicatorData.forEach(item => {
     switch (item.type) {
-      case 'location':
+      case 'location': {
         const locationMarkers = item.data.map((indicator, index) =>
-          locationMarker(indicator, index, setMarkerInfo)
+          locationMarker(indicator, index, setMarkerInfo, item.color)
         );
         markerArray.push(locationMarkers);
         break;
-      case 'circle':
+      }
+      case 'circle': {
         const circleMarkers = item.data.map((indicator, index) =>
           circleMarker(indicator, index, setMarkerInfo)
         );
         markerArray.push(circleMarkers);
         break;
+      }
       default:
         break;
     }

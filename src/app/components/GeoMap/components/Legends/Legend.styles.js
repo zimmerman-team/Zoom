@@ -11,7 +11,7 @@ export const LegendItem = styled.div`
 `;
 
 export const LegendLabel = styled.div`
-  padding: 10px 0 6px 0;
+  padding: 10px 0 8px 0;
   margin-left: 3px;
   line-height: 12px;
   color: ${theme.color.zoomBlack};

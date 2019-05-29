@@ -19,4 +19,5 @@ export const LocationName = styled.div`
 
 export const LocItemContainer = styled.div`
   display: flex;
+  margin-bottom: 4px;
 `;

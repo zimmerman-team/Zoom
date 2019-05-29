@@ -43,7 +43,6 @@
     "nodemon": "^1.19.0",
     "postmark": "^2.2.4",
     "prop-types": "^15.7.2",
-    "randomcolor": "^0.5.4",
     "rc-slider": "8.6.9",
     "react": "16.8.6",
     "react-cookie": "^3.1.2",

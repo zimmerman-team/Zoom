@@ -210,6 +210,8 @@ export class GeoMap extends Component {
   }
 
   setMarkerInfo(indicator) {
+    console.log('SET MARKER INFO', indicator);
+
     this.setState({
       hoverMarkerInfo: indicator
     });

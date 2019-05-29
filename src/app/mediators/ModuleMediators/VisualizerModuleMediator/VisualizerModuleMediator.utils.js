@@ -7,7 +7,6 @@ import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
 import findIndex from 'lodash/findIndex';
-import randomColor from 'randomcolor';
 
 // these are aggregation keys associated with graphql returned variables
 // 'geolocationTag' & 'date' are the graphql variables
@@ -407,6 +406,8 @@ export function formatGeoData(indAggregations) {
   let countryLayerData = {};
   const geomapData = [];
   let countryCircleData = [];
+  let colorInd = 0;
+  const colors = colorSet[1].colors;
 
   indAggregations.forEach((aggregation, index) => {
     if (aggregation.data && aggregation.data[0]) {
@@ -465,10 +466,16 @@ export function formatGeoData(indAggregations) {
         if (longLatData.length > 0) {
           geomapData.push({
             type: 'location',
-            color: randomColor(),
+            color: colors[colorInd],
             data: longLatData,
             legendName: `${indName} - ${aggregation.selectedSubInd.join(', ')}`
           });
+
+          if (colorInd + 1 < colors.length) {
+            colorInd += 1;
+          } else {
+            colorInd = 0;
+          }
         }
       }
     }

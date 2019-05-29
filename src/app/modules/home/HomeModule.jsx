@@ -45,6 +45,10 @@ export class HomeModule extends Component {
     cookies.set('homeDialogShown', 'true', { path: '/', expires: d });
   };
 
+  onClose = () => {
+    this.setState({ dialogOpen: false });
+  };
+
   componentWillUnmount() {
     // AAAND when this component unmounts we reset the chart and pane variables in redux
 

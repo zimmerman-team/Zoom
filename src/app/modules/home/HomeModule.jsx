@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Cookies from 'universal-cookie';
 
 /* utils */
 import * as actions from 'services/actions/general';
@@ -14,6 +15,7 @@ import paneTypes from '__consts__/PaneTypesConst';
 
 /* components */
 import NavPane from 'components/Panes/NavPane/NavPane';
+import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
 import VizPaneMediator from 'mediators/ComponentMediators/PaneMediators/VisPaneMediator/VizPaneMediator';
 import VisualizerModuleMediator from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator';
@@ -29,6 +31,20 @@ const defaultProps = {
 };
 
 export class HomeModule extends Component {
+  state = {
+    dialogOpen: true,
+    dialogShown: 'false'
+  };
+
+  componentDidMount = () => {
+    /* todo: the cookie logic is pretty rudimentary, suffices for now but should be optimised */
+    const cookies = new Cookies();
+    this.setState({ dialogShown: cookies.get('homeDialogShown') || 'false' });
+    let d = new Date();
+    d.setTime(d.getTime() + 1440 * 60 * 1000);
+    cookies.set('homeDialogShown', 'true', { path: '/', expires: d });
+  };
+
   componentWillUnmount() {
     // AAAND when this component unmounts we reset the chart and pane variables in redux
 
@@ -53,6 +69,9 @@ export class HomeModule extends Component {
 
     return (
       <React.Fragment>
+        {this.state.dialogShown === 'false' && (
+          <BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />
+        )}
         <VisualizerModuleMediator
           home
           dropDownData={this.props.dropDownData}

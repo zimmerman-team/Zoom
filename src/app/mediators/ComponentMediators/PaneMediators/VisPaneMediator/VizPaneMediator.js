@@ -9,6 +9,7 @@ import connect from 'react-redux/es/connect/connect';
 import * as actions from 'services/actions/general';
 /* helpers */
 import sortBy from 'lodash/sortBy';
+import isEqual from 'lodash/isEqual';
 import { formatYearParam, yearStrToArray } from 'utils/genericUtils';
 /* consts */
 import initialState, { initIndItem } from '__consts__/InitialChartDataConst';
@@ -149,6 +150,16 @@ class VizPaneMediator extends React.Component {
       },
       this.refetch
     );
+  }
+
+  componentDidUpdate(prevProps) {
+    // so basically because of silentauth it takes some time
+    // for the user to load in, so to show correct indicators
+    // for the signed in user we will refetch the indicators
+    // once user data has changed.
+    if (isEqual(this.props.user.data, prevProps.user.data)) {
+      this.refetch();
+    }
   }
 
   selectDataSource(item, array = false) {

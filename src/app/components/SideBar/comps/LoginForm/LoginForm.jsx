@@ -212,7 +212,7 @@ export class LoginForm extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.user.data,
+    user: state.currentUser.data,
     loginStatusMessage: state.loginStatusMessage.data,
     forgotPasswordEmailSent: state.forgotPasswordEmailSent.data
   };

@@ -7,8 +7,15 @@ import { createFragmentContainer, graphql } from 'react-relay';
 /* mutations */
 import DeleteFileMutation from 'mediators/DashboardMediators/mutations/DeleteFile';
 /* actions */
+import * as syncActions from 'services/actions/sync';
 import * as actions from 'services/actions/nodeBackend';
 import * as generalActions from 'services/actions/general';
+import {
+  getGroupsRequest,
+  getAllUsersRequest,
+  deleteAuthUserRequest,
+  deleteAuthGroupRequest
+} from 'services/actions/authNodeBackend';
 /* utils */
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
@@ -37,7 +44,8 @@ class DashboardMediator extends React.Component {
     loadUsers: false,
     isSortByOpen: false,
     allUsers: [],
-    allTeams: []
+    allTeams: [],
+    deletedSelf: false
   };
 
   componentDidMount = () => {
@@ -118,12 +126,24 @@ class DashboardMediator extends React.Component {
     }
 
     // we re-load the users
-    if (!isEqual(this.props.userDeleted, prevProps.userDeleted)) {
-      this.reloadData();
+    if (
+      !isEqual(this.props.deleteUser, prevProps.deleteUser) &&
+      this.props.deleteUser.success
+    ) {
+      if (this.state.deletedSelf) {
+        this.props.auth0Client.signOut().then(() => {
+          this.props.dispatch(syncActions.clearUserData());
+        });
+      } else {
+        this.reloadData();
+      }
     }
 
     // we re-load the teams
-    if (!isEqual(this.props.teamDeleted, prevProps.teamDeleted)) {
+    if (
+      !isEqual(this.props.deleteGroup, prevProps.deleteGroup) &&
+      this.props.deleteGroup.success
+    ) {
       this.reloadData();
     }
 
@@ -146,6 +166,16 @@ class DashboardMediator extends React.Component {
     ) {
       this.setState({ trashCharts: [] });
     }
+
+    // Get all users from back-end through auth0 API
+    if (!isEqual(this.props.allUsers, prevProps.allUsers)) {
+      this.setUsers(this.props.allUsers.data || []);
+    }
+
+    // Get all groups from back-end through auth0 API
+    if (!isEqual(this.props.groups, prevProps.groups)) {
+      this.setTeams(this.props.groups.data || []);
+    }
   };
 
   componentWillUnmount = () => {
@@ -154,10 +184,14 @@ class DashboardMediator extends React.Component {
 
   getAllUsers = initialLoad => {
     if (initialLoad) {
-      this.setState({ loadUsers: true });
-      this.props.auth0Client
-        .getAllUsers(this.setUsers, this.props.user)
-        .then(() => this.setState({ loadUsers: false }));
+      this.props.dispatch(
+        getAllUsersRequest(
+          {
+            userId: this.props.user.authId
+          },
+          { Authorization: `Bearer ${this.props.user.idToken}` }
+        )
+      );
     } else {
       this.setUsers(this.state.allUsers, false);
     }
@@ -188,23 +222,44 @@ class DashboardMediator extends React.Component {
     this.props.history.push(`/view-user/${userId}`);
   };
 
-  deleteUser = userId => {
-    this.props.auth0Client.deleteUser(userId, this, () =>
+  deleteUser = delId => {
+    if (delId === this.props.user.authId) {
+      // eslint-disable-next-line no-alert
+      if (window.confirm('You are about to delete yourself! Are you sure?')) {
+        this.setState({ deletedSelf: true });
+        this.props.dispatch(
+          deleteAuthUserRequest(
+            {
+              delId: delId,
+              userId: this.props.user.authId
+            },
+            { Authorization: `Bearer ${this.props.user.idToken}` }
+          )
+        );
+      }
+    } else {
       this.props.dispatch(
-        actions.deleteUserRequest({ userId, authId: this.props.user.authId })
-      )
-    );
+        deleteAuthUserRequest(
+          {
+            delId: delId,
+            userId: this.props.user.authId
+          },
+          { Authorization: `Bearer ${this.props.user.idToken}` }
+        )
+      );
+    }
   };
 
   getAllTeams = initialLoad => {
     if (initialLoad) {
-      this.setState({ loadUsers: true });
-      this.props.auth0Client
-        .getUserGroups(null, 'this.props.user', this.props.user)
-        .then(res => {
-          this.setTeams(res, true);
-          this.setState({ loadUsers: false });
-        });
+      this.props.dispatch(
+        getGroupsRequest(
+          {
+            userId: this.props.user.authId
+          },
+          { Authorization: `Bearer ${this.props.user.idToken}` }
+        )
+      );
     } else {
       this.setTeams(this.state.allTeams, false);
     }
@@ -219,7 +274,6 @@ class DashboardMediator extends React.Component {
       this.state.page,
       this.state.sort,
       this.state.searchKeyword,
-      this.state.allUsers,
       this.editTeam,
       this.deleteTeam,
       this.viewTeam
@@ -239,8 +293,14 @@ class DashboardMediator extends React.Component {
   };
 
   deleteTeam = (id, name) => {
-    this.props.auth0Client.deleteGroup(id, this, () =>
-      this.props.dispatch(actions.deleteGroupRequest({ name }))
+    this.props.dispatch(
+      deleteAuthGroupRequest(
+        {
+          delId: id,
+          name: name
+        },
+        { Authorization: `Bearer ${this.props.user.idToken}` }
+      )
     );
   };
 
@@ -435,7 +495,7 @@ class DashboardMediator extends React.Component {
     );
   }
 
-  render() {
+  render = () => {
     const greetingName =
       get(this.props.user, 'firstName', '') !== ''
         ? `${get(this.props.user, 'firstName', '')} ${get(
@@ -449,7 +509,8 @@ class DashboardMediator extends React.Component {
         loading={
           this.props.userDatasets.request ||
           this.props.userCharts.request ||
-          this.state.loadUsers
+          this.props.allUsers.request ||
+          this.props.deleteGroup.request
         }
         // tabs={tabs}
         page={this.state.page}
@@ -484,7 +545,7 @@ class DashboardMediator extends React.Component {
         auth0Client={this.props.auth0Client}
       />
     );
-  }
+  };
 }
 
 const mapStateToProps = state => {
@@ -498,8 +559,12 @@ const mapStateToProps = state => {
     userDeleted: state.userDeleted,
     // yeah so actually these are the user and team charts
     userCharts: state.userCharts,
-    user: state.user.data,
-    teamDeleted: state.groupDeleted
+    user: state.currentUser.data,
+    teamDeleted: state.groupDeleted,
+    allUsers: state.allUsers,
+    groups: state.authGroups,
+    deleteUser: state.deleteUser,
+    deleteGroup: state.deleteGroup
   };
 };
 

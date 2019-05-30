@@ -85,10 +85,9 @@ export class AppBar extends React.Component {
 
   // TODO somehow make this funciton reusable cause the same one is used in DuplicatorMediator.js
   closeSave() {
-    if (this.props.user) {
+    if (this.props.user.data) {
       this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
 
-      const profile = this.props.auth0Client.getProfile();
       const dataSources = [];
 
       this.props.chartData.selectedInd.forEach(indData => {
@@ -101,7 +100,7 @@ export class AppBar extends React.Component {
       });
 
       const chartData = {
-        authId: profile.sub,
+        authId: this.props.user.data.authId,
         dataSources,
         _public: this.props.chartData._public,
         teams: this.props.chartData.teams,
@@ -285,7 +284,7 @@ const mapStateToProps = state => {
   return {
     chartData: state.chartData.chartData,
     paneData: state.paneData.paneData,
-    user: state.user,
+    user: state.currentUser,
     chartCreated: state.chartCreated,
     dataPaneOpen: state.dataPaneOpen.open
   };

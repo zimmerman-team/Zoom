@@ -364,8 +364,6 @@ class WrapUpMediator extends React.Component {
 
       // and after everything is done mapping we can actually
       // save the dataset into our zoom backend
-      const profile = this.props.auth0Client.getProfile();
-
       const accessibility =
         typeof this.props.metaData.shared === 'string' &&
         this.props.metaData.shared === 'Yes'
@@ -374,7 +372,7 @@ class WrapUpMediator extends React.Component {
 
       this.props.dispatch(
         nodeActions.addNewDatasetRequest({
-          authId: profile.sub,
+          authId: this.props.user.authId,
           datasetId: this.props.fileId,
           name: this.props.metaData.title,
           dataSource:
@@ -430,6 +428,7 @@ class WrapUpMediator extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    user: state.currentUser.data,
     datasetAdded: state.datasetAdded,
     metaData: state.stepData.stepzData.metaData,
     wrapUpData: state.stepData.stepzData.wrapUpData,

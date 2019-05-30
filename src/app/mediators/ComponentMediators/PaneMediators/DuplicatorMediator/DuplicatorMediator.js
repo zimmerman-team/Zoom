@@ -13,14 +13,12 @@ import isEqual from 'lodash/isEqual';
 import Snackbar from 'components/Snackbar/Snackbar';
 
 const propTypes = {
-  auth0Client: PropTypes.shape({}),
   chartData: PropTypes.shape({}),
   outerHistory: PropTypes.shape({}),
   paneData: PropTypes.shape({}),
   dupChartCreated: PropTypes.shape({})
 };
 const defaultProps = {
-  auth0Client: {},
   chartData: {},
   outerHistory: {},
   paneData: {},
@@ -78,8 +76,6 @@ class DuplicatorMediator extends React.Component {
   // TODO somehow make this funciton reusable cause the same one is used in AppBar.jsx
   saveChart(chartId = 'vizID') {
     if (this.props.user) {
-      const profile = this.props.auth0Client.getProfile();
-
       const dataSources = [];
 
       this.props.chartData.selectedInd.forEach(indData => {
@@ -92,7 +88,7 @@ class DuplicatorMediator extends React.Component {
       });
 
       const chartData = {
-        authId: profile.sub,
+        authId: this.props.user.authId,
         dataSources,
         _public: this.props.chartData._public,
         teams: this.props.chartData.teams,
@@ -170,7 +166,7 @@ const mapStateToProps = state => {
     chartData: state.chartData.chartData,
     paneData: state.paneData.paneData,
     dupChartCreated: state.dupChartCreated,
-    user: state.user.data
+    user: state.currentUser.data
   };
 };
 

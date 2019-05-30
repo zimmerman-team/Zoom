@@ -394,11 +394,9 @@ class DatasetMediator extends React.Component {
     else if (response) {
       // and after everything is done mapping we can actually
       // save the dataset into our zoom backend
-      const profile = this.props.auth0Client.getProfile();
-
       this.props.dispatch(
         nodeActions.updateDatasetRequest({
-          authId: profile.sub,
+          authId: this.props.user.authId,
           datasetId: this.props.match.params.id,
           name: this.props.stepMetaData.title,
           dataSource:
@@ -502,6 +500,7 @@ class DatasetMediator extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    user: state.currentUser.data,
     datasetUpdated: state.datasetUpdated,
     stepMetaData: state.stepData.stepzData.metaData,
     stepData: state.stepData.stepzData

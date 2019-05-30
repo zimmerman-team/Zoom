@@ -1,18 +1,24 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import auth0Client from 'auth/Auth';
-import { connect } from 'react-redux';
+import React from 'react';
 import isEqual from 'lodash/isEqual';
-import { getUserRequest } from 'services/actions/nodeBackend';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { setUserIdToken } from 'services/actions/sync';
+import { getCurrentUserRequest } from 'services/actions/authNodeBackend';
 
-class Callback extends Component {
-  componentDidMount() {
-    auth0Client.handleAuthentication().then(results => {
+class Callback extends React.Component {
+  componentDidMount = () => {
+    this.props.auth0Client.handleAuthentication().then(results => {
+      this.props.dispatch(setUserIdToken(results.idToken));
       this.props.dispatch(
-        getUserRequest({ authId: results.idTokenPayload.sub })
+        getCurrentUserRequest(
+          {
+            userId: results.idTokenPayload.sub
+          },
+          { Authorization: `Bearer ${results.idToken}` }
+        )
       );
     });
-  }
+  };
 
   componentDidUpdate(prevProps) {
     if (!isEqual(prevProps.user.data, this.props.user.data))
@@ -26,7 +32,7 @@ class Callback extends Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.user
+    user: state.currentUser
   };
 };
 

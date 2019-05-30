@@ -17,6 +17,7 @@ import createEncryptor from 'redux-persist-transform-encrypt';
 import reducers from 'services/reducers';
 import mutationReducers from 'services/reducers/mutation';
 import syncReducers from 'services/reducers/sync';
+import authNodeReducers from 'services/reducers/authNodeBackend';
 import sagas from 'services/sagas';
 import generalReducers from 'services/reducers/general';
 
@@ -39,7 +40,7 @@ const encryptor = createEncryptor({
 const persistConfig = {
   key: 'root',
   storage: storageSession,
-  whitelist: ['open', 'user'],
+  whitelist: ['open', 'user', 'currentUser'],
   transforms: [encryptor]
 };
 
@@ -50,7 +51,8 @@ const store = createStore(
       ...reducers,
       ...mutationReducers,
       ...syncReducers,
-      ...generalReducers
+      ...generalReducers,
+      ...authNodeReducers
     })
   ),
   composeEnhancers(applyMiddleware(sagaMiddleware, routerMiddleware(history)))

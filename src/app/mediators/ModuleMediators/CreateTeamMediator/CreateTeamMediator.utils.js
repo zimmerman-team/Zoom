@@ -6,7 +6,7 @@ import { paginate } from 'utils/genericUtils';
 export function formatUsersData(data, initialLoad, page, sort, search) {
   let allUsers = data;
   if (initialLoad) {
-    allUsers = data.users.map(d => {
+    allUsers = data.map(d => {
       const name = isEmpty(d.user_metadata)
         ? d.email
         : `${get(d, 'user_metadata.firstName', '')} ${get(

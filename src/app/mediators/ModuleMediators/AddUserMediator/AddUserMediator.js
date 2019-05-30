@@ -1,7 +1,17 @@
 /* base */
 import React from 'react';
+import connect from 'react-redux/es/connect/connect';
+/* actions */
+import {
+  getRolesRequest,
+  getGroupsRequest,
+  addAuthUserInitial,
+  addAuthUserRequest
+} from 'services/actions/authNodeBackend';
 /* utils */
+import get from 'lodash/get';
 import sortBy from 'lodash/sortBy';
+import isEqual from 'lodash/isEqual';
 /* components */
 import AddUserModule from 'modules/UserManagement/AddUser/AddUserModule';
 
@@ -20,14 +30,47 @@ class AddUserMediator extends React.Component {
   };
 
   componentDidMount = () => {
-    this.props.auth0Client
-      .getUserGroups(null, 'this.props.user', this.props.user)
-      .then(userGroups => {
-        this.setState({
-          userGroups: sortBy(userGroups, ['label'])
-        });
+    this.props.dispatch(
+      getRolesRequest(
+        {
+          userId: this.props.user.authId
+        },
+        { Authorization: `Bearer ${this.props.user.idToken}` }
+      )
+    );
+    this.props.dispatch(
+      getGroupsRequest(
+        {
+          userId: this.props.user.authId
+        },
+        { Authorization: `Bearer ${this.props.user.idToken}` }
+      )
+    );
+  };
+
+  componentDidUpdate = prevProps => {
+    if (!isEqual(this.props.roles, prevProps.roles)) {
+      this.setState({ userRoles: this.props.roles.data });
+    }
+    if (!isEqual(this.props.groups, prevProps.groups)) {
+      this.setState({ userGroups: sortBy(this.props.groups.data, ['label']) });
+    }
+    if (
+      this.props.addUser.success !== prevProps.addUser.success &&
+      this.props.addUser.success
+    ) {
+      this.setState({
+        email: '',
+        lastName: '',
+        firstName: '',
+        userRole: { label: '', value: '', _id: '' },
+        organisation: { label: '', value: '', _id: '' }
       });
-    this.props.auth0Client.getUserRoles(this);
+    }
+  };
+
+  componentWillUnmount = () => {
+    this.props.dispatch(addAuthUserInitial());
   };
 
   changeFirstName = e => {
@@ -52,23 +95,33 @@ class AddUserMediator extends React.Component {
 
   submitForm = e => {
     e.preventDefault();
-    this.props.auth0Client.addUser(
-      this.state.firstName,
-      this.state.lastName,
-      this.state.email,
-      this.state.organisation._id,
-      this.state.userRole._id,
-      this
+    this.props.dispatch(
+      addAuthUserRequest(
+        {
+          email: this.state.email,
+          name: this.state.firstName,
+          surname: this.state.lastName,
+          groupId: this.state.organisation._id,
+          roleId: this.state.userRole._id,
+          groupName: this.state.organisation.name,
+          roleName: this.state.userRole.name
+        },
+        { Authorization: `Bearer ${this.props.user.idToken}` }
+      )
     );
   };
 
-  render() {
+  render = () => {
     return (
       <AddUserModule
         email={this.state.email}
-        success={this.state.success}
+        success={this.props.addUser.success}
         secondaryInfoMessage={this.state.secondaryInfoMessage}
-        errorMessage={this.state.errorMessage}
+        errorMessage={
+          get(this.props.addUser.error, 'result', false)
+            ? this.props.addUser.error.result
+            : ''
+        }
         lastName={this.state.lastName}
         firstName={this.state.firstName}
         userRole={this.state.userRole}
@@ -85,7 +138,16 @@ class AddUserMediator extends React.Component {
         roleOptions={this.state.userRoles}
       />
     );
-  }
+  };
 }
 
-export default AddUserMediator;
+const mapStateToProps = state => {
+  return {
+    roles: state.authRoles,
+    groups: state.authGroups,
+    user: state.currentUser.data,
+    addUser: state.addUser
+  };
+};
+
+export default connect(mapStateToProps)(AddUserMediator);

@@ -2,6 +2,7 @@ import 'isomorphic-fetch';
 import assign from 'lodash/assign';
 import querystring from 'querystring';
 import axios from 'axios';
+import get from 'lodash/get';
 
 function handleResponse(response) {
   return response.json().then(result => {
@@ -103,16 +104,20 @@ export function transactionsAggregationsRequest(values) {
 // NODE BACKEND CALL TYPES
 export function nodeBackendGetRequest(request) {
   return axios.get(`/api/${request.endpoint}`, {
-    params: request.values
+    params: request.values,
+    headers: get(request, 'headers', {})
   });
 }
 
 export function nodeBackendPostRequest(request) {
-  return axios.post(`/api/${request.endpoint}`, request.values);
+  return axios.post(`/api/${request.endpoint}`, request.values, {
+    headers: get(request, 'headers', {})
+  });
 }
 
 export function nodeBackendDeleteRequest(request) {
   return axios.delete(`/api/${request.endpoint}`, {
-    params: request.values
+    params: request.values,
+    headers: get(request, 'headers', {})
   });
 }

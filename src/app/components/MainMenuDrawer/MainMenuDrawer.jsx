@@ -47,7 +47,7 @@ class MainMenuDrawer extends React.Component {
               >
                 <SidebarNavListItem
                   type={item.type}
-                  loggedIn={this.props.user.data !== null}
+                  loggedIn={this.props.user !== null}
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>
                   <ZoomListItemText primary={item.label} />

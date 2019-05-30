@@ -855,7 +855,7 @@ const mapStateToProps = state => {
   return {
     chartResults: state.chartResults.data,
     chartData: state.chartData.chartData,
-    user: state.user.data,
+    user: state.currentUser.data,
     dupChartCreated: state.dupChartCreated,
     chartCreated: state.chartCreated,
     paneData: state.paneData.paneData,

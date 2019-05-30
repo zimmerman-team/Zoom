@@ -3,7 +3,14 @@ import React from 'react';
 import filter from 'lodash/filter';
 import { connect } from 'react-redux';
 /* actions */
-import { updateUsersTeamRequest } from 'services/actions/nodeBackend';
+import {
+  getAllUsersRequest,
+  addAuthGroupRequest,
+  addAuthGroupInitial
+} from 'services/actions/authNodeBackend';
+/* utils */
+import get from 'lodash/get';
+import isEqual from 'lodash/isEqual';
 /* components */
 import CreateTeamModule from 'modules/UserManagement/CreateTeam/CreateTeamModule';
 import { formatUsersData } from './CreateTeamMediator.utils';
@@ -30,13 +37,36 @@ class CreateTeamMediator extends React.Component {
     document.addEventListener('mousedown', this.handleClickOutside);
   };
 
+  componentDidUpdate = prevProps => {
+    if (!isEqual(this.props.allUsers, prevProps.allUsers)) {
+      this.setUsers(this.props.allUsers.data || []);
+    }
+    if (
+      this.props.addGroup.success !== prevProps.addGroup.success &&
+      this.props.addGroup.success
+    ) {
+      this.setState({
+        name: '',
+        users: []
+      });
+    }
+  };
+
   componentWillUnmount = () => {
+    this.props.dispatch(addAuthGroupInitial());
     document.removeEventListener('mousedown', this.handleClickOutside);
   };
 
   getAllUsers = initialLoad => {
     if (initialLoad) {
-      this.props.auth0Client.getAllUsers(this.setUsers, this.props.user.data);
+      this.props.dispatch(
+        getAllUsersRequest(
+          {
+            userId: this.props.user.authId
+          },
+          { Authorization: `Bearer ${this.props.user.idToken}` }
+        )
+      );
     } else {
       this.setUsers(this.state.allUsers, false);
     }
@@ -54,7 +84,7 @@ class CreateTeamMediator extends React.Component {
       allUsers: result.allUsers,
       paginatedUsers: result.paginatedUsers,
       totalPages: initialLoad
-        ? Math.ceil(data.users.length / 10)
+        ? Math.ceil(data.length / 10)
         : prevState.totalPages
     }));
   };
@@ -136,32 +166,20 @@ class CreateTeamMediator extends React.Component {
 
   submitForm = e => {
     e.preventDefault();
-    this.setState({ loading: true });
 
-    const team = this.state.name;
-    const users = this.state.users;
-
-    this.props.auth0Client
-      .addGroup(this.state.name, this.state.users, this)
-      .then(() => {
-        // and after everything has been succesfully done on auth0
-        // we save the new user roles in zoombackend
-        this.props.dispatch(
-          updateUsersTeamRequest({
-            user: {
-              authId: this.props.auth0Client.getProfile().sub
-            },
-            team,
-            updateUsers: users.map(authId => {
-              return { authId };
-            })
-          })
-        );
-        this.setState({ loading: false });
-      });
+    this.props.dispatch(
+      addAuthGroupRequest(
+        {
+          userId: this.props.user.authId,
+          name: this.state.name,
+          usersToAdd: this.state.users
+        },
+        { Authorization: `Bearer ${this.props.user.idToken}` }
+      )
+    );
   };
 
-  render() {
+  render = () => {
     return (
       <CreateTeamModule
         users={this.state.users}
@@ -170,10 +188,14 @@ class CreateTeamMediator extends React.Component {
         changeName={this.changeName}
         totalPages={this.state.totalPages}
         changeSearchKeyword={this.changeSearchKeyword}
-        success={this.state.success}
-        loading={this.state.loading}
+        success={this.props.addGroup.success}
+        loading={this.props.addGroup.request || this.props.allUsers.request}
         secondaryInfoMessage={this.state.secondaryInfoMessage}
-        errorMessage={this.state.errorMessage}
+        errorMessage={
+          get(this.props.addGroup.error, 'result', false)
+            ? this.props.addGroup.error.result
+            : ''
+        }
         addRemoveUser={this.addRemoveUser}
         addRemoveAllUsers={this.addRemoveAllUsers}
         changePage={this.changePage}
@@ -185,13 +207,15 @@ class CreateTeamMediator extends React.Component {
         selectedSortBy={this.state.sort}
       />
     );
-  }
+  };
 }
 
 const mapStateToProps = state => {
   return {
+    allUsers: state.allUsers,
     usersTeam: state.usersTeam,
-    user: state.user
+    user: state.currentUser.data,
+    addGroup: state.addGroup
   };
 };
 

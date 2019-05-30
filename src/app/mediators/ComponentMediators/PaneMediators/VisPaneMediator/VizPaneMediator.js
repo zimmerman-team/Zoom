@@ -157,7 +157,7 @@ class VizPaneMediator extends React.Component {
     // for the user to load in, so to show correct indicators
     // for the signed in user we will refetch the indicators
     // once user data has changed.
-    if (isEqual(this.props.user.data, prevProps.user.data)) {
+    if (!isEqual(this.props.user.data, prevProps.user.data)) {
       this.refetch();
     }
   }

@@ -28,6 +28,7 @@ const TabNavigator = props => {
     <ComponentBase>
       {props.navItems.map((item, index) => (
         <TabNavigatorItem
+          disable={item.disable}
           chart={props.chart}
           key={item.path}
           code={props.code}

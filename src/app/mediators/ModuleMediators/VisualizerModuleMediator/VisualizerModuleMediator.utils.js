@@ -1,11 +1,12 @@
-import findIndex from 'lodash/findIndex';
-import { scaleQuantile } from 'd3-scale';
-import { range } from 'd3-array';
 /* consts */
 import chartTypes from '__consts__/ChartConst';
 import { colorSet } from '__consts__/PaneConst';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
-import { geoTypes } from '__consts__/GeolocationConst';
+
+/* utils */
+import sortBy from 'lodash/sortBy';
+import filter from 'lodash/filter';
+import findIndex from 'lodash/findIndex';
 
 // these are aggregation keys associated with graphql returned variables
 // 'geolocationTag' & 'date' are the graphql variables
@@ -15,16 +16,30 @@ export const aggrKeys = {
 };
 
 // Updates layer percentiles depending on the value
-export function updatePercentiles(featureCollection, accessor) {
-  const { features } = featureCollection;
-  const scale = scaleQuantile()
-    .domain(features.map(accessor))
-    .range(range(9));
-  features.forEach(f => {
-    const value = accessor(f);
-    f.properties.value = value;
-    f.properties.percentile = scale(value);
-  });
+// and updates the unique value amount that will be used
+// to determine the amount of color stops
+export function updatePercentiles(featureCollection) {
+  let { features } = featureCollection;
+
+  let uniqCount = 0;
+
+  if (features.length > 0) {
+    // so first we sort the values from lowest to highest
+    features = sortBy(features, ['properties.value']);
+
+    // so we'll start with the first lowest value
+    let currentValue = features[0].properties.value;
+    // and then we give percentile values to features
+    features.forEach(f => {
+      if (currentValue !== f.properties.value) {
+        uniqCount += 1;
+        currentValue = f.properties.value;
+      }
+      f.properties.percentile = uniqCount;
+    });
+  }
+
+  featureCollection.uniqCount = uniqCount;
 }
 
 export function formatCountryLayerData(
@@ -391,40 +406,15 @@ export function formatGeoData(indAggregations) {
   let countryLayerData = {};
   const geomapData = [];
   let countryCircleData = [];
+  let colorInd = 0;
+  const colors = colorSet[1].colors;
 
   indAggregations.forEach((aggregation, index) => {
     if (aggregation.data && aggregation.data[0]) {
       const indName = aggregation.data[0].indicatorName;
 
-      // so we check here if the retrieved data is long lat
-      // and then format it differently
-      // TODO: make this work differently, this is currently i quick and dirty fix
-      if (
-        aggregation.data[0] &&
-        aggregation.data[0].geolocationType &&
-        aggregation.data[0].geolocationType === geoTypes.pointBased
-      ) {
-        // so if the tag contains some numbers divided by a comma
-        // that means that its a long/lat aggregation
-        // and it then overrides the other legend types on the geomap
-        longLatData = formatLongLatData(
-          aggregation.data,
-          indName,
-          aggregation.selectedSubInd,
-          aggregation.subIndAggr
-        );
-
-        // and we push them into the indicatorData array for the geomap
-        if (longLatData.length > 0) {
-          geomapData.push({
-            type: 'location',
-            data: longLatData,
-            legendName: `POI: ${indName} - ${aggregation.selectedSubInd.join(
-              ', '
-            )}`
-          });
-        }
-      } else if (index === 0) {
+      // so the first data item is layer legend
+      if (index === 0) {
         // so for the first indicator aggregation on the geomap
         // we form the layers
         countryLayerData = formatCountryLayerData(
@@ -436,7 +426,7 @@ export function formatGeoData(indAggregations) {
 
         // and we push them into the indicatorData array for the geomap
         if (countryLayerData.features && countryLayerData.features.length > 0) {
-          updatePercentiles(countryLayerData, f => f.properties.value);
+          updatePercentiles(countryLayerData);
 
           geomapData.push({
             type: 'layer',
@@ -445,6 +435,7 @@ export function formatGeoData(indAggregations) {
           });
         }
       } else if (index === 1) {
+        // the second is circle legend
         // and for the second indicator aggregation on the geomap
         // we format the center data
         countryCircleData = formatCountryCenterData(
@@ -462,12 +453,31 @@ export function formatGeoData(indAggregations) {
             legendName: ` ${indName} - ${aggregation.selectedSubInd.join(', ')}`
           });
         }
+      } else {
+        // all others are long/lat indicators
+        longLatData = formatLongLatData(
+          aggregation.data,
+          indName,
+          aggregation.selectedSubInd,
+          aggregation.subIndAggr
+        );
+
+        // and we push them into the indicatorData array for the geomap
+        if (longLatData.length > 0) {
+          geomapData.push({
+            type: 'location',
+            color: colors[colorInd],
+            data: longLatData,
+            legendName: `${indName} - ${aggregation.selectedSubInd.join(', ')}`
+          });
+
+          if (colorInd + 1 < colors.length) {
+            colorInd += 1;
+          } else {
+            colorInd = 0;
+          }
+        }
       }
-      // else {
-      //   // here we'll format mainly the long/lat data
-      //   // when this functionality for the geomap will
-      //   // be addressed
-      // }
     }
   });
 
@@ -512,7 +522,9 @@ export function formatChartLegends(
           label: `${indName} - ${indItem.subInd.join(', ')}`,
           name: indName,
           color: colors[colorInd],
+          dataSource: indItem.dataSource,
           indIndex: index,
+          indIndexedName: indName,
           orientation
         });
 
@@ -529,7 +541,9 @@ export function formatChartLegends(
             label: key,
             name: key,
             color: colors[colorInd],
+            dataSource: indItem.dataSource,
             indIndex: index,
+            indIndexedName: indName,
             orientation
           });
 
@@ -559,11 +573,52 @@ export function formatChartLegends(
 // it would be wats shown on the x Axis of the linechart
 // and the subIndAggr will be used to aggregate or disaggregate by the
 // indicators selected Sub indicators
-export function formatLineData(indicators, aggregate) {
-  const aggrKey = aggrKeys[aggregate];
+export function formatLineData(
+  indSelectedIndex,
+  currChartKeys,
+  currIndKeys,
+  currData,
+  indicators,
+  aggregate
+) {
+  let indicatorData = [];
 
-  const indicatorData = [];
-  const indicatorNames = [];
+  // so this variable will help us form keys
+  // for the line chart
+  let indicatorNames = [];
+
+  if (indSelectedIndex !== -1) {
+    indicatorData = [...currData];
+    indicatorNames = [...currIndKeys];
+
+    // so basically if an indicator or data associated
+    // with ONLY that indicator
+    // has been changed we remove the current data of this
+    // indicator cause we have recalled all of it and need to
+    // replace it
+    let keysToRemove = filter(currChartKeys, ['indIndex', indSelectedIndex]);
+
+    if (keysToRemove.length > 0) {
+      keysToRemove.forEach(keyItem => {
+        indicatorData.forEach(item => {
+          if (item[keyItem.name]) {
+            // and then we just delete it
+            delete item[keyItem.name];
+            delete item[`${keyItem.name}Format`];
+          }
+        });
+
+        const remIndKeyIndex = indicatorNames.indexOf(keyItem.indIndexedName);
+
+        if (remIndKeyIndex !== -1) {
+          // and also we remove the indicator key item
+          indicatorNames.splice(remIndKeyIndex, 1);
+        }
+      });
+    }
+  }
+
+  const aggrKey = aggrKeys[aggregate];
 
   indicators.forEach((indicator, index) => {
     if (indicator.data.length > 0) {
@@ -617,7 +672,15 @@ export function formatLineData(indicators, aggregate) {
     }
   });
 
-  return indicatorData;
+  // so yeah because of optimisation we want to sort this data
+  // on the frontend
+  // eventuallyy this whole data will be coming from the backend
+  // so no need to worry
+
+  return {
+    data: sortBy(indicatorData, [aggregate]),
+    indKeys: indicatorNames
+  };
 }
 
 // so this function basically formats the
@@ -644,10 +707,15 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
 
       if (indItem.subIndAggr) {
         chartKeys.push({
+          indIndexedName: indName,
           key: indName,
+          dataSource: indItem.dataSource,
           indName,
           label: `${indName} - ${indItem.subInd.join(', ')}`,
-          color: colors[colorInd]
+          color: colors[colorInd],
+          // this will be used for data manipulation
+          // to optimise indicator data refetching
+          indIndex: index
         });
 
         if (colorInd + 1 < colors.length) {
@@ -661,9 +729,14 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
 
           chartKeys.push({
             key,
+            dataSource: indItem.dataSource,
             indName: key,
+            indIndexedName: indName,
             label: key,
-            color: colors[colorInd]
+            color: colors[colorInd],
+            // this will be used for data manipulation
+            // to optimise indicator data refetching
+            indIndex: index
           });
 
           if (colorInd + 1 < colors.length) {
@@ -679,14 +752,63 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
   return chartKeys;
 }
 
-export function formatBarData(indicators, colors = colorSet[0].colors) {
-  const barChartData = [];
-  const barChartKeys = [];
+export function formatBarData(
+  indSelectedIndex,
+  currChartKeys,
+  currIndKeys,
+  currData,
+  indicators,
+  aggregate,
+  rankBy,
+  horizontal,
+  colors = colorSet[0].colors
+) {
+  let barChartData = [];
+
+  // so this variable will help us form keys
+  // for the bar chart
+  let barIndKeys = [];
+
+  if (indSelectedIndex !== -1) {
+    barChartData = [...currData];
+    barIndKeys = [...currIndKeys];
+
+    // so basically if an indicator or data associated
+    // with ONLY that indicator
+    // has been changed we remove the current data of this
+    // indicator cause we have recalled all of it and need to
+    // replace it
+    let keysToRemove = filter(currChartKeys, ['indIndex', indSelectedIndex]);
+
+    if (keysToRemove.length > 0) {
+      keysToRemove.forEach(keyItem => {
+        barChartData.forEach(item => {
+          if (item[keyItem.key]) {
+            // so if the key exists we first substract its
+            // value from the 'allValSum' item so that
+            // bar sorting would still work properly
+            item.allValSum -= item[keyItem.key];
+            // and then we just delete it
+            delete item[keyItem.key];
+          }
+        });
+
+        const remIndKeyIndex = barIndKeys.indexOf(keyItem.indIndexedName);
+
+        if (remIndKeyIndex !== -1) {
+          // and also we remove the indicator key item
+          barIndKeys.splice(remIndKeyIndex, 1);
+        }
+      });
+    }
+  }
+
+  const aggrKey = aggrKeys[aggregate];
 
   let colorInd = 0;
   indicators.forEach((indicator, index) => {
     if (indicator.data.length > 0) {
-      const existInd = barChartKeys.indexOf(indicator.data[0].indicatorName);
+      const existInd = barIndKeys.indexOf(indicator.data[0].indicatorName);
       let indName = indicator.data[0].indicatorName;
 
       // so we need this logic for when a person would
@@ -695,14 +817,23 @@ export function formatBarData(indicators, colors = colorSet[0].colors) {
       // the index as a suffix
       if (existInd !== -1) indName = indName.concat(` (${index})`);
 
-      barChartKeys.push(indName);
+      barIndKeys.push(indName);
 
       indicator.data.forEach(indItem => {
         // yeah and cause we might receive data with the same geolocation name
         // we add in the values for that geolocation so it wouldn't be repeated over and over
         const existItemInd = findIndex(barChartData, existing => {
-          return indItem.geolocationTag === existing.geoName;
+          return indItem[aggrKey] === existing[aggrKey];
         });
+
+        let aggrValue = indItem.date;
+
+        if (aggrKey === 'geolocationTag') {
+          aggrValue =
+            indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
+              ? indItem.geolocationIso2.toUpperCase()
+              : indItem.geolocationTag;
+        }
 
         let itemId = `${indName} - ${indItem.filterName}`;
         let label = itemId;
@@ -714,21 +845,23 @@ export function formatBarData(indicators, colors = colorSet[0].colors) {
 
         if (existItemInd === -1) {
           barChartData.push({
+            // so this variable will basically be used for sorting
+            // by biggest or lowest value, of joined bars
+            allValSum: Math.round(indItem.value),
             [`${itemId}Label`]: label,
-            geoName: indItem.geolocationTag,
 
-            geolocation:
-              indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
-                ? indItem.geolocationIso2.toUpperCase()
-                : indItem.geolocationTag,
+            [aggrKey]: indItem[aggrKey],
+            [aggregate]: aggrValue,
 
             [itemId]: Math.round(indItem.value),
             [`${itemId}Color`]: colors[colorInd],
             [`${itemId}Format`]: indItem.valueFormatType
           });
         } else if (barChartData[existItemInd][itemId] !== undefined) {
+          barChartData[existItemInd].allValSum += Math.round(indItem.value);
           barChartData[existItemInd][itemId] += Math.round(indItem.value);
         } else {
+          barChartData[existItemInd].allValSum += Math.round(indItem.value);
           barChartData[existItemInd][itemId] = Math.round(indItem.value);
           barChartData[existItemInd][`${itemId}Color`] = colors[colorInd];
           barChartData[existItemInd][`${itemId}Label`] = label;
@@ -741,7 +874,21 @@ export function formatBarData(indicators, colors = colorSet[0].colors) {
     }
   });
 
-  return barChartData;
+  let sortedData = [];
+
+  if ((rankBy === 'high' && horizontal) || (rankBy === 'low' && !horizontal)) {
+    sortedData = sortBy(barChartData, ['allValSum']);
+  } else if (
+    (rankBy === 'high' && !horizontal) ||
+    (rankBy === 'low' && horizontal)
+  ) {
+    sortedData = sortBy(barChartData, ['allValSum']).reverse();
+  }
+
+  return {
+    data: sortedData,
+    indKeys: barIndKeys
+  };
 }
 
 export function formatTableData(indicators) {
@@ -795,9 +942,62 @@ export function formatTableData(indicators) {
   };
 }
 
-export function formatDonutData(indicators) {
-  const chartData = [];
-  const donutChartLabels = [];
+export function formatDonutData(
+  prevChart,
+  indSelectedIndex,
+  currChartKeys,
+  currIndKeys,
+  currData,
+  indicators,
+  aggrCountry
+) {
+  let chartData = [];
+
+  // so this variable will help us form keys
+  // for the bar chart
+  let donutChartLabels = [];
+
+  if (indSelectedIndex !== -1) {
+    donutChartLabels = [...currIndKeys];
+
+    // so basically if an indicator or data associated
+    // with ONLY that indicator
+    // has been changed we remove the current data of this
+    // indicator cause we have recalled all of it and need to
+    // replace it
+    const keysToRemove = filter(currChartKeys, ['indIndex', indSelectedIndex]);
+
+    if (keysToRemove.length > 0) {
+      currData.forEach(item => {
+        let pushItem = true;
+
+        for (let i = 0; i < keysToRemove.length; i += 1) {
+          if (item.label === keysToRemove[i].name) {
+            // so if the items key exist in the keysToremove
+            // we want to NOT push the item in
+
+            pushItem = false;
+            break;
+          }
+        }
+
+        if (pushItem) {
+          chartData.push(item);
+        }
+      });
+
+      keysToRemove.forEach(keyItem => {
+        const remIndKeyIndex = donutChartLabels.indexOf(keyItem.indIndexedName);
+
+        if (remIndKeyIndex !== -1) {
+          // and also we remove the indicator key item
+          donutChartLabels.splice(remIndKeyIndex, 1);
+        }
+      });
+    } else {
+      chartData = [...currData];
+    }
+  }
 
   indicators.forEach((indicator, indIndex) => {
     if (indicator.data[0]) {
@@ -812,7 +1012,7 @@ export function formatDonutData(indicators) {
 
       donutChartLabels.push(indName);
 
-      indicator.data.forEach(indItem => {
+      indicator.data.forEach((indItem, itemIndex) => {
         let itemId = `${indName} - ${indItem.filterName}`;
         let label = itemId;
 
@@ -821,21 +1021,45 @@ export function formatDonutData(indicators) {
           label = `${indName} - ${indicator.selectedSubInd.join(', ')}`;
         }
 
-        const chartItemInd = findIndex(chartData, ['id', itemId]);
+        const chartItemInd = findIndex(chartData, chartItem => {
+          if (aggrCountry) {
+            return chartItem.key === itemId;
+          }
+
+          return (
+            chartItem.key === itemId &&
+            chartItem.geolocationTag === indItem.geolocationTag
+          );
+        });
 
         if (chartItemInd === -1) {
+          let geoName = null;
+
+          if (!aggrCountry) {
+            geoName = indItem.geolocationTag;
+            geoName = geoName.charAt(0).toUpperCase() + geoName.slice(1);
+          }
+
           chartData.push({
-            id: itemId,
+            geoName,
+            geolocationTag: indItem.geolocationTag,
+            id: `${itemId} ${itemIndex}`,
+            key: `${itemId}`,
             label,
             value: Math.round(indItem.value),
             format: indItem.valueFormatType
           });
-        } else chartData[chartItemInd].value += Math.round(indItem.value);
+        } else {
+          chartData[chartItemInd].value += Math.round(indItem.value);
+        }
       });
     }
   });
 
-  return chartData;
+  return {
+    data: chartData,
+    indKeys: donutChartLabels
+  };
 }
 
 // so here we gonna format the donut keys according to the
@@ -863,6 +1087,9 @@ export function formatDonutKeys(selectedInds, colors) {
         chartKeys.push({
           label: itemId,
           name: itemId,
+          indIndex: index,
+          indIndexedName: name,
+          dataSource: indItem.dataSource,
           color: colors[colorInd]
         });
 
@@ -878,6 +1105,9 @@ export function formatDonutKeys(selectedInds, colors) {
           chartKeys.push({
             label: itemId,
             name: itemId,
+            indIndex: index,
+            indIndexedName: name,
+            dataSource: indItem.dataSource,
             color: colors[colorInd]
           });
 

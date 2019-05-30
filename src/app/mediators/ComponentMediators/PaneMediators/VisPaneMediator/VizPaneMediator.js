@@ -15,8 +15,10 @@ import initialState, { initIndItem } from '__consts__/InitialChartDataConst';
 import chartTypes from '__consts__/ChartConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
 import { maxYear } from '__consts__/TimeLineConst';
+import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 
 const propTypes = {
+  display: PropTypes.string,
   dropDownData: PropTypes.shape({
     exploreIndicators: PropTypes.shape({
       edges: PropTypes.arrayOf(
@@ -41,6 +43,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+  display: 'block',
   dropDownData: {}
 };
 
@@ -48,10 +51,12 @@ const indicatorQuery = graphql`
   query VizPaneMediatorQuery(
     $year_Range: String!
     $fileSource_Name_In: String!
+    $file_Accessibility: String!
   ) {
     allIndicators(
       year_Range: $year_Range
       fileSource_Name_In: $fileSource_Name_In
+      file_Accessibility: $file_Accessibility
     ) {
       edges {
         node {
@@ -116,7 +121,11 @@ class VizPaneMediator extends React.Component {
     allCountries = sortBy(allCountries, ['label']);
 
     let allRegions = this.props.dropDownData.allRegions.edges.map(indicator => {
-      return { label: indicator.node.name, value: indicator.node.country };
+      return {
+        label: indicator.node.name,
+        value: indicator.node.country,
+        codeVal: indicator.node.code
+      };
     });
 
     allRegions = sortBy(allRegions, ['label']);
@@ -226,7 +235,8 @@ class VizPaneMediator extends React.Component {
 
     const refetchVars = {
       year_Range,
-      fileSource_Name_In
+      fileSource_Name_In,
+      file_Accessibility: this.props.user.data ? 'z' : 'a'
     };
 
     fetchQuery(this.props.relay.environment, indicatorQuery, refetchVars).then(
@@ -272,6 +282,7 @@ class VizPaneMediator extends React.Component {
     if (val === 'resetAll') {
       this.props.dispatch(
         actions.storeChartDataRequest({
+          refetch: true,
           selectedInd: selectedInd.map((indItem, ind) => {
             if (ind === 0 && process.env.NODE_ENV === 'development') {
               return {
@@ -296,7 +307,8 @@ class VizPaneMediator extends React.Component {
         selectedInd[index].dataSource = undefined;
         this.props.dispatch(
           actions.storeChartDataRequest({
-            selectedInd
+            selectedInd,
+            refetch: true
           })
         );
       } else {
@@ -306,8 +318,16 @@ class VizPaneMediator extends React.Component {
         // indicators data point, so
         this.props.dispatch(
           actions.storeChartDataRequest({
+            // so the year reselection functionality only works with geolocations thats why we
+            // refetch all indicators only when the aggregate option IS geolocation
+            refetchAll:
+              this.props.chartData.specOptions[graphKeys.aggregate] ===
+                aggrOptions[0].value &&
+              this.props.chartData.selectedYear !== val.firstYear,
             selectedInd,
+            indicatorSelected: true,
             indSelectedIndex: index,
+            refetch: true,
             selectedYear: val.firstYear
           })
         );
@@ -359,6 +379,8 @@ class VizPaneMediator extends React.Component {
     // so we set the values for chart data
     this.props.dispatch(
       actions.storeChartDataRequest({
+        indSelectedIndex: index,
+        refetch: true,
         selectedInd
       })
     );
@@ -398,7 +420,8 @@ class VizPaneMediator extends React.Component {
     this.props.dispatch(
       actions.storeChartDataRequest({
         selectedCountryVal,
-        selectedCountryLabels
+        selectedCountryLabels,
+        refetch: true
       })
     );
 
@@ -408,6 +431,7 @@ class VizPaneMediator extends React.Component {
   selectRegion(item, array = false) {
     let selectedRegionVal = [];
     let selectedRegionLabels = [];
+    let selectedRegionCodes = [];
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
@@ -416,20 +440,24 @@ class VizPaneMediator extends React.Component {
         item.forEach(it => {
           selectedRegionVal.push(it.value);
           selectedRegionLabels.push(it.label);
+          selectedRegionCodes.push(it.codeVal);
         });
       } else {
         selectedRegionVal = [...this.props.chartData.selectedRegionVal];
         selectedRegionLabels = [...this.props.chartData.selectedRegionLabels];
-        const regionIndex = selectedRegionVal.indexOf(item.value);
+        selectedRegionCodes = [...this.props.chartData.selectedRegionCodes];
+        const regionIndex = selectedRegionCodes.indexOf(item.codeVal);
 
         if (regionIndex === -1) {
           // so if it doesn't exist we add it
           selectedRegionVal.push(item.value);
           selectedRegionLabels.push(item.label);
+          selectedRegionCodes.push(item.codeVal);
         } else {
           // if it does exist we remove it
           selectedRegionVal.splice(regionIndex, 1);
           selectedRegionLabels.splice(regionIndex, 1);
+          selectedRegionCodes.splice(regionIndex, 1);
         }
       }
     }
@@ -437,7 +465,9 @@ class VizPaneMediator extends React.Component {
     this.props.dispatch(
       actions.storeChartDataRequest({
         selectedRegionVal,
-        selectedRegionLabels
+        selectedRegionLabels,
+        selectedRegionCodes,
+        refetch: true
       })
     );
 
@@ -482,11 +512,16 @@ class VizPaneMediator extends React.Component {
   removeIndicator(index) {
     const selectedInd = [...this.props.chartData.selectedInd];
 
+    const refetch =
+      selectedInd[index].indicator &&
+      selectedInd[index].selectedSubInd.length > 0;
+
     selectedInd.splice(index, 1);
 
     this.props.dispatch(
       actions.storeChartDataRequest({
-        selectedInd
+        selectedInd,
+        refetch
       })
     );
 
@@ -567,15 +602,11 @@ class VizPaneMediator extends React.Component {
 
     this.props.dispatch(
       actions.storeChartDataRequest({
+        indSelectedIndex: index,
         selectedInd,
-        // so this variable is true then a refetch of data will not happen,
-        // because it makes sense to not regetch data when aggregation
-        // for a not selected indicator has been done, cause there's
-        // nothing to reagregate
-        noRefetch: !(
+        refetch:
           selectedInd[index].indicator &&
           selectedInd[index].selectedSubInd.length > 0
-        )
       })
     );
   }
@@ -593,7 +624,16 @@ class VizPaneMediator extends React.Component {
         actions.storeChartDataRequest({
           specOptions,
           changesMade: true,
+          refetch: true,
           selectedYears: formatYearParam([startYear, endYear])
+        })
+      );
+    } else if (key === graphKeys.aggrCountry) {
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          changesMade: true,
+          refetch: true,
+          specOptions
         })
       );
     } else {
@@ -612,11 +652,6 @@ class VizPaneMediator extends React.Component {
           this.props.paneData.chartType === chartTypes.lineChart
             ? this.handleAxisSwitch
             : null
-        }
-        multipleInd={
-          this.props.paneData.chartType !== chartTypes.geoMap &&
-          this.props.paneData.chartType !== chartTypes.focusNL &&
-          this.props.paneData.chartType !== chartTypes.focusKE
         }
         subIndAggrToggle={this.subIndAggrToggle}
         chartType={this.props.paneData.chartType}
@@ -638,15 +673,18 @@ class VizPaneMediator extends React.Component {
         selectInd={this.selectInd}
         selectSubInd={this.selectSubInd}
         indSelectedIndex={this.props.chartData.indSelectedIndex}
+        indicatorSelected={this.props.chartData.indicatorSelected}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.props.chartData.selectedCountryVal}
         selectedCountryLabel={this.props.chartData.selectedCountryLabels}
         selectedRegionVal={this.props.chartData.selectedRegionVal}
+        selectedRegionCodes={this.props.chartData.selectedRegionCodes}
         selectedRegionLabels={this.props.chartData.selectedRegionLabels}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
         selectYearRange={this.selectYearRange}
         yearRange={yearStrToArray(this.state.yearRange)}
+        display={this.props.display}
       />
     );
   }
@@ -658,7 +696,8 @@ VizPaneMediator.defaultProps = defaultProps;
 const mapStateToProps = state => {
   return {
     chartData: state.chartData.chartData,
-    paneData: state.paneData.paneData
+    paneData: state.paneData.paneData,
+    user: state.user
   };
 };
 
@@ -685,6 +724,7 @@ export default createFragmentContainer(
         edges {
           node {
             name
+            code
             country {
               iso2
             }

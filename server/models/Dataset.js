@@ -10,7 +10,7 @@ const DatasetSchema = new Schema(
     name: { type: String, min: 1 },
     team: { type: String, default: '' },
     teams: [{ type: String }],
-    public: { type: Boolean, default: false },
+    public: { type: String, default: 'p' },
     dataSource: { type: String, required: true }
   },
   {

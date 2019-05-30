@@ -11,9 +11,9 @@ import paneTypes from '__consts__/PaneTypesConst';
 import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';
 import VizContainer from 'modules/visualizer/sort/container/VizContainer';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
+
 /* utils */
 import { formatWindowTitle } from './VisualizerModule.utils';
-
 // import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
 const ModuleBase = styled.div`
@@ -36,6 +36,7 @@ const propTypes = {
   chartTitle: PropTypes.string,
   publicPage: PropTypes.bool,
   saveViewport: PropTypes.func,
+  home: PropTypes.bool,
   moduleMode: PropTypes.string
 };
 
@@ -50,6 +51,7 @@ const defaultProps = {
   chartType: PropTypes.string,
   chartTitle: '',
   saveViewport: null,
+  home: false,
   loggedIn: true
 };
 
@@ -77,8 +79,8 @@ class BuilderModule extends Component {
   renderWindowTitle = (chartType, pathname) => {
     return (
       <Helmet>
-        {pathname.includes('vizID') ? (
-          <title>{formatWindowTitle(chartType)}</title>
+        {pathname.includes('vizID') || this.props.home ? (
+          <title>{formatWindowTitle(chartType, this.props.home)}</title>
         ) : (
           <title>{this.props.chartTitle}</title>
         )}
@@ -102,6 +104,7 @@ class BuilderModule extends Component {
           )}
 
           <VizContainer
+            home={this.props.home}
             saveViewport={this.props.saveViewport}
             chartKeys={this.props.chartKeys}
             publicPage={this.props.publicPage}
@@ -114,7 +117,7 @@ class BuilderModule extends Component {
             display={this.props.dataPaneOpen === paneTypes.visualizer}
           />
 
-          {!this.props.publicPage && (
+          {!this.props.publicPage && !this.props.home && (
             <VizSidebar
               auth0Client={this.props.auth0Client}
               chartType={this.props.chartType}

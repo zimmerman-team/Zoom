@@ -20,6 +20,7 @@ const ChartSchema = new Schema(
     type: { type: String, required: true },
 
     chartKeys: [],
+    indKeys: [],
     /* indicators/ sub-indicators of chart */
     indicatorItems: [
       {

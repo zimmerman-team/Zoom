@@ -121,13 +121,13 @@ const ChartController = {
 
   // gets one user chart
   get: (req, res) => {
-    const { chartId, authId } = req.query;
+    const { chartId, authId, type } = req.query;
 
     User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
       else
-        Chart.findOne({ _id: chartId, author, archived: false })
+        Chart.findOne({ _id: chartId, author, archived: false, type })
           .populate('author')
           .exec((chartError, chart) => {
             if (chartError) general.handleError(res, chartError);
@@ -151,9 +151,9 @@ const ChartController = {
 
   // gets one public chart
   getOnePublic: (req, res) => {
-    const { chartId } = req.query;
+    const { chartId, type } = req.query;
 
-    Chart.findOne({ _id: chartId, _public: true, archived: false })
+    Chart.findOne({ _id: chartId, _public: true, archived: false, type })
       .populate('author')
       .exec((chartError, chart) => {
         if (chartError) general.handleError(res, chartError);
@@ -283,6 +283,7 @@ const ChartController = {
       type,
       descIntro,
       chartKeys,
+      indKeys,
       indicatorItems,
       selectedSources,
       yearRange,
@@ -318,6 +319,7 @@ const ChartController = {
                   type,
 
                   chartKeys,
+                  indKeys,
                   /* indicators/ sub-indicators of chart */
                   indicatorItems,
 
@@ -384,6 +386,8 @@ const ChartController = {
                     chart.teams = teams;
 
                     chart.chartKeys = chartKeys;
+                    chart.indKeys = indKeys;
+
                     /* indicators/ sub-indicators of chart */
                     chart.indicatorItems = indicatorItems;
 
@@ -453,6 +457,7 @@ const ChartController = {
                   type: chart.type,
 
                   chartKeys: chart.chartKeys,
+                  indKeys: chart.indKeys,
                   /* indicators/ sub-indicators of chart */
                   indicatorItems: chart.indicatorItems,
 

@@ -13,7 +13,7 @@ import ErrorBoundaryFallback from 'components/ErrorBoundaryFallback/ErrorBoundar
 import { ErrorBoundary } from 'react-error-boundary';
 import { generateLegends, generateMarkers } from './GeoMap.util';
 /* styles */
-import { borderStyle, dataLayer } from './components/map-style';
+import { borderStyle, dataLayer, colorStops } from './components/map-style';
 /* components */
 import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
 import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
@@ -109,9 +109,9 @@ export class GeoMap extends Component {
     ) {
       this.setState({
         viewport: {
+          ...this.state.viewport,
           latitude: this.props.focus.latitude,
           longitude: this.props.focus.longitude,
-
           zoom: this.props.focus.zoom
         }
       });
@@ -123,7 +123,14 @@ export class GeoMap extends Component {
       this.props.viewport.zoom !== undefined
     ) {
       this.setState({
-        viewport: this.props.viewport
+        viewport: {
+          ...this.props.viewport,
+          // oke so we want this to always be passed in like this
+          // for everything to work properly
+          // cause sometimes saved data from the backend
+          // passes this in as NOT a function
+          transitionInterpolator: new LinearInterpolator()
+        }
       });
     }
   }
@@ -152,8 +159,31 @@ export class GeoMap extends Component {
       if (!find(mapStyle.layers, ['id', 'outline'])) {
         mapStyle.layers.push(borderStyle);
       }
+
+      // so here we change the data layers color stops
+      // according to the amount of actually unique values
+      // in our geomap data, so that the layers on the map
+      // would reflect the legend of the map
+      const colorStopz = colorStops;
+      // and this [1][0] is the actual value that we
+      // want to adjust in these color stops as
+      // the color stop amount is formed according to
+      // this value, check the variable imported 'colorStops'
+      // for clarity
+      colorStopz[1][0] = layers.data.uniqCount;
+
       if (!find(mapStyle.layers, ['id', 'layer'])) {
+        dataLayer.paint['fill-color'].stops = colorStopz;
+
         mapStyle.layers.push(dataLayer);
+      } else {
+        // and when we get new data into the layers we want to update
+        // the color stops according to this new data
+
+        // so we find the layer containing our color stops
+        const layerColInd = findIndex(mapStyle.layers, ['id', 'layer']);
+
+        mapStyle.layers[layerColInd].paint['fill-color'].stops = colorStopz;
       }
     } else {
       // so if no layers are loaded we want to make sure that

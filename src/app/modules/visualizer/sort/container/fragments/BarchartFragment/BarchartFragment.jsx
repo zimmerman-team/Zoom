@@ -3,7 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-/* mock */
+
+/* utils */
+import find from 'lodash/find';
+
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import { ResponsiveBar } from '@nivo/bar';
@@ -29,6 +32,20 @@ const defaultProps = {
 };
 
 const BarchartFragment = props => {
+  const margin = props.specOptions[graphKeys.horizont]
+    ? {
+        top: 0,
+        right: 20,
+        bottom: 30,
+        left: 40
+      }
+    : {
+        top: 20,
+        right: 0,
+        bottom: 25,
+        left: 60
+      };
+
   return (
     <FragmentBase>
       <Box>
@@ -37,15 +54,11 @@ const BarchartFragment = props => {
           keys={props.chartKeys.map(item => {
             return item.key;
           })}
-          indexBy="geolocation"
-          margin={{
-            top: 20,
-            right: 0,
-            bottom: 25,
-            left: 30
-          }}
+          margin={margin}
+          indexBy={props.specOptions[graphKeys.aggregate]}
           tooltip={payload => (
             <TooltipContent
+              aggrType={props.specOptions[graphKeys.aggregate]}
               xKey={payload.indexValue}
               index={payload.index}
               color={payload.color}
@@ -55,9 +68,16 @@ const BarchartFragment = props => {
             />
           )}
           padding={0.3}
-          groupMode="grouped"
-          colors={props.specOptions[graphKeys.colorPallet]}
-          colorBy="id"
+          groupMode={
+            props.specOptions[graphKeys.grouped] ? 'grouped' : 'stacked'
+          }
+          colorBy={d => {
+            const chartItem = find(props.chartKeys, ['key', d.id]);
+            if (chartItem) {
+              return chartItem.color;
+            }
+            return '#38bcb2';
+          }}
           defs={[
             {
               id: 'dots',
@@ -92,6 +112,10 @@ const BarchartFragment = props => {
           //     id: 'lines'
           //   }
           // ]}
+
+          layout={
+            props.specOptions[graphKeys.horizont] ? 'horizontal' : 'vertical'
+          }
           borderColor="inherit:darker(1.6)"
           axisTop={null}
           axisRight={null}

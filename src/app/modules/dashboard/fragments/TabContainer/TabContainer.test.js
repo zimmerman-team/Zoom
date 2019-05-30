@@ -19,7 +19,6 @@ const wrapper = shallow(
     tabCounts={{
       charts: 0,
       'data-sets': 0,
-      'focus-pages': 0,
       users: 0,
       teams: 0,
       trash: 0

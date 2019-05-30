@@ -13,7 +13,7 @@ import { formatNumber } from 'utils/genericUtils';
 // this function to get the offset top of the popup
 // for now mainly used for the circle marker
 function getOffsetTop(hoverMarkerInfo) {
-  let offset = -20;
+  let offset = -28;
   if (
     hoverMarkerInfo.maxValue !== undefined &&
     hoverMarkerInfo.minValue !== undefined

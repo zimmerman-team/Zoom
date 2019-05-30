@@ -1,4 +1,9 @@
 import React from 'react';
+
+/* utils */
+import filter from 'lodash/filter';
+
+/* components */
 import locationMarker from './components/Markers/LocationMarker/LocationMarker';
 import layerLegend from './components/Legends/LayerLegend/LayerLegend';
 import locationLegend from './components/Legends/LocationLegend/LocationLegend';
@@ -14,18 +19,20 @@ export function generateMarkers(indicatorData, setMarkerInfo) {
 
   indicatorData.forEach(item => {
     switch (item.type) {
-      case 'location':
+      case 'location': {
         const locationMarkers = item.data.map((indicator, index) =>
-          locationMarker(indicator, index, setMarkerInfo)
+          locationMarker(indicator, index, setMarkerInfo, item.color)
         );
         markerArray.push(locationMarkers);
         break;
-      case 'circle':
+      }
+      case 'circle': {
         const circleMarkers = item.data.map((indicator, index) =>
           circleMarker(indicator, index, setMarkerInfo)
         );
         markerArray.push(circleMarkers);
         break;
+      }
       default:
         break;
     }
@@ -37,6 +44,9 @@ export function generateMarkers(indicatorData, setMarkerInfo) {
 // for the legend container
 export function generateLegends(indicatorData) {
   const legendArray = [];
+
+  const locationItems = [];
+
   indicatorData.forEach((item, index) => {
     switch (item.type) {
       case 'layer':
@@ -50,7 +60,10 @@ export function generateLegends(indicatorData) {
         );
         break;
       case 'location':
-        legendArray.push(locationLegend(item.legendName, index));
+        locationItems.push({
+          name: item.legendName,
+          color: item.color
+        });
         break;
       case 'circle':
         legendArray.push(
@@ -66,5 +79,10 @@ export function generateLegends(indicatorData) {
         break;
     }
   });
+
+  if (locationItems.length > 0) {
+    legendArray.push(locationLegend(locationItems, 2));
+  }
+
   return legendArray;
 }

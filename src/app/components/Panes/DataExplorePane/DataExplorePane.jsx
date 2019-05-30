@@ -76,6 +76,7 @@ const propTypes = {
       })
     )
   ),
+  selectedRegionCodes: PropTypes.arrayOf(PropTypes.string),
   selectedRegionLabels: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.array
@@ -96,7 +97,7 @@ const propTypes = {
   addIndicator: PropTypes.func,
   removeIndicator: PropTypes.func,
   locationSelected: PropTypes.bool,
-  multipleInd: PropTypes.bool,
+  indicatorSelected: PropTypes.bool,
   saveGraphOption: PropTypes.func,
   subIndAggrToggle: PropTypes.func,
   resetAll: PropTypes.func
@@ -108,10 +109,10 @@ const defaultProps = {
   handleAxisSwitch: null,
   removeIndicator: null,
   locationSelected: true,
+  indicatorSelected: false,
   subInd1AllSelected: true,
   subInd2AllSelected: true,
   indSelectedIndex: -1,
-  multipleInd: false,
   chartType: chartTypes.geoMap,
   addIndicator: null,
   specOptions: {},
@@ -124,6 +125,7 @@ const defaultProps = {
   selectedCountryVal: [],
   selectedCountryLabels: [],
   selectedRegionVal: [],
+  selectedRegionCodes: [],
   selectedRegionLabels: [],
   selectCountry: null,
   selectRegion: null,
@@ -146,13 +148,37 @@ class DataExplorePane extends React.Component {
 
       labelNumb = labelNumb.length > 1 ? labelNumb : '0'.concat(labelNumb);
 
+      const isGeoChart =
+        this.props.chartType === chartTypes.focusNL ||
+        this.props.chartType === chartTypes.geoMap ||
+        this.props.chartType === chartTypes.focusKE;
+
+      let addIndLabel = 'Add Indicator';
+
+      let indicatorLabel = `Indicator ${labelNumb}`;
+
+      if (isGeoChart) {
+        addIndLabel = 'Add Long/Lat Indicator';
+
+        switch (index) {
+          case 0:
+            indicatorLabel = indicatorLabel.concat(' (layer)');
+            break;
+          case 1:
+            indicatorLabel = indicatorLabel.concat(' (bubble)');
+            break;
+          default:
+            indicatorLabel = indicatorLabel.concat(' (flag)');
+            break;
+        }
+      }
+
       // we push in the indicator dropdown data
       indPanels.push({
         indIndex: index,
-        sectionRemove: this.props.multipleInd,
         removeIndicator: () => this.props.removeIndicator(index),
         isIndicator: true,
-        indicatorLabel: `Indicator ${labelNumb}`,
+        indicatorLabel,
         categorise: true,
         placeHolderText: 'Select indicator',
         placeHolderNumber: this.props.indNames.length,
@@ -167,15 +193,18 @@ class DataExplorePane extends React.Component {
       indPanels.push({
         indIndex: index,
         addIndicator: this.props.addIndicator,
-        sectionAdd:
-          index === this.props.selectedInd.length - 1 && this.props.multipleInd,
+        addIndLabel,
+        sectionAdd: index === this.props.selectedInd.length - 1,
         subIndicator: true,
         categorise: true,
         multiple: true,
         selectAll: true,
         defaultAll: false,
         aggrCheck: indItem.aggregate,
-        openSubInd: this.props.indSelectedIndex === index,
+        openSubInd:
+          this.props.indicatorSelected && this.props.indSelectedIndex === index
+            ? index
+            : -1,
         placeHolderText: 'Select sub indicator',
         selectDataSource: (val, isArray) =>
           this.props.selectSubInd(val, isArray, index),
@@ -252,6 +281,7 @@ class DataExplorePane extends React.Component {
                   allFileSources: this.props.regions,
                   defaultAll: this.props.locationSelected,
                   selectedSources: this.props.selectedRegionVal,
+                  selectedRegionCodes: this.props.selectedRegionCodes,
                   valueSelected: this.props.selectedRegionLabels,
                   capitalize: true,
                   reset: () => this.props.selectRegion('reset')

@@ -39,7 +39,9 @@ const WrapUpStep = props => (
       </ErrorContainer>
     ) : (
       <SectionHeading>
-        Your data set was updated/uploaded succesfully!
+        Your data set is being mapped, you will be notified by email when your
+        mapping is finished(Currently only - devops-zz@zimmermanzimmerman.nl get
+        this notification)
       </SectionHeading>
     )}
   </ModuleContainer>

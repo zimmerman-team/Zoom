@@ -293,6 +293,8 @@ class VisualizerModuleMediator extends Component {
     // and the color pallet should be the first color
     // set from the consts
 
+    let selectedInd = [...this.props.chartData.selectedInd];
+
     const specOptions = {
       [graphKeys.colorPallet]: colorSet[1].colors,
       [graphKeys.aggregate]: aggrOptions[0].value
@@ -306,6 +308,9 @@ class VisualizerModuleMediator extends Component {
       specOptions[graphKeys.grouped] = false;
       specOptions[graphKeys.rankBy] = rankOptions[0].value;
       specOptions[graphKeys.horizont] = true;
+
+      //  and we also remove the second indicator for the barchart
+      selectedInd.pop();
     }
 
     if (chartTypes.donutChart === this.props.match.params.chart) {
@@ -315,6 +320,7 @@ class VisualizerModuleMediator extends Component {
     this.props.dispatch(
       actions.storeChartDataRequest({
         specOptions,
+        selectedInd,
         // so we refetch data for development environment
         // cause we want that default indicator to be selected
         // always

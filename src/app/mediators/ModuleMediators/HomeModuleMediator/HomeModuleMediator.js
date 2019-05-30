@@ -17,6 +17,9 @@ import generalInitial from '__consts__/InitialChartDataConst';
 import { connect } from 'react-redux';
 import * as actions from 'services/actions/general';
 import { geoTypes } from '__consts__/GeolocationConst';
+import initialPaneState from '__consts__/InitialPaneDataConst';
+import paneTypes from '__consts__/PaneTypesConst';
+import * as nodeActions from 'services/actions/nodeBackend';
 
 const propTypes = {
   indicatorAggregations: PropTypes.shape({
@@ -172,14 +175,17 @@ class HomeModuleMediator extends Component {
   }
 
   componentWillUnmount() {
+    // AAAND when this component unmounts we reset the chart and pane variables in redux
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        ...initialState
+      })
+    );
+
     this.props.dispatch(
       actions.storePaneDataRequest({
-        allCountries: [],
-        allRegions: [],
-        selectedSources: [],
-        yearRange: '1992,2018',
-        subIndicators1: [],
-        subIndicators2: []
+        ...initialPaneState
       })
     );
   }
@@ -263,7 +269,7 @@ class HomeModuleMediator extends Component {
     const data = [];
 
     if (countryLayerData.features && countryLayerData.features.length > 0) {
-      updatePercentiles(countryLayerData, f => f.properties.value);
+      updatePercentiles(countryLayerData);
 
       data.push({
         type: 'layer',
@@ -468,6 +474,7 @@ class HomeModuleMediator extends Component {
     // Adding labels to selectedRegionVal would break to many things,
     // therefor chose to do it in a separate var. WET solution..
     let selectedRegionLabels = [];
+    let selectedRegionCodes = [];
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
@@ -476,27 +483,34 @@ class HomeModuleMediator extends Component {
         item.forEach(it => {
           selectedRegionVal.push(it.value);
           selectedRegionLabels.push(it.label);
+          selectedRegionCodes.push(it.codeVal);
         });
       } else {
         selectedRegionVal = [...this.state.selectedRegionVal];
         selectedRegionLabels = [...this.state.selectedRegionLabels];
+        selectedRegionCodes = [...this.state.selectedRegionCodes];
 
-        const regionIndex = selectedRegionVal.indexOf(item.value);
+        const regionIndex = selectedRegionCodes.indexOf(item.codeVal);
 
         // so if it doesn't exist we add it
         if (regionIndex === -1) {
           selectedRegionVal.push(item.value);
           selectedRegionLabels.push(item.label);
+          selectedRegionCodes.push(item.codeVal);
         } else {
           // if it does exist we remove it
           selectedRegionVal.splice(regionIndex, 1);
           selectedRegionLabels.splice(regionIndex, 1);
+          selectedRegionCodes.splice(regionIndex, 1);
         }
       }
     }
 
     this.selectCountry(this.getCountriesByRegion(selectedRegionVal), true);
-    this.setState({ selectedRegionLabels, selectedRegionVal }, this.refetch);
+    this.setState(
+      { selectedRegionLabels, selectedRegionVal, selectedRegionCodes },
+      this.refetch
+    );
   }
 
   //Compares the selectedRegions with all the countries, to output only countries that are in that region.
@@ -566,6 +580,7 @@ class HomeModuleMediator extends Component {
         selectRegion={this.selectRegion}
         selectedRegionVal={this.state.selectedRegionVal}
         selectedRegionLabels={this.state.selectedRegionLabels}
+        selectedRegionCodes={this.state.selectedRegionCodes}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.state.selectedCountryVal}
         selectedCountryLabel={this.state.selectedCountryLabel}

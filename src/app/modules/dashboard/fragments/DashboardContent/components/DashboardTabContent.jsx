@@ -82,11 +82,6 @@ const DashboardTabContent = props => {
         props.isAdministrator || props.isSuperAdmin ? 'map data set' : null;
       tabContentName = 'Data sets';
       break;
-    case 'focus-pages':
-      targetData = [];
-      leftOptionLabel = 'add focus page';
-      tabContentName = 'Focus page';
-      break;
     case 'users':
       targetData = props.users;
       targetUrl = '/add-user';

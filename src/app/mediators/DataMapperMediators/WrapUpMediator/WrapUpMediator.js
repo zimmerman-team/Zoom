@@ -364,6 +364,12 @@ class WrapUpMediator extends React.Component {
 
       // and after everything is done mapping we can actually
       // save the dataset into our zoom backend
+      const accessibility =
+        typeof this.props.metaData.shared === 'string' &&
+        this.props.metaData.shared === 'Yes'
+          ? 'o'
+          : 'p';
+
       this.props.dispatch(
         nodeActions.addNewDatasetRequest({
           authId: this.props.user.authId,
@@ -372,7 +378,7 @@ class WrapUpMediator extends React.Component {
           dataSource:
             this.state.sourceName || this.props.metaData.dataSource.label,
           teams: [],
-          public: this.props.metaData.shared === 'Yes'
+          public: accessibility
         })
       );
     }

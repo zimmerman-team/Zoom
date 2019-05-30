@@ -50,6 +50,7 @@ const propTypes = {
   publicPage: PropTypes.bool,
   chartKeys: PropTypes.array,
   saveViewport: PropTypes.func,
+  home: PropTypes.bool,
   mode: PropTypes.bool,
   context: PropTypes.bool
 };
@@ -58,6 +59,7 @@ const defaultProps = {
   publicPage: false,
   chartKeys: [],
   saveViewport: null,
+  home: false,
   mode: location.pathname.includes('preview'),
   context: location.pathname.includes('context')
 };
@@ -89,6 +91,10 @@ class VizContainer extends React.Component {
       this.props.chartType === chartTypes.focusNL
         ? theme.color.aidsFondsWhiteOpacity
         : theme.color.aidsFondsGreyOpacity;
+
+    const geoChartPath = this.props.home
+      ? '/home'
+      : '/(visualizer|public)/(geomap|focusKE|focusNL)/:code/:tab';
 
     return (
       <ComponentBase
@@ -123,7 +129,7 @@ class VizContainer extends React.Component {
             selectedYear={this.props.selectedYear}
             indicatorData={this.props.data}
             saveViewport={this.props.saveViewport}
-            path="/(visualizer|public)/(geomap|focusKE|focusNL)/:code/:tab"
+            path={geoChartPath}
             component={GeomapFragment}
             mode={this.state.preview}
           />

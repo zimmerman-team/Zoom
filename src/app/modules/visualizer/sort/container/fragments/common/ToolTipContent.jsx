@@ -8,7 +8,15 @@ import {
   ToolTipValue
 } from 'components/charts/TooltipContent.styles';
 
-const TooltipContent = ({ xKey, index, color, valueLabel, value, format }) => {
+const TooltipContent = ({
+  aggrType,
+  xKey,
+  index,
+  color,
+  valueLabel,
+  value,
+  format
+}) => {
   let nrFormat = ' ';
 
   if (format === 'percentage') nrFormat = ' %';
@@ -16,11 +24,15 @@ const TooltipContent = ({ xKey, index, color, valueLabel, value, format }) => {
     nrFormat = ' '.concat(format);
   }
 
+  const capitalType = aggrType
+    ? aggrType.charAt(0).toUpperCase() + aggrType.slice(1)
+    : 'Geo';
+
   return (
     <Container>
       {xKey && (
         <Title>
-          Geo: <b>{xKey}</b>
+          {capitalType}: <b>{xKey}</b>
         </Title>
       )}
       <Row key={index}>

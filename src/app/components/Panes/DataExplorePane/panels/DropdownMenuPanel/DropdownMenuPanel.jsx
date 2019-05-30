@@ -29,9 +29,9 @@ const propTypes = {
     PropTypes.shape({
       isIndicator: PropTypes.bool,
       addIndicator: PropTypes.func,
-      sectionRemove: PropTypes.bool,
       sectionAdd: PropTypes.bool,
       aggrCheck: PropTypes.bool,
+      addIndLabel: PropTypes.string,
       indicatorLabel: PropTypes.string,
       subIndicator: PropTypes.bool,
       categorise: PropTypes.bool,
@@ -39,6 +39,7 @@ const propTypes = {
       allFileSources: PropTypes.array,
       selectedSources: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
       selectDataSource: PropTypes.func,
+      selectedRegionCodes: PropTypes.arrayOf(PropTypes.string),
       multiple: PropTypes.bool,
       selectAll: PropTypes.bool,
       defaultAll: PropTypes.bool,
@@ -62,14 +63,15 @@ const defaultProps = {
       addIndicator: null,
       subIndicator: false,
       sectionAdd: false,
+      addIndLabel: 'Add Indicator',
       aggrCheck: false,
-      sectionRemove: false,
       indIndex: -1,
       indicatorLabel: 'Indicator',
       categorise: false,
       allFileSources: [],
       selectedSources: [],
       selectDataSource: undefined,
+      selectedRegionCodes: null,
       multiple: false,
       selectAll: false,
       openSubInd: false,
@@ -115,11 +117,9 @@ const DropdownMenuPanel = props => {
             {detail.indicatorLabel && (
               <IndLabelContainer>
                 <IndicatorLabel>{detail.indicatorLabel}</IndicatorLabel>
-                {detail.sectionRemove && (
-                  <IndicatorRemove onClick={detail.removeIndicator}>
-                    Remove
-                  </IndicatorRemove>
-                )}
+                <IndicatorRemove onClick={detail.removeIndicator}>
+                  Remove
+                </IndicatorRemove>
               </IndLabelContainer>
             )}
             <ZoomSelect
@@ -129,6 +129,7 @@ const DropdownMenuPanel = props => {
               selectAll={detail.selectAll}
               defaultAll={detail.defaultAll}
               openDropDown={detail.subIndicator && detail.openSubInd}
+              selectedRegionCodes={detail.selectedRegionCodes}
               reset={detail.reset}
               placeHolderText={detail.placeHolderText}
               placeHolderNumber={detail.placeHolderNumber}
@@ -167,7 +168,7 @@ const DropdownMenuPanel = props => {
               <AddSection onClick={() => detail.addIndicator()}>
                 <AddContainer>
                   <SvgIconAdd />
-                  <AddLabel> Add Indicator</AddLabel>
+                  <AddLabel>{detail.addIndLabel}</AddLabel>
                 </AddContainer>
               </AddSection>
             )}

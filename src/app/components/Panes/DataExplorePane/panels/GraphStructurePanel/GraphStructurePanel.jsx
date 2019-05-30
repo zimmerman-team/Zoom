@@ -9,11 +9,7 @@ import SimpleSwitch from 'components/SimpleSwitch/SimpleSwitch';
 /* consts */
 import chartTypes from '__consts__/ChartConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
-import {
-  aggrOptions,
-  axisOptions,
-  rankOptions
-} from '__consts__/GraphStructOptionConsts';
+import { aggrOptions, rankOptions } from '__consts__/GraphStructOptionConsts';
 
 /**
  *
@@ -57,74 +53,73 @@ class GraphStructurePanel extends React.Component {
     return (
       <ComponentBase>
         {/* FIRST ROW //////////////////////////////////////////////////////// */}
-        <FilterContainer>
-          {/* LEFT Y-AXIS */}
-          <SimpleSelect
-            label="Left Y-axis"
-            selectKey={graphKeys.leftYAxis}
-            options={axisOptions}
-            defValue={this.props.specOptions[graphKeys.leftYAxis]}
-            onChange={this.props.saveGraphOption}
-          />
-          {/* RIGHT Y-AXIS */}
-          <SimpleSelect
-            label="Right Y-axis"
-            selectKey={graphKeys.rightYAxis}
-            options={axisOptions}
-            defValue={this.props.specOptions[graphKeys.rightYAxis]}
-            onChange={this.props.saveGraphOption}
-          />
-        </FilterContainer>
+        {this.props.chartType === chartTypes.barChart && (
+          <FilterContainer>
+            {/* AGGREGATE BY */}
+
+            <SimpleSelect
+              label="Aggregate by"
+              options={aggrOptions}
+              selectKey={graphKeys.aggregate}
+              defValue={this.props.specOptions[graphKeys.aggregate]}
+              onChange={this.props.saveGraphOption}
+            />
+
+            {/* RANK BY */}
+            <SimpleSelect
+              selectKey={graphKeys.rankBy}
+              defValue={this.props.specOptions[graphKeys.rankBy]}
+              onChange={this.props.saveGraphOption}
+              label="Rank by"
+              options={rankOptions}
+            />
+          </FilterContainer>
+        )}
 
         {/* SECOND ROW /////////////////////////////////////////////////////// */}
-        <FilterContainer>
-          {/* X-AXIS */}
-          <SimpleSelect
-            label="X-axis"
-            selectKey={graphKeys.xAxis}
-            defValue={this.props.specOptions[graphKeys.xAxis]}
-            options={axisOptions}
-            onChange={this.props.saveGraphOption}
-          />
-        </FilterContainer>
+        {this.props.chartType === chartTypes.barChart && (
+          <FilterContainer>
+            {/* STACKED VS GROUPED */}
+
+            <SimpleSwitch
+              defaultCheck={this.props.specOptions[graphKeys.grouped]}
+              selectKey={graphKeys.grouped}
+              onSwitch={this.props.saveGraphOption}
+              option1="Stacked"
+              option2="Grouped"
+            />
+          </FilterContainer>
+        )}
 
         {/* THIRD ROW //////////////////////////////////////////////////////// */}
-        <FilterContainer>
-          {/* AGGREGATE BY */}
-          <SimpleSelect
-            label="Aggregate by"
-            options={aggrOptions}
-            selectKey={graphKeys.aggregate}
-            defValue={this.props.specOptions[graphKeys.aggregate]}
-            onChange={this.props.saveGraphOption}
-          />
-          {/* RANK BY */}
-          <SimpleSelect
-            disabled={this.props.chartType === chartTypes.lineChart}
-            label="Rank by"
-            options={rankOptions}
-          />
-        </FilterContainer>
+        {this.props.chartType === chartTypes.barChart && (
+          <FilterContainer>
+            {/* VERTICAL VS HORIZONTAL */}
 
-        {/* FOURTH ROW /////////////////////////////////////////////////////// */}
-        <FilterContainer>
-          {/* STACKED VS GROUPED */}
-          <SimpleSwitch
-            disabled={this.props.chartType === chartTypes.lineChart}
-            option1="Stacked"
-            option2="Grouped"
-          />
-        </FilterContainer>
+            <SimpleSwitch
+              defaultCheck={this.props.specOptions[graphKeys.horizont]}
+              selectKey={graphKeys.horizont}
+              onSwitch={this.props.saveGraphOption}
+              option1="Vertical"
+              option2="Horizontal"
+            />
+          </FilterContainer>
+        )}
 
-        {/* FIFTH ROW //////////////////////////////////////////////////////// */}
-        {/*<FilterContainer>*/}
-        {/*/!* VERTICAL VS HORIZONTAL *!/*/}
-        {/*<SimpleSwitch option1="Vertical" option2="Horizontal" />*/}
-        {/*</FilterContainer>*/}
+        {/* FOURTH ROW //////////////////////////////////////////////////////// */}
+        {this.props.chartType === chartTypes.donutChart && (
+          <FilterContainer>
+            {/* Aggregated by country disaggregated by country */}
 
-        {/* SIXTH ROW //////////////////////////////////////////////////////// */}
-
-        {/* SEVENT ROW /////////////////////////////////////////////////////// */}
+            <SimpleSwitch
+              defaultCheck={this.props.specOptions[graphKeys.aggrCountry]}
+              selectKey={graphKeys.aggrCountry}
+              onSwitch={this.props.saveGraphOption}
+              option1="Split Countries"
+              option2="Aggregate Countries"
+            />
+          </FilterContainer>
+        )}
 
         <FilterContainer>
           {/* X-AXIS */}

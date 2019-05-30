@@ -15,6 +15,8 @@ export default {
     aidsFondsWhite: '#ffffff',
     aidsFondsWhiteOpacity: 'rgba(255, 255, 255, 0.7)',
     aidsFondsGreyOpacity: 'rgba(239, 239, 239, 0.7)',
+    tableToolHoverGeyOpacity: 'rgba(0, 0, 0, 0.08)',
+    tableChartIconGreyOpacity: 'rgba(0, 0, 0, 0.54)',
     toolTipColor: '#414141',
     chartColorOne: '#FFCE7F',
     chartColorTwo: '#5376F3',
@@ -34,6 +36,7 @@ export default {
     zoomGreyEleven: '#BFBFBF', //grey-light-25
     zoomGreyTwelf: '#d9d9d9',
     zoomGreyThirteen: '#e0e0e0',
+    zoomGreyFourteen: '#616161',
     zoomGrey14: '#666666',
     zoomBlack: '#000000',
     colHeadColor: '#9b9b9b',

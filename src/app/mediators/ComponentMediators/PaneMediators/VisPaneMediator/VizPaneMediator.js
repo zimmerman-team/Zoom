@@ -51,10 +51,12 @@ const indicatorQuery = graphql`
   query VizPaneMediatorQuery(
     $year_Range: String!
     $fileSource_Name_In: String!
+    $file_Accessibility: String!
   ) {
     allIndicators(
       year_Range: $year_Range
       fileSource_Name_In: $fileSource_Name_In
+      file_Accessibility: $file_Accessibility
     ) {
       edges {
         node {
@@ -233,7 +235,8 @@ class VizPaneMediator extends React.Component {
 
     const refetchVars = {
       year_Range,
-      fileSource_Name_In
+      fileSource_Name_In,
+      file_Accessibility: this.props.user.data ? 'z' : 'a'
     };
 
     fetchQuery(this.props.relay.environment, indicatorQuery, refetchVars).then(
@@ -693,7 +696,8 @@ VizPaneMediator.defaultProps = defaultProps;
 const mapStateToProps = state => {
   return {
     chartData: state.chartData.chartData,
-    paneData: state.paneData.paneData
+    paneData: state.paneData.paneData,
+    user: state.user
   };
 };
 

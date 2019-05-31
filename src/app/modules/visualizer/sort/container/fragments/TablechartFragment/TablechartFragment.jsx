@@ -11,6 +11,7 @@ const TablechartFragment = props => {
   return (
     <FragmentBase position="flex-start" paddingTop="40px">
       <TableChart
+        onDownload={e => console.log(e)}
         title={props.indicatorData.title}
         data={
           props.indicatorData.rows && props.indicatorData.rows.length > 0

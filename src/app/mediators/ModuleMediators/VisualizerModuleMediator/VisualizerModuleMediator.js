@@ -715,21 +715,23 @@ class VisualizerModuleMediator extends Component {
   }
 
   loadChartData() {
-    if (this.props.publicPage) {
-      this.props.dispatch(
-        nodeActions.getPublicChartRequest({
-          chartId: this.props.match.params.code,
-          type: this.props.match.params.chart
-        })
-      );
-    } else if (this.props.match.params.code !== 'vizID' && this.props.user) {
-      this.props.dispatch(
-        nodeActions.getChartRequest({
-          authId: this.props.user.authId,
-          chartId: this.props.match.params.code,
-          type: this.props.match.params.chart
-        })
-      );
+    if (!this.props.home) {
+      if (this.props.publicPage) {
+        this.props.dispatch(
+          nodeActions.getPublicChartRequest({
+            chartId: this.props.match.params.code,
+            type: this.props.match.params.chart
+          })
+        );
+      } else if (this.props.match.params.code !== 'vizID' && this.props.user) {
+        this.props.dispatch(
+          nodeActions.getChartRequest({
+            authId: this.props.user.authId,
+            chartId: this.props.match.params.code,
+            type: this.props.match.params.chart
+          })
+        );
+      }
     }
   }
 
@@ -823,27 +825,29 @@ class VisualizerModuleMediator extends Component {
 
   render() {
     return (
-      <VisualizerModule
-        home={this.props.home}
-        saveViewport={this.saveViewport}
-        chartKeys={this.props.chartData.chartKeys}
-        publicPage={this.props.publicPage}
-        outerHistory={this.props.history}
-        chartType={this.props.paneData.chartType}
-        code={this.props.chartData.chartId}
-        loading={
-          this.state.loading ||
-          this.props.chartCreated.request ||
-          this.props.dupChartCreated.request
-        }
-        auth0Client={this.props.auth0Client}
-        selectYearRange={this.selectYearRange}
-        selectYear={this.selectYear}
-        selectedYear={this.props.chartData.selectedYear}
-        data={this.props.chartData.data}
-        dropDownData={this.props.dropDownData}
-        chartTitle={this.props.chartData.name}
-      />
+      <div>
+        <VisualizerModule
+          home={this.props.home}
+          saveViewport={this.saveViewport}
+          chartKeys={this.props.chartData.chartKeys}
+          publicPage={this.props.publicPage}
+          outerHistory={this.props.history}
+          chartType={this.props.paneData.chartType}
+          code={this.props.chartData.chartId}
+          loading={
+            this.state.loading ||
+            this.props.chartCreated.request ||
+            this.props.dupChartCreated.request
+          }
+          auth0Client={this.props.auth0Client}
+          selectYearRange={this.selectYearRange}
+          selectYear={this.selectYear}
+          selectedYear={this.props.chartData.selectedYear}
+          data={this.props.chartData.data}
+          dropDownData={this.props.dropDownData}
+          chartTitle={this.props.chartData.name}
+        />
+      </div>
     );
   }
 }

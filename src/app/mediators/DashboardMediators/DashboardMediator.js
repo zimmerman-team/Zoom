@@ -130,6 +130,8 @@ class DashboardMediator extends React.Component {
       !isEqual(this.props.deleteUser, prevProps.deleteUser) &&
       this.props.deleteUser.success
     ) {
+      // and we delete the users
+
       if (this.state.deletedSelf) {
         this.props.auth0Client.signOut().then(() => {
           this.props.dispatch(syncActions.clearUserData());

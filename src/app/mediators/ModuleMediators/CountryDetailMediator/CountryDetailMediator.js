@@ -10,6 +10,7 @@ import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import {
   formatBarChartInfoIndicators,
+  formatEcoLineData,
   formatLineChart2Data,
   formatPieChartData,
   formatProjectData,
@@ -98,6 +99,14 @@ const propTypes = {
         date: PropTypes.string,
         value: PropTypes.number
       })
+    ),
+    ecoIndicators: PropTypes.arrayOf(
+      PropTypes.shape({
+        filterName: PropTypes.string,
+        indicatorName: PropTypes.string,
+        date: PropTypes.string,
+        value: PropTypes.number
+      })
     )
   })
 };
@@ -125,6 +134,8 @@ class CountryDetailMediator extends React.Component {
     infoBarData: [],
     projectSort: '-activity_budget_value',
     isSortByOpen: false,
+    ecoIndicatorsData: [],
+    ecoChartKeys: [],
     projectsLoading: false
   };
 
@@ -210,10 +221,16 @@ class CountryDetailMediator extends React.Component {
         this.props.indicatorAggregations.aidsEpidemic
       );
 
+      const ecoData = formatEcoLineData(
+        this.props.indicatorAggregations.ecoIndicators
+      );
+
       this.setState({
         infoBarData,
         countryName,
-        aidsLineChartData
+        aidsLineChartData,
+        ecoIndicatorsData: ecoData.data,
+        ecoChartKeys: ecoData.chartKeys
         // wikiParams
       });
     }
@@ -292,6 +309,8 @@ class CountryDetailMediator extends React.Component {
         projectInfo={this.state.projectInfo}
         infoBarData={this.state.infoBarData}
         aidsLineChartData={this.state.aidsLineChartData}
+        ecoIndicatorsData={this.state.ecoIndicatorsData}
+        ecoChartKeys={this.state.ecoChartKeys}
         countryName={this.state.countryName}
         excerpts={this.state.excerpts}
         aidsEpIndicators={mock.lineChartInd}
@@ -368,6 +387,58 @@ export default createRefetchContainer(
         geolocationIso2_In: $countryCode
         indicatorName_In: ["civicus score"]
       ) {
+        indicatorName
+        date
+        value
+      }
+      ecoIndicators: datapointsAggregation(
+        groupBy: [
+          "indicatorName"
+          "geolocationTag"
+          "date"
+          "geolocationIso2"
+          "filterName"
+        ]
+        orderBy: ["date"]
+        aggregation: ["Sum(value)"]
+        geolocationIso2_In: $countryCode
+        indicatorName_In: [
+          "ghdx: total hiv/aids spending"
+          "gdp per capita (current us$)"
+        ]
+        filterName_In: ["all ages", "the_total_mean"]
+        date_In: [
+          "1990"
+          "1991"
+          "1992"
+          "1993"
+          "1994"
+          "1995"
+          "1996"
+          "1997"
+          "1998"
+          "1999"
+          "2000"
+          "2001"
+          "2002"
+          "2003"
+          "2004"
+          "2005"
+          "2006"
+          "2007"
+          "2008"
+          "2009"
+          "2010"
+          "2011"
+          "2012"
+          "2013"
+          "2014"
+          "2015"
+          "2016"
+          "2017"
+        ]
+      ) {
+        filterName
         indicatorName
         date
         value

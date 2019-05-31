@@ -123,11 +123,7 @@ const Routes = props => {
           <Route
             exact
             path="/home"
-            render={() => (
-              <HomeModule
-                dropDownData={props}
-              />
-            )}
+            render={() => <HomeModule dropDownData={props} />}
           />
           <Route
             exact
@@ -144,9 +140,7 @@ const Routes = props => {
             path="/visualizer/:chart/:code/:tab"
             render={() =>
               props.user.data ? (
-                <VisualizerModuleMediator
-                  dropDownData={props}
-                />
+                <VisualizerModuleMediator dropDownData={props} />
               ) : (
                 <Redirect to="/" />
               )
@@ -157,10 +151,7 @@ const Routes = props => {
             exact
             path="/public/:chart/:code/:tab"
             render={() => (
-              <VisualizerModuleMediator
-                publicPage
-                dropDownData={props}
-              />
+              <VisualizerModuleMediator publicPage dropDownData={props} />
             )}
           />
           <Route

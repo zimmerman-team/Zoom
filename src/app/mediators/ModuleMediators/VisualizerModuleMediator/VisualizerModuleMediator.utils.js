@@ -898,6 +898,7 @@ export function formatTableData(indicators) {
     { name: 'Date' },
     { name: `Measure Value` },
     { name: 'Indicator' },
+    { name: 'Sub-Indicator' },
     { name: 'Unit of measure' },
     { name: 'ISO2 codes' }
   );
@@ -922,6 +923,9 @@ export function formatTableData(indicators) {
 
           //Indicator
           indItem.indicatorName,
+
+          //Sub-Indicator
+          indItem.filterName,
 
           //Unit of measure
           indItem.valueFormatType,

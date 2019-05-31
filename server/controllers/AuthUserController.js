@@ -4,6 +4,7 @@ const axios = require('axios');
 const authUtils = require('../utils/auth');
 const general = require('./generalResponse');
 const User = require('../models/User');
+const Dataset = require('../models/Dataset');
 
 const get = require('lodash/get');
 const some = require('lodash/some');
@@ -315,11 +316,57 @@ const AuthUserController = {
                 general.handleError(res, 'Admin user not found', 404);
               } else if (
                 adminUser.role === 'Administrator' ||
-                adminUser.role === 'Super admin'
+                adminUser.role === 'Super admin' ||
+                userId === delId
               ) {
-                User.deleteOne({ authId: delId }, error => {
-                  if (error) general.handleError(res, error);
-                  else res.json({ message: 'user deleted' });
+                // okay so here we find the user to be deleted
+                User.findOne({ authId: delId }, (delUsErr, delUser) => {
+                  if (delUsErr) {
+                    general.handleError(res, delUsErr);
+                  } else {
+                    // and then we find the datasets that should be deleted
+                    // so that we could pass their ids to the frontend
+                    // so that frontend could delete it from DUCT
+                    // cause i aint setting up graphql with zoomBackend
+                    // #Morty
+                    Dataset.find(
+                      {
+                        author: delUser
+                      },
+                      (findSetErr, setData) => {
+                        if (findSetErr) {
+                          console.log('findSetErr', findSetErr);
+                          general.handleError(res, findSetErr);
+                        } else {
+                          // and then we delete the users mapped out datasets
+                          // and then we delete the user themselves
+                          Dataset.deleteMany(
+                            {
+                              author: delUser
+                            },
+                            setDelErr => {
+                              if (setDelErr) {
+                                console.log('setDelErr', setDelErr);
+                                general.handleError(res, setDelErr);
+                              } else {
+                                // and then we delete the user themselves
+                                User.deleteOne({ authId: delId }, error => {
+                                  if (error) {
+                                    general.handleError(res, error);
+                                  } else {
+                                    res.json({
+                                      message: 'user deleted',
+                                      setData
+                                    });
+                                  }
+                                });
+                              }
+                            }
+                          );
+                        }
+                      }
+                    );
+                  }
                 });
               } else {
                 general.handleError(res, 'Unauthorized', 401);

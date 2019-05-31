@@ -1,23 +1,37 @@
 import styled from 'styled-components';
-import { LegendItem } from 'components/GeoMap/components/Legends/Legend.styles';
+import {
+  LegendItem,
+  LegendLabel
+} from 'components/GeoMap/components/Legends/Legend.styles';
 import theme from 'theme/Theme';
 
-export const LocationLegendItem = styled(LegendItem)`
-  width: fit-content;
-`;
+export const LocationLegendItem = styled(LegendItem)``;
 
 export const LocationName = styled.div`
   height: ${theme.fontSize.caption};
-  color: ${theme.color.zoomGreyTwo};
+  color: ${theme.color.smallTextBlack};
   font-family: ${theme.font.zoomFontFamTwo};
-  font-size: 10px;
+  font-size: ${theme.fontSize.caption};
   font-weight: ${theme.weight.book};
   position: relative;
-  bottom: 6px;
-  margin-left: 5px;
+  top: 6px;
+  margin-left: 8px;
+  line-height: 1.2;
+  letter-spacing: 0.2px;
+`;
+
+export const LocationLegendLabel = styled(LegendLabel)`
+  padding: 24px 0 16px 0;
+  font-size: ${theme.fontSize.caption};
+  line-height: 1.2;
+  letter-spacing: 0.2px;
 `;
 
 export const LocItemContainer = styled.div`
   display: flex;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
+
+  &:last-child {
+    margin-bottom: 10px;
+  }
 `;

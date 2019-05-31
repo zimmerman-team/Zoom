@@ -21,10 +21,17 @@ import isEqual from 'lodash/isEqual';
 
 const propTypes = {
   specOptions: PropTypes.shape({}),
+  margin: PropTypes.shape({
+    top: PropTypes.number,
+    right: PropTypes.number,
+    left: PropTypes.number,
+    bottom: PropTypes.number
+  }),
   xAxisKey: PropTypes.string
 };
 const defaultProps = {
   specOptions: {},
+  margin: { top: 30, right: 10, left: 10, bottom: 0 },
   xAxisKey: 'year'
 };
 
@@ -66,10 +73,7 @@ class LineChart extends React.Component {
 
     return (
       <ResponsiveContainer>
-        <ReLineChart
-          data={data}
-          margin={{ top: 30, right: 10, left: 10, bottom: 0 }}
-        >
+        <ReLineChart data={data} margin={this.props.margin}>
           <CartesianGrid />
           <XAxis dataKey={xAxisKey} interval={0} tick={{ fontSize: 10 }} />
           <YAxis

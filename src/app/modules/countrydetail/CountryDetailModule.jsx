@@ -63,6 +63,8 @@ const propTypes = {
       id: PropTypes.string
     })
   ),
+  ecoIndicatorsData: PropTypes.arrayOf(PropTypes.shape({})),
+  ecoChartKeys: PropTypes.arrayOf(PropTypes.shape({})),
   projectsLoading: PropTypes.bool,
   projectSort: PropTypes.string,
   changeSortBy: PropTypes.func,
@@ -80,6 +82,7 @@ const defaultProps = {
   },
   countryName: '',
   infoBarData: [],
+  ecoIndicatorsData: [],
   aidsLineChartData: [],
   projectsLoading: false,
   projectSort: '',
@@ -114,7 +117,10 @@ const CountryDetailModule = props => {
       />
 
       {/* Fragment 3: economic indicators */}
-      <EconomicIndicators />
+      <EconomicIndicators
+        data={props.ecoIndicatorsData}
+        chartKeys={props.ecoChartKeys}
+      />
 
       {/* Fragment 4: civic space */}
       <CivicSpace

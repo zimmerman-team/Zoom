@@ -31,14 +31,14 @@ const LineChart = props => {
           top: 20,
           right: 30,
           bottom: 30,
-          left: 50
+          left: 80
         }}
         xScale={{
           type: 'point'
         }}
         yScale={{
           type: 'linear',
-          stacked: true
+          stacked: false
         }}
         minY="auto"
         maxY="auto"

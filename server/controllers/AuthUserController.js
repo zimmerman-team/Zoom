@@ -4,6 +4,7 @@ const axios = require('axios');
 const authUtils = require('../utils/auth');
 const general = require('./generalResponse');
 const User = require('../models/User');
+const Dataset = require('../models/Dataset');
 
 const get = require('lodash/get');
 const some = require('lodash/some');
@@ -317,10 +318,33 @@ const AuthUserController = {
                 adminUser.role === 'Administrator' ||
                 adminUser.role === 'Super admin'
               ) {
-                User.deleteOne({ authId: delId }, error => {
-                  if (error) general.handleError(res, error);
-                  else res.json({ message: 'user deleted' });
-                });
+                // so we first delete the users mapped out datasets
+                // and then we delete the user themselves
+                Dataset.deleteMany(
+                  {
+                    author: delId
+                  },
+                  (setDelErr, delMessage, extradata) => {
+                    if (setDelErr) {
+                      console.log('setDelErr', setDelErr);
+                      general.handleError(res, setDelErr);
+                    } else {
+                      // and then we delete the user themselves
+                      User.deleteOne({ authId: delId }, error => {
+                        if (error) {
+                          general.handleError(res, error);
+                        } else {
+                          res.json({
+                            message: 'user deleted',
+                            datasetsDel: delMessage,
+                            extradata,
+                            setDelErr
+                          });
+                        }
+                      });
+                    }
+                  }
+                );
               } else {
                 general.handleError(res, 'Unauthorized', 401);
               }

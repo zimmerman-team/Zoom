@@ -91,3 +91,5 @@ server/data/*
 
 # exception to the rule
 !server/data/.gitkeep
+
+yarn.lock

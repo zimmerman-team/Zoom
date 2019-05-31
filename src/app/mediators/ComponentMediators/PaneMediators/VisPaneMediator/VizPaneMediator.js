@@ -708,7 +708,7 @@ const mapStateToProps = state => {
   return {
     chartData: state.chartData.chartData,
     paneData: state.paneData.paneData,
-    user: state.user
+    user: state.currentUser
   };
 };
 

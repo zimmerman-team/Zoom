@@ -1,4 +1,4 @@
-
+yarn.lock
 
 # Logs
 logs
@@ -91,5 +91,3 @@ server/data/*
 
 # exception to the rule
 !server/data/.gitkeep
-
-yarn.lock

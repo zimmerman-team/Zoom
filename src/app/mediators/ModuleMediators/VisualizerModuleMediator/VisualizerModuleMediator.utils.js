@@ -8,6 +8,9 @@ import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
 import findIndex from 'lodash/findIndex';
 
+/* styles */
+import theme from 'theme/Theme';
+
 // these are aggregation keys associated with graphql returned variables
 // 'geolocationTag' & 'date' are the graphql variables
 export const aggrKeys = {
@@ -407,7 +410,7 @@ export function formatGeoData(indAggregations) {
   const geomapData = [];
   let countryCircleData = [];
   let colorInd = 0;
-  const colors = colorSet[1].colors;
+  const colors = theme.color.locationColorSet;
 
   indAggregations.forEach((aggregation, index) => {
     if (aggregation.data && aggregation.data[0]) {

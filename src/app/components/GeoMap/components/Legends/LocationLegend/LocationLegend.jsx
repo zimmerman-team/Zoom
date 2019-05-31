@@ -1,18 +1,18 @@
 import React from 'react';
-import { LegendLabel } from 'components/GeoMap/components/Legends/Legend.styles';
 import {
   LocationLegendItem,
   LocationName,
-  LocItemContainer
+  LocItemContainer,
+  LocationLegendLabel
 } from './LocationLegend.style';
-import FlagIcon from 'assets/icons/geomap/FlagIcon';
+import SvgIconLocation from 'assets/icons/geomap/SvgIconLocation';
 
 const locationLegend = (locationItems, index) => (
   <LocationLegendItem key={`legend-${index}`}>
-    <LegendLabel>Location legend</LegendLabel>
+    <LocationLegendLabel>Points of interests</LocationLegendLabel>
     {locationItems.map(item => (
       <LocItemContainer>
-        <FlagIcon fill={item.color} />
+        <SvgIconLocation color={item.color} />
         <LocationName>{item.name}</LocationName>
       </LocItemContainer>
     ))}

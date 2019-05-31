@@ -168,7 +168,7 @@ class DataExplorePane extends React.Component {
             indicatorLabel = indicatorLabel.concat(' (bubble)');
             break;
           default:
-            indicatorLabel = indicatorLabel.concat(' (flag)');
+            indicatorLabel = indicatorLabel.concat(' (point)');
             break;
         }
       }

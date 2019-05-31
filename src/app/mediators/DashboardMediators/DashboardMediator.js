@@ -130,7 +130,17 @@ class DashboardMediator extends React.Component {
       !isEqual(this.props.deleteUser, prevProps.deleteUser) &&
       this.props.deleteUser.success
     ) {
-      // and we delete the users
+      // and we delete the users datasets from DUCT according to the
+      // setData returned from the zoomBackend
+
+      this.props.deleteUser.data.setData.forEach(dataset => {
+        DeleteFileMutation.commit(
+          this.props.relay.environment,
+          dataset.datasetId,
+          this.handleFileDeleteCompleted,
+          this.handleFileDeleteError
+        );
+      });
 
       if (this.state.deletedSelf) {
         this.props.auth0Client.signOut().then(() => {

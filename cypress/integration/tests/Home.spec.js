@@ -53,6 +53,7 @@ describe('Home page geo map datamapping', function() {
     cy.contains('Select region').click();
     cy.contains('south america').click();
     cy.get('[data-cy="geo-map-container"]').click();
+    cy.waitIndicatorsLoaded();
     cy.contains('Select indicator').click();
     cy.contains('aids related deaths').click();
     cy.waitPageLoader();

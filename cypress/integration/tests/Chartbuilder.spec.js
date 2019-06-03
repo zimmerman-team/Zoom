@@ -188,11 +188,15 @@ describe('Chartbuilder table chart fragment e2e', function() {
     });
     cy.get('[aria-label="Delete Selected Rows"]').click();
     cy.waitPageLoader();
+    cy.get('[aria-label="Search"]').click();
+    cy.get('.MuiInputBase-root > .MuiInputBase-input').type('kenya');
+    cy.waitPageLoader();
     cy.get('tbody>tr').should('contain', 'Sorry, no matching records found');
 
-    cy.get('[aria-label="Search"]').click();
     cy.get('.MUIDataTableSearch-main').within(() => {
-      cy.get('[type="button"]').click();
+      cy.get('[type="button"]')
+        .first()
+        .click();
     });
   });
 

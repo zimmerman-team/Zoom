@@ -17,6 +17,7 @@ import chartTypes from '__consts__/ChartConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
 import { maxYear } from '__consts__/TimeLineConst';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
+import pubIndicators from '__consts__/PublicIndicatorsConst';
 
 const propTypes = {
   display: PropTypes.string,
@@ -52,12 +53,10 @@ const indicatorQuery = graphql`
   query VizPaneMediatorQuery(
     $year_Range: String!
     $fileSource_Name_In: String!
-    $file_Accessibility: String!
   ) {
     allIndicators(
       year_Range: $year_Range
       fileSource_Name_In: $fileSource_Name_In
-      file_Accessibility: $file_Accessibility
     ) {
       edges {
         node {
@@ -246,19 +245,31 @@ class VizPaneMediator extends React.Component {
 
     const refetchVars = {
       year_Range,
-      fileSource_Name_In,
-      file_Accessibility: this.props.user.data ? 'z' : 'a'
+      fileSource_Name_In
     };
 
     fetchQuery(this.props.relay.environment, indicatorQuery, refetchVars).then(
       data => {
-        let allIndNames = data.allIndicators.edges.map(indicator => {
-          return {
-            label: indicator.node.name,
-            value: indicator.node.name,
-            dataSource: indicator.node.fileSource.name,
-            firstYear: indicator.node.firstDataYear
-          };
+        let allIndNames = [];
+
+        data.allIndicators.edges.forEach(indicator => {
+          if (this.props.user.data) {
+            allIndNames.push({
+              label: indicator.node.name,
+              value: indicator.node.name,
+              dataSource: indicator.node.fileSource.name,
+              firstYear: indicator.node.firstDataYear
+            });
+          } else if (
+            pubIndicators.indexOf(indicator.node.name.toLowerCase()) !== -1
+          ) {
+            allIndNames.push({
+              label: indicator.node.name,
+              value: indicator.node.name,
+              dataSource: indicator.node.fileSource.name,
+              firstYear: indicator.node.firstDataYear
+            });
+          }
         });
 
         allIndNames = sortBy(allIndNames, ['label']);

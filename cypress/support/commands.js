@@ -95,6 +95,9 @@ Cypress.Commands.add('waitPageLoader2', (timeout = 1750000) => {
   cy.get('[data-cy=loader2]', { timeout }).should('not.be.visible');
 });
 
+Cypress.Commands.add('waitIndicatorsLoaded', (timeout = 1750000) => {
+  cy.contains('Select indicator').should('be.greaterThan', '1');
+});
 // --------- Hover ---------
 Cypress.Commands.add('hover', (selectorHoverItem, selectorShowItem, n = 0) => {
   cy.get(selectorHoverItem)

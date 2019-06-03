@@ -121,7 +121,9 @@ class NavPane extends React.Component {
   };
 
   render() {
-    return <ComponentBase>{this.renderPaneItems()}</ComponentBase>;
+    return (
+      <ComponentBase data-cy="nav-pane">{this.renderPaneItems()}</ComponentBase>
+    );
   }
 }
 

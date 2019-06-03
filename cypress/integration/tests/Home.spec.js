@@ -45,10 +45,12 @@ describe('Home page map controls', function() {
 
 describe('Home page geo map datamapping', function() {
   it('Plots South America data about aids related deaths', function() {
+    cy.signIn();
     cy.visit('/');
-    cy.get('[data-cy=dialog-overlay]').click();
+    // cy.get('[data-cy=dialog-overlay]').click();
     cy.get('[data-cy="cookie-notice"]').click();
     cy.get('[data-cy="geomap-filter-button"]').click();
+    cy.get('[data-cy="nav-pane-item-2"]').click();
     cy.get('[data-cy="data-explorer-panel-reset"]').click();
     cy.contains('Select region').click();
     cy.contains('south america').click();

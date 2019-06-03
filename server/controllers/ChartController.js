@@ -234,7 +234,7 @@ const ChartController = {
                   name: { $regex: searchTitle, $options: 'i' }
                 },
                 {
-                  teams: { $all: author.teams },
+                  teams: { $elemMatch: { $in: author.teams } },
                   archived: false,
                   name: { $regex: searchTitle, $options: 'i' }
                 }
@@ -249,8 +249,11 @@ const ChartController = {
           .sort(sort)
           .populate('author', 'username authId firstName lastName')
           .exec((chartError, chart) => {
-            if (chartError) general.handleError(res, chartError);
-            res.json(chart);
+            if (chartError) {
+              general.handleError(res, chartError);
+            } else {
+              res.json(chart);
+            }
           });
       }
     });

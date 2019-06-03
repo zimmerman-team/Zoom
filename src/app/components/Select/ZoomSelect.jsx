@@ -1,34 +1,30 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* components */
 import SelectHeader from 'components/Select/components/SelectHeader/SelectHeader';
 import { Tooltip } from 'react-tippy';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import DropDownCheckbox from 'components/DropDownCheckBox/DropDownCheckbox';
 import SearchField from 'components/Select/components/SearchField/SearchField';
-
 /* icons */
 import ResetIconSmall from 'assets/icons/ResetIconSmall';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import findIndex from 'lodash/findIndex';
-
 /* styles */
 import {
-  ComponentBase,
-  DropDownItem,
-  ResetContainer,
-  DropDownLabel,
-  DropDownContainer,
-  SelectAll,
-  OptionsContainer,
   CategoryItem,
-  ItemContainer,
+  ComponentBase,
+  DropDownContainer,
+  DropDownItem,
+  DropDownLabel,
+  EmptyOptions,
   InfoLabel,
-  EmptyOptions
+  ItemContainer,
+  OptionsContainer,
+  ResetContainer,
+  SelectAll
 } from 'components/Select/ZoomSelect.styles';
 
 const propTypes = {
@@ -45,8 +41,11 @@ const propTypes = {
   search: PropTypes.bool,
   selectAll: PropTypes.bool,
   defaultAll: PropTypes.bool,
+  openDropDown: PropTypes.bool,
+  selectedRegionCodes: PropTypes.arrayOf(PropTypes.string),
   disabledValues: PropTypes.arrayOf(PropTypes.string),
-  dropDownWidth: PropTypes.number
+  dropDownWidth: PropTypes.number,
+  capitalize: PropTypes.bool
 };
 
 const defaultProps = {
@@ -56,11 +55,14 @@ const defaultProps = {
   placeHolder: 'Has no indicators',
   placeHolderText: 'Has no indicators',
   placeHolderNumber: undefined,
+  selectedRegionCodes: null,
   reset: undefined,
+  openDropDown: false,
   search: true,
   selectAll: false,
   disabledValues: [],
-  dropDownWidth: undefined
+  dropDownWidth: undefined,
+  capitalize: false
 };
 
 class ZoomSelect extends React.Component {
@@ -135,6 +137,13 @@ class ZoomSelect extends React.Component {
         this.setState({ initialSelect: false });
       }
     }
+
+    if (
+      this.props.openDropDown !== prevProps.openDropDown &&
+      this.props.openDropDown
+    ) {
+      this.setState({ open: true });
+    }
   }
 
   componentWillUnmount() {
@@ -163,10 +172,11 @@ class ZoomSelect extends React.Component {
   }
 
   selectAllClick() {
-    if (this.state.allSelected)
+    if (this.state.allSelected) {
       // so if selected all was checked and now it is to be unchecked
       // we reset the selected array like this
       this.props.selectVal('reset');
+    }
     // and if vice versa we pass in all the options as the value
     // and also pass in the array variable as true
     else this.props.selectVal(this.props.data, true);
@@ -181,12 +191,13 @@ class ZoomSelect extends React.Component {
     if (this.props.arraySelected) {
       // so if an option is selected and 'selected all' is not checked
       // we check it, as it is the functionality shown in the VD
-      if (this.props.arraySelected.length > 0)
+      if (this.props.arraySelected.length > 0) {
         this.setState({ allSelected: true });
-      else if (this.props.arraySelected.length === 0)
+      } else if (this.props.arraySelected.length === 0) {
         //  and if the selected array becomes 0 and the all selected was checked
         //  we uncheck it
         this.setState({ allSelected: false });
+      }
     }
   }
 
@@ -225,12 +236,13 @@ class ZoomSelect extends React.Component {
   // europe, regional -> europe
   trimSelectedValues(selectedValues) {
     const newSelectedValues = selectedValues;
-    if (selectedValues.length > 1)
+    if (selectedValues.length > 1) {
       selectedValues.forEach((val, index) => {
         if (val.includes(',')) {
           newSelectedValues[index] = val.substring(0, val.indexOf(','));
         }
       });
+    }
 
     return newSelectedValues;
   }
@@ -262,13 +274,42 @@ class ZoomSelect extends React.Component {
   }
 
   renderDropDownItem(item, index) {
-    if (item.value === 'category')
+    if (item.value === 'category') {
       return (
         <CategoryItem key={`dropDownItem-${index}`}>
-          <DropDownLabel>{item.label}</DropDownLabel>
+          <DropDownLabel capitalize={this.props.capitalize}>
+            {item.label}
+          </DropDownLabel>
         </CategoryItem>
       );
+    }
     const itemDisabled = this.props.disabledValues.indexOf(item.value) !== -1;
+
+    let checked = false;
+
+    // so for regions because some regions in our system
+    // have 0 country values associated with them,
+    // and because generally we should be checking things by codes or ids
+    // we need to redo the checked part for the regions, cause the selected
+    // values currently are associated country values
+    // so we'll do the checked checking for regions by their codes,
+    // and not their values
+    if (this.props.selectedRegionCodes) {
+      checked =
+        findIndex(this.props.selectedRegionCodes, arrItemn => {
+          return item.codeVal === arrItemn;
+        }) !== -1;
+    } else {
+      // and this is the normal checking
+      checked =
+        findIndex(this.props.arraySelected, arrItemn => {
+          if (item.value instanceof Array) {
+            return isEqual(item.value, arrItemn);
+          }
+          return item.value === arrItemn;
+        }) !== -1;
+    }
+
     return (
       <DropDownItem
         style={{
@@ -279,19 +320,10 @@ class ZoomSelect extends React.Component {
         key={`dropDownItem-${index}`}
         onClick={() => this.handleItemClick(item)}
       >
-        {this.props.multiple && (
-          <DropDownCheckbox
-            checked={
-              findIndex(this.props.arraySelected, arrItemn => {
-                if (item.value instanceof Array) {
-                  return isEqual(item.value, arrItemn);
-                }
-                return item.value === arrItemn;
-              }) !== -1
-            }
-          />
-        )}
-        <DropDownLabel>{item.label}</DropDownLabel>
+        {this.props.multiple && <DropDownCheckbox checked={checked} />}
+        <DropDownLabel capitalize={this.props.capitalize}>
+          {item.label}
+        </DropDownLabel>
       </DropDownItem>
     );
   }
@@ -304,6 +336,7 @@ class ZoomSelect extends React.Component {
         compBorder={this.props.border}
       >
         <SelectHeader
+          capitalize={this.props.capitalize}
           headerStyle={this.props.headerStyle}
           arrowMargins={this.props.arrowMargins}
           placeHolderNumber={this.placeHolderNumber(
@@ -368,10 +401,12 @@ class ZoomSelect extends React.Component {
                         option.label
                           .toLowerCase()
                           .includes(this.state.searchWord.toLowerCase()))
-                    )
+                    ) {
                       return this.renderDropDownItem(option, index);
-                    else if (this.state.searchWord.length === 0)
+                    }
+                    if (this.state.searchWord.length === 0) {
                       return this.renderDropDownItem(option, index);
+                    }
                   })}
                 </OptionsContainer>
               </div>

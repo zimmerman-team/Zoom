@@ -1,21 +1,41 @@
 import findIndex from 'lodash/findIndex';
-import { scaleQuantile } from 'd3-scale';
-import { range } from 'd3-array';
+
+/* utils */
+import sortBy from 'lodash/sortBy';
 
 // Updates layer percentiles depending on the value
-export function updatePercentiles(featureCollection, accessor) {
-  const { features } = featureCollection;
-  const scale = scaleQuantile()
-    .domain(features.map(accessor))
-    .range(range(9));
-  features.forEach(f => {
-    const value = accessor(f);
-    f.properties.value = value;
-    f.properties.percentile = scale(value);
-  });
+// and updates the unique value amount that will be used
+// to determine the amount of color stops
+export function updatePercentiles(featureCollection) {
+  let { features } = featureCollection;
+
+  let uniqCount = 0;
+
+  if (features.length > 0) {
+    // so first we sort the values from lowest to highest
+    features = sortBy(features, ['properties.value']);
+
+    // so we'll start with the first lowest value
+    let currentValue = features[0].properties.value;
+    // and then we give percentile values to features
+    features.forEach(f => {
+      if (currentValue !== f.properties.value) {
+        uniqCount += 1;
+        currentValue = f.properties.value;
+      }
+      f.properties.percentile = uniqCount;
+    });
+  }
+
+  featureCollection.uniqCount = uniqCount;
 }
 
-export function formatCountryLayerData(indicators, indName, selectedSubInd) {
+export function formatCountryLayerData(
+  indicators,
+  indName,
+  selectedSubInd,
+  subIndAggr
+) {
   const countryLayers = {
     type: 'FeatureCollection',
     features: []
@@ -38,7 +58,16 @@ export function formatCountryLayerData(indicators, indName, selectedSubInd) {
         // which is i dunno a double string or sth :D
         geometry: JSON.parse(JSON.parse(indicator.geolocationPolygons)),
         properties: {
-          tooltipLabel: `${indName} - ${selectedSubInd.join(', ')}`,
+          tooltipLabels: [
+            {
+              subIndName: indicator.filterName,
+              format: indicator.valueFormatType,
+              label: subIndAggr
+                ? `${indName} - ${selectedSubInd.join(', ')}`
+                : `${indName} - ${indicator.filterName}`,
+              value: Math.round(indicator.value)
+            }
+          ],
           indName,
           name: indicator.geolocationTag,
           iso2: indicator.geolocationIso2,
@@ -52,6 +81,35 @@ export function formatCountryLayerData(indicators, indName, selectedSubInd) {
     } else {
       const changeFeat = countryLayers.features[existLayerIndex];
       changeFeat.properties.value += Math.round(indicator.value);
+
+      if (subIndAggr) {
+        // cause if its being aggregated, we will only have one
+        // tooltip label item, which will show the summed up value
+        changeFeat.properties.tooltipLabels[0].value += Math.round(
+          indicator.value
+        );
+      } else {
+        const labelInd = findIndex(changeFeat.properties.tooltipLabels, [
+          'subIndName',
+          indicator.filterName
+        ]);
+
+        // so if the sub indicators value exists, we will add up the value in the tool tip for that
+        // sub indicator
+        if (labelInd !== -1) {
+          changeFeat.properties.tooltipLabels[labelInd].value += Math.round(
+            indicator.value
+          );
+        } else {
+          // otherwise we just push in a new filter value
+          changeFeat.properties.tooltipLabels.push({
+            subIndName: indicator.filterName,
+            format: indicator.valueFormatType,
+            label: `${indName} - ${indicator.filterName}`,
+            value: Math.round(indicator.value)
+          });
+        }
+      }
     }
   });
 
@@ -77,7 +135,12 @@ export function formatCountryLayerData(indicators, indName, selectedSubInd) {
   return countryLayers;
 }
 
-export function formatCountryCenterData(indicators, indName, selectedSubInd) {
+export function formatCountryCenterData(
+  indicators,
+  indName,
+  selectedSubInd,
+  subIndAggr
+) {
   const countryCenteredData = [];
 
   indicators.forEach(indicator => {
@@ -98,22 +161,60 @@ export function formatCountryCenterData(indicators, indName, selectedSubInd) {
         const coord = JSON.parse(JSON.parse(indicator.geolocationCenterLongLat))
           .coordinates;
         countryCenteredData.push({
-          tooltipLabel: `${indName} - ${selectedSubInd.join(', ')}`,
+          tooltipLabels: [
+            {
+              subIndName: indicator.filterName,
+              format: indicator.valueFormatType,
+              label: subIndAggr
+                ? `${indName} - ${selectedSubInd.join(', ')}`
+                : `${indName} - ${indicator.filterName}`,
+              value: Math.round(indicator.value)
+            }
+          ],
           indName,
           value: Math.round(indicator.value),
           geolocationIso2: indicator.geolocationIso2,
           geolocationType: indicator.geolocationType,
-          maxValue,
-          minValue,
+          maxValue: 0,
+          minValue: 0,
           longitude: coord[0],
           latitude: coord[1],
-          format: indicator.valueFormatType,
           name: indicator.geolocationTag
         });
-      } else
+      } else {
         countryCenteredData[existCountryIndex].value =
           countryCenteredData[existCountryIndex].value +
           Math.round(indicator.value);
+
+        if (subIndAggr) {
+          // cause if its being aggregated, we will only have one
+          // tooltip label item, which will show the summed up value
+          countryCenteredData[
+            existCountryIndex
+          ].tooltipLabels[0].value += Math.round(indicator.value);
+        } else {
+          const labelInd = findIndex(
+            countryCenteredData[existCountryIndex].tooltipLabels,
+            ['subIndName', indicator.filterName]
+          );
+
+          // so if the sub indicators value exists, we will add up the value in the tool tip for that
+          // sub indicator
+          if (labelInd !== -1) {
+            countryCenteredData[existCountryIndex].tooltipLabels[
+              labelInd
+            ].value += Math.round(indicator.value);
+          } else {
+            // otherwise we just push in a new filter value
+            countryCenteredData[existCountryIndex].tooltipLabels.push({
+              subIndName: indicator.filterName,
+              format: indicator.valueFormatType,
+              label: `${indName} - ${indicator.filterName}`,
+              value: Math.round(indicator.value)
+            });
+          }
+        }
+      }
     }
   });
 
@@ -147,17 +248,24 @@ export function formatCountryParam(countryCodes, regionCountryCodes) {
   jointCountries = jointCountries.concat(countryCodes);
 
   regionCountryCodes.forEach(region => {
-    if (region !== 'select all')
+    if (region !== 'select all') {
       region.forEach(countryCode => {
-        if (jointCountries.indexOf(countryCode.iso2) === -1)
+        if (jointCountries.indexOf(countryCode.iso2) === -1) {
           jointCountries.push(countryCode.iso2);
+        }
       });
+    }
   });
 
   return jointCountries;
 }
 
-export function formatLongLatData(indicators, indName, selectedSubInd) {
+export function formatLongLatData(
+  indicators,
+  indName,
+  selectedSubInd,
+  subIndAggr
+) {
   const longLatData = [];
 
   indicators.forEach(indicator => {
@@ -180,16 +288,52 @@ export function formatLongLatData(indicators, indName, selectedSubInd) {
         lat = parseFloat(lat);
 
         longLatData.push({
-          tooltipLabel: `${indName} - ${selectedSubInd.join(', ')}`,
+          tooltipLabels: [
+            {
+              subIndName: indicator.filterName,
+              format: indicator.valueFormatType,
+              label: subIndAggr
+                ? `${indName} - ${selectedSubInd.join(', ')}`
+                : `${indName} - ${indicator.filterName}`,
+              value: Math.round(indicator.value)
+            }
+          ],
           indName,
           longitude: long,
           latitude: lat,
           name: indicator.comment || indicator.geolocationTag,
-          format: indicator.valueFormatType,
           value: Math.round(indicator.value)
         });
       } else {
         longLatData[existPointIndex].value += Math.round(indicator.value);
+        if (subIndAggr) {
+          // cause if its being aggregated, we will only have one
+          // tooltip label item, which will show the summed up value
+          longLatData[existPointIndex].tooltipLabels[0].value += Math.round(
+            indicator.value
+          );
+        } else {
+          const labelInd = findIndex(
+            longLatData[existPointIndex].tooltipLabels,
+            ['subIndName', indicator.filterName]
+          );
+
+          // so if the sub indicators value exists, we will add up the value in the tool tip for that
+          // sub indicator
+          if (labelInd !== -1) {
+            longLatData[existPointIndex].tooltipLabels[
+              labelInd
+            ].value += Math.round(indicator.value);
+          } else {
+            // otherwise we just push in a new filter value
+            longLatData[existPointIndex].tooltipLabels.push({
+              subIndName: indicator.filterName,
+              format: indicator.valueFormatType,
+              label: `${indName} - ${indicator.filterName}`,
+              value: Math.round(indicator.value)
+            });
+          }
+        }
       }
     }
   });

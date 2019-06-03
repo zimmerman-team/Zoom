@@ -1,6 +1,5 @@
 import React from 'react';
 import MetaDataMediator from 'mediators/DataMapperMediators/MetaDataMediator/MetaDataMediator';
-
 /* styles */
 import {
   ButtonContainer,
@@ -9,11 +8,11 @@ import {
   ModuleContent,
   ModuleSection
 } from './DatasetModule.style';
-
+import { stepButStyle } from 'components/Stepper/Stepper.style';
 /* components */
 import ZoomButton from 'components/ZoomButton/ZoomButton';
 import PropTypes from 'prop-types';
-import { step1InitialData } from '__consts__/DataMapperStepConsts';
+import theme from 'theme/Theme';
 
 const propTypes = {
   dropDownData: PropTypes.shape({
@@ -27,11 +26,15 @@ const propTypes = {
       )
     })
   }),
+  saveDisabled: PropTypes.bool,
+  metaDataEmptyFields: PropTypes.arrayOf(PropTypes.string),
   saveDataset: PropTypes.func
 };
 
 const defaultProps = {
   dropDownData: {},
+  metaDataEmptyFields: [],
+  saveDisabled: true,
   saveDataset: null
 };
 
@@ -42,7 +45,13 @@ class DatasetModule extends React.Component {
         <ModuleSection>
           <ButtonContainer margin="small">
             <ZoomButton
-              style={{ width: 75 }}
+              style={{
+                width: 75,
+                backgroundColor: this.props.saveDisabled
+                  ? theme.color.zoomGreySix
+                  : '',
+                ...stepButStyle
+              }}
               onClick={() => this.props.saveDataset()}
             >
               <ButtonLabel>save</ButtonLabel>
@@ -55,13 +64,20 @@ class DatasetModule extends React.Component {
             dataSetEdit
             alwaysSave
             dropDownData={this.props.dropDownData}
+            metaDataEmptyFields={this.props.metaDataEmptyFields}
           />
         </ModuleContent>
 
         <ModuleSection>
           <ButtonContainer margin="small">
             <ZoomButton
-              style={{ width: 75 }}
+              style={{
+                width: 75,
+                backgroundColor: this.props.saveDisabled
+                  ? theme.color.zoomGreySix
+                  : '',
+                ...stepButStyle
+              }}
               onClick={() => this.props.saveDataset()}
             >
               <ButtonLabel>save</ButtonLabel>

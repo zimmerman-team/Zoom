@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-
 import GeoMap from 'components/GeoMap/GeoMap';
-
 /* utils */
 import { getFocus } from 'modules/visualizer/VisualizerModule.utils';
 

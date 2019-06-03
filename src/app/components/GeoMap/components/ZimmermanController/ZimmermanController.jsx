@@ -1,6 +1,5 @@
 import React from 'react';
 import { BaseControl } from 'react-map-gl';
-import styled from 'styled-components';
 
 class ZimmermanController extends BaseControl {
   _render() {

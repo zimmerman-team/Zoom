@@ -6,20 +6,15 @@ import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import ErrorStep from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep';
 import connect from 'react-redux/es/connect/connect';
-
 /* mutations */
 import FileErrorResultMutation from 'mediators/DataMapperMediators/CorrectErrorsMediator/mutations/FileErrorResultMutation';
 import FileValidationMutation from 'mediators/DataMapperMediators/mutations/FileValidation';
-
 /* utils */
 import get from 'lodash/get';
 import findIndex from 'lodash/findIndex';
-import { formatErrorCells, checkIfErrors } from './CorrectErrorsMediator.util';
+import { formatErrorCells } from './CorrectErrorsMediator.util';
 import * as generalActions from 'services/actions/general';
-import {
-  formatManData,
-  formatOverviewData
-} from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
+import { formatOverviewData } from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
 import { formatErrorColumns } from 'mediators/DataMapperMediators/ManualMappingMediator.util';
 
 const propTypes = {
@@ -177,8 +172,9 @@ class CorrectErrorsMediator extends React.Component {
         });
 
         let repCol = null;
-        if (command.replace_pressed && command.filter_column_heading)
+        if (command.replace_pressed && command.filter_column_heading) {
           repCol = command.filter_column_heading;
+        }
 
         const errorCells = formatErrorCells(
           results.error_data.error_messages,
@@ -419,8 +415,9 @@ class CorrectErrorsMediator extends React.Component {
       if (
         errColInd === -1 &&
         this.props.stepData.orgErrorColumns.indexOf(headerName) !== -1
-      )
+      ) {
         errorColumns.push(headerName);
+      }
 
       ignoredErrors.splice(headerInd, 1);
     }

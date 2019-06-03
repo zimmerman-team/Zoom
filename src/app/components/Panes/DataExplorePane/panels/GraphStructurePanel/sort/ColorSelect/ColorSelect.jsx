@@ -3,23 +3,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Select from '@material-ui/core/Select/index';
-import theme from 'theme/Theme';
-import ReactDOM from 'react-dom';
-import { withStyles } from '@material-ui/core/styles/index';
+
 import Input from '@material-ui/core/Input/index';
-import OutlinedInput from '@material-ui/core/OutlinedInput/index';
-import FilledInput from '@material-ui/core/FilledInput/index';
+
 import InputLabel from '@material-ui/core/InputLabel/index';
 import MenuItem from '@material-ui/core/MenuItem/index';
-import FormHelperText from '@material-ui/core/FormHelperText/index';
+
 import FormControl from '@material-ui/core/FormControl/index';
 import themes from 'theme/Theme';
 import IconPointer from 'assets/icons/IconPointer';
-
 /* utils */
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
-
 /* consts */
 import { colorSet as colorSetz } from '__consts__/PaneConst';
 

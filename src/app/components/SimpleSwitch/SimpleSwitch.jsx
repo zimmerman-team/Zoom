@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Switch from '@material-ui/core/Switch';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/styles/withStyles';
 
 import theme from 'theme/Theme';
 
@@ -26,7 +26,6 @@ const SwitchLabel = styled.span`
   font-family: ${theme.font.zoomFontFamTwo};
   color: #9b9b9b;
   min-width: 45px;
-  overflow: hidden;
   &:last-child {
     // note: let's not make a habit out of tweaking the position of element with transforms
     transform: translateX(-13px);
@@ -68,7 +67,7 @@ const styles = props => ({
 
 const ZimSwitch = styled(props => <Switch disableRipple {...props} />)`
   && {
-    transform: translateX(-10px);
+    transform: translateX(-5px);
 
     //outline: solid green;
     & [class*='MuiSwitch-root'] {
@@ -111,14 +110,18 @@ const propTypes = {
   onSwitch: PropTypes.func,
   defaultCheck: PropTypes.bool,
   disabled: PropTypes.bool,
+  label: PropTypes.string,
   option1: PropTypes.string,
+  selectKey: PropTypes.string,
   option2: PropTypes.string
 };
 const defaultProps = {
+  label: undefined,
   option1: 'empty 1',
   defaultCheck: false,
   disabled: false,
   onSwitch: null,
+  selectKey: 'key',
   option2: 'empty 2'
 };
 
@@ -129,7 +132,8 @@ class SimpleSwitch extends React.Component {
 
   handleChange = name => event => {
     this.setState({ [name]: event.target.checked });
-    this.props.onSwitch && this.props.onSwitch(event.target.checked);
+    this.props.onSwitch &&
+      this.props.onSwitch(event.target.checked, this.props.selectKey);
   };
 
   render() {
@@ -140,7 +144,9 @@ class SimpleSwitch extends React.Component {
           this.props.disabled ? { pointerEvents: 'none', opacity: '0.4' } : {}
         }
       >
-        <SwitchLabel>{this.props.option1}</SwitchLabel>
+        {this.props.label && <SwitchLabel>{this.props.label}</SwitchLabel>}
+        {!this.props.label && <SwitchLabel>{this.props.option1}</SwitchLabel>}
+
         <ZimSwitch
           classes={{
             switchBase: classes.iOSSwitchBase,
@@ -153,7 +159,7 @@ class SimpleSwitch extends React.Component {
           onChange={this.handleChange('checked')}
           value="checked"
         />
-        <SwitchLabel>{this.props.option2}</SwitchLabel>
+        {!this.props.label && <SwitchLabel>{this.props.option2}</SwitchLabel>}
       </ComponentBase>
     );
   }

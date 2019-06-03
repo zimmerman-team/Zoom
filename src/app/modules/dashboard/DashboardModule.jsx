@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-
 /* components */
 import { ModuleContainer } from 'modules/dashboard/DashboardModule.styles';
 import DashboardContent from 'modules/dashboard/fragments/DashboardContent/DashboardContent';
@@ -81,7 +80,8 @@ const DashboardModule = ({
   totalPages,
   changePage,
   isSuperAdmin,
-  isAdministrator
+  isAdministrator,
+  auth0Client
 }) => (
   <ModuleContainer>
     <Helmet>
@@ -117,6 +117,7 @@ const DashboardModule = ({
       navItems={navItems}
       isAdministrator={isAdministrator}
       isSuperAdmin={isSuperAdmin}
+      auth0Client={auth0Client}
     />
     {totalPages > 0 && (
       <Pagination

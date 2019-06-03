@@ -1,20 +1,18 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import HorizontalBarChart from 'components/charts/barcharts/horizontal/HorizontalBarChart';
-
 /* components */
 import {
-  BarsContainer,
   Bar,
   BarContainer,
   BarName,
-  Value,
-  LegendContainer,
+  BarsContainer,
   Legend,
   LegendColor,
-  LegendText
+  LegendContainer,
+  LegendText,
+  Value
 } from 'components/charts/barcharts/horizontal/HorizontalBarChart.styles';
-
 /* mock */
 import barChartMockData from '__mocks__/barChartHorizontalMock';
 

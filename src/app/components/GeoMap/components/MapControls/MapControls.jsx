@@ -1,18 +1,12 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* icons */
 import IconOnlyPlus from 'assets/icons/IconOnlyPlus';
 import IconOnlyMinus from 'assets/icons/IconOnlyMinus';
 import IconOnlyFullScreen from 'assets/icons/IconOnlyFullScreen';
-
 /* styles */
-import {
-  ComponentBase,
-  ButtonContainer,
-  DisabledElement
-} from './MapControls.style';
+import { ButtonContainer, ComponentBase } from './MapControls.style';
 
 const propTypes = {
   onZoomIn: PropTypes.func,

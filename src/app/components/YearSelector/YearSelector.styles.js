@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import './YearSelector.css';
-import { Range } from 'rc-slider';
+import Range from 'rc-slider/es/Range';
 import theme from 'theme/Theme';
 
 export const YearLabel = styled.div`
@@ -40,7 +40,7 @@ export const CustomHandle = styled.div`
   color: ${theme.color.aidsFondsWhite};
   font-size: 12px;
   font-family: ${theme.font.zoomFontFamOne};
-  line-height: 1;
+  line-height: 1.7;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   &:focus {
     border-color: #57c5f7;

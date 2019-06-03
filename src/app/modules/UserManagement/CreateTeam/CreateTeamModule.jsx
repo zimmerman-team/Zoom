@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip } from 'react-tippy';
-import { Text } from 'grommet';
+import { Text } from 'grommet/components/Text';
 /* components */
 import {
   CreateTeamForm,

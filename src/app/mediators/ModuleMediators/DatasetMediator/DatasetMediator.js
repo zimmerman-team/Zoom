@@ -4,24 +4,22 @@ import { withRouter } from 'react-router';
 import { createRefetchContainer, graphql } from 'react-relay';
 import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
-
 /* mutations */
 import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
 import SurveyMutation from 'mediators/DataMapperMediators/WrapUpMediator/mutations/SurveyMutation';
 import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import find from 'lodash/find';
 import { fetchQuery } from 'relay-runtime';
-
 /* actions */
 import * as actions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
-
 /* consts */
 import { numberOptions } from 'modules/datamapper/fragments/MetaData/MetaData.consts';
 import { step1InitialData } from '__consts__/DataMapperStepConsts';
+/* components */
+import Snackbar from 'components/Snackbar/Snackbar';
 
 const surveyQuery = graphql`
   query DatasetMediatorQuery($entryId: Float!) {
@@ -85,7 +83,10 @@ class DatasetMediator extends React.Component {
       team: '',
       loadComponent: false,
       sourceName: undefined,
-      surveyId: null
+      surveyId: null,
+      openSnackbar: false,
+      errorMessage: 'error',
+      metaDataEmptyFields: []
     };
 
     this.refetch = this.refetch.bind(this);
@@ -100,6 +101,7 @@ class DatasetMediator extends React.Component {
     this.handleMetaDataCompleted = this.handleMetaDataCompleted.bind(this);
     this.handleMetaDataError = this.handleMetaDataError.bind(this);
     this.updateMetaData = this.updateMetaData.bind(this);
+    this.saveDisabled = this.saveDisabled.bind(this);
   }
 
   componentDidMount() {
@@ -152,8 +154,9 @@ class DatasetMediator extends React.Component {
             const q51 = [];
 
             actualSurveyData.dataCleaningTechniques.split(',').forEach(item => {
-              if (item.indexOf('None') === -1)
+              if (item.indexOf('None') === -1) {
                 q51.push({ label: item.trim(), value: item.trim() });
+              }
             });
 
             const surveyStepData = {
@@ -220,13 +223,17 @@ class DatasetMediator extends React.Component {
       !this.state.loadComponent &&
       !isEqual(this.props.stepData, prevProps.stepData) &&
       this.props.stepData.metaData.title.length > 0
-    )
+    ) {
       this.setState({ loadComponent: true });
+    }
 
     // and after the dataset gets updated
     // we redirect the user to the dashboard of datasets
-    if (!isEqual(this.props.datasetUpdated.data, prevProps.datasetUpdated.data))
+    if (
+      !isEqual(this.props.datasetUpdated.data, prevProps.datasetUpdated.data)
+    ) {
       this.props.history.push('/dashboard/data-sets');
+    }
   }
 
   componentWillUnmount() {
@@ -253,18 +260,48 @@ class DatasetMediator extends React.Component {
   }
 
   saveDataset() {
-    if (this.props.stepMetaData.surveyData === 'Yes')
+    const { stepMetaData } = this.props;
+
+    const metaDataEmptyFields = [];
+
+    // we check if the title is empty
+    if (!stepMetaData.title || stepMetaData.title.length === 0) {
+      metaDataEmptyFields.push('title');
+    }
+
+    // we check if the description is empty
+    if (!stepMetaData.desc || stepMetaData.desc.length === 0) {
+      metaDataEmptyFields.push('desc');
+    }
+
+    // we check if the datasource is empty
+    if (
+      !stepMetaData.dataSource.value ||
+      stepMetaData.dataSource.value.length === 0
+    ) {
+      metaDataEmptyFields.push('dataSource');
+    }
+
+    if (metaDataEmptyFields.length > 0) {
+      this.setState({
+        openSnackbar: true,
+        errorMessage: 'Please fill the required fields',
+        metaDataEmptyFields
+      });
+    } else if (this.props.stepMetaData.surveyData === 'Yes') {
       // we add the survey data
       this.updateSurveyData();
-    else if (this.props.stepMetaData.dataSource.key === 'other')
+    } else if (this.props.stepMetaData.dataSource.key === 'other') {
       this.updateDataSource(this.props.stepMetaData.dataSource.value);
-    // otherwise we just add the existing source id
-    // and then add the metadata
-    else this.updateMetaData();
+    } else {
+      // otherwise we just add the existing source id
+      // and then add the metadata
+      this.updateMetaData();
+    }
   }
 
   handleSourceCompleted(response) {
-    if (response)
+    if (response) {
       this.setState(
         {
           sourceId: response.fileSource.entryId,
@@ -272,6 +309,7 @@ class DatasetMediator extends React.Component {
         },
         this.updateMetaData
       );
+    }
   }
 
   handleSourceError(error) {
@@ -289,19 +327,20 @@ class DatasetMediator extends React.Component {
 
   handleSurveyCompleted(response, error) {
     if (error) console.log('error adding survey data:', error);
-    else if (response)
+    else if (response) {
       this.setState(
         {
           surveyId: response.surveyData.id
         },
         this.afterSurvey
       );
+    }
   }
 
   afterSurvey() {
-    if (this.props.stepMetaData.dataSource.key === 'other')
+    if (this.props.stepMetaData.dataSource.key === 'other') {
       this.updateDataSource(this.props.stepMetaData.dataSource.value);
-    else this.updateMetaData();
+    } else this.updateMetaData();
   }
 
   handleSurveyError(error) {
@@ -355,11 +394,9 @@ class DatasetMediator extends React.Component {
     else if (response) {
       // and after everything is done mapping we can actually
       // save the dataset into our zoom backend
-      const profile = this.props.auth0Client.getProfile();
-
       this.props.dispatch(
         nodeActions.updateDatasetRequest({
-          authId: profile.sub,
+          authId: this.props.user.authId,
           datasetId: this.props.match.params.id,
           name: this.props.stepMetaData.title,
           dataSource:
@@ -425,23 +462,45 @@ class DatasetMediator extends React.Component {
     );
   }
 
+  saveDisabled() {
+    return (
+      !this.props.stepData.metaData ||
+      !this.props.stepData.metaData.title ||
+      this.props.stepData.metaData.title.length === 0 ||
+      !this.props.stepData.metaData.desc ||
+      this.props.stepData.metaData.desc.length === 0 ||
+      !this.props.stepData.metaData.dataSource.value ||
+      this.props.stepData.metaData.dataSource.value.length === 0
+    );
+  }
+
   render() {
     // so we want to load the component only when the actual stepData
     // is filled in with the metadata of the dataset
     // for all of the underlying components to render properly
-    return this.state.loadComponent ? (
-      <DatasetModule
-        dropDownData={this.props.dropDownData}
-        saveDataset={this.saveDataset}
-      />
-    ) : (
-      <div />
+    return (
+      <div>
+        <Snackbar
+          message={this.state.errorMessage}
+          open={this.state.openSnackbar}
+          onClose={() => this.setState({ openSnackbar: false })}
+        />
+        {this.state.loadComponent && (
+          <DatasetModule
+            metaDataEmptyFields={this.state.metaDataEmptyFields}
+            saveDisabled={this.saveDisabled()}
+            dropDownData={this.props.dropDownData}
+            saveDataset={this.saveDataset}
+          />
+        )}
+      </div>
     );
   }
 }
 
 const mapStateToProps = state => {
   return {
+    user: state.currentUser.data,
     datasetUpdated: state.datasetUpdated,
     stepMetaData: state.stepData.stepzData.metaData,
     stepData: state.stepData.stepzData

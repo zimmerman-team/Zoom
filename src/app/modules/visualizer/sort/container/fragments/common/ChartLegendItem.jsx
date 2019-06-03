@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import theme from 'theme/Theme';
 import FragmentInfoButton from 'components/Layout/ModuleFragment/common/FragmentInfoButton';
 
+import { Tooltip } from 'react-tippy';
+
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
@@ -45,21 +47,23 @@ const LegendColor = styled.div`
 
 const propTypes = {
   color: PropTypes.string,
-  text: PropTypes.string
+  text: PropTypes.string,
+  dataSource: PropTypes.string
 };
 const defaultProps = {
   color: '#f47c69',
+  dataSource: 'No Source?',
   text: ''
 };
 
 const ChartLegendItem = props => {
   return (
     <ComponentBase>
-      <Box data-cy={props.text}>
+      <Box>
         <LegendColor color={props.color} />
-        <LegendLabel text={props.text} />
+        <LegendLabel text={props.text} data-cy="legend-label" />
       </Box>
-      <FragmentInfoButton />
+      <FragmentInfoButton text={`Datasource: ${props.dataSource}`} />
     </ComponentBase>
   );
 };

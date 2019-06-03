@@ -31,18 +31,18 @@ const LineChart = props => {
           top: 20,
           right: 30,
           bottom: 30,
-          left: 50
+          left: 80
         }}
         xScale={{
           type: 'point'
         }}
         yScale={{
           type: 'linear',
-          stacked: true
+          stacked: false
         }}
         minY="auto"
         maxY="auto"
-        stacked={true}
+        stacked
         axisTop={null}
         axisRight={null}
         axisBottom={{
@@ -67,10 +67,10 @@ const LineChart = props => {
         dotColor="inherit:darker(0.3)"
         dotBorderWidth={2}
         dotBorderColor="#ffffff"
-        enableDotLabel={true}
+        enableDotLabel
         dotLabel="y"
         dotLabelYOffset={-12}
-        animate={true}
+        animate
         motionStiffness={90}
         motionDamping={15}
         legends={[]}

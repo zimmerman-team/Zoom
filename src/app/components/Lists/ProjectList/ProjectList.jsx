@@ -1,8 +1,9 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 // import { projectsMockData } from '__mocks__/projectsMock';
-import { Box, RoutedButton } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import {
   Label,
   List,
@@ -51,15 +52,16 @@ const ProjectList = props => {
         <ListItem key={`project-${project.id}`}>
           {/* title container */}
           <TitleContainer level="4" truncate>
-            <RoutedButton
-              label={project.title}
-              path={`/iati-activity/${project.id}`}
-              plain
-            />
+            <Link
+              to={`/iati-activity/${project.id}`}
+              data-cy={`project-${project.id}`}
+            >
+              {project.title}
+            </Link>
           </TitleContainer>
 
           {/* mixed properties */}
-          <Box>
+          <Box data-cy="project-list">
             <PropertyContainer
               width="100%"
               direction="row"

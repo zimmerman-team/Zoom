@@ -20,12 +20,14 @@ const ChartSchema = new Schema(
     type: { type: String, required: true },
 
     chartKeys: [],
+    indKeys: [],
     /* indicators/ sub-indicators of chart */
     indicatorItems: [
       {
         indicator: String,
         subIndicators: [String],
-        allSubIndicators: { type: [], default: [] }
+        allSubIndicators: { type: [], default: [] },
+        aggregate: Boolean
       }
     ],
 

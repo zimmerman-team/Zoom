@@ -1,16 +1,14 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* styles */
 import {
-  ModuleContainer,
   ErrorContainer,
+  ErrorItem,
   ErrorTitle,
-  ErrorItem
+  ModuleContainer
 } from './WrapUpStep.styles';
 import { SectionHeading } from 'components/sort/Headings';
-
 /* components */
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
 
@@ -41,7 +39,9 @@ const WrapUpStep = props => (
       </ErrorContainer>
     ) : (
       <SectionHeading>
-        Your data set was updated/uploaded succesfully!
+        Your data set is being mapped, you will be notified by email when your
+        mapping is finished(Currently only - devops-zz@zimmermanzimmerman.nl get
+        this notification)
       </SectionHeading>
     )}
   </ModuleContainer>

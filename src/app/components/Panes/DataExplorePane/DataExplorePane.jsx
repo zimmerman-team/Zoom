@@ -1,26 +1,20 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createBrowserHistory } from 'history';
-
 /* consts */
 import chartTypes from '__consts__/ChartConst';
-
 /* utils */
-import isEqual from 'lodash/isEqual';
-
 /* icons */
 import IconRedIndicators from 'assets/icons/IconRedIndicators';
 import IconRedLocation from 'assets/icons/IconRedLocation';
 import IconRedPeriod from 'assets/icons/IconRedPeriod';
 import IconGraphStructure from 'assets/icons/data_explorer/IconGraphStructure';
 import ResetIcon from 'assets/icons/IconReset';
-
 /* styles */
 import {
   ComponentBase,
-  ResetContainer,
-  PanelAccordion
+  PanelAccordion,
+  ResetContainer
 } from './DataExplorerPane.style';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
@@ -45,7 +39,6 @@ const propTypes = {
   ),
   chartKeys: PropTypes.arrayOf(PropTypes.shape({})),
   regionAmount: PropTypes.number,
-  changesMade: PropTypes.bool,
   indNames: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
@@ -83,11 +76,13 @@ const propTypes = {
       })
     )
   ),
+  selectedRegionCodes: PropTypes.arrayOf(PropTypes.string),
   selectedRegionLabels: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.array
   ]),
   selectCountry: PropTypes.func,
+  /* todo: solve the issue of this prop sometimes receiving a boolean */
   handleAxisSwitch: PropTypes.func,
   selectRegion: PropTypes.func,
   selectYearRange: PropTypes.func,
@@ -98,11 +93,13 @@ const propTypes = {
   selectSubInd: PropTypes.func,
   subInd1AllSelected: PropTypes.bool,
   subInd2AllSelected: PropTypes.bool,
+  indSelectedIndex: PropTypes.number,
   addIndicator: PropTypes.func,
   removeIndicator: PropTypes.func,
   locationSelected: PropTypes.bool,
-  multipleInd: PropTypes.bool,
+  indicatorSelected: PropTypes.bool,
   saveGraphOption: PropTypes.func,
+  subIndAggrToggle: PropTypes.func,
   resetAll: PropTypes.func
 };
 
@@ -112,11 +109,11 @@ const defaultProps = {
   handleAxisSwitch: null,
   removeIndicator: null,
   locationSelected: true,
+  indicatorSelected: false,
   subInd1AllSelected: true,
   subInd2AllSelected: true,
-  multipleInd: false,
+  indSelectedIndex: -1,
   chartType: chartTypes.geoMap,
-  changesMade: true,
   addIndicator: null,
   specOptions: {},
   chartKeys: [],
@@ -128,11 +125,13 @@ const defaultProps = {
   selectedCountryVal: [],
   selectedCountryLabels: [],
   selectedRegionVal: [],
+  selectedRegionCodes: [],
   selectedRegionLabels: [],
   selectCountry: null,
   selectRegion: null,
   selectInd: null,
   selectSubInd: null,
+  subIndAggrToggle: null,
   resetAll: null
 };
 
@@ -149,13 +148,37 @@ class DataExplorePane extends React.Component {
 
       labelNumb = labelNumb.length > 1 ? labelNumb : '0'.concat(labelNumb);
 
+      const isGeoChart =
+        this.props.chartType === chartTypes.focusNL ||
+        this.props.chartType === chartTypes.geoMap ||
+        this.props.chartType === chartTypes.focusKE;
+
+      let addIndLabel = 'Add Indicator';
+
+      let indicatorLabel = `Indicator ${labelNumb}`;
+
+      if (isGeoChart) {
+        addIndLabel = 'Add Long/Lat Indicator';
+
+        switch (index) {
+          case 0:
+            indicatorLabel = indicatorLabel.concat(' (layer)');
+            break;
+          case 1:
+            indicatorLabel = indicatorLabel.concat(' (bubble)');
+            break;
+          default:
+            indicatorLabel = indicatorLabel.concat(' (point)');
+            break;
+        }
+      }
+
       // we push in the indicator dropdown data
       indPanels.push({
         indIndex: index,
-        sectionRemove: this.props.multipleInd,
         removeIndicator: () => this.props.removeIndicator(index),
-        indicator: true,
-        indicatorLabel: `Indicator ${labelNumb}`,
+        isIndicator: true,
+        indicatorLabel,
         categorise: true,
         placeHolderText: 'Select indicator',
         placeHolderNumber: this.props.indNames.length,
@@ -170,18 +193,21 @@ class DataExplorePane extends React.Component {
       indPanels.push({
         indIndex: index,
         addIndicator: this.props.addIndicator,
-        sectionAdd:
-          index === this.props.selectedInd.length - 1 && this.props.multipleInd,
-        indicator: indItem.indicator,
+        addIndLabel,
+        sectionAdd: index === this.props.selectedInd.length - 1,
         subIndicator: true,
         categorise: true,
         multiple: true,
         selectAll: true,
+        defaultAll: false,
+        aggrCheck: indItem.aggregate,
+        openSubInd:
+          this.props.indicatorSelected && this.props.indSelectedIndex === index
+            ? index
+            : -1,
         placeHolderText: 'Select sub indicator',
         selectDataSource: (val, isArray) =>
           this.props.selectSubInd(val, isArray, index),
-        defaultAll:
-          this.props.changesMade && indItem.selectedSubInd.length === 0,
         allFileSources: indItem.subIndicators,
         selectedSources: indItem.selectedSubInd
       });
@@ -192,17 +218,15 @@ class DataExplorePane extends React.Component {
 
   render() {
     /* TODO: put this in the state so that it wouldn't
-        everytime when unneeded changes are made
+        render everytime when unneeded changes are made
         right now there some referencing bs happening
         so can't catch the did update prop change*/
     const indPanels = this.generateIndicatorPanels();
 
-    const history = createBrowserHistory();
-    const isGeoMap =
-      history.location.pathname.includes('geomap') ||
-      history.location.pathname.includes('focusNL') ||
-      history.location.pathname.includes('focusKE') ||
-      history.location.pathname.includes('home');
+    const graphStruct =
+      this.props.chartType === chartTypes.barChart ||
+      this.props.chartType === chartTypes.lineChart ||
+      this.props.chartType === chartTypes.donutChart;
 
     return (
       <ComponentBase style={{ display: this.props.display }}>
@@ -257,7 +281,9 @@ class DataExplorePane extends React.Component {
                   allFileSources: this.props.regions,
                   defaultAll: this.props.locationSelected,
                   selectedSources: this.props.selectedRegionVal,
+                  selectedRegionCodes: this.props.selectedRegionCodes,
                   valueSelected: this.props.selectedRegionLabels,
+                  capitalize: true,
                   reset: () => this.props.selectRegion('reset')
                 },
                 {
@@ -270,6 +296,7 @@ class DataExplorePane extends React.Component {
                   defaultAll: this.props.locationSelected,
                   selectedSources: this.props.selectedCountryVal,
                   valueSelected: this.props.selectedCountryLabel,
+                  capitalize: true,
                   reset: () => this.props.selectCountry('reset')
                 }
               ]}
@@ -297,12 +324,14 @@ class DataExplorePane extends React.Component {
           >
             <DropdownMenuPanel
               handleAxisSwitch={this.props.handleAxisSwitch}
+              subIndAggrToggle={this.props.subIndAggrToggle}
               chartKeys={this.props.chartKeys}
+              aggrToggle={this.props.chartType !== chartTypes.tableChart}
               panelDetails={indPanels}
             />
           </ExpansionPanelContainer>
 
-          {!isGeoMap && (
+          {graphStruct && (
             <ExpansionPanelContainer
               icon={<IconGraphStructure />}
               label="Graph structure"

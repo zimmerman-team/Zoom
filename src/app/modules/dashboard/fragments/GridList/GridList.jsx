@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
-
 /* components */
 import { Container } from './GridList.styles';
 import GridItem from './components/GridItem/GridItem';

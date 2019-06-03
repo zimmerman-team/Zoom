@@ -1,10 +1,9 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-/* components */
-
 import theme from 'theme/Theme';
 import { ComponentBase, OptionRow } from './SortbyDialog.styles';
+/* components */
 
 const propTypes = {
   open: PropTypes.bool,

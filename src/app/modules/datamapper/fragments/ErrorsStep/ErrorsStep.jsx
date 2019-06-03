@@ -1,30 +1,27 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* components */
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import FindReplace from 'modules/datamapper/fragments/ErrorsStep/components/FindReplace/FindReplace';
 import Pagination from 'components/Pagination/Pagination';
 import ZoomButton from 'components/ZoomButton/ZoomButton';
 import SimpleEditDialog from 'components/Dialog/SimpleEditDialog/SimpleEditDialog';
 import Divider from 'components/Dividers/Divider';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
-
 /* utils */
 import { formatColumns } from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep.util';
 import isEqual from 'lodash/isEqual';
 import findIndex from 'lodash/findIndex';
-
 /* styles */
 import {
+  ButtonContainer,
+  ErrorTable,
   ErrorTitle,
   ModuleContainer,
-  ErrorTable,
   TabContainer,
-  TabText,
-  ButtonContainer,
-  TabDivider
+  TabDivider,
+  TabText
 } from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
 
 import theme from 'theme/Theme';
@@ -118,7 +115,7 @@ class ErrorStep extends React.Component {
       !isEqual(this.props.data, prevProps.data) ||
       !isEqual(this.props.ignoredErrors, prevProps.ignoredErrors) ||
       !isEqual(this.props.errorCells, prevProps.errorCells)
-    )
+    ) {
       this.setState(
         {
           data: this.props.data,
@@ -133,6 +130,7 @@ class ErrorStep extends React.Component {
         },
         this.changeColors
       );
+    }
   }
 
   componentWillUnmount() {

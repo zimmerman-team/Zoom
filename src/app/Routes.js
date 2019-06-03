@@ -21,12 +21,12 @@ import DataMapperModule from 'modules/datamapper/DataMapperModule';
 import CountryDetailMediator from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator';
 
 /*
-const HomeModuleMediator = lazy(() =>
-  import('mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator')
+const HomeModule = lazy(() =>
+  import('modules/home/HomeModule')
 );
 */
 
-import HomeModuleMediator from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator';
+import HomeModule from 'modules/home/HomeModule';
 
 /*const FocusModuleMediator = lazy(() =>
   import('mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator')
@@ -102,6 +102,7 @@ const DashboardMediator = lazy(() =>
 */
 
 import DashboardMediator from 'mediators/DashboardMediators/DashboardMediator';
+import auth0Client from './auth/Auth';
 
 // const ManMappingStep = lazy(() =>
 //   import('modules/datamapper/fragments/ManMappingStep/ManMappingStep')
@@ -113,18 +114,16 @@ const Routes = props => {
     <React.Fragment>
       <Suspense fallback={<PageLoader />}>
         <Switch>
-          <Route exact path="/callback" component={LoginCallback} />
+          <Route
+            exact
+            path="/callback"
+            render={() => <LoginCallback auth0Client={auth0Client} />}
+          />
           <Route exact path="/" render={() => <Redirect to="/home" />} />
           <Route
             exact
             path="/home"
-            render={() => (
-              <HomeModuleMediator
-                indicatorAggregations={props}
-                dropDownData={props}
-                auth0Client={props.auth0Client}
-              />
-            )}
+            render={() => <HomeModule dropDownData={props} />}
           />
           <Route
             exact
@@ -140,12 +139,8 @@ const Routes = props => {
             exact
             path="/visualizer/:chart/:code/:tab"
             render={() =>
-              props.auth0Client.isAuthenticated() ? (
-                <VisualizerModuleMediator
-                  indicatorAggregations={props}
-                  dropDownData={props}
-                  auth0Client={props.auth0Client}
-                />
+              props.user.data ? (
+                <VisualizerModuleMediator dropDownData={props} />
               ) : (
                 <Redirect to="/" />
               )
@@ -156,12 +151,7 @@ const Routes = props => {
             exact
             path="/public/:chart/:code/:tab"
             render={() => (
-              <VisualizerModuleMediator
-                publicPage
-                indicatorAggregations={props}
-                dropDownData={props}
-                auth0Client={props.auth0Client}
-              />
+              <VisualizerModuleMediator publicPage dropDownData={props} />
             )}
           />
           <Route
@@ -180,9 +170,10 @@ const Routes = props => {
             exact
             path="/add-user"
             render={() =>
-              props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
-                <AddUserMediator auth0Client={props.auth0Client} />
+              props.user.data &&
+              (get(props.user, 'data.role', '') === 'Administrator' ||
+                get(props.user, 'data.role', '') === 'Super admin') ? (
+                <AddUserMediator user={props.user.data} />
               ) : (
                 <Redirect to="/" />
               )
@@ -198,10 +189,11 @@ const Routes = props => {
                   ? get(props.user.data, 'authId', '') ===
                     rProps.match.params.userId
                   : false;
-              return props.auth0Client.isAuthenticated() &&
-                (props.auth0Client.isAdministrator() ||
+              return props.user.data &&
+                (get(props.user, 'data.role', '') === 'Administrator' ||
+                  get(props.user, 'data.role', '') === 'Super admin' ||
                   isRegularUserEditSelf) ? (
-                <EditUserMediator auth0Client={props.auth0Client} />
+                <EditUserMediator />
               ) : (
                 <Redirect to="/" />
               );
@@ -210,22 +202,30 @@ const Routes = props => {
           <Route
             exact
             path="/view-user/:userId"
-            render={() =>
-              props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
-                <EditUserMediator auth0Client={props.auth0Client} viewOnly />
+            render={rProps => {
+              const isRegularUserEditSelf =
+                get(props.user.data, 'role', '') === 'Regular user' ||
+                get(props.user.data, 'role', '') === 'Moderator'
+                  ? get(props.user.data, 'authId', '') ===
+                    rProps.match.params.userId
+                  : false;
+              return props.user.data &&
+                (get(props.user, 'data.role', '') === 'Administrator' ||
+                  get(props.user, 'data.role', '') === 'Super admin' ||
+                  isRegularUserEditSelf) ? (
+                <EditUserMediator viewOnly />
               ) : (
                 <Redirect to="/" />
-              )
-            }
+              );
+            }}
           />
           <Route
             exact
             path="/create-team"
             render={() =>
-              props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isSuperAdmin() ? (
-                <CreateTeamMediator auth0Client={props.auth0Client} />
+              props.user.data &&
+              get(props.user, 'data.role', '') === 'Super admin' ? (
+                <CreateTeamMediator />
               ) : (
                 <Redirect to="/" />
               )
@@ -235,9 +235,10 @@ const Routes = props => {
             exact
             path="/edit-team/:teamId"
             render={() =>
-              props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
-                <EditTeamMediator auth0Client={props.auth0Client} />
+              props.user.data &&
+              (get(props.user, 'data.role', '') === 'Administrator' ||
+                get(props.user, 'data.role', '') === 'Super admin') ? (
+                <EditTeamMediator />
               ) : (
                 <Redirect to="/" />
               )
@@ -247,9 +248,10 @@ const Routes = props => {
             exact
             path="/view-team/:teamId"
             render={() =>
-              props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
-                <EditTeamMediator auth0Client={props.auth0Client} viewOnly />
+              props.user.data &&
+              (get(props.user, 'data.role', '') === 'Administrator' ||
+                get(props.user, 'data.role', '') === 'Super admin') ? (
+                <EditTeamMediator viewOnly />
               ) : (
                 <Redirect to="/" />
               )
@@ -263,8 +265,8 @@ const Routes = props => {
           <Route
             path="/dashboard/:tab"
             render={() =>
-              props.auth0Client.isAuthenticated() ? (
-                <DashboardMediator auth0Client={props.auth0Client} />
+              props.user.data ? (
+                <DashboardMediator auth0Client={auth0Client} />
               ) : (
                 <Redirect to="/" />
               )
@@ -275,13 +277,10 @@ const Routes = props => {
           <Route
             path="/mapper"
             render={() =>
-              props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
-                <DataMapperModule
-                  dropDownData={props}
-                  fileCorrection={props}
-                  auth0Client={props.auth0Client}
-                />
+              props.user.data &&
+              (get(props.user, 'data.role', '') === 'Administrator' ||
+                get(props.user, 'data.role', '') === 'Super admin') ? (
+                <DataMapperModule dropDownData={props} fileCorrection={props} />
               ) : (
                 <Redirect to="/" />
               )
@@ -290,13 +289,10 @@ const Routes = props => {
           <Route
             path="/dataset/:id"
             render={() =>
-              props.auth0Client.isAuthenticated() &&
-              props.auth0Client.isAdministrator() ? (
-                <DatasetMediator
-                  dropDownData={props}
-                  auth0Client={props.auth0Client}
-                  metaData={props}
-                />
+              props.user.data &&
+              (get(props.user, 'data.role', '') === 'Administrator' ||
+                get(props.user, 'data.role', '') === 'Super admin') ? (
+                <DatasetMediator dropDownData={props} metaData={props} />
               ) : (
                 <Redirect to="/" />
               )
@@ -326,7 +322,7 @@ const mapStateToProps = state => {
   return {
     userUpdated: state.userUpdated,
     userAdded: state.userAdded,
-    user: state.userPersist
+    user: state.currentUser
   };
 };
 

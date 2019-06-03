@@ -1,44 +1,45 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import theme from 'theme/Theme';
+
+/* style */
+import {
+  InfoIcon,
+  ToolTipContainer,
+  InvContainer
+} from './FragmentInfoButton.style';
+
+/* components */
+import { Tooltip } from 'react-tippy';
 
 /**
  * todo: Please write a short component description of what this component does
  * @param {Object} customProperty - please describe component property
  */
 
-const ComponentBase = styled.div`
-  height: 15px;
-  width: 15px;
-  border-radius: 50%;
-  background-color: darkgrey;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-  cursor: pointer;
+const propTypes = {
+  text: PropTypes.string
+};
+const defaultProps = {
+  text: 'No text'
+};
 
-  &:hover {
-    background-color: ${theme.color.aidsFondsRed};
-  }
-
-  &:after {
-    content: 'i';
-    font-size: 13px;
-    text-align: center;
-    color: ${theme.color.aidsFondsWhite};
-    font-family: ${theme.color.zoomFontFamOne};
-    user-select: none;
-  }
-`;
-
-const propTypes = {};
-const defaultProps = {};
-
-const FragmentInfoButton = () => {
-  return <ComponentBase />;
+const FragmentInfoButton = props => {
+  return (
+    <div>
+      <Tooltip
+        // options
+        html={
+          <InvContainer>
+            <ToolTipContainer>{props.text}</ToolTipContainer>
+          </InvContainer>
+        }
+        position="top"
+      >
+        <InfoIcon />
+      </Tooltip>
+    </div>
+  );
 };
 
 FragmentInfoButton.propTypes = propTypes;

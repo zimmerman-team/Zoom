@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 import EditableTitle from 'components/chartcontext/common/EditableTitle';
-
 /* components */
-import TitleEditor from 'components/TitleEditor/TitleEditor';
 
 /**
  * todo: Please write a short component description of what this component does

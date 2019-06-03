@@ -1,9 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import ProjectList from './ProjectList';
-
 // Components
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import {
   Label,
   List,

@@ -96,7 +96,9 @@ Cypress.Commands.add('waitPageLoader2', (timeout = 1750000) => {
 });
 
 Cypress.Commands.add('waitIndicatorsLoaded', (timeout = 1750000) => {
-  cy.contains('Select indicator').should('be.greaterThan', '1');
+  cy.get('[data-cy=zoom-select]')
+    .contains('Select indicator')
+    .should('not.have.text', 'Select indicator (1)');
 });
 // --------- Hover ---------
 Cypress.Commands.add('hover', (selectorHoverItem, selectorShowItem, n = 0) => {

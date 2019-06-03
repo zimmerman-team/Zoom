@@ -32,9 +32,9 @@ describe('Create geo functionality', function() {
       'Country Focus Page Netherlands'
     );
     cy.get('[data-cy="nav-pane-item-3"]').should('have.text', 'Line chart');
-    cy.get('[data-cy="nav-pane-item-4"]').should('have.text', 'Table chart');
-    // cy.get('[data-cy="nav-pane-item-4"]').should('have.text', 'Bar chart');
-    // cy.get('[data-cy="nav-pane-item-6"]').should('have.text', 'Donut chart');
+    cy.get('[data-cy="nav-pane-item-4"]').should('have.text', 'Bar chart');
+    cy.get('[data-cy="nav-pane-item-5"]').should('have.text', 'Table chart');
+    cy.get('[data-cy="nav-pane-item-6"]').should('have.text', 'Donut chart');
   });
 });
 
@@ -188,11 +188,15 @@ describe('Chartbuilder table chart fragment e2e', function() {
     });
     cy.get('[aria-label="Delete Selected Rows"]').click();
     cy.waitPageLoader();
+    cy.get('[aria-label="Search"]').click();
+    cy.get('.MuiInputBase-root > .MuiInputBase-input').type('kenya');
+    cy.waitPageLoader();
     cy.get('tbody>tr').should('contain', 'Sorry, no matching records found');
 
-    cy.get('[aria-label="Search"]').click();
     cy.get('.MUIDataTableSearch-main').within(() => {
-      cy.get('[type="button"]').click();
+      cy.get('[type="button"]')
+        .first()
+        .click();
     });
   });
 

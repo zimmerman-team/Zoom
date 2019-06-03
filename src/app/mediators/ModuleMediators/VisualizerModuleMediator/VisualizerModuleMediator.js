@@ -781,6 +781,10 @@ class VisualizerModuleMediator extends Component {
       actions.storeChartDataRequest({
         changesMade: this.props.chartResults.data === undefined,
         chartMounted: true,
+        // for development purposes this needs to be reset
+        // to -1 for the flow of chart data loading to work
+        // properly
+        indSelectedIndex: -1,
         name,
         _public,
         teams,

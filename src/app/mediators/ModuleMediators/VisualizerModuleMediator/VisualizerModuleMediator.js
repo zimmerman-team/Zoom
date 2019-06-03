@@ -793,7 +793,7 @@ class VisualizerModuleMediator extends Component {
         desc: description,
         selectedInd,
         indicatorSelected: false,
-        authorName: author.username,
+        authorName: author ? author.username : 'User Not Found',
         createdDate: formatDate(created),
         selectedRegionVal: removeIds(selectedRegionVal),
         chartKeys:

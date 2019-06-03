@@ -44,25 +44,20 @@ describe('Home page map controls', function() {
 });
 
 describe('Home page geo map datamapping', function() {
-  it('Plots South America data about aids related deaths', function() {
+  it('Plots South of Sahara data about one public indicator', function() {
     cy.visit('/');
     cy.get('[data-cy=dialog-overlay]').click();
     cy.get('[data-cy="cookie-notice"]').click();
     cy.get('[data-cy="geomap-filter-button"]').click();
-    cy.get('[data-cy="data-explorer-panel-reset"]').click();
-    cy.contains('Select region').click();
-    cy.contains('south america').click();
     cy.get('[data-cy="geo-map-container"]').click();
-    cy.waitIndicatorsLoaded();
     cy.contains('Select indicator').click();
-    cy.contains('aids related deaths').click();
+    cy.contains('one public indicator').click();
     cy.waitPageLoader();
     cy.waitPageLoader2();
     cy.get('[data-cy="legendLayer-label"]').should(
       'contain',
-      'aids related deaths'
+      'one public indicator'
     );
-    cy.contains('south america');
   });
 
   it('Should make a snapshot of the visual current state', function() {

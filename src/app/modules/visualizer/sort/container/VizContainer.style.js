@@ -34,11 +34,10 @@ export const FragmentBase = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  //height: calc(100% - 32px);
-  //height: -moz-calc(100% - 32px);
-  //height: -webkit-calc(100% - 32px);
   height: 100%;
   align-items: center;
-  justify-content: center;
+  /* todo: solve this in a cleaner manner */
+  padding-top: ${props => props.paddingTop || 'initial'};
+  justify-content: ${props => props.position || 'center'};
   background-color: white;
 `;

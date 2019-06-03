@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
 import ChartLegendItem from 'modules/visualizer/sort/container/fragments/common/ChartLegendItem';
 
 /**
@@ -38,7 +37,12 @@ const ChartLegends = props => {
       {props.data.map(indicator => {
         return (
           indicator.label && (
-            <ChartLegendItem color={indicator.color} text={indicator.label} />
+            <ChartLegendItem
+              color={indicator.color}
+              text={indicator.label}
+              dataSource={indicator.dataSource}
+              // data-cy={console.log(indicator.name)}
+            />
           )
         );
       })}

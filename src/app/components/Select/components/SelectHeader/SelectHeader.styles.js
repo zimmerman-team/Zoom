@@ -16,6 +16,7 @@ export const ComponentBase = styled.div`
   &:hover {
     cursor: pointer;
   }
+  text-transform: ${props => (props.capitalize ? 'capitalize' : '')};
 `;
 
 export const PointerContainer = styled.div`

@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
 /* components */
 import GeoMap from 'components/GeoMap/GeoMap';
 import { ModuleContainer } from 'modules/focus/FocuseModule.styles';
@@ -88,7 +87,7 @@ class FocusModule extends React.Component {
               {(this.props.dataPaneOpen === paneTypes.privPane ||
                 this.props.dataPaneOpen === paneTypes.createChart ||
                 this.props.dataPaneOpen === paneTypes.convertData) && (
-                <NavPane />
+                <NavPane auth0Client={this.props.auth0Client} />
               )}
             </DataPaneContainer>
           )}

@@ -1,18 +1,15 @@
 import React from 'react';
-
 /* styles */
 import {
   CheckBox,
   ErrorCell,
   ErrorColHeader,
-  IgnorHeaderLabel,
+  HeaderCheckBox,
   HeaderName,
   IgnoreHeaderCheckBox,
-  HeaderCheckBox
+  IgnorHeaderLabel
 } from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
-
 /* components */
-import CustomCheckBox from 'components/CustomCheckBox/CustomCheckBox';
 import Checkbox from 'components/Checkbox/CheckBox';
 
 // so yeah here the columns will need to be formatted according to the data
@@ -61,7 +58,7 @@ export function formatColumns(
     Object.keys(row).forEach((key, index) => {
       // because it seems to be the same as the index
       // and i think its just extra generated stuff from graphql
-      if (key !== 'line no.' && key !== 'checked')
+      if (key !== 'line no.' && key !== 'checked') {
         columns.push({
           property: key,
           header:
@@ -92,6 +89,7 @@ export function formatColumns(
             </ErrorCell>
           )
         });
+      }
     });
   }
 

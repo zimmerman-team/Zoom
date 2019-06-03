@@ -12,9 +12,9 @@ import ModuleContainer from 'modules/common/modulecontainer/ModuleContainer';
 const propTypes = {};
 const defaultProps = {};
 
-const About = props => {
+const About = () => {
   return (
-    <ModuleContainer title={'About zoom'}>
+    <ModuleContainer title="About zoom">
       <AboutTitle data-cy="about-heading">About zoom</AboutTitle>
       <DescriptionParagraphBold data-cy="about-paragraph">
         The major aim of ZOOM is to develop and implement an open data platform

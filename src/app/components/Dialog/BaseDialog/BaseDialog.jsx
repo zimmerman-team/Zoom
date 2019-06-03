@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Box, Layer } from 'grommet';
+import { Box } from 'grommet/components/Box';
+import { Layer } from 'grommet/components/Layer';
 import { SimpleText } from 'components/sort/Misc';
 import { DialogHeading } from 'components/sort/Headings';
 import ZoomButton from 'components/ZoomButton/ZoomButton';
@@ -24,7 +25,9 @@ const propTypes = {
   open: PropTypes.bool,
   title: PropTypes.string,
   message: PropTypes.string,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  buttonText: PropTypes.string,
+  buttonEnabled: PropTypes.bool
 };
 const defaultProps = {
   open: true,

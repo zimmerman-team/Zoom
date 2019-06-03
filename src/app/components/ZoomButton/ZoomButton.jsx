@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Box, Button, DataTable, Text } from 'grommet';
+import { Button } from 'grommet/components/Button';
 import theme from 'theme/Theme';
 
 /**
@@ -11,14 +11,14 @@ import theme from 'theme/Theme';
  */
 
 const ComponentBase = styled(Button)`
-  width: ${props => props.width + 'px'};
+  width: ${props => `${props.width}px`};
   height: 30px;
   border-radius: 15px;
   background-color: ${props => props.backgroundColor};
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: ${props => props.fontSize + 'px'};
+  font-size: ${props => `${props.fontSize}px`};
   font-family: ${theme.font.zoomFontFamTwo};
   text-transform: lowercase;
   color: ${theme.color.aidsFondsWhite};

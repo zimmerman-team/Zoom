@@ -1,37 +1,31 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box } from 'grommet';
-import { Menu } from 'grommet-icons';
+import { Box } from 'grommet/components/Box';
+import { Menu } from 'grommet-icons/icons/Menu';
 import theme from 'theme/Theme';
-import { withRouter, Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
-
 /* components */
 import {
   AidsFondLogo,
-  MenuButton,
   ComponentBase,
-  PaneButton,
+  MenuButton,
   PaneButContainer,
+  PaneButton,
+  PaneButtonText,
   PaneButtonTextVar,
-  PaneButtonVar,
-  PaneButtonText
+  PaneButtonVar
 } from 'components/AppBar/AppBar.styles';
-import { ToastsStore } from 'react-toasts';
-import { SimpleErrorText } from 'components/sort/Misc';
-
+import Snackbar from 'components/Snackbar/Snackbar';
 /* icons */
 import SvgIconPlus from 'assets/icons/IconPlus';
 import SvgIconCloseSmall from 'assets/icons/IconCloseSmaller';
 import SvgIconBack from 'assets/icons/IconBack';
-
 /* actions */
 import * as actions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
@@ -50,7 +44,9 @@ export class AppBar extends React.Component {
     this.state = {
       auth: true,
       anchorEl: null,
-      paneButton: null
+      paneButton: null,
+      errorMessage: 'Error',
+      openSnackbar: false
     };
 
     this.closeSave = this.closeSave.bind(this);
@@ -63,7 +59,8 @@ export class AppBar extends React.Component {
   componentDidUpdate(prevProps) {
     if (
       this.props.location.pathname !== prevProps.location.pathname ||
-      this.props.dataPaneOpen !== prevProps.dataPaneOpen
+      this.props.dataPaneOpen !== prevProps.dataPaneOpen ||
+      !isEqual(this.props.user.data, prevProps.user.data)
     ) {
       this.loadPaneButton();
     }
@@ -71,32 +68,39 @@ export class AppBar extends React.Component {
     // so we only want to load the user to the dashboard after their
     // chart was saved
     // so that the edited chart would appear with the new data in the dashboard
-    if (
-      !isEqual(this.props.chartCreated, prevProps.chartCreated) &&
-      this.props.chartCreated.data
-    ) {
-      this.props.history.push('/dashboard');
+    if (!isEqual(this.props.chartCreated, prevProps.chartCreated)) {
+      if (this.props.chartCreated.data) {
+        this.props.history.push('/dashboard');
+      } else if (
+        this.props.chartCreated.error &&
+        this.props.chartCreated.error.result
+      ) {
+        this.setState({
+          openSnackbar: true,
+          errorMessage: JSON.stringify(this.props.chartCreated.error.result)
+        });
+      }
     }
   }
 
   // TODO somehow make this funciton reusable cause the same one is used in DuplicatorMediator.js
   closeSave() {
-    if (this.props.auth0Client.isAuthenticated()) {
+    if (this.props.user.data) {
       this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
 
-      const profile = this.props.auth0Client.getProfile();
       const dataSources = [];
 
       this.props.chartData.selectedInd.forEach(indData => {
         if (
           dataSources.indexOf(indData.dataSource) === -1 &&
           indData.dataSource
-        )
+        ) {
           dataSources.push(indData.dataSource);
+        }
       });
 
       const chartData = {
-        authId: profile.sub,
+        authId: this.props.user.data.authId,
         dataSources,
         _public: this.props.chartData._public,
         teams: this.props.chartData.teams,
@@ -107,10 +111,12 @@ export class AppBar extends React.Component {
         type: this.props.paneData.chartType,
         data: this.props.chartData.data,
         chartKeys: this.props.chartData.chartKeys,
+        indKeys: this.props.chartData.indKeys,
         indicatorItems: this.props.chartData.selectedInd.map(indData => {
           return {
             indicator: indData.indicator,
             subIndicators: indData.selectedSubInd,
+            aggregate: indData.aggregate,
             // we also need to save the all sub indicators
             // for the datapanes default selections
             // because usually subindicators are refetched
@@ -132,7 +138,7 @@ export class AppBar extends React.Component {
 
       this.props.dispatch(nodeActions.createUpdateChartRequest(chartData));
     } else {
-      ToastsStore.error(<SimpleErrorText> Unauthorized </SimpleErrorText>);
+      this.setState({ openSnackbar: true, errorMessage: 'Unauthorized' });
     }
   }
 
@@ -141,7 +147,7 @@ export class AppBar extends React.Component {
     let buttonLabel = '';
     let paneType = 'none';
 
-    if (this.props.auth0Client.isAuthenticated()) {
+    if (this.props.user.data) {
       if (this.props.dataPaneOpen === paneTypes.none) {
         if (
           this.props.location.pathname.indexOf('/home') !== -1 ||
@@ -243,6 +249,11 @@ export class AppBar extends React.Component {
         align="center"
       >
         <Box direction="row" justify="center">
+          <Snackbar
+            message={this.state.errorMessage}
+            open={this.state.openSnackbar}
+            onClose={() => this.setState({ openSnackbar: false })}
+          />
           <MenuButton
             plain
             icon={<Menu color={theme.color.aidsFondsRed} />}
@@ -251,6 +262,7 @@ export class AppBar extends React.Component {
           />
           <Link to="/">
             <AidsFondLogo
+              data-cy="home-logo"
               a11yTitle="Aidsfonds logo"
               fit="contain"
               alignSelf="center"
@@ -272,7 +284,7 @@ const mapStateToProps = state => {
   return {
     chartData: state.chartData.chartData,
     paneData: state.paneData.paneData,
-    user: state.user,
+    user: state.currentUser,
     chartCreated: state.chartCreated,
     dataPaneOpen: state.dataPaneOpen.open
   };

@@ -2,15 +2,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
-import { barChartMockData } from '__mocks__/barChartVerticalMock';
-import BarChart from 'components/charts/barcharts/horizontal_old/BarChartHorizontal';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll';
+import { Tooltip } from 'react-tippy';
+import {
+  Circle,
+  Container,
+  ItemContainer,
+  StateTooltip,
+  Text
+} from './CivicSpace.styles';
 
 const propTypes = {
+  value: PropTypes.number,
   background: PropTypes.string
 };
 const defaultProps = {
+  value: 0,
   background: ''
 };
 
@@ -23,7 +31,23 @@ const CivicSpace = props => {
         description={countryDetailMockData.fragments[3].description[0]}
         showInfoButton
       >
-        <BarChart data={barChartMockData} />
+        <Container>
+          {countryDetailMockData.fragments[3].states.map(state => (
+            <ItemContainer key={state.value}>
+              <Tooltip
+                position="top"
+                trigger="mouseenter"
+                html={<StateTooltip>{state.desc}</StateTooltip>}
+              >
+                <Circle
+                  color={state.color}
+                  active={props.value === state.value}
+                />
+              </Tooltip>
+              <Text>{state.text}</Text>
+            </ItemContainer>
+          ))}
+        </Container>
       </ModuleFragment>
     </Element>
   );

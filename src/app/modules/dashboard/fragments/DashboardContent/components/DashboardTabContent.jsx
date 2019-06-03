@@ -4,16 +4,16 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 import { connect } from 'react-redux';
-
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
-
 /* components */
 import GridList from 'modules/dashboard/fragments/GridList/GridList';
 import GridListOptionsPane from 'modules/dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
 import NavPane from 'components/Panes/NavPane/NavPane';
 import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
+
+/* todo: logic in this component seems somewhat convoluted, needs some cleaning up */
 
 const ComponentBase = styled.div`
   display: flex;
@@ -22,7 +22,6 @@ const ComponentBase = styled.div`
   justify-content: center;
   flex-direction: column;
   border-top: 2px solid #cfcfcf;
-  //overflow: hidden;
 `;
 
 const Message = styled.div`
@@ -79,13 +78,9 @@ const DashboardTabContent = props => {
     case 'data-sets':
       targetData = props.datasets;
       targetUrl = '/mapper';
-      leftOptionLabel = 'map data set';
+      leftOptionLabel =
+        props.isAdministrator || props.isSuperAdmin ? 'map data set' : null;
       tabContentName = 'Data sets';
-      break;
-    case 'focus-pages':
-      targetData = [];
-      leftOptionLabel = 'add focus page';
-      tabContentName = 'Focus page';
       break;
     case 'users':
       targetData = props.users;
@@ -112,26 +107,12 @@ const DashboardTabContent = props => {
       style={props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}}
     >
       {props.loading && <ProgressIcon />}
-      {/*{isRemoveOption && (*/}
-      {/*<GridListOptionsPane*/}
-      {/*leftOptionLabel={leftOptionLabel}*/}
-      {/*sortIsVisible={sortIsVisible}*/}
-      {/*isRemoveOption={isRemoveOption}*/}
-      {/*isSortByOpen={props.isSortByOpen}*/}
-      {/*changeSortBy={props.changeSortBy}*/}
-      {/*setWrapperRef={props.setWrapperRef}*/}
-      {/*setIsSortByOpen={props.setIsSortByOpen}*/}
-      {/*activeTab={props.activeTab}*/}
-      {/*sort={props.sort}*/}
-      {/*tabs={props.tabs}*/}
-      {/*/>*/}
-      {/*)}*/}
 
       {(props.dataPaneOpen === paneTypes.privPane ||
         props.dataPaneOpen === paneTypes.createChart ||
         props.dataPaneOpen === paneTypes.convertData) && (
         <DataPaneContainer>
-          <NavPane />
+          <NavPane auth0Client={props.auth0Client} />
         </DataPaneContainer>
       )}
 

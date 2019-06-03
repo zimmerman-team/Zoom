@@ -1,6 +1,5 @@
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
-import theme from 'theme/Theme';
 
 export const startItems = [
   {
@@ -36,33 +35,21 @@ export const createChartItems = [
   },
   {
     label: 'Bar chart',
-    // navTo: '/visualizer/barchart/vizID/edit',
-    style: {
-      color: theme.color.zoomGreyEleven,
-      cursor: 'default',
-      fill: theme.color.zoomGreyEleven,
-      backgroundColor: theme.color.aidsFondsWhite
-    }
+    navTo: '/visualizer/barchart/vizID/edit'
   },
   {
     label: 'Table chart',
-    // navTo: '/visualizer/tablechart/vizID/edit',
-    style: {
-      color: theme.color.zoomGreyEleven,
-      cursor: 'default',
-      fill: theme.color.zoomGreyEleven,
-      backgroundColor: theme.color.aidsFondsWhite
-    }
+    navTo: '/visualizer/tablechart/vizID/edit'
   },
   {
     label: 'Donut chart',
-    // navTo: '/visualizer/donutchart/vizID/edit',
-    style: {
-      color: theme.color.zoomGreyEleven,
-      cursor: 'default',
-      fill: theme.color.zoomGreyEleven,
-      backgroundColor: theme.color.aidsFondsWhite
-    }
+    navTo: '/visualizer/donutchart/vizID/edit'
+    // style: {
+    //   color: theme.color.zoomGreyEleven,
+    //   cursor: 'default',
+    //   fill: theme.color.zoomGreyEleven,
+    //   backgroundColor: theme.color.aidsFondsWhite
+    // }
   }
 ];
 

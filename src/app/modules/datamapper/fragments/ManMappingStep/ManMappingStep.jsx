@@ -1,35 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
-
 /* actions */
 import * as generalActions from 'services/actions/general';
-
 /* mock */
 import { uploadInitialstate } from '__consts__/UploadMediatorConst';
-
 /* utils */
 import findIndex from 'lodash/findIndex';
 import filter from 'lodash/filter';
 import keys from 'lodash/keys';
 import pickBy from 'lodash/pickBy';
-
 /* components */
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import ZoomSelect from 'components/Select/ZoomSelect';
-
 /* styles */
 import {
   Cell,
-  ColHeader,
-  ZoomColHeader,
+  CellButton,
   CellLine,
   CellTextField,
-  CellButton,
-  ModuleContainer,
+  ColHeader,
+  ErrorLabel,
   ManMapTable,
   ManMapTitle,
-  ErrorLabel
+  ModuleContainer,
+  ZoomColHeader
 } from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep.style';
 import CellValue from 'components/ZoomTable/CellValue';
 import theme from 'theme/Theme';
@@ -185,14 +180,16 @@ class ManMappingStep extends React.Component {
       disabledValues.splice(prevIndex, 1);
     }
 
-    if (value !== 'filters' && value !== '-None-')
+    if (value !== 'filters' && value !== '-None-') {
       // and we push in the new value either way
       disabledValues.push(value);
+    }
 
     // logic to disable/enable relative values
     if (value === 'Number Value' || value === 'Percentage Value') {
-      if (disabledValues.indexOf('Mixed Value') === -1)
+      if (disabledValues.indexOf('Mixed Value') === -1) {
         disabledValues.push('Mixed Value');
+      }
     } else if (prevVal === 'Number Value' || prevVal === 'Percentage Value') {
       // so if neither number nor percantage value is selected
       // in any other row, we can enable mixed value selection
@@ -204,11 +201,13 @@ class ManMappingStep extends React.Component {
         if (mixedInd !== -1) disabledValues.splice(mixedInd, 1);
       }
     } else if (value === 'Mixed Value') {
-      if (disabledValues.indexOf('Number Value') === -1)
+      if (disabledValues.indexOf('Number Value') === -1) {
         disabledValues.push('Number Value');
+      }
 
-      if (disabledValues.indexOf('Percentage Value') === -1)
+      if (disabledValues.indexOf('Percentage Value') === -1) {
         disabledValues.push('Percentage Value');
+      }
     } else if (prevVal === 'Mixed Value') {
       const numbInd = disabledValues.indexOf('Number Value');
       if (numbInd !== -1) disabledValues.splice(numbInd, 1);
@@ -224,7 +223,7 @@ class ManMappingStep extends React.Component {
     // so we only generate placeholders
     // for emptyFieldRows to inform the user about
     // what needs to be inputed there
-    if (row.emptyFieldRow)
+    if (row.emptyFieldRow) {
       switch (row.zoomModel) {
         case 'indicator':
           return 'Please enter any text';
@@ -235,6 +234,7 @@ class ManMappingStep extends React.Component {
         default:
           return '';
       }
+    }
 
     return '';
   }

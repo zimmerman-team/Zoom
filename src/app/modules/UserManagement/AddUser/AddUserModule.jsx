@@ -4,11 +4,10 @@ import PropTypes from 'prop-types';
 /* components */
 import {
   AddUserForm,
+  Container,
   DropDownContainer,
   DropDownLabel,
-  Message,
-  SubmitButton,
-  Container
+  Message
 } from 'modules/UserManagement/AddUser/AddUserModule.styles';
 
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
@@ -17,7 +16,7 @@ import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
 
 import userManagementMockData from '__mocks__/userManagementMock';
-import { Box } from 'grommet';
+
 import theme from 'theme/Theme';
 import ZoomSelect from 'components/Select/ZoomSelect';
 import ZoomButton from 'components/ZoomButton/ZoomButton';

@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import LineChart from './LineChart';
-
 // Components
 import { ResponsiveLine } from '@nivo/line';
 import { ComponentBase } from 'components/charts/nivo_linechart/LineChart.styles';

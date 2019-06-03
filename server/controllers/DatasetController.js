@@ -101,9 +101,12 @@ const DatasetApi = {
           });
 
           dataset.save(err => {
-            if (err) general.handleError(res, err);
-
-            res.json({ message: 'dataset saved' });
+            if (err) {
+              console.log('err', error);
+              general.handleError(res, err);
+            } else {
+              res.json({ message: 'dataset saved' });
+            }
           });
         } else {
           general.handleError(res, 'Unauthorized');

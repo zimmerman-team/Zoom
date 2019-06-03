@@ -23,3 +23,12 @@ export function clearUserData() {
     type: CLEAR_USER_DATA
   };
 }
+
+export const SET_USER_ID_TOKEN = 'SET_USER_ID_TOKEN';
+
+export function setUserIdToken(idToken) {
+  return {
+    type: SET_USER_ID_TOKEN,
+    data: idToken
+  };
+}

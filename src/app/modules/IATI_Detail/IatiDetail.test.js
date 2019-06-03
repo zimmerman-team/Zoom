@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import IatiDetail from 'modules/IATI_Detail/IatiDetail';
-
 // Components
 import Sectors from 'modules/IATI_Detail/fragments/Sectors/Sectors';
 import TotalBudget from 'modules/IATI_Detail/fragments/TotalBudget/TotalBudget';

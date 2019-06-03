@@ -1,14 +1,12 @@
 import React from 'react';
-
 /* styles */
 import {
   LegendItem,
   LegendLabel,
-  LegendNumberContainer,
-  LegendNumber
+  LegendNumber,
+  LegendNumberContainer
 } from 'components/GeoMap/components/Legends/Legend.styles';
 import { ColorGradient } from 'components/GeoMap/components/Legends/LayerLegend/LayerLegend.styles';
-
 /* utils */
 import { formatNumber } from 'utils/genericUtils';
 

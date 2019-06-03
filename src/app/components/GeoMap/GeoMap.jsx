@@ -4,31 +4,27 @@ import PropTypes from 'prop-types';
 import MapGL, { LinearInterpolator } from 'react-map-gl';
 import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
-
 /* utils */
 import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
+import MapControls from 'components/GeoMap/components/MapControls/MapControls';
+import MAP_STYLE from 'components/GeoMap/data/map-style-basic-v8';
+import ErrorBoundaryFallback from 'components/ErrorBoundaryFallback/ErrorBoundaryFallback';
+import { ErrorBoundary } from 'react-error-boundary';
 import { generateLegends, generateMarkers } from './GeoMap.util';
-
 /* styles */
-import { borderStyle, dataLayer } from './components/map-style';
-
+import { borderStyle, dataLayer, colorStops } from './components/map-style';
 /* components */
 import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
 import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
-import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
-import MapControls from 'components/GeoMap/components/MapControls/MapControls';
-import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 
-import MAP_STYLE from 'components/GeoMap/data/map-style-basic-v8';
 import {
+  ControlsContainer,
   LegendContainer,
-  MapContainer,
-  ControlsContainer
+  MapContainer
 } from './GeoMap.style';
 
-const MAPBOX_TOKEN =
-  'pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw';
+const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const propTypes = {
   latitude: PropTypes.number,
@@ -113,9 +109,9 @@ export class GeoMap extends Component {
     ) {
       this.setState({
         viewport: {
+          ...this.state.viewport,
           latitude: this.props.focus.latitude,
           longitude: this.props.focus.longitude,
-
           zoom: this.props.focus.zoom
         }
       });
@@ -127,7 +123,14 @@ export class GeoMap extends Component {
       this.props.viewport.zoom !== undefined
     ) {
       this.setState({
-        viewport: this.props.viewport
+        viewport: {
+          ...this.props.viewport,
+          // oke so we want this to always be passed in like this
+          // for everything to work properly
+          // cause sometimes saved data from the backend
+          // passes this in as NOT a function
+          transitionInterpolator: new LinearInterpolator()
+        }
       });
     }
   }
@@ -156,8 +159,31 @@ export class GeoMap extends Component {
       if (!find(mapStyle.layers, ['id', 'outline'])) {
         mapStyle.layers.push(borderStyle);
       }
+
+      // so here we change the data layers color stops
+      // according to the amount of actually unique values
+      // in our geomap data, so that the layers on the map
+      // would reflect the legend of the map
+      const colorStopz = colorStops;
+      // and this [1][0] is the actual value that we
+      // want to adjust in these color stops as
+      // the color stop amount is formed according to
+      // this value, check the variable imported 'colorStops'
+      // for clarity
+      colorStopz[1][0] = layers.data.uniqCount;
+
       if (!find(mapStyle.layers, ['id', 'layer'])) {
+        dataLayer.paint['fill-color'].stops = colorStopz;
+
         mapStyle.layers.push(dataLayer);
+      } else {
+        // and when we get new data into the layers we want to update
+        // the color stops according to this new data
+
+        // so we find the layer containing our color stops
+        const layerColInd = findIndex(mapStyle.layers, ['id', 'layer']);
+
+        mapStyle.layers[layerColInd].paint['fill-color'].stops = colorStopz;
       }
     } else {
       // so if no layers are loaded we want to make sure that
@@ -192,8 +218,9 @@ export class GeoMap extends Component {
   _updateViewport = viewport => {
     this.setState({ viewport });
 
-    if (this.props.chartMounted && this.props.saveViewport)
+    if (this.props.chartMounted && this.props.saveViewport) {
       this.props.saveViewport(viewport);
+    }
   };
 
   _setLayerInfo = event => {
@@ -228,8 +255,9 @@ export class GeoMap extends Component {
     const { features } = event;
 
     const feature = features && features.find(f => f.layer.id === 'layer');
-    if (feature && feature.properties.geolocationType === 'country')
+    if (feature && feature.properties.geolocationType === 'country') {
       this.props.outerHistory.push(`/country/${feature.properties.iso2}`);
+    }
   };
 
   _handleMapLoaded = event => {
@@ -250,7 +278,7 @@ export class GeoMap extends Component {
   }
 
   handleZoomOut() {
-    if (this.state.viewport.zoom >= this.state.settings.minZoom)
+    if (this.state.viewport.zoom >= this.state.settings.minZoom) {
       this._updateViewport({
         ...this.state.viewport,
         zoom:
@@ -258,6 +286,7 @@ export class GeoMap extends Component {
             ? this.state.viewport.zoom - 0.1
             : this.state.settings.minZoom
       });
+    }
   }
 
   handleFullscreen() {
@@ -301,66 +330,54 @@ export class GeoMap extends Component {
 
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
+      <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+        <MapContainer data-cy="geo-map-container" id="home-geomap">
+          <ControlsContainer>
+            <MapControls
+              onZoomIn={this.handleZoomIn}
+              onZoomOut={this.handleZoomOut}
+              onFullScreen={this.handleFullscreen}
+            />
+          </ControlsContainer>
 
-      <MapContainer data-cy="geo-map-container" id="home-geomap">
-        <ControlsContainer>
-          <MapControls
-            onZoomIn={this.handleZoomIn}
-            onZoomOut={this.handleZoomOut}
-            onFullScreen={this.handleFullscreen}
-          />
-        </ControlsContainer>
-
-        {/*<YearContainer*/}
-        {/*style={*/}
-        {/*this.props.disableYear*/}
-        {/*? { pointerEvents: 'none', opacity: '0.4' }*/}
-        {/*: {}*/}
-        {/*}*/}
-        {/*>*/}
-        {/*<CustomYearSelector*/}
-        {/*selectedYear={this.props.selectedYear}*/}
-        {/*selectYear={this.props.selectYear}*/}
-        {/*/>*/}
-        {/*</YearContainer>*/}
-
-        <MapGL
-          {...viewport}
-          {...settings}
-          scrollZoom={true}
-          width="100%"
-          height="100%"
-          mapStyle={mapStyle}
-          onViewportChange={this._updateViewport}
-          onHover={this._setLayerInfo}
-          onClick={this._onCountryClick}
-          onLoad={this._handleMapLoaded}
-          mapboxApiAccessToken={MAPBOX_TOKEN}
-          // mapOptions={this.props.mapOptions}
-          ref={map => (this.mapRef = map)}
-          attributionControl
-          // bounds={ya}
-          // so commenting this out cause it causes the
-          // onHover to NOT receive features...
-          // dunno why though seems like just a bug in this react-map-gl library
-          // cause the on click does receive the features...
-          // reuseMaps
-        >
-          {/*So this is the layer tooltip, and we seperate it from the
+          <MapGL
+            {...viewport}
+            {...settings}
+            scrollZoom
+            width="100%"
+            height="100%"
+            mapStyle={mapStyle}
+            onViewportChange={this._updateViewport}
+            onHover={this._setLayerInfo}
+            onClick={this._onCountryClick}
+            onLoad={this._handleMapLoaded}
+            mapboxApiAccessToken={MAPBOX_TOKEN}
+            // mapOptions={this.props.mapOptions}
+            ref={map => (this.mapRef = map)}
+            attributionControl
+            // bounds={ya}
+            // so commenting this out cause it causes the
+            // onHover to NOT receive features...
+            // dunno why though seems like just a bug in this react-map-gl library
+            // cause the on click does receive the features...
+            // reuseMaps
+          >
+            {/*So this is the layer tooltip, and we seperate it from the
               martker tooltip, cause its functionality as a tooltip is a bit different
               and also because we implement the layers a bit more differently
               than normal markers*/}
-          {this._showLayerInfo()}
+            {this._showLayerInfo()}
 
-          {this._showMarkerInfo()}
+            {this._showMarkerInfo()}
 
-          {markerArray}
+            {markerArray}
 
-          {/*contains zoom in/out and fullscreen toggle*/}
+            {/*contains zoom in/out and fullscreen toggle*/}
 
-          <LegendContainer>{legends}</LegendContainer>
-        </MapGL>
-      </MapContainer>
+            <LegendContainer>{legends}</LegendContainer>
+          </MapGL>
+        </MapContainer>
+      </ErrorBoundary>
     );
   }
 }

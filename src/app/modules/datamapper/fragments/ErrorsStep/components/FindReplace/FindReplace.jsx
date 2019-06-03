@@ -1,14 +1,14 @@
 import React from 'react';
 import {
-  FieldContainer,
-  ComponentBase,
-  InputLabelContainer,
-  InputLabel,
-  InputContainer,
-  EmptyInput,
   ButtonContainer,
+  ButtonLabel,
   buttonStyle,
-  ButtonLabel
+  ComponentBase,
+  EmptyInput,
+  FieldContainer,
+  InputContainer,
+  InputLabel,
+  InputLabelContainer
 } from 'modules/datamapper/fragments/ErrorsStep/components/FindReplace/FindReplace.styles';
 import PropTypes from 'prop-types';
 import ZoomButton from 'components/ZoomButton/ZoomButton';

@@ -6,14 +6,11 @@ import PropTypes from 'prop-types';
 import MetaData from 'modules/datamapper/fragments/MetaData/MetaData';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { connect } from 'react-redux';
-
 /* actions */
 import * as actions from 'services/actions/general';
-
 /* utils */
 import findIndex from 'lodash/findIndex';
 import sortBy from 'lodash/sortBy';
-
 /* consts */
 import { step1InitialData } from '__consts__/DataMapperStepConsts';
 
@@ -223,7 +220,7 @@ class MetaDataMediator extends React.Component {
   // and we'll have a specific text change
   // if 'other' option is chosen from the dropdowns
   otherDropdownText(value, question, qText, options) {
-    if (this.state.data[question].key === 'other')
+    if (this.state.data[question].key === 'other') {
       this.simpleChange(
         {
           key: this.state.data[question].key,
@@ -232,7 +229,7 @@ class MetaDataMediator extends React.Component {
         },
         question
       );
-    else if (this.state.data[question].key === '') {
+    } else if (this.state.data[question].key === '') {
       const labelInd = findIndex(options, ['value', 'other']);
       this.simpleChange(
         {
@@ -245,7 +242,7 @@ class MetaDataMediator extends React.Component {
     }
 
     const existingItem = findIndex(options, ['label', value]);
-    if (existingItem !== -1)
+    if (existingItem !== -1) {
       this.simpleChange(
         {
           key: value,
@@ -254,6 +251,7 @@ class MetaDataMediator extends React.Component {
         },
         question
       );
+    }
 
     this.simpleChange(value, qText);
   }

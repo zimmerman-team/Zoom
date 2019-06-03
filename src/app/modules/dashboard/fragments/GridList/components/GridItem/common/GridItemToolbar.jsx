@@ -1,7 +1,6 @@
 /* base */
 import React from 'react';
 import styled from 'styled-components';
-
 /* components */
 import GridItemToolbarTab from './GridItemToolbarTab';
 import SvgIconEdit from '../../../../../../../assets/icons/IconEdit';

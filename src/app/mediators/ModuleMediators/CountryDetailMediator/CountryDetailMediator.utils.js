@@ -6,6 +6,8 @@ import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
 import theme from 'theme/Theme';
 import { split } from 'sentence-splitter';
+/* mock */
+import mock from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
 
 /*
   Formats project data so it would be acceptable
@@ -134,16 +136,14 @@ export function formatBarChartInfoIndicators(
   let results = [];
   const barChartData = [];
 
-  // console.log(countryData);
-
   indicatorNames.forEach((name, index) => {
     if (index < 3) {
       const countryDataPoints = filter(countryData, ['indicatorName', name]);
       // const globalDataPoints = filter(globalData, ['indicatorName', name]);
 
       if (countryDataPoints.length > 0) {
-        let countryIndValue = sortBy(countryDataPoints, ['date']).reverse()[0]
-          .value;
+        const countryInd = sortBy(countryDataPoints, ['date']).reverse()[0];
+        const countryIndValue = countryInd.value;
         // countryDataPoints.forEach(point => {
         //   countryIndValue += point.value;
         // });
@@ -155,9 +155,22 @@ export function formatBarChartInfoIndicators(
         // });
 
         barChartData.push({
-          indicator: name,
+          indicator: `${
+            find(mock.lineChartInd, lci => lci.name.indexOf(name) > -1).name
+          } | ${countryInd.date}`,
           [countryName]: countryIndValue,
-          CountryColor: theme.color.chartColorTwo
+          [`${countryName}-formatted-value`]: countryIndValue.toLocaleString(
+            undefined,
+            {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2
+            }
+          ),
+          CountryColor: get(
+            find(mock.lineChartInd, lci => lci.name.indexOf(name) > -1),
+            'color',
+            theme.color.chartColorTwo
+          )
           // Global: globalIndValue,
           // GlobalColor: theme.color.chartColorThree
         });
@@ -242,17 +255,68 @@ export function formatLineChart2Data(indicatorData) {
     if (chartItemInd > -1) {
       lineChartData[chartItemInd] = {
         ...lineChartData[chartItemInd],
-        [item.indicatorName]: item.value
+        [find(
+          mock.lineChartInd,
+          lci => lci.name.indexOf(item.indicatorName) > -1
+        ).name]: item.value
       };
     } else {
       lineChartData.push({
         year: item.date,
-        [item.indicatorName]: item.value
+        [find(
+          mock.lineChartInd,
+          lci => lci.name.indexOf(item.indicatorName) > -1
+        ).name]: item.value
       });
     }
   });
 
   return lineChartData;
+}
+
+// also formats and exports the chart keys for lineData
+// switching orientation of each different indicator - subindicator sequence
+// so works for the current version where we use two different sequences
+// might misbehave if we ever add some other data here
+export function formatEcoLineData(indicatorData) {
+  const ecoLineData = [];
+  const chartKeys = [];
+
+  let orientBool = true;
+
+  indicatorData.forEach(indicator => {
+    const indicatorId = `${indicator.indicatorName} - ${indicator.filterName}`;
+
+    const existIndIndex = findIndex(chartKeys, ['name', indicatorId]);
+
+    if (existIndIndex === -1) {
+      chartKeys.push({
+        name: indicatorId,
+        // coloring is also made to work with mainly two indicators
+        // will not work properly with extra indicators
+        color: orientBool ? 'hsl(172, 70%, 50%)' : 'hsl(91, 70%, 50%)',
+        orientation: orientBool ? 'left' : 'right'
+      });
+
+      orientBool = !orientBool;
+    }
+
+    const existYearIndex = findIndex(ecoLineData, ['year', indicator.date]);
+
+    if (existYearIndex === -1) {
+      ecoLineData.push({
+        year: indicator.date,
+        [indicatorId]: indicator.value
+      });
+    } else {
+      ecoLineData[existYearIndex][indicatorId] = indicator.value;
+    }
+  });
+
+  return {
+    data: ecoLineData,
+    chartKeys
+  };
 }
 
 export function formatPieChartData(data, groupByType, valueType) {
@@ -267,6 +331,7 @@ export function formatPieChartData(data, groupByType, valueType) {
 
 export function titleCase(str) {
   const splitStr = str.toLowerCase().split(' ');
+  /* todo: convert to map */
   for (let i = 0; i < splitStr.length; i++) {
     splitStr[i] =
       splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);

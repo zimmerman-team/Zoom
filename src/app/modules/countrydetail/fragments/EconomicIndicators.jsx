@@ -3,18 +3,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
-import LineChart from 'components/charts/nivo_linechart/LineChart';
-import { lineChartMockData } from '__mocks__/lineChartMock';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';
+import LineChart2 from 'components/charts/recharts_linechart/LineChart';
+import { ChartContainer } from 'modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic.style';
 
 const ComponentBase = styled.div``;
 
 const propTypes = {
-  data: PropTypes.object
+  chartKeys: PropTypes.arrayOf(PropTypes.shape({})),
+  data: PropTypes.arrayOf(PropTypes.shape({}))
 };
 const defaultProps = {
-  data: undefined
+  chartKeys: [],
+  data: []
 };
 
 const EconomicIndicators = props => {
@@ -24,7 +26,13 @@ const EconomicIndicators = props => {
         title={countryDetailMockData.fragments[2].title}
         showInfoButton
       >
-        <LineChart data={lineChartMockData} />
+        <ChartContainer data-cy="economics-chart">
+          <LineChart2
+            chartKeys={props.chartKeys}
+            data={props.data}
+            margin={{ top: 30, right: 10, left: 30, bottom: 0 }}
+          />
+        </ChartContainer>
       </ModuleFragment>
     </Element>
   );

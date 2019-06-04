@@ -44,25 +44,25 @@ describe('Home page map controls', function() {
 });
 
 describe('Home page geo map datamapping', function() {
-  it('Plots South of Sahara data about one public indicator', function() {
+  it('Plots South of Sahara data about new hiv infections', function() {
     cy.visit('/');
     cy.get('[data-cy=dialog-overlay]').click();
     cy.get('[data-cy="cookie-notice"]').click();
     cy.get('[data-cy="geomap-filter-button"]').click();
     cy.get('[data-cy="geo-map-container"]').click();
     cy.contains('Select indicator').click();
-    cy.contains('one public indicator').click();
+    cy.contains('new hiv infections').click();
     cy.waitPageLoader();
     cy.waitPageLoader2();
     cy.get('[data-cy="legendLayer-label"]').should(
       'contain',
-      'one public indicator'
+      'new hiv infections'
     );
   });
 
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.percySnapshot('Home page - Aids related deaths in South America');
+    cy.percySnapshot('Home page - New hiv infections in South Sahara');
   });
 });

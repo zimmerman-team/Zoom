@@ -194,7 +194,7 @@ const ChartController = {
             archived: false,
             name: { $regex: searchTitle, $options: 'i' }
           },
-          'created last_updated teams type dataSources _id name _public'
+          'created last_updated teams type indicatorItems _id name _public'
         )
           .limit(pSize)
           .skip(p * pSize)
@@ -243,7 +243,7 @@ const ChartController = {
 
         Chart.find(
           query,
-          'created last_updated teams _public type dataSources _id name archived'
+          'created last_updated teams _public type indicatorItems _id name archived'
         )
           .collation({ locale: 'en' })
           .sort(sort)
@@ -292,7 +292,6 @@ const ChartController = {
       yearRange,
       selectedYear,
       selectedYears,
-      dataSources,
       _public,
       data,
       teams,
@@ -312,7 +311,6 @@ const ChartController = {
                 const chartz = new Chart({
                   name: uniqueName,
                   author,
-                  dataSources,
                   description,
                   _public,
                   teams,
@@ -378,7 +376,6 @@ const ChartController = {
                     chart.author = author;
 
                     chart.description = description;
-                    chart.dataSources = dataSources;
 
                     chart.dataFileUrl = fileUrl;
                     chart.descIntro = descIntro;
@@ -449,7 +446,6 @@ const ChartController = {
                 const chartz = new Chart({
                   name: uniqueName,
                   author,
-                  dataSources: chart.dataSources,
                   description: chart.description,
                   _public: chart._public,
                   teams,

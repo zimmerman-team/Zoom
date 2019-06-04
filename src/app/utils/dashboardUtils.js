@@ -126,9 +126,14 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
     shared = shared.join(', ');
     let dataSources = '';
 
-    chart.dataSources.forEach((source, index) => {
-      if (index) dataSources = dataSources.concat(', ').concat(source);
-      else dataSources = source;
+    chart.indicatorItems.forEach((indItem, index) => {
+      if (indItem.dataSource) {
+        if (index) {
+          dataSources = dataSources.concat(', ').concat(indItem.dataSource);
+        } else {
+          dataSources = indItem.dataSource;
+        }
+      }
     });
 
     let onEdit;

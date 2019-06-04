@@ -4,7 +4,7 @@ describe('About page E2E test', function() {
     cy.get('[data-cy=cookie-notice]').click();
   });
 
-  it('Should make a snapshot of the visual current state', function() {
+  it('Should make a snapshott of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
     cy.percySnapshot('About page');

@@ -139,7 +139,7 @@ jobs:
             if [ -z "${CIRCLE_PULL_REQUEST}" ] && [ "${CIRCLE_BRANCH}" != "develop" ]; then
               yarn e2e:record:parallel
             else
-              yarn e2e:record:parallel
+              yarn e2e:record:parallel:chrome
             fi
 
 # WORKFLOWS

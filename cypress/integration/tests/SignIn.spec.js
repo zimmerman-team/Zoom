@@ -1,4 +1,10 @@
 context('Sign in', () => {
+  beforeEach(() => {
+    // README keep in mind that Cypress clears the whole state before each test. => signIn() before each test.
+    // set this for skipping landing dialog
+    cy.setCookie('cookieNotice', 'false');
+  });
+
   it('Visit Homepage', () => {
     cy.visit('/');
     cy.wait(1000);
@@ -12,7 +18,6 @@ context('Sign in', () => {
     cy.get('body').then($body => {
       if ($body.find('[data-cy=sidebar-logout-button]').length) {
         cy.get('[data-cy=sidebar-logout-button]').click();
-        cy.wait(1000);
       } else {
         cy.get('[data-cy=sidebar-close]').click();
       }
@@ -20,19 +25,18 @@ context('Sign in', () => {
   });
 
   it('Do sign-in procedure', () => {
-    cy.get('[data-cy=cookie-notice]').click();
     cy.get('[data-cy=sidebar-toggle]').click();
-    //Here we wait till the map is loaded
-    cy.wait(15000);
+
     cy.percySnapshot('Sidebar - login');
     cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
     cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
     cy.get('[data-cy=sidebar-login-button]').click();
-    cy.wait(4000);
+
+    cy.waitForApiRequests();
+
     cy.location('pathname').should('include', '/dashboard/charts');
     cy.get('[data-cy=sidebar-toggle]').click();
-    //Here we wait till the map is loaded
-    cy.wait(15000);
+
     cy.percySnapshot('Sidebar - logout');
     cy.get('[data-cy=sidebar-logout-button]').contains('Sign out');
   });

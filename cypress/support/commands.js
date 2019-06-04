@@ -53,11 +53,10 @@ Cypress.Commands.add('upload_file', (fileName, fileType = ' ', selector) => {
 Cypress.Commands.add(
   'signIn',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.visit('/home');
-    cy.waitPageLoader();
-    cy.waitPageLoader2();
+    // cy.visit('/home');
+    // cy.waitPageLoader();
+    // cy.waitPageLoader2();
 
-    cy.wait(4000);
     cy.get('body').then($body => {
       if ($body.find('[data-cy="dialog-overlay"]').length) {
         cy.get('[data-cy="dialog-overlay"]').click();
@@ -65,6 +64,7 @@ Cypress.Commands.add(
     });
 
     //Check if signed in
+
     cy.get('[data-cy=sidebar-toggle]').click();
     cy.get('body').then($body => {
       if ($body.find('[data-cy=sidebar-logout-button]').length) {
@@ -75,12 +75,14 @@ Cypress.Commands.add(
     });
 
     cy.get('[data-cy=sidebar-toggle]').click();
-    cy.get('[data-cy=sidebar-login-email-input]').type(username);
-    cy.get('[data-cy=sidebar-pass-email-input]').type(password);
+    cy.get('[data-cy=sidebar-login-email-input]').type(username, { delay: 0 });
+    cy.get('[data-cy=sidebar-pass-email-input]').type(password, { delay: 0 });
     cy.get('[data-cy=sidebar-login-button]').click();
 
     //Instead of wait => wait till request has been done and page has fully loaded
-    cy.wait(10000);
+    cy.server();
+    cy.route('/api/*').as('getApi');
+    cy.wait('@getApi');
   }
 );
 
@@ -93,6 +95,14 @@ Cypress.Commands.add('waitPageLoader', (timeout = 1750000) => {
 //This is the "Loading" text that appears in the top-left corner
 Cypress.Commands.add('waitPageLoader2', (timeout = 1750000) => {
   cy.get('[data-cy=loader2]', { timeout }).should('not.be.visible');
+});
+
+// --------- Wait ---------
+//Wait for api
+Cypress.Commands.add('waitForApiRequests', () => {
+  cy.server();
+  cy.route('/api/*').as('getApi');
+  cy.wait('@getApi');
 });
 
 // --------- Hover ---------

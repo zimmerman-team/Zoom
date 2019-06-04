@@ -334,6 +334,7 @@ class ZoomSelect extends React.Component {
         style={this.props.disabled ? { pointerEvents: 'none' } : {}}
         ref={this.setWrapperRef}
         compBorder={this.props.border}
+        data-cy="zoom-select"
       >
         <SelectHeader
           capitalize={this.props.capitalize}

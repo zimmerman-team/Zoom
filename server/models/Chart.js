@@ -7,8 +7,6 @@ mongoose.Promise = global.Promise; // use ES6 promises
 
 const ChartSchema = new Schema(
   {
-    dataSources: [String],
-
     /* meta data of chart */
     name: { type: String, default: 'Untitled', min: 1, max: 1000 },
     author: { type: Schema.Types.ObjectId, ref: User },
@@ -27,6 +25,7 @@ const ChartSchema = new Schema(
         indicator: String,
         subIndicators: [String],
         allSubIndicators: { type: [], default: [] },
+        dataSource: String,
         aggregate: Boolean
       }
     ],

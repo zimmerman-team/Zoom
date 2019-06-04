@@ -360,7 +360,8 @@ class VisualizerModuleMediator extends Component {
       return {
         indName: indItem.indicator,
         subIndAggr: indItem.aggregate,
-        subInd: indItem.selectedSubInd
+        subInd: indItem.selectedSubInd,
+        dataSource: indItem.dataSource
       };
     });
 
@@ -749,7 +750,6 @@ class VisualizerModuleMediator extends Component {
       type,
       selectedSources,
       author,
-      dataSources,
       _public,
       teams,
       indKeys,
@@ -761,18 +761,19 @@ class VisualizerModuleMediator extends Component {
 
     const selectedInds = [];
 
-    const selectedInd = indicatorItems.map((indItem, index) => {
+    const selectedInd = indicatorItems.map(indItem => {
       selectedInds.push({
         indName: indItem.indicator,
         subIndAggr: indItem.aggregate,
-        subInds: indItem.selectedSubInd
+        subInds: indItem.selectedSubInd,
+        dataSource: indItem.dataSource
       });
       return {
         indicator: indItem.indicator,
         subIndicators: indItem.allSubIndicators,
         selectedSubInd: indItem.subIndicators,
         aggregate: indItem.aggregate,
-        dataSource: dataSources[index]
+        dataSource: indItem.dataSource
       };
     });
 

@@ -9,13 +9,16 @@ describe('Create geo functionality', function() {
   //On the test server this bug does not occur.
   it("Shouldn't be able to create geo when not logged in", function() {
     cy.visit('/home');
-    cy.wait(1000);
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
+    cy.waitForApiRequests();
     cy.get('[data-cy="appbar-right-button"]').should('not.have.text', 'Create');
   });
 
   it('Should display appropriate content per tab', function() {
     cy.signIn();
     // cy.wait(10000);
+    cy.waitForApiRequests();
     cy.get('[data-cy="appbar-right-button"]').click();
 
     cy.get('[data-cy="nav-pane"]').should('contain', 'Create chart');

@@ -4,6 +4,9 @@ describe('Visiting all pages through navigation from home as not logged in', () 
     cy.get('[data-cy=dialog-overlay]').click();
     cy.get('[data-cy=cookie-notice]').click();
     cy.get('[data-cy=sidebar-toggle]').click();
+    cy.waitForApiRequests();
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
   });
 
   it('Goes into Public charts through navigation bar', () => {

@@ -37,6 +37,8 @@ context('Sign in', () => {
     cy.location('pathname').should('include', '/dashboard/charts');
     cy.get('[data-cy=sidebar-toggle]').click();
 
+    cy.waitForApiRequests();
+
     cy.percySnapshot('Sidebar - logout');
     cy.get('[data-cy=sidebar-logout-button]').contains('Sign out');
   });

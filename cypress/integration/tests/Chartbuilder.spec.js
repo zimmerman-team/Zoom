@@ -211,11 +211,17 @@ describe('Chartbuilder table chart fragment e2e', function() {
   });
 });
 
-describe('Chartbuilder bar chart fragment e2e', function() {
-  it('Should contain /barchart in the url', function() {
+describe.only('Chartbuilder bar chart fragment e2e', function() {
+  it('Should contain /barchart in the url and map aids related deaths data', function() {
     cy.signIn();
     cy.navigateToBarchart();
     cy.url().should('include', '/visualizer/barchart');
+
+    // cy.contains('Select indicator').click();
+    // cy.contains('aids related deaths (unaids)').click();
+    cy.waitPageLoader();
+
+    cy.get('[data-cy="legend-label"]').should('have.css', 'content');
   });
 
   it('Should make a snapshot of the visual current state', function() {

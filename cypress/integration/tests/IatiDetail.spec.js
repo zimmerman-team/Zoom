@@ -8,6 +8,7 @@ describe('IATI activity page', () => {
   });
   it('IATI activity page should display correct content', () => {
     // First we navigate to activity page
+    cy.visit('/home');
     cy.signIn();
     cy.visit('/iati-activity/2769536');
 

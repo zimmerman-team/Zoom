@@ -1,6 +1,6 @@
 describe('Visiting all pages through navigation from home as not logged in', () => {
   beforeEach(() => {
-    cy.visit('/');
+    cy.visit('/home');
     cy.get('[data-cy=dialog-overlay]').click();
     cy.get('[data-cy=cookie-notice]').click();
     cy.get('[data-cy=sidebar-toggle]').click();

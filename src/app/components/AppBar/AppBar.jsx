@@ -88,20 +88,8 @@ export class AppBar extends React.Component {
     if (this.props.user.data) {
       this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.none));
 
-      const dataSources = [];
-
-      this.props.chartData.selectedInd.forEach(indData => {
-        if (
-          dataSources.indexOf(indData.dataSource) === -1 &&
-          indData.dataSource
-        ) {
-          dataSources.push(indData.dataSource);
-        }
-      });
-
       const chartData = {
         authId: this.props.user.data.authId,
-        dataSources,
         _public: this.props.chartData._public,
         teams: this.props.chartData.teams,
         chartId: this.props.chartData.chartId,
@@ -124,7 +112,8 @@ export class AppBar extends React.Component {
             // and because we want to initially load in just the
             // data from zoombackend, we don't want to be refetching
             // anything
-            allSubIndicators: indData.subIndicators
+            allSubIndicators: indData.subIndicators,
+            dataSource: indData.dataSource
           };
         }),
         selectedSources: this.props.paneData.selectedSources,

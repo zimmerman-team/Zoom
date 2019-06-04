@@ -76,20 +76,8 @@ class DuplicatorMediator extends React.Component {
   // TODO somehow make this funciton reusable cause the same one is used in AppBar.jsx
   saveChart(chartId = 'vizID') {
     if (this.props.user) {
-      const dataSources = [];
-
-      this.props.chartData.selectedInd.forEach(indData => {
-        if (
-          dataSources.indexOf(indData.dataSource) === -1 &&
-          indData.dataSource
-        ) {
-          dataSources.push(indData.dataSource);
-        }
-      });
-
       const chartData = {
         authId: this.props.user.authId,
-        dataSources,
         _public: this.props.chartData._public,
         teams: this.props.chartData.teams,
         chartId,
@@ -112,7 +100,8 @@ class DuplicatorMediator extends React.Component {
             // and because we want to initially load in just the
             // data from zoombackend, we don't want to be refetching
             // anything
-            allSubIndicators: indData.subIndicators
+            allSubIndicators: indData.subIndicators,
+            dataSource: indData.dataSource
           };
         }),
         selectedSources: this.props.paneData.selectedSources,

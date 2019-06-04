@@ -17,24 +17,23 @@ describe('Create geo functionality', function() {
     cy.signIn();
     cy.wait(10000);
     cy.get('[data-cy="appbar-right-button"]').click();
-    cy.get('[data-cy="nav-pane-item-0"]').should('have.text', 'Create chart');
-    cy.get('[data-cy="nav-pane-item-1"]').should('have.text', 'Convert data');
-    cy.get('[data-cy="nav-pane-item-2"]').should('have.text', 'Explore data');
 
+    cy.get('[data-cy="nav-pane"]').should('contain', 'Create chart');
+    cy.get('[data-cy="nav-pane"]').should('contain', 'Convert data');
+    cy.get('[data-cy="nav-pane"]').should('contain', 'Explore data');
     cy.get('[data-cy="nav-pane-item-0"]').click();
-    cy.get('[data-cy="nav-pane-item-0"]').should('have.text', 'Geo Map Chart');
-    cy.get('[data-cy="nav-pane-item-1"]').should(
-      'have.text',
+
+    cy.get('[data-cy="nav-pane"]').should('contain', 'Geo Map Chart');
+    cy.get('[data-cy="nav-pane"]').should(
+      'contain',
       'Country Focus Page Kenya'
     );
-    cy.get('[data-cy="nav-pane-item-2"]').should(
-      'have.text',
+    cy.get('[data-cy="nav-pane"]').should(
+      'contain',
       'Country Focus Page Netherlands'
     );
-    cy.get('[data-cy="nav-pane-item-3"]').should('have.text', 'Line chart');
-    cy.get('[data-cy="nav-pane-item-4"]').should('have.text', 'Bar chart');
-    cy.get('[data-cy="nav-pane-item-5"]').should('have.text', 'Table chart');
-    cy.get('[data-cy="nav-pane-item-6"]').should('have.text', 'Donut chart');
+    cy.get('[data-cy="nav-pane"]').should('contain', 'Line chart');
+    cy.get('[data-cy="nav-pane"]').should('contain', 'Table chart');
   });
 });
 
@@ -151,6 +150,7 @@ describe('Chartbuilder table chart fragment e2e', function() {
     //Here we wait till the indicators have loaded.
     cy.wait(2000);
     cy.contains('Select indicator').click();
+
     cy.contains('aids related deaths (unaids)').click();
     cy.waitPageLoader();
     cy.get('#MUIDataTableBodyRow-2 > :nth-child(5)').should('contain', '2005');
@@ -188,15 +188,11 @@ describe('Chartbuilder table chart fragment e2e', function() {
     });
     cy.get('[aria-label="Delete Selected Rows"]').click();
     cy.waitPageLoader();
-    cy.get('[aria-label="Search"]').click();
-    cy.get('.MuiInputBase-root > .MuiInputBase-input').type('kenya');
-    cy.waitPageLoader();
-    cy.get('tbody>tr').should('contain', 'Sorry, no matching records found');
+    cy.get('tbody>tr').should('not.contain', 'Kenya');
 
+    cy.get('[aria-label="Search"]').click();
     cy.get('.MUIDataTableSearch-main').within(() => {
-      cy.get('[type="button"]')
-        .first()
-        .click();
+      cy.get('[type="button"]').click();
     });
   });
 

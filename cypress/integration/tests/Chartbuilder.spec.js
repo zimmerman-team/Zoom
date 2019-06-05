@@ -117,7 +117,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
   });
 });
 
-describe.only('Chartbuilder line chart fragment e2e', function() {
+describe('Chartbuilder line chart fragment e2e', function() {
   it('Should contain /linechart/ in the url', function() {
     cy.log('**Signs in and and navigates to linechart**');
     cy.signIn();
@@ -142,6 +142,7 @@ describe.only('Chartbuilder line chart fragment e2e', function() {
       'Datasource: UNAIDS 2018'
     );
 
+    cy.log('**Hovering over chart displays correct content**');
     cy.wait(4000);
     cy.waitPageLoader();
     cy.get('.recharts-surface')

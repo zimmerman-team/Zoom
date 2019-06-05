@@ -212,7 +212,7 @@ class CountryDetailMediator extends React.Component {
       // Here we format the bar chart indicator data
       const infoBarData = formatBarChartInfoIndicators(
         this.props.indicatorAggregations.country,
-        this.props.indicatorAggregations.global,
+        this.state.subIndicators,
         this.state.barChartIndicators,
         countryName
       );
@@ -356,26 +356,40 @@ export default createRefetchContainer(
         subInds: { type: "[String]", defaultValue: ["undefined"] }
       ) {
       country: datapointsAggregation(
-        groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
+        groupBy: [
+          "indicatorName"
+          "geolocationTag"
+          "date"
+          "geolocationIso2"
+          "filterName"
+        ]
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
         geolocationIso2_In: $countryCode
         indicatorName_In: $barChartIndicators
         filterName_In: $subInds
       ) {
+        filterName
         indicatorName
         geolocationTag
         value
         date
       }
       aidsEpidemic: datapointsAggregation(
-        groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
+        groupBy: [
+          "indicatorName"
+          "geolocationTag"
+          "date"
+          "geolocationIso2"
+          "filterName"
+        ]
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
         geolocationIso2_In: $countryCode
         indicatorName_In: $aidsEpIndicators
         filterName_In: $subInds
       ) {
+        filterName
         indicatorName
         date
         value

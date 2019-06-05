@@ -213,17 +213,20 @@ describe('Chartbuilder table chart fragment e2e', function() {
 
 describe('Chartbuilder bar chart fragment e2e', function() {
   it('Should contain /barchart in the url and map aids related deaths data', function() {
+    cy.log('**Signs in and and navigates to barchart**');
     cy.signIn();
     cy.navigateToBarchart();
+
+    cy.log('**URL is correct**');
     cy.url().should('include', '/visualizer/barchart');
 
+    cy.log('**Plots aids related deaths**');
     cy.contains('Select indicator').click();
     cy.contains('aids related deaths (unaids)').click();
     cy.waitPageLoader();
-
     cy.get('[data-cy="legend-label"]').should('have.css', 'content');
 
-    cy.log('Tooltip shows right content');
+    cy.log('**Tooltip shows right content**');
     cy.get('[data-cy="tooltip-info-button"]')
       .scrollIntoView()
       .trigger('mouseenter', { force: true });
@@ -234,9 +237,10 @@ describe('Chartbuilder bar chart fragment e2e', function() {
 
     cy.get('body').click();
 
+    cy.log('**Graph structure mutations works on barchart**');
     cy.contains('Geolocation').click();
     cy.contains('Year').click();
-    cy.wait(6000);
+    cy.wait(4000);
     cy.get('rect')
       .last()
       .scrollIntoView()
@@ -248,12 +252,12 @@ describe('Chartbuilder bar chart fragment e2e', function() {
     );
   });
 
-  // it('Should make a snapshot of the visual current state', function() {
-  //   cy.waitPageLoader();
-  //   cy.waitPageLoader2();
-  //   cy.wait(15000);
-  //   cy.percySnapshot('Chartbuilder - Barchart');
-  // });
+  it('Should make a snapshot of the visual current state', function() {
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
+    cy.wait(15000);
+    cy.percySnapshot('Chartbuilder - Barchart');
+  });
 });
 
 describe('Chartbuilder country focus Kenya fragment e2e', function() {

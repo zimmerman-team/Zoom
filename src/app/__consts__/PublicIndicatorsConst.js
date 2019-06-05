@@ -1,11 +1,11 @@
 const pubIndicators = [
-  'people living with hiv',
-  'new hiv infections',
-  'aids related deaths',
+  'number of people living with hiv',
+  'number of new hiv infections',
+  'number of aids-related deaths',
   'aidsfonds iati: total commitment per country',
   'civicus monitor (civic space rating)',
   'ghdx: total hiv/aids spending',
-  'worldbank: gdp per capita',
+  'gdp per capita (current us$)',
   'criminalisation of sex work',
   'coverage of people receiving art'
 ];

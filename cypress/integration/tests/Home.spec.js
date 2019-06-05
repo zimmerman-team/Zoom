@@ -56,7 +56,6 @@ describe('Home page geo map datamapping', function() {
     cy.contains('new hiv infections').click();
     cy.contains('Select / Deselect all').click();
     cy.contains('Select / Deselect all').click();
-    cy.contains().click();
     cy.waitPageLoader();
     cy.waitPageLoader2();
     cy.get('[data-cy="legendLayer-label"]').should(

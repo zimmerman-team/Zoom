@@ -128,7 +128,7 @@ export function formatWikiExcerpts(excerpts) {
 // in country info
 export function formatBarChartInfoIndicators(
   countryData,
-  globalData,
+  subInds,
   indicatorNames,
   countryName
 ) {
@@ -138,7 +138,14 @@ export function formatBarChartInfoIndicators(
 
   indicatorNames.forEach((name, index) => {
     if (index < 3) {
-      const countryDataPoints = filter(countryData, ['indicatorName', name]);
+      const indName = `${name} - ${subInds[index]}`;
+
+      const countryDataPoints = filter(countryData, countryItem => {
+        return (
+          countryItem.indicatorName.toLowerCase() === name.toLowerCase() &&
+          countryItem.filterName.toLowerCase() === subInds[index].toLowerCase()
+        );
+      });
       // const globalDataPoints = filter(globalData, ['indicatorName', name]);
 
       if (countryDataPoints.length > 0) {
@@ -155,9 +162,7 @@ export function formatBarChartInfoIndicators(
         // });
 
         barChartData.push({
-          indicator: `${
-            find(mock.lineChartInd, lci => lci.name.indexOf(name) > -1).name
-          } | ${countryInd.date}`,
+          indicator: `${indName} | ${countryInd.date}`,
           [countryName]: countryIndValue,
           [`${countryName}-formatted-value`]: countryIndValue.toLocaleString(
             undefined,
@@ -255,18 +260,12 @@ export function formatLineChart2Data(indicatorData) {
     if (chartItemInd > -1) {
       lineChartData[chartItemInd] = {
         ...lineChartData[chartItemInd],
-        [find(
-          mock.lineChartInd,
-          lci => lci.name.indexOf(item.indicatorName) > -1
-        ).name]: item.value
+        [`${item.indicatorName} - ${item.filterName}`]: item.value
       };
     } else {
       lineChartData.push({
         year: item.date,
-        [find(
-          mock.lineChartInd,
-          lci => lci.name.indexOf(item.indicatorName) > -1
-        ).name]: item.value
+        [`${item.indicatorName} - ${item.filterName}`]: item.value
       });
     }
   });

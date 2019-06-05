@@ -117,19 +117,41 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
   });
 });
 
-describe('Chartbuilder line chart fragment e2e', function() {
+describe.only('Chartbuilder line chart fragment e2e', function() {
   it('Should contain /linechart/ in the url', function() {
+    cy.log('**Signs in and and navigates to linechart**');
     cy.signIn();
     cy.navigateToCreateLinechart();
-    cy.url().should('include', '/visualizer/linechart');
-  });
 
-  it('Should display mapped data on the linechart', function() {
-    cy.wait(5000);
+    cy.log('**URL is correct**');
+    cy.url().should('include', '/visualizer/linechart');
+
+    cy.log('**Plots aids related deaths**');
     cy.contains('Select indicator').click();
     cy.contains('aids related deaths (unaids)').click();
-    //Here we check on the Chart Legend
-    // cy.get('[data-cy="aids related deaths (unaids)"]');
+    cy.get('body').click();
+    cy.waitPageLoader();
+    cy.get('[data-cy="legend-label"]').should('have.css', 'content');
+
+    cy.log('**Tooltip shows right content**');
+    cy.get('[data-cy="tooltip-info-button"]')
+      .scrollIntoView()
+      .trigger('mouseenter', { force: true });
+    cy.get('[data-cy="tooltip-content"]').should(
+      'have.text',
+      'Datasource: UNAIDS 2018'
+    );
+
+    cy.wait(4000);
+    cy.waitPageLoader();
+    cy.get('.recharts-surface')
+      .scrollIntoView()
+      .trigger('mouseover', { force: true });
+
+    cy.contains('Year: 2005');
+    cy.contains(
+      'aids related deaths (unaids) - adolescents (10 to 19) realistic estimate'
+    );
   });
 
   it('Should make a snapshot of the visual current state', function() {

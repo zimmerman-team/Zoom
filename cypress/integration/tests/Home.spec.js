@@ -46,6 +46,8 @@ describe('Home page map controls', function() {
 describe('Home page geo map datamapping', function() {
   it('Plots South of Sahara data about new hiv infections', function() {
     cy.visit('/');
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
     cy.get('[data-cy=dialog-overlay]').click();
     cy.get('[data-cy="cookie-notice"]').click();
     cy.get('[data-cy="geomap-filter-button"]').click();

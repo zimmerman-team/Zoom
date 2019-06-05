@@ -31,12 +31,14 @@ const FragmentInfoButton = props => {
         // options
         html={
           <InvContainer>
-            <ToolTipContainer>{props.text}</ToolTipContainer>
+            <ToolTipContainer data-cy="tooltip-content">
+              {props.text}
+            </ToolTipContainer>
           </InvContainer>
         }
         position="top"
       >
-        <InfoIcon />
+        <InfoIcon data-cy="tooltip-info-button" />
       </Tooltip>
     </div>
   );

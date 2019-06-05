@@ -41,6 +41,7 @@ const ChartLegends = props => {
               color={indicator.color}
               text={indicator.label}
               dataSource={indicator.dataSource}
+              data-cy="legend"
               // data-cy={console.log(indicator.name)}
             />
           )

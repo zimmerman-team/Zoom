@@ -69,6 +69,7 @@ Cypress.Commands.add(
     cy.get('body').then($body => {
       if ($body.find('[data-cy=sidebar-logout-button]').length) {
         cy.get('[data-cy=sidebar-logout-button]').click();
+        cy.wait(4000);
       } else {
         cy.get('[data-cy=sidebar-close]').click();
       }

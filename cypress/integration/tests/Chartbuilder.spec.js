@@ -100,6 +100,8 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     cy.signIn();
     cy.navigateToCreateGeo();
     cy.visit('/visualizer/geomap/vizID/download');
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
     cy.get('[data-cy="dowload-option-JSON"]').click();
     cy.get('[data-cy="dowload-option-CSV"]').click();
     cy.get('[data-cy="dowload-option-XML"]').click();

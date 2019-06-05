@@ -120,7 +120,7 @@ class App extends React.Component {
     return (
       <JssProvider generateClassName={generateClassName}>
         <MuiThemeProvider theme={theme}>
-          <Grommet theme={ZoomTheme}>
+          <Grommet theme={ZoomTheme} style={{ height: '100%' }}>
             <QueryRenderer
               environment={modernEnvironment}
               query={graphql`

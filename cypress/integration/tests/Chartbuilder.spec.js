@@ -211,25 +211,49 @@ describe('Chartbuilder table chart fragment e2e', function() {
   });
 });
 
-describe.only('Chartbuilder bar chart fragment e2e', function() {
+describe('Chartbuilder bar chart fragment e2e', function() {
   it('Should contain /barchart in the url and map aids related deaths data', function() {
     cy.signIn();
     cy.navigateToBarchart();
     cy.url().should('include', '/visualizer/barchart');
 
-    // cy.contains('Select indicator').click();
-    // cy.contains('aids related deaths (unaids)').click();
+    cy.contains('Select indicator').click();
+    cy.contains('aids related deaths (unaids)').click();
     cy.waitPageLoader();
 
     cy.get('[data-cy="legend-label"]').should('have.css', 'content');
+
+    cy.log('Tooltip shows right content');
+    cy.get('[data-cy="tooltip-info-button"]')
+      .scrollIntoView()
+      .trigger('mouseenter', { force: true });
+    cy.get('[data-cy="tooltip-content"]').should(
+      'have.text',
+      'Datasource: UNAIDS 2018'
+    );
+
+    cy.get('body').click();
+
+    cy.contains('Geolocation').click();
+    cy.contains('Year').click();
+    cy.wait(6000);
+    cy.get('rect')
+      .last()
+      .scrollIntoView()
+      .trigger('mouseover', { force: true });
+
+    cy.contains('Year: 2005');
+    cy.contains(
+      'aids related deaths (unaids) - adolescents (10 to 19) realistic estimate: 10000'
+    );
   });
 
-  it('Should make a snapshot of the visual current state', function() {
-    cy.waitPageLoader();
-    cy.waitPageLoader2();
-    cy.wait(15000);
-    cy.percySnapshot('Chartbuilder - Barchart');
-  });
+  // it('Should make a snapshot of the visual current state', function() {
+  //   cy.waitPageLoader();
+  //   cy.waitPageLoader2();
+  //   cy.wait(15000);
+  //   cy.percySnapshot('Chartbuilder - Barchart');
+  // });
 });
 
 describe('Chartbuilder country focus Kenya fragment e2e', function() {

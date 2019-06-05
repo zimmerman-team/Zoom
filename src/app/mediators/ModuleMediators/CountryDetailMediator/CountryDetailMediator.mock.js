@@ -30,27 +30,27 @@ const data = {
   // So currently these are the default indicators
   // that are gonna be used for all country details
   barChartIndicators: [
-    'people living with hiv',
-    'new hiv infections',
-    'aids-related deaths'
+    'number of people living with hiv',
+    'number of new hiv infections',
+    'number of aids-related deaths'
   ],
   // So currently for aids epidemics data we will use
   // this array of indicators
   aidsEpIndicators: [
-    'new hiv infections',
-    'aids-related deaths',
-    'people living with hiv',
-    'children living with hiv',
+    'number of new hiv infections',
+    'number of aids-related deaths',
+    'number of people living with hiv',
+    'number of people living with hiv',
     'coverage of people receiving art'
   ],
   lineChartInd: [
     {
-      name: 'new hiv infections - all ages realistic estimate',
+      name: 'number of new hiv infections - all ages realistic estimate',
       color: 'hsl(172, 70%, 50%)',
       orientation: 'left'
     },
     {
-      name: 'aids-related deaths - children realistic estimate',
+      name: 'number of aids-related deaths - all ages realistic estimate',
       color: 'hsl(91, 70%, 50%)',
       orientation: 'left'
     },
@@ -60,7 +60,8 @@ const data = {
       orientation: 'right'
     },
     {
-      name: 'children living with hiv',
+      name:
+        'number of people living with hiv - children (0 to 14) realistic estimate',
       color: 'hsl(221, 70%, 50%)',
       orientation: 'right'
     },
@@ -72,8 +73,9 @@ const data = {
   ],
   subIndicators: [
     'all ages realistic estimate',
-    'children realistic estimate',
-    'all ages realistic estimate'
+    'all ages realistic estimate',
+    'all ages realistic estimate',
+    'children (0 to 14) realistic estimate'
   ],
   isoCountries: {
     AF: 'Afghanistan',

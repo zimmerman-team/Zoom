@@ -285,30 +285,43 @@ describe('Chartbuilder bar chart fragment e2e', function() {
   });
 });
 
-describe('Chartbuilder country focus Kenya fragment e2e', function() {
-  it('Should contain /focusKE in the url', function() {
+describe('Chartbuilder country focus fragment e2e', function() {
+  it('Should be able to plot Kenya specific data', function() {
+    cy.log('**Signs in and navigates to Country Focus Kenya**');
     cy.signIn();
     cy.navigateToCountryFocusKenya();
     cy.url().should('include', '/visualizer/focusKE');
-  });
 
-  it('Should make a snapshot of the visual current state', function() {
+    cy.log('**It makes a Percy snapshot**');
     cy.waitPageLoader();
     cy.waitPageLoader2();
     cy.percySnapshot('Chartbuilder - Kenya focus');
-  });
-});
 
-describe('Chartbuilder country focus Netherlands fragment e2e', function() {
-  it('Should contain /focusNL in the url', function() {
-    cy.signIn();
-    cy.navigateToCountryFocusNetherlands();
+    cy.log('**Plots some Kenya specific data**');
+    cy.contains('Select indicator').click();
+    cy.contains('aids related deaths (unaids)').click();
+
+    cy.get('[data-cy="legendLayer-label"]').should(
+      'contain',
+      'aids related deaths (unaids)'
+    );
+  });
+
+  it('Should be able to plot NL specific data', function() {
+    cy.log('**Navigates to Country Focus NL**');
+    cy.visit('/visualizer/focusNL/vizID/edit');
     cy.url().should('include', '/visualizer/focusNL');
-  });
 
-  it('Should make a snapshot of the visual current state', function() {
+    cy.log('**It makes a Percy snapshot**');
     cy.waitPageLoader();
     cy.waitPageLoader2();
     cy.percySnapshot('Chartbuilder - Netherlands focus');
+
+    cy.log('**Plots some NL specific data**');
+    cy.contains('Select indicator').click();
+    cy.contains('condom use').click();
+
+    cy.contains('men who have sex with men 25 plus').click();
+    cy.get('[data-cy="legendLayer-label"]').should('contain', 'condom use');
   });
 });

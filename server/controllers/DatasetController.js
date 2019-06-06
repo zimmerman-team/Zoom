@@ -7,6 +7,10 @@ const general = require('./generalResponse');
 const Dataset = require('../models/Dataset');
 const User = require('../models/User');
 
+const consts = require('../config/consts');
+
+const roles = consts.roles;
+
 const DatasetApi = {
   // gets data set, if its the owners data set
   getDataset: (req, res) => {
@@ -90,7 +94,11 @@ const DatasetApi = {
       if (error) general.handleError(res, error);
       else if (!acc) general.handleError(res, 'User not found', 404);
       else {
-        if (acc.role === 'Administrator' || acc.role === 'Super admin') {
+        if (
+          acc.role === roles.admin ||
+          acc.role === roles.superAdm ||
+          acc.role === roles.mod
+        ) {
           const dataset = new Dataset({
             datasetId: data.datasetId,
             author: acc,
@@ -123,8 +131,9 @@ const DatasetApi = {
       if (error) general.handleError(res, error);
       else if (!author) general.handleError(res, 'User not found', 404);
       else if (
-        author.role === 'Administrator' ||
-        author.role === 'Super admin'
+        author.role === roles.admin ||
+        author.role === roles.superAdm ||
+        author.role === roles.mod
       ) {
         Dataset.findOne(
           { author, datasetId: data.datasetId },

@@ -308,6 +308,7 @@ class DashboardMediator extends React.Component {
     this.props.dispatch(
       deleteAuthGroupRequest(
         {
+          adminId: this.props.user.authId,
           delId: id,
           name: name
         },

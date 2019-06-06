@@ -5,6 +5,7 @@ export const ComponentBase = styled.div`
 
   //width: calc(100vw - 320px);
   //height: calc(100vh - 40px);
+  padding-top: 40px;
   display: flex;
   flex-direction: column;
   flex-shrink: 1;

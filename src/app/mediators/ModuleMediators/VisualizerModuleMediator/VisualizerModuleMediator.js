@@ -830,7 +830,7 @@ class VisualizerModuleMediator extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ height: 'calc(100% - 40px)' }}>
         <VisualizerModule
           home={this.props.home}
           saveViewport={this.saveViewport}

@@ -133,7 +133,6 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
         }
       }
     });
-
     dataSources = dataSources.join(', ');
 
     let onEdit;

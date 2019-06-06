@@ -109,10 +109,8 @@ class App extends React.Component {
   };
 
   componentDidUpdate = prevProps => {
-    if (!isEqual(this.props.currentUser, prevProps.currentUser)) {
-      this.props.dispatch(
-        getUserRequest({ authId: this.props.currentUser.authId })
-      );
+    if (!isEqual(this.props.user, prevProps.user)) {
+      this.props.dispatch(getUserRequest({ authId: this.props.user.authId }));
     }
   };
 

@@ -302,23 +302,25 @@ export function formatLongLatData(
         );
         lat = parseFloat(lat);
 
-        longLatData.push({
-          tooltipLabels: [
-            {
-              subIndName: indicator.filterName,
-              format: indicator.valueFormatType,
-              label: subIndAggr
-                ? `${indName} - ${selectedSubInd.join(', ')}`
-                : `${indName} - ${indicator.filterName}`,
-              value: Math.round(indicator.value)
-            }
-          ],
-          indName,
-          longitude: long,
-          latitude: lat,
-          name: indicator.comment || indicator.geolocationTag,
-          value: Math.round(indicator.value)
-        });
+        if (!isNaN(lat) && !isNaN(long)) {
+          longLatData.push({
+            tooltipLabels: [
+              {
+                subIndName: indicator.filterName,
+                format: indicator.valueFormatType,
+                label: subIndAggr
+                  ? `${indName} - ${selectedSubInd.join(', ')}`
+                  : `${indName} - ${indicator.filterName}`,
+                value: Math.round(indicator.value)
+              }
+            ],
+            indName,
+            longitude: long,
+            latitude: lat,
+            name: indicator.comment || indicator.geolocationTag,
+            value: Math.round(indicator.value)
+          });
+        }
       } else {
         longLatData[existPointIndex].value += Math.round(indicator.value);
         if (subIndAggr) {

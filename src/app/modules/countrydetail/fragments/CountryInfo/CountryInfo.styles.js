@@ -4,7 +4,7 @@ import { PageHeading } from 'components/sort/Headings';
 
 export const CountryInfoContainer = styled(Box)``;
 export const CountryName = styled(PageHeading)`
-  margin-top: 0;
+  margin-top: 10px;
 `;
 export const CountryInfoIntro = styled.p``;
 export const CountryInfoMore = styled.p``;

@@ -70,6 +70,7 @@ class EditUserMediator extends React.Component {
     this.props.dispatch(
       editAuthUserRequest(
         {
+          adminId: this.props.user.authId,
           userId: this.props.match.params.userId,
           email: this.state.email,
           name: this.state.firstName,

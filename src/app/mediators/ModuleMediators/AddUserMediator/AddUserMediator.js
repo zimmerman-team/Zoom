@@ -98,6 +98,7 @@ class AddUserMediator extends React.Component {
     this.props.dispatch(
       addAuthUserRequest(
         {
+          adminId: this.props.user.authId,
           email: this.state.email,
           name: this.state.firstName,
           surname: this.state.lastName,

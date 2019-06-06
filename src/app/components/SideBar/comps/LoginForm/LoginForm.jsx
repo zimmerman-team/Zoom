@@ -178,10 +178,8 @@ export class LoginForm extends React.Component {
             />
 
             <InfoText size="small">
-              Would you like to have access to Zoom? Please contact Jane Doe,{' '}
-              <Link href="mailto:janedoe@aidsfonds.nl">
-                janedoe@aidsfonds.nl
-              </Link>
+              Would you like to have access to Zoom? Please contact{' '}
+              <Link href="mailto:data@aidsfonds.nl">data@aidsfonds.nl</Link>
             </InfoText>
 
             {this.state.error && (

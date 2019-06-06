@@ -6,6 +6,9 @@ const User = require('../models/User');
 const get = require('lodash/get');
 const find = require('lodash/find');
 const filter = require('lodash/filter');
+const consts = require('../config/consts');
+
+const roles = consts.roles;
 
 const AuthGroupController = {
   getUserGroup: (req, res) => {
@@ -155,6 +158,7 @@ const AuthGroupController = {
 
   addGroup: (req, res) => {
     const { userId, name, usersToAdd } = req.body;
+
     let today = new Date();
     const dd = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate();
     const mm =
@@ -177,41 +181,52 @@ const AuthGroupController = {
             }
           )
           .then(response => {
-            if (response.status === 200 || response.status === 204) {
-              if (usersToAdd.length > 0) {
-                return axios
-                  .patch(
-                    `${process.env.REACT_APP_AE_API_URL}/groups/${
-                      response.data._id
-                    }/members`,
-                    usersToAdd,
-                    {
-                      headers: {
-                        Authorization: token
-                      }
-                    }
-                  )
-                  .then(response1 => {
-                    if (response1.status === 204) {
-                      usersToAdd.forEach(updatU => {
-                        User.findOneAndUpdate(
-                          { authId: updatU },
-                          { $push: { teams: name } },
-                          (err, node) => {
-                            if (err) console.log(err);
+            User.findOne({ authId: userId }, (adminErr, adminUser) => {
+              if (adminErr) general.handleError(res, adminErr);
+              else if (!adminUser) {
+                general.handleError(res, 'Admin user not found', 404);
+              } else if (adminUser.role === roles.superAdm) {
+                if (response.status === 200 || response.status === 204) {
+                  if (usersToAdd.length > 0) {
+                    return axios
+                      .patch(
+                        `${process.env.REACT_APP_AE_API_URL}/groups/${
+                          response.data._id
+                        }/members`,
+                        usersToAdd,
+                        {
+                          headers: {
+                            Authorization: token
                           }
-                        );
+                        }
+                      )
+                      .then(response1 => {
+                        if (response1.status === 204) {
+                          usersToAdd.forEach(updatU => {
+                            User.findOneAndUpdate(
+                              { authId: updatU },
+                              { $push: { teams: name } },
+                              (err, node) => {
+                                if (err) console.log(err);
+                              }
+                            );
+                          });
+                          return res.json('success');
+                        }
+                        return res
+                          .status(response1.status)
+                          .send(response1.data.statusText);
                       });
-                      return res.json('success');
-                    }
-                    return res
-                      .status(response1.status)
-                      .send(response1.data.statusText);
-                  });
+                  }
+                  return res.json('success');
+                }
+                return res
+                  .status(response.status)
+                  .send(response.data.statusText);
+              } else {
+                general.handleError(res, 'unauthorized', 401);
               }
-              return res.json('success');
-            }
-            return res.status(response.status).send(response.data.statusText);
+            });
           })
           .catch(error => {
             return res
@@ -232,6 +247,7 @@ const AuthGroupController = {
       user,
       team
     } = req.body;
+
     authUtils.getAccessToken('auth_ext').then(token => {
       const requests = [
         axios.put(
@@ -288,8 +304,8 @@ const AuthGroupController = {
                   return general.handleError(res, 'User not found', 404);
                 }
                 if (
-                  adminUser.role === 'Administrator' ||
-                  adminUser.role === 'Super admin'
+                  adminUser.role === roles.admin ||
+                  adminUser.role === roles.superAdm
                 ) {
                   // Remove team from selected users
                   if (usersToRemove.length > 0) {
@@ -351,7 +367,7 @@ const AuthGroupController = {
   },
 
   deleteGroup: (req, res) => {
-    const { delId, name } = req.query;
+    const { adminId, delId, name } = req.query;
     authUtils.getAccessToken('auth_ext').then(token => {
       axios
         .delete(`${process.env.REACT_APP_AE_API_URL}/groups/${delId}`, {
@@ -360,17 +376,29 @@ const AuthGroupController = {
           }
         })
         .then(response => {
-          if (response.status === 204) {
-            User.updateMany(
-              { teams: { $eq: name } },
-              { $pull: { teams: name } },
-              (err, node) => {
-                if (err) console.log(err);
+          User.findOne({ authId: adminId }, (adminErr, adminUser) => {
+            if (adminErr) general.handleError(res, adminErr);
+            else if (!adminUser) {
+              general.handleError(res, 'Admin user not found', 404);
+            } else if (
+              adminUser.role === roles.admin ||
+              adminUser.role === roles.superAdm
+            ) {
+              if (response.status === 204) {
+                User.updateMany(
+                  { teams: { $eq: name } },
+                  { $pull: { teams: name } },
+                  (err, node) => {
+                    if (err) console.log(err);
+                  }
+                );
+                return res.json('success');
               }
-            );
-            return res.json('success');
-          }
-          return res.status(response.status).send(response.data.statusText);
+              return res.status(response.status).send(response.data.statusText);
+            } else {
+              general.handleError(res, 'Unauthorized', 401);
+            }
+          });
         })
         .catch(error => {
           // console.log(error.response);

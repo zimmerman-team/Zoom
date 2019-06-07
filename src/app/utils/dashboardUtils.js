@@ -124,17 +124,16 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
     let shared = chart.teams;
     if (chart._public) shared.push('Public');
     shared = shared.join(', ');
-    let dataSources = '';
+    let dataSources = [];
 
     chart.indicatorItems.forEach((indItem, index) => {
       if (indItem.dataSource) {
-        if (index) {
-          dataSources = dataSources.concat(', ').concat(indItem.dataSource);
-        } else {
-          dataSources = indItem.dataSource;
+        if (index && dataSources.indexOf(indItem.dataSource) === -1) {
+          dataSources.push(indItem.dataSource);
         }
       }
     });
+    dataSources = dataSources.join(', ');
 
     let onEdit;
     let onView;

@@ -72,7 +72,11 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     cy.navigateToCreateGeo();
     //Here we wait till the indicators are loaded.
     cy.wait(2000);
-    cy.contains('Select indicator').click();
+    cy.get(
+      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
+    )
+      .first()
+      .click();
     cy.contains('aids related deaths (unaids)').click();
     //Here we wait till the data has been mapped
     cy.waitPageLoader();
@@ -127,7 +131,11 @@ describe('Chartbuilder line chart fragment e2e', function() {
     cy.url().should('include', '/visualizer/linechart');
 
     cy.log('**Plots aids related deaths**');
-    cy.contains('Select indicator').click();
+    cy.get(
+      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
+    )
+      .first()
+      .click();
     cy.contains('aids related deaths (unaids)').click();
     cy.get('body').click();
     cy.waitPageLoader();
@@ -174,7 +182,11 @@ describe('Chartbuilder table chart fragment e2e', function() {
     cy.get('[data-cy="year-2005"]').click();
     //Here we wait till the indicators have loaded.
     cy.wait(2000);
-    cy.contains('Select indicator').click();
+    cy.get(
+      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
+    )
+      .first()
+      .click();
 
     cy.contains('aids related deaths (unaids)').click();
     cy.waitPageLoader();
@@ -246,7 +258,11 @@ describe('Chartbuilder bar chart fragment e2e', function() {
     cy.url().should('include', '/visualizer/barchart');
 
     cy.log('**Plots aids related deaths**');
-    cy.contains('Select indicator').click();
+    cy.get(
+      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
+    )
+      .first()
+      .click();
     cy.contains('aids related deaths (unaids)').click();
     cy.waitPageLoader();
     cy.get('[data-cy="legend-label"]').should('have.css', 'content');
@@ -298,7 +314,11 @@ describe('Chartbuilder country focus fragment e2e', function() {
     cy.percySnapshot('Chartbuilder - Kenya focus');
 
     cy.log('**Plots some Kenya specific data**');
-    cy.contains('Select indicator').click();
+    cy.get(
+      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
+    )
+      .first()
+      .click();
     cy.contains('aids related deaths (unaids)').click();
 
     cy.get('[data-cy="legendLayer-label"]').should(
@@ -318,7 +338,11 @@ describe('Chartbuilder country focus fragment e2e', function() {
     cy.percySnapshot('Chartbuilder - Netherlands focus');
 
     cy.log('**Plots some NL specific data**');
-    cy.contains('Select indicator').click();
+    cy.get(
+      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
+    )
+      .first()
+      .click();
     cy.contains('condom use').click();
 
     cy.contains('men who have sex with men 25 plus').click();

@@ -182,8 +182,6 @@ const fileDataType = [
   ['100% of data a blank value.']
 ];
 
-// will check if this still doesnt work on circle CI, so random comment this is
-
 // and this is an array of blank cells for each file column
 // each arrays index is in relation to the fileColumns array indexes
 const blankCells = [0, 0, 0, 0, 0, 0, 0, 0, 3, 11];

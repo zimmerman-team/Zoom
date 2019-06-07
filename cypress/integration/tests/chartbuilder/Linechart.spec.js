@@ -1,3 +1,9 @@
+beforeEach(() => {
+  // README keep in mind that Cypress clears the whole state before each test. => signIn() before each test.
+  // set this for skipping landing dialog
+  cy.setCookie('cookieNotice', 'false');
+});
+
 describe('Chartbuilder line chart fragment e2e', function() {
   it('Should contain /linechart/ in the url', function() {
     cy.log('**Signs in and and navigates to linechart**');

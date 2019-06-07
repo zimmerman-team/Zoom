@@ -23,7 +23,7 @@ context('Sign in', () => {
     cy.get('[data-cy=cookie-notice]').click();
     cy.get('[data-cy=sidebar-toggle]').click();
     //Here we wait till the map is loaded
-    cy.wait(15000);
+    cy.wait(10000);
     cy.percySnapshot('Sidebar - login');
     cy.get('[data-cy=sidebar-login-email-input]').type(Cypress.env('username'));
     cy.get('[data-cy=sidebar-pass-email-input]').type(Cypress.env('password'));
@@ -32,7 +32,7 @@ context('Sign in', () => {
     cy.location('pathname').should('include', '/dashboard/charts');
     cy.get('[data-cy=sidebar-toggle]').click();
     //Here we wait till the map is loaded
-    cy.wait(15000);
+    cy.wait(10000);
     cy.percySnapshot('Sidebar - logout');
     cy.get('[data-cy=sidebar-logout-button]').contains('Sign out');
   });

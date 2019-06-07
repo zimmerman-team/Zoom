@@ -49,7 +49,7 @@ describe('Chartbuilder line chart fragment e2e', function() {
   it('Should make a snapshot of the visual current state', function() {
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.wait(15000);
+    cy.wait(10000);
     cy.percySnapshot('Chartbuilder - Linechart');
   });
 });

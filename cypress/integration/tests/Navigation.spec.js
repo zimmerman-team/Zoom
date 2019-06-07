@@ -19,6 +19,8 @@ describe('Visiting all pages through navigation from home as not logged in', () 
   });
 });
 
+// will check if this still doesnt work on circle CI, so random comment this is
+
 describe('Visiting all pages through navigation from home as logged in', () => {
   beforeEach(() => {
     cy.signIn();

@@ -18,6 +18,7 @@ context('Sign in', () => {
       }
     });
   });
+  // will check if this still doesnt work on circle CI, so random comment this is
 
   it('Do sign-in procedure', () => {
     cy.get('[data-cy=cookie-notice]').click();

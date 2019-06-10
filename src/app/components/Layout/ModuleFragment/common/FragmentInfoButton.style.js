@@ -38,3 +38,7 @@ export const ToolTipContainer = styled.div`
 export const InvContainer = styled.div`
   padding-bottom: 5px;
 `;
+
+export const ComponentBase = styled.div`
+  margin-bottom: auto;
+`;

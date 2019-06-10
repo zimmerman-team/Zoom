@@ -6,7 +6,8 @@ import PropTypes from 'prop-types';
 import {
   InfoIcon,
   ToolTipContainer,
-  InvContainer
+  InvContainer,
+  ComponentBase
 } from './FragmentInfoButton.style';
 
 /* components */
@@ -26,7 +27,7 @@ const defaultProps = {
 
 const FragmentInfoButton = props => {
   return (
-    <div>
+    <ComponentBase>
       <Tooltip
         // options
         html={
@@ -40,7 +41,7 @@ const FragmentInfoButton = props => {
       >
         <InfoIcon data-cy="tooltip-info-button" />
       </Tooltip>
-    </div>
+    </ComponentBase>
   );
 };
 

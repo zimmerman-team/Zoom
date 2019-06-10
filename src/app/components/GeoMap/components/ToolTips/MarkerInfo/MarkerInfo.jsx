@@ -8,6 +8,7 @@ import {
   ValueContainer
 } from 'components/GeoMap/components/ToolTips/ToolTip.style';
 import { formatNumber } from 'utils/genericUtils';
+import Dotdotdot from 'react-dotdotdot';
 
 // So if the marker changes in size depending on its value we use
 // this function to get the offset top of the popup
@@ -55,7 +56,7 @@ const markerInfo = hoverMarkerInfo => {
 
             return (
               <ToolTipLabel key={ttItem.label}>
-                {ttItem.label}:
+                <Dotdotdot clamp={4}>{ttItem.label}</Dotdotdot>:
                 <ToolTipText>
                   {formatNumber(ttItem.value)}
                   {nrFormat}

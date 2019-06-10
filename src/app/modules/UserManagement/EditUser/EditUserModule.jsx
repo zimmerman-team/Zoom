@@ -55,7 +55,10 @@ const EditUserModule = props => {
     : 'No changed detected.';
 
   return (
-    <ModuleFragment title={props.viewOnly ? 'View user' : 'Edit user'}>
+    <ModuleFragment
+      paddingTop="65px"
+      title={props.viewOnly ? 'View user' : 'Edit user'}
+    >
       <EditUserForm onSubmit={props.submitForm}>
         {/* first name field */}
         <InputField

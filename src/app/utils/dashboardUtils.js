@@ -1,5 +1,4 @@
 import get from 'lodash/get';
-import find from 'lodash/find';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
 import { paginate } from './genericUtils';
@@ -34,6 +33,7 @@ export function formatUsersTabData(
           Charts: 0,
           Twitter: ''
         },
+        last_updated: new Date(d.updated_at),
         onEdit: () => onEdit(d.user_id),
         onView: () => onView(d.user_id),
         onDelete: () => onDelete(d.user_id)
@@ -84,6 +84,7 @@ export function formatTeamsTabData(
           'Publication date': get(d, 'date', ''),
           Organisations: ''
         },
+        last_updated: new Date(get(d, 'last_updated', '')),
         onEdit: () => onEdit(d._id),
         onView: () => onView(d._id),
         onDelete: () => onDelete(d._id, get(d, 'name', ''))

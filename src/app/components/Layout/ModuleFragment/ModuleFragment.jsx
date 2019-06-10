@@ -38,7 +38,10 @@ class ModuleFragment extends React.Component {
 
   render() {
     return (
-      <FragmentContainer background={this.props.background}>
+      <FragmentContainer
+        background={this.props.background}
+        paddingTop={this.props.paddingTop}
+      >
         <FragmentContent>
           {this.props.title && (
             <FragmentHeader>{this.props.title}</FragmentHeader>

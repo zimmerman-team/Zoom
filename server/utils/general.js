@@ -12,6 +12,10 @@ module.exports = {
         return { name: 1 };
       case 'name:-1':
         return { name: -1 };
+      case 'last_updated':
+        return { last_updated: 1 };
+      case '-last_updated':
+        return { last_updated: -1 };
       default:
         return { name: 1 };
     }

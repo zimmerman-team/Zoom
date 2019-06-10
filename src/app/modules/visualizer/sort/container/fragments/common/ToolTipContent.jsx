@@ -24,15 +24,13 @@ const TooltipContent = ({
     nrFormat = ' '.concat(format);
   }
 
-  const capitalType = aggrType
-    ? aggrType.charAt(0).toUpperCase() + aggrType.slice(1)
-    : 'Geo';
+  const capitalXKey = xKey ? xKey.charAt(0).toUpperCase() + xKey.slice(1) : '';
 
   return (
     <Container>
-      {xKey && (
+      {capitalXKey && (
         <Title>
-          {capitalType}: <b>{xKey}</b>
+          <b>{capitalXKey}</b>
         </Title>
       )}
       <Row key={index}>

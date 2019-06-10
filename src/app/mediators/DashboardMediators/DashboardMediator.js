@@ -36,7 +36,7 @@ class DashboardMediator extends React.Component {
     page: 0,
     users: [],
     teams: [],
-    sort: 'title',
+    sort: '-last_updated',
     searchKeyword: '',
     charts: [],
     trashCharts: [],
@@ -517,6 +517,7 @@ class DashboardMediator extends React.Component {
             ''
           )}`
         : get(this.props.user, 'email', '');
+    console.log(this.state.teams);
     return (
       <DashboardModule
         loading={

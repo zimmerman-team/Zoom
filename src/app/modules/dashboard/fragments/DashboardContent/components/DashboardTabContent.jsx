@@ -94,7 +94,7 @@ const DashboardTabContent = props => {
       tabContentName = 'Users';
       break;
     case 'teams':
-      targetData = isAdmin ? props.datasets : [];
+      targetData = isAdmin ? props.teams : [];
       targetUrl = '/create-team';
       leftOptionLabel = props.isSuperAdmin ? 'create team' : null;
       tabContentName = 'Teams';

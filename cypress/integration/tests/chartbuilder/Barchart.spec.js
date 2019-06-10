@@ -43,7 +43,7 @@ describe('Chartbuilder bar chart fragment e2e', function() {
       .scrollIntoView()
       .trigger('mouseover', { force: true });
 
-    cy.contains('Year: 2005');
+    cy.contains('2005');
     cy.contains(
       'aids related deaths (unaids) - adolescents (10 to 19) realistic estimate: 10000'
     );

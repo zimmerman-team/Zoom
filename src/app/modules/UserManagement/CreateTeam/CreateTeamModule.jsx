@@ -83,7 +83,7 @@ const CreateTeam = props => {
   const disableSubmit =
     props.disableSubmit === undefined ? props.name === '' : props.disableSubmit;
   return (
-    <ModuleFragment title={props.pageTitle}>
+    <ModuleFragment paddingTop="65px" title={props.pageTitle}>
       {props.loading && <ProgressIcon />}
       <CreateTeamForm onSubmit={props.submitForm}>
         {props.success && (

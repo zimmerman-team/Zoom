@@ -17,6 +17,7 @@ export const FragmentContainer = styled(Box)`
   justify-content: center;
   padding: 40px;
   position: relative;
+  padding-top: ${props => props.paddingTop};
 `;
 
 export const FragmentContent = styled(Box)`

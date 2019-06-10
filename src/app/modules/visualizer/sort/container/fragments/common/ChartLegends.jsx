@@ -10,11 +10,11 @@ import ChartLegendItem from 'modules/visualizer/sort/container/fragments/common/
  */
 
 const ComponentBase = styled.div`
-  display: flex;
   width: 1024px;
   height: max-content;
-  flex-wrap: wrap;
   padding-top: 20px;
+  display: grid;
+  grid-template-columns: 200px auto 200px;
 `;
 
 const propTypes = {

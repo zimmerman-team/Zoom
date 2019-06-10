@@ -11,7 +11,6 @@ import ChartLegendItem from 'modules/visualizer/sort/container/fragments/common/
 
 const ComponentBase = styled.div`
   display: flex;
-  flex-direction: column;
   width: 1024px;
   height: max-content;
   flex-wrap: wrap;

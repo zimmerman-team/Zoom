@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import theme from 'theme/Theme';
 import BaseTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/common/BaseTab';
 import IconDownload from 'assets/icons/sidebar/IconDownload';
+import html2canvas from 'html2canvas';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -13,12 +14,15 @@ import IconDownload from 'assets/icons/sidebar/IconDownload';
 const ListContainer = styled.div`
   padding: 15px;
 `;
+
 const ItemContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 10px;
   user-select: none;
   cursor: pointer;
+  opacity: ${props => (props.disabled ? 0.5 : 1)};
+  pointer-events: ${props => (props.disabled ? 'none' : 'all')};
 
   &:hover {
     opacity: 0.5;
@@ -42,21 +46,41 @@ const defaultProps = {};
 
 /*todo: tidy up this component*/
 
-const DownloadTab = () => {
+const downloadImage = name => {
+  const node = document.getElementById('viz-container');
+  html2canvas(node, { allowTaint: true, useCORS: true }).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.style = 'display: none';
+    a.href = imgData;
+    a.download = `${name}.png`;
+    a.click();
+    window.URL.revokeObjectURL(imgData);
+    a.parentNode.removeChild(a);
+  });
+};
+
+const DownloadTab = ({ chartTitle }) => {
   return (
     <BaseTab>
       <ListContainer>
-        <ItemContainer>
+        <ItemContainer onClick={() => downloadImage(chartTitle)}>
+          <ItemIcon />
+          <DownloadItem data-cy="dowload-option-PNG">PNG</DownloadItem>
+        </ItemContainer>
+
+        <ItemContainer disabled>
           <ItemIcon />
           <DownloadItem data-cy="dowload-option-JSON">JSON</DownloadItem>
         </ItemContainer>
 
-        <ItemContainer>
+        <ItemContainer disabled>
           <ItemIcon />
           <DownloadItem data-cy="dowload-option-CSV">CSV</DownloadItem>
         </ItemContainer>
 
-        <ItemContainer>
+        <ItemContainer disabled>
           <ItemIcon />
           <DownloadItem data-cy="dowload-option-XML">XML</DownloadItem>
         </ItemContainer>

@@ -10,6 +10,7 @@ import SearchField from 'components/Select/components/SearchField/SearchField';
 /* icons */
 import ResetIconSmall from 'assets/icons/ResetIconSmall';
 /* utils */
+import filter from 'lodash/filter';
 import isEqual from 'lodash/isEqual';
 import findIndex from 'lodash/findIndex';
 /* styles */
@@ -85,6 +86,7 @@ class ZoomSelect extends React.Component {
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.allCheck = this.allCheck.bind(this);
     this.categorise = this.categorise.bind(this);
+    this.onSearchChange = this.onSearchChange.bind(this);
   }
 
   componentDidMount() {
@@ -150,6 +152,19 @@ class ZoomSelect extends React.Component {
     document.removeEventListener('mousedown', this.handleClickOutside);
   }
 
+  onSearchChange(e) {
+    this.setState({ searchWord: e.target.value }, () => {
+      const data = filter(this.props.data, item =>
+        item.label.includes(this.state.searchWord.toLowerCase())
+      );
+      if (this.props.categorise) {
+        this.categorise(data);
+      } else {
+        this.setState({ options: data });
+      }
+    });
+  }
+
   /**
    * Set the wrapper ref for dropdown container
    */
@@ -201,32 +216,34 @@ class ZoomSelect extends React.Component {
     }
   }
 
-  categorise() {
+  categorise(data = this.props.data) {
     const regexLetter = /^[a-zA-Z]+$/;
     const options = [];
     // so here we define the first character of the category, depending on the first items
     // first character, we also check if it is a letter, then we put it in letter category
     // otherwise we put it under '#' category
-    let prevCat = regexLetter.test(this.props.data[0].label[0])
-      ? this.props.data[0].label[0].toUpperCase()
-      : '#';
-
-    options.push({ label: prevCat, value: 'category' });
-
-    // and now we loop and add all other categories along with the actual values
-    this.props.data.forEach(item => {
-      const category = regexLetter.test(item.label[0])
-        ? item.label[0].toUpperCase()
+    if (data.length > 0) {
+      let prevCat = regexLetter.test(data[0].label[0])
+        ? data[0].label[0].toUpperCase()
         : '#';
-      // so if the previous category is not equals to the new category
-      // we push it in and set it to be the prevCategory
-      if (prevCat !== category) {
-        prevCat = category;
-        options.push({ label: prevCat, value: 'category' });
-      }
 
-      options.push(item);
-    });
+      options.push({ label: prevCat, value: 'category' });
+
+      // and now we loop and add all other categories along with the actual values
+      data.forEach(item => {
+        const category = regexLetter.test(item.label[0])
+          ? item.label[0].toUpperCase()
+          : '#';
+        // so if the previous category is not equals to the new category
+        // we push it in and set it to be the prevCategory
+        if (prevCat !== category) {
+          prevCat = category;
+          options.push({ label: prevCat, value: 'category' });
+        }
+
+        options.push(item);
+      });
+    }
 
     this.setState({ options });
   }
@@ -362,56 +379,44 @@ class ZoomSelect extends React.Component {
         />
         {this.state.open && (
           <DropDownContainer>
-            {this.state.options.length > 0 ? (
-              <div>
-                {this.props.multiple && (
-                  <ItemContainer>
-                    <InfoLabel>
-                      {this.props.arraySelected.length} of{' '}
-                      {this.props.data.length} selected
-                    </InfoLabel>
-                  </ItemContainer>
-                )}
-                {this.props.search && (
-                  <ItemContainer>
-                    <SearchField
-                      data-cy="geo-map-search"
-                      value={this.state.searchWord}
-                      onChange={e =>
-                        this.setState({ searchWord: e.target.value })
-                      }
-                    />
-                  </ItemContainer>
-                )}
-                {this.props.selectAll && this.props.multiple && (
-                  <SelectAll onClick={() => this.selectAllClick()}>
-                    <DropDownCheckbox
-                      checked={
-                        this.state.allSelected ||
-                        this.props.arraySelected.length > 0
-                      }
-                    />
-                    <DropDownLabel>Select / Deselect all</DropDownLabel>
-                  </SelectAll>
-                )}
-                <OptionsContainer>
-                  {this.state.options.map((option, index) => {
-                    if (
-                      this.state.searchWord.length > 0 &&
-                      (option.value === 'category' ||
-                        option.label
-                          .toLowerCase()
-                          .includes(this.state.searchWord.toLowerCase()))
-                    ) {
-                      return this.renderDropDownItem(option, index);
+            {this.props.data.length > 0 && this.props.multiple && (
+              <ItemContainer>
+                <InfoLabel>
+                  {this.props.arraySelected.length} of {this.props.data.length}{' '}
+                  selected
+                </InfoLabel>
+              </ItemContainer>
+            )}
+            {this.props.search && (
+              <ItemContainer>
+                <SearchField
+                  data-cy="geo-map-search"
+                  value={this.state.searchWord}
+                  onChange={this.onSearchChange}
+                />
+              </ItemContainer>
+            )}
+            {this.props.data.length > 0 &&
+              this.props.selectAll &&
+              this.props.multiple && (
+                <SelectAll onClick={() => this.selectAllClick()}>
+                  <DropDownCheckbox
+                    checked={
+                      this.state.allSelected ||
+                      this.props.arraySelected.length > 0
                     }
-                    if (this.state.searchWord.length === 0) {
-                      return this.renderDropDownItem(option, index);
-                    }
-                  })}
-                </OptionsContainer>
-              </div>
-            ) : (
+                  />
+                  <DropDownLabel>Select / Deselect all</DropDownLabel>
+                </SelectAll>
+              )}
+            {this.state.options.length > 0 && (
+              <OptionsContainer>
+                {this.state.options.map((option, index) => {
+                  return this.renderDropDownItem(option, index);
+                })}
+              </OptionsContainer>
+            )}
+            {this.state.options.length === 0 && (
               <EmptyOptions> No options </EmptyOptions>
             )}
           </DropDownContainer>

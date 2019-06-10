@@ -56,9 +56,10 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     cy.visit('/visualizer/geomap/vizID/download');
     cy.waitPageLoader();
     cy.waitPageLoader2();
-    cy.get('[data-cy="dowload-option-JSON"]').click();
-    cy.get('[data-cy="dowload-option-CSV"]').click();
-    cy.get('[data-cy="dowload-option-XML"]').click();
+    cy.get('[data-cy="dowload-option-PNG"]').click();
+    // cy.get('[data-cy="dowload-option-JSON"]').click();
+    // cy.get('[data-cy="dowload-option-CSV"]').click();
+    // cy.get('[data-cy="dowload-option-XML"]').click();
 
     cy.log('**DO SOME PUBLISHING TESTING*');
     cy.visit('/visualizer/geomap/vizID/visibility');

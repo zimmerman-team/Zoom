@@ -18,8 +18,9 @@ const ComponentBase = styled.div`
   width: 200px;
   height: max-content;
   align-items: center;
-  margin-right: 100px;
+  margin-right: 50px;
   justify-content: space-between;
+  margin-bottom: 16px;
 `;
 
 const LegendLabel = styled.div`

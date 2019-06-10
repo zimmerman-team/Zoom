@@ -37,7 +37,6 @@ export const data = {
     {
       label: 'download',
       path: `${Path}download`,
-      disable: true,
       component: DownloadTab,
       icon: <IconDownload />
     },

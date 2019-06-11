@@ -53,10 +53,12 @@ const indicatorQuery = graphql`
   query VizPaneMediatorQuery(
     $year_Range: String!
     $fileSource_Name_In: String!
+    $country_Iso2: String
   ) {
     allIndicators(
       year_Range: $year_Range
       fileSource_Name_In: $fileSource_Name_In
+      country_Iso2: $country_Iso2
     ) {
       edges {
         node {
@@ -82,6 +84,7 @@ class VizPaneMediator extends React.Component {
 
     this.state = {
       allIndNames: [],
+      locReselected: false,
       allCountries: [],
       allFileSources: [],
       selectedSources: props.paneData.selectedSources
@@ -112,26 +115,45 @@ class VizPaneMediator extends React.Component {
   }
 
   componentDidMount() {
-    let allCountries = this.props.dropDownData.allCountries.edges.map(
-      indicator => {
-        return { label: indicator.node.name, value: indicator.node.iso2 };
-      }
-    );
+    let allCountries = [];
+    let allRegions = [];
 
-    allCountries = sortBy(allCountries, ['label']);
+    if (this.props.paneData.chartType === chartTypes.focusKE) {
+      allCountries = [
+        {
+          label: 'Kenya',
+          value: 'ke'
+        }
+      ];
+    } else if (this.props.paneData.chartType === chartTypes.focusNL) {
+      allCountries = [
+        {
+          label: 'Netherlands',
+          value: 'nl'
+        }
+      ];
+    } else {
+      allCountries = this.props.dropDownData.allCountries.edges.map(
+        indicator => {
+          return { label: indicator.node.name, value: indicator.node.iso2 };
+        }
+      );
 
-    let allRegions = this.props.dropDownData.allRegions.edges.map(indicator => {
-      return {
-        label: indicator.node.name,
-        value: indicator.node.country,
-        codeVal: indicator.node.code
-      };
-    });
+      allCountries = sortBy(allCountries, ['label']);
 
-    allRegions = sortBy(allRegions, ['label']);
+      allRegions = this.props.dropDownData.allRegions.edges.map(indicator => {
+        return {
+          label: indicator.node.name,
+          value: indicator.node.country,
+          codeVal: indicator.node.code
+        };
+      });
 
-    // and we also push in a variable for undefined
-    allRegions.push({ label: 'undefined', value: [{ iso2: 'undefined' }] });
+      allRegions = sortBy(allRegions, ['label']);
+
+      // and we also push in a variable for undefined
+      allRegions.push({ label: 'undefined', value: [{ iso2: 'undefined' }] });
+    }
 
     let allFileSources = this.props.dropDownData.allFileSources.edges.map(
       indicator => {
@@ -151,13 +173,57 @@ class VizPaneMediator extends React.Component {
     );
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     // so basically because of silentauth it takes some time
     // for the user to load in, so to show correct indicators
     // for the signed in user we will refetch the indicators
     // once user data has changed.
     if (!isEqual(this.props.user.data, prevProps.user.data)) {
       this.refetch();
+    }
+
+    if (
+      this.props.paneData.chartType !== prevProps.paneData.chartType &&
+      (prevProps.paneData.chartType === chartTypes.focusKE ||
+        prevProps.paneData.chartType === chartTypes.focusNL)
+    ) {
+      let allCountries = this.props.dropDownData.allCountries.edges.map(
+        indicator => {
+          return { label: indicator.node.name, value: indicator.node.iso2 };
+        }
+      );
+
+      allCountries = sortBy(allCountries, ['label']);
+
+      let allRegions = this.props.dropDownData.allRegions.edges.map(
+        indicator => {
+          return {
+            label: indicator.node.name,
+            value: indicator.node.country,
+            codeVal: indicator.node.code
+          };
+        }
+      );
+
+      allRegions = sortBy(allRegions, ['label']);
+
+      // and we also push in a variable for undefined
+      allRegions.push({ label: 'undefined', value: [{ iso2: 'undefined' }] });
+
+      this.setState({
+        locReselected: true,
+        allCountries,
+        allRegions
+      });
+    }
+
+    if (
+      this.state.locReselected !== prevState.locReselected &&
+      this.state.locReselected
+    ) {
+      this.setState({
+        locReselected: false
+      });
     }
   }
 
@@ -247,6 +313,14 @@ class VizPaneMediator extends React.Component {
       year_Range,
       fileSource_Name_In
     };
+
+    if (this.props.paneData.chartType === chartTypes.focusKE) {
+      refetchVars.country_Iso2 = 'ke';
+    }
+
+    if (this.props.paneData.chartType === chartTypes.focusNL) {
+      refetchVars.country_Iso2 = 'nl';
+    }
 
     fetchQuery(this.props.relay.environment, indicatorQuery, refetchVars).then(
       data => {
@@ -687,7 +761,9 @@ class VizPaneMediator extends React.Component {
         regions={this.state.allRegions}
         // okay so we use this variable to change the
         // to disable the geolocation dropdowns being defaultly selected
-        locationSelected={!this.props.chartData.chartMounted}
+        locationSelected={
+          !this.props.chartData.chartMounted || this.state.locReselected
+        }
         selectedInd={this.props.chartData.selectedInd}
         chartKeys={this.props.chartData.chartKeys}
         addIndicator={this.addIndicator}

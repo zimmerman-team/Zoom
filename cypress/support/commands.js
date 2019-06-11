@@ -85,6 +85,18 @@ Cypress.Commands.add(
   }
 );
 
+Cypress.Commands.add('signOut', () => {
+  cy.get('[data-cy=sidebar-toggle]').click();
+  cy.get('body').then($body => {
+    if ($body.find('[data-cy=sidebar-logout-button]').length) {
+      cy.get('[data-cy=sidebar-logout-button]').click();
+      cy.wait(4000);
+    } else {
+      cy.get('[data-cy=sidebar-close]').click();
+    }
+  });
+});
+
 // --------- Loaders ---------
 //This is the circular progress loader icon
 Cypress.Commands.add('waitPageLoader', (timeout = 1750000) => {

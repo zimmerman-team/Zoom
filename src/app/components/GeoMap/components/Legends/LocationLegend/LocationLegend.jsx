@@ -1,10 +1,15 @@
 import React from 'react';
+
+import Dotdotdot from 'react-dotdotdot';
+
 import {
   LocationLegendItem,
   LocationName,
   LocItemContainer,
-  LocationLegendLabel
+  LocationLegendLabel,
+  ScgIconContainer
 } from './LocationLegend.style';
+
 import SvgIconLocation from 'assets/icons/geomap/SvgIconLocation';
 
 const locationLegend = (locationItems, index) => (
@@ -12,8 +17,12 @@ const locationLegend = (locationItems, index) => (
     <LocationLegendLabel>Points of interests</LocationLegendLabel>
     {locationItems.map(item => (
       <LocItemContainer>
-        <SvgIconLocation color={item.color} />
-        <LocationName>{item.name}</LocationName>
+        <ScgIconContainer>
+          <SvgIconLocation color={item.color} />
+        </ScgIconContainer>
+        <Dotdotdot clamp={4}>
+          <LocationName>{item.name}</LocationName>
+        </Dotdotdot>
       </LocItemContainer>
     ))}
   </LocationLegendItem>

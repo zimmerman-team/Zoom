@@ -11,6 +11,7 @@ export const DetailList = styled.ul`
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
+  padding-top: ${props => props.paddingTop};
 `;
 
 export const DetailListItem = styled.li`

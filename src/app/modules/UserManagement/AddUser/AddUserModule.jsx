@@ -83,7 +83,7 @@ const AddUserModule = props => {
     props.roleSelected._id === '';
 
   return (
-    <ModuleFragment title="Add user">
+    <ModuleFragment paddingTop="65px" title="Add user">
       <AddUserForm onSubmit={props.submitForm}>
         {/* first name field */}
         <InputField

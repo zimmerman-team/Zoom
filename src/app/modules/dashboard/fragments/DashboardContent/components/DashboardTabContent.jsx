@@ -12,6 +12,7 @@ import GridListOptionsPane from 'modules/dashboard/fragments/GridList/components
 import NavPane from 'components/Panes/NavPane/NavPane';
 import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
+import userRoles from '__consts__/UserRoleConst';
 
 /* todo: logic in this component seems somewhat convoluted, needs some cleaning up */
 
@@ -68,6 +69,9 @@ const DashboardTabContent = props => {
   let sortIsVisible = true;
   let tabContentName = true;
   let isRemoveOption = false;
+  const isAdmin =
+    (props.user && props.user.role === userRoles.admin) ||
+    props.user.role === userRoles.superAdm;
 
   switch (props.activeTab) {
     case 'charts':
@@ -76,7 +80,7 @@ const DashboardTabContent = props => {
       tabContentName = 'Charts';
       break;
     case 'data-sets':
-      targetData = props.datasets;
+      targetData = isAdmin ? props.datasets : [];
       targetUrl = '/mapper';
       leftOptionLabel =
         props.isAdministrator || props.isSuperAdmin ? 'map data set' : null;
@@ -90,7 +94,7 @@ const DashboardTabContent = props => {
       tabContentName = 'Users';
       break;
     case 'teams':
-      targetData = props.teams;
+      targetData = isAdmin ? props.teams : [];
       targetUrl = '/create-team';
       leftOptionLabel = props.isSuperAdmin ? 'create team' : null;
       tabContentName = 'Teams';
@@ -145,6 +149,7 @@ DashboardTabContent.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
+    user: state.currentUser.data,
     dataPaneOpen: state.dataPaneOpen.open
   };
 };

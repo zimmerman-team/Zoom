@@ -12,6 +12,10 @@ const find = require('lodash/find');
 const filter = require('lodash/filter');
 const isEqual = require('lodash/isEqual');
 
+const consts = require('../config/consts');
+
+const roles = consts.roles;
+
 const AuthUserController = {
   getAllUsers: (req, res) => {
     const { userId } = req.query;
@@ -232,6 +236,7 @@ const AuthUserController = {
 
   addUser: (req, res) => {
     const {
+      adminId,
       email,
       name,
       surname,
@@ -240,62 +245,75 @@ const AuthUserController = {
       groupName,
       roleName
     } = req.body;
-    authUtils.getAccessToken('management').then(token => {
-      axios
-        .post(
-          `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/users`,
-          {
-            email,
-            blocked: false,
-            email_verified: false,
-            verify_email: true,
-            password: 'wPsRZT?&&H%p2sj3',
-            given_name: name,
-            family_name: surname,
-            name: `${name} ${surname}`,
-            nickname: name,
-            connection: 'Username-Password-Authentication',
-            user_metadata: {
-              firstName: name,
-              lastName: surname
-            },
-            app_metadata: {
-              authorization: {
-                groups: [groupName],
-                roles: [roleName]
+
+    User.findOne({ authId: adminId }, (admError, admin) => {
+      if (admError) {
+        general.handleError(res, admError);
+      } else if (!admin) {
+        general.handleError(res, 'User not found', 404);
+      } else if (admin.role === roles.admin || roles.superAdm) {
+        authUtils.getAccessToken('management').then(token => {
+          axios
+            .post(
+              `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/users`,
+              {
+                email,
+                blocked: false,
+                email_verified: false,
+                verify_email: true,
+                password: 'wPsRZT?&&H%p2sj3',
+                given_name: name,
+                family_name: surname,
+                name: `${name} ${surname}`,
+                nickname: name,
+                connection: 'Username-Password-Authentication',
+                user_metadata: {
+                  firstName: name,
+                  lastName: surname
+                },
+                app_metadata: {
+                  authorization: {
+                    groups: [groupName],
+                    roles: [roleName]
+                  }
+                }
+              },
+              {
+                headers: {
+                  Authorization: token
+                }
               }
-            }
-          },
-          {
-            headers: {
-              Authorization: token
-            }
-          }
-        )
-        .then(response => {
-          if (response.status === 201) {
-            authUtils.sendWelcomeEmail(
-              response.data.user_id,
-              name,
-              surname,
-              email
-            );
-            authUtils.addUserToGroup(response.data.user_id, groupId);
-            authUtils.assignRoleToUser(response.data.user_id, roleId);
-            return res.json('success');
-          }
-          return res
-            .status(response.data.statusCode)
-            .send(response.data.message);
-        })
-        .catch(error => {
-          console.log(
-            `${error.response.data.statusCode}: ${error.response.data.message}`
-          );
-          return res
-            .status(error.response.data.statusCode)
-            .send(error.response.data.message);
+            )
+            .then(response => {
+              if (response.status === 201) {
+                authUtils.sendWelcomeEmail(
+                  response.data.user_id,
+                  name,
+                  surname,
+                  email
+                );
+                authUtils.addUserToGroup(response.data.user_id, groupId);
+                authUtils.assignRoleToUser(response.data.user_id, roleId);
+                return res.json('success');
+              }
+              return res
+                .status(response.data.statusCode)
+                .send(response.data.message);
+            })
+            .catch(error => {
+              console.log(
+                `${error.response.data.statusCode}: ${
+                  error.response.data.message
+                }`
+              );
+              return res
+                .status(error.response.data.statusCode)
+                .send(error.response.data.message);
+            });
         });
+      } else {
+        general.handleError(res, 'Unauthorized', 401);
+      }
     });
   },
 
@@ -315,8 +333,8 @@ const AuthUserController = {
               else if (!adminUser) {
                 general.handleError(res, 'Admin user not found', 404);
               } else if (
-                adminUser.role === 'Administrator' ||
-                adminUser.role === 'Super admin' ||
+                adminUser.role === roles.admin ||
+                adminUser.role === roles.superAdm ||
                 userId === delId
               ) {
                 // okay so here we find the user to be deleted
@@ -389,7 +407,7 @@ const AuthUserController = {
   },
 
   editUser: (req, res) => {
-    const { userId, email, name, surname } = req.body;
+    const { adminId, userId, email, name, surname } = req.body;
     authUtils.getAccessToken('management').then(token => {
       axios
         .patch(
@@ -409,28 +427,41 @@ const AuthUserController = {
           }
         )
         .then(response => {
-          if (response.status === 200 || response.status === 201) {
-            return User.findOne({ authId: userId }, (err, userFound) => {
-              if (userFound) {
-                if (err) general.handleError(res, err);
-                if (userFound.email !== email && email) {
-                  userFound.email = email;
-                }
-                if (userFound.firstName !== name && name) {
-                  userFound.firstName = name;
-                }
-                if (userFound.lastName !== surname && surname) {
-                  userFound.lastName = surname;
-                }
-                userFound.save(error => {});
-                return res.json('success');
+          User.findOne({ authId: adminId }, (adminErr, adminUser) => {
+            if (adminErr) general.handleError(res, adminErr);
+            else if (!adminUser) {
+              general.handleError(res, 'Admin user not found', 404);
+            } else if (
+              adminUser.role === roles.admin ||
+              adminUser.role === roles.superAdm ||
+              userId === adminId
+            ) {
+              if (response.status === 200 || response.status === 201) {
+                return User.findOne({ authId: userId }, (err, userFound) => {
+                  if (userFound) {
+                    if (err) general.handleError(res, err);
+                    if (userFound.email !== email && email) {
+                      userFound.email = email;
+                    }
+                    if (userFound.firstName !== name && name) {
+                      userFound.firstName = name;
+                    }
+                    if (userFound.lastName !== surname && surname) {
+                      userFound.lastName = surname;
+                    }
+                    userFound.save(error => {});
+                    return res.json('success');
+                  }
+                  return res.json('success');
+                });
               }
-              return res.json('success');
-            });
-          }
-          return res
-            .status(response.data.statusCode)
-            .send(response.data.message);
+              return res
+                .status(response.data.statusCode)
+                .send(response.data.message);
+            } else {
+              general.handleError(res, 'Unauthorized', 401);
+            }
+          });
         })
         .catch(error => {
           console.log(

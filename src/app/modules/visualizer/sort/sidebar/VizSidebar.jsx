@@ -60,6 +60,7 @@ const VizSidebar = props => {
         code={props.code}
         data={props.data}
         dropDownData={props.dropDownData}
+        chartTitle={props.chartTitle}
       />
     </ComponentBase>
   );

@@ -14,7 +14,7 @@ const ComponentBase = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${theme.color.aidsFondsWhite};
-  padding: 30px 26% 80px 26%;
+  padding: 70px 26% 80px 26%;
 `;
 
 const propTypes = {

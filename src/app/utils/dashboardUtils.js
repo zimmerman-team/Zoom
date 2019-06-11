@@ -1,5 +1,4 @@
 import get from 'lodash/get';
-import find from 'lodash/find';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
 import { paginate } from './genericUtils';
@@ -34,6 +33,7 @@ export function formatUsersTabData(
           Charts: 0,
           Twitter: ''
         },
+        last_updated: new Date(d.updated_at),
         onEdit: () => onEdit(d.user_id),
         onView: () => onView(d.user_id),
         onDelete: () => onDelete(d.user_id)
@@ -84,6 +84,7 @@ export function formatTeamsTabData(
           'Publication date': get(d, 'date', ''),
           Organisations: ''
         },
+        last_updated: new Date(get(d, 'last_updated', '')),
         onEdit: () => onEdit(d._id),
         onView: () => onView(d._id),
         onDelete: () => onDelete(d._id, get(d, 'name', ''))
@@ -124,17 +125,16 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
     let shared = chart.teams;
     if (chart._public) shared.push('Public');
     shared = shared.join(', ');
-    let dataSources = '';
+    let dataSources = [];
 
     chart.indicatorItems.forEach((indItem, index) => {
       if (indItem.dataSource) {
-        if (index) {
-          dataSources = dataSources.concat(', ').concat(indItem.dataSource);
-        } else {
-          dataSources = indItem.dataSource;
+        if (index && dataSources.indexOf(indItem.dataSource) === -1) {
+          dataSources.push(indItem.dataSource);
         }
       }
     });
+    dataSources = dataSources.join(', ');
 
     let onEdit;
     let onView;

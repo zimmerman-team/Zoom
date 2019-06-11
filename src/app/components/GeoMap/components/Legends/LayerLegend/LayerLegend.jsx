@@ -1,4 +1,5 @@
 import React from 'react';
+import Dotdotdot from 'react-dotdotdot';
 /* styles */
 import {
   LegendItem,
@@ -19,7 +20,9 @@ const layerLegend = (legendName, index, min, max) => {
   return (
     legendName && (
       <LegendItem key={`legend-${index}`} data-cy="legendLayer-label">
-        <LegendLabel>{legendName}</LegendLabel>
+        <Dotdotdot clamp={4}>
+          <LegendLabel>{legendName}</LegendLabel>
+        </Dotdotdot>
         <ColorGradient />
         <LegendNumberContainer>
           <LegendNumber>{formatNumber(min)}</LegendNumber>

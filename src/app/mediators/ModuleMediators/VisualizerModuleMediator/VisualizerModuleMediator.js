@@ -624,7 +624,9 @@ class VisualizerModuleMediator extends Component {
           this.props.chartData.specOptions[graphKeys.aggregate] ===
           aggrOptions[1].value
         ) {
-          datePeriod = this.props.chartData.selectedYears;
+          datePeriod = this.props.chartData.selectedYears.concat(
+            this.props.chartData.selectedYears.map(sy => `${sy}.0`)
+          );
         }
       }
 

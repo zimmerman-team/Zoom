@@ -14,11 +14,13 @@ describe('Chartbuilder bar chart fragment e2e', function() {
     cy.url().should('include', '/visualizer/barchart');
 
     cy.log('**Plots aids related deaths**');
+    cy.wait(2000);
     cy.get(
       '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
     )
       .first()
       .click();
+    cy.wait(2000);
     cy.contains('aids related deaths (unaids)').click();
     cy.waitPageLoader();
     cy.get('[data-cy="legend-label"]').should('have.css', 'content');

@@ -643,6 +643,7 @@ class VisualizerModuleMediator extends Component {
         if (
           (this.props.paneData.chartType === chartTypes.focusNL ||
             this.props.paneData.chartType === chartTypes.focusKE) &&
+          countriesISO2.length > 0 &&
           countriesISO2.indexOf('undefined') === -1
         ) {
           countriesISO2.push('undefined');
@@ -657,7 +658,7 @@ class VisualizerModuleMediator extends Component {
           indicatorStr: indicator || 'null',
           subInds,
           datePeriod,
-          countriesISO2,
+          countriesISO2: countriesISO2.length > 0 ? countriesISO2 : [null],
           OR_GeolocationIso2_Is_Null: iso2Undef,
           orderBy
         };

@@ -532,22 +532,24 @@ class VizPaneMediator extends React.Component {
   }
 
   removeIndicator(index) {
-    const selectedInd = [...this.props.chartData.selectedInd];
+    if (this.props.chartData.selectedInd.length > 1) {
+      const selectedInd = [...this.props.chartData.selectedInd];
 
-    const refetch =
-      selectedInd[index].indicator &&
-      selectedInd[index].selectedSubInd.length > 0;
+      const refetch =
+        selectedInd[index].indicator &&
+        selectedInd[index].selectedSubInd.length > 0;
 
-    selectedInd.splice(index, 1);
+      selectedInd.splice(index, 1);
 
-    this.props.dispatch(
-      actions.storeChartDataRequest({
-        selectedInd,
-        refetch
-      })
-    );
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          selectedInd,
+          refetch
+        })
+      );
 
-    this.changesMade();
+      this.changesMade();
+    }
   }
 
   resetAll() {

@@ -199,6 +199,7 @@ class WrapUpMediator extends React.Component {
   handleSurveyCompleted(response, error) {
     if (error) console.log('error adding survey data:', error);
     if (response) {
+      console.log('handleSurveyCompleted', response);
       this.setState(
         {
           surveyId: response.surveyData.id
@@ -224,11 +225,6 @@ class WrapUpMediator extends React.Component {
     if (!this.props.wrapUpData.surveyId) {
       const { metaData } = this.props;
 
-      const selectRespondents = [];
-      metaData.q3.forEach(q => {
-        selectRespondents.push(q.value);
-      });
-
       const dataCleaningTechniques = [];
       metaData.q51.forEach(q => {
         dataCleaningTechniques.push(q.value.trim());
@@ -239,10 +235,10 @@ class WrapUpMediator extends React.Component {
         whoDidYouTestWith: metaData.q2.map(q => {
           return q.value;
         }),
-        consideredSenstive: metaData.q22,
-        staffTrained: metaData.q21,
+        consideredSenstive: metaData.q21,
+        staffTrained: metaData.q22,
         askSensitive: metaData.q22,
-        selectRespondents,
+        selectRespondents: metaData.q4Text,
         howManyRespondents:
           metaData.q4.value.length > 0 ? metaData.q4.value : '0',
         editSheet: metaData.q5,
@@ -255,9 +251,7 @@ class WrapUpMediator extends React.Component {
         variables.otherCleaningTechnique = metaData.q51Text;
       }
 
-      if (selectRespondents.indexOf('0') !== -1) {
-        variables.otherRespondent = metaData.q3Text;
-      }
+      console.log('SURVEY DATA VARS', variables);
 
       // and here we upload all the metadata for the file
       SurveyMutation.commit(
@@ -287,21 +281,17 @@ class WrapUpMediator extends React.Component {
   addMetaData() {
     const { metaData } = this.props;
 
-    // okay so the fileType has
-    const today = new Date().toISOString();
-    const isoDate = today.substring(0, today.indexOf('T'));
-
     const fileType = /[.]/.exec(this.props.file.name)
       ? /[^.]+$/.exec(this.props.file.name)
       : [''];
 
-    // TODO: this commented out logic below will be added in the last step
-    // along with every other metadata field
-    // This is shared data set 'p' for private, 'o' for public
-    const accessibility =
-      typeof metaData.shared === 'string' && metaData.shared === 'Yes'
-        ? 'o'
-        : 'p';
+    let accessibility = 'p';
+
+    if (metaData.accessibility === 'Public') {
+      accessibility = 'a';
+    } else if (metaData.accessibility === 'Team') {
+      accessibility = 'o';
+    }
 
     const tags = metaData.tags.map(tag => {
       return { name: tag };
@@ -313,13 +303,13 @@ class WrapUpMediator extends React.Component {
       title: metaData.title,
       description: metaData.desc,
       containsSubnationalData: true,
-      organisation: 'Unavailable field',
+      organisation: metaData.org,
       maintainer: 'Unavailable field',
       methodology: 'Unavailable field',
       defineMethodology: 'Unavailable field',
       updateFrequency: 'Unavailable field',
       comments: 'Unavailable field',
-      dateOfDataset: isoDate,
+      dateOfDataset: metaData.year,
       accessibility,
       dataQuality: 'Unavailable field',
       numberOfRows: '1',
@@ -344,13 +334,15 @@ class WrapUpMediator extends React.Component {
       variables.surveyData = this.state.surveyId;
     }
 
+    console.log('variables', variables);
+
     // and here we upload all the metadata for the file
-    AddFileMutation.commit(
-      this.props.environment,
-      variables,
-      this.handleMetaDataCompleted,
-      this.handleMetaDataError
-    );
+    // AddFileMutation.commit(
+    //   this.props.environment,
+    //   variables,
+    //   this.handleMetaDataCompleted,
+    //   this.handleMetaDataError
+    // );
   }
 
   handleMappingCompleted(response, error) {

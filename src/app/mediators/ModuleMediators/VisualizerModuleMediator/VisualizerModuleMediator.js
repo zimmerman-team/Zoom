@@ -584,7 +584,10 @@ class VisualizerModuleMediator extends Component {
   ) {
     const indicatorData = [];
 
-    let datePeriod = [this.props.chartData.selectedYear];
+    let datePeriod = [
+      this.props.chartData.selectedYear,
+      `${this.props.chartData.selectedYear}.0`
+    ];
     let orderBy = ['date'];
 
     // so if an indicators data is selected we will receive an
@@ -621,7 +624,9 @@ class VisualizerModuleMediator extends Component {
           this.props.chartData.specOptions[graphKeys.aggregate] ===
           aggrOptions[1].value
         ) {
-          datePeriod = this.props.chartData.selectedYears;
+          datePeriod = this.props.chartData.selectedYears.concat(
+            this.props.chartData.selectedYears.map(sy => `${sy}.0`)
+          );
         }
       }
 

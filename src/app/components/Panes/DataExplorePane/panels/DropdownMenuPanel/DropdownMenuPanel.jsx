@@ -119,9 +119,11 @@ const DropdownMenuPanel = props => {
             {detail.indicatorLabel && (
               <IndLabelContainer>
                 <IndicatorLabel>{detail.indicatorLabel}</IndicatorLabel>
-                <IndicatorRemove onClick={detail.removeIndicator}>
-                  Remove
-                </IndicatorRemove>
+                {props.panelDetails.length > 2 && (
+                  <IndicatorRemove onClick={detail.removeIndicator}>
+                    Remove
+                  </IndicatorRemove>
+                )}
               </IndLabelContainer>
             )}
             <ZoomSelect

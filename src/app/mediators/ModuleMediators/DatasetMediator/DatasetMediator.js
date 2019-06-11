@@ -33,7 +33,6 @@ const surveyQuery = graphql`
           staffTrained
           askSensitive
           selectRespondents
-          otherRespondent
           howManyRespondents
           editSheet
           dataCleaningTechniques

@@ -2,14 +2,16 @@ export const step1InitialData = {
   metaData: {
     title: '',
     desc: '',
+    org: '',
+    year: '',
     tags: [],
     dataSource: {
       key: '',
       label: '',
       value: ''
     },
-    shared: 'Yes',
-    surveyData: 'No',
+    accessibility: 'Private',
+    surveyData: 'Yes',
     q1: '2',
     q2: [],
     q21: '2',
@@ -28,7 +30,7 @@ export const step1InitialData = {
     q51Text: '',
     // the required fields need to have the same name as the
     // state variables
-    requiredFields: ['title', 'desc', 'dataSource'],
+    requiredFields: ['title', 'desc', 'dataSource', 'org', 'year'],
     fileSources: []
   },
   uploadData: {

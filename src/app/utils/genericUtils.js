@@ -40,10 +40,16 @@ export function paginate(
   reverse = false
 ) {
   const sortedList = reverse
-    ? sortBy(initialListData, [item => item[sort].toLowerCase()]).reverse()
+    ? sortBy(initialListData, [
+        item => (sort.includes('date') ? item[sort] : item[sort].toLowerCase())
+      ]).reverse()
     : sortBy(initialListData, [
         item => {
-          return item[sort] !== '' ? item[sort].toLowerCase() : 'zzz';
+          return item[sort] !== ''
+            ? sort.includes('date')
+              ? item[sort]
+              : item[sort].toLowerCase()
+            : 'zzz';
         }
       ]);
 

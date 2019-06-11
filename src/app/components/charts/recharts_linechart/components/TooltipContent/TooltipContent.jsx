@@ -9,14 +9,12 @@ import {
   ToolTipValue
 } from 'components/charts/TooltipContent.styles';
 
-const TooltipContent = ({ active, payload, label, xAxisKey }) => {
+const TooltipContent = ({ active, payload, label }) => {
   if (active && payload) {
-    const xAxisLabel = xAxisKey.charAt(0).toUpperCase() + xAxisKey.slice(1);
-
     return (
       <Container>
         <Title>
-          {xAxisLabel}: <b>{label}</b>
+          <b>{label}</b>
         </Title>
         {payload.map(p => {
           let nrFormat = ' ';

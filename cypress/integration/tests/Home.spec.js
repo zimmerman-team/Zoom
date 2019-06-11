@@ -46,16 +46,30 @@ describe('Home page map controls', function() {
 describe('Home page geo map datamapping', function() {
   it('Plots South of Sahara data about new hiv infections', function() {
     cy.visit('/');
-    cy.waitPageLoader();
     cy.waitPageLoader2();
+    cy.waitPageLoader();
     cy.get('[data-cy=dialog-overlay]').click();
     cy.get('[data-cy="cookie-notice"]').click();
+    cy.waitPageLoader();
+
+    cy.signOut();
+    cy.waitPageLoader2();
+    cy.waitPageLoader();
+
     cy.get('[data-cy="geomap-filter-button"]').click();
     cy.get('[data-cy="geo-map-container"]').click();
-    cy.contains('Select indicator').click();
+
+    cy.get(
+      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
+    )
+      .first()
+      .click();
     cy.contains('new hiv infections').click();
-    cy.waitPageLoader();
+    cy.get('[class*=ZoomSelectstyles__Drop] > li').click();
+    cy.wait(1000);
+    cy.get('[class*=ZoomSelectstyles__Drop] > li').click();
     cy.waitPageLoader2();
+    cy.waitPageLoader();
     cy.get('[data-cy="legendLayer-label"]').should(
       'contain',
       'new hiv infections'

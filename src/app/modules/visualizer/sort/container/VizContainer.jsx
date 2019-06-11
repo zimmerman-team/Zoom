@@ -60,8 +60,8 @@ const defaultProps = {
   chartKeys: [],
   saveViewport: null,
   home: false,
-  mode: location.pathname.includes('preview'),
-  context: location.pathname.includes('context')
+  mode: window.location.pathname.includes('preview'),
+  context: window.location.pathname.includes('context')
 };
 
 class VizContainer extends React.Component {
@@ -73,8 +73,8 @@ class VizContainer extends React.Component {
     // need an initial set here, because those default props, don't actually set
     // the state correctly
     this.setState({
-      preview: location.pathname.includes('preview'),
-      context: location.pathname.includes('context')
+      preview: window.location.pathname.includes('preview'),
+      context: window.location.pathname.includes('context')
     });
 
     this.props.history.listen((location, action) => {
@@ -98,6 +98,7 @@ class VizContainer extends React.Component {
 
     return (
       <ComponentBase
+        id="viz-container"
         mode={
           this.state.preview || this.props.publicPage ? 'initial' : 'center'
         }

@@ -17,9 +17,9 @@ import { formatWindowTitle } from './VisualizerModule.utils';
 // import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
 
 const ModuleBase = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
-  width: 100vw;
-  height: calc(100vh - 40px);
   position: relative;
 `;
 
@@ -92,6 +92,7 @@ class BuilderModule extends Component {
     return (
       <Router>
         <ModuleBase
+          id="home-geomap"
           style={
             this.props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}
           }
@@ -123,6 +124,7 @@ class BuilderModule extends Component {
               chartType={this.props.chartType}
               code={this.props.code}
               dropDownData={this.props.dropDownData}
+              chartTitle={this.props.chartTitle}
               outerHistory={this.props.outerHistory}
               /* todo: convoluted logic, refactor */
               display={this.props.dataPaneOpen === paneTypes.visualizer}

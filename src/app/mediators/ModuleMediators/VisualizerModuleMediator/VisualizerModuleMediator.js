@@ -640,6 +640,14 @@ class VisualizerModuleMediator extends Component {
           this.props.chartData.selectedRegionVal
         );
 
+        if (
+          (this.props.paneData.chartType === chartTypes.focusNL ||
+            this.props.paneData.chartType === chartTypes.focusKE) &&
+          countriesISO2.indexOf('undefined') === -1
+        ) {
+          countriesISO2.push('undefined');
+        }
+
         // so this variable basically controlls the filter param for data points
         // that don't have/do have geolocationIso2 field
         const iso2Undef = countriesISO2.indexOf('undefined') !== -1;

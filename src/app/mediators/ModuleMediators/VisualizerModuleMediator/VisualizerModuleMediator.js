@@ -584,7 +584,10 @@ class VisualizerModuleMediator extends Component {
   ) {
     const indicatorData = [];
 
-    let datePeriod = [this.props.chartData.selectedYear];
+    let datePeriod = [
+      this.props.chartData.selectedYear,
+      `${this.props.chartData.selectedYear}.0`
+    ];
     let orderBy = ['date'];
 
     // so if an indicators data is selected we will receive an

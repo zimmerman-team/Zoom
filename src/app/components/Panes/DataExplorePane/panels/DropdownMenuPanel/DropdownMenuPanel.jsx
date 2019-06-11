@@ -27,6 +27,7 @@ const propTypes = {
   aggrToggle: PropTypes.bool,
   panelDetails: PropTypes.arrayOf(
     PropTypes.shape({
+      disabledValues: PropTypes.arrayOf(PropTypes.string),
       isIndicator: PropTypes.bool,
       addIndicator: PropTypes.func,
       sectionAdd: PropTypes.bool,
@@ -59,6 +60,7 @@ const defaultProps = {
   aggrToggle: false,
   panelDetails: [
     {
+      disabledValues: [],
       isIndicator: false,
       addIndicator: null,
       subIndicator: false,
@@ -126,6 +128,7 @@ const DropdownMenuPanel = props => {
             )}
             <ZoomSelect
               data-cy={`datapane-select-${index}`}
+              disabledValues={detail.disabledValues}
               categorise={detail.categorise}
               multiple={detail.multiple}
               selectAll={detail.selectAll}

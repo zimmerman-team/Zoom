@@ -51,6 +51,7 @@ const propTypes = {
       value: PropTypes.string
     })
   ),
+  disabledValues: PropTypes.arrayOf(PropTypes.string),
   regions: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
@@ -105,6 +106,7 @@ const propTypes = {
 
 const defaultProps = {
   selectedInd: [],
+  disabledValues: [],
   saveGraphOption: null,
   handleAxisSwitch: null,
   removeIndicator: null,
@@ -228,6 +230,43 @@ class DataExplorePane extends React.Component {
       this.props.chartType === chartTypes.lineChart ||
       this.props.chartType === chartTypes.donutChart;
 
+    const isFocus =
+      this.props.chartType === chartTypes.focusNL ||
+      this.props.chartType === chartTypes.focusKE;
+
+    const geoPanel = [
+      {
+        multiple: true,
+        selectAll: true,
+        placeHolderText: 'Select country',
+        placeHolderNumber: this.props.countries.length,
+        selectDataSource: this.props.selectCountry,
+        allFileSources: this.props.countries,
+        defaultAll: this.props.locationSelected,
+        selectedSources: this.props.selectedCountryVal,
+        valueSelected: this.props.selectedCountryLabel,
+        capitalize: true,
+        reset: () => this.props.selectCountry('reset')
+      }
+    ];
+
+    if (!isFocus) {
+      geoPanel.unshift({
+        multiple: true,
+        selectAll: true,
+        placeHolderText: 'Select region',
+        placeHolderNumber: this.props.regions.length,
+        selectDataSource: this.props.selectRegion,
+        allFileSources: this.props.regions,
+        defaultAll: this.props.locationSelected,
+        selectedSources: this.props.selectedRegionVal,
+        selectedRegionCodes: this.props.selectedRegionCodes,
+        valueSelected: this.props.selectedRegionLabels,
+        capitalize: true,
+        reset: () => this.props.selectRegion('reset')
+      });
+    }
+
     return (
       <ComponentBase style={{ display: this.props.display }}>
         <PanelAccordion
@@ -271,35 +310,7 @@ class DataExplorePane extends React.Component {
           >
             <DropdownMenuPanel
               data-cy="dropdown-geolocation"
-              panelDetails={[
-                {
-                  multiple: true,
-                  selectAll: true,
-                  placeHolderText: 'Select region',
-                  placeHolderNumber: this.props.regions.length,
-                  selectDataSource: this.props.selectRegion,
-                  allFileSources: this.props.regions,
-                  defaultAll: this.props.locationSelected,
-                  selectedSources: this.props.selectedRegionVal,
-                  selectedRegionCodes: this.props.selectedRegionCodes,
-                  valueSelected: this.props.selectedRegionLabels,
-                  capitalize: true,
-                  reset: () => this.props.selectRegion('reset')
-                },
-                {
-                  multiple: true,
-                  selectAll: true,
-                  placeHolderText: 'Select country',
-                  placeHolderNumber: this.props.countries.length,
-                  selectDataSource: this.props.selectCountry,
-                  allFileSources: this.props.countries,
-                  defaultAll: this.props.locationSelected,
-                  selectedSources: this.props.selectedCountryVal,
-                  valueSelected: this.props.selectedCountryLabel,
-                  capitalize: true,
-                  reset: () => this.props.selectCountry('reset')
-                }
-              ]}
+              panelDetails={geoPanel}
             />
           </ExpansionPanelContainer>
 

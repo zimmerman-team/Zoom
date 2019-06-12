@@ -312,7 +312,9 @@ class UploadMediator extends React.Component {
         // and we upload the file to the server
         const values = new FormData();
         values.append('file', file);
-        this.props.dispatch(actions.uploadRequest(values));
+        this.props.dispatch(
+          actions.uploadRequest(values, this.props.user.idToken)
+        );
         // we also reset the manMapData when a new file is uploaded
         // so that the loading icon would initiate
         this.setState({ file }, this.afterFileUpload);
@@ -352,6 +354,7 @@ UploadMediator.defaultProps = defaultProps;
 const mapStateToProps = state => {
   return {
     upload: state.upload,
+    user: state.currentUser.data,
     stepData: state.stepData.stepzData
   };
 };

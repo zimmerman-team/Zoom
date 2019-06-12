@@ -5,8 +5,12 @@ beforeEach(() => {
 });
 
 const firstStepVal = {
+  howManyRespondents: '4',
+  selectRespondents: '4',
   title: 'Metadata title',
   desc: 'Metadata Description',
+  org: 'Test Organisation',
+  year: '2005',
   tags: ['tag1', 'tag2'],
   dataSource: 'Meta data Data Source',
   sharedData: 'Yes',
@@ -244,95 +248,49 @@ describe('Datamapper e2e tests', function() {
       '[class*=MetaDatastyle__FieldContainer]:nth-child(3) textarea:nth-child(3)'
     ).type(firstStepVal.desc);
 
-    // and this is the tag input
-    firstStepVal.tags.forEach(tag => {
-      cy.get('[class*=MetaDatastyle__FieldContainer]:nth-child(4) input').type(
-        tag
-      );
-      cy.get('[class*=MetaDatastyle__FieldContainer]:nth-child(4) input').type(
-        '{enter}'
-      );
-      cy.wait(500);
-    });
-
     //
     // oke and here we'll be adding a new name for the data source, unless a name like this already exists in the database
     // but either way, the dropdown should be adjusted according to this text input field
     // if the new name exists the dropdown should be selected as 'Add new'
     // and if it doesn't the dropdown selected should be the entered name
     cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(5) > [class*=MetaDatastyle__DataSourceTextCont]  input'
+      '[class*=MetaDatastyle__FieldContainer]:nth-child(4) > [class*=MetaDatastyle__DataSourceTextCont]  input'
     ).type(firstStepVal.dataSource);
 
-    // we press yes for the shared data
+    // We enter the organisation
+    cy.get('[class*=MetaDatastyle__FieldContainer]:nth-child(5) input').type(
+      firstStepVal.org
+    );
+
+    // We enter the year
+    cy.get('[class*=MetaDatastyle__FieldContainer]:nth-child(6) input').type(
+      firstStepVal.year
+    );
+
+    // we press the private accesibility
     cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(6) label:nth-child(1)'
+      '[class*=MetaDatastyle__FieldContainer]:nth-child(7) label:nth-child(1)'
     ).click();
 
-    // we press yes for the survey data
+    // we press yes for first question
     cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(8) label:nth-child(1)'
+      '[class*=MetaDatastyle__FieldContainer]:nth-child(11) label:nth-child(1)'
     ).click();
 
-    // we press dont know for the first survey question
+    // we press yes for second question
     cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(10) label:nth-child(3)'
+      '[class*=MetaDatastyle__FieldContainer]:nth-child(13) label:nth-child(1)'
     ).click();
 
-    // we press 'Respondents' for the second survey quesiton
-    cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(12) label:nth-child(3)'
-    ).click();
-    // we press 'Representative group of respondents' for the second survey quesiton
-    cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(12) label:nth-child(4)'
-    ).click();
+    // we enter 4 for third quesiton
+    cy.get('[class*=MetaDatastyle__FieldContainer]:nth-child(15) input').type(
+      firstStepVal.selectRespondents
+    );
 
-    // we press dont know for the 2.1 survey question
-    cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(14) label:nth-child(3)'
-    ).click();
-
-    // we press dont know for the 2.2 survey question
-    cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(16) label:nth-child(3)'
-    ).click();
-
-    //  we press 'Multistage sampling' for the third survey quesiton
-    cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(18) label:nth-child(5)'
-    ).click();
-    //  we press 'Other' for the third survey quesiton
-    cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(18) label:nth-child(6)'
-    ).click();
-    //  we enter 'Other' value for the third survey quesiton
-    cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(18) > div input'
-    ).type(firstStepVal.q3[1]);
-
-    // we enter a value for the fourth survey question(should work similarly to dataSource field)
-    cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(20) > [class*=MetaDatastyle__DataSourceTextCont]  input'
-    ).type(firstStepVal.q4);
-
-    // we press dont know for the 5 survey question
-    cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(22) label:nth-child(3)'
-    ).click();
-
-    //  we press 'Join, delimite or concatenate data' for the 5.1 survey quesiton
-    cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(24) label:nth-child(5)'
-    ).click();
-    //  we press 'Other' for the 5.1 survey quesiton
-    cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(24) label:nth-child(6)'
-    ).click();
-    //  we enter 'Other' value for the third survey quesiton
-    cy.get(
-      '[class*=MetaDatastyle__FieldContainer]:nth-child(24) > div input'
-    ).type(firstStepVal.q51[1]);
+    // we enter 4 for 4th quesiton
+    cy.get('[class*=MetaDatastyle__FieldContainer]:nth-child(16) input').type(
+      firstStepVal.howManyRespondents
+    );
 
     cy.contains('next').click();
     cy.wait(1000);

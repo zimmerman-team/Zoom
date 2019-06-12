@@ -41,7 +41,6 @@ const propTypes = {
    Label for the button.
    */
   simpleChange: PropTypes.func,
-  checkBoxChange: PropTypes.func,
   otherCheckBoxText: PropTypes.func,
   dropDownChange: PropTypes.func,
   otherDropdownText: PropTypes.func,
@@ -105,7 +104,6 @@ const defaultProps = {
   metaDataEmptyFields: [],
   data: step1InitialData,
   simpleChange: undefined,
-  checkBoxChange: undefined,
   otherCheckBoxText: undefined,
   dropDownChange: undefined,
   otherDropdownText: undefined
@@ -150,7 +148,8 @@ class MetaData extends React.Component {
       field === 'year' &&
       this.props.data[field] &&
       this.props.data[field].length > 0 &&
-      !/^\d+$/.test(this.props.data[field])
+      (!/^\d+$/.test(this.props.data[field]) ||
+        this.props.data[field].length > 4)
     ) {
       return true;
     }

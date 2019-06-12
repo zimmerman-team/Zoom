@@ -81,7 +81,8 @@ class DataMapperModule extends React.Component {
         this.props.stepData.metaData.org.length === 0 ||
         !this.props.stepData.metaData.year ||
         this.props.stepData.metaData.year.length === 0 ||
-        !/^\d+$/.test(this.props.stepData.metaData.year)
+        !/^\d+$/.test(this.props.stepData.metaData.year) ||
+        this.props.stepData.metaData.year.length > 4
       );
     }
 
@@ -146,7 +147,8 @@ class DataMapperModule extends React.Component {
         if (
           !stepData.metaData.year ||
           stepData.metaData.year.length === 0 ||
-          !/^\d+$/.test(this.props.stepData.metaData.year)
+          !/^\d+$/.test(this.props.stepData.metaData.year) ||
+          this.props.stepData.metaData.year.length > 4
         ) {
           metaDataEmptyFields.push('year');
         }

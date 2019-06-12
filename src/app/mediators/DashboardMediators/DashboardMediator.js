@@ -517,7 +517,6 @@ class DashboardMediator extends React.Component {
             ''
           )}`
         : get(this.props.user, 'email', '');
-    console.log(this.state.teams);
     return (
       <DashboardModule
         loading={

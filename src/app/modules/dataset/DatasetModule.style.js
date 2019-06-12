@@ -21,6 +21,10 @@ export const ModuleSection = styled.div`
   padding: 20px 0;
 `;
 
+export const TopModuleSection = styled(ModuleSection)`
+  margin-top: 40px;
+`;
+
 export const ModuleContent = styled.div`
   width: 100%;
 `;

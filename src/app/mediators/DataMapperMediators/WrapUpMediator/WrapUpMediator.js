@@ -224,11 +224,6 @@ class WrapUpMediator extends React.Component {
     if (!this.props.wrapUpData.surveyId) {
       const { metaData } = this.props;
 
-      const selectRespondents = [];
-      metaData.q3.forEach(q => {
-        selectRespondents.push(q.value);
-      });
-
       const dataCleaningTechniques = [];
       metaData.q51.forEach(q => {
         dataCleaningTechniques.push(q.value.trim());
@@ -239,12 +234,11 @@ class WrapUpMediator extends React.Component {
         whoDidYouTestWith: metaData.q2.map(q => {
           return q.value;
         }),
-        consideredSenstive: metaData.q22,
-        staffTrained: metaData.q21,
+        consideredSenstive: metaData.q21,
+        staffTrained: metaData.q22,
         askSensitive: metaData.q22,
-        selectRespondents,
-        howManyRespondents:
-          metaData.q4.value.length > 0 ? metaData.q4.value : '0',
+        selectRespondents: metaData.q3Text,
+        howManyRespondents: metaData.q4Text,
         editSheet: metaData.q5,
         dataCleaningTechniques
       };
@@ -253,10 +247,6 @@ class WrapUpMediator extends React.Component {
       // text value in other
       if (dataCleaningTechniques.indexOf('0') !== -1) {
         variables.otherCleaningTechnique = metaData.q51Text;
-      }
-
-      if (selectRespondents.indexOf('0') !== -1) {
-        variables.otherRespondent = metaData.q3Text;
       }
 
       // and here we upload all the metadata for the file
@@ -287,21 +277,17 @@ class WrapUpMediator extends React.Component {
   addMetaData() {
     const { metaData } = this.props;
 
-    // okay so the fileType has
-    const today = new Date().toISOString();
-    const isoDate = today.substring(0, today.indexOf('T'));
-
     const fileType = /[.]/.exec(this.props.file.name)
       ? /[^.]+$/.exec(this.props.file.name)
       : [''];
 
-    // TODO: this commented out logic below will be added in the last step
-    // along with every other metadata field
-    // This is shared data set 'p' for private, 'o' for public
-    const accessibility =
-      typeof metaData.shared === 'string' && metaData.shared === 'Yes'
-        ? 'o'
-        : 'p';
+    let accessibility = 'p';
+
+    if (metaData.accessibility === 'Public') {
+      accessibility = 'a';
+    } else if (metaData.accessibility === 'Team') {
+      accessibility = 'o';
+    }
 
     const tags = metaData.tags.map(tag => {
       return { name: tag };
@@ -313,13 +299,13 @@ class WrapUpMediator extends React.Component {
       title: metaData.title,
       description: metaData.desc,
       containsSubnationalData: true,
-      organisation: 'Unavailable field',
+      organisation: metaData.org,
       maintainer: 'Unavailable field',
       methodology: 'Unavailable field',
       defineMethodology: 'Unavailable field',
       updateFrequency: 'Unavailable field',
       comments: 'Unavailable field',
-      dateOfDataset: isoDate,
+      dateOfDataset: metaData.year,
       accessibility,
       dataQuality: 'Unavailable field',
       numberOfRows: '1',
@@ -362,13 +348,18 @@ class WrapUpMediator extends React.Component {
     if (response && !error) {
       this.props.disableMapStep(true);
 
+      let teams = [];
+
       // and after everything is done mapping we can actually
       // save the dataset into our zoom backend
-      const accessibility =
-        typeof this.props.metaData.shared === 'string' &&
-        this.props.metaData.shared === 'Yes'
-          ? 'o'
-          : 'p';
+      let accessibility = 'p';
+
+      if (this.props.metaData.accessibility === 'Public') {
+        accessibility = 'a';
+      } else if (this.props.metaData.accessibility === 'Team') {
+        accessibility = 'o';
+        teams = this.props.user.groups.map(group => group.name);
+      }
 
       this.props.dispatch(
         nodeActions.addNewDatasetRequest({
@@ -377,7 +368,7 @@ class WrapUpMediator extends React.Component {
           name: this.props.metaData.title,
           dataSource:
             this.state.sourceName || this.props.metaData.dataSource.label,
-          teams: [],
+          teams,
           public: accessibility
         })
       );

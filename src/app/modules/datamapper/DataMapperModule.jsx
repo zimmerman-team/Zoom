@@ -76,7 +76,13 @@ class DataMapperModule extends React.Component {
         !this.props.stepData.metaData.desc ||
         this.props.stepData.metaData.desc.length === 0 ||
         !this.props.stepData.metaData.dataSource.value ||
-        this.props.stepData.metaData.dataSource.value.length === 0
+        this.props.stepData.metaData.dataSource.value.length === 0 ||
+        !this.props.stepData.metaData.org ||
+        this.props.stepData.metaData.org.length === 0 ||
+        !this.props.stepData.metaData.year ||
+        this.props.stepData.metaData.year.length === 0 ||
+        !/^\d+$/.test(this.props.stepData.metaData.year) ||
+        this.props.stepData.metaData.year.length > 4
       );
     }
 
@@ -130,6 +136,21 @@ class DataMapperModule extends React.Component {
           stepData.metaData.dataSource.value.length === 0
         ) {
           metaDataEmptyFields.push('dataSource');
+        }
+
+        // we check if the organisation is empty
+        if (!stepData.metaData.org || stepData.metaData.org.length === 0) {
+          metaDataEmptyFields.push('org');
+        }
+
+        // we check if the year is empty
+        if (
+          !stepData.metaData.year ||
+          stepData.metaData.year.length === 0 ||
+          !/^\d+$/.test(this.props.stepData.metaData.year) ||
+          this.props.stepData.metaData.year.length > 4
+        ) {
+          metaDataEmptyFields.push('year');
         }
 
         if (metaDataEmptyFields.length > 0) {

@@ -194,15 +194,21 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
 export function formatDatasets(datasets, history, remove) {
   return datasets.map(dataset => {
     let shared = '';
-    if (dataset.teams.length > 0 && dataset.teams !== 'none') {
-      shared = shared.concat(dataset.teams.join(', '));
-    }
 
-    if (dataset.public) {
+    if (dataset.public === 'o') {
+      if (dataset.teams.length > 0 && dataset.teams !== 'none') {
+        shared = shared.concat(dataset.teams.join(', '));
+      }
+    } else if (dataset.public === 'a') {
       shared =
         shared.length > 0
           ? shared.concat(', ').concat('Public')
           : shared.concat('Public');
+    } else if (dataset.public === 'p') {
+      shared =
+        shared.length > 0
+          ? shared.concat(', ').concat('Private')
+          : shared.concat('Private');
     }
 
     return {

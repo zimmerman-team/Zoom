@@ -199,7 +199,6 @@ class WrapUpMediator extends React.Component {
   handleSurveyCompleted(response, error) {
     if (error) console.log('error adding survey data:', error);
     if (response) {
-      console.log('handleSurveyCompleted', response);
       this.setState(
         {
           surveyId: response.surveyData.id
@@ -238,9 +237,8 @@ class WrapUpMediator extends React.Component {
         consideredSenstive: metaData.q21,
         staffTrained: metaData.q22,
         askSensitive: metaData.q22,
-        selectRespondents: metaData.q4Text,
-        howManyRespondents:
-          metaData.q4.value.length > 0 ? metaData.q4.value : '0',
+        selectRespondents: metaData.q3Text,
+        howManyRespondents: metaData.q4Text,
         editSheet: metaData.q5,
         dataCleaningTechniques
       };
@@ -250,8 +248,6 @@ class WrapUpMediator extends React.Component {
       if (dataCleaningTechniques.indexOf('0') !== -1) {
         variables.otherCleaningTechnique = metaData.q51Text;
       }
-
-      console.log('SURVEY DATA VARS', variables);
 
       // and here we upload all the metadata for the file
       SurveyMutation.commit(
@@ -334,15 +330,13 @@ class WrapUpMediator extends React.Component {
       variables.surveyData = this.state.surveyId;
     }
 
-    console.log('variables', variables);
-
     // and here we upload all the metadata for the file
-    // AddFileMutation.commit(
-    //   this.props.environment,
-    //   variables,
-    //   this.handleMetaDataCompleted,
-    //   this.handleMetaDataError
-    // );
+    AddFileMutation.commit(
+      this.props.environment,
+      variables,
+      this.handleMetaDataCompleted,
+      this.handleMetaDataError
+    );
   }
 
   handleMappingCompleted(response, error) {
@@ -354,13 +348,18 @@ class WrapUpMediator extends React.Component {
     if (response && !error) {
       this.props.disableMapStep(true);
 
+      let teams = [];
+
       // and after everything is done mapping we can actually
       // save the dataset into our zoom backend
-      const accessibility =
-        typeof this.props.metaData.shared === 'string' &&
-        this.props.metaData.shared === 'Yes'
-          ? 'o'
-          : 'p';
+      let accessibility = 'p';
+
+      if (this.props.metaData.accessibility === 'Public') {
+        accessibility = 'a';
+      } else if (this.props.metaData.accessibility === 'Team') {
+        accessibility = 'o';
+        teams = this.props.user.groups.map(group => group.name);
+      }
 
       this.props.dispatch(
         nodeActions.addNewDatasetRequest({
@@ -369,7 +368,7 @@ class WrapUpMediator extends React.Component {
           name: this.props.metaData.title,
           dataSource:
             this.state.sourceName || this.props.metaData.dataSource.label,
-          teams: [],
+          teams,
           public: accessibility
         })
       );

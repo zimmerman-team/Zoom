@@ -6,7 +6,8 @@ import {
   ButtonLabel,
   ModuleContainer,
   ModuleContent,
-  ModuleSection
+  ModuleSection,
+  TopModuleSection
 } from './DatasetModule.style';
 import { stepButStyle } from 'components/Stepper/Stepper.style';
 /* components */
@@ -42,7 +43,7 @@ class DatasetModule extends React.Component {
   render() {
     return (
       <ModuleContainer>
-        <ModuleSection>
+        <TopModuleSection>
           <ButtonContainer margin="small">
             <ZoomButton
               style={{
@@ -57,7 +58,7 @@ class DatasetModule extends React.Component {
               <ButtonLabel>save</ButtonLabel>
             </ZoomButton>
           </ButtonContainer>
-        </ModuleSection>
+        </TopModuleSection>
 
         <ModuleContent>
           <MetaDataMediator

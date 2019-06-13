@@ -327,23 +327,12 @@ class VizPaneMediator extends React.Component {
         let allIndNames = [];
 
         data.allIndicators.edges.forEach(indicator => {
-          if (this.props.user.data) {
-            allIndNames.push({
-              label: indicator.node.name,
-              value: indicator.node.name,
-              dataSource: indicator.node.fileSource.name,
-              firstYear: indicator.node.firstDataYear
-            });
-          } else if (
-            pubIndicators.indexOf(indicator.node.name.toLowerCase()) !== -1
-          ) {
-            allIndNames.push({
-              label: indicator.node.name,
-              value: indicator.node.name,
-              dataSource: indicator.node.fileSource.name,
-              firstYear: indicator.node.firstDataYear
-            });
-          }
+          allIndNames.push({
+            label: indicator.node.name,
+            value: indicator.node.name,
+            dataSource: indicator.node.fileSource.name,
+            firstYear: indicator.node.firstDataYear
+          });
         });
 
         allIndNames = sortBy(allIndNames, ['label']);

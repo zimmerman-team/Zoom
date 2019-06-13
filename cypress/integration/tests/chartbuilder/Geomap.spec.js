@@ -13,7 +13,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
 
     cy.log('**PLOTS SOME DATA**');
     //Here we wait till the indicators are loaded.
-    cy.wait(4000);
+    cy.wait(6000);
     cy.get(
       '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
     )

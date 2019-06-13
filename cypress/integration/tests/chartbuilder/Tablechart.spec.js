@@ -14,7 +14,7 @@ describe('Chartbuilder table chart fragment e2e', function() {
 
     cy.get('[data-cy="year-2005"]').click();
     //Here we wait till the indicators have loaded.
-    cy.wait(2000);
+    cy.wait(6000);
     cy.get(
       '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
     )

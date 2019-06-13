@@ -17,6 +17,7 @@ describe('Chartbuilder country focus fragment e2e', function() {
     cy.percySnapshot('Chartbuilder - Kenya focus');
 
     cy.log('**Plots some Kenya specific data**');
+    cy.wait(6000);
     cy.get(
       '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
     )
@@ -26,7 +27,7 @@ describe('Chartbuilder country focus fragment e2e', function() {
 
     cy.get('[data-cy="legendLayer-label"]').should(
       'contain',
-      'aids-related deaths (unaids)'
+      'aids-related deaths'
     );
   });
 

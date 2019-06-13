@@ -58,7 +58,7 @@ describe('Home page geo map datamapping', function() {
 
     cy.get('[data-cy="geomap-filter-button"]').click();
     cy.get('[data-cy="geo-map-container"]').click();
-    cy.wait(4000);
+    cy.wait(6000);
     cy.get(
       '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
     )

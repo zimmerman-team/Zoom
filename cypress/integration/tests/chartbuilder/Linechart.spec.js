@@ -14,6 +14,7 @@ describe('Chartbuilder line chart fragment e2e', function() {
     cy.url().should('include', '/visualizer/linechart');
 
     cy.log('**Plots aids related deaths**');
+    cy.wait(4000);
     cy.get(
       '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
     )

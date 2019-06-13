@@ -124,6 +124,7 @@ class BuilderModule extends Component {
               chartType={this.props.chartType}
               code={this.props.code}
               dropDownData={this.props.dropDownData}
+              chartTitle={this.props.chartTitle}
               outerHistory={this.props.outerHistory}
               /* todo: convoluted logic, refactor */
               display={this.props.dataPaneOpen === paneTypes.visualizer}

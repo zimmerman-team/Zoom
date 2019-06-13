@@ -100,7 +100,11 @@ class App extends React.Component {
   };
 
   componentDidUpdate = prevProps => {
-    if (!isEqual(this.props.user, prevProps.user) && this.props.user) {
+    if (
+      !isEqual(this.props.user, prevProps.user) &&
+      this.props.user &&
+      this.props.user.authId
+    ) {
       this.props.dispatch(getUserRequest({ authId: this.props.user.authId }));
       this.setState({
         currentEnv: new Environment({

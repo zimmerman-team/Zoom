@@ -8,16 +8,13 @@ import theme from 'theme/Theme';
 export const LocationLegendItem = styled(LegendItem)``;
 
 export const LocationName = styled.div`
-  height: ${theme.fontSize.caption};
   color: ${theme.color.smallTextBlack};
   font-family: ${theme.font.zoomFontFamTwo};
   font-size: ${theme.fontSize.caption};
   font-weight: ${theme.weight.book};
   position: relative;
-  top: 6px;
+  top: 1px;
   margin-left: 8px;
-  line-height: 1.2;
-  letter-spacing: 0.2px;
 `;
 
 export const LocationLegendLabel = styled(LegendLabel)`
@@ -34,4 +31,9 @@ export const LocItemContainer = styled.div`
   &:last-child {
     margin-bottom: 10px;
   }
+`;
+
+export const ScgIconContainer = styled.div`
+  height: 24px;
+  width: 24px;
 `;

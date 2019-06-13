@@ -1,5 +1,11 @@
 import React from 'react';
+
+/* utils */
+import { truncateText } from 'components/GeoMap/components/ToolTips/ToolTip.util';
 import { getMeasure } from 'components/GeoMap/components/Markers/CircleMarker/CircleMarker';
+import { formatNumber } from 'utils/genericUtils';
+
+/* styles */
 import {
   ToolTipContainer,
   ToolTipLabel,
@@ -7,7 +13,6 @@ import {
   ToolTipTitle,
   ValueContainer
 } from 'components/GeoMap/components/ToolTips/ToolTip.style';
-import { formatNumber } from 'utils/genericUtils';
 
 // So if the marker changes in size depending on its value we use
 // this function to get the offset top of the popup
@@ -55,7 +60,7 @@ const markerInfo = hoverMarkerInfo => {
 
             return (
               <ToolTipLabel key={ttItem.label}>
-                {ttItem.label}:
+                {truncateText(ttItem.label)}:
                 <ToolTipText>
                   {formatNumber(ttItem.value)}
                   {nrFormat}

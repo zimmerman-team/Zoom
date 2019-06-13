@@ -1,9 +1,7 @@
-import filter from 'lodash/filter';
-
 const Path = '/dashboard/';
 
 export function data(isAdmin, isSuperAdmin, users, teams, charts, dataSets) {
-  const tabs = [
+  return [
     {
       label: 'Charts',
       path: `${Path}charts`,
@@ -28,12 +26,6 @@ export function data(isAdmin, isSuperAdmin, users, teams, charts, dataSets) {
       adminOnly: true
     }
   ];
-
-  return filter(tabs, t => {
-    if (t.adminOnly) return isAdmin || isSuperAdmin;
-    // if (t.superAdminOnly) return isSuperAdmin;
-    return true;
-  });
 }
 
 export default data;

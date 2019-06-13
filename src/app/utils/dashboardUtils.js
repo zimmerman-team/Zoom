@@ -1,5 +1,4 @@
 import get from 'lodash/get';
-import find from 'lodash/find';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
 import { paginate } from './genericUtils';
@@ -34,6 +33,7 @@ export function formatUsersTabData(
           Charts: 0,
           Twitter: ''
         },
+        last_updated: new Date(d.updated_at),
         onEdit: () => onEdit(d.user_id),
         onView: () => onView(d.user_id),
         onDelete: () => onDelete(d.user_id)
@@ -84,6 +84,7 @@ export function formatTeamsTabData(
           'Publication date': get(d, 'date', ''),
           Organisations: ''
         },
+        last_updated: new Date(get(d, 'last_updated', '')),
         onEdit: () => onEdit(d._id),
         onView: () => onView(d._id),
         onDelete: () => onDelete(d._id, get(d, 'name', ''))
@@ -193,15 +194,21 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
 export function formatDatasets(datasets, history, remove) {
   return datasets.map(dataset => {
     let shared = '';
-    if (dataset.teams.length > 0 && dataset.teams !== 'none') {
-      shared = shared.concat(dataset.teams.join(', '));
-    }
 
-    if (dataset.public) {
+    if (dataset.public === 'o') {
+      if (dataset.teams.length > 0 && dataset.teams !== 'none') {
+        shared = shared.concat(dataset.teams.join(', '));
+      }
+    } else if (dataset.public === 'a') {
       shared =
         shared.length > 0
           ? shared.concat(', ').concat('Public')
           : shared.concat('Public');
+    } else if (dataset.public === 'p') {
+      shared =
+        shared.length > 0
+          ? shared.concat(', ').concat('Private')
+          : shared.concat('Private');
     }
 
     return {

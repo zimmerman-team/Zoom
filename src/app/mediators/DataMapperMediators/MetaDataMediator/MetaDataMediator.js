@@ -31,13 +31,15 @@ const propTypes = {
   stepData: PropTypes.shape({
     title: PropTypes.string,
     desc: PropTypes.string,
+    org: PropTypes.string,
+    year: PropTypes.string,
     tags: PropTypes.arrayOf(PropTypes.string),
     dataSource: PropTypes.shape({
       key: PropTypes.string,
       label: PropTypes.string,
       value: PropTypes.string
     }),
-    shared: PropTypes.Boolean,
+    accessibility: PropTypes.string,
     surveyData: PropTypes.Boolean,
     q1: PropTypes.string,
     q2: PropTypes.arrayOf(
@@ -176,6 +178,7 @@ class MetaDataMediator extends React.Component {
       ) {
         const stepData = { ...props.stepData };
         stepData.metaData = data;
+
         props.dispatch(actions.saveStepDataRequest(stepData));
       }
 

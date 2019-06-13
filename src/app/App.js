@@ -116,12 +116,20 @@ class App extends React.Component {
   };
 
   fetchQuery = (operation, variables) => {
-    return fetch(`${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${get(this.props, 'user.idToken', '')}`,
+    let url = `${process.env.REACT_APP_GRAPHQL_HOST}/public-graphql/`;
+    let headers = {
+      'Content-Type': 'application/json'
+    };
+    if (get(this.props.user, 'idToken', null)) {
+      url = `${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`;
+      headers = {
+        Authorization: `Bearer ${this.props.user.idToken}`,
         'Content-Type': 'application/json'
-      },
+      };
+    }
+    return fetch(url, {
+      method: 'POST',
+      headers: headers,
       body: JSON.stringify({
         query: operation.text,
         variables

@@ -19,13 +19,13 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     )
       .first()
       .click();
-    cy.contains('aids related deaths (unaids)').click();
+    cy.contains('aids-related deaths').click();
     //Here we wait till the data has been mapped
     cy.waitPageLoader();
     cy.wait(8000);
     cy.get('[data-cy="legendLayer-label"]').should(
       'contain',
-      'aids related deaths (unaids)'
+      'aids-related deaths'
     );
   });
 

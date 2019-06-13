@@ -36,8 +36,8 @@ describe('Chartbuilder country focus fragment e2e', function() {
     cy.url().should('include', '/visualizer/focusNL');
 
     cy.log('**It makes a Percy snapshot**');
-    cy.waitPageLoader();
     cy.waitPageLoader2();
+    cy.waitPageLoader();
     cy.percySnapshot('Chartbuilder - Netherlands focus');
 
     cy.log('**Plots some NL specific data**');

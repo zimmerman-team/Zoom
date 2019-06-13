@@ -14,11 +14,13 @@ describe('Chartbuilder bar chart fragment e2e', function() {
     cy.url().should('include', '/visualizer/barchart');
 
     cy.log('**Plots aids related deaths**');
+    cy.wait(2000);
     cy.get(
       '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
     )
       .first()
       .click();
+    cy.wait(2000);
     cy.contains('aids related deaths (unaids)').click();
     cy.waitPageLoader();
     cy.get('[data-cy="legend-label"]').should('have.css', 'content');
@@ -43,7 +45,7 @@ describe('Chartbuilder bar chart fragment e2e', function() {
       .scrollIntoView()
       .trigger('mouseover', { force: true });
 
-    cy.contains('Year: 2005');
+    cy.contains('2005');
     cy.contains(
       'aids related deaths (unaids) - adolescents (10 to 19) realistic estimate: 10000'
     );

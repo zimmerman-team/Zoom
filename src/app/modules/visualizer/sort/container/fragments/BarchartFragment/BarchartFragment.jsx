@@ -59,7 +59,7 @@ const BarchartFragment = props => {
           tooltip={payload => (
             <TooltipContent
               aggrType={props.specOptions[graphKeys.aggregate]}
-              xKey={payload.indexValue}
+              xKey={payload.data.geolocationTag || payload.data.date}
               index={payload.index}
               color={payload.color}
               valueLabel={payload.data[`${payload.id}Label`]}

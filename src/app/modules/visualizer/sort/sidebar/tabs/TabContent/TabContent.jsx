@@ -73,6 +73,7 @@ class TabContent extends React.Component {
                 path={formPath(this.props.code, section.path, this.props.chart)}
                 component={section.component}
                 code={this.props.code}
+                chartTitle={this.props.chartTitle}
               />
             )
         )}

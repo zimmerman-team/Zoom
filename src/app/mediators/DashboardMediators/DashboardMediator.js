@@ -36,7 +36,7 @@ class DashboardMediator extends React.Component {
     page: 0,
     users: [],
     teams: [],
-    sort: 'title',
+    sort: '-last_updated',
     searchKeyword: '',
     charts: [],
     trashCharts: [],

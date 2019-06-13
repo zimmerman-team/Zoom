@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import theme from 'theme/Theme';
-// import {  TabBadge } from './DashboardTabNavItem.style';
+import { connect } from 'react-redux';
+
+/* consts */
+import userRoles from '__consts__/UserRoleConst';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -53,18 +56,29 @@ const ComponentBase = styled(NavLink)`
 const propTypes = {
   label: PropTypes.string,
   path: PropTypes.string,
+  forAdmin: PropTypes.bool,
   count: PropTypes.number
 };
 const defaultProps = {
   label: 'empty',
   path: '/empty',
+  forAdmin: false,
   count: 0
 };
 
 const DashboardTabNavItem = props => {
+  const isAdmin =
+    (props.user && props.user.role === userRoles.admin) ||
+    props.user.role === userRoles.superAdm;
+
   return (
     <ComponentBase
-      to={props.path}
+      style={
+        props.forAdmin && !isAdmin
+          ? { pointerEvents: 'none', opacity: '0.4' }
+          : {}
+      }
+      to={props.forAdmin && !isAdmin ? '/dashboard/charts' : props.path}
       isActive={(match, location) => {
         const selectedTab = location.pathname.substr(
           location.pathname.lastIndexOf('/')
@@ -82,4 +96,10 @@ const DashboardTabNavItem = props => {
 DashboardTabNavItem.propTypes = propTypes;
 DashboardTabNavItem.defaultProps = defaultProps;
 
-export default DashboardTabNavItem;
+const mapStateToProps = state => {
+  return {
+    user: state.currentUser.data
+  };
+};
+
+export default connect(mapStateToProps)(DashboardTabNavItem);

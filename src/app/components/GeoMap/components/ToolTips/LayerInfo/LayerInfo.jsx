@@ -1,4 +1,10 @@
 import React from 'react';
+
+/* utils */
+import { truncateText } from 'components/GeoMap/components/ToolTips/ToolTip.util';
+import { formatNumber } from 'utils/genericUtils';
+
+/* styles */
 import {
   ToolTipContainer,
   ToolTipLabel,
@@ -6,7 +12,6 @@ import {
   ToolTipTitle,
   ValueContainer
 } from 'components/GeoMap/components/ToolTips/ToolTip.style';
-import { formatNumber } from 'utils/genericUtils';
 
 // This component is specific for the react-map-gl, thus there's no story books
 // or unit tests for it as a seperate component
@@ -37,7 +42,7 @@ const layerInfo = hoverLayerInfo => {
 
             return (
               <ToolTipLabel key={ttItem.label}>
-                {ttItem.label}:
+                {truncateText(ttItem.label)}:
                 <ToolTipText>
                   {formatNumber(ttItem.value)}
                   {nrFormat}

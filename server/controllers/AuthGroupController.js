@@ -72,6 +72,7 @@ const AuthGroupController = {
                       label: g.name,
                       value: g._id,
                       date: get(g, 'description', ',').split(',')[0],
+                      last_updated: get(g, 'description', ',').split(',')[2],
                       createdBy: `${get(creator, 'firstName', '')} ${get(
                         creator,
                         'lastName',
@@ -173,7 +174,7 @@ const AuthGroupController = {
         axios
           .post(
             `${process.env.REACT_APP_AE_API_URL}/groups`,
-            { name, description: `${today},${currentUser.authId}` },
+            { name, description: `${today},${currentUser.authId},${today}` },
             {
               headers: {
                 Authorization: token
@@ -248,11 +249,20 @@ const AuthGroupController = {
       team
     } = req.body;
 
+    let today = new Date();
+    const dd = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate();
+    const mm =
+      today.getMonth() + 1 < 10
+        ? `0${today.getMonth() + 1}`
+        : today.getMonth() + 1; // January is 0
+    const yyyy = today.getFullYear();
+    today = `${dd}/${mm}/${yyyy}`;
+
     authUtils.getAccessToken('auth_ext').then(token => {
       const requests = [
         axios.put(
           `${process.env.REACT_APP_AE_API_URL}/groups/${groupId}`,
-          { name, description },
+          { name, description: `${description},${today}` },
           {
             headers: {
               Authorization: token

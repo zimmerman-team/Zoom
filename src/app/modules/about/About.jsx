@@ -46,15 +46,19 @@ const About = () => {
         embedding of the platform and data driven working within the
         organisation.
       </Text>
-      <DescriptionParagraph>Check the new website</DescriptionParagraph>
+      <DescriptionParagraph>
+        You can find the data guidelines for Zoom in this document
+      </DescriptionParagraph>
       <DescriptionParagraph>
         <RedLink
           data-cy="about-link-to-web"
           target="_blank"
           rel="noopener noreferrer"
-          href="https://aidsfonds.nl/"
+          href={`${
+            process.env.REACT_APP_GRAPHQL_HOST
+          }/static/Data guidelines_final.pdf`}
         >
-          https://aidsfonds.nl/
+          Data guidelines_final.pdf
         </RedLink>
       </DescriptionParagraph>
     </ModuleContainer>

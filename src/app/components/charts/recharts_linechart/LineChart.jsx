@@ -101,7 +101,7 @@ class LineChart extends React.Component {
           />
           <Tooltip
             data-cy="linechart-tooltip"
-            content={<TooltipContent xAxisKey={xAxisKey} />}
+            content={<TooltipContent />}
             cursor={{ stroke: 'grey', strokeWidth: 1 }}
           />
           {this.state.realKeys.map(chartKey => (

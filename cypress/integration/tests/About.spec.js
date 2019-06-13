@@ -1,6 +1,8 @@
 describe('About page E2E test', function() {
   it('Visit about page', function() {
     cy.visit('/About');
+    cy.waitPageLoader();
+    cy.waitPageLoader2();
     cy.get('[data-cy=cookie-notice]').click();
   });
 

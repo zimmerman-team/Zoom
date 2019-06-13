@@ -19,7 +19,7 @@ describe('Chartbuilder line chart fragment e2e', function() {
     )
       .first()
       .click();
-    cy.contains('aids related deaths (unaids)').click();
+    cy.contains('aids-related deaths').click();
     cy.get('body').click();
     cy.waitPageLoader();
     cy.get('[data-cy="legend-label"]').should('have.css', 'content');
@@ -42,7 +42,7 @@ describe('Chartbuilder line chart fragment e2e', function() {
 
     cy.contains('2005');
     cy.contains(
-      'aids related deaths (unaids) - adolescents (10 to 19) realistic estimate'
+      'aids-related deaths - adolescents (10 to 19) realistic estimate'
     );
   });
 

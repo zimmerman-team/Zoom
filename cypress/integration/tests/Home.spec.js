@@ -64,7 +64,7 @@ describe('Home page geo map datamapping', function() {
     )
       .first()
       .click();
-    cy.contains('new hiv infections').click();
+    cy.contains('aids-related deaths').click();
     cy.get('[class*=ZoomSelectstyles__Drop] > li').click();
     cy.wait(1000);
     cy.get('[class*=ZoomSelectstyles__Drop] > li').click();
@@ -72,7 +72,7 @@ describe('Home page geo map datamapping', function() {
     cy.waitPageLoader();
     cy.get('[data-cy="legendLayer-label"]').should(
       'contain',
-      'new hiv infections'
+      'aids-related deaths'
     );
   });
 

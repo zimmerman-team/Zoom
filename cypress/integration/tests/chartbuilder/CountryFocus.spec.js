@@ -22,11 +22,11 @@ describe('Chartbuilder country focus fragment e2e', function() {
     )
       .first()
       .click();
-    cy.contains('aids related deaths (unaids)').click();
+    cy.contains('aids-related deaths (unaids)').click();
 
     cy.get('[data-cy="legendLayer-label"]').should(
       'contain',
-      'aids related deaths (unaids)'
+      'aids-related deaths (unaids)'
     );
   });
 

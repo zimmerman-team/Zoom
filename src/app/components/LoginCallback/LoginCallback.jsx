@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { setUserIdToken } from 'services/actions/sync';
 import { getCurrentUserRequest } from 'services/actions/authNodeBackend';
+import ModuleContainer from 'modules/common/modulecontainer/ModuleContainer';
 
 class Callback extends React.Component {
   componentDidMount = () => {
@@ -20,14 +21,21 @@ class Callback extends React.Component {
     });
   };
 
-  componentDidUpdate(prevProps) {
-    if (!isEqual(prevProps.user.data, this.props.user.data))
+  componentDidUpdate = prevProps => {
+    if (!isEqual(prevProps.user.data, this.props.user.data)) {
       this.props.history.replace('/dashboard/charts');
-  }
+    }
+  };
 
-  render() {
-    return <p>Loading profile...</p>;
-  }
+  render = () => {
+    return (
+      <ModuleContainer title="Loading">
+        <div style={{ width: '100%', textAlign: 'center' }}>
+          Loading profile...
+        </div>
+      </ModuleContainer>
+    );
+  };
 }
 
 const mapStateToProps = state => {

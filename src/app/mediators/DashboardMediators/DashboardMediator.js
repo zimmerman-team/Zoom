@@ -30,6 +30,7 @@ import DashboardModule from 'modules/dashboard/DashboardModule';
 /* consts */
 import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
 import paneTypes from '__consts__/PaneTypesConst';
+import userRoles from '__consts__/UserRoleConst';
 
 class DashboardMediator extends React.Component {
   state = {
@@ -49,6 +50,13 @@ class DashboardMediator extends React.Component {
   };
 
   componentDidMount = () => {
+    if (
+      (this.props.match.params.tab === 'teams' ||
+        this.props.match.params.tab === 'data-sets') &&
+      this.props.user.role !== userRoles.admin
+    ) {
+      this.props.history.replace('/dashboard/charts');
+    }
     // also when this component loads we want to reset the pane
     // to its default state for this component
     this.props.dispatch(generalActions.dataPaneToggleRequest(paneTypes.none));
@@ -517,7 +525,6 @@ class DashboardMediator extends React.Component {
             ''
           )}`
         : get(this.props.user, 'email', '');
-    console.log(this.state.teams);
     return (
       <DashboardModule
         loading={

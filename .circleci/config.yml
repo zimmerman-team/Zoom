@@ -38,22 +38,26 @@ jobs:
           name: Set enviornment variables
           command: |
             echo 'export REACT_APP_POSTMARK_CLIENT_ID="$REACT_APP_POSTMARK_CLIENT_ID"' >> $BASH_ENV
+            echo 'export REACT_APP_ENCRYPTION_SECRET="$REACT_APP_ENCRYPTION_SECRET"' >> $BASH_ENV
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_STAGING"' >> $BASH_ENV
               echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_STAGING"' >> $BASH_ENV
               echo 'export REACT_APP_BACKEND_HOST="$DUCT_STAGING"' >> $BASH_ENV
               echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
-
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
               echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_TEST"' >> $BASH_ENV
               echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_TEST"' >> $BASH_ENV
               echo 'export REACT_APP_BACKEND_HOST="$DUCT_TEST"' >> $BASH_ENV
               echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
-
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
               echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
               echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_DEV"' >> $BASH_ENV
               echo 'export REACT_APP_BACKEND_HOST="$DUCT_DEV"' >> $BASH_ENV
+              echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
+            elif [ "${CIRCLE_BRANCH}" == "production" ]; then
+              echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_PROD"' >> $BASH_ENV
+              echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_PROD"' >> $BASH_ENV
+              echo 'export REACT_APP_BACKEND_HOST="$DUCT_PROD"' >> $BASH_ENV
               echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
             else
               echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
@@ -72,6 +76,8 @@ jobs:
               ssh-keyscan "$SSH_HOST_TEST" >> ~/.ssh/known_hosts
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
               ssh-keyscan "$SSH_HOST_DEV" >> ~/.ssh/known_hosts
+            elif [ "${CIRCLE_BRANCH}" == "production" ]; then
+              ssh-keyscan "$SSH_HOST_PROD" >> ~/.ssh/known_hosts
             else
               ssh-keyscan "$SSH_HOST_DEV" >> ~/.ssh/known_hosts
             fi
@@ -128,6 +134,8 @@ jobs:
               echo 'export CYPRESS_baseUrl="$REACT_APP_PROJECT_URL_TEST"' >> $BASH_ENV
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
               echo 'export CYPRESS_baseUrl="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
+            elif [ "${CIRCLE_BRANCH}" == "production" ]; then
+              echo 'export CYPRESS_baseUrl="$REACT_APP_PROJECT_URL_PROD"' >> $BASH_ENV
             else
               echo 'export CYPRESS_baseUrl="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
             fi

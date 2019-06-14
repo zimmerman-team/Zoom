@@ -43,6 +43,9 @@ function stepData(state = initial, action) {
 
 function chartData(state = initial, action) {
   switch (action.type) {
+    case actions.STORE_CHART_DATA_INITIAL:
+      console.log('INITIAL CHART STORE BOIII', initialState);
+      return update(state, { chartData: { $set: initialState } });
     case actions.STORE_CHART_DATA_REQUEST:
       return update(state, { chartData: { $set: { ...state.chartData } } });
     case actions.STORE_CHART_DATA_DONE:
@@ -56,6 +59,8 @@ function chartData(state = initial, action) {
 
 function paneData(state = initial, action) {
   switch (action.type) {
+    case actions.STORE_PANE_DATA_INITIAL:
+      return update(state, { paneData: { $set: initialPaneState } });
     case actions.STORE_PANE_DATA_REQUEST:
       return update(state, { paneData: { $set: { ...state.paneData } } });
     case actions.STORE_PANE_DATA_DONE:

@@ -3,6 +3,10 @@ import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
 import * as syncActions from 'services/actions/sync';
 import * as nodeActions from 'services/actions/nodeBackend';
+import { GET_DATASET_IDS_INITIAL } from 'services/actions/nodeBackend';
+import { GET_DATASET_IDS_REQUEST } from 'services/actions/nodeBackend';
+import { GET_DATASET_IDS_SUCCESS } from 'services/actions/nodeBackend';
+import { GET_DATASET_IDS_FAILED } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -571,7 +575,23 @@ function chartTrashEmpty(state = initial, action) {
   }
 }
 
+function datasetIds(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_DATASET_IDS_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_DATASET_IDS_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_DATASET_IDS_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_DATASET_IDS_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  datasetIds,
   chartTrashEmpty,
   archivedCharts,
   datasetDeleted,

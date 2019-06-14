@@ -1,8 +1,6 @@
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
 import Stepper from '@material-ui/core/Stepper';
 
 export const ComponentBase = styled.div`
@@ -50,7 +48,7 @@ export const materialStyles = uiTheme => ({
     }
   },
   connectorLine: {
-    transition: uiTheme.transitions.create('border-color')
+    // transition: uiTheme.transitions.create('border-color')
   },
 
   stepLabel: {

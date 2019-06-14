@@ -2,25 +2,21 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import theme from 'theme/Theme';
-
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
-
 /* actions */
 import * as actions from 'services/actions/general';
-
 /* icons */
 import SvgIconPointer from 'assets/icons/IconPointer';
-import { createChartItems, convertDataItems } from './NavPane.const';
-
+import { convertDataItems, createChartItems } from './NavPane.const';
 /* styles */
 import {
-  NavPaneItem,
   ComponentBase,
+  ItemIcon,
   ItemLabel,
-  ItemIcon
+  NavPaneItem
 } from './NavPane.style';
+import get from 'lodash/get';
 
 /* todo: re-assess logic in this component, seems somewhat convoluted */
 
@@ -44,8 +40,9 @@ class NavPane extends React.Component {
     if (
       this.props.location.pathname.indexOf('/dashboard') !== -1 &&
       item === paneTypes.pubPane
-    )
+    ) {
       this.props.history.push('/home');
+    }
   };
 
   renderPaneItems = () => {
@@ -65,12 +62,16 @@ class NavPane extends React.Component {
             </NavPaneItem>
 
             {/*{this.props.user.role != 'Regular user' && (*/}
-            <NavPaneItem to="/mapper" data-cy="nav-pane-item-1">
-              <ItemIcon>
-                <SvgIconPointer />
-              </ItemIcon>
-              <ItemLabel>Convert data</ItemLabel>
-            </NavPaneItem>
+
+            {get(this.props.user, 'role', '') === 'Administrator' ||
+            get(this.props.user, 'role', '') === 'Super admin' ? (
+              <NavPaneItem to="/mapper" data-cy="nav-pane-item-1">
+                <ItemIcon>
+                  <SvgIconPointer />
+                </ItemIcon>
+                <ItemLabel>Convert data</ItemLabel>
+              </NavPaneItem>
+            ) : null}
             {/*)}*/}
 
             <NavPaneItem
@@ -120,14 +121,16 @@ class NavPane extends React.Component {
   };
 
   render() {
-    return <ComponentBase>{this.renderPaneItems()}</ComponentBase>;
+    return (
+      <ComponentBase data-cy="nav-pane">{this.renderPaneItems()}</ComponentBase>
+    );
   }
 }
 
 const mapStateToProps = state => {
   return {
     dataPaneOpen: state.dataPaneOpen.open,
-    user: state.user.data
+    user: state.currentUser.data
   };
 };
 

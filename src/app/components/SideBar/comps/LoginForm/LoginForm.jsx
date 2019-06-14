@@ -2,29 +2,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
 /* actions */
 import * as syncActions from 'services/actions/sync';
-
 /* components */
 import theme from 'theme/Theme';
 import IconSignIn from 'assets/icons/IconSignIn';
 import {
   ComponentBase,
-  LoginHeader,
-  TextField,
+  ErrorMessage,
+  ErrorText,
   FormButton,
-  LoginHeaderLabel,
   InfoText,
   Link,
-  ErrorMessage,
-  ErrorText
+  LoginHeader,
+  LoginHeaderLabel,
+  TextField
 } from 'components/SideBar/comps/LoginForm/LoginForm.styles';
 import ForgetPassword from 'components/SideBar/comps/ForgetPassword/ForgetPassword';
-
 /* utils */
 import get from 'lodash/get';
-import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 
 const propTypes = {
@@ -117,10 +113,10 @@ export class LoginForm extends React.Component {
       borderStyle: this.state.error ? 'solid' : 'none',
       borderColor: this.state.error ? theme.color.aidsFondsRed : 'none'
     };
-    let headerText = this.props.auth0Client.isAuthenticated()
+    let headerText = this.props.user
       ? `Welcome ${greetingName}`
       : 'Sign in registered users';
-    if (!this.props.auth0Client.isAuthenticated()) {
+    if (!this.props.user) {
       headerText =
         this.state.view === 'login'
           ? 'Sign in registered users'
@@ -133,7 +129,7 @@ export class LoginForm extends React.Component {
           <LoginHeaderLabel size="small">{headerText}</LoginHeaderLabel>
         </LoginHeader>
 
-        {this.props.auth0Client.isAuthenticated() ? (
+        {this.props.user ? (
           <FormButton
             onClick={() => {
               this.props.auth0Client.signOut().then(() => {
@@ -182,10 +178,8 @@ export class LoginForm extends React.Component {
             />
 
             <InfoText size="small">
-              Would you like to have access to Zoom? Please contact Jane Doe,{' '}
-              <Link href="mailto:janedoe@aidsfonds.nl">
-                janedoe@aidsfonds.nl
-              </Link>
+              Would you like to have access to Zoom? Please contact{' '}
+              <Link href="mailto:data@aidsfonds.nl">data@aidsfonds.nl</Link>
             </InfoText>
 
             {this.state.error && (
@@ -216,7 +210,7 @@ export class LoginForm extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.user.data,
+    user: state.currentUser.data,
     loginStatusMessage: state.loginStatusMessage.data,
     forgotPasswordEmailSent: state.forgotPasswordEmailSent.data
   };

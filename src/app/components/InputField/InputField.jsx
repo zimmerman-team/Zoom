@@ -3,9 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
-
 /* components */
-import { FormField, TextInput } from 'grommet';
+import { FormField } from 'grommet/components/FormField';
+import { TextInput } from 'grommet/components/TextInput';
 
 const Label = styled.span`
   margin-left: -12px;

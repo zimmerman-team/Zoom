@@ -2,14 +2,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
 /* components */
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import ProjectList from 'components/Lists/ProjectList/ProjectList';
 import { Element } from 'react-scroll/modules';
 import SvgIconSort from 'assets/icons/IconSort';
 import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
-
 /* mock */
 import { countryDetailMockData } from '__mocks__/countryDetailMock';
 
@@ -82,7 +80,7 @@ const Projects = props => {
         props.projectInfo.commitment
       } commitment`;
   return (
-    <Element name="Projects">
+    <Element name="Projects" data-cy="project-fragment">
       <ModuleFragment
         title={title}
         description={countryDetailMockData.fragments[6].description[0]}
@@ -100,7 +98,7 @@ const Projects = props => {
             />
           </div>
         </ControlsRow>
-        <ProjectList projectData={props.projectData} />
+        <ProjectList projectData={props.projectData} data-cy="project-list" />
       </ModuleFragment>
     </Element>
   );

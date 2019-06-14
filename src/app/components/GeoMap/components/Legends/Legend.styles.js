@@ -8,16 +8,16 @@ export const LegendItem = styled.div`
   margin-top: 14px;
   padding: 4px 26px 14px 18px;
   background-color: rgba(239, 239, 239, 0.72);
+  max-width: 50vw;
 `;
 
 export const LegendLabel = styled.div`
-  padding: 10px 0;
+  padding: 10px 0 8px 0;
   margin-left: 3px;
   line-height: 12px;
   color: ${theme.color.zoomBlack};
   font-family: ${theme.font.zoomFontFamOne};
   font-size: 10px;
-  max-width: 270px;
 `;
 
 export const LegendIcon = styled.div`

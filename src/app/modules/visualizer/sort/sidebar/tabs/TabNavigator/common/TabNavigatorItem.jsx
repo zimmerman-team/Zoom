@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import shortid from 'shortid';
 import theme from 'theme/Theme';
 import { formPath } from 'modules/visualizer/VisualizerModule.utils';
 
@@ -31,13 +30,17 @@ const ComponentBase = styled(NavLink)`
 const propTypes = {
   path: PropTypes.string,
   icon: PropTypes.node,
+  disable: PropTypes.bool,
   code: PropTypes.string
 };
-const defaultProps = {};
+const defaultProps = {
+  disable: false
+};
 
 const TabNavigatorItem = props => {
   return (
     <ComponentBase
+      style={props.disable ? { pointerEvents: 'none', opacity: '0.4' } : {}}
       to={formPath(props.code, props.path, props.chart)}
       isActive={(match, location) => {
         const selectedTab = location.pathname.substr(

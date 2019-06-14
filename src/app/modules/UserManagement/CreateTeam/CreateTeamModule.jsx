@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip } from 'react-tippy';
-import { Text } from 'grommet';
+import { Text } from 'grommet/components/Text';
 /* components */
 import {
   CreateTeamForm,
@@ -83,7 +83,7 @@ const CreateTeam = props => {
   const disableSubmit =
     props.disableSubmit === undefined ? props.name === '' : props.disableSubmit;
   return (
-    <ModuleFragment title={props.pageTitle}>
+    <ModuleFragment paddingTop="65px" title={props.pageTitle}>
       {props.loading && <ProgressIcon />}
       <CreateTeamForm onSubmit={props.submitForm}>
         {props.success && (

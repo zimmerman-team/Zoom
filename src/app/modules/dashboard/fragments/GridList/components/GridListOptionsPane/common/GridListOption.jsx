@@ -10,9 +10,11 @@ import {
   RemoveButton,
   SortIconButton
 } from './GridListOption.styles';
-import SortbyDialog from '../../../../../../../components/Dialog/SortbyDialog/SortbyDialog';
+import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
 
 const sortByOptions = [
+  { label: 'Last Updated (asc)', value: 'last_updated' },
+  { label: 'Last Updated (desc)', value: '-last_updated' },
   { label: 'Name (asc)', value: 'title' },
   { label: 'Name (desc)', value: '-title' }
 ];
@@ -68,7 +70,7 @@ const GridListOption = props => {
         </React.Fragment>
       );
     default:
-      if (props.label)
+      if (props.label) {
         return (
           <Link to={props.targetUrl} visibility={props.visibility}>
             <IconButton>
@@ -77,6 +79,7 @@ const GridListOption = props => {
             </IconButton>
           </Link>
         );
+      }
       return null;
   }
 };

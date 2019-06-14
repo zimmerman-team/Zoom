@@ -4,24 +4,22 @@ import { withRouter } from 'react-router';
 import { createRefetchContainer, graphql } from 'react-relay';
 import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
-
 /* mutations */
 import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
 import SurveyMutation from 'mediators/DataMapperMediators/WrapUpMediator/mutations/SurveyMutation';
 import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import find from 'lodash/find';
 import { fetchQuery } from 'relay-runtime';
-
 /* actions */
 import * as actions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
-
 /* consts */
 import { numberOptions } from 'modules/datamapper/fragments/MetaData/MetaData.consts';
 import { step1InitialData } from '__consts__/DataMapperStepConsts';
+/* components */
+import Snackbar from 'components/Snackbar/Snackbar';
 
 const surveyQuery = graphql`
   query DatasetMediatorQuery($entryId: Float!) {
@@ -35,7 +33,6 @@ const surveyQuery = graphql`
           staffTrained
           askSensitive
           selectRespondents
-          otherRespondent
           howManyRespondents
           editSheet
           dataCleaningTechniques
@@ -85,7 +82,10 @@ class DatasetMediator extends React.Component {
       team: '',
       loadComponent: false,
       sourceName: undefined,
-      surveyId: null
+      surveyId: null,
+      openSnackbar: false,
+      errorMessage: 'error',
+      metaDataEmptyFields: []
     };
 
     this.refetch = this.refetch.bind(this);
@@ -100,6 +100,7 @@ class DatasetMediator extends React.Component {
     this.handleMetaDataCompleted = this.handleMetaDataCompleted.bind(this);
     this.handleMetaDataError = this.handleMetaDataError.bind(this);
     this.updateMetaData = this.updateMetaData.bind(this);
+    this.saveDisabled = this.saveDisabled.bind(this);
   }
 
   componentDidMount() {
@@ -112,19 +113,33 @@ class DatasetMediator extends React.Component {
     if (!isEqual(this.props.metaData, prevProps.metaData)) {
       const { node: fileMetaData } = this.props.metaData.allFiles.edges[0];
 
+      const yearEndInd = fileMetaData.dateOfDataset.indexOf('-');
+
+      const year =
+        yearEndInd !== -1
+          ? fileMetaData.dateOfDataset.substring(0, yearEndInd)
+          : fileMetaData.dateOfDataset;
+
+      let accessibility = 'Private';
+
+      if (fileMetaData.accessibility.toLowerCase() === 'a') {
+        accessibility = 'Public';
+      } else if (fileMetaData.accessibility.toLowerCase() === 'o') {
+        accessibility = 'Team';
+      }
+
       let metaStepData = {
         title: fileMetaData.title,
         desc: fileMetaData.description,
-        tags: fileMetaData.tags.edges.map(tag => {
-          return tag && tag.node ? tag.node.name : '';
-        }),
+        org: fileMetaData.organisation,
+        year,
         dataSource: {
           key: fileMetaData.source.name,
           label: fileMetaData.source.name,
           value: fileMetaData.source.entryId
         },
-        shared: fileMetaData.accessibility === 'O' ? 'Yes' : 'No',
-        surveyData: 'No'
+        accessibility,
+        surveyData: 'Yes'
       };
 
       if (fileMetaData.surveyData) {
@@ -139,47 +154,31 @@ class DatasetMediator extends React.Component {
 
             metaStepData.surveyData = 'Yes';
 
-            // checking if other value was selected or if it was one from the selection
-            const respondents = find(numberOptions, [
-              'value',
-              actualSurveyData.howManyRespondents
-            ]);
-
             const q2 = actualSurveyData.whoDidYouTestWith.split(',');
-
-            const q3 = actualSurveyData.selectRespondents.split(',');
 
             const q51 = [];
 
             actualSurveyData.dataCleaningTechniques.split(',').forEach(item => {
-              if (item.indexOf('None') === -1)
-                q51.push({ label: item.trim(), value: item.trim() });
+              if (item.indexOf('None') === -1) {
+                const newIt = item.length > 0 ? item.trim() : '2';
+                q51.push({ label: newIt, value: newIt });
+              }
             });
 
             const surveyStepData = {
               q1: actualSurveyData.haveYouTestedTool,
               q2: q2.map(item => {
-                return { label: item.trim(), value: item.trim() };
+                const newIt = item.length > 0 ? item.trim() : '2';
+
+                return { label: newIt, value: newIt };
               }),
-              q21: actualSurveyData.staffTrained,
+              q21: actualSurveyData.consideredSenstive,
               q22: actualSurveyData.askSensitive,
-              q3: q3.map(item => {
-                return { label: item.trim(), value: item.trim() };
-              }),
-              q4: {
-                key: respondents
-                  ? actualSurveyData.howManyRespondents
-                  : 'other',
-                label: respondents
-                  ? actualSurveyData.howManyRespondents
-                  : 'Other',
-                value: actualSurveyData.howManyRespondents
-              },
               q5: actualSurveyData.editSheet,
               q51,
               // will be adjusted later on
-              q3Text: actualSurveyData.otherRespondent,
-              q4Text: respondents ? '' : actualSurveyData.howManyRespondents,
+              q3Text: actualSurveyData.selectRespondents,
+              q4Text: actualSurveyData.howManyRespondents,
               // will be adjusted later on
               q51Text: actualSurveyData.otherCleaningTechnique
             };
@@ -220,13 +219,17 @@ class DatasetMediator extends React.Component {
       !this.state.loadComponent &&
       !isEqual(this.props.stepData, prevProps.stepData) &&
       this.props.stepData.metaData.title.length > 0
-    )
+    ) {
       this.setState({ loadComponent: true });
+    }
 
     // and after the dataset gets updated
     // we redirect the user to the dashboard of datasets
-    if (!isEqual(this.props.datasetUpdated.data, prevProps.datasetUpdated.data))
+    if (
+      !isEqual(this.props.datasetUpdated.data, prevProps.datasetUpdated.data)
+    ) {
       this.props.history.push('/dashboard/data-sets');
+    }
   }
 
   componentWillUnmount() {
@@ -253,18 +256,63 @@ class DatasetMediator extends React.Component {
   }
 
   saveDataset() {
-    if (this.props.stepMetaData.surveyData === 'Yes')
+    const { stepMetaData } = this.props;
+
+    const metaDataEmptyFields = [];
+
+    // we check if the title is empty
+    if (!stepMetaData.title || stepMetaData.title.length === 0) {
+      metaDataEmptyFields.push('title');
+    }
+
+    // we check if the description is empty
+    if (!stepMetaData.desc || stepMetaData.desc.length === 0) {
+      metaDataEmptyFields.push('desc');
+    }
+
+    // we check if the datasource is empty
+    if (
+      !stepMetaData.dataSource.value ||
+      stepMetaData.dataSource.value.length === 0
+    ) {
+      metaDataEmptyFields.push('dataSource');
+    }
+
+    // we check if the organisation is empty
+    if (!stepMetaData.org || stepMetaData.org.length === 0) {
+      metaDataEmptyFields.push('org');
+    }
+
+    // we check if the year is empty
+    if (
+      !stepMetaData.year ||
+      stepMetaData.year.length === 0 ||
+      !/^\d+$/.test(stepMetaData.year) ||
+      stepMetaData.year.length > 4
+    ) {
+      metaDataEmptyFields.push('year');
+    }
+
+    if (metaDataEmptyFields.length > 0) {
+      this.setState({
+        openSnackbar: true,
+        errorMessage: 'Please fill the required fields',
+        metaDataEmptyFields
+      });
+    } else if (this.props.stepMetaData.surveyData === 'Yes') {
       // we add the survey data
       this.updateSurveyData();
-    else if (this.props.stepMetaData.dataSource.key === 'other')
+    } else if (this.props.stepMetaData.dataSource.key === 'other') {
       this.updateDataSource(this.props.stepMetaData.dataSource.value);
-    // otherwise we just add the existing source id
-    // and then add the metadata
-    else this.updateMetaData();
+    } else {
+      // otherwise we just add the existing source id
+      // and then add the metadata
+      this.updateMetaData();
+    }
   }
 
   handleSourceCompleted(response) {
-    if (response)
+    if (response) {
       this.setState(
         {
           sourceId: response.fileSource.entryId,
@@ -272,6 +320,7 @@ class DatasetMediator extends React.Component {
         },
         this.updateMetaData
       );
+    }
   }
 
   handleSourceError(error) {
@@ -289,19 +338,20 @@ class DatasetMediator extends React.Component {
 
   handleSurveyCompleted(response, error) {
     if (error) console.log('error adding survey data:', error);
-    else if (response)
+    else if (response) {
       this.setState(
         {
           surveyId: response.surveyData.id
         },
         this.afterSurvey
       );
+    }
   }
 
   afterSurvey() {
-    if (this.props.stepMetaData.dataSource.key === 'other')
+    if (this.props.stepMetaData.dataSource.key === 'other') {
       this.updateDataSource(this.props.stepMetaData.dataSource.value);
-    else this.updateMetaData();
+    } else this.updateMetaData();
   }
 
   handleSurveyError(error) {
@@ -311,30 +361,21 @@ class DatasetMediator extends React.Component {
   updateSurveyData() {
     const { stepMetaData: metaData } = this.props;
 
-    const selectRespondents = [];
-    metaData.q3.forEach(q => {
-      selectRespondents.push(q.value);
-    });
-
     const dataCleaningTechniques = [];
     metaData.q51.forEach(q => {
       dataCleaningTechniques.push(q.value.trim());
     });
-
     const variables = {
       id: this.state.surveyId,
       haveYouTestedTool: metaData.q1,
       whoDidYouTestWith: metaData.q2.map(q => {
         return q.value;
       }),
-      consideredSenstive: metaData.q22,
-      staffTrained: metaData.q21,
+      consideredSenstive: metaData.q21,
       askSensitive: metaData.q22,
-      selectRespondents,
-      otherRespondent:
-        selectRespondents.indexOf('0') !== -1 ? metaData.q3Text : '',
-      howManyRespondents:
-        metaData.q4.value.length > 0 ? metaData.q4.value : '0',
+      selectRespondents: metaData.q3Text,
+      howManyRespondents: metaData.q4Text,
+      staffTrained: metaData.q22,
       editSheet: metaData.q5,
       dataCleaningTechniques,
       otherCleaningTechnique:
@@ -353,18 +394,30 @@ class DatasetMediator extends React.Component {
   handleMetaDataCompleted(response, error) {
     if (error) console.log('error uploading file:', error);
     else if (response) {
+      let teams = [];
+
       // and after everything is done mapping we can actually
       // save the dataset into our zoom backend
-      const profile = this.props.auth0Client.getProfile();
+      let accessibility = 'p';
 
+      if (this.props.stepMetaData.accessibility === 'Public') {
+        accessibility = 'a';
+      } else if (this.props.stepMetaData.accessibility === 'Team') {
+        accessibility = 'o';
+        teams = this.props.user.groups.map(group => group.name);
+      }
+
+      // and after everything is done mapping we can actually
+      // save the dataset into our zoom backend
       this.props.dispatch(
         nodeActions.updateDatasetRequest({
-          authId: profile.sub,
+          authId: this.props.user.authId,
           datasetId: this.props.match.params.id,
           name: this.props.stepMetaData.title,
           dataSource:
             this.state.sourceName || this.props.stepMetaData.dataSource.label,
-          public: this.props.stepMetaData.shared === 'Yes'
+          teams,
+          public: accessibility
         })
       );
     }
@@ -377,11 +430,14 @@ class DatasetMediator extends React.Component {
   updateMetaData() {
     const { stepMetaData: metaData } = this.props;
 
-    // This is shared data set 'p' for private, 'o' for public
-    const accessibility =
-      typeof metaData.shared === 'string' && metaData.shared === 'Yes'
-        ? 'o'
-        : 'p';
+    // This is shared data set 'p' for private, 'o' for team and 'a' public for all
+    let accessibility = 'p';
+
+    if (metaData.accessibility === 'Public') {
+      accessibility = 'a';
+    } else if (metaData.accessibility === 'Team') {
+      accessibility = 'o';
+    }
 
     const tags = metaData.tags.map(tag => {
       return { name: tag };
@@ -393,7 +449,7 @@ class DatasetMediator extends React.Component {
       title: metaData.title,
       description: metaData.desc,
       containsSubnationalData: true,
-      organisation: 'Unavailable',
+      organisation: metaData.org,
       maintainer: 'Unavailable',
       methodology: 'Unavailable',
       defineMethodology: 'Unavailable',
@@ -401,8 +457,8 @@ class DatasetMediator extends React.Component {
       comments: 'Unavailable',
       accessibility,
       dataQuality: 'Unavailable',
+      dateOfDataset: metaData.year,
       fileTypes: this.state.fileTypes.toLowerCase(),
-      dateOfDataset: this.state.dateOfDataset,
       file: this.state.file,
       numberOfRows: '1',
       // Location should always be 2, until we start using different data
@@ -425,23 +481,51 @@ class DatasetMediator extends React.Component {
     );
   }
 
+  saveDisabled() {
+    return (
+      !this.props.stepData.metaData ||
+      !this.props.stepData.metaData.title ||
+      this.props.stepData.metaData.title.length === 0 ||
+      !this.props.stepData.metaData.desc ||
+      this.props.stepData.metaData.desc.length === 0 ||
+      !this.props.stepData.metaData.dataSource.value ||
+      this.props.stepData.metaData.dataSource.value.length === 0 ||
+      !this.props.stepData.metaData.org ||
+      this.props.stepData.metaData.org.length === 0 ||
+      !this.props.stepData.metaData.year ||
+      this.props.stepData.metaData.year.length === 0 ||
+      !/^\d+$/.test(this.props.stepData.metaData.year) ||
+      this.props.stepData.metaData.year.length > 4
+    );
+  }
+
   render() {
     // so we want to load the component only when the actual stepData
     // is filled in with the metadata of the dataset
     // for all of the underlying components to render properly
-    return this.state.loadComponent ? (
-      <DatasetModule
-        dropDownData={this.props.dropDownData}
-        saveDataset={this.saveDataset}
-      />
-    ) : (
-      <div />
+    return (
+      <div>
+        <Snackbar
+          message={this.state.errorMessage}
+          open={this.state.openSnackbar}
+          onClose={() => this.setState({ openSnackbar: false })}
+        />
+        {this.state.loadComponent && (
+          <DatasetModule
+            metaDataEmptyFields={this.state.metaDataEmptyFields}
+            saveDisabled={this.saveDisabled()}
+            dropDownData={this.props.dropDownData}
+            saveDataset={this.saveDataset}
+          />
+        )}
+      </div>
     );
   }
 }
 
 const mapStateToProps = state => {
   return {
+    user: state.currentUser.data,
     datasetUpdated: state.datasetUpdated,
     stepMetaData: state.stepData.stepzData.metaData,
     stepData: state.stepData.stepzData
@@ -470,6 +554,7 @@ export default createRefetchContainer(
               }
             }
             file
+            organisation
             fileTypes
             dateOfDataset
             accessibility

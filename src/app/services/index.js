@@ -2,6 +2,8 @@ import 'isomorphic-fetch';
 import assign from 'lodash/assign';
 import querystring from 'querystring';
 import axios from 'axios';
+import get from 'lodash/get';
+import cryptoJs from 'crypto-js';
 
 function handleResponse(response) {
   return response.json().then(result => {
@@ -17,7 +19,7 @@ function handleResponse(response) {
   });
 }
 
-function handleRequest(url, values = null, method = 'post') {
+function handleRequest(url, values = null, method = 'post', idToken = '') {
   const request = {
     method: method !== 'upload' ? method : 'post'
   };
@@ -26,6 +28,9 @@ function handleRequest(url, values = null, method = 'post') {
       assign(request, { body: JSON.stringify(values) });
     } else if (method === 'upload') {
       assign(request, { body: values });
+      assign(request, {
+        headers: { Authorization: `Bearer ${idToken}` }
+      });
       url = url.concat('?', querystring.stringify({ format: 'json' }));
     } else {
       url = url.concat('?', querystring.stringify(values));
@@ -34,11 +39,12 @@ function handleRequest(url, values = null, method = 'post') {
   return fetch(url, request).then(handleResponse);
 }
 
-export function uploadRequest(values) {
+export function uploadRequest(values, idToken) {
   return handleRequest(
     `${process.env.REACT_APP_BACKEND_HOST}/api/metadata/upload/`,
     values,
-    'upload'
+    'upload',
+    idToken
   );
 }
 
@@ -102,17 +108,49 @@ export function transactionsAggregationsRequest(values) {
 
 // NODE BACKEND CALL TYPES
 export function nodeBackendGetRequest(request) {
+  // so here we encrypt values passed to zoomBackend
+  const encValues = cryptoJs.AES.encrypt(
+    JSON.stringify(request.values),
+    process.env.REACT_APP_ENCRYPTION_SECRET
+  ).toString();
+
   return axios.get(`/api/${request.endpoint}`, {
-    params: request.values
+    params: {
+      payload: encValues
+    },
+    headers: get(request, 'headers', {})
   });
 }
 
 export function nodeBackendPostRequest(request) {
-  return axios.post(`/api/${request.endpoint}`, request.values);
+  // so here we encrypt values passed to zoomBackend
+  const encValues = cryptoJs.AES.encrypt(
+    JSON.stringify(request.values),
+    process.env.REACT_APP_ENCRYPTION_SECRET
+  ).toString();
+
+  return axios.post(
+    `/api/${request.endpoint}`,
+    {
+      payload: encValues
+    },
+    {
+      headers: get(request, 'headers', {})
+    }
+  );
 }
 
 export function nodeBackendDeleteRequest(request) {
+  // so here we encrypt values passed to zoomBackend
+  const encValues = cryptoJs.AES.encrypt(
+    JSON.stringify(request.values),
+    process.env.REACT_APP_ENCRYPTION_SECRET
+  ).toString();
+
   return axios.delete(`/api/${request.endpoint}`, {
-    params: request.values
+    params: {
+      payload: encValues
+    },
+    headers: get(request, 'headers', {})
   });
 }

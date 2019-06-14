@@ -1,7 +1,6 @@
 /* base */
 import React from 'react';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
 
 const IconContainer = styled(props => <div {...props} />)`
   display: flex;

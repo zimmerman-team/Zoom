@@ -9,7 +9,7 @@ import {
   TextField,
   UsersTable
 } from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
-import { Text } from 'grommet';
+import { Text } from 'grommet/components/Text';
 import Pagination from 'components/Pagination/Pagination';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';

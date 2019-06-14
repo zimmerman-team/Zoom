@@ -5,25 +5,21 @@ import connect from 'react-redux/es/connect/connect';
 import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';
 import { createRefetchContainer, graphql } from 'react-relay';
 import { withRouter } from 'react-router';
-
 /* helpers */
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import {
-  titleCase,
   formatBarChartInfoIndicators,
-  // formatLineChartData,
+  formatEcoLineData,
+  formatLineChart2Data,
+  formatPieChartData,
   formatProjectData,
   formatWikiExcerpts,
-  getProjectCountNCommitment,
-  formatLineChart2Data,
-  formatPieChartData
+  getProjectCountNCommitment
 } from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
-
 /* actions */
 import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
-
 /* mock */
 import mock from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
 
@@ -103,6 +99,14 @@ const propTypes = {
         date: PropTypes.string,
         value: PropTypes.number
       })
+    ),
+    ecoIndicators: PropTypes.arrayOf(
+      PropTypes.shape({
+        filterName: PropTypes.string,
+        indicatorName: PropTypes.string,
+        date: PropTypes.string,
+        value: PropTypes.number
+      })
     )
   })
 };
@@ -123,17 +127,30 @@ class CountryDetailMediator extends React.Component {
     countryOrgDisbursements: [],
     excerpts: ['', ''],
     barChartIndicators: mock.barChartIndicators,
-    aidsEpIndicators: mock.lineChartInd.map(lci => lci.name),
+    aidsEpIndicators: mock.lineChartInd.map(lci => lci.name.split(' - ')[0]),
+    subIndicators: mock.subIndicators,
     aidsLineChartData: [],
     countryName: '',
     infoBarData: [],
     projectSort: '-activity_budget_value',
     isSortByOpen: false,
+    ecoIndicatorsData: [],
+    ecoChartKeys: [],
     projectsLoading: false
   };
 
   componentDidMount = () => {
     document.addEventListener('mousedown', this.handleClickOutside);
+    // We dispatch wiki api here, cause this is the place where we get the country name
+    const nonZoomCountryName = get(
+      mock.isoCountries,
+      [this.props.match.params.iso2.toUpperCase()],
+      ''
+    );
+    const wikiParams = this.state.wikiParams;
+    wikiParams.titles = nonZoomCountryName;
+    this.props.dispatch(actions.countryExcerptRequest(this.state.wikiParams));
+
     // We get countries related activities here
     const activityParams = this.state.activityParams;
     activityParams.recipient_country = this.props.match.params.iso2.toUpperCase();
@@ -190,30 +207,31 @@ class CountryDetailMediator extends React.Component {
       const countryName = get(
         this.props.indicatorAggregations,
         'country[0].geolocationTag',
-        'CountryNotFound'
+        ''
       );
       // Here we format the bar chart indicator data
       const infoBarData = formatBarChartInfoIndicators(
         this.props.indicatorAggregations.country,
-        this.props.indicatorAggregations.global,
+        this.state.subIndicators,
         this.state.barChartIndicators,
         countryName
       );
 
-      // We dispatch wiki api here, cause this is the place where we get the country name
-      const wikiParams = this.state.wikiParams;
-      wikiParams.titles = titleCase(countryName);
-      this.props.dispatch(actions.countryExcerptRequest(this.state.wikiParams));
-
       const aidsLineChartData = formatLineChart2Data(
         this.props.indicatorAggregations.aidsEpidemic
+      );
+
+      const ecoData = formatEcoLineData(
+        this.props.indicatorAggregations.ecoIndicators
       );
 
       this.setState({
         infoBarData,
         countryName,
         aidsLineChartData,
-        wikiParams
+        ecoIndicatorsData: ecoData.data,
+        ecoChartKeys: ecoData.chartKeys
+        // wikiParams
       });
     }
 
@@ -256,7 +274,8 @@ class CountryDetailMediator extends React.Component {
     this.props.relay.refetch({
       countryCode: [this.props.match.params.iso2.toLowerCase()],
       barChartIndicators: this.state.barChartIndicators,
-      aidsEpIndicators: this.state.aidsEpIndicators
+      aidsEpIndicators: this.state.aidsEpIndicators,
+      subInds: this.state.subIndicators
     });
   };
 
@@ -283,13 +302,15 @@ class CountryDetailMediator extends React.Component {
     }
   };
 
-  render() {
+  render = () => {
     return (
       <CountryDetailModule
         projectData={this.state.projectData}
         projectInfo={this.state.projectInfo}
         infoBarData={this.state.infoBarData}
         aidsLineChartData={this.state.aidsLineChartData}
+        ecoIndicatorsData={this.state.ecoIndicatorsData}
+        ecoChartKeys={this.state.ecoChartKeys}
         countryName={this.state.countryName}
         excerpts={this.state.excerpts}
         aidsEpIndicators={mock.lineChartInd}
@@ -303,9 +324,14 @@ class CountryDetailMediator extends React.Component {
         setIsSortByOpen={this.setIsSortByOpen}
         isSortByOpen={this.state.isSortByOpen}
         projectsLoading={this.state.projectsLoading}
+        civicSpace={get(
+          this.props.indicatorAggregations.civicSpace,
+          '[0].value',
+          0
+        )}
       />
     );
-  }
+  };
 }
 
 const mapStateToProps = state => {
@@ -327,26 +353,106 @@ export default createRefetchContainer(
         countryCode: { type: "[String]", defaultValue: ["undefined"] }
         barChartIndicators: { type: "[String]", defaultValue: ["undefined"] }
         aidsEpIndicators: { type: "[String]", defaultValue: ["undefined"] }
+        subInds: { type: "[String]", defaultValue: ["undefined"] }
       ) {
       country: datapointsAggregation(
-        groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
+        groupBy: [
+          "indicatorName"
+          "geolocationTag"
+          "date"
+          "geolocationIso2"
+          "filterName"
+        ]
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
         geolocationIso2_In: $countryCode
         indicatorName_In: $barChartIndicators
+        filterName_In: $subInds
       ) {
+        filterName
         indicatorName
         geolocationTag
         value
         date
       }
       aidsEpidemic: datapointsAggregation(
-        groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
+        groupBy: [
+          "indicatorName"
+          "geolocationTag"
+          "date"
+          "geolocationIso2"
+          "filterName"
+        ]
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
         geolocationIso2_In: $countryCode
         indicatorName_In: $aidsEpIndicators
+        filterName_In: $subInds
       ) {
+        filterName
+        indicatorName
+        date
+        value
+      }
+      civicSpace: datapointsAggregation(
+        groupBy: ["indicatorName", "geolocationTag", "date", "geolocationIso2"]
+        orderBy: ["indicatorName"]
+        aggregation: ["Sum(value)"]
+        geolocationIso2_In: $countryCode
+        indicatorName_In: ["civicus score"]
+      ) {
+        indicatorName
+        date
+        value
+      }
+      ecoIndicators: datapointsAggregation(
+        groupBy: [
+          "indicatorName"
+          "geolocationTag"
+          "date"
+          "geolocationIso2"
+          "filterName"
+        ]
+        orderBy: ["date"]
+        aggregation: ["Sum(value)"]
+        geolocationIso2_In: $countryCode
+        indicatorName_In: [
+          "ghdx: total hiv/aids spending"
+          "gdp per capita (current us$)"
+        ]
+        filterName_In: ["all ages", "the_total_mean"]
+        date_In: [
+          "1990"
+          "1991"
+          "1992"
+          "1993"
+          "1994"
+          "1995"
+          "1996"
+          "1997"
+          "1998"
+          "1999"
+          "2000"
+          "2001"
+          "2002"
+          "2003"
+          "2004"
+          "2005"
+          "2006"
+          "2007"
+          "2008"
+          "2009"
+          "2010"
+          "2011"
+          "2012"
+          "2013"
+          "2014"
+          "2015"
+          "2016"
+          "2017"
+        ]
+      ) {
+        filterName
         indicatorName
         date
         value
@@ -358,12 +464,14 @@ export default createRefetchContainer(
       $countryCode: [String]
       $barChartIndicators: [String]
       $aidsEpIndicators: [String]
+      $subInds: [String]
     ) {
       ...CountryDetailMediator_indicatorAggregations
         @arguments(
           countryCode: $countryCode
           barChartIndicators: $barChartIndicators
           aidsEpIndicators: $aidsEpIndicators
+          subInds: $subInds
         )
     }
   `

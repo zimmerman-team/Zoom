@@ -5,21 +5,26 @@ import { fetchQuery } from 'relay-runtime';
 import DataExplorePane from 'components/Panes/DataExplorePane/DataExplorePane';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
-
 /* actions */
 import * as actions from 'services/actions/general';
-
+import * as nodeActions from 'services/actions/nodeBackend';
 /* helpers */
 import sortBy from 'lodash/sortBy';
+import isEqual from 'lodash/isEqual';
 import { formatYearParam, yearStrToArray } from 'utils/genericUtils';
-
 /* consts */
-import initialState, { initIndItem } from '__consts__/InitialChartDataConst';
+import initialState, {
+  devIndicatorInd,
+  devIndicatorName,
+  initIndItem
+} from '__consts__/InitialChartDataConst';
 import chartTypes from '__consts__/ChartConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
 import { maxYear } from '__consts__/TimeLineConst';
+import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 
 const propTypes = {
+  display: PropTypes.string,
   dropDownData: PropTypes.shape({
     exploreIndicators: PropTypes.shape({
       edges: PropTypes.arrayOf(
@@ -44,6 +49,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+  display: 'block',
   dropDownData: {}
 };
 
@@ -51,13 +57,18 @@ const indicatorQuery = graphql`
   query VizPaneMediatorQuery(
     $year_Range: String!
     $fileSource_Name_In: String!
+    $country_Iso2: String
+    $file_EntryId_In: String
   ) {
     allIndicators(
       year_Range: $year_Range
       fileSource_Name_In: $fileSource_Name_In
+      country_Iso2: $country_Iso2
+      file_EntryId_In: $file_EntryId_In
     ) {
       edges {
         node {
+          entryId
           name
           firstDataYear
           fileSource {
@@ -80,6 +91,7 @@ class VizPaneMediator extends React.Component {
 
     this.state = {
       allIndNames: [],
+      locReselected: false,
       allCountries: [],
       allFileSources: [],
       selectedSources: props.paneData.selectedSources
@@ -103,28 +115,53 @@ class VizPaneMediator extends React.Component {
     this.changesMade = this.changesMade.bind(this);
     this.getCountriesByRegion = this.getCountriesByRegion.bind(this);
     this.handleAxisSwitch = this.handleAxisSwitch.bind(this);
+    this.subIndAggrToggle = this.subIndAggrToggle.bind(this);
     this.saveGraphOption = this.saveGraphOption.bind(this);
     this.addIndicator = this.addIndicator.bind(this);
     this.removeIndicator = this.removeIndicator.bind(this);
+    this.getIndicators = this.getIndicators.bind(this);
   }
 
   componentDidMount() {
-    let allCountries = this.props.dropDownData.allCountries.edges.map(
-      indicator => {
-        return { label: indicator.node.name, value: indicator.node.iso2 };
-      }
-    );
+    let allCountries = [];
+    let allRegions = [];
 
-    allCountries = sortBy(allCountries, ['label']);
+    if (this.props.paneData.chartType === chartTypes.focusKE) {
+      allCountries = [
+        {
+          label: 'Kenya',
+          value: 'ke'
+        }
+      ];
+    } else if (this.props.paneData.chartType === chartTypes.focusNL) {
+      allCountries = [
+        {
+          label: 'Netherlands',
+          value: 'nl'
+        }
+      ];
+    } else {
+      allCountries = this.props.dropDownData.allCountries.edges.map(
+        indicator => {
+          return { label: indicator.node.name, value: indicator.node.iso2 };
+        }
+      );
 
-    let allRegions = this.props.dropDownData.allRegions.edges.map(indicator => {
-      return { label: indicator.node.name, value: indicator.node.country };
-    });
+      allCountries = sortBy(allCountries, ['label']);
 
-    allRegions = sortBy(allRegions, ['label']);
+      allRegions = this.props.dropDownData.allRegions.edges.map(indicator => {
+        return {
+          label: indicator.node.name,
+          value: indicator.node.country,
+          codeVal: indicator.node.code
+        };
+      });
 
-    // and we also push in a variable for undefined
-    allRegions.push({ label: 'undefined', value: [{ iso2: 'undefined' }] });
+      allRegions = sortBy(allRegions, ['label']);
+
+      // and we also push in a variable for undefined
+      allRegions.push({ label: 'undefined', value: [{ iso2: 'undefined' }] });
+    }
 
     let allFileSources = this.props.dropDownData.allFileSources.edges.map(
       indicator => {
@@ -140,8 +177,87 @@ class VizPaneMediator extends React.Component {
         allCountries,
         allRegions
       },
-      this.refetch
+      this.getIndicators
     );
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // so basically because of silentauth it takes some time
+    // for the user to load in, so to show correct indicators
+    // for the signed in user we will refetch the indicators
+    // once user data has changed.
+    if (!isEqual(this.props.user.data, prevProps.user.data)) {
+      this.getIndicators();
+    }
+
+    // And here we refetch the appropriate indicators for the current user
+    // if ofcourse a user is signed in here
+    if (!isEqual(this.props.datasetIds, prevProps.datasetIds)) {
+      this.refetch();
+    }
+
+    if (
+      this.props.paneData.chartType !== prevProps.paneData.chartType &&
+      (prevProps.paneData.chartType === chartTypes.focusKE ||
+        prevProps.paneData.chartType === chartTypes.focusNL)
+    ) {
+      let allCountries = this.props.dropDownData.allCountries.edges.map(
+        indicator => {
+          return { label: indicator.node.name, value: indicator.node.iso2 };
+        }
+      );
+
+      allCountries = sortBy(allCountries, ['label']);
+
+      let allRegions = this.props.dropDownData.allRegions.edges.map(
+        indicator => {
+          return {
+            label: indicator.node.name,
+            value: indicator.node.country,
+            codeVal: indicator.node.code
+          };
+        }
+      );
+
+      allRegions = sortBy(allRegions, ['label']);
+
+      // and we also push in a variable for undefined
+      allRegions.push({ label: 'undefined', value: [{ iso2: 'undefined' }] });
+
+      this.setState({
+        locReselected: true,
+        allCountries,
+        allRegions
+      });
+    }
+
+    if (
+      this.state.locReselected !== prevState.locReselected &&
+      this.state.locReselected
+    ) {
+      this.setState({
+        locReselected: false
+      });
+    }
+  }
+
+  getIndicators() {
+    if (this.props.user.data && this.props.user.data.authId) {
+      // so if the user is signedIn we will retrieve the appropriate
+      // dataset Ids with which we'll retrieve the appropriate
+      // indicators for the user
+      this.props.dispatch(
+        nodeActions.getDatasetIdsRequest({
+          authId: this.props.user.data.authId
+        })
+      );
+    } else {
+      // AND currently if the user is NOT signed in we'll just refetch everything
+      // cause we have that hardcoded nonsense in the frontend for which indicators
+      // are actually public, working with when a user is NOT signed in
+      // TODO: Redo this when we have proper public indicator flow
+      this.refetch();
+    }
   }
 
   selectDataSource(item, array = false) {
@@ -157,9 +273,10 @@ class VizPaneMediator extends React.Component {
       } else {
         selectedSources = [...this.state.selectedSources];
         const sourceIndex = selectedSources.indexOf(item.value);
-        if (sourceIndex === -1)
+        if (sourceIndex === -1) {
           // so if it doesn't exist we add it
           selectedSources.push(item.value);
+        }
         // if it does exist we remove it
         else selectedSources.splice(sourceIndex, 1);
       }
@@ -170,9 +287,9 @@ class VizPaneMediator extends React.Component {
     if (
       process.env.NODE_ENV === 'development' &&
       this.state.selectedSources.length > 0
-    )
+    ) {
       this.resetIndicators();
-    else if (process.env.NODE_ENV !== 'development') this.resetIndicators();
+    } else if (process.env.NODE_ENV !== 'development') this.resetIndicators();
 
     // and we store this so it would be accessible to the visualizer mediator
     this.props.dispatch(
@@ -181,12 +298,13 @@ class VizPaneMediator extends React.Component {
       })
     );
 
-    if (!this.props.chartData.chartMounted)
+    if (!this.props.chartData.chartMounted) {
       this.props.dispatch(
         actions.storeChartDataRequest({
           chartMounted: true
         })
       );
+    }
 
     this.changesMade();
   }
@@ -229,15 +347,41 @@ class VizPaneMediator extends React.Component {
       fileSource_Name_In
     };
 
+    if (this.props.paneData.chartType === chartTypes.focusKE) {
+      refetchVars.country_Iso2 = 'ke';
+    }
+
+    if (this.props.paneData.chartType === chartTypes.focusNL) {
+      refetchVars.country_Iso2 = 'nl';
+    }
+
+    // So only if the user is signed in we apply the appropriate logic to retrieve
+    // the indicators that this user can access, be it their own, shared with their team
+    // or the public ones, but when the user is NOT signed in we just get all the indicators
+    // and just filter them according to the hardcoded indicator names stored in this frontend
+    // of course this is only temporary until we implement the proper public indicator logic.
+    // so yeah TODO: adjust the flow properly when we have proper public indicator logic implemented
+    if (this.props.user.data && this.props.user.data.authId) {
+      refetchVars.file_EntryId_In = '-1';
+
+      if (this.props.datasetIds) {
+        refetchVars.file_EntryId_In = this.props.datasetIds
+          .map(item => item.datasetId)
+          .join(',');
+      }
+    }
+
     fetchQuery(this.props.relay.environment, indicatorQuery, refetchVars).then(
       data => {
-        let allIndNames = data.allIndicators.edges.map(indicator => {
-          return {
+        let allIndNames = [];
+
+        data.allIndicators.edges.forEach(indicator => {
+          allIndNames.push({
             label: indicator.node.name,
-            value: indicator.node.name,
+            value: indicator.node.entryId,
             dataSource: indicator.node.fileSource.name,
             firstYear: indicator.node.firstDataYear
-          };
+          });
         });
 
         allIndNames = sortBy(allIndNames, ['label']);
@@ -262,8 +406,10 @@ class VizPaneMediator extends React.Component {
     this.props.chartData.selectedInd.forEach(indItem => {
       selectedInd.push({
         indicator: indItem.indicator,
+        indLabel: indItem.indLabel,
         subIndicators: indItem.subIndicators,
         dataSource: indItem.dataSource,
+        aggregate: indItem.aggregate,
         selectedSubInd: [...indItem.selectedSubInd]
       });
     });
@@ -271,11 +417,13 @@ class VizPaneMediator extends React.Component {
     if (val === 'resetAll') {
       this.props.dispatch(
         actions.storeChartDataRequest({
+          refetch: true,
           selectedInd: selectedInd.map((indItem, ind) => {
             if (ind === 0 && process.env.NODE_ENV === 'development') {
               return {
                 ...initIndItem,
-                indicator: 'aids related deaths (unaids)'
+                indicator: devIndicatorInd,
+                indLabel: devIndicatorName
               };
             }
             return {
@@ -286,16 +434,19 @@ class VizPaneMediator extends React.Component {
       );
     } else {
       selectedInd[index].indicator = val.value;
+      selectedInd[index].indLabel = val.label;
       selectedInd[index].dataSource = val.dataSource;
       selectedInd[index].selectedSubInd = [];
       selectedInd[index].subIndicators = [];
 
       if (val === 'reset') {
         selectedInd[index].indicator = undefined;
+        selectedInd[index].indLabel = undefined;
         selectedInd[index].dataSource = undefined;
         this.props.dispatch(
           actions.storeChartDataRequest({
-            selectedInd
+            selectedInd,
+            refetch: true
           })
         );
       } else {
@@ -305,7 +456,16 @@ class VizPaneMediator extends React.Component {
         // indicators data point, so
         this.props.dispatch(
           actions.storeChartDataRequest({
+            // so the year reselection functionality only works with geolocations thats why we
+            // refetch all indicators only when the aggregate option IS geolocation
+            refetchAll:
+              this.props.chartData.specOptions[graphKeys.aggregate] ===
+                aggrOptions[0].value &&
+              this.props.chartData.selectedYear !== val.firstYear,
             selectedInd,
+            indicatorSelected: true,
+            indSelectedIndex: index,
+            refetch: true,
             selectedYear: val.firstYear
           })
         );
@@ -325,7 +485,9 @@ class VizPaneMediator extends React.Component {
     this.props.chartData.selectedInd.forEach(indItem => {
       selectedInd.push({
         indicator: indItem.indicator,
+        indLabel: indItem.indLabel,
         subIndicators: indItem.subIndicators,
+        aggregate: indItem.aggregate,
         dataSource: indItem.dataSource,
         selectedSubInd: [...indItem.selectedSubInd]
       });
@@ -342,9 +504,10 @@ class VizPaneMediator extends React.Component {
         const subIndicatorIndex = selectedInd[index].selectedSubInd.indexOf(
           item.value
         );
-        if (subIndicatorIndex === -1)
+        if (subIndicatorIndex === -1) {
           // so if it doesn't exist we add it
           selectedInd[index].selectedSubInd.push(item.value);
+        }
         // if it does exist we remove it
         else selectedInd[index].selectedSubInd.splice(subIndicatorIndex, 1);
       }
@@ -355,6 +518,8 @@ class VizPaneMediator extends React.Component {
     // so we set the values for chart data
     this.props.dispatch(
       actions.storeChartDataRequest({
+        indSelectedIndex: index,
+        refetch: true,
         selectedInd
       })
     );
@@ -394,7 +559,8 @@ class VizPaneMediator extends React.Component {
     this.props.dispatch(
       actions.storeChartDataRequest({
         selectedCountryVal,
-        selectedCountryLabels
+        selectedCountryLabels,
+        refetch: true
       })
     );
 
@@ -404,6 +570,7 @@ class VizPaneMediator extends React.Component {
   selectRegion(item, array = false) {
     let selectedRegionVal = [];
     let selectedRegionLabels = [];
+    let selectedRegionCodes = [];
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
@@ -412,20 +579,24 @@ class VizPaneMediator extends React.Component {
         item.forEach(it => {
           selectedRegionVal.push(it.value);
           selectedRegionLabels.push(it.label);
+          selectedRegionCodes.push(it.codeVal);
         });
       } else {
         selectedRegionVal = [...this.props.chartData.selectedRegionVal];
         selectedRegionLabels = [...this.props.chartData.selectedRegionLabels];
-        const regionIndex = selectedRegionVal.indexOf(item.value);
+        selectedRegionCodes = [...this.props.chartData.selectedRegionCodes];
+        const regionIndex = selectedRegionCodes.indexOf(item.codeVal);
 
         if (regionIndex === -1) {
           // so if it doesn't exist we add it
           selectedRegionVal.push(item.value);
           selectedRegionLabels.push(item.label);
+          selectedRegionCodes.push(item.codeVal);
         } else {
           // if it does exist we remove it
           selectedRegionVal.splice(regionIndex, 1);
           selectedRegionLabels.splice(regionIndex, 1);
+          selectedRegionCodes.splice(regionIndex, 1);
         }
       }
     }
@@ -433,7 +604,9 @@ class VizPaneMediator extends React.Component {
     this.props.dispatch(
       actions.storeChartDataRequest({
         selectedRegionVal,
-        selectedRegionLabels
+        selectedRegionLabels,
+        selectedRegionCodes,
+        refetch: true
       })
     );
 
@@ -476,17 +649,24 @@ class VizPaneMediator extends React.Component {
   }
 
   removeIndicator(index) {
-    const selectedInd = [...this.props.chartData.selectedInd];
+    if (this.props.chartData.selectedInd.length > 1) {
+      const selectedInd = [...this.props.chartData.selectedInd];
 
-    selectedInd.splice(index, 1);
+      const refetch =
+        selectedInd[index].indicator &&
+        selectedInd[index].selectedSubInd.length > 0;
 
-    this.props.dispatch(
-      actions.storeChartDataRequest({
-        selectedInd
-      })
-    );
+      selectedInd.splice(index, 1);
 
-    this.changesMade();
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          selectedInd,
+          refetch
+        })
+      );
+
+      this.changesMade();
+    }
   }
 
   resetAll() {
@@ -506,26 +686,68 @@ class VizPaneMediator extends React.Component {
   // from the zoombackend(if ofcourse a saved chart is loaded, for editing purposes)
   // otherwise all the data comes from DUCT
   changesMade() {
-    if (!this.props.chartData.changesMade)
+    if (!this.props.chartData.changesMade) {
       this.props.dispatch(
         actions.storeChartDataRequest({
           changesMade: true
         })
       );
+    }
   }
 
   // so this mainly controls the data for the linechart
   // cause you can switch the Y-axis of the data/indicator thats being shown
-  handleAxisSwitch(checked, indicator, index) {
+  handleAxisSwitch(checked, index) {
     // so if checked is false this the left axis will be selected
     // for this indicator otherwise its the right
-    const { chartKeys } = this.props.chartData;
+    const chartKeyz = [...this.props.chartData.chartKeys];
 
-    chartKeys[index].orientation = checked ? 'right' : 'left';
+    // now because we have some new logic in our datas
+    // where we can have aggregated indicators by their sub inds
+    // and we can have disagregated indicators by their subinds
+    // and have seperate legends for each, we need to get all chartKeys
+    // which are associated with that disagregated subindicator
+    // and when the axis has been switched, all of the sub-indicator
+    // legends need to switch, cause they all are under the same indicator
+    const chartKeys = [];
+
+    chartKeyz.forEach(chartKey => {
+      let chartKeyItem = chartKey;
+
+      if (chartKey.indIndex === index) {
+        chartKeyItem = {
+          ...chartKey,
+          orientation: checked ? 'right' : 'left'
+        };
+      }
+
+      chartKeys.push(chartKeyItem);
+    });
 
     this.props.dispatch(
       actions.storeChartDataRequest({
         chartKeys
+      })
+    );
+  }
+
+  // this function basically toggles the aggregations and disaggregations
+  // of the indicator data
+  subIndAggrToggle(checked, index) {
+    const selectedInd = [...this.props.chartData.selectedInd];
+
+    selectedInd[index] = {
+      ...selectedInd[index],
+      aggregate: checked
+    };
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        indSelectedIndex: index,
+        selectedInd,
+        refetch:
+          selectedInd[index].indicator &&
+          selectedInd[index].selectedSubInd.length > 0
       })
     );
   }
@@ -543,29 +765,36 @@ class VizPaneMediator extends React.Component {
         actions.storeChartDataRequest({
           specOptions,
           changesMade: true,
+          refetch: true,
           selectedYears: formatYearParam([startYear, endYear])
         })
       );
-    } else
+    } else if (key === graphKeys.aggrCountry) {
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          changesMade: true,
+          refetch: true,
+          specOptions
+        })
+      );
+    } else {
       this.props.dispatch(
         actions.storeChartDataRequest({
           specOptions
         })
       );
+    }
   }
 
   render() {
     return (
       <DataExplorePane
         handleAxisSwitch={
-          this.props.paneData.chartType === chartTypes.lineChart &&
-          this.handleAxisSwitch
+          this.props.paneData.chartType === chartTypes.lineChart
+            ? this.handleAxisSwitch
+            : null
         }
-        multipleInd={
-          this.props.paneData.chartType !== chartTypes.geoMap &&
-          this.props.paneData.chartType !== chartTypes.focusNL &&
-          this.props.paneData.chartType !== chartTypes.focusKE
-        }
+        subIndAggrToggle={this.subIndAggrToggle}
         chartType={this.props.paneData.chartType}
         specOptions={this.props.chartData.specOptions}
         saveGraphOption={this.saveGraphOption}
@@ -577,23 +806,28 @@ class VizPaneMediator extends React.Component {
         regions={this.state.allRegions}
         // okay so we use this variable to change the
         // to disable the geolocation dropdowns being defaultly selected
-        locationSelected={!this.props.chartData.chartMounted}
-        changesMade={this.props.chartData.changesMade}
+        locationSelected={
+          !this.props.chartData.chartMounted || this.state.locReselected
+        }
         selectedInd={this.props.chartData.selectedInd}
         chartKeys={this.props.chartData.chartKeys}
         addIndicator={this.addIndicator}
         removeIndicator={this.removeIndicator}
         selectInd={this.selectInd}
         selectSubInd={this.selectSubInd}
+        indSelectedIndex={this.props.chartData.indSelectedIndex}
+        indicatorSelected={this.props.chartData.indicatorSelected}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.props.chartData.selectedCountryVal}
         selectedCountryLabel={this.props.chartData.selectedCountryLabels}
         selectedRegionVal={this.props.chartData.selectedRegionVal}
+        selectedRegionCodes={this.props.chartData.selectedRegionCodes}
         selectedRegionLabels={this.props.chartData.selectedRegionLabels}
         selectRegion={this.selectRegion}
         resetAll={this.resetAll}
         selectYearRange={this.selectYearRange}
         yearRange={yearStrToArray(this.state.yearRange)}
+        display={this.props.display}
       />
     );
   }
@@ -605,7 +839,9 @@ VizPaneMediator.defaultProps = defaultProps;
 const mapStateToProps = state => {
   return {
     chartData: state.chartData.chartData,
-    paneData: state.paneData.paneData
+    paneData: state.paneData.paneData,
+    user: state.currentUser,
+    datasetIds: state.datasetIds.data
   };
 };
 
@@ -632,6 +868,7 @@ export default createFragmentContainer(
         edges {
           node {
             name
+            code
             country {
               iso2
             }

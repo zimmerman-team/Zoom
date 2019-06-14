@@ -1,18 +1,18 @@
 import React from 'react';
 /* icon */
 import CircleMarkerIcon from 'assets/icons/CircleMarkerIcon';
-
 /* styles */
 import { LegendItem } from 'components/GeoMap/components/Legends/Legend.styles';
 import {
-  CircleNumber,
-  CircleLegendLabel,
   CircleLegendItem,
-  CircleLegendNum
+  CircleLegendLabel,
+  CircleLegendNum,
+  CircleNumber
 } from 'components/GeoMap/components/Legends/CircleLegend/CircleLegend.styles';
-
 /* utils */
 import { formatNumber } from 'utils/genericUtils';
+/* components */
+import Dotdotdot from 'react-dotdotdot';
 
 const circleLegend = (legendName, index, min, max) => {
   const third = Math.round((max - min) / 3);
@@ -24,7 +24,7 @@ const circleLegend = (legendName, index, min, max) => {
     legendName && (
       <LegendItem key={`legend-${index}`}>
         <CircleLegendLabel data-cy="legendCircle-label">
-          {legendName}
+          <Dotdotdot clamp={4}>{legendName}</Dotdotdot>
         </CircleLegendLabel>
         <CircleLegendItem>
           <CircleNumber>

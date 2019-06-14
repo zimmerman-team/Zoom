@@ -1,4 +1,4 @@
-import { Box, Button, DataTable, Text } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import theme from 'theme/Theme';
 import styled from 'styled-components';
 import { BaseParagraph } from 'components/sort/Paragraphs';
@@ -17,6 +17,7 @@ export const FragmentContainer = styled(Box)`
   justify-content: center;
   padding: 40px;
   position: relative;
+  padding-top: ${props => props.paddingTop};
 `;
 
 export const FragmentContent = styled(Box)`

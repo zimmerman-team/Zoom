@@ -1,19 +1,31 @@
 import React from 'react';
-import LocationMarkerIcon from 'components/GeoMap/components/Markers/LocationMarker/LocationMarker.icon';
-import { LegendLabel } from 'components/GeoMap/components/Legends/Legend.styles';
-import { LocationLegendItem } from './LocationLegend.style';
 
-const locationLegend = (legendName, index) =>
-  legendName && (
-    <LocationLegendItem key={`legend-${index}`}>
-      <LegendLabel>{legendName}</LegendLabel>
-      <div>
-        <LocationMarkerIcon
-          size={20}
-          extraStyle={{ position: 'relative', top: '25px', left: '15px' }}
-        />
-      </div>
-    </LocationLegendItem>
-  );
+import Dotdotdot from 'react-dotdotdot';
+
+import {
+  LocationLegendItem,
+  LocationName,
+  LocItemContainer,
+  LocationLegendLabel,
+  ScgIconContainer
+} from './LocationLegend.style';
+
+import SvgIconLocation from 'assets/icons/geomap/SvgIconLocation';
+
+const locationLegend = (locationItems, index) => (
+  <LocationLegendItem key={`legend-${index}`}>
+    <LocationLegendLabel>Points of interests</LocationLegendLabel>
+    {locationItems.map(item => (
+      <LocItemContainer>
+        <ScgIconContainer>
+          <SvgIconLocation color={item.color} />
+        </ScgIconContainer>
+        <Dotdotdot clamp={4}>
+          <LocationName>{item.name}</LocationName>
+        </Dotdotdot>
+      </LocItemContainer>
+    ))}
+  </LocationLegendItem>
+);
 
 export default locationLegend;

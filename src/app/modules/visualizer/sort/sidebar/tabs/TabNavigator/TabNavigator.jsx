@@ -1,7 +1,6 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import shortid from 'shortid';
 
 import styled from 'styled-components';
 import TabNavigatorItem from 'modules/visualizer/sort/sidebar/tabs/TabNavigator/common/TabNavigatorItem';
@@ -29,6 +28,7 @@ const TabNavigator = props => {
     <ComponentBase>
       {props.navItems.map((item, index) => (
         <TabNavigatorItem
+          disable={item.disable}
           chart={props.chart}
           key={item.path}
           code={props.code}

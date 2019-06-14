@@ -1,38 +1,38 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* utils */
-import find from 'lodash/find';
-
+import findIndex from 'lodash/findIndex';
 /* components */
 import { DropDownCont } from 'components/Panes/DataExplorePane/DataExplorerPane.style';
 import SimpleSwitch from 'components/SimpleSwitch/SimpleSwitch';
-
 /* icons */
 import SvgIconAdd from 'assets/icons/IconAdd';
-
 /* styles */
 import {
-  ZoomSelect,
-  SwitchContainer,
-  IndicatorLabel,
-  AddSection,
   AddContainer,
-  IndLabelContainer,
+  AddLabel,
+  AddSection,
+  IndicatorLabel,
   IndicatorRemove,
-  AddLabel
+  IndLabelContainer,
+  SwitchContainer,
+  ZoomSelect
 } from './DropdownMenuPanel.style';
 
 const propTypes = {
   handleAxisSwitch: PropTypes.func,
   chartKeys: PropTypes.arrayOf(PropTypes.shape({})),
+  subIndAggrToggle: PropTypes.func,
+  aggrToggle: PropTypes.bool,
   panelDetails: PropTypes.arrayOf(
     PropTypes.shape({
-      indicator: PropTypes.string,
+      disabledValues: PropTypes.arrayOf(PropTypes.string),
+      isIndicator: PropTypes.bool,
       addIndicator: PropTypes.func,
-      sectionRemove: PropTypes.bool,
       sectionAdd: PropTypes.bool,
+      aggrCheck: PropTypes.bool,
+      addIndLabel: PropTypes.string,
       indicatorLabel: PropTypes.string,
       subIndicator: PropTypes.bool,
       categorise: PropTypes.bool,
@@ -40,11 +40,14 @@ const propTypes = {
       allFileSources: PropTypes.array,
       selectedSources: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
       selectDataSource: PropTypes.func,
+      selectedRegionCodes: PropTypes.arrayOf(PropTypes.string),
       multiple: PropTypes.bool,
       selectAll: PropTypes.bool,
       defaultAll: PropTypes.bool,
+      openSubInd: PropTypes.bool,
       removeIndicator: PropTypes.func,
       placeHolderNumber: PropTypes.number,
+      capitalize: PropTypes.bool,
       reset: PropTypes.func
     })
   )
@@ -53,46 +56,56 @@ const propTypes = {
 const defaultProps = {
   handleAxisSwitch: null,
   chartKeys: [],
+  subIndAggrToggle: null,
+  aggrToggle: false,
   panelDetails: [
     {
-      indicator: '',
+      disabledValues: [],
+      isIndicator: false,
       addIndicator: null,
       subIndicator: false,
       sectionAdd: false,
-      sectionRemove: false,
+      addIndLabel: 'Add Indicator',
+      aggrCheck: false,
       indIndex: -1,
       indicatorLabel: 'Indicator',
       categorise: false,
       allFileSources: [],
       selectedSources: [],
       selectDataSource: undefined,
+      selectedRegionCodes: null,
       multiple: false,
       selectAll: false,
+      openSubInd: false,
       defaultAll: false,
       removeIndicator: null,
       placeHolderNumber: undefined,
+      capitalize: false,
       reset: undefined
     }
   ]
 };
 
 const DropdownMenuPanel = props => {
-  // console.log('panelDetails', props.panelDetails);
-
   return (
     <React.Fragment>
       {props.panelDetails.map((detail, index) => {
-        let defChecked = false;
+        let axisChecked = false;
 
         if (
           detail.subIndicator &&
           props.handleAxisSwitch &&
           detail.indIndex !== -1
         ) {
-          defChecked = props.chartKeys[detail.indIndex];
+          const chartKeyInd = findIndex(props.chartKeys, [
+            'indIndex',
+            detail.indIndex
+          ]);
 
           // so right is true, left is false
-          defChecked = defChecked && defChecked.orientation === 'right';
+          axisChecked =
+            chartKeyInd !== -1 &&
+            props.chartKeys[chartKeyInd].orientation === 'right';
         }
 
         return (
@@ -100,13 +113,13 @@ const DropdownMenuPanel = props => {
           <DropDownCont
             key={index}
             style={{
-              marginTop: detail.indicator === true && index !== 0 ? '30px' : ''
+              marginTop: detail.isIndicator && index !== 0 ? '30px' : ''
             }}
           >
             {detail.indicatorLabel && (
               <IndLabelContainer>
                 <IndicatorLabel>{detail.indicatorLabel}</IndicatorLabel>
-                {detail.sectionRemove && (
+                {props.panelDetails.length > 2 && (
                   <IndicatorRemove onClick={detail.removeIndicator}>
                     Remove
                   </IndicatorRemove>
@@ -115,10 +128,13 @@ const DropdownMenuPanel = props => {
             )}
             <ZoomSelect
               data-cy={`datapane-select-${index}`}
+              disabledValues={detail.disabledValues}
               categorise={detail.categorise}
               multiple={detail.multiple}
               selectAll={detail.selectAll}
               defaultAll={detail.defaultAll}
+              openDropDown={detail.subIndicator && detail.openSubInd}
+              selectedRegionCodes={detail.selectedRegionCodes}
               reset={detail.reset}
               placeHolderText={detail.placeHolderText}
               placeHolderNumber={detail.placeHolderNumber}
@@ -126,29 +142,38 @@ const DropdownMenuPanel = props => {
               arraySelected={detail.selectedSources}
               selectVal={detail.selectDataSource}
               valueSelected={detail.valueSelected}
+              capitalize={detail.capitalize}
             />
-            {detail.subIndicator && props.handleAxisSwitch && (
+
+            {detail.subIndicator && (
               <SwitchContainer>
                 {/* Axis options specifically made for linechart dual Y-axis functionality */}
-                <SimpleSwitch
-                  defaultCheck={defChecked}
-                  option1="Left Y-axis"
-                  option2="Right Y-axis"
-                  onSwitch={checked =>
-                    props.handleAxisSwitch(
-                      checked,
-                      detail.indicator,
-                      detail.indIndex
-                    )
-                  }
-                />
+                {props.handleAxisSwitch && (
+                  <SimpleSwitch
+                    defaultCheck={axisChecked}
+                    label="Switch Axis"
+                    onSwitch={checked =>
+                      props.handleAxisSwitch(checked, detail.indIndex)
+                    }
+                  />
+                )}
+                {props.aggrToggle && (
+                  <SimpleSwitch
+                    defaultCheck={detail.aggrCheck}
+                    label="(Dis)aggregate"
+                    onSwitch={checked =>
+                      props.subIndAggrToggle(checked, detail.indIndex)
+                    }
+                  />
+                )}
               </SwitchContainer>
             )}
+
             {detail.sectionAdd && (
               <AddSection onClick={() => detail.addIndicator()}>
                 <AddContainer>
                   <SvgIconAdd />
-                  <AddLabel> Add Indicator</AddLabel>
+                  <AddLabel>{detail.addIndLabel}</AddLabel>
                 </AddContainer>
               </AddSection>
             )}

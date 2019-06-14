@@ -9,10 +9,11 @@ export function uploadInitial() {
   };
 }
 
-export function uploadRequest(values) {
+export function uploadRequest(values, idToken) {
   return {
     type: UPLOAD_REQUEST,
-    values
+    values,
+    idToken
   };
 }
 

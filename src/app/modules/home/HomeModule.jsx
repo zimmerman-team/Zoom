@@ -9,8 +9,6 @@ import Cookies from 'universal-cookie';
 import * as actions from 'services/actions/general';
 
 /* consts */
-import initialState from '__consts__/InitialChartDataConst';
-import initialPaneState from '__consts__/InitialPaneDataConst';
 import paneTypes from '__consts__/PaneTypesConst';
 
 /* components */
@@ -49,22 +47,6 @@ export class HomeModule extends Component {
     this.setState({ dialogOpen: false });
   };
 
-  componentWillUnmount() {
-    // AAAND when this component unmounts we reset the chart and pane variables in redux
-
-    this.props.dispatch(
-      actions.storeChartDataRequest({
-        ...initialState
-      })
-    );
-
-    this.props.dispatch(
-      actions.storePaneDataRequest({
-        ...initialPaneState
-      })
-    );
-  }
-
   render = () => {
     const paneContVis =
       this.props.dataPaneOpen === paneTypes.none ? 'none' : 'block';
@@ -98,6 +80,8 @@ HomeModule.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
+    chartData: state.chartData,
+    paneData: state.paneData,
     dataPaneOpen: state.dataPaneOpen.open
   };
 };

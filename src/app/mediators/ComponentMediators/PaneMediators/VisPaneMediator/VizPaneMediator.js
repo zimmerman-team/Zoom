@@ -13,12 +13,15 @@ import sortBy from 'lodash/sortBy';
 import isEqual from 'lodash/isEqual';
 import { formatYearParam, yearStrToArray } from 'utils/genericUtils';
 /* consts */
-import initialState, { initIndItem } from '__consts__/InitialChartDataConst';
+import initialState, {
+  devIndicatorInd,
+  devIndicatorName,
+  initIndItem
+} from '__consts__/InitialChartDataConst';
 import chartTypes from '__consts__/ChartConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
 import { maxYear } from '__consts__/TimeLineConst';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
-import pubIndicators from '__consts__/PublicIndicatorsConst';
 
 const propTypes = {
   display: PropTypes.string,
@@ -65,6 +68,7 @@ const indicatorQuery = graphql`
     ) {
       edges {
         node {
+          entryId
           name
           firstDataYear
           fileSource {
@@ -372,23 +376,12 @@ class VizPaneMediator extends React.Component {
         let allIndNames = [];
 
         data.allIndicators.edges.forEach(indicator => {
-          if (this.props.user.data) {
-            allIndNames.push({
-              label: indicator.node.name,
-              value: indicator.node.name,
-              dataSource: indicator.node.fileSource.name,
-              firstYear: indicator.node.firstDataYear
-            });
-          } else if (
-            pubIndicators.indexOf(indicator.node.name.toLowerCase()) !== -1
-          ) {
-            allIndNames.push({
-              label: indicator.node.name,
-              value: indicator.node.name,
-              dataSource: indicator.node.fileSource.name,
-              firstYear: indicator.node.firstDataYear
-            });
-          }
+          allIndNames.push({
+            label: indicator.node.name,
+            value: indicator.node.entryId,
+            dataSource: indicator.node.fileSource.name,
+            firstYear: indicator.node.firstDataYear
+          });
         });
 
         allIndNames = sortBy(allIndNames, ['label']);
@@ -413,6 +406,7 @@ class VizPaneMediator extends React.Component {
     this.props.chartData.selectedInd.forEach(indItem => {
       selectedInd.push({
         indicator: indItem.indicator,
+        indLabel: indItem.indLabel,
         subIndicators: indItem.subIndicators,
         dataSource: indItem.dataSource,
         aggregate: indItem.aggregate,
@@ -428,7 +422,8 @@ class VizPaneMediator extends React.Component {
             if (ind === 0 && process.env.NODE_ENV === 'development') {
               return {
                 ...initIndItem,
-                indicator: 'aids related deaths (unaids)'
+                indicator: devIndicatorInd,
+                indLabel: devIndicatorName
               };
             }
             return {
@@ -439,12 +434,14 @@ class VizPaneMediator extends React.Component {
       );
     } else {
       selectedInd[index].indicator = val.value;
+      selectedInd[index].indLabel = val.label;
       selectedInd[index].dataSource = val.dataSource;
       selectedInd[index].selectedSubInd = [];
       selectedInd[index].subIndicators = [];
 
       if (val === 'reset') {
         selectedInd[index].indicator = undefined;
+        selectedInd[index].indLabel = undefined;
         selectedInd[index].dataSource = undefined;
         this.props.dispatch(
           actions.storeChartDataRequest({
@@ -488,6 +485,7 @@ class VizPaneMediator extends React.Component {
     this.props.chartData.selectedInd.forEach(indItem => {
       selectedInd.push({
         indicator: indItem.indicator,
+        indLabel: indItem.indLabel,
         subIndicators: indItem.subIndicators,
         aggregate: indItem.aggregate,
         dataSource: indItem.dataSource,

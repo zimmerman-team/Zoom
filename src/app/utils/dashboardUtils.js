@@ -127,9 +127,9 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
     shared = shared.join(', ');
     let dataSources = [];
 
-    chart.indicatorItems.forEach((indItem, index) => {
+    chart.indicatorItems.forEach(indItem => {
       if (indItem.dataSource) {
-        if (index && dataSources.indexOf(indItem.dataSource) === -1) {
+        if (dataSources.indexOf(indItem.dataSource) === -1) {
           dataSources.push(indItem.dataSource);
         }
       }

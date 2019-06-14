@@ -40,8 +40,15 @@ export function saveStepDataDone(data) {
 }
 
 // basically used to store the currently editable chart in redux
+export const STORE_CHART_DATA_INITIAL = 'STORE_CHART_DATA_INITIAL';
 export const STORE_CHART_DATA_REQUEST = 'STORE_CHART_DATA_REQUEST';
 export const STORE_CHART_DATA_DONE = 'STORE_CHART_DATA_DONE';
+
+export function storeChartDataInitial() {
+  return {
+    type: STORE_CHART_DATA_INITIAL
+  };
+}
 
 export function storeChartDataRequest(data) {
   return {
@@ -59,8 +66,15 @@ export function storeChartDataDone(data) {
 
 // basically used to store the currently used panes data in redux
 // (mainly the selections for dropdowns n stuff)
+export const STORE_PANE_DATA_INITIAL = 'STORE_PANE_DATA_INITIAL';
 export const STORE_PANE_DATA_REQUEST = 'STORE_PANE_DATA_REQUEST';
 export const STORE_PANE_DATA_DONE = 'STORE_PANE_DATA_DONE';
+
+export function storePaneDataInitial() {
+  return {
+    type: STORE_PANE_DATA_INITIAL
+  };
+}
 
 export function storePaneDataRequest(data) {
   return {

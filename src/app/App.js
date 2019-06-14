@@ -19,6 +19,7 @@ import { getUserRequest } from 'services/actions/nodeBackend';
 import { getCurrentUserRequest } from 'services/actions/authNodeBackend';
 
 /* utils */
+import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 
 // Routes
@@ -50,26 +51,6 @@ const theme = createMuiTheme({
 import MainMenuDrawer from 'components/MainMenuDrawer/MainMenuDrawer';
 import CookieNotice from 'components/CookieNotice/CookieNotice';
 
-const modernEnvironment = new Environment({
-  network: Network.create(fetchQuery),
-  store: new Store(new RecordSource())
-});
-
-function fetchQuery(operation, variables) {
-  return fetch(`${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      query: operation.text,
-      variables
-    })
-  }).then(response => {
-    return response.json();
-  });
-}
-
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'production'
@@ -77,7 +58,11 @@ const generateClassName = createGenerateClassName({
 
 class App extends React.Component {
   state = {
-    showSidebar: false
+    showSidebar: false,
+    currentEnv: new Environment({
+      network: Network.create(),
+      store: new Store(new RecordSource())
+    })
   };
 
   componentWillMount = () => {
@@ -87,6 +72,12 @@ class App extends React.Component {
   };
 
   componentDidMount = () => {
+    this.setState({
+      currentEnv: new Environment({
+        network: Network.create(this.fetchQuery),
+        store: new Store(new RecordSource())
+      })
+    });
     if (window.location.pathname.indexOf('/callback') !== -1) {
       return;
     }
@@ -109,9 +100,43 @@ class App extends React.Component {
   };
 
   componentDidUpdate = prevProps => {
-    if (!isEqual(this.props.user, prevProps.user) && this.props.user) {
+    if (
+      !isEqual(this.props.user, prevProps.user) &&
+      this.props.user &&
+      this.props.user.authId
+    ) {
       this.props.dispatch(getUserRequest({ authId: this.props.user.authId }));
+      this.setState({
+        currentEnv: new Environment({
+          network: Network.create(this.fetchQuery),
+          store: new Store(new RecordSource())
+        })
+      });
     }
+  };
+
+  fetchQuery = (operation, variables) => {
+    let url = `${process.env.REACT_APP_GRAPHQL_HOST}/public-graphql/`;
+    let headers = {
+      'Content-Type': 'application/json'
+    };
+    if (get(this.props.user, 'idToken', null)) {
+      url = `${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`;
+      headers = {
+        Authorization: `Bearer ${this.props.user.idToken}`,
+        'Content-Type': 'application/json'
+      };
+    }
+    return fetch(url, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        query: operation.text,
+        variables
+      })
+    }).then(response => {
+      return response.json();
+    });
   };
 
   render = () => {
@@ -120,7 +145,7 @@ class App extends React.Component {
         <MuiThemeProvider theme={theme}>
           <Grommet theme={ZoomTheme} style={{ height: '100%' }}>
             <QueryRenderer
-              environment={modernEnvironment}
+              environment={this.state.currentEnv}
               query={graphql`
                 query AppQuery {
                   ...ExplorePanelMediator_dropDownData
@@ -165,8 +190,14 @@ class App extends React.Component {
                     </Router>
                   );
                 }
+                if (error) {
+                  return (
+                    <div>{get(error, 'source.errors[0].message', '')}</div>
+                  );
+                }
                 return <div data-cy="loader2">Loading</div>;
               }}
+              operation
             />
           </Grommet>
         </MuiThemeProvider>

@@ -252,10 +252,6 @@ class VizPaneMediator extends React.Component {
         })
       );
     } else {
-      // AND currently if the user is NOT signed in we'll just refetch everything
-      // cause we have that hardcoded nonsense in the frontend for which indicators
-      // are actually public, working with when a user is NOT signed in
-      // TODO: Redo this when we have proper public indicator flow
       this.refetch();
     }
   }
@@ -355,12 +351,6 @@ class VizPaneMediator extends React.Component {
       refetchVars.country_Iso2 = 'nl';
     }
 
-    // So only if the user is signed in we apply the appropriate logic to retrieve
-    // the indicators that this user can access, be it their own, shared with their team
-    // or the public ones, but when the user is NOT signed in we just get all the indicators
-    // and just filter them according to the hardcoded indicator names stored in this frontend
-    // of course this is only temporary until we implement the proper public indicator logic.
-    // so yeah TODO: adjust the flow properly when we have proper public indicator logic implemented
     if (this.props.user.data && this.props.user.data.authId) {
       refetchVars.file_EntryId_In = '-1';
 

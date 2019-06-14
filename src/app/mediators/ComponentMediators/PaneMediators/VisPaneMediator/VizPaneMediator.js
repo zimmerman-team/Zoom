@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 /* actions */
 import * as actions from 'services/actions/general';
+import * as nodeActions from 'services/actions/nodeBackend';
 /* helpers */
 import sortBy from 'lodash/sortBy';
 import isEqual from 'lodash/isEqual';
@@ -57,11 +58,13 @@ const indicatorQuery = graphql`
     $year_Range: String!
     $fileSource_Name_In: String!
     $country_Iso2: String
+    $file_EntryId_In: String
   ) {
     allIndicators(
       year_Range: $year_Range
       fileSource_Name_In: $fileSource_Name_In
       country_Iso2: $country_Iso2
+      file_EntryId_In: $file_EntryId_In
     ) {
       edges {
         node {
@@ -116,6 +119,7 @@ class VizPaneMediator extends React.Component {
     this.saveGraphOption = this.saveGraphOption.bind(this);
     this.addIndicator = this.addIndicator.bind(this);
     this.removeIndicator = this.removeIndicator.bind(this);
+    this.getIndicators = this.getIndicators.bind(this);
   }
 
   componentDidMount() {
@@ -173,7 +177,7 @@ class VizPaneMediator extends React.Component {
         allCountries,
         allRegions
       },
-      this.refetch
+      this.getIndicators
     );
   }
 
@@ -183,6 +187,12 @@ class VizPaneMediator extends React.Component {
     // for the signed in user we will refetch the indicators
     // once user data has changed.
     if (!isEqual(this.props.user.data, prevProps.user.data)) {
+      this.getIndicators();
+    }
+
+    // And here we refetch the appropriate indicators for the current user
+    // if ofcourse a user is signed in here
+    if (!isEqual(this.props.datasetIds, prevProps.datasetIds)) {
       this.refetch();
     }
 
@@ -228,6 +238,25 @@ class VizPaneMediator extends React.Component {
       this.setState({
         locReselected: false
       });
+    }
+  }
+
+  getIndicators() {
+    if (this.props.user.data && this.props.user.data.authId) {
+      // so if the user is signedIn we will retrieve the appropriate
+      // dataset Ids with which we'll retrieve the appropriate
+      // indicators for the user
+      this.props.dispatch(
+        nodeActions.getDatasetIdsRequest({
+          authId: this.props.user.data.authId
+        })
+      );
+    } else {
+      // AND currently if the user is NOT signed in we'll just refetch everything
+      // cause we have that hardcoded nonsense in the frontend for which indicators
+      // are actually public, working with when a user is NOT signed in
+      // TODO: Redo this when we have proper public indicator flow
+      this.refetch();
     }
   }
 
@@ -324,6 +353,22 @@ class VizPaneMediator extends React.Component {
 
     if (this.props.paneData.chartType === chartTypes.focusNL) {
       refetchVars.country_Iso2 = 'nl';
+    }
+
+    // So only if the user is signed in we apply the appropriate logic to retrieve
+    // the indicators that this user can access, be it their own, shared with their team
+    // or the public ones, but when the user is NOT signed in we just get all the indicators
+    // and just filter them according to the hardcoded indicator names stored in this frontend
+    // of course this is only temporary until we implement the proper public indicator logic.
+    // so yeah TODO: adjust the flow properly when we have proper public indicator logic implemented
+    if (this.props.user.data && this.props.user.data.authId) {
+      refetchVars.file_EntryId_In = '-1';
+
+      if (this.props.datasetIds) {
+        refetchVars.file_EntryId_In = this.props.datasetIds
+          .map(item => item.datasetId)
+          .join(',');
+      }
     }
 
     fetchQuery(this.props.relay.environment, indicatorQuery, refetchVars).then(
@@ -795,7 +840,8 @@ const mapStateToProps = state => {
   return {
     chartData: state.chartData.chartData,
     paneData: state.paneData.paneData,
-    user: state.currentUser
+    user: state.currentUser,
+    datasetIds: state.datasetIds.data
   };
 };
 

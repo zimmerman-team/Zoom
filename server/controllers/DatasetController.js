@@ -49,6 +49,46 @@ const DatasetApi = {
     });
   },
 
+  // basically gets the dataset IDs of the user mapped out datasets
+  // and of the datasets that have been shared with this users team
+  // it also returns the datasetIds which are available to the
+  // public, to everybody.
+  getDatasetIds: (req, res) => {
+    const { authId } = req.query;
+
+    User.findOne({ authId }, (error, author) => {
+      if (error) {
+        general.handleError(res, error);
+      } else if (!author) {
+        general.handleError(res, 'User not found', 404);
+      } else {
+        Dataset.find(
+          {
+            $or: [
+              {
+                author
+              },
+              {
+                teams: { $elemMatch: { $in: author.teams } }
+              },
+              {
+                public: 'a'
+              }
+            ]
+          },
+          'datasetId',
+          (setErrors, dataSets) => {
+            if (setErrors) {
+              general.handleError(res, setErrors);
+            } else {
+              res.json(dataSets);
+            }
+          }
+        );
+      }
+    });
+  },
+
   // TODO: this is not being used, maybe remove it?
   // so this updates the team related to the dataset
   // currently only the owner can do this

@@ -5,28 +5,28 @@ export const UPLOAD_FAILED = 'UPLOAD_FAILED';
 
 export function uploadInitial() {
   return {
-    type: UPLOAD_INITIAL,
+    type: UPLOAD_INITIAL
   };
 }
 
 export function uploadRequest(values) {
   return {
     type: UPLOAD_REQUEST,
-    values,
+    values
   };
 }
 
 export function uploadSuccess(data) {
   return {
     type: UPLOAD_SUCCESS,
-    data,
+    data
   };
 }
 
 export function uploadFailed(error) {
   return {
     type: UPLOAD_FAILED,
-    error,
+    error
   };
 }
 
@@ -37,28 +37,28 @@ export const VALIDATE_FAILED = 'VALIDATE_FAILED';
 
 export function validateInitial() {
   return {
-    type: VALIDATE_INITIAL,
+    type: VALIDATE_INITIAL
   };
 }
 
 export function validateRequest(values) {
   return {
     type: VALIDATE_REQUEST,
-    values,
+    values
   };
 }
 
 export function validateSuccess(data) {
   return {
     type: VALIDATE_SUCCESS,
-    data,
+    data
   };
 }
 
 export function validateFailed(error) {
   return {
     type: VALIDATE_FAILED,
-    error,
+    error
   };
 }
 
@@ -69,28 +69,28 @@ export const GET_COLUMNS_FAILED = 'GET_COLUMNS_FAILED';
 
 export function getColumnsInitial() {
   return {
-    type: GET_COLUMNS_INITIAL,
+    type: GET_COLUMNS_INITIAL
   };
 }
 
 export function getColumnsRequest(values) {
   return {
     type: GET_COLUMNS_REQUEST,
-    values,
+    values
   };
 }
 
 export function getColumnsSuccess(data) {
   return {
     type: GET_COLUMNS_SUCCESS,
-    data,
+    data
   };
 }
 
 export function getColumnsFailed(error) {
   return {
     type: GET_COLUMNS_FAILED,
-    error,
+    error
   };
 }
 
@@ -101,28 +101,28 @@ export const GET_FILE_ERRORS_FAILED = 'GET_FILE_ERRORS_FAILED';
 
 export function getFileErrorsInitial() {
   return {
-    type: GET_FILE_ERRORS_INITIAL,
+    type: GET_FILE_ERRORS_INITIAL
   };
 }
 
 export function getFileErrorsRequest(values) {
   return {
     type: GET_FILE_ERRORS_REQUEST,
-    values,
+    values
   };
 }
 
 export function getFileErrorsSuccess(data) {
   return {
     type: GET_FILE_ERRORS_SUCCESS,
-    data,
+    data
   };
 }
 
 export function getFileErrorsFailed(error) {
   return {
     type: GET_FILE_ERRORS_FAILED,
-    error,
+    error
   };
 }
 
@@ -133,28 +133,28 @@ export const ERROR_CORRECTION_SAVE_FAILED = 'ERROR_CORRECTION_SAVE_FAILED';
 
 export function errorCorrectionSaveInitial() {
   return {
-    type: ERROR_CORRECTION_SAVE_INITIAL,
+    type: ERROR_CORRECTION_SAVE_INITIAL
   };
 }
 
 export function errorCorrectionSaveRequest(values) {
   return {
     type: ERROR_CORRECTION_SAVE_REQUEST,
-    values,
+    values
   };
 }
 
 export function errorCorrectionSaveSuccess(data) {
   return {
     type: ERROR_CORRECTION_SAVE_SUCCESS,
-    data,
+    data
   };
 }
 
 export function errorCorrectionSaveFailed(error) {
   return {
     type: ERROR_CORRECTION_SAVE_FAILED,
-    error,
+    error
   };
 }
 
@@ -169,28 +169,28 @@ export const ERROR_CORRECTION_DELETE_ROW_FAILED =
 
 export function errorCorrectionDeleteRowInitial() {
   return {
-    type: ERROR_CORRECTION_DELETE_ROW_INITIAL,
+    type: ERROR_CORRECTION_DELETE_ROW_INITIAL
   };
 }
 
 export function errorCorrectionDeleteRowRequest(values) {
   return {
     type: ERROR_CORRECTION_DELETE_ROW_REQUEST,
-    values,
+    values
   };
 }
 
 export function errorCorrectionDeleteRowSuccess(data) {
   return {
     type: ERROR_CORRECTION_DELETE_ROW_SUCCESS,
-    data,
+    data
   };
 }
 
 export function errorCorrectionDeleteRowFailed(error) {
   return {
     type: ERROR_CORRECTION_DELETE_ROW_FAILED,
-    error,
+    error
   };
 }
 
@@ -201,28 +201,28 @@ export const MANUAL_MAP_DATA_FAILED = 'MANUAL_MAP_DATA_FAILED';
 
 export function manualMapDataInitial() {
   return {
-    type: MANUAL_MAP_DATA_INITIAL,
+    type: MANUAL_MAP_DATA_INITIAL
   };
 }
 
 export function manualMapDataRequest(values) {
   return {
     type: MANUAL_MAP_DATA_REQUEST,
-    values,
+    values
   };
 }
 
 export function manualMapDataSuccess(data) {
   return {
     type: MANUAL_MAP_DATA_SUCCESS,
-    data,
+    data
   };
 }
 
 export function manualMapDataFailed(error) {
   return {
     type: MANUAL_MAP_DATA_FAILED,
-    error,
+    error
   };
 }
 
@@ -233,27 +233,27 @@ export const COUNTRY_EXCERPT_FAILED = 'COUNTRY_EXCERPT_FAILED';
 
 export function countryExcerptInitial() {
   return {
-    type: COUNTRY_EXCERPT_INITIAL,
+    type: COUNTRY_EXCERPT_INITIAL
   };
 }
 
 export function countryExcerptRequest(values) {
   return {
     type: COUNTRY_EXCERPT_REQUEST,
-    values,
+    values
   };
 }
 
 export function countryExcerptSuccess(data) {
   return {
     type: COUNTRY_EXCERPT_SUCCESS,
-    data,
+    data
   };
 }
 
 export function countryExcerptFailed(error) {
   return {
     type: COUNTRY_EXCERPT_FAILED,
-    error,
+    error
   };
 }

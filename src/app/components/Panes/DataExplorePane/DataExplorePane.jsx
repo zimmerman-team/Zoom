@@ -186,8 +186,8 @@ class DataExplorePane extends React.Component {
         placeHolderNumber: this.props.indNames.length,
         selectDataSource: val => this.props.selectInd(val, index),
         allFileSources: this.props.indNames,
-        selectedSources: indItem.indicator,
-        valueSelected: indItem.indicator,
+        selectedSources: indItem.indLabel,
+        valueSelected: indItem.indLabel,
         reset: () => this.props.selectInd('reset', index)
       });
 

@@ -19,7 +19,7 @@ function handleResponse(response) {
   });
 }
 
-function handleRequest(url, values = null, method = 'post') {
+function handleRequest(url, values = null, method = 'post', idToken = '') {
   const request = {
     method: method !== 'upload' ? method : 'post'
   };
@@ -28,6 +28,9 @@ function handleRequest(url, values = null, method = 'post') {
       assign(request, { body: JSON.stringify(values) });
     } else if (method === 'upload') {
       assign(request, { body: values });
+      assign(request, {
+        headers: { Authorization: `Bearer ${idToken}` }
+      });
       url = url.concat('?', querystring.stringify({ format: 'json' }));
     } else {
       url = url.concat('?', querystring.stringify(values));
@@ -36,11 +39,12 @@ function handleRequest(url, values = null, method = 'post') {
   return fetch(url, request).then(handleResponse);
 }
 
-export function uploadRequest(values) {
+export function uploadRequest(values, idToken) {
   return handleRequest(
     `${process.env.REACT_APP_BACKEND_HOST}/api/metadata/upload/`,
     values,
-    'upload'
+    'upload',
+    idToken
   );
 }
 

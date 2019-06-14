@@ -16,6 +16,7 @@ today = mm + '/' + dd + '/' + yyyy;
 
 export const initIndItem = {
   indicator: undefined,
+  indLabel: undefined,
   // so these are all of the sub-indicators
   // of the selected indicator
   subIndicators: [],
@@ -25,6 +26,10 @@ export const initIndItem = {
   dataSource: undefined,
   selectedSubInd: []
 };
+
+export const devIndicatorInd = 109;
+
+export const devIndicatorName = 'aids related deaths (unaids)';
 
 const initialState = {
   // so this variable is mainly used to control
@@ -58,10 +63,8 @@ const initialState = {
       ? [
           {
             color: 'hsl(23, 70%, 50%)',
-            name:
-              'aids related deaths (unaids) - adolescents (10 to 19) realistic estimate',
-            label:
-              'aids related deaths (unaids) - adolescents (10 to 19) realistic estimate',
+            name: `${devIndicatorName} - adolescents (10 to 19) realistic estimate`,
+            label: `${devIndicatorName} - adolescents (10 to 19) realistic estimate`,
             indIndex: 0,
             orientation: 'left'
           }
@@ -76,9 +79,9 @@ const initialState = {
   selectedInd: [
     {
       indicator:
-        process.env.NODE_ENV === 'development'
-          ? 'aids related deaths (unaids)'
-          : undefined,
+        process.env.NODE_ENV === 'development' ? devIndicatorInd : undefined,
+      indLabel:
+        process.env.NODE_ENV === 'development' ? devIndicatorName : undefined,
       // so these are all of the sub-indicators
       // of the selected indicator
       subIndicators: [],
@@ -94,6 +97,7 @@ const initialState = {
     },
     {
       indicator: undefined,
+      indLabel: undefined,
       // so these are all of the sub-indicators
       // of the selected indicator
       subIndicators: [],

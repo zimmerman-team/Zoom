@@ -19,30 +19,32 @@ const AuthRoleController = require('./controllers/AuthRoleController');
 router.use((req, res, next) => {
   // so here basically we'll decrypt the values retrieved from the frontend
 
-  // this decrypts the get request values if there are any
-  if (
-    req.query.constructor === Object &&
-    Object.entries(req.query).length !== 0
-  ) {
-    req.query = JSON.parse(
-      cryptoJs.AES.decrypt(
-        req.query.payload.toString(),
-        process.env.REACT_APP_ENCRYPTION_SECRET
-      ).toString(cryptoJs.enc.Utf8)
-    );
-  }
+  if (req.path !== '/redirectToHome') {
+    // this decrypts the get request values if there are any
+    if (
+      req.query.constructor === Object &&
+      Object.entries(req.query).length !== 0
+    ) {
+      req.query = JSON.parse(
+        cryptoJs.AES.decrypt(
+          req.query.payload.toString(),
+          process.env.REACT_APP_ENCRYPTION_SECRET
+        ).toString(cryptoJs.enc.Utf8)
+      );
+    }
 
-  // and this decrypts the post request values if there are any
-  if (
-    req.body.constructor === Object &&
-    Object.entries(req.body).length !== 0
-  ) {
-    req.body = JSON.parse(
-      cryptoJs.AES.decrypt(
-        req.body.payload.toString(),
-        process.env.REACT_APP_ENCRYPTION_SECRET
-      ).toString(cryptoJs.enc.Utf8)
-    );
+    // and this decrypts the post request values if there are any
+    if (
+      req.body.constructor === Object &&
+      Object.entries(req.body).length !== 0
+    ) {
+      req.body = JSON.parse(
+        cryptoJs.AES.decrypt(
+          req.body.payload.toString(),
+          process.env.REACT_APP_ENCRYPTION_SECRET
+        ).toString(cryptoJs.enc.Utf8)
+      );
+    }
   }
 
   next();

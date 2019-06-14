@@ -91,10 +91,10 @@ const defaultProps = {
 const indicatorDataQuery = graphql`
   query VisualizerModuleMediatorQuery(
     $datePeriod: [String]!
-    $indicator: [String]!
+    $indicator: [Int]!
     $subInds: [String]!
     $countriesISO2: [String]!
-    $indicatorStr: String!
+    $indicatorId: Float!
     $OR_GeolocationIso2_Is_Null: Boolean!
     $orderBy: [String]!
   ) {
@@ -114,7 +114,7 @@ const indicatorDataQuery = graphql`
       aggregation: ["Sum(value)"]
       orderBy: $orderBy
       date_In: $datePeriod
-      indicatorName_In: $indicator
+      indicatorId_In: $indicator
       geolocationIso2_In: $countriesISO2
       filterName_In: $subInds
       OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
@@ -131,7 +131,7 @@ const indicatorDataQuery = graphql`
       date
       value
     }
-    subIndicators: allFilters(indicator_Name_In: $indicatorStr) {
+    subIndicators: allFilters(indicatorId: $indicatorId) {
       edges {
         node {
           name
@@ -177,8 +177,10 @@ class VisualizerModuleMediator extends Component {
 
     if (this.props.home) {
       // and we store the chart type so it would be accessible to the visualizer mediator
+      // and whenever the visualizer mounts we want to reset the previous values
       this.props.dispatch(
         actions.storePaneDataRequest({
+          ...initialPaneState,
           chartType: chartTypes.geoMap
         })
       );
@@ -193,6 +195,7 @@ class VisualizerModuleMediator extends Component {
       // and we store the chart type so it would be accessible to the visualizer mediator
       this.props.dispatch(
         actions.storePaneDataRequest({
+          ...initialPaneState,
           chartType: this.props.match.params.chart
         })
       );
@@ -293,7 +296,7 @@ class VisualizerModuleMediator extends Component {
     // and the color pallet should be the first color
     // set from the consts
 
-    let selectedInd = [...this.props.chartData.selectedInd];
+    let selectedInd = [...initialState.selectedInd];
 
     const specOptions = {
       [graphKeys.colorPallet]: colorSet[1].colors,
@@ -319,6 +322,7 @@ class VisualizerModuleMediator extends Component {
 
     this.props.dispatch(
       actions.storeChartDataRequest({
+        ...initialState,
         specOptions,
         selectedInd,
         // so we refetch data for development environment
@@ -358,7 +362,7 @@ class VisualizerModuleMediator extends Component {
   updateChartColor() {
     const selectedInds = this.props.chartData.selectedInd.map(indItem => {
       return {
-        indName: indItem.indicator,
+        indName: indItem.indLabel,
         subIndAggr: indItem.aggregate,
         subInd: indItem.selectedSubInd,
         dataSource: indItem.dataSource
@@ -408,7 +412,7 @@ class VisualizerModuleMediator extends Component {
     // load in less data
     const selectedInds = selectedInd.map(indItem => {
       return {
-        indName: indItem.indicator,
+        indName: indItem.indLabel,
         dataSource: indItem.dataSource,
         subIndAggr: indItem.aggregate,
         subInd: indItem.selectedSubInd
@@ -660,7 +664,7 @@ class VisualizerModuleMediator extends Component {
 
         const refetchVars = {
           indicator: [indicator],
-          indicatorStr: indicator || 'null',
+          indicatorId: indicator || -1,
           subInds,
           datePeriod,
           countriesISO2: countriesISO2.length > 0 ? countriesISO2 : [null],
@@ -777,13 +781,14 @@ class VisualizerModuleMediator extends Component {
 
     const selectedInd = indicatorItems.map(indItem => {
       selectedInds.push({
-        indName: indItem.indicator,
+        indName: indItem.indLabel,
         subIndAggr: indItem.aggregate,
         subInds: indItem.selectedSubInd,
         dataSource: indItem.dataSource
       });
       return {
         indicator: indItem.indicator,
+        indLabel: indItem.indLabel,
         subIndicators: indItem.allSubIndicators,
         selectedSubInd: indItem.subIndicators,
         aggregate: indItem.aggregate,

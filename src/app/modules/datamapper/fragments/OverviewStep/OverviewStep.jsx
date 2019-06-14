@@ -2,14 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
-
 /* components */
-import { Box } from 'grommet';
-
+import { Box } from 'grommet/components/Box';
 /* consts */
 import { step1InitialData } from '__consts__/DataMapperStepConsts';
 import Const from 'modules/datamapper/fragments/OverviewStep/OverviewStep.const';
-
 /* styles */
 import {
   ModuleContainer,

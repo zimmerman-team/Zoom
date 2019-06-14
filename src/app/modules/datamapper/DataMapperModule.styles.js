@@ -13,7 +13,7 @@ export const ModuleHeader = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  padding-top: 10px;
+  padding-top: 50px;
   padding-bottom: 20px;
   background-color: ${theme.color.zoomGreyZero};
 `;

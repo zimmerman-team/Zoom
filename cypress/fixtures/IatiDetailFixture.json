@@ -1,16 +1,16 @@
 {
   "Header": {
     "StartDatePlannedLabel": "Start date planned:",
-    "StartDatePlannedValue": "31 Dec 2015",
+    "StartDatePlannedValue": "01 Jan 2016",
     "StartDateActualLabel": "Start date actual:",
     "StartDateActualValue": "Data not available",
     "EndDatePlannedLabel": "End date planned:",
-    "EndDatePlannedValue": "30 Dec 2018",
+    "EndDatePlannedValue": "31 Dec 2018",
     "EndDateActualLabel": "End date actual:",
     "EndDateActualValue": "Data not available",
     "Title": "2015142 - Sex Worker Networks Consortium: Sex Workers: strengthening rights based responses to HIV",
     "LastProjectUpdateLabel": "Last project update:",
-    "LastProjectUpdateValue": "05 Nov 2018",
+    "LastProjectUpdateValue": "28 Jan 2019",
     "StatusLabel": "Status:",
     "StatusValue": "Implementation",
     "BeneficiaryCountryLabel": "Beneficiary country:",
@@ -24,15 +24,16 @@
     "IatiIDValue": "NL-KVK-41207989-P-11803-2015142 - 2S3202"
   },
   "TotalBudget": {
-    "InfoTooltip": "Lorem ipsum dolor simet empty module description."
+    "TotalBudgetValue": "$1,898,100"
   },
   "Sectors": {
-    "SectorsInfo": "Lorem ipsum dolor simet empty module description.",
-    "Values": [
-      "STD control including HIV/AIDS",
-      "Human rights",
-      "Social mitigation of HIV/AIDS",
-      "Reproductive health care"
-    ]
+     "Sector1Label": "STD control including HIV/AIDS",
+      "Sector1Value": "25%",
+     "Sector2Label": "Human rights",
+      "Sector2Value": "25%",
+     "Sector3Label": "Social mitigation of HIV/AIDS",
+      "Sector3Value": "25%",
+     "Sector4Label": "Reproductive health care",
+      "Sector4Value": "25%"
   }
 }

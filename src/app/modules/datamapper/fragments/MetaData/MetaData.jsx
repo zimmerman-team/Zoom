@@ -2,8 +2,7 @@
 /* third party */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box } from 'grommet';
-
+import { Box } from 'grommet/components/Box';
 /* custom components */
 import ZoomSelect from 'components/Select/ZoomSelect';
 import CheckboxesGroup from 'components/CheckboxesGroup/CheckboxesGroup';
@@ -11,40 +10,37 @@ import RadioButtonGroup from 'components/RadioButtonGroup/RadioButtonGroup';
 import TextField from 'components/sort/TextField';
 import InputFieldLabel from 'components/InputFieldLabel/InputFieldLabel';
 import InputFieldDivider from 'components/Dividers/InputFieldDivider';
-import ChipInput from 'components/ChipInput/ChipInput';
-
+import SimpleParagraphText from 'components/Texts/SimpleParagraphText/SimpleParagraphText';
 /* style */
 import { SectionHeading } from 'components/sort/Headings';
 import {
+  DataSourceTextCont,
   FieldContainer,
   ModuleContainer,
-  DataSourceTextCont,
-  SelectSurround,
-  TwoFieldContainer,
+  OrLabel,
   SelectContainer,
-  OrLabel
+  SelectSurround,
+  TwoFieldContainer
 } from './MetaData.style';
 import theme from 'theme/Theme';
-
 /* const data */
 import { step1InitialData } from '__consts__/DataMapperStepConsts';
 import {
-  options1,
-  options2,
   checkBoxOptions2,
   checkBoxOptions3,
   checkBoxOptions51,
+  dataSourceOptions,
   numberOptions,
-  dataSourceOptions
+  options2,
+  nonSurveyChoice,
+  accesibilityOptions
 } from './MetaData.consts';
-import { nonSurveyChoice } from 'modules/datamapper/fragments/MetaData/MetaData.consts';
 
 const propTypes = {
   /**
    Label for the button.
    */
   simpleChange: PropTypes.func,
-  checkBoxChange: PropTypes.func,
   otherCheckBoxText: PropTypes.func,
   dropDownChange: PropTypes.func,
   otherDropdownText: PropTypes.func,
@@ -52,13 +48,15 @@ const propTypes = {
     metaData: PropTypes.shape({
       title: PropTypes.string,
       desc: PropTypes.string,
+      org: PropTypes.string,
+      year: PropTypes.string,
       tags: PropTypes.arrayOf(PropTypes.string),
       dataSource: PropTypes.shape({
         key: PropTypes.string,
         label: PropTypes.string,
         value: PropTypes.string
       }),
-      shared: PropTypes.Boolean,
+      accessibility: PropTypes.string,
       surveyData: PropTypes.Boolean,
       q1: PropTypes.string,
       q2: PropTypes.arrayOf(
@@ -106,7 +104,6 @@ const defaultProps = {
   metaDataEmptyFields: [],
   data: step1InitialData,
   simpleChange: undefined,
-  checkBoxChange: undefined,
   otherCheckBoxText: undefined,
   dropDownChange: undefined,
   otherDropdownText: undefined
@@ -132,8 +129,9 @@ class MetaData extends React.Component {
       this.props.data.q3Text !== nextProps.data.q3Text ||
       this.props.data.q4Text !== nextProps.data.q4Text ||
       this.props.data.q51Text !== nextProps.data.q51Text
-    )
+    ) {
       return false;
+    }
 
     // console.log('SHOULD UPDATE');
     // if any other field is being changed rerendering is ooke
@@ -142,8 +140,20 @@ class MetaData extends React.Component {
 
   validateField(field) {
     let length = this.props.data[field].length === 0;
-    if (field === 'dataSource')
+    if (field === 'dataSource') {
       length = this.props.data[field].value.length === 0;
+    }
+
+    if (
+      field === 'year' &&
+      this.props.data[field] &&
+      this.props.data[field].length > 0 &&
+      (!/^\d+$/.test(this.props.data[field]) ||
+        this.props.data[field].length > 4)
+    ) {
+      return true;
+    }
+
     return this.props.metaDataEmptyFields.indexOf(field) !== -1 && length;
   }
 
@@ -171,16 +181,6 @@ class MetaData extends React.Component {
             label="Description"
             onChange={e => this.props.simpleChange(e.target.value, 'desc')}
             required
-          />
-        </FieldContainer>
-
-        {/*////////////////////////////////////////////////////////////////////*/}
-        <FieldContainer>
-          <ChipInput
-            value={this.props.data.tags}
-            label="Tags"
-            onAdd={chip => this.props.onChipAdd(chip)}
-            onDelete={(chip, index) => this.props.onChipDelete(index)}
           />
         </FieldContainer>
 
@@ -226,33 +226,48 @@ class MetaData extends React.Component {
           </DataSourceTextCont>
         </TwoFieldContainer>
 
+        <FieldContainer>
+          <TextField
+            defaultValue={this.props.data.org}
+            error={this.validateField('org')}
+            label="Organisation (upload and manage dataset)"
+            onChange={e => this.props.simpleChange(e.target.value, 'org')}
+            required
+          />
+        </FieldContainer>
+
+        <FieldContainer>
+          <TextField
+            defaultValue={this.props.data.year}
+            error={this.validateField('year')}
+            label="Year of data collection"
+            onChange={e => this.props.simpleChange(e.target.value, 'year')}
+            required
+          />
+        </FieldContainer>
+
         {/*////////////////////////////////////////////////////////////////////*/}
         <FieldContainer>
-          <InputFieldLabel text="Share data set?" />
+          <InputFieldLabel text="Accessibility of dataset" />
           <Box>
             <RadioButtonGroup
-              direction="column"
-              value={this.props.data.shared}
-              options={nonSurveyChoice}
-              onChange={value => this.props.simpleChange(value, 'shared')}
+              value={this.props.data.accessibility}
+              options={accesibilityOptions}
+              onChange={value =>
+                this.props.simpleChange(value, 'accessibility')
+              }
             />
           </Box>
         </FieldContainer>
 
         <InputFieldDivider />
 
-        {/*////////////////////////////////////////////////////////////////////*/}
-        <FieldContainer>
-          <InputFieldLabel text="Is this a survey data set?" />
-          <Box>
-            <RadioButtonGroup
-              direction="column"
-              options={nonSurveyChoice}
-              value={this.props.data.surveyData}
-              onChange={value => this.props.simpleChange(value, 'surveyData')}
-            />
-          </Box>
-        </FieldContainer>
+        <SimpleParagraphText>
+          The questions below are to be answered if you are uploading data that
+          you or your organisation has collected. This is to get a better
+          understanding of the methodology used to collect this data. Please
+          answer the questions you have an answer to.
+        </SimpleParagraphText>
 
         <InputFieldDivider />
 
@@ -276,25 +291,7 @@ class MetaData extends React.Component {
 
         {/*////////////////////////////////////////////////////////////////////*/}
         <FieldContainer>
-          <InputFieldLabel
-            text="2. Have you tested the tool in a pilot or with a test group before
-          conducting it?"
-          />
-          <CheckboxesGroup
-            values={this.props.data.q2}
-            options={checkBoxOptions2}
-            onChange={value => this.props.checkBoxChange(value, 'q2')}
-          />
-        </FieldContainer>
-
-        <InputFieldDivider />
-
-        {/*////////////////////////////////////////////////////////////////////*/}
-        <FieldContainer>
-          <InputFieldLabel
-            text="2.1 - Staff was trained on how to ask the senstive information to
-          avoid influencing the respondent’s anwers?"
-          />
+          <InputFieldLabel text="2. Does the data contain information which can be considered sensitive?" />
           <Box direction="row">
             <RadioButtonGroup
               value={this.props.data.q21}
@@ -309,101 +306,27 @@ class MetaData extends React.Component {
 
         {/*////////////////////////////////////////////////////////////////////*/}
         <FieldContainer>
-          <InputFieldLabel
-            text="2.2 - It was possible for respondents to not answer certain questions
-          if they found them to personal/senstive?"
-          />
-          <Box direction="row">
-            <RadioButtonGroup
-              value={this.props.data.q22}
-              direction="row"
-              options={options2}
-              onChange={value => this.props.simpleChange(value, 'q22')}
-            />
-          </Box>
-        </FieldContainer>
-
-        <InputFieldDivider />
-
-        {/*////////////////////////////////////////////////////////////////////*/}
-        <FieldContainer>
-          <InputFieldLabel text="3. How did you select respondents?" />
-          <CheckboxesGroup
-            values={this.props.data.q3}
-            options={checkBoxOptions3}
-            onChange={value => this.props.checkBoxChange(value, 'q3')}
-          />
           <TextField
-            label="If other, explain"
+            label="3. How did you select respondents?"
             defaultValue={this.props.data.q3Text}
             onChange={e => this.props.simpleChange(e.target.value, 'q3Text')}
           />
         </FieldContainer>
 
-        <InputFieldDivider />
-
-        {/*////////////////////////////////////////////////////////////////////*/}
-        <TwoFieldContainer>
-          <SelectContainer>
-            <InputFieldLabel text="4. How many respondents were interviewed/participated?" />
-            <SelectSurround>
-              <ZoomSelect
-                dropDownWidth={290}
-                search={false}
-                placeHolderText="Select or add number of respondents"
-                data={numberOptions}
-                valueSelected={this.props.data.q4.label}
-                selectVal={value =>
-                  this.props.dropDownChange(value, 'q4', 'q4Text')
-                }
-              />
-            </SelectSurround>
-          </SelectContainer>
-          <OrLabel> or </OrLabel>
-          <DataSourceTextCont>
-            <TextField
-              label="Enter a number"
-              defaultValue={this.props.data.q4Text}
-              //
-              onChange={e =>
-                this.props.otherDropdownText(
-                  e.target.value,
-                  'q4',
-                  'q4Text',
-                  numberOptions
-                )
-              }
-            />
-          </DataSourceTextCont>
-        </TwoFieldContainer>
-
-        <InputFieldDivider />
-
         {/*////////////////////////////////////////////////////////////////////*/}
         <FieldContainer>
-          <InputFieldLabel text="5. Did you clean/edit the data before uploading it?" />
-          <RadioButtonGroup
-            direction="row"
-            options={options2}
-            value={this.props.data.q5}
-            onChange={value => this.props.simpleChange(value, 'q5')}
-          />
-        </FieldContainer>
-
-        <InputFieldDivider />
-
-        {/*////////////////////////////////////////////////////////////////////*/}
-        <FieldContainer>
-          <InputFieldLabel text="5.1 Which data cleaning techniques did you use?" />
-          <CheckboxesGroup
-            values={this.props.data.q51}
-            options={checkBoxOptions51}
-            onChange={value => this.props.checkBoxChange(value, 'q51')}
-          />
           <TextField
-            label="If other, explain"
-            defaultValue={this.props.data.q51Text}
-            onChange={e => this.props.simpleChange(e.target.value, 'q51Text')}
+            label="4. How many respondents were interviewed/participated?"
+            defaultValue={this.props.data.q4Text}
+            //
+            onChange={e =>
+              this.props.otherDropdownText(
+                e.target.value,
+                'q4',
+                'q4Text',
+                numberOptions
+              )
+            }
           />
         </FieldContainer>
       </ModuleContainer>

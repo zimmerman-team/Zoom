@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import NoSsr from '@material-ui/core/NoSsr';
-import { Text } from 'grommet';
+import { Text } from 'grommet/components/Text';
 import theme from 'theme/Theme';
 
 export default styled(({ text, ...props }) => (

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import theme from 'theme/Theme';
 
 export const DetailList = styled.ul`
@@ -11,6 +11,7 @@ export const DetailList = styled.ul`
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
+  padding-top: ${props => props.paddingTop};
 `;
 
 export const DetailListItem = styled.li`

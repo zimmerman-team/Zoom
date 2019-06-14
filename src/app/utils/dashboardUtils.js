@@ -1,5 +1,4 @@
 import get from 'lodash/get';
-import find from 'lodash/find';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
 import { paginate } from './genericUtils';
@@ -17,7 +16,7 @@ export function formatUsersTabData(
   let allUsers = data;
 
   if (initialLoad) {
-    allUsers = data.users.map(d => {
+    allUsers = data.map(d => {
       const title = !isEmpty(d.user_metadata)
         ? `${get(d.user_metadata, 'firstName', '')} ${get(
             d.user_metadata,
@@ -34,6 +33,7 @@ export function formatUsersTabData(
           Charts: 0,
           Twitter: ''
         },
+        last_updated: new Date(d.updated_at),
         onEdit: () => onEdit(d.user_id),
         onView: () => onView(d.user_id),
         onDelete: () => onDelete(d.user_id)
@@ -68,7 +68,6 @@ export function formatTeamsTabData(
   page,
   sort,
   search,
-  users,
   onEdit,
   onDelete,
   onView
@@ -77,19 +76,15 @@ export function formatTeamsTabData(
 
   if (initialLoad) {
     allTeams = data.map(d => {
-      const values = get(d, 'description', '').split(',');
       return {
         id: d._id,
         title: get(d, 'name', ''),
         info: {
-          'Created by': get(
-            find(users, user => user.id === get(values, '[1]', '')),
-            'title',
-            ''
-          ),
-          'Publication date': get(values, '[0]', ''),
+          'Created by': get(d, 'createdBy', ''),
+          'Publication date': get(d, 'date', ''),
           Organisations: ''
         },
+        last_updated: new Date(get(d, 'last_updated', '')),
         onEdit: () => onEdit(d._id),
         onView: () => onView(d._id),
         onDelete: () => onDelete(d._id, get(d, 'name', ''))
@@ -130,17 +125,21 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
     let shared = chart.teams;
     if (chart._public) shared.push('Public');
     shared = shared.join(', ');
-    let dataSources = '';
+    let dataSources = [];
 
-    chart.dataSources.forEach((source, index) => {
-      if (index) dataSources = dataSources.concat(', ').concat(source);
-      else dataSources = source;
+    chart.indicatorItems.forEach(indItem => {
+      if (indItem.dataSource) {
+        if (dataSources.indexOf(indItem.dataSource) === -1) {
+          dataSources.push(indItem.dataSource);
+        }
+      }
     });
+    dataSources = dataSources.join(', ');
 
-    let onEdit = undefined;
-    let onView = undefined;
-    let onDuplicate = undefined;
-    let onDelete = undefined;
+    let onEdit;
+    let onView;
+    let onDuplicate;
+    let onDelete;
 
     if (duplicate) onDuplicate = () => duplicate(chart._id);
 
@@ -160,8 +159,9 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
 
     let author = '';
 
-    if (chart.author)
+    if (chart.author) {
       author = `${chart.author.firstName} ${chart.author.lastName}`;
+    }
 
     return {
       id: chart._id,
@@ -194,14 +194,22 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
 export function formatDatasets(datasets, history, remove) {
   return datasets.map(dataset => {
     let shared = '';
-    if (dataset.teams.length > 0 && dataset.teams !== 'none')
-      shared = shared.concat(dataset.teams.join(', '));
 
-    if (dataset.public)
+    if (dataset.public === 'o') {
+      if (dataset.teams.length > 0 && dataset.teams !== 'none') {
+        shared = shared.concat(dataset.teams.join(', '));
+      }
+    } else if (dataset.public === 'a') {
       shared =
         shared.length > 0
           ? shared.concat(', ').concat('Public')
           : shared.concat('Public');
+    } else if (dataset.public === 'p') {
+      shared =
+        shared.length > 0
+          ? shared.concat(', ').concat('Private')
+          : shared.concat('Private');
+    }
 
     return {
       id: dataset.datasetId,

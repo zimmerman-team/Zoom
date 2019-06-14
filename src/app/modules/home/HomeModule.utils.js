@@ -1,5 +1,3 @@
-import find from 'lodash/find';
-
 export const yearDropDown = [
   '1990',
   '1991',
@@ -12,5 +10,5 @@ export const yearDropDown = [
   '1998',
   '1999',
   '2000',
-  '2001',
+  '2001'
 ];

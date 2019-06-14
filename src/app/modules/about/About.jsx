@@ -12,9 +12,9 @@ import ModuleContainer from 'modules/common/modulecontainer/ModuleContainer';
 const propTypes = {};
 const defaultProps = {};
 
-const About = props => {
+const About = () => {
   return (
-    <ModuleContainer title={'About zoom'}>
+    <ModuleContainer title="About zoom">
       <AboutTitle data-cy="about-heading">About zoom</AboutTitle>
       <DescriptionParagraphBold data-cy="about-paragraph">
         The major aim of ZOOM is to develop and implement an open data platform
@@ -46,15 +46,19 @@ const About = props => {
         embedding of the platform and data driven working within the
         organisation.
       </Text>
-      <DescriptionParagraph>Check the new website</DescriptionParagraph>
+      <DescriptionParagraph>
+        You can find the data guidelines for Zoom in this document
+      </DescriptionParagraph>
       <DescriptionParagraph>
         <RedLink
           data-cy="about-link-to-web"
           target="_blank"
           rel="noopener noreferrer"
-          href="https://aidsfonds.nl/"
+          href={`${
+            process.env.REACT_APP_GRAPHQL_HOST
+          }/static/Data guidelines_final.pdf`}
         >
-          https://aidsfonds.nl/
+          Data guidelines_final.pdf
         </RedLink>
       </DescriptionParagraph>
     </ModuleContainer>

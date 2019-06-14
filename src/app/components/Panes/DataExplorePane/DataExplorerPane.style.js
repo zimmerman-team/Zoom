@@ -1,14 +1,16 @@
 import styled from 'styled-components';
-import { Box, Accordion, AccordionPanel } from 'grommet';
+import { Box } from 'grommet/components/Box';
+import { Accordion } from 'grommet/components/Accordion';
+import { AccordionPanel } from 'grommet/components/AccordionPanel';
 import theme from 'theme/Theme';
 
 export const ComponentBase = styled.div`
-  width: 320px;
-  height: inherit;
-  background-color: ${theme.color.aidsFondsWhite};
-  box-shadow: 0 5px 7px rgba(0, 0, 0, 0.5);
-  overflow: scroll;
   z-index: 8;
+  width: 320px;
+  overflow: auto;
+  height: inherit;
+  box-shadow: 0 5px 7px rgba(0, 0, 0, 0.5);
+  background-color: ${theme.color.aidsFondsWhite};
 `;
 
 export const FilterTitle = styled.span`

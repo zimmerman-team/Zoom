@@ -1,20 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 /* consts */
 import { maxYear, minYear } from '__consts__/TimeLineConst';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import { formatYearLabels } from 'utils/YearSelectUtil';
-
 /* styles */
 import {
   ComponentBase,
-  YearLabel,
+  EndControl,
   SelectedYearLabel,
   StartControl,
-  EndControl
+  YearLabel
 } from './YearRangeSelector.style';
 
 const propTypes = {
@@ -55,6 +52,8 @@ class YearRangeSelector extends React.Component {
     document.addEventListener('mouseover', this.handleMoveOutside);
     // we generate the year array here
     const numArray = [];
+
+    /* todo: convert to map */
     for (let i = this.props.min; i < this.props.max + 1; i++) {
       numArray.push(i.toString());
     }
@@ -62,14 +61,16 @@ class YearRangeSelector extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (!isEqual(this.props.selectedYears, prevProps.selectedYears))
+    if (!isEqual(this.props.selectedYears, prevProps.selectedYears)) {
       this.setState({ selectedYears: this.props.selectedYears });
+    }
 
     if (
       this.state.mouseDown !== prevState.mouseDown &&
       this.state.mouseDown === 'none'
-    )
+    ) {
       this.props.selectYearRange(this.state.selectedYears);
+    }
   }
 
   componentWillUnmount() {
@@ -143,7 +144,7 @@ class YearRangeSelector extends React.Component {
 
     const { min, max } = this.props;
 
-    if (number === this.state.selectedYears[0])
+    if (number === this.state.selectedYears[0]) {
       yearLabels = (
         <StartControl
           onMouseDown={() => this.handleMouseDown('start')}
@@ -153,9 +154,9 @@ class YearRangeSelector extends React.Component {
           {formatYearLabels(number, min, max)}
         </StartControl>
       );
-    else if (
+    } else if (
       number === this.state.selectedYears[this.state.selectedYears.length - 1]
-    )
+    ) {
       yearLabels = (
         <EndControl
           key={`year-${index}`}
@@ -165,7 +166,7 @@ class YearRangeSelector extends React.Component {
           {formatYearLabels(number, min, max)}
         </EndControl>
       );
-    else if (this.state.selectedYears.indexOf(number) !== -1)
+    } else if (this.state.selectedYears.indexOf(number) !== -1) {
       yearLabels = (
         <SelectedYearLabel
           onMouseEnter={() => this.handleMouseEnter(number)}
@@ -175,7 +176,7 @@ class YearRangeSelector extends React.Component {
           {formatYearLabels(number, min, max)}
         </SelectedYearLabel>
       );
-    else
+    } else {
       yearLabels = (
         <YearLabel
           onMouseEnter={() => this.handleMouseEnter(number)}
@@ -185,6 +186,7 @@ class YearRangeSelector extends React.Component {
           {formatYearLabels(number, min, max)}
         </YearLabel>
       );
+    }
 
     return yearLabels;
   }

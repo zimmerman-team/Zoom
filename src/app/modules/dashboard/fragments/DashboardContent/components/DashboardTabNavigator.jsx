@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import shortid from 'shortid';
-import theme from 'theme/Theme';
 import DashboardTabNavItem from 'modules/dashboard/fragments/DashboardContent/components/components/DashboardTabNavItem';
 //import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
 
@@ -47,6 +46,7 @@ const DashboardTabNavigator = props => {
       <Box>
         {props.navItems.map(item => (
           <DashboardTabNavItem
+            forAdmin={item.adminOnly}
             path={item.path}
             key={shortid.generate()}
             label={item.label}

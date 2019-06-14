@@ -2,12 +2,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { HomeModule } from 'modules/home/HomeModule';
-
 /* components */
 import GeoMap from 'components/GeoMap/GeoMap';
 import {
-  ModuleContainer,
-  ControlPanelContainer
+  ControlPanelContainer,
+  ModuleContainer
 } from 'modules/home/HomeModule.styles';
 import ExplorePanelMediator from 'mediators/ComponentMediators/PaneMediators/ExplorePanelMediator/ExplorePanelMediator';
 

@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
 import { ModuleTitle } from 'modules/dashboard/DashboardModule.styles';
 import UserGreeting from 'modules/dashboard/fragments/DashboardHeader/component/UserGreeting/UserGreeting';
 

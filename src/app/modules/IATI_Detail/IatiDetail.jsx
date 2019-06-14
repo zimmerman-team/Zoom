@@ -68,7 +68,7 @@ const IatiDetail = props => {
       <Helmet>
         <title>Zoom - Country detail</title>
       </Helmet>
-      <Header data={props.data} />
+      <Header data={props.data} data-cy="iati-activity-header" />
       <TotalBudget
         data={props.data.budgets}
         totalBudget={props.data.totalBudget}

@@ -2,37 +2,26 @@
 import React from 'react';
 import DuplicatorTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/DuplicatorTab';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-
+import PropTypes from 'prop-types';
 /* actions */
-import * as actions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
-
 /* utils */
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
-
 /* consts */
-import initialPaneState from '__consts__/InitialPaneDataConst';
-import initialState from '__consts__/InitialChartDataConst';
-
 /* components */
-import { ToastsStore } from 'react-toasts';
-import { SimpleErrorText } from 'components/sort/Misc';
-import PropTypes from 'prop-types';
+import Snackbar from 'components/Snackbar/Snackbar';
 
 const propTypes = {
-  auth0Client: PropTypes.shape({}),
   chartData: PropTypes.shape({}),
+  outerHistory: PropTypes.shape({}),
   paneData: PropTypes.shape({}),
-  user: PropTypes.shape({}),
   dupChartCreated: PropTypes.shape({})
 };
 const defaultProps = {
-  auth0Client: {},
   chartData: {},
+  outerHistory: {},
   paneData: {},
-  user: {},
   dupChartCreated: {}
 };
 
@@ -41,7 +30,9 @@ class DuplicatorMediator extends React.Component {
     super(props);
 
     this.state = {
-      duplId: undefined
+      duplId: undefined,
+      errorMessage: 'Error',
+      openSnackbar: false
     };
 
     this.saveChart = this.saveChart.bind(this);
@@ -50,38 +41,43 @@ class DuplicatorMediator extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (
-      !isEqual(
-        this.props.dupChartCreated.data,
-        prevProps.dupChartCreated.data
-      ) &&
-      this.props.dupChartCreated.data &&
-      this.state.duplId
+      !isEqual(this.props.dupChartCreated.data, prevProps.dupChartCreated.data)
     ) {
-      window.location = `/visualizer/${get(
-        this.props.dupChartCreated,
-        'data.chartType'
-      )}/${this.state.duplId}/edit`;
+      if (this.props.dupChartCreated.data && this.state.duplId) {
+        const link = `/visualizer/${get(
+          this.props.dupChartCreated,
+          'data.chartType'
+        )}/${this.state.duplId}/edit`;
+
+        // and we reinitialize the dupChart redux variable before
+        // pushing the duplicate chart into our visualizer routes
+        nodeActions.createDuplicateChartInitial();
+
+        // So this guy pushes the link to the data panes
+        // navigator history, so that the datapane would change accordingly
+        this.props.history.push(link);
+
+        // And this guy pushes the link to the visualizer module history
+        // so that everything in there would change accordingly.
+        this.props.outerHistory.push(link);
+      } else if (
+        this.props.dupChartCreated.error &&
+        this.props.dupChartCreated.error.status &&
+        this.props.dupChartCreated.error.result
+      ) {
+        this.setState({
+          openSnackbar: true,
+          errorMessage: JSON.stringify(this.props.dupChartCreated.error.result)
+        });
+      }
     }
   }
 
   // TODO somehow make this funciton reusable cause the same one is used in AppBar.jsx
   saveChart(chartId = 'vizID') {
-    if (this.props.auth0Client.isAuthenticated()) {
-      const profile = this.props.auth0Client.getProfile();
-
-      const dataSources = [];
-
-      this.props.chartData.selectedInd.forEach(indData => {
-        if (
-          dataSources.indexOf(indData.dataSource) === -1 &&
-          indData.dataSource
-        )
-          dataSources.push(indData.dataSource);
-      });
-
+    if (this.props.user) {
       const chartData = {
-        authId: profile.sub,
-        dataSources,
+        authId: this.props.user.authId,
         _public: this.props.chartData._public,
         teams: this.props.chartData.teams,
         chartId,
@@ -91,10 +87,13 @@ class DuplicatorMediator extends React.Component {
         type: this.props.paneData.chartType,
         data: this.props.chartData.data,
         chartKeys: this.props.chartData.chartKeys,
+        indKeys: this.props.chartData.indKeys,
         indicatorItems: this.props.chartData.selectedInd.map(indData => {
           return {
             indicator: indData.indicator,
+            indLabel: indData.indLabel,
             subIndicators: indData.selectedSubInd,
+            aggregate: indData.aggregate,
             // we also need to save the all sub indicators
             // for the datapanes default selections
             // because usually subindicators are refetched
@@ -102,7 +101,8 @@ class DuplicatorMediator extends React.Component {
             // and because we want to initially load in just the
             // data from zoombackend, we don't want to be refetching
             // anything
-            allSubIndicators: indData.subIndicators
+            allSubIndicators: indData.subIndicators,
+            dataSource: indData.dataSource
           };
         }),
         selectedSources: this.props.paneData.selectedSources,
@@ -116,7 +116,7 @@ class DuplicatorMediator extends React.Component {
 
       this.props.dispatch(nodeActions.createDuplicateChartRequest(chartData));
     } else {
-      ToastsStore.error(<SimpleErrorText> Unauthorized </SimpleErrorText>);
+      this.setState({ openSnackbar: true, errorMessage: 'Unauthorized' });
     }
   }
 
@@ -131,12 +131,19 @@ class DuplicatorMediator extends React.Component {
 
   render() {
     return (
-      <DuplicatorTab
-        handleSaveEdit={this.saveEdit}
-        handleDuplicate={this.saveChart}
-        duplName={get(this.props.dupChartCreated, 'data.name')}
-        duplID={get(this.props.dupChartCreated, 'data.id')}
-      />
+      <React.Fragment>
+        <Snackbar
+          message={this.state.errorMessage}
+          open={this.state.openSnackbar}
+          onClose={() => this.setState({ openSnackbar: false })}
+        />
+        <DuplicatorTab
+          handleSaveEdit={this.saveEdit}
+          handleDuplicate={this.saveChart}
+          duplName={get(this.props.dupChartCreated, 'data.name')}
+          duplID={get(this.props.dupChartCreated, 'data.id')}
+        />
+      </React.Fragment>
     );
   }
 }
@@ -148,8 +155,8 @@ const mapStateToProps = state => {
   return {
     chartData: state.chartData.chartData,
     paneData: state.paneData.paneData,
-    user: state.user,
-    dupChartCreated: state.dupChartCreated
+    dupChartCreated: state.dupChartCreated,
+    user: state.currentUser.data
   };
 };
 

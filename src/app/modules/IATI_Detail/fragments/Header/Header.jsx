@@ -64,7 +64,7 @@ class Header extends React.Component {
     return (
       <React.Fragment>
         <ModuleFragment background={theme.color.zoomGreyZero}>
-          <DetailList>
+          <DetailList paddingTop="40px">
             {get(this.props.data, 'timeline', []).map(item => (
               <DetailListItem key={item.id}>
                 <ItemLabel>{item.label}</ItemLabel>
@@ -74,7 +74,7 @@ class Header extends React.Component {
           </DetailList>
         </ModuleFragment>
         <ModuleFragment>
-          <PageHeading>{this.props.data.title}</PageHeading>
+          <PageHeading data-cy="header">{this.props.data.title}</PageHeading>
         </ModuleFragment>
         <ModuleFragment background={theme.color.zoomGreyZero}>
           <DetailList>

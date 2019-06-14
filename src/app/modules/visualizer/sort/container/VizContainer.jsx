@@ -3,23 +3,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 import { Route, withRouter } from 'react-router';
-
 /* consts */
 import graphKeys from '__consts__/GraphStructKeyConst';
+import chartTypes from '__consts__/ChartConst';
 
 import ContextPreview from 'components/ContextPreview/ContextPreview';
-import BarchartFragment from 'modules/visualizer/sort/container/fragments/BarchartFragment';
-import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFragment';
+import BarchartFragment from 'modules/visualizer/sort/container/fragments/BarchartFragment/BarchartFragment';
+import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFragment/GeomapFragment';
 
-import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment';
-import TablechartFragment from 'modules/visualizer/sort/container/fragments/TablechartFragment';
-import DonutchartFragment from 'modules/visualizer/sort/container/fragments/DonutchartFragment';
-import { PreviewTextContainer, ComponentBase } from './VizContainer.style';
+import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment/LinechartFragment';
+import TablechartFragment from 'modules/visualizer/sort/container/fragments/TablechartFragment/TablechartFragment';
+import DonutchartFragment from 'modules/visualizer/sort/container/fragments/DonutchartFragment/DonutchartFragment';
+import { ComponentBase, PreviewTextContainer } from './VizContainer.style';
 import CustomYearSelector from '../../../../components/CustomYearSelector/CustomYearSelector';
 import { YearContainer } from '../../../../components/CustomYearSelector/CustomYearSelector.style';
-import paneTypes from '../../../../__consts__/PaneTypesConst';
+
 import YearRangeSelector from 'components/YearRangeSelector/YearRangeSelector';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
+
+/* style */
+import theme from 'theme/Theme';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -47,6 +50,7 @@ const propTypes = {
   publicPage: PropTypes.bool,
   chartKeys: PropTypes.array,
   saveViewport: PropTypes.func,
+  home: PropTypes.bool,
   mode: PropTypes.bool,
   context: PropTypes.bool
 };
@@ -55,8 +59,9 @@ const defaultProps = {
   publicPage: false,
   chartKeys: [],
   saveViewport: null,
-  mode: location.pathname.includes('preview'),
-  context: location.pathname.includes('context')
+  home: false,
+  mode: window.location.pathname.includes('preview'),
+  context: window.location.pathname.includes('context')
 };
 
 class VizContainer extends React.Component {
@@ -68,8 +73,8 @@ class VizContainer extends React.Component {
     // need an initial set here, because those default props, don't actually set
     // the state correctly
     this.setState({
-      preview: location.pathname.includes('preview'),
-      context: location.pathname.includes('context')
+      preview: window.location.pathname.includes('preview'),
+      context: window.location.pathname.includes('context')
     });
 
     this.props.history.listen((location, action) => {
@@ -80,8 +85,20 @@ class VizContainer extends React.Component {
   }
 
   render() {
+    const yearBackgrCol =
+      this.props.chartType === chartTypes.geoMap ||
+      this.props.chartType === chartTypes.focusKE ||
+      this.props.chartType === chartTypes.focusNL
+        ? theme.color.aidsFondsWhiteOpacity
+        : theme.color.aidsFondsGreyOpacity;
+
+    const geoChartPath = this.props.home
+      ? '/home'
+      : '/(visualizer|public)/(geomap|focusKE|focusNL)/:code/:tab';
+
     return (
       <ComponentBase
+        id="viz-container"
         mode={
           this.state.preview || this.props.publicPage ? 'initial' : 'center'
         }
@@ -113,7 +130,7 @@ class VizContainer extends React.Component {
             selectedYear={this.props.selectedYear}
             indicatorData={this.props.data}
             saveViewport={this.props.saveViewport}
-            path="/(visualizer|public)/(geomap|focusKE|focusNL)/:code/:tab"
+            path={geoChartPath}
             component={GeomapFragment}
             mode={this.state.preview}
           />
@@ -161,7 +178,7 @@ class VizContainer extends React.Component {
             mode={this.state.preview}
           />
 
-          <YearContainer bottom="24px">
+          <YearContainer bottom="24px" backgroundColor={yearBackgrCol}>
             {/* so the second item in the aggrOptions array is the year aggregation option*/}
             {this.props.chartData.specOptions[graphKeys.aggregate] ===
             aggrOptions[1].value ? (

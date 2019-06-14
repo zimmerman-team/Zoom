@@ -2,16 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 // import { Provider } from 'react-redux';
 import JssProvider from 'react-jss/lib/JssProvider';
-import { createGenerateClassName } from '@material-ui/core/styles';
-import { BrowserRouter as Router, withRouter } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { graphql, QueryRenderer } from 'react-relay';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import auth0Client from 'auth/Auth';
 import Analytics from 'react-router-ga';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import Cookies from 'universal-cookie';
+import {
+  createGenerateClassName,
+  MuiThemeProvider,
+  createMuiTheme
+} from '@material-ui/core/styles';
+
 /* actions */
-import * as nodeActions from 'services/actions/nodeBackend';
+import { setUserIdToken } from 'services/actions/sync';
+import { getUserRequest } from 'services/actions/nodeBackend';
+import { getCurrentUserRequest } from 'services/actions/authNodeBackend';
 
 /* utils */
 import get from 'lodash/get';
@@ -19,7 +24,7 @@ import isEqual from 'lodash/isEqual';
 
 // Routes
 import Routes from './Routes';
-import { Grommet } from 'grommet';
+import { Grommet } from 'grommet/components/Grommet';
 import { ZoomTheme } from 'styles/ZoomTheme';
 
 /* global app components */
@@ -30,6 +35,10 @@ const theme = createMuiTheme({
     // So we have `transition: none;` everywhere
     create: () => 'none'
   },*/
+  typography: {
+    useNextVariants: true
+  },
+
   props: {
     // Name of the component ⚛️
     MuiButtonBase: {
@@ -39,34 +48,8 @@ const theme = createMuiTheme({
   }
 });
 
-import {
-  ToastsContainer,
-  ToastsStore,
-  ToastsContainerPosition
-} from 'react-toasts';
-
 import MainMenuDrawer from 'components/MainMenuDrawer/MainMenuDrawer';
 import CookieNotice from 'components/CookieNotice/CookieNotice';
-
-const modernEnvironment = new Environment({
-  network: Network.create(fetchQuery),
-  store: new Store(new RecordSource())
-});
-
-function fetchQuery(operation, variables) {
-  return fetch(`${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      query: operation.text,
-      variables
-    })
-  }).then(response => {
-    return response.json();
-  });
-}
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -75,7 +58,11 @@ const generateClassName = createGenerateClassName({
 
 class App extends React.Component {
   state = {
-    showSidebar: false
+    showSidebar: false,
+    currentEnv: new Environment({
+      network: Network.create(),
+      store: new Store(new RecordSource())
+    })
   };
 
   componentWillMount = () => {
@@ -85,100 +72,85 @@ class App extends React.Component {
   };
 
   componentDidMount = () => {
+    this.setState({
+      currentEnv: new Environment({
+        network: Network.create(this.fetchQuery),
+        store: new Store(new RecordSource())
+      })
+    });
     if (window.location.pathname.indexOf('/callback') !== -1) {
       return;
     }
     try {
       auth0Client.silentAuth().then(results => {
         this.props.dispatch(
-          nodeActions.getUserRequest({ authId: results.idTokenPayload.sub })
+          getCurrentUserRequest(
+            {
+              userId: results.idTokenPayload.sub
+            },
+            { Authorization: `Bearer ${results.idToken}` }
+          )
         );
+        this.props.dispatch(setUserIdToken(results.idToken));
         this.forceUpdate();
       });
-    } catch (err) {}
+    } catch (err) {
+      // console.log(err);
+    }
   };
 
   componentDidUpdate = prevProps => {
-    // so this basically either adds a new user that has
-    // signed in or updates their username and email
-
-    if (!isEqual(this.props.user, prevProps.user)) {
-      if (this.props.user.data) {
-        // so we update the user
-        auth0Client.getUserRole().then(role => {
-          auth0Client.getUserGroup().then(groups => {
-            const profile = auth0Client.getProfile();
-            this.props.dispatch(
-              nodeActions.updateUserRequest({
-                firstName: get(
-                  profile['https://auth.nyuki.io_user_metadata'],
-                  'firstName',
-                  ''
-                ),
-                lastName: get(
-                  profile['https://auth.nyuki.io_user_metadata'],
-                  'lastName',
-                  ''
-                ),
-                username: profile.nickname,
-                email: profile.email,
-                authId: profile.sub,
-                role,
-                teams: groups.map(g => g.name)
-              })
-            );
-          });
-        });
-      } else if (this.props.user.error.status === 404) {
-        // so if a user was not found in our zoom backend after signing in ^
-        // we add it as a new user
-
-        // but first we get them user roles and groups, cause they need to be retrieved
-        // in a very weird way
-        auth0Client.getUserRole().then(role => {
-          auth0Client.getUserGroup().then(groups => {
-            const profile = auth0Client.getProfile();
-
-            // and we finally make the call to add the user
-            this.props.dispatch(
-              nodeActions.addUserRequest({
-                username: profile.nickname,
-                email: profile.email,
-                authId: profile.sub,
-                role,
-                avatar: profile.picture,
-                firstName: get(
-                  profile['https://auth.nyuki.io_user_metadata'],
-                  'firstName',
-                  ''
-                ),
-                lastName: get(
-                  profile['https://auth.nyuki.io_user_metadata'],
-                  'lastName',
-                  ''
-                ),
-                teams: groups.map(g => g.name)
-              })
-            );
-          });
-        });
-      }
+    if (
+      !isEqual(this.props.user, prevProps.user) &&
+      this.props.user &&
+      this.props.user.authId
+    ) {
+      this.props.dispatch(getUserRequest({ authId: this.props.user.authId }));
+      this.setState({
+        currentEnv: new Environment({
+          network: Network.create(this.fetchQuery),
+          store: new Store(new RecordSource())
+        })
+      });
     }
+  };
+
+  fetchQuery = (operation, variables) => {
+    let url = `${process.env.REACT_APP_GRAPHQL_HOST}/public-graphql/`;
+    let headers = {
+      'Content-Type': 'application/json'
+    };
+    if (get(this.props.user, 'idToken', null)) {
+      url = `${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`;
+      headers = {
+        Authorization: `Bearer ${this.props.user.idToken}`,
+        'Content-Type': 'application/json'
+      };
+    }
+    return fetch(url, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        query: operation.text,
+        variables
+      })
+    }).then(response => {
+      return response.json();
+    });
   };
 
   render = () => {
     return (
       <JssProvider generateClassName={generateClassName}>
         <MuiThemeProvider theme={theme}>
-          <Grommet theme={ZoomTheme}>
+          <Grommet theme={ZoomTheme} style={{ height: '100%' }}>
             <QueryRenderer
-              environment={modernEnvironment}
+              environment={this.state.currentEnv}
               query={graphql`
                 query AppQuery {
                   ...ExplorePanelMediator_dropDownData
                   ...VizPaneMediator_dropDownData
                   ...HomeModuleMediator_indicatorAggregations
-                  ...VisualizerModuleMediator_indicatorAggregations
                   ...CountryDetailMediator_indicatorAggregations
                   ...MetaDataMediator_dropDownData
                   ...CorrectErrorsMediator_fileCorrection
@@ -194,21 +166,15 @@ class App extends React.Component {
                     <Router>
                       <React.Fragment>
                         <CookieNotice />
-
-                        {/* todo: replace toasts with material-ui snackbar https://material-ui.com/demos/snackbars/ */}
-                        <ToastsContainer
-                          store={ToastsStore}
-                          position={ToastsContainerPosition.TOP_CENTER}
-                        />
                         <AppBar
                           toggleSideBar={() =>
                             this.setState({
                               showSidebar: !this.state.showSidebar
                             })
                           }
-                          auth0Client={auth0Client}
                         />
                         <MainMenuDrawer
+                          user={this.props.user}
                           auth0Client={auth0Client}
                           open={this.state.showSidebar}
                           toggleSideBar={() =>
@@ -224,8 +190,14 @@ class App extends React.Component {
                     </Router>
                   );
                 }
-                return <div>Loading</div>;
+                if (error) {
+                  return (
+                    <div>{get(error, 'source.errors[0].message', '')}</div>
+                  );
+                }
+                return <div data-cy="loader2">Loading</div>;
               }}
+              operation
             />
           </Grommet>
         </MuiThemeProvider>
@@ -236,9 +208,9 @@ class App extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    userUpdated: state.userUpdated,
     userAdded: state.userAdded,
-    user: state.user
+    user: state.currentUser.data,
+    userUpdated: state.userUpdated
   };
 };
 

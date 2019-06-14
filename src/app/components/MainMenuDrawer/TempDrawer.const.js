@@ -1,9 +1,6 @@
 import React from 'react';
-import EditorTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/EditorTab';
-import IconFilter from 'assets/icons/toolpanel/IconFilter';
 import IconHome from 'assets/icons/IconHome';
 import IconCharts from 'assets/icons/IconCharts';
-import IconClose from 'assets/icons/IconClose';
 import IconAbout from 'assets/icons/IconAbout';
 
 const pathPrefix = '/';
@@ -40,7 +37,7 @@ export const data = [
     path: `${pathPrefix}iati`,
     icon: <IconCharts />,
     env: 'development',
-    atype: 'private'
+    type: 'private'
   },
   //////////////////////////////////////////////////////////////////////////////
   // DATA MAPPER

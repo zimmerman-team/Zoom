@@ -4,17 +4,13 @@ import PropTypes from 'prop-types';
 /* components */
 import {
   EditUserForm,
-  // DropDownContainer,
-  // DropDownLabel,
   Message
-  // Container
 } from 'modules/UserManagement/EditUser/EditUserModule.styles';
 
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';
 import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
-
 // import userManagementMockData from '__mocks__/userManagementMock';
 import theme from 'theme/Theme';
 // import ZoomSelect from 'components/Select/ZoomSelect';
@@ -59,7 +55,10 @@ const EditUserModule = props => {
     : 'No changed detected.';
 
   return (
-    <ModuleFragment title={props.viewOnly ? 'View user' : 'Edit user'}>
+    <ModuleFragment
+      paddingTop="65px"
+      title={props.viewOnly ? 'View user' : 'Edit user'}
+    >
       <EditUserForm onSubmit={props.submitForm}>
         {/* first name field */}
         <InputField

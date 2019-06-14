@@ -1,17 +1,16 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { LoginForm } from 'components/SideBar/comps/LoginForm/LoginForm';
-
 /* Components */
 import IconSignIn from 'assets/icons/IconSignIn';
 import {
   ComponentBase,
-  LoginHeader,
-  TextField,
   FormButton,
-  LoginHeaderLabel,
   InfoText,
-  Link
+  Link,
+  LoginHeader,
+  LoginHeaderLabel,
+  TextField
 } from './LoginForm.styles';
 import ForgetPassword from '../ForgetPassword/ForgetPassword';
 

@@ -7,6 +7,10 @@ const general = require('./generalResponse');
 const Dataset = require('../models/Dataset');
 const User = require('../models/User');
 
+const consts = require('../config/consts');
+
+const roles = consts.roles;
+
 const DatasetApi = {
   // gets data set, if its the owners data set
   getDataset: (req, res) => {
@@ -41,6 +45,46 @@ const DatasetApi = {
             if (setError) general.handleError(res, setError);
             else res.json(dataset);
           });
+      }
+    });
+  },
+
+  // basically gets the dataset IDs of the user mapped out datasets
+  // and of the datasets that have been shared with this users team
+  // it also returns the datasetIds which are available to the
+  // public, to everybody.
+  getDatasetIds: (req, res) => {
+    const { authId } = req.query;
+
+    User.findOne({ authId }, (error, author) => {
+      if (error) {
+        general.handleError(res, error);
+      } else if (!author) {
+        general.handleError(res, 'User not found', 404);
+      } else {
+        Dataset.find(
+          {
+            $or: [
+              {
+                author
+              },
+              {
+                teams: { $elemMatch: { $in: author.teams } }
+              },
+              {
+                public: 'a'
+              }
+            ]
+          },
+          'datasetId',
+          (setErrors, dataSets) => {
+            if (setErrors) {
+              general.handleError(res, setErrors);
+            } else {
+              res.json(dataSets);
+            }
+          }
+        );
       }
     });
   },
@@ -90,7 +134,11 @@ const DatasetApi = {
       if (error) general.handleError(res, error);
       else if (!acc) general.handleError(res, 'User not found', 404);
       else {
-        if (acc.role === 'Administrator' || acc.role === 'Super admin') {
+        if (
+          acc.role === roles.admin ||
+          acc.role === roles.superAdm ||
+          acc.role === roles.mod
+        ) {
           const dataset = new Dataset({
             datasetId: data.datasetId,
             author: acc,
@@ -101,9 +149,12 @@ const DatasetApi = {
           });
 
           dataset.save(err => {
-            if (err) general.handleError(res, err);
-
-            res.json({ message: 'dataset saved' });
+            if (err) {
+              console.log('err', error);
+              general.handleError(res, err);
+            } else {
+              res.json({ message: 'dataset saved' });
+            }
           });
         } else {
           general.handleError(res, 'Unauthorized');
@@ -120,8 +171,9 @@ const DatasetApi = {
       if (error) general.handleError(res, error);
       else if (!author) general.handleError(res, 'User not found', 404);
       else if (
-        author.role === 'Administrator' ||
-        author.role === 'Super admin'
+        author.role === roles.admin ||
+        author.role === roles.superAdm ||
+        author.role === roles.mod
       ) {
         Dataset.findOne(
           { author, datasetId: data.datasetId },

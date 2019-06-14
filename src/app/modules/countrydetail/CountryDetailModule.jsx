@@ -2,19 +2,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import theme from 'theme/Theme';
 import { Helmet } from 'react-helmet';
 
 import CountryInfo from 'modules/countrydetail/fragments/CountryInfo/CountryInfo';
 import HumanRights from 'modules/countrydetail/fragments/HumanRights';
-import CivicSpace from 'modules/countrydetail/fragments/CivicSpace';
+import CivicSpace from 'modules/countrydetail/fragments/CivicSpace/CivicSpace';
 import AidsEpidemic from 'modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic';
 import EconomicIndicators from 'modules/countrydetail/fragments/EconomicIndicators';
 import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTransactions';
 import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';
 import Projects from 'modules/countrydetail/fragments/Projects/Projects';
-
 /* utils */
 import { capitalize } from './CountryDetailModule.utilis';
 
@@ -64,6 +63,8 @@ const propTypes = {
       id: PropTypes.string
     })
   ),
+  ecoIndicatorsData: PropTypes.arrayOf(PropTypes.shape({})),
+  ecoChartKeys: PropTypes.arrayOf(PropTypes.shape({})),
   projectsLoading: PropTypes.bool,
   projectSort: PropTypes.string,
   changeSortBy: PropTypes.func,
@@ -81,6 +82,7 @@ const defaultProps = {
   },
   countryName: '',
   infoBarData: [],
+  ecoIndicatorsData: [],
   aidsLineChartData: [],
   projectsLoading: false,
   projectSort: '',
@@ -115,10 +117,16 @@ const CountryDetailModule = props => {
       />
 
       {/* Fragment 3: economic indicators */}
-      <EconomicIndicators />
+      <EconomicIndicators
+        data={props.ecoIndicatorsData}
+        chartKeys={props.ecoChartKeys}
+      />
 
       {/* Fragment 4: civic space */}
-      <CivicSpace background={theme.color.zoomGreyZero} />
+      <CivicSpace
+        value={props.civicSpace}
+        background={theme.color.zoomGreyZero}
+      />
 
       {/* Fragment 5: human rights */}
       <HumanRights />

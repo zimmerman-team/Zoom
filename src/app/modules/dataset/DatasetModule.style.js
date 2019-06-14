@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import theme from 'theme/Theme';
 
 export const ButtonContainer = styled(Box)`
@@ -19,6 +19,10 @@ export const ModuleSection = styled.div`
   justify-content: center;
   margin-top: auto;
   padding: 20px 0;
+`;
+
+export const TopModuleSection = styled(ModuleSection)`
+  margin-top: 40px;
 `;
 
 export const ModuleContent = styled.div`

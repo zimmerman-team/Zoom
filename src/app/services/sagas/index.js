@@ -5,12 +5,19 @@ import * as api from 'services/index';
 import * as oipaActions from 'services/actions/oipa';
 import * as generalActions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
+import * as authNodeActions from 'services/actions/authNodeBackend';
 
 export function* uploadRequest(action) {
   try {
-    const response = yield call(api.uploadRequest, action.values);
+    console.log(action);
+    const response = yield call(
+      api.uploadRequest,
+      action.values,
+      action.idToken
+    );
     yield put(actions.uploadSuccess(response));
   } catch (error) {
+    console.log(error);
     yield put(actions.uploadFailed(error));
   }
 }
@@ -510,8 +517,242 @@ export function* emptyChartTrashRequest(action) {
   }
 }
 
+export function* getCurrentUserRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getUserFromAuth',
+      values: action.values,
+      headers: action.headers
+    });
+    yield put(authNodeActions.getCurrentUserSuccess(response.data));
+  } catch (error) {
+    yield put(
+      authNodeActions.getCurrentUserFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* getAllUsersRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getAllUsers',
+      values: action.values,
+      headers: action.headers
+    });
+    yield put(authNodeActions.getAllUsersSuccess(response.data));
+  } catch (error) {
+    yield put(
+      authNodeActions.getAllUsersFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* getRolesRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getUserRoles',
+      values: action.values,
+      headers: action.headers
+    });
+    yield put(authNodeActions.getRolesSuccess(response.data));
+  } catch (error) {
+    yield put(
+      authNodeActions.getRolesFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* getGroupsRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getUserGroups',
+      values: action.values,
+      headers: action.headers
+    });
+    yield put(authNodeActions.getGroupsSuccess(response.data));
+  } catch (error) {
+    yield put(
+      authNodeActions.getGroupsFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* getGroupRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getGroup',
+      values: action.values,
+      headers: action.headers
+    });
+    yield put(authNodeActions.getGroupSuccess(response.data));
+  } catch (error) {
+    yield put(
+      authNodeActions.getGroupFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* editGroupRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'editGroup',
+      values: action.values,
+      headers: action.headers
+    });
+    yield put(authNodeActions.editGroupSuccess(response.data));
+  } catch (error) {
+    yield put(
+      authNodeActions.editGroupFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* getAuthUserRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getUserFromAuth',
+      values: action.values,
+      headers: action.headers
+    });
+    yield put(authNodeActions.getAuthUserSuccess(response.data));
+  } catch (error) {
+    yield put(
+      authNodeActions.getAuthUserFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* addAuthUserRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'addUser',
+      values: action.values,
+      headers: action.headers
+    });
+    yield put(authNodeActions.addAuthUserSuccess(response.data));
+  } catch (error) {
+    yield put(
+      authNodeActions.addAuthUserFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* deleteAuthUserRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendDeleteRequest, {
+      endpoint: 'deleteUser',
+      values: action.values,
+      headers: action.headers
+    });
+    yield put(authNodeActions.deleteAuthUserSuccess(response.data));
+  } catch (error) {
+    yield put(
+      authNodeActions.deleteAuthUserFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* editAuthUserRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'editUser',
+      values: action.values,
+      headers: action.headers
+    });
+    yield put(authNodeActions.editAuthUserSuccess(response.data));
+  } catch (error) {
+    yield put(
+      authNodeActions.editAuthUserFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* addAuthGroupRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendPostRequest, {
+      endpoint: 'addGroup',
+      values: action.values,
+      headers: action.headers
+    });
+    yield put(authNodeActions.addAuthGroupSuccess(response.data));
+  } catch (error) {
+    yield put(
+      authNodeActions.addAuthGroupFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* deleteAuthGroupRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendDeleteRequest, {
+      endpoint: 'deleteGroup',
+      values: action.values,
+      headers: action.headers
+    });
+    yield put(authNodeActions.deleteAuthGroupSuccess(response.data));
+  } catch (error) {
+    yield put(
+      authNodeActions.deleteAuthGroupFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
+export function* getDatasetIdsRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getDatasetIds',
+      values: action.values
+    });
+    yield put(nodeActions.getDatasetIdsSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.getDatasetIdsFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('GET_DATASET_IDS_REQUEST', getDatasetIdsRequest),
     takeLatest('EMPTY_CHART_TRASH_REQUEST', emptyChartTrashRequest),
     takeLatest('ALL_ARCHIVED_CHARTS_REQUEST', allArchivedChartsRequest),
     takeLatest('GET_PUBLIC_CHART_REQUEST', getPublicChartRequest),
@@ -557,7 +798,19 @@ function* sagas() {
       'UPDATE_TEAM_AND_USERS_OF_IT__REQUEST',
       updateTeamAndUsersOfItRequest
     ),
-    takeLatest('DELETE_GROUP_REQUEST', deleteTeamRequest)
+    takeLatest('DELETE_GROUP_REQUEST', deleteTeamRequest),
+    takeLatest('GET_CURRENT_USER_REQUEST', getCurrentUserRequest),
+    takeLatest('GET_ALL_USERS_REQUEST', getAllUsersRequest),
+    takeLatest('GET_ROLES_REQUEST', getRolesRequest),
+    takeLatest('GET_GROUPS_REQUEST', getGroupsRequest),
+    takeLatest('GET_GROUP_REQUEST', getGroupRequest),
+    takeLatest('EDIT_GROUP_REQUEST', editGroupRequest),
+    takeLatest('GET_AUTH_USER_REQUEST', getAuthUserRequest),
+    takeLatest('ADD_AUTH_USER_REQUEST', addAuthUserRequest),
+    takeLatest('DELETE_AUTH_USER_REQUEST', deleteAuthUserRequest),
+    takeLatest('EDIT_AUTH_USER_REQUEST', editAuthUserRequest),
+    takeLatest('ADD_AUTH_GROUP_REQUEST', addAuthGroupRequest),
+    takeLatest('DELETE_AUTH_GROUP_REQUEST', deleteAuthGroupRequest)
   ];
 }
 

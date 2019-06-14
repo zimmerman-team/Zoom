@@ -2,13 +2,13 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
-
 /* components */
 import EditUserModule from 'modules/UserManagement/EditUser/EditUserModule';
-
 /* actions */
-import { updateUserRequest } from 'services/actions/nodeBackend';
-
+import {
+  getAuthUserRequest,
+  editAuthUserRequest
+} from 'services/actions/authNodeBackend';
 /* utils */
 import isEqual from 'lodash/isEqual';
 
@@ -24,7 +24,33 @@ class EditUserMediator extends React.Component {
   };
 
   componentDidMount = () => {
-    this.props.auth0Client.getUser(this.props.match.params.userId, this);
+    this.props.dispatch(
+      getAuthUserRequest(
+        {
+          userId: this.props.match.params.userId
+        },
+        { Authorization: `Bearer ${this.props.user.idToken}` }
+      )
+    );
+  };
+
+  componentDidUpdate = prevProps => {
+    // Get user from back-end through auth0
+    if (
+      !isEqual(this.props.loadedUser, prevProps.loadedUser) &&
+      this.props.loadedUser.data
+    ) {
+      this.setState({
+        email: this.props.loadedUser.data.email,
+        firstName: this.props.loadedUser.data.firstName,
+        lastName: this.props.loadedUser.data.lastName,
+        initialData: {
+          email: this.props.loadedUser.data.email,
+          firstName: this.props.loadedUser.data.firstName,
+          lastName: this.props.loadedUser.data.lastName
+        }
+      });
+    }
   };
 
   changeFirstName = e => {
@@ -41,20 +67,17 @@ class EditUserMediator extends React.Component {
 
   submitForm = e => {
     e.preventDefault();
-    this.props.auth0Client.editUser(
-      this.props.match.params.userId,
-      this.state.firstName,
-      this.state.lastName,
-      this.state.email,
-      this,
-      () =>
-        this.props.dispatch(
-          updateUserRequest({
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            email: this.state.email
-          })
-        )
+    this.props.dispatch(
+      editAuthUserRequest(
+        {
+          adminId: this.props.user.authId,
+          userId: this.props.match.params.userId,
+          email: this.state.email,
+          name: this.state.firstName,
+          surname: this.state.lastName
+        },
+        { Authorization: `Bearer ${this.props.user.idToken}` }
+      )
     );
   };
 
@@ -74,7 +97,7 @@ class EditUserMediator extends React.Component {
       <EditUserModule
         viewOnly={this.props.viewOnly}
         email={this.state.email}
-        success={this.state.success}
+        success={this.props.editUser.success}
         secondaryInfoMessage={this.state.secondaryInfoMessage}
         errorMessage={this.state.errorMessage}
         lastName={this.state.lastName}
@@ -91,7 +114,9 @@ class EditUserMediator extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    userToEdit: state.userToEdit
+    user: state.currentUser.data,
+    loadedUser: state.loadedUser,
+    editUser: state.editUser
   };
 };
 

@@ -4,33 +4,28 @@
 import React from 'react';
 import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
-import { ToastsStore } from 'react-toasts';
 
 /* mutations */
 import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
 import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
 import FileValidationMutation from 'mediators/DataMapperMediators/mutations/FileValidation';
-
 /* consts */
 import { step1InitialData } from '__consts__/DataMapperStepConsts';
-import { uploadInitialstate } from '__consts__/UploadMediatorConst';
-
 /* actions */
 import * as actions from 'services/actions';
 import * as generalActions from 'services/actions/general';
-
 /* components */
 import UploadStep from 'modules/datamapper/fragments/UploadStep/UploadStep';
 import { SimpleErrorText } from 'components/sort/Misc';
-
 /* utils */
 import isEqual from 'lodash/isEqual';
 import {
-  formatOverviewData,
+  formatManData,
   formatModelOptions,
-  formatManData
+  formatOverviewData
 } from './UploadMediator.util';
 import { formatErrorColumns } from 'mediators/DataMapperMediators/ManualMappingMediator.util';
+import Snackbar from '../../../components/Snackbar/Snackbar';
 
 const propTypes = {
   dataSource: PropTypes.shape({
@@ -113,6 +108,13 @@ class UploadMediator extends React.Component {
     this.afterFileInput = this.afterFileInput.bind(this);
   }
 
+  componentDidMount() {
+    this.setState({
+      openSnackbar: false,
+      errorMessage: ''
+    });
+  }
+
   componentDidUpdate(prevProps) {
     if (
       !isEqual(this.props.upload.data, prevProps.upload.data) &&
@@ -129,11 +131,12 @@ class UploadMediator extends React.Component {
   }
 
   handleSourceCompleted(response) {
-    if (response)
+    if (response) {
       this.setState(
         { sourceId: response.fileSource.entryId },
         this.addMetaData
       );
+    }
   }
 
   handleSourceError(error) {
@@ -271,8 +274,9 @@ class UploadMediator extends React.Component {
     // otherwise we always use an existing file source from the first filesource list
     // to just be able to upload the file for following steps
     // more explenation about this step is above the class name
-    if (this.props.stepData.metaData.fileSources.length <= 0)
+    if (this.props.stepData.metaData.fileSources.length <= 0) {
       this.addDataSource(this.props.stepData.metaData.dataSource.value);
+    }
     // otherwise we just add the file to the first source
     else {
       this.setState(
@@ -296,43 +300,50 @@ class UploadMediator extends React.Component {
     // we save the uploaded file in state
     const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
 
-    const fileType = /[.]/.exec(file.name) ? /[^.]+$/.exec(file.name) : [''];
+    if (file) {
+      const fileType = /[.]/.exec(file.name) ? /[^.]+$/.exec(file.name) : [''];
 
-    if (fileType[0] !== 'csv') {
-      ToastsStore.error(
-        <SimpleErrorText> Only csv files are accepted </SimpleErrorText>
-      );
-      this.setState({ url: undefined });
-    } else if (file) {
-      this.setState({ file });
-      // and we upload the file to the server
-      const values = new FormData();
-      values.append('file', file);
-      this.props.dispatch(actions.uploadRequest(values));
-      // we also reset the manMapData when a new file is uploaded
-      // so that the loading icon would initiate
-      this.setState({ file }, this.afterFileUpload);
+      if (fileType[0] !== 'csv') {
+        this.setState({ openSnackbar: true });
+        this.setState({ errorMessage: 'Only csv files are accepted' });
+        this.setState({ url: undefined });
+      } else {
+        this.setState({ file });
+        // and we upload the file to the server
+        const values = new FormData();
+        values.append('file', file);
+        this.props.dispatch(
+          actions.uploadRequest(values, this.props.user.idToken)
+        );
+        // we also reset the manMapData when a new file is uploaded
+        // so that the loading icon would initiate
+        this.setState({ file }, this.afterFileUpload);
+      }
     } else {
-      ToastsStore.error(
-        <SimpleErrorText>
-          Some error uploading the file occurred
-        </SimpleErrorText>
-      );
+      this.setState({ openSnackbar: true });
+      this.setState({ errorMessage: 'Some error uploading the file occurred' });
     }
   }
 
   render() {
     return (
-      <UploadStep
-        loading={
-          this.state.file.name &&
-          (!this.props.stepData.manMapData ||
-            this.props.stepData.manMapData.length === 0)
-        }
-        error={this.state.url === undefined}
-        file={this.state.file}
-        handleFileUpload={this.handleFileUpload}
-      />
+      <React.Fragment>
+        <Snackbar
+          message={this.state.errorMessage}
+          open={this.state.openSnackbar}
+          onClose={() => this.setState({ openSnackbar: false })}
+        />
+        <UploadStep
+          loading={
+            this.state.file.name &&
+            (!this.props.stepData.manMapData ||
+              this.props.stepData.manMapData.length === 0)
+          }
+          error={this.state.url === undefined}
+          file={this.state.file}
+          handleFileUpload={this.handleFileUpload}
+        />
+      </React.Fragment>
     );
   }
 }
@@ -343,6 +354,7 @@ UploadMediator.defaultProps = defaultProps;
 const mapStateToProps = state => {
   return {
     upload: state.upload,
+    user: state.currentUser.data,
     stepData: state.stepData.stepzData
   };
 };

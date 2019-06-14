@@ -24,8 +24,9 @@ export function checkEmptyFields(manMapData, mapReqFields) {
         !find(manMapData, ['zoomModel', field]) &&
         (!find(manMapData, ['zoomModel', 'Longitude']) ||
           !find(manMapData, ['zoomModel', 'Latitude']))
-      )
+      ) {
         emptyFields.push(field);
+      }
     } else if (!find(manMapData, ['zoomModel', field])) emptyFields.push(field);
   });
 

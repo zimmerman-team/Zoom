@@ -6,17 +6,20 @@ import {
   formatCountryCenterData,
   formatCountryLayerData,
   formatCountryParam,
-  updatePercentiles,
-  formatLongLatData
+  formatLongLatData,
+  updatePercentiles
 } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.utils';
 import HomeModule from 'modules/home/HomeModule';
 import PropTypes from 'prop-types';
-
 /* consts */
 import { initialState } from 'mediators/ModuleMediators/HomeModuleMediator/HomeModuleMediator.consts';
-import generalInitial, { initIndItem } from '__consts__/InitialChartDataConst';
+import generalInitial from '__consts__/InitialChartDataConst';
 import { connect } from 'react-redux';
 import * as actions from 'services/actions/general';
+import { geoTypes } from '__consts__/GeolocationConst';
+import initialPaneState from '__consts__/InitialPaneDataConst';
+import paneTypes from '__consts__/PaneTypesConst';
+import * as nodeActions from 'services/actions/nodeBackend';
 
 const propTypes = {
   indicatorAggregations: PropTypes.shape({
@@ -107,6 +110,7 @@ class HomeModuleMediator extends Component {
     this.selectCountry = this.selectCountry.bind(this);
     this.selectRegion = this.selectRegion.bind(this);
     this.resetAll = this.resetAll.bind(this);
+    this.subIndAggrToggle = this.subIndAggrToggle.bind(this);
     this.getCountriesByRegion = this.getCountriesByRegion.bind(this);
   }
 
@@ -115,7 +119,9 @@ class HomeModuleMediator extends Component {
       !isEqual(
         this.props.indicatorAggregations,
         prevProps.indicatorAggregations
-      )
+      ) ||
+      this.state.subIndAggr1 !== prevState.subIndAggr1 ||
+      this.state.subIndAggr2 !== prevState.subIndAggr2
     ) {
       this.updateIndicators();
     }
@@ -127,17 +133,59 @@ class HomeModuleMediator extends Component {
     ) {
       this.refetch();
     }
+
+    // and once the subindicators are refetched we select the first one
+    if (
+      !isEqual(this.state.subIndicators1, prevState.subIndicators1) &&
+      this.state.subIndicators1.length > 0
+    ) {
+      // and we do it like this because when a new indicator is selected
+      // the selected sub indicators might be 0
+      // and ofcourse refetch
+      this.setState(
+        {
+          selectedSubInd1: [this.state.subIndicators1[0].value],
+          // and we set indSelectedIndex to -1 cause the selected
+          // indicators subindicator dropdown has already been opened
+          // and cause we use this index to control the dropdown opening
+          indSelectedIndex: -1
+        },
+        this.refetch
+      );
+    }
+
+    if (
+      !isEqual(this.state.subIndicators2, prevState.subIndicators2) &&
+      this.state.subIndicators2.length > 0
+    ) {
+      // and we do it like this because when a new indicator is selected
+      // the selected sub indicators might be 0
+      // and ofcourse refetch
+      this.setState(
+        {
+          selectedSubInd2: [this.state.subIndicators2[0].value],
+          // and we set indSelectedIndex to -1 cause the selected
+          // indicators subindicator dropdown has already been opened
+          // and cause we use this index to control the dropdown opening
+          indSelectedIndex: -1
+        },
+        this.refetch
+      );
+    }
   }
 
   componentWillUnmount() {
+    // AAAND when this component unmounts we reset the chart and pane variables in redux
+
+    this.props.dispatch(
+      actions.storeChartDataRequest({
+        ...initialState
+      })
+    );
+
     this.props.dispatch(
       actions.storePaneDataRequest({
-        allCountries: [],
-        allRegions: [],
-        selectedSources: [],
-        yearRange: '1992,2018',
-        subIndicators1: [],
-        subIndicators2: []
+        ...initialPaneState
       })
     );
   }
@@ -170,23 +218,23 @@ class HomeModuleMediator extends Component {
     // TODO: make this work differently, this is currently i quick and dirty fix
     if (
       this.props.indicatorAggregations.indicators1[0] &&
-      this.props.indicatorAggregations.indicators1[0].geolocationTag &&
-      this.props.indicatorAggregations.indicators1[0].geolocationTag.indexOf(
-        ','
-      ) !== -1 &&
-      /\d/.test(this.props.indicatorAggregations.indicators1[0].geolocationTag)
+      this.props.indicatorAggregations.indicators1[0].geolocationType &&
+      this.props.indicatorAggregations.indicators1[0].geolocationType ===
+        geoTypes.pointBased
     ) {
       longLatData = formatLongLatData(
         this.props.indicatorAggregations.indicators1,
         this.state.selectedInd1,
-        this.state.selectedSubInd1
+        this.state.selectedSubInd1,
+        this.state.subIndAggr1
       );
       longLatSubind = this.state.selectedSubInd1.join(', ');
     } else {
       countryLayerData = formatCountryLayerData(
         this.props.indicatorAggregations.indicators1,
         this.state.selectedInd1,
-        this.state.selectedSubInd1
+        this.state.selectedSubInd1,
+        this.state.subIndAggr1
       );
     }
 
@@ -205,21 +253,23 @@ class HomeModuleMediator extends Component {
       longLatData = formatLongLatData(
         this.props.indicatorAggregations.indicators2,
         this.state.selectedInd2,
-        this.state.selectedSubInd2
+        this.state.selectedSubInd2,
+        this.state.subIndAggr2
       );
       longLatSubind = this.state.selectedSubInd2.join(', ');
     } else {
       countryCircleData = formatCountryCenterData(
         this.props.indicatorAggregations.indicators2,
         this.state.selectedInd2,
-        this.state.selectedSubInd2
+        this.state.selectedSubInd2,
+        this.state.subIndAggr2
       );
     }
 
     const data = [];
 
     if (countryLayerData.features && countryLayerData.features.length > 0) {
-      updatePercentiles(countryLayerData, f => f.properties.value);
+      updatePercentiles(countryLayerData);
 
       data.push({
         type: 'layer',
@@ -335,6 +385,7 @@ class HomeModuleMediator extends Component {
         {
           selectedYear: val.firstYear,
           [indKey]: val.value,
+          indSelectedIndex: index,
           subIndicators1: [],
           selectedSubInd1: []
         },
@@ -358,15 +409,24 @@ class HomeModuleMediator extends Component {
       } else {
         selectedSubInd = [...this.state[subIndKey]];
         const subIndicatorIndex = selectedSubInd.indexOf(item.value);
-        if (subIndicatorIndex === -1)
+        if (subIndicatorIndex === -1) {
           // so if it doesn't exist we add it
           selectedSubInd.push(item.value);
+        }
         // if it does exist we remove it
         else selectedSubInd.splice(subIndicatorIndex, 1);
       }
     }
 
     this.setState({ [subIndKey]: selectedSubInd }, this.refetch);
+  }
+
+  // this function basically toggles the aggregations and disaggregations
+  // of the indicator data
+  subIndAggrToggle(checked, index) {
+    const subIndKey = `subIndAggr${index + 1}`;
+
+    this.setState({ [subIndKey]: checked }, this.refetch);
   }
 
   selectYear(val) {
@@ -395,9 +455,8 @@ class HomeModuleMediator extends Component {
           // so if it doesn't exist we add it
           selectedCountryVal.push(item.value);
           selectedCountryLabel.push(item.label);
-        }
-        // if it does exist we remove it
-        else {
+        } else {
+          // if it does exist we remove it
           selectedCountryVal.splice(countryIndex, 1);
           selectedCountryLabel.splice(countryIndex, 1);
         }
@@ -415,6 +474,7 @@ class HomeModuleMediator extends Component {
     // Adding labels to selectedRegionVal would break to many things,
     // therefor chose to do it in a separate var. WET solution..
     let selectedRegionLabels = [];
+    let selectedRegionCodes = [];
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in
@@ -423,29 +483,34 @@ class HomeModuleMediator extends Component {
         item.forEach(it => {
           selectedRegionVal.push(it.value);
           selectedRegionLabels.push(it.label);
+          selectedRegionCodes.push(it.codeVal);
         });
       } else {
         selectedRegionVal = [...this.state.selectedRegionVal];
         selectedRegionLabels = [...this.state.selectedRegionLabels];
+        selectedRegionCodes = [...this.state.selectedRegionCodes];
 
-        const regionIndex = selectedRegionVal.indexOf(item.value);
+        const regionIndex = selectedRegionCodes.indexOf(item.codeVal);
 
         // so if it doesn't exist we add it
         if (regionIndex === -1) {
           selectedRegionVal.push(item.value);
           selectedRegionLabels.push(item.label);
-        }
-
-        // if it does exist we remove it
-        else {
+          selectedRegionCodes.push(item.codeVal);
+        } else {
+          // if it does exist we remove it
           selectedRegionVal.splice(regionIndex, 1);
           selectedRegionLabels.splice(regionIndex, 1);
+          selectedRegionCodes.splice(regionIndex, 1);
         }
       }
     }
 
     this.selectCountry(this.getCountriesByRegion(selectedRegionVal), true);
-    this.setState({ selectedRegionLabels, selectedRegionVal }, this.refetch);
+    this.setState(
+      { selectedRegionLabels, selectedRegionVal, selectedRegionCodes },
+      this.refetch
+    );
   }
 
   //Compares the selectedRegions with all the countries, to output only countries that are in that region.
@@ -486,20 +551,26 @@ class HomeModuleMediator extends Component {
         // so these are all of the sub-indicators
         // of the selected indicator
         subIndicators: this.state.subIndicators1,
-        selectedSubInd: this.state.selectedSubInd1
+        aggregate: this.state.subIndAggr1,
+        selectedSubInd: this.state.selectedSubInd1,
+        openSubInd: this.state.openSubInd1
       },
       {
         indicator: this.state.selectedInd2,
         // so these are all of the sub-indicators
         // of the selected indicator
         subIndicators: this.state.subIndicators2,
-        selectedSubInd: this.state.selectedSubInd2
+        aggregate: this.state.subIndAggr2,
+        selectedSubInd: this.state.selectedSubInd2,
+        openSubInd: this.state.openSubInd2
       }
     ];
 
     return (
       <HomeModule
+        subIndAggrToggle={this.subIndAggrToggle}
         selectedInd={selectedInd}
+        indSelectedIndex={this.state.indSelectedIndex}
         loading={this.state.loading}
         data={this.state.data}
         dropDownData={this.props.dropDownData}
@@ -509,6 +580,7 @@ class HomeModuleMediator extends Component {
         selectRegion={this.selectRegion}
         selectedRegionVal={this.state.selectedRegionVal}
         selectedRegionLabels={this.state.selectedRegionLabels}
+        selectedRegionCodes={this.state.selectedRegionCodes}
         selectCountry={this.selectCountry}
         selectedCountryVal={this.state.selectedCountryVal}
         selectedCountryLabel={this.state.selectedCountryLabel}
@@ -553,6 +625,7 @@ export default createRefetchContainer(
           "geolocationIso2"
           "comment"
           "geolocationPolygons"
+          "filterName"
           "valueFormatType"
         ]
         orderBy: ["indicatorName"]
@@ -570,6 +643,7 @@ export default createRefetchContainer(
         geolocationType
         geolocationPolygons
         valueFormatType
+        filterName
         date
         value
       }
@@ -581,6 +655,7 @@ export default createRefetchContainer(
           "geolocationType"
           "geolocationIso2"
           "comment"
+          "filterName"
           "geolocationCenterLongLat"
           "valueFormatType"
         ]
@@ -597,6 +672,7 @@ export default createRefetchContainer(
         comment
         geolocationTag
         geolocationType
+        filterName
         geolocationCenterLongLat
         valueFormatType
         date

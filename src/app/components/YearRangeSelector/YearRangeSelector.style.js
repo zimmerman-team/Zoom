@@ -4,7 +4,7 @@ import theme from 'theme/Theme';
 
 export const ComponentBase = styled.div`
   display: flex;
-  background-color: ${theme.color.aidsFondsWhiteOpacity};
+  background-color: inherit;
 `;
 
 export const YearLabel = styled.div`

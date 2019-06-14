@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import CountryInfo from './CountryInfo';
 // Components
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 import HorizontalBarChart from 'components/charts/barcharts/horizontal/HorizontalBarChart';
 import { SimpleText } from 'components/sort/Misc';
 import {

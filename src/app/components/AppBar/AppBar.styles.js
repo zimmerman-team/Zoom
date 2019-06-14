@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import { Box, Button, Image } from 'grommet';
+import { Box } from 'grommet/components/Box';
+import { Button } from 'grommet/components/Button';
+import { Image } from 'grommet/components/Image';
 import theme from 'theme/Theme';
 
 export const ComponentBase = styled(Box)`
@@ -9,7 +11,7 @@ export const ComponentBase = styled(Box)`
   display: flex;
   margin: 0;
   z-index: 10;
-  position: sticky;
+  position: fixed;
   top: 0;
   background-color: ${theme.color.aidsFondsWhite};
 `;

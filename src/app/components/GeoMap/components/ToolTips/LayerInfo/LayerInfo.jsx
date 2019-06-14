@@ -1,12 +1,17 @@
 import React from 'react';
+
+/* utils */
+import { truncateText } from 'components/GeoMap/components/ToolTips/ToolTip.util';
+import { formatNumber } from 'utils/genericUtils';
+
+/* styles */
 import {
   ToolTipContainer,
   ToolTipLabel,
-  ToolTipTitle,
   ToolTipText,
+  ToolTipTitle,
   ValueContainer
 } from 'components/GeoMap/components/ToolTips/ToolTip.style';
-import { formatNumber } from 'utils/genericUtils';
 
 // This component is specific for the react-map-gl, thus there's no story books
 // or unit tests for it as a seperate component
@@ -15,14 +20,7 @@ const layerInfo = hoverLayerInfo => {
     let countryName = hoverLayerInfo.properties.name;
     countryName = countryName.charAt(0).toUpperCase() + countryName.slice(1);
 
-    let nrFormat = ' ';
-
-    if (hoverLayerInfo.properties.format === 'percentage') nrFormat = ' %';
-    else if (
-      hoverLayerInfo.properties.format !== 'number' &&
-      hoverLayerInfo.properties.format
-    )
-      nrFormat = ' '.concat(hoverLayerInfo.properties.format);
+    const toolTipLabels = JSON.parse(hoverLayerInfo.properties.tooltipLabels);
 
     return (
       <ToolTipContainer
@@ -34,13 +32,24 @@ const layerInfo = hoverLayerInfo => {
       >
         <ToolTipTitle>{countryName}</ToolTipTitle>
         <ValueContainer>
-          <ToolTipLabel>
-            {hoverLayerInfo.properties.tooltipLabel}:
-            <ToolTipText>
-              {formatNumber(hoverLayerInfo.properties.value)}
-              {nrFormat}
-            </ToolTipText>
-          </ToolTipLabel>
+          {toolTipLabels.map(ttItem => {
+            let nrFormat = ' ';
+
+            if (ttItem.format === 'percentage') nrFormat = ' %';
+            else if (ttItem.format !== 'number' && ttItem.format) {
+              nrFormat = ' '.concat(ttItem.format);
+            }
+
+            return (
+              <ToolTipLabel key={ttItem.label}>
+                {truncateText(ttItem.label)}:
+                <ToolTipText>
+                  {formatNumber(ttItem.value)}
+                  {nrFormat}
+                </ToolTipText>
+              </ToolTipLabel>
+            );
+          })}
         </ValueContainer>
       </ToolTipContainer>
     );

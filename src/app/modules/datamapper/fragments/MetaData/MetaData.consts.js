@@ -9,6 +9,21 @@ export const nonSurveyChoice = [
   }
 ];
 
+export const accesibilityOptions = [
+  {
+    label: 'Private',
+    value: 'Private'
+  },
+  {
+    label: 'Team',
+    value: 'Team'
+  },
+  {
+    label: 'Public',
+    value: 'Public'
+  }
+];
+
 export const options1 = [
   {
     label: 'Yes',

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { Box, Heading } from 'grommet';
+import { Box } from 'grommet/components/Box';
+import { Heading } from 'grommet/components/Heading';
 import theme from 'theme/Theme';
 
 export const List = styled(Box)`
@@ -37,6 +38,11 @@ export const TitleContainer = styled(Heading)`
   margin-bottom: 10px;
   line-height: 1.5;
   max-width: 100%;
+
+  a {
+    text-decoration: none;
+    color: ${theme.color.aidsFondsRed};
+  }
 `;
 
 export const DateContainer = styled(Box)``;
@@ -57,7 +63,6 @@ export const SectorListItem = styled(Value)`
     content: ',';
     margin-right: 4px;
   }
-
   &:last-child {
     &:after {
       content: '';

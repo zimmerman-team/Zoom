@@ -3,12 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
-
 /* components */
 import {
   ModuleContainer,
-  ViewContainer,
-  ModuleTitle
+  ModuleTitle,
+  ViewContainer
 } from 'modules/dashboard/DashboardModule.styles';
 
 import Searchbox from 'modules/dashboard/fragments/Searchbox/Searchbox';
@@ -16,9 +15,8 @@ import GridListOptionsPane from '../dashboard/fragments/GridList/components/Grid
 import Pagination from '../../components/Pagination/Pagination';
 import GridList from '../dashboard/fragments/GridList/GridList';
 import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
-// import data from './PublicChartLibraryModule.const';
-
 import theme from 'theme/Theme';
+// import data from './PublicChartLibraryModule.const';
 
 const Box = styled.div`
   width: 100%;

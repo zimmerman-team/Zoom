@@ -26,15 +26,17 @@ export const ComponentBase = styled.div`
 `;
 
 export const GridItemHeading = styled.div`
-  font-family: ${Theme.font.zoomFontFamTwo};
-  font-size: 18px;
   line-height: 1;
-  color: ${Theme.color.aidsFondsRed};
+  font-size: 18px;
   margin-bottom: 15px;
+  color: ${Theme.color.aidsFondsRed};
+  word-break: break-word;
+  font-family: ${Theme.font.zoomFontFamTwo};
 `;
 
 export const BoxLink = styled(NavLink)`
   height: 100%;
+  width: calc(100% - 23px);
   //CSS router Link reset
   text-decoration: none;
   &:focus,

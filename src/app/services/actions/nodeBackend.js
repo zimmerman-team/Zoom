@@ -690,3 +690,35 @@ export function emptyChartTrashFailed(error) {
     error
   };
 }
+
+export const GET_DATASET_IDS_INITIAL = 'GET_DATASET_IDS_INITIAL';
+export const GET_DATASET_IDS_REQUEST = 'GET_DATASET_IDS_REQUEST';
+export const GET_DATASET_IDS_SUCCESS = 'GET_DATASET_IDS_SUCCESS';
+export const GET_DATASET_IDS_FAILED = 'GET_DATASET_IDS_FAILED';
+
+export function getDatasetIdsInitial() {
+  return {
+    type: GET_DATASET_IDS_INITIAL
+  };
+}
+
+export function getDatasetIdsRequest(values) {
+  return {
+    type: GET_DATASET_IDS_REQUEST,
+    values
+  };
+}
+
+export function getDatasetIdsSuccess(data) {
+  return {
+    type: GET_DATASET_IDS_SUCCESS,
+    data
+  };
+}
+
+export function getDatasetIdsFailed(error) {
+  return {
+    type: GET_DATASET_IDS_FAILED,
+    error
+  };
+}

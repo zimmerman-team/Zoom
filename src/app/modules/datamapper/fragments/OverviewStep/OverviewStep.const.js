@@ -1,10 +1,10 @@
 import React from 'react';
 import CellValue from 'components/ZoomTable/CellValue';
 import {
+  Cell,
   CellLine,
   CellText,
-  ColHeader,
-  Cell
+  ColHeader
 } from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
 
 const Const = {

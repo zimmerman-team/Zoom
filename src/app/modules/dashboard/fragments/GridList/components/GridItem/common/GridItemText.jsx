@@ -6,7 +6,7 @@ import Theme from 'theme/Theme';
 const ComponentBase = styled.div`
   display: flex;
   margin-bottom: 7px;
-
+  max-width: 258px;
   &:last-child {
     margin-bottom: initial;
   }

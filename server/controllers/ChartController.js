@@ -121,13 +121,13 @@ const ChartController = {
 
   // gets one user chart
   get: (req, res) => {
-    const { chartId, authId } = req.query;
+    const { chartId, authId, type } = req.query;
 
     User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
       else
-        Chart.findOne({ _id: chartId, author, archived: false })
+        Chart.findOne({ _id: chartId, author, archived: false, type })
           .populate('author')
           .exec((chartError, chart) => {
             if (chartError) general.handleError(res, chartError);
@@ -151,9 +151,9 @@ const ChartController = {
 
   // gets one public chart
   getOnePublic: (req, res) => {
-    const { chartId } = req.query;
+    const { chartId, type } = req.query;
 
-    Chart.findOne({ _id: chartId, _public: true, archived: false })
+    Chart.findOne({ _id: chartId, _public: true, archived: false, type })
       .populate('author')
       .exec((chartError, chart) => {
         if (chartError) general.handleError(res, chartError);
@@ -174,7 +174,7 @@ const ChartController = {
       });
   },
 
-  // this basically validates the user and gets all public charts
+  // this basically gets all public charts
   getPublic: (req, res) => {
     const { sortBy, pageSize, page, searchTitle } = req.query;
     Chart.countDocuments(
@@ -194,13 +194,13 @@ const ChartController = {
             archived: false,
             name: { $regex: searchTitle, $options: 'i' }
           },
-          'created last_updated teams type dataSources _id name _public'
+          'created last_updated teams type indicatorItems _id name _public'
         )
           .limit(pSize)
           .skip(p * pSize)
           .collation({ locale: 'en' })
           .sort(sort)
-          .populate('author', 'username authId')
+          .populate('author', 'username authId firstName lastName')
           .exec((chartError, charts) => {
             if (chartError) general.handleError(res, chartError);
             res.json({
@@ -234,7 +234,7 @@ const ChartController = {
                   name: { $regex: searchTitle, $options: 'i' }
                 },
                 {
-                  teams: { $all: author.teams },
+                  teams: { $elemMatch: { $in: author.teams } },
                   archived: false,
                   name: { $regex: searchTitle, $options: 'i' }
                 }
@@ -243,14 +243,17 @@ const ChartController = {
 
         Chart.find(
           query,
-          'created last_updated teams _public type dataSources _id name archived'
+          'created last_updated teams _public type indicatorItems _id name archived'
         )
           .collation({ locale: 'en' })
           .sort(sort)
           .populate('author', 'username authId firstName lastName')
           .exec((chartError, chart) => {
-            if (chartError) general.handleError(res, chartError);
-            res.json(chart);
+            if (chartError) {
+              general.handleError(res, chartError);
+            } else {
+              res.json(chart);
+            }
           });
       }
     });
@@ -283,12 +286,12 @@ const ChartController = {
       type,
       descIntro,
       chartKeys,
+      indKeys,
       indicatorItems,
       selectedSources,
       yearRange,
       selectedYear,
       selectedYears,
-      dataSources,
       _public,
       data,
       teams,
@@ -308,7 +311,6 @@ const ChartController = {
                 const chartz = new Chart({
                   name: uniqueName,
                   author,
-                  dataSources,
                   description,
                   _public,
                   teams,
@@ -318,6 +320,7 @@ const ChartController = {
                   type,
 
                   chartKeys,
+                  indKeys,
                   /* indicators/ sub-indicators of chart */
                   indicatorItems,
 
@@ -373,7 +376,6 @@ const ChartController = {
                     chart.author = author;
 
                     chart.description = description;
-                    chart.dataSources = dataSources;
 
                     chart.dataFileUrl = fileUrl;
                     chart.descIntro = descIntro;
@@ -384,6 +386,8 @@ const ChartController = {
                     chart.teams = teams;
 
                     chart.chartKeys = chartKeys;
+                    chart.indKeys = indKeys;
+
                     /* indicators/ sub-indicators of chart */
                     chart.indicatorItems = indicatorItems;
 
@@ -442,7 +446,6 @@ const ChartController = {
                 const chartz = new Chart({
                   name: uniqueName,
                   author,
-                  dataSources: chart.dataSources,
                   description: chart.description,
                   _public: chart._public,
                   teams,
@@ -452,6 +455,8 @@ const ChartController = {
                   // so the type of chart
                   type: chart.type,
 
+                  chartKeys: chart.chartKeys,
+                  indKeys: chart.indKeys,
                   /* indicators/ sub-indicators of chart */
                   indicatorItems: chart.indicatorItems,
 
@@ -459,8 +464,10 @@ const ChartController = {
                   yearRange: chart.yearRange,
 
                   selectedYear: chart.selectedYear,
+                  selectedYears: chart.selectedYears,
                   selectedCountryVal: chart.selectedCountryVal,
-                  selectedRegionVal: chart.selectedRegionVal
+                  selectedRegionVal: chart.selectedRegionVal,
+                  specOptions: chart.specOptions
                 });
 
                 chartz.save(err => {

@@ -3,15 +3,15 @@ import { shallow } from 'enzyme';
 import EditUserModule from 'modules/UserManagement/EditUser/EditUserModule';
 // Components
 import {
-  EditUserForm,
   DropDownContainer,
   DropDownLabel,
+  EditUserForm,
   SubmitButton
 } from 'modules/UserManagement/EditUser/EditUserModule.styles';
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
 import InputField from 'components/InputField/InputField';
 import FormSelect from 'components/FormSelect/FormSelect';
-import { Box } from 'grommet';
+import { Box } from 'grommet/components/Box';
 
 const wrapper = shallow(<EditUserModule />);
 

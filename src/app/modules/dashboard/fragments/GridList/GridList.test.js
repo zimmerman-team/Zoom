@@ -2,15 +2,14 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import GridList from 'modules/dashboard/fragments/GridList/GridList';
-
 /* components */
 import {
   Container,
   GridListItem,
-  GridListItemTitle,
   GridListItemRow,
   GridListItemRowLabel,
-  GridListItemRowValue
+  GridListItemRowValue,
+  GridListItemTitle
 } from 'modules/dashboard/fragments/GridList/GridList.styles';
 
 const items = [

@@ -10,11 +10,6 @@ export default [
     route: '/dashboard/data-sets'
   },
   {
-    key: 'focus-pages',
-    label: 'Focus pages',
-    route: '/dashboard/focus-pages'
-  },
-  {
     key: 'users',
     label: 'Users',
     route: '/dashboard/users'

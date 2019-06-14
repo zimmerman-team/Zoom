@@ -3,19 +3,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-
-/* mock */
-// import { LinechartMockData } from './LinechartMockData';
-
 /* consts */
 import graphKeys from '__consts__/GraphStructKeyConst';
-
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import LineChart from 'components/charts/recharts_linechart/LineChart';
-
 /* styles */
-import { FragmentBase } from '../VizContainer.style';
+import { FragmentBase } from 'modules/visualizer/sort/container/VizContainer.style';
+
+/* mock */
+// import { LinechartMockData } from './LinechartMockData';
 
 const Box = styled.div`
   width: 1024px;

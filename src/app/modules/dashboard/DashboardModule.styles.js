@@ -1,11 +1,11 @@
 import theme from 'theme/Theme';
-import { TextInput } from 'grommet';
+import { TextInput } from 'grommet/components/TextInput';
 import styled from 'styled-components';
 import { PageHeading as _PageHeading } from 'components/sort/Headings';
 
 export const ModuleContainer = styled.div`
-  padding: 0 140px;
-  min-height: 96vh;
+  padding: 40px 140px 0 140px;
+  // min-height: 96vh;
   display: flex;
   flex-direction: column;
   align-items: center;

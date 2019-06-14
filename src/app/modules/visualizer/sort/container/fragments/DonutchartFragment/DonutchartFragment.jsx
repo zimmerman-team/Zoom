@@ -3,20 +3,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-
+/* utils */
+import find from 'lodash/find';
 /* consts */
 import graphKeys from '__consts__/GraphStructKeyConst';
-
-/* styles */
-//import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
-
 /* components */
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import { ResponsivePie } from '@nivo/pie';
 import TooltipContent from 'modules/visualizer/sort/container/fragments/common/ToolTipContent';
+/* styles */
+import { FragmentBase } from 'modules/visualizer/sort/container/VizContainer.style';
 
 /* styles */
-import { FragmentBase } from '../VizContainer.style';
+//import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
 
 const Box = styled.div`
   width: 1024px;
@@ -48,18 +47,24 @@ const DonutchartFragment = props => {
           animate
           /* todo: currently indicator data is empty, needs to get data */
           data={props.indicatorData}
-          indexBy="geolocation"
           margin={{
             top: 40,
             right: 80,
             bottom: 80,
             left: 80
           }}
+          // aids related deaths (unaids) - adolescents (10 to 19) realistic estimate
           innerRadius={0.65}
           padAngle={0.7}
           cornerRadius={4}
           colors={props.donutColors}
-          colorBy="id"
+          colorBy={d => {
+            const chartItem = find(props.chartKeys, ['name', d.label]);
+            if (chartItem) {
+              return chartItem.color;
+            }
+            return '#38bcb2';
+          }}
           borderWidth={1}
           borderColor="inherit:darker(0.2)"
           enableSlicesLabels={false}
@@ -73,17 +78,21 @@ const DonutchartFragment = props => {
           motionStiffness={90}
           motionDamping={15}
           radialLabel={item => {
-            if (item.label.length > 13) {
-              return `${item.label.substr(0, 13)}...`;
+            const radLab = item.geoName || item.label;
+
+            if (radLab.length > 13) {
+              return `${radLab.substr(0, 13)}...`;
             }
-            return item.label;
+            return radLab;
           }}
           tooltip={payload => (
             <TooltipContent
+              xKey={payload.geoName}
               index={payload.id}
               color={payload.color}
               valueLabel={payload.label}
               value={payload.value}
+              format={payload.format}
             />
           )}
           // tooltipFormat={l => {

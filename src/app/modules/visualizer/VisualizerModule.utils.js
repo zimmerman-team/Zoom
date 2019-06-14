@@ -1,5 +1,4 @@
 import replace from 'lodash/replace';
-import GeoMap from 'modules/home/HomeModule';
 import React from 'react';
 
 // Forms the correct path by putting the actual code of the project, country, etc.
@@ -41,7 +40,11 @@ export function getFocus(chartType) {
   }
 }
 
-export function formatWindowTitle(chartType) {
+export function formatWindowTitle(chartType, home) {
+  if (home) {
+    return 'Zoom - Home';
+  }
+
   switch (chartType) {
     case 'focusNL':
       return 'Zoom - Create Country Focus Page NL';

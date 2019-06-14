@@ -1,6 +1,5 @@
 /* base */
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary';
 import theme from 'theme/Theme';

@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core';
+import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import Theme from '../../../theme/Theme';
 
 const body2 = {
@@ -30,6 +30,9 @@ const caption = {
 
 export default () =>
   createMuiTheme({
+    typography: {
+      useNextVariants: true
+    },
     overrides: {
       MuiTypography: {
         h6,
@@ -87,8 +90,7 @@ export default () =>
           color: `${Theme.color.aidsFondsBlue}!important`
         },
         headerCell: {
-          borderTop: `1px solid ${Theme.color.zoomGreyThirteen}`,
-          zIndex: 0
+          borderTop: `1px solid ${Theme.color.zoomGreyThirteen}`
         }
       },
       MuiTablePagination: {

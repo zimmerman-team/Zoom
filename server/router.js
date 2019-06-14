@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const cryptoJs = require('crypto-js');
+
 const jwt = require('express-jwt');
 const jwtAuthz = require('express-jwt-authz');
 const jwksRsa = require('jwks-rsa');
@@ -10,38 +12,63 @@ const ChartController = require('./controllers/ChartController');
 const UserController = require('./controllers/UserController');
 const DatasetController = require('./controllers/DatasetController');
 const EmailController = require('./controllers/EmailController');
+const AuthUserController = require('./controllers/AuthUserController');
+const AuthGroupController = require('./controllers/AuthGroupController');
+const AuthRoleController = require('./controllers/AuthRoleController');
 
-// TODO this still needs to be set up properly currently getting some error when doing an axios call
+router.use((req, res, next) => {
+  // so here basically we'll decrypt the values retrieved from the frontend
+
+  // this decrypts the get request values if there are any
+  if (
+    req.query.constructor === Object &&
+    Object.entries(req.query).length !== 0
+  ) {
+    req.query = JSON.parse(
+      cryptoJs.AES.decrypt(
+        req.query.payload.toString(),
+        process.env.REACT_APP_ENCRYPTION_SECRET
+      ).toString(cryptoJs.enc.Utf8)
+    );
+  }
+
+  // and this decrypts the post request values if there are any
+  if (
+    req.body.constructor === Object &&
+    Object.entries(req.body).length !== 0
+  ) {
+    req.body = JSON.parse(
+      cryptoJs.AES.decrypt(
+        req.body.payload.toString(),
+        process.env.REACT_APP_ENCRYPTION_SECRET
+      ).toString(cryptoJs.enc.Utf8)
+    );
+  }
+
+  next();
+});
+
 // Authentication middleware. When used, the
 // Access Token must exist and be verified against
 // the Auth0 JSON Web Key Set
-// const checkJwt = jwt({
-//   // Dynamically provide a signing key
-//   // based on the kid in the header and
-//   // the signing keys provided by the JWKS endpoint.
-//   secret: jwksRsa.expressJwtSecret({
-//     cache: true,
-//     rateLimit: true,
-//     jwksRequestsPerMinute: 200,
-//     jwksUri: `https://${
-//       process.env.REACT_APP_AUTH_CUSTOM_DOMAIN
-//     }/.well-known/jwks.json`
-//   }),
-//
-//   // Validate the audience and the issuer.
-//   audience: process.env.REACT_APP_CLIENT_ID,
-//   issuer: `${process.env.REACT_APP_AUTH_CUSTOM_DOMAIN}`,
-//   algorithms: ['RS256']
-// });
+const checkJwt = jwt({
+  // Dynamically provide a signing key
+  // based on the kid in the header and
+  // the signing keys provided by the JWKS endpoint.
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 200,
+    jwksUri: `https://${
+      process.env.REACT_APP_AUTH_CUSTOM_DOMAIN
+    }/.well-known/jwks.json`
+  }),
 
-// So this is how the call would be done on the frontend
-// axios
-//   .get('/api/getTest', {
-//     headers: {
-//       Authorization: `Bearer ${this.props.auth0Client.getIdToken()}`
-//     }
-//   })
-//   .then(result => console.log(result));
+  // Validate the audience and the issuer.
+  audience: process.env.REACT_APP_CLIENT_ID,
+  issuer: `https://${process.env.REACT_APP_AUTH_CUSTOM_DOMAIN}/`,
+  algorithms: ['RS256']
+});
 
 // so this should only be uncommented and used if you have
 // a clean database, and just need some data init
@@ -109,6 +136,8 @@ router.get('/getDataset', DatasetController.getDataset);
 
 router.get('/getOwnerDatasets', DatasetController.getOwnerDatasets);
 
+router.get('/getDatasetIds', DatasetController.getDatasetIds);
+
 router.post('/updateTeam', DatasetController.updateTeam);
 
 router.post('/updatePublic', DatasetController.updatePublic);
@@ -130,5 +159,33 @@ router.get('/sendEmail', EmailController.sendMail);
 router.get('/redirectToHome', (req, res) => {
   res.redirect(`${process.env.REACT_APP_PROJECT_URL}/home/#`);
 });
+
+router.get('/getUserGroup', checkJwt, AuthGroupController.getUserGroup);
+
+router.get('/getUserRole', checkJwt, AuthRoleController.getUserRole);
+
+router.get('/getAllUsers', checkJwt, AuthUserController.getAllUsers);
+
+router.get('/getUserGroups', checkJwt, AuthGroupController.getUserGroups);
+
+router.get('/getUserRoles', checkJwt, AuthRoleController.getUserRoles);
+
+router.post('/addUserToGroup', checkJwt, AuthGroupController.addUserToGroup);
+
+router.get('/getGroup', checkJwt, AuthGroupController.getGroup);
+
+router.post('/editGroup', checkJwt, AuthGroupController.editGroup);
+
+router.delete('/deleteGroup', checkJwt, AuthGroupController.deleteGroup);
+
+router.get('/getUserFromAuth', checkJwt, AuthUserController.getUser);
+
+router.delete('/deleteUser', checkJwt, AuthUserController.deleteUser);
+
+router.post('/editUser', checkJwt, AuthUserController.editUser);
+
+router.post('/addUser', checkJwt, AuthUserController.addUser);
+
+router.post('/addGroup', checkJwt, AuthGroupController.addGroup);
 
 module.exports = router;

@@ -24,7 +24,6 @@ const ChartSchema = new Schema(
       {
         indicator: String,
         subIndicators: [String],
-        indLabel: String,
         allSubIndicators: { type: [], default: [] },
         dataSource: String,
         aggregate: Boolean

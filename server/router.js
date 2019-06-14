@@ -136,6 +136,8 @@ router.get('/getDataset', DatasetController.getDataset);
 
 router.get('/getOwnerDatasets', DatasetController.getOwnerDatasets);
 
+router.get('/getDatasetIds', DatasetController.getDatasetIds);
+
 router.post('/updateTeam', DatasetController.updateTeam);
 
 router.post('/updatePublic', DatasetController.updatePublic);

@@ -733,8 +733,26 @@ export function* deleteAuthGroupRequest(action) {
   }
 }
 
+export function* getDatasetIdsRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getDatasetIds',
+      values: action.values
+    });
+    yield put(nodeActions.getDatasetIdsSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.getDatasetIdsFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('GET_DATASET_IDS_REQUEST', getDatasetIdsRequest),
     takeLatest('EMPTY_CHART_TRASH_REQUEST', emptyChartTrashRequest),
     takeLatest('ALL_ARCHIVED_CHARTS_REQUEST', allArchivedChartsRequest),
     takeLatest('GET_PUBLIC_CHART_REQUEST', getPublicChartRequest),

@@ -22,10 +22,7 @@ class Callback extends React.Component {
   };
 
   componentDidUpdate = prevProps => {
-    if (
-      !isEqual(prevProps.user.data, this.props.user.data) &&
-      this.props.user.data.authId
-    ) {
+    if (!isEqual(prevProps.user.data, this.props.user.data)) {
       this.props.history.replace('/dashboard/charts');
     }
   };

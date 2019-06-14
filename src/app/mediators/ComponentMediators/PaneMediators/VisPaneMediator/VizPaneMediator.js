@@ -354,7 +354,7 @@ class VizPaneMediator extends React.Component {
     if (this.props.user.data && this.props.user.data.authId) {
       refetchVars.file_EntryId_In = '-1';
 
-      if (this.props.datasetIds) {
+      if (this.props.datasetIds && this.props.datasetIds.length > 0) {
         refetchVars.file_EntryId_In = this.props.datasetIds
           .map(item => item.datasetId)
           .join(',');

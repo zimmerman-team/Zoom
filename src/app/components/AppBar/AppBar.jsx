@@ -103,6 +103,7 @@ export class AppBar extends React.Component {
         indicatorItems: this.props.chartData.selectedInd.map(indData => {
           return {
             indicator: indData.indicator,
+            indLabel: indData.indLabel,
             subIndicators: indData.selectedSubInd,
             aggregate: indData.aggregate,
             // we also need to save the all sub indicators

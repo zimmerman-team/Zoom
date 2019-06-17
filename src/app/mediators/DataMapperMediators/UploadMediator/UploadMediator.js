@@ -18,11 +18,12 @@ import * as generalActions from 'services/actions/general';
 import UploadStep from 'modules/datamapper/fragments/UploadStep/UploadStep';
 import { SimpleErrorText } from 'components/sort/Misc';
 /* utils */
+import sortBy from 'lodash/sortBy';
 import isEqual from 'lodash/isEqual';
 import {
   formatManData,
-  formatModelOptions,
-  formatOverviewData
+  formatOverviewData,
+  defModelOptions
 } from './UploadMediator.util';
 import { formatErrorColumns } from 'mediators/DataMapperMediators/ManualMappingMediator.util';
 import Snackbar from '../../../components/Snackbar/Snackbar';
@@ -163,7 +164,7 @@ class UploadMediator extends React.Component {
       this.setState(
         {
           mappingJson,
-          modelOptions: formatModelOptions(mappingJson),
+          modelOptions: sortBy(defModelOptions, ['label']),
           fileId: response.file.entryId
         },
         this.fileValidation

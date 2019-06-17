@@ -1,11 +1,150 @@
 import findIndex from 'lodash/findIndex';
 import find from 'lodash/find';
-import sortBy from 'lodash/sortBy';
 
-export const arrayOfValues = [
-  'Number Value',
-  'Percentage Value',
-  'Mixed Value'
+export const defModelOptions = [
+  { label: '-None-', value: '-None-' },
+  { label: 'Date', value: 'date', disable: ['date', 'Date Value Column'] },
+  { label: 'Filters', value: 'filters', disable: ['Filter Value Column'] },
+  {
+    label: 'Geolocation',
+    value: 'geolocation',
+    disable: ['geolocation', 'Geolocation Value Column']
+  },
+  {
+    label: 'Indicator',
+    value: 'indicator',
+    disable: ['indicator', 'Indicator Value Column']
+  },
+  { label: 'Latitude', value: 'Latitude', disable: ['Latitude'] },
+  { label: 'Legend', value: 'comment', disable: ['comment'] },
+  { label: 'Longitude', value: 'Longitude', disable: ['Longitude'] },
+  {
+    label: 'Mixed Value',
+    value: 'Mixed Value',
+    disable: [
+      'Mixed Value',
+      'Number Value',
+      'Percentage Value',
+      'Indicator Value Column',
+      'Filter Value Column',
+      'Date Value Column',
+      'Geolocation Value Column',
+      'Value_format Value Column'
+    ]
+  },
+  {
+    label: 'Number Value',
+    value: 'Number Value',
+    disable: [
+      'Mixed Value',
+      'Number Value',
+      'Indicator Value Column',
+      'Filter Value Column',
+      'Date Value Column',
+      'Geolocation Value Column',
+      'Value_format Value Column',
+      'value_format'
+    ]
+  },
+  {
+    label: 'Percentage Value',
+    value: 'Percentage Value',
+    disable: [
+      'Mixed Value',
+      'Percentage Value',
+      'Indicator Value Column',
+      'Filter Value Column',
+      'Date Value Column',
+      'Geolocation Value Column',
+      'Value_format Value Column',
+      'value_format'
+    ]
+  },
+  {
+    label: 'Value_format',
+    value: 'value_format',
+    assocModel: 'value_format',
+    disable: ['value_format', 'Value_format Value Column']
+  },
+  {
+    label: 'Indicator Value Column',
+    value: 'Indicator Value Column',
+    assocModel: 'indicator',
+    disable: [
+      'Mixed Value',
+      'Number Value',
+      'Percentage Value',
+      'Filter Value Column',
+      'Date Value Column',
+      'Geolocation Value Column',
+      'Value_format Value Column',
+      'indicator',
+      'value_format'
+    ]
+  },
+  {
+    label: 'Filter Value Column',
+    value: 'Filter Value Column',
+    assocModel: 'filters',
+    disable: [
+      'Mixed Value',
+      'Number Value',
+      'Percentage Value',
+      'Indicator Value Column',
+      'Date Value Column',
+      'Geolocation Value Column',
+      'Value_format Value Column',
+      'filters',
+      'value_format'
+    ]
+  },
+  {
+    label: 'Date Value Column',
+    value: 'Date Value Column',
+    assocModel: 'date',
+    disable: [
+      'Mixed Value',
+      'Percentage Value',
+      'Number Value',
+      'Indicator Value Column',
+      'Filter Value Column',
+      'Geolocation Value Column',
+      'Value_format Value Column',
+      'date',
+      'value_format'
+    ]
+  },
+  {
+    label: 'Geolocation Value Column',
+    value: 'Geolocation Value Column',
+    assocModel: 'geolocation',
+    disable: [
+      'Mixed Value',
+      'Number Value',
+      'Percentage Value',
+      'Indicator Value Column',
+      'Filter Value Column',
+      'Date Value Column',
+      'Value_format Value Column',
+      'geolocation',
+      'value_format'
+    ]
+  },
+  {
+    label: 'Value_format Value Column',
+    value: 'Value_format Value Column',
+    assocModel: 'value_format',
+    disable: [
+      'Mixed Value',
+      'Number Value',
+      'Percentage Value',
+      'Indicator Value Column',
+      'Filter Value Column',
+      'Date Value Column',
+      'Geolocation Value Column',
+      'value_format'
+    ]
+  }
 ];
 
 //  Note this whole types and summary data is formed in a very very weird way
@@ -85,60 +224,7 @@ export function formatOverviewData(sumString, typesString) {
   return overviewData;
 }
 
-export function formatModelOptions(dataModelHeading) {
-  let modelOptions = [];
-
-  // We push in the default label none
-  modelOptions.push({
-    label: '-None-',
-    value: '-None-'
-  });
-
-  // We push in the Longitude, for the Longitude column selection
-  modelOptions.push({
-    label: 'Longitude',
-    value: 'Longitude'
-  });
-
-  // We push in the Latitude, for the Latitude column selection
-  modelOptions.push({
-    label: 'Latitude',
-    value: 'Latitude'
-  });
-
-  // We push in the comment type seperately as we want it
-  // to have a different label
-  modelOptions.push({
-    label: 'Legend',
-    value: 'comment'
-  });
-
-  // and because we have a bunch of different types of values
-  arrayOfValues.forEach(valName => {
-    modelOptions.push({
-      label: valName,
-      value: valName
-    });
-  });
-
-  Object.keys(dataModelHeading.mapping_dict).map(key => {
-    // so since we already pushed in the only available value selections
-    // with types/formats we don't need the default value and value_format
-    if (key !== 'value' && key !== 'comment') {
-      // and now we push in the rest
-      modelOptions.push({
-        label: key.charAt(0).toUpperCase() + key.slice(1),
-        value: key
-      });
-    }
-  });
-
-  modelOptions = sortBy(modelOptions, ['label']);
-
-  return modelOptions;
-}
-
-export function formatManData(typesString, modelOptions) {
+export function formatManData(typesString) {
   const manMapData = [];
 
   // so yeah the types we retrieve from the overview step contains the actual column headers
@@ -147,7 +233,7 @@ export function formatManData(typesString, modelOptions) {
 
   // yet again this is super weird data so we form it in a weird way.
   Object.keys(types).forEach(typeKey => {
-    const modelOption = find(modelOptions, ['value', types[typeKey][0]]);
+    const modelOption = find(defModelOptions, ['value', types[typeKey][0]]);
 
     manMapData.push({
       lockedIn: false,

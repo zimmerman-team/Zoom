@@ -181,5 +181,11 @@ export function formatMapJson(mappingJson, mapData, fileId) {
 
   console.log('mapJson', mapJson);
 
+  // TODO: Try it with filters and filter headings,
+  //  cause using indicator without filter headings breaks
+  //  declaring an empty value_format exception, BUT
+  //  maybe its because i added USD$ as a value format
+  //  try 'Number'
+
   return mapJson;
 }

@@ -6,6 +6,8 @@ import * as actions from 'services/actions/general';
 /* components */
 import Stepper from 'components/Stepper/Stepper';
 import Snackbar from 'components/Snackbar/Snackbar';
+/* consts */
+import { columnValues } from 'mediators/DataMapperMediators/WrapUpMediator/WrapUpMediator.const';
 
 /* utils */
 import {
@@ -45,6 +47,7 @@ class DataMapperModule extends React.Component {
       manMapEmptyValue: false,
       manMapEmptyFields: false,
       manMapEmptyFormat: false,
+      emptyValColFormat: false,
       mapStepDisabled: false,
 
       metaDataEmptyFields: [],
@@ -206,6 +209,19 @@ class DataMapperModule extends React.Component {
           manMapEmptyFormat = true;
         }
 
+        let emptyValColFormat = false;
+
+        for (let i = 0; i < manMapData.length; i += 1) {
+          if (
+            columnValues.indexOf(manMapData[i].zoomModel) !== -1 &&
+            (!manMapData[i].label ||
+              !manMapData[i].lockedIn ||
+              manMapData[i].label.length === 0)
+          ) {
+            emptyValColFormat = true;
+          }
+        }
+
         if (
           emptyFields.length > 0 ||
           find(manMapData, item => {
@@ -215,29 +231,25 @@ class DataMapperModule extends React.Component {
             );
           })
         ) {
-          // so here we check if one of the empty manual mapping
-          // values is actually 'value' === a number for data
-          // we will not let the user populate it but just give them
-          // a message about it, cause their data needs to have a column like this
-          const emptyValue = emptyFields.indexOf('value') !== -1;
-          const manMapEmptyFields = emptyValue ? emptyFields.length > 1 : true;
+          const manMapEmptyFields = emptyFields.length > 1;
 
           stepData.manMapData = addInEmptyFieldRows(emptyFields, manMapData);
 
           props.dispatch(actions.saveStepDataRequest(stepData));
 
           return {
-            manMapEmptyValue: emptyValue,
+            emptyValColFormat,
             manMapEmptyFields,
             manMapEmptyFormat
           };
         }
         if (manMapEmptyFormat) {
-          return { manMapEmptyFormat };
+          return { manMapEmptyFormat, emptyValColFormat };
         }
         return {
           step: prevState.step + 1,
           manMapEmptyFormat,
+          emptyValColFormat,
           manMapEmptyFields: false,
           manMapEmptyValue: false
         };
@@ -277,6 +289,7 @@ class DataMapperModule extends React.Component {
         return (
           this.props.stepData.manMapData && (
             <ManMappingStep
+              emptyValColFormat={this.state.emptyValColFormat}
               emptyFormat={this.state.manMapEmptyFormat}
               emptyValue={this.state.manMapEmptyValue}
               manMapEmptyFields={this.state.manMapEmptyFields}

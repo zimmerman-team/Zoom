@@ -8,6 +8,13 @@ import GeoMap from 'components/GeoMap/GeoMap';
 /* utils */
 import { getFocus } from 'modules/visualizer/VisualizerModule.utils';
 
+/* styles */
+import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
+import theme from 'theme/Theme';
+
+/* component */
+import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
+
 const ComponentBase = styled.div`
   display: flex;
   flex-direction: column;
@@ -17,15 +24,17 @@ const ComponentBase = styled.div`
   height: ${props => props.height};
   flex-shrink: 0;
 
-  position: relative;
-  top: 16px;
   z-index: 0;
 `;
 
 const propTypes = {
-  saveViewport: PropTypes.func
+  saveViewport: PropTypes.func,
+  selectedYear: PropTypes.string,
+  selectYear: PropTypes.func
 };
 const defaultProps = {
+  selectedYear: '2005',
+  selectYear: null,
   saveViewport: null
 };
 
@@ -74,7 +83,7 @@ class GeomapFragment extends React.Component {
   render() {
     const { mode, ...otherProps } = this.props;
     return (
-      <ComponentBase height={mode ? '400px' : '100%'}>
+      <ComponentBase height={mode ? '400px' : '100%'} id="geo-map">
         <GeoMap
           chartMounted={this.props.chartMounted}
           viewport={this.props.viewport}
@@ -83,6 +92,15 @@ class GeomapFragment extends React.Component {
           {...otherProps}
           mapOptions={{ maxBounds: this.state.bounds }}
         />
+        <YearContainer
+          bottom="24px"
+          backgroundColor={theme.color.aidsFondsWhiteOpacity}
+        >
+          <CustomYearSelector
+            selectedYear={this.props.selectedYear}
+            selectYear={this.props.selectYear}
+          />
+        </YearContainer>
       </ComponentBase>
     );
   }

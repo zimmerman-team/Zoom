@@ -292,7 +292,7 @@ export class GeoMap extends Component {
   handleFullscreen() {
     const isInFullScreen = this.isInFullScreen();
 
-    const docElm = document.getElementById('home-geomap');
+    const docElm = document.getElementById('geo-map');
     if (!isInFullScreen) {
       if (docElm.requestFullscreen) {
         docElm.requestFullscreen();

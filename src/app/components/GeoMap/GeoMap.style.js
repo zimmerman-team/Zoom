@@ -3,8 +3,7 @@ import styled from 'styled-components';
 export const MapContainer = styled.div`
   width: 100%;
   height: 100%;
-  position: relative;
-  top: 16px;
+  grid-area: 1 / 1;
 `;
 
 export const NavContainer = styled.div`
@@ -39,9 +38,10 @@ export const CountyInfo = styled.div`
 `;
 
 export const ControlsContainer = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  margin: 16px 10px 0 auto;
+  grid-area: 1 / 1;
+  height: 108px;
+  width: 36px;
   z-index: 1;
   background-color: rgba(239, 239, 239, 0.72);
 `;

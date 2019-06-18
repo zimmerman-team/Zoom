@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import theme from 'theme/Theme';
 
 export const YearContainer = styled.div`
-  position: relative;
-  bottom: ${props => props.bottom};
+  height: 32px;
+  grid-area: 1 / 1;
   background-color: ${props => props.backgroundColor};
   width: calc(100% - 48px);
   max-width: 1000px;
-  margin: 0 auto;
+  margin: auto auto 32px auto;
+  z-index: 1;
 `;
 
 export const ComponentBase = styled.div`

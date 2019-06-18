@@ -2,7 +2,7 @@ module.exports = {
   roles: {
     superAdm: 'Super admin',
     admin: 'Administrator',
-    mod: 'Moderator',
+    mod: 'Data steward',
     regular: 'Regular user'
   }
 };

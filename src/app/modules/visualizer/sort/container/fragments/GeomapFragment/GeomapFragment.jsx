@@ -19,7 +19,6 @@ const ComponentBase = styled.div`
   display: grid;
   width: 100%;
   height: ${props => props.height};
-
   z-index: 0;
 `;
 

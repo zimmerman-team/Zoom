@@ -16,13 +16,9 @@ import theme from 'theme/Theme';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 
 const ComponentBase = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-items: center;
-  justify-content: center;
+  display: grid;
   width: 100%;
   height: ${props => props.height};
-  flex-shrink: 0;
 
   z-index: 0;
 `;

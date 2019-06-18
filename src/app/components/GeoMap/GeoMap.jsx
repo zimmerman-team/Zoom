@@ -331,15 +331,14 @@ export class GeoMap extends Component {
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
       <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+        <ControlsContainer>
+          <MapControls
+            onZoomIn={this.handleZoomIn}
+            onZoomOut={this.handleZoomOut}
+            onFullScreen={this.handleFullscreen}
+          />
+        </ControlsContainer>
         <MapContainer data-cy="geo-map-container">
-          <ControlsContainer>
-            <MapControls
-              onZoomIn={this.handleZoomIn}
-              onZoomOut={this.handleZoomOut}
-              onFullScreen={this.handleFullscreen}
-            />
-          </ControlsContainer>
-
           <MapGL
             {...viewport}
             {...settings}

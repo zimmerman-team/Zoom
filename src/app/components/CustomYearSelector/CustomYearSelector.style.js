@@ -8,6 +8,7 @@ export const YearContainer = styled.div`
   background-color: ${props => props.backgroundColor};
   width: calc(100% - 48px);
   max-width: 1000px;
+  margin: 0 auto;
 `;
 
 export const ComponentBase = styled.div`

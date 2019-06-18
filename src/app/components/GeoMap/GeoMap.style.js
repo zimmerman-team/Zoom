@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
 export const MapContainer = styled.div`
-  position: relative;
   width: 100%;
   height: 100%;
+  position: relative;
+  top: 16px;
 `;
 
 export const NavContainer = styled.div`
@@ -17,9 +18,9 @@ export const NavContainer = styled.div`
 `;
 
 export const LegendContainer = styled.div`
-  position: fixed;
-  left: 10px;
-  top: 40px;
+  position: absolute;
+  left: 11px;
+  top: 2px;
   display: flex;
   flex-direction: column;
   width: fit-content;

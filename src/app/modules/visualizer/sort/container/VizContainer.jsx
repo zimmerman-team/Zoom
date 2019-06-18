@@ -85,12 +85,10 @@ class VizContainer extends React.Component {
   }
 
   render() {
-    const yearBackgrCol =
+    const isGeoChart =
       this.props.chartType === chartTypes.geoMap ||
       this.props.chartType === chartTypes.focusKE ||
-      this.props.chartType === chartTypes.focusNL
-        ? theme.color.aidsFondsWhiteOpacity
-        : theme.color.aidsFondsGreyOpacity;
+      this.props.chartType === chartTypes.focusNL;
 
     const geoChartPath = this.props.home
       ? '/home'
@@ -178,21 +176,28 @@ class VizContainer extends React.Component {
             mode={this.state.preview}
           />
 
-          <YearContainer bottom="24px" backgroundColor={yearBackgrCol}>
-            {/* so the second item in the aggrOptions array is the year aggregation option*/}
-            {this.props.chartData.specOptions[graphKeys.aggregate] ===
-            aggrOptions[1].value ? (
-              <YearRangeSelector
-                selectYearRange={this.props.selectYearRange}
-                selectedYears={this.props.chartData.selectedYears}
-              />
-            ) : (
-              <CustomYearSelector
-                selectedYear={this.props.selectedYear}
-                selectYear={this.props.selectYear}
-              />
-            )}
-          </YearContainer>
+          {/*So for the geocharts we load the this component inside the
+            fragment for the fullscreen to work properly*/}
+          {!isGeoChart && !this.props.home && (
+            <YearContainer
+              bottom="24px"
+              backgroundColor={theme.color.aidsFondsGreyOpacity}
+            >
+              {/* so the second item in the aggrOptions array is the year aggregation option*/}
+              {this.props.chartData.specOptions[graphKeys.aggregate] ===
+              aggrOptions[1].value ? (
+                <YearRangeSelector
+                  selectYearRange={this.props.selectYearRange}
+                  selectedYears={this.props.chartData.selectedYears}
+                />
+              ) : (
+                <CustomYearSelector
+                  selectedYear={this.props.selectedYear}
+                  selectYear={this.props.selectYear}
+                />
+              )}
+            </YearContainer>
+          )}
         </React.Fragment>
         <PreviewTextContainer mode={this.state.preview ? 'flex' : 'none'}>
           <ContextPreview

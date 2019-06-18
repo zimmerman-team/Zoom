@@ -48,7 +48,7 @@ const defaultProps = {
   auth0Client: {},
   selectYearRange: null,
   dropDownData: {},
-  chartType: PropTypes.string,
+  chartType: 'geomap',
   chartTitle: '',
   saveViewport: null,
   home: false,
@@ -115,7 +115,10 @@ class BuilderModule extends Component {
             selectYearRange={this.props.selectYearRange}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
-            display={this.props.dataPaneOpen === paneTypes.visualizer}
+            display={
+              this.props.dataPaneOpen === paneTypes.visualizer ||
+              (this.props.home && this.props.dataPaneOpen !== paneTypes.none)
+            }
           />
 
           {!this.props.publicPage && !this.props.home && (

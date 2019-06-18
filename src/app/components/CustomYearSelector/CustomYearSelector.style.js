@@ -4,7 +4,7 @@ import theme from 'theme/Theme';
 
 export const YearContainer = styled.div`
   height: 32px;
-  grid-area: 1 / 1;
+  grid-area: 1/1;
   background-color: ${props => props.backgroundColor};
   width: calc(100% - 48px);
   max-width: 1000px;

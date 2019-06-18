@@ -13,7 +13,7 @@ const ComponentBase = styled.div`
   flex-direction: column;
 
   width: 320px;
-  height: calc(100vh - 40px);
+  height: inherit;
   background-color: white;
   box-shadow: 0 5px 7px rgba(0, 0, 0, 0.5);
 `;

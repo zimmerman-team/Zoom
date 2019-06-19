@@ -23,6 +23,7 @@ import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 
 /* style */
 import theme from 'theme/Theme';
+import initialState from '__consts__/InitialChartDataConst';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -52,6 +53,7 @@ const propTypes = {
   saveViewport: PropTypes.func,
   home: PropTypes.bool,
   mode: PropTypes.bool,
+  chartData: PropTypes.shape({}),
   context: PropTypes.bool
 };
 const defaultProps = {
@@ -60,6 +62,7 @@ const defaultProps = {
   chartKeys: [],
   saveViewport: null,
   home: false,
+  chartData: initialState,
   mode: window.location.pathname.includes('preview'),
   context: window.location.pathname.includes('context')
 };
@@ -80,7 +83,9 @@ class VizContainer extends React.Component {
     this.props.history.listen((location, action) => {
       const mode = location.pathname.includes('preview');
       const context = location.pathname.includes('context');
-      this.setState({ preview: mode, context });
+      if (this.state.preview !== mode || this.state.context !== context) {
+        this.setState({ preview: mode, context });
+      }
     });
   }
 
@@ -214,13 +219,7 @@ class VizContainer extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    chartData: state.chartData.chartData
-  };
-};
-
 VizContainer.propTypes = propTypes;
 VizContainer.defaultProps = defaultProps;
 
-export default connect(mapStateToProps)(withRouter(VizContainer));
+export default withRouter(VizContainer);

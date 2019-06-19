@@ -5,7 +5,7 @@ beforeEach(() => {
 });
 
 describe('Chartbuilder bar chart fragment e2e', function() {
-  it('Should contain /barchart in the url and map aids related deaths data', function() {
+  it('Should contain /barchart in the url and map new hiv infections data', function() {
     cy.log('**Signs in and and navigates to barchart**');
     cy.signIn();
     cy.navigateToBarchart();
@@ -13,7 +13,7 @@ describe('Chartbuilder bar chart fragment e2e', function() {
     cy.log('**URL is correct**');
     cy.url().should('include', '/visualizer/barchart');
 
-    cy.log('**Plots aids related deaths**');
+    cy.log('**Plots new hiv infections**');
     cy.wait(2000);
     cy.get(
       '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
@@ -21,7 +21,7 @@ describe('Chartbuilder bar chart fragment e2e', function() {
       .first()
       .click();
     cy.wait(2000);
-    cy.contains('aids related deaths (unaids)').click();
+    cy.contains('new hiv infections').click();
     cy.waitPageLoader();
     cy.get('[data-cy="legend-label"]').should('have.css', 'content');
 
@@ -45,9 +45,8 @@ describe('Chartbuilder bar chart fragment e2e', function() {
       .scrollIntoView()
       .trigger('mouseover', { force: true });
 
-    cy.contains('2005');
     cy.contains(
-      'aids related deaths (unaids) - adolescents (10 to 19) realistic estimate: 10000'
+      'number of new hiv infections - adolescents (10 to 19) lower bound'
     );
   });
 

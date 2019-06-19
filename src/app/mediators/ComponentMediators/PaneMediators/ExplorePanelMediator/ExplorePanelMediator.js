@@ -55,7 +55,7 @@ const indicatorQuery = graphql`
       edges {
         node {
           name
-          firstDataYear
+          lastDataYear
         }
       }
     }
@@ -226,7 +226,7 @@ class ExplorePanelMediator extends React.Component {
           return {
             label: indicator.node.name,
             value: indicator.node.name,
-            firstYear: indicator.node.firstDataYear
+            lastYear: indicator.node.lastDataYear
           };
         });
 

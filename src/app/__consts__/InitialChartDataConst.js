@@ -41,7 +41,7 @@ const initialState = {
   // and this ofcourse becomes false only when
   // actual chart data from the zoombackend has been loaded
   changesMade: true,
-  yearPeriod: formatYearParam([1992, 2018]),
+  yearPeriod: formatYearParam([1990, 2020]),
   chartMounted: false,
   authorName: 'You',
   createdDate: formatDate(today),

@@ -1,7 +1,7 @@
 const initialState = {
-  chartType: '',
+  chartType: 'geomap',
   selectedSources: [],
-  yearRange: '1992,2018',
+  yearRange: '1990,2020',
   selectedRegionLabels: [],
   selectedCountryLabels: []
 };

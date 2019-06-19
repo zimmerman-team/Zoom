@@ -4,11 +4,11 @@ import theme from 'theme/Theme';
 
 export const YearContainer = styled.div`
   position: relative;
-  bottom: ${props => props.bottom};
   background-color: ${props => props.backgroundColor};
   width: calc(100% - 48px);
   max-width: 1000px;
-  margin: 0 auto;
+  margin: 0 auto 32px auto;
+  z-index: 0;
 `;
 
 export const ComponentBase = styled.div`

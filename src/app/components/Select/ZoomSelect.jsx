@@ -155,7 +155,7 @@ class ZoomSelect extends React.Component {
   onSearchChange(e) {
     this.setState({ searchWord: e.target.value }, () => {
       const data = filter(this.props.data, item =>
-        item.label.includes(this.state.searchWord.toLowerCase())
+        item.label.toLowerCase().includes(this.state.searchWord.toLowerCase())
       );
       if (this.props.categorise) {
         this.categorise(data);

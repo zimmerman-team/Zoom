@@ -48,4 +48,5 @@ export const ControlsContainer = styled.div`
 export const GeoYearContainer = styled(YearContainer)`
   top: calc(100% - 186px);
   margin: 0 auto;
+  z-index: 1;
 `;

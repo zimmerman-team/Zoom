@@ -8,22 +8,9 @@ import GeoMap from 'components/GeoMap/GeoMap';
 /* utils */
 import { getFocus } from 'modules/visualizer/VisualizerModule.utils';
 
-/* styles */
-import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
-import theme from 'theme/Theme';
-
-/* component */
-import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
-
 const ComponentBase = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-items: center;
-  justify-content: center;
   width: 100%;
   height: ${props => props.height};
-  flex-shrink: 0;
-
   z-index: 0;
 `;
 
@@ -92,15 +79,6 @@ class GeomapFragment extends React.Component {
           {...otherProps}
           mapOptions={{ maxBounds: this.state.bounds }}
         />
-        <YearContainer
-          bottom="24px"
-          backgroundColor={theme.color.aidsFondsWhiteOpacity}
-        >
-          <CustomYearSelector
-            selectedYear={this.props.selectedYear}
-            selectYear={this.props.selectYear}
-          />
-        </YearContainer>
       </ComponentBase>
     );
   }

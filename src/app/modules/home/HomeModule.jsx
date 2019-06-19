@@ -5,9 +5,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Cookies from 'universal-cookie';
 
-/* utils */
-import * as actions from 'services/actions/general';
-
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
 

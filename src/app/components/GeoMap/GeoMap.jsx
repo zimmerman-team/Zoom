@@ -14,15 +14,18 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { generateLegends, generateMarkers } from './GeoMap.util';
 /* styles */
 import { borderStyle, dataLayer, colorStops } from './components/map-style';
-/* components */
-import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
-import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
-
 import {
   ControlsContainer,
   LegendContainer,
-  MapContainer
+  MapContainer,
+  GeoYearContainer
 } from './GeoMap.style';
+import theme from 'theme/Theme';
+
+/* components */
+import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
+import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
+import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
@@ -96,6 +99,8 @@ export class GeoMap extends Component {
     this.handleZoomIn = this.handleZoomIn.bind(this);
     this.handleZoomOut = this.handleZoomOut.bind(this);
     this.handleFullscreen = this.handleFullscreen.bind(this);
+    this.setMapControlsRef = this.setMapControlsRef.bind(this);
+    this.setYearSelectorRef = this.setYearSelectorRef.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -252,11 +257,19 @@ export class GeoMap extends Component {
   }
 
   _onCountryClick = event => {
-    const { features } = event;
+    // so we basically use these refs for map control buttons and year selector buttons
+    // to have priority over the countries clicked, cause previously the country
+    // would have the click priority which should NOT be the case
+    if (
+      !this.mapControlRef.contains(event.target) &&
+      !this.yearSelectorRef.contains(event.target)
+    ) {
+      const { features } = event;
 
-    const feature = features && features.find(f => f.layer.id === 'layer');
-    if (feature && feature.properties.geolocationType === 'country') {
-      this.props.outerHistory.push(`/country/${feature.properties.iso2}`);
+      const feature = features && features.find(f => f.layer.id === 'layer');
+      if (feature && feature.properties.geolocationType === 'country') {
+        this.props.outerHistory.push(`/country/${feature.properties.iso2}`);
+      }
     }
   };
 
@@ -269,6 +282,14 @@ export class GeoMap extends Component {
       });
     }
   };
+
+  setMapControlsRef(node) {
+    this.mapControlRef = node;
+  }
+
+  setYearSelectorRef(node) {
+    this.yearSelectorRef = node;
+  }
 
   handleZoomIn() {
     this._updateViewport({
@@ -331,13 +352,6 @@ export class GeoMap extends Component {
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
       <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
-        <ControlsContainer>
-          <MapControls
-            onZoomIn={this.handleZoomIn}
-            onZoomOut={this.handleZoomOut}
-            onFullScreen={this.handleFullscreen}
-          />
-        </ControlsContainer>
         <MapContainer data-cy="geo-map-container">
           <MapGL
             {...viewport}
@@ -361,6 +375,13 @@ export class GeoMap extends Component {
             // cause the on click does receive the features...
             // reuseMaps
           >
+            <ControlsContainer ref={this.setMapControlsRef}>
+              <MapControls
+                onZoomIn={this.handleZoomIn}
+                onZoomOut={this.handleZoomOut}
+                onFullScreen={this.handleFullscreen}
+              />
+            </ControlsContainer>
             {/*So this is the layer tooltip, and we seperate it from the
               martker tooltip, cause its functionality as a tooltip is a bit different
               and also because we implement the layers a bit more differently
@@ -374,6 +395,16 @@ export class GeoMap extends Component {
             {/*contains zoom in/out and fullscreen toggle*/}
 
             <LegendContainer>{legends}</LegendContainer>
+            <GeoYearContainer
+              ref={this.setYearSelectorRef}
+              bottom="0"
+              backgroundColor={theme.color.aidsFondsWhiteOpacity}
+            >
+              <CustomYearSelector
+                selectedYear={this.props.selectedYear}
+                selectYear={this.props.selectYear}
+              />
+            </GeoYearContainer>
           </MapGL>
         </MapContainer>
       </ErrorBoundary>

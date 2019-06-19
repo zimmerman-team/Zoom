@@ -70,7 +70,7 @@ const indicatorQuery = graphql`
         node {
           entryId
           name
-          firstDataYear
+          lastDataYear
           fileSource {
             name
           }
@@ -370,7 +370,7 @@ class VizPaneMediator extends React.Component {
             label: indicator.node.name,
             value: indicator.node.entryId,
             dataSource: indicator.node.fileSource.name,
-            firstYear: indicator.node.firstDataYear
+            lastYear: indicator.node.lastDataYear
           });
         });
 
@@ -451,12 +451,12 @@ class VizPaneMediator extends React.Component {
             refetchAll:
               this.props.chartData.specOptions[graphKeys.aggregate] ===
                 aggrOptions[0].value &&
-              this.props.chartData.selectedYear !== val.firstYear,
+              this.props.chartData.selectedYear !== val.lastYear,
             selectedInd,
             indicatorSelected: true,
             indSelectedIndex: index,
             refetch: true,
-            selectedYear: val.firstYear
+            selectedYear: val.lastYear
           })
         );
       }

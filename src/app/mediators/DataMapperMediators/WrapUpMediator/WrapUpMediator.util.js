@@ -145,6 +145,8 @@ export function formatMapJson(mappingJson, mapData, fileId) {
       mapJson.extra_information.empty_entries.empty_value_format[
         item.fileType
       ] = item.label;
+
+      mapJson.filter_headings[item.fileType] = item.fileType;
     }
   });
 

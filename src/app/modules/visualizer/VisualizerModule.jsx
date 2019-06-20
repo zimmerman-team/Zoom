@@ -7,6 +7,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 /* consts */
 import paneTypes from '__consts__/PaneTypesConst';
+import initialState from '__consts__/InitialChartDataConst';
 /* components */
 import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';
 import VizContainer from 'modules/visualizer/sort/container/VizContainer';
@@ -36,6 +37,7 @@ const propTypes = {
   chartTitle: PropTypes.string,
   publicPage: PropTypes.bool,
   saveViewport: PropTypes.func,
+  chartData: PropTypes.shape({}),
   home: PropTypes.bool,
   moduleMode: PropTypes.string
 };
@@ -43,6 +45,7 @@ const propTypes = {
 const defaultProps = {
   data: [],
   publicPage: false,
+  chartData: initialState,
   dataPaneOpen: 'visualizer',
   chartKeys: [],
   auth0Client: {},
@@ -105,6 +108,7 @@ class BuilderModule extends Component {
           )}
 
           <VizContainer
+            chartData={this.props.chartData}
             home={this.props.home}
             saveViewport={this.props.saveViewport}
             chartKeys={this.props.chartKeys}

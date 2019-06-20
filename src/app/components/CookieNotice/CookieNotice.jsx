@@ -20,9 +20,9 @@ const propTypes = {
 };
 const defaultProps = {
   cookieText:
-    'Zoom gebruikt cookies om het bezoek (geanonimiseerd) te analyseren om verbeteringen aan te brengen. Indien je hiermee akkoord bent, hoef je je voorkeuren niet te wijzigen. ',
+    'aidsfonds.org uses cookies to offer the best website experience possible and to anonymously analyze website behaviour. More information. ',
   cookieButtonText: 'accepteren',
-  cookieLinkText: 'Meer informatie'
+  cookieLinkText: 'More information'
 };
 
 function CookieNotice(props) {

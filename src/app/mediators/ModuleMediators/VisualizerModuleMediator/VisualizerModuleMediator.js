@@ -915,6 +915,7 @@ class VisualizerModuleMediator extends Component {
     return (
       <div style={{ height: '100%' }}>
         <VisualizerModule
+          chartData={this.props.chartData}
           home={this.props.home}
           saveViewport={this.saveViewport}
           chartKeys={this.props.chartData.chartKeys}

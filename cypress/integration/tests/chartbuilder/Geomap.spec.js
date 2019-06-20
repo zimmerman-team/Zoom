@@ -19,6 +19,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     )
       .first()
       .click();
+    cy.wait(4000);
     cy.contains('new hiv infections').click();
     //Here we wait till the data has been mapped
     cy.waitPageLoader();

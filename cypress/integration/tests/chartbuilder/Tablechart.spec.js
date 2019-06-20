@@ -5,7 +5,7 @@ beforeEach(() => {
 });
 
 describe('Chartbuilder table chart fragment e2e', function() {
-  it('Should contain /tablechart in the url and map aids related deaths data', function() {
+  it('Should contain /tablechart in the url and map new hiv infections data', function() {
     cy.signIn();
     cy.navigateToTablechart();
     cy.waitPageLoader2();
@@ -21,12 +21,11 @@ describe('Chartbuilder table chart fragment e2e', function() {
       .first()
       .click();
 
-    cy.contains('aids related deaths (unaids)').click();
+    cy.contains('new hiv infections').click();
     cy.waitPageLoader();
-    cy.get('#MUIDataTableBodyRow-2 > :nth-child(5)').should('contain', '2005');
     cy.get('#MUIDataTableBodyRow-2 > :nth-child(9)').should(
       'contain',
-      'aids related deaths (unaids)'
+      'new hiv infections'
     );
   });
 

@@ -21,6 +21,7 @@ describe('Chartbuilder line chart fragment e2e', function() {
       .click();
     cy.contains('new hiv infections').click();
     cy.get('body').click();
+    cy.wait(10000);
     cy.waitPageLoader();
     cy.get('[data-cy="legend-label"]').should('have.css', 'content');
 

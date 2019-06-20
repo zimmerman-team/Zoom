@@ -22,7 +22,7 @@ describe('Chartbuilder country focus fragment e2e', function() {
     )
       .first()
       .click();
-    cy.wait(4000);
+    cy.wait(10000);
     cy.get('[data-cy="geo-map-search"] input').type(
       'number of new hiv infections'
     );
@@ -58,7 +58,7 @@ describe('Chartbuilder country focus fragment e2e', function() {
     )
       .first()
       .click();
-    cy.wait(4000);
+    cy.wait(10000);
     cy.get('[data-cy="geo-map-search"] input').type(
       'number of new hiv infections'
     );

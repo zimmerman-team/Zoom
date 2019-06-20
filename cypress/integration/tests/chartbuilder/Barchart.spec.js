@@ -31,7 +31,7 @@ describe('Chartbuilder bar chart fragment e2e', function() {
       .trigger('mouseenter', { force: true });
     cy.get('[data-cy="tooltip-content"]').should(
       'have.text',
-      'Datasource: UNAIDS 2018'
+      'Datasource: Public Indicators'
     );
 
     cy.get('body').click();

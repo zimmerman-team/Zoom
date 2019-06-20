@@ -49,7 +49,7 @@ class CustomYearSelector extends React.Component {
   componentDidUpdate(prevProps) {
     if (!isEqual(this.props.selectedYear, prevProps.selectedYear)) {
       this.setState({
-        selectedYear: this.props.selectedYear.replace('.0', '')
+        selectedYear: this.props.selectedYear.toString().replace('.0', '')
       });
     }
   }

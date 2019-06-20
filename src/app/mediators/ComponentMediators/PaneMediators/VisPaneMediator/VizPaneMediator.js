@@ -9,6 +9,7 @@ import connect from 'react-redux/es/connect/connect';
 import * as actions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
 /* helpers */
+import find from 'lodash/find';
 import sortBy from 'lodash/sortBy';
 import isEqual from 'lodash/isEqual';
 import { formatYearParam, yearStrToArray } from 'utils/genericUtils';
@@ -18,6 +19,7 @@ import initialState, {
   devIndicatorName,
   initIndItem
 } from '__consts__/InitialChartDataConst';
+import iatiInds from '__consts__/IatiIndicatorsConst';
 import chartTypes from '__consts__/ChartConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
 import { maxYear } from '__consts__/TimeLineConst';
@@ -168,6 +170,8 @@ class VizPaneMediator extends React.Component {
         return { label: indicator.node.name, value: indicator.node.name };
       }
     );
+
+    allFileSources.push({ label: 'IATI', value: 'IATI' });
 
     allFileSources = sortBy(allFileSources, ['label']);
 
@@ -332,7 +336,9 @@ class VizPaneMediator extends React.Component {
     let fileSource_Name_In = '';
 
     selectedSources.forEach(source => {
-      fileSource_Name_In = fileSource_Name_In.concat(source).concat(',');
+      if (source !== 'IATI') {
+        fileSource_Name_In = fileSource_Name_In.concat(source).concat(',');
+      }
     });
 
     fileSource_Name_In =
@@ -373,6 +379,10 @@ class VizPaneMediator extends React.Component {
             firstYear: indicator.node.firstDataYear
           });
         });
+
+        if (find(selectedSources, s => s === 'IATI')) {
+          iatiInds.forEach(ii => allIndNames.push(ii));
+        }
 
         allIndNames = sortBy(allIndNames, ['label']);
 
@@ -427,7 +437,11 @@ class VizPaneMediator extends React.Component {
       selectedInd[index].indLabel = val.label;
       selectedInd[index].dataSource = val.dataSource;
       selectedInd[index].selectedSubInd = [];
-      selectedInd[index].subIndicators = [];
+      if (val.dataSource !== 'IATI') {
+        selectedInd[index].subIndicators = [];
+      } else {
+        selectedInd[index].subIndicators = val.subIndicators;
+      }
 
       if (val === 'reset') {
         selectedInd[index].indicator = undefined;
@@ -844,6 +858,7 @@ export default createFragmentContainer(
           node {
             name
             iso2
+            polygons
           }
         }
       }

@@ -93,3 +93,35 @@ export function countryOrganisationsFailed(error) {
     error: error
   };
 }
+
+export const ACTIVITY_STATUS_IND_INITIAL = 'ACTIVITY_STATUS_IND_INITIAL';
+export const ACTIVITY_STATUS_IND_REQUEST = 'ACTIVITY_STATUS_IND_REQUEST';
+export const ACTIVITY_STATUS_IND_SUCCESS = 'ACTIVITY_STATUS_IND_SUCCESS';
+export const ACTIVITY_STATUS_IND_FAILED = 'ACTIVITY_STATUS_IND_FAILED';
+
+export function activityStatusIndInitial() {
+  return {
+    type: ACTIVITY_STATUS_IND_INITIAL
+  };
+}
+
+export function activityStatusIndRequest(values) {
+  return {
+    type: ACTIVITY_STATUS_IND_REQUEST,
+    values: values
+  };
+}
+
+export function activityStatusIndSuccess(data) {
+  return {
+    type: ACTIVITY_STATUS_IND_SUCCESS,
+    data: data
+  };
+}
+
+export function activityStatusIndFailed(error) {
+  return {
+    type: ACTIVITY_STATUS_IND_FAILED,
+    error: error
+  };
+}

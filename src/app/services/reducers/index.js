@@ -590,6 +590,21 @@ function datasetIds(state = initial, action) {
   }
 }
 
+function activityStatusInd(state = initial, action) {
+  switch (action.type) {
+    case oipaActions.ACTIVITY_STATUS_IND_INITIAL:
+      return updateInitial(state);
+    case oipaActions.ACTIVITY_STATUS_IND_REQUEST:
+      return updateRequest(state, action);
+    case oipaActions.ACTIVITY_STATUS_IND_SUCCESS:
+      return updateSuccess(state, action);
+    case oipaActions.ACTIVITY_STATUS_IND_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
   datasetIds,
   chartTrashEmpty,
@@ -624,7 +639,8 @@ const reducers = {
   updateTeamAndUsersOfIt,
   groupDeleted,
   userDeleted,
-  userPersist
+  userPersist,
+  activityStatusInd
 };
 
 export default reducers;

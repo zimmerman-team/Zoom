@@ -7,8 +7,9 @@ import { withRouter } from 'react-router';
 import VisualizerModule from 'modules/visualizer/VisualizerModule';
 
 /* utils */
-import isEqual from 'lodash/isEqual';
+import get from 'lodash/get';
 import sortBy from 'lodash/sortBy';
+import isEqual from 'lodash/isEqual';
 import {
   aggrKeys,
   formatBarChartKeys,
@@ -35,6 +36,7 @@ import { aggrOptions, rankOptions } from '__consts__/GraphStructOptionConsts';
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
 import * as actions from 'services/actions/general';
+import { activityStatusIndRequest } from 'app/services/actions/oipa';
 
 const propTypes = {
   publicChart: PropTypes.shape({}),
@@ -148,7 +150,8 @@ class VisualizerModuleMediator extends Component {
       loading: false,
       selectedYear: this.props.chartData.selectedYear
         ? this.props.chartData.selectedYear
-        : initialState.yearPeriod[0]
+        : initialState.yearPeriod[0],
+      indicatorData: []
     };
 
     this.refetch = this.refetch.bind(this);
@@ -159,6 +162,7 @@ class VisualizerModuleMediator extends Component {
     this.selectYearRange = this.selectYearRange.bind(this);
     this.updateChartColor = this.updateChartColor.bind(this);
     this.updateRankBy = this.updateRankBy.bind(this);
+    this.getIatiIndData = this.getIatiIndData.bind(this);
     this.storeInitialChartOptions = this.storeInitialChartOptions.bind(this);
   }
 
@@ -263,6 +267,16 @@ class VisualizerModuleMediator extends Component {
         prevProps.chartData.specOptions[graphKeys.horizont]
     ) {
       this.updateRankBy(this.props.chartData.specOptions);
+    }
+
+    if (
+      !isEqual(
+        this.props.activityStatusIndData,
+        prevProps.activityStatusIndData
+      ) &&
+      this.props.activityStatusIndData.data
+    ) {
+      this.updateIndicators(this.state.indicatorData);
     }
   }
 
@@ -383,10 +397,21 @@ class VisualizerModuleMediator extends Component {
     );
   }
 
+  getIatiIndData(iatiInd) {
+    console.log(iatiInd);
+    switch (iatiInd) {
+      case 'activity status':
+        return get(this.props.activityStatusIndData.data, 'results');
+      default:
+        return [];
+    }
+  }
+
   updateIndicators(
     indicatorData,
     indSelectedIndex = this.props.chartData.indSelectedIndex
   ) {
+    console.log(indicatorData);
     // this will be used for some extra formatting things
     // concerning chart keys and also for saving the subIndicators
     // of the appropriate indicators
@@ -402,11 +427,15 @@ class VisualizerModuleMediator extends Component {
       // as the indicator selections, cause of promise stuff
       // the actual index was stored when initially this 'indicatorData' was formed
       aggregationData[indItem.index] = {
-        data: indItem.indAggregation,
+        data: indItem.isIATI
+          ? this.getIatiIndData(indItem.indName)
+          : indItem.indAggregation,
         selectedSubInd: selectedInd[indItem.index].selectedSubInd,
         subIndAggr: selectedInd[indItem.index].aggregate
       };
     });
+
+    console.log(aggregationData);
 
     // we just reparse it here, cause we want to
     // load in less data
@@ -521,10 +550,17 @@ class VisualizerModuleMediator extends Component {
     if (this.props.chartData.indicatorSelected) {
       // formatting the subindicator data commences!
       indicatorData.forEach(indItem => {
-        let subIndicators = indItem.subIndicators.edges.map(indicator => {
-          return { label: indicator.node.name, value: indicator.node.name };
-        });
-
+        let subIndicators = [];
+        if (indItem.subIndicators.edges) {
+          subIndicators = indItem.subIndicators.edges.map(indicator => {
+            return {
+              label: indicator.node.name,
+              value: indItem.isIATI ? indicator.node.code : indicator.node.name
+            };
+          });
+        } else {
+          subIndicators = indItem.subIndicators;
+        }
         // and we sort them
         subIndicators = sortBy(subIndicators, ['label']);
         let selectedSubInd = selectedInd[indItem.index].selectedSubInd;
@@ -581,6 +617,24 @@ class VisualizerModuleMediator extends Component {
     }
   }
 
+  loadIatiIndData(ind, countries) {
+    // console.log(ind);
+    const params = {
+      group_by: 'recipient_country',
+      aggregations: 'count',
+      recipient_country: countries.join(',').toUpperCase()
+    };
+    switch (ind.indicator) {
+      case 'activity_status':
+        this.props.dispatch(
+          activityStatusIndRequest({
+            ...params,
+            activity_status: ind.selectedSubInd.join(',')
+          })
+        );
+    }
+  }
+
   refetch(
     index = this.props.chartData.indSelectedIndex,
     selectedInd = this.props.chartData.selectedInd,
@@ -606,7 +660,6 @@ class VisualizerModuleMediator extends Component {
       this.props.paneData.chartType !== chartTypes.focusKE &&
       this.props.paneData.chartType !== chartTypes.focusNL;
     const selectedInds = refetchOne ? [selectedInd[index]] : selectedInd;
-
     if (selectedInds.length > 0) {
       this.setState({
         loading: true
@@ -637,7 +690,8 @@ class VisualizerModuleMediator extends Component {
       selectedInds.forEach((indItem, indIndex) => {
         const currIndex = refetchOne ? index : indIndex;
 
-        const indicator = indItem.indicator;
+        const indicator =
+          indItem.dataSource !== 'IATI' ? indItem.indicator : null;
 
         const subInds =
           indItem.selectedSubInd.length > 0 ? indItem.selectedSubInd : ['null'];
@@ -648,6 +702,10 @@ class VisualizerModuleMediator extends Component {
           this.props.chartData.selectedCountryVal,
           this.props.chartData.selectedRegionVal
         );
+
+        if (indItem.dataSource === 'IATI') {
+          this.loadIatiIndData(indItem, countriesISO2);
+        }
 
         if (
           (this.props.paneData.chartType === chartTypes.focusNL ||
@@ -677,16 +735,22 @@ class VisualizerModuleMediator extends Component {
           indicatorDataQuery,
           refetchVars
         ).then(data => {
+          console.log(indItem);
           indicatorData.push({
             index: currIndex,
+            indName: indItem.indLabel,
             indAggregation: data.indicators,
-            subIndicators: data.subIndicators
+            isIATI: indItem.dataSource === 'IATI',
+            subIndicators:
+              indItem.dataSource === 'IATI'
+                ? indItem.subIndicators
+                : data.subIndicators
           });
 
           // so we only update the indicators when we've retrieved the same
           // amount of indicator data as we have indicators selected
           if (indicatorData.length === selectedInds.length) {
-            this.setState({ loading: false });
+            this.setState({ loading: false, indicatorData });
 
             const updateIndIndex =
               refetchOne ||
@@ -861,7 +925,8 @@ class VisualizerModuleMediator extends Component {
           loading={
             this.state.loading ||
             this.props.chartCreated.request ||
-            this.props.dupChartCreated.request
+            this.props.dupChartCreated.request ||
+            this.props.activityStatusIndData.request
           }
           auth0Client={this.props.auth0Client}
           selectYearRange={this.selectYearRange}
@@ -887,6 +952,7 @@ const mapStateToProps = state => {
     dupChartCreated: state.dupChartCreated,
     chartCreated: state.chartCreated,
     paneData: state.paneData.paneData,
+    activityStatusIndData: state.activityStatusInd,
     dataPaneOpen: state.dataPaneOpen.open
   };
 };

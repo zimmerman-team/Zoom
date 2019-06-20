@@ -750,6 +750,18 @@ export function* getDatasetIdsRequest(action) {
   }
 }
 
+export function* activityStatusIndRequest(action) {
+  try {
+    const response = yield call(
+      api.transactionsAggregationsRequest,
+      action.values
+    );
+    yield put(oipaActions.activityStatusIndSuccess(response));
+  } catch (error) {
+    yield put(oipaActions.activityStatusIndFailed(error));
+  }
+}
+
 function* sagas() {
   yield [
     takeLatest('GET_DATASET_IDS_REQUEST', getDatasetIdsRequest),
@@ -810,7 +822,8 @@ function* sagas() {
     takeLatest('DELETE_AUTH_USER_REQUEST', deleteAuthUserRequest),
     takeLatest('EDIT_AUTH_USER_REQUEST', editAuthUserRequest),
     takeLatest('ADD_AUTH_GROUP_REQUEST', addAuthGroupRequest),
-    takeLatest('DELETE_AUTH_GROUP_REQUEST', deleteAuthGroupRequest)
+    takeLatest('DELETE_AUTH_GROUP_REQUEST', deleteAuthGroupRequest),
+    takeLatest('ACTIVITY_STATUS_IND_REQUEST', activityStatusIndRequest)
   ];
 }
 

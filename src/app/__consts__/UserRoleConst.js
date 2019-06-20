@@ -1,7 +1,7 @@
 const userRoles = {
   superAdm: 'Super admin',
   admin: 'Administrator',
-  mod: 'Moderator',
+  mod: 'Data steward',
   regular: 'Regular user'
 };
 

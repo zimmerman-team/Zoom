@@ -1,7 +1,7 @@
 export const userManagementMockData = {
   roleOptions: [
     { label: 'Regular user', value: 'regular' },
-    { label: 'Moderator', value: 'moderator' },
+    { label: 'Data steward', value: 'Data steward' },
     { label: 'Administrator', value: 'administrator' }
   ],
   orgOptions: [

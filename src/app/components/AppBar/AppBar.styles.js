@@ -11,7 +11,7 @@ export const ComponentBase = styled(Box)`
   display: flex;
   margin: 0;
   z-index: 10;
-  position: fixed;
+  position: absolute;
   top: 0;
   background-color: ${theme.color.aidsFondsWhite};
 `;

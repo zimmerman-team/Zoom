@@ -23,6 +23,7 @@ import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 
 /* style */
 import theme from 'theme/Theme';
+import initialState from '__consts__/InitialChartDataConst';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -52,6 +53,7 @@ const propTypes = {
   saveViewport: PropTypes.func,
   home: PropTypes.bool,
   mode: PropTypes.bool,
+  chartData: PropTypes.shape({}),
   context: PropTypes.bool
 };
 const defaultProps = {
@@ -60,6 +62,7 @@ const defaultProps = {
   chartKeys: [],
   saveViewport: null,
   home: false,
+  chartData: initialState,
   mode: window.location.pathname.includes('preview'),
   context: window.location.pathname.includes('context')
 };
@@ -80,17 +83,17 @@ class VizContainer extends React.Component {
     this.props.history.listen((location, action) => {
       const mode = location.pathname.includes('preview');
       const context = location.pathname.includes('context');
-      this.setState({ preview: mode, context });
+      if (this.state.preview !== mode || this.state.context !== context) {
+        this.setState({ preview: mode, context });
+      }
     });
   }
 
   render() {
-    const yearBackgrCol =
+    const isGeoChart =
       this.props.chartType === chartTypes.geoMap ||
       this.props.chartType === chartTypes.focusKE ||
-      this.props.chartType === chartTypes.focusNL
-        ? theme.color.aidsFondsWhiteOpacity
-        : theme.color.aidsFondsGreyOpacity;
+      this.props.chartType === chartTypes.focusNL;
 
     const geoChartPath = this.props.home
       ? '/home'
@@ -178,21 +181,28 @@ class VizContainer extends React.Component {
             mode={this.state.preview}
           />
 
-          <YearContainer bottom="24px" backgroundColor={yearBackgrCol}>
-            {/* so the second item in the aggrOptions array is the year aggregation option*/}
-            {this.props.chartData.specOptions[graphKeys.aggregate] ===
-            aggrOptions[1].value ? (
-              <YearRangeSelector
-                selectYearRange={this.props.selectYearRange}
-                selectedYears={this.props.chartData.selectedYears}
-              />
-            ) : (
-              <CustomYearSelector
-                selectedYear={this.props.selectedYear}
-                selectYear={this.props.selectYear}
-              />
-            )}
-          </YearContainer>
+          {/*So for the geocharts we load the this component inside the
+            fragment for the fullscreen to work properly*/}
+          {!isGeoChart && !this.props.home && (
+            <YearContainer
+              bottom="24px"
+              backgroundColor={theme.color.aidsFondsGreyOpacity}
+            >
+              {/* so the second item in the aggrOptions array is the year aggregation option*/}
+              {this.props.chartData.specOptions[graphKeys.aggregate] ===
+              aggrOptions[1].value ? (
+                <YearRangeSelector
+                  selectYearRange={this.props.selectYearRange}
+                  selectedYears={this.props.chartData.selectedYears}
+                />
+              ) : (
+                <CustomYearSelector
+                  selectedYear={this.props.selectedYear}
+                  selectYear={this.props.selectYear}
+                />
+              )}
+            </YearContainer>
+          )}
         </React.Fragment>
         <PreviewTextContainer mode={this.state.preview ? 'flex' : 'none'}>
           <ContextPreview
@@ -209,13 +219,7 @@ class VizContainer extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    chartData: state.chartData.chartData
-  };
-};
-
 VizContainer.propTypes = propTypes;
 VizContainer.defaultProps = defaultProps;
 
-export default connect(mapStateToProps)(withRouter(VizContainer));
+export default withRouter(VizContainer);

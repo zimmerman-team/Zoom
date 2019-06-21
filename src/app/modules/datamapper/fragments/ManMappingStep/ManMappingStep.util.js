@@ -13,7 +13,11 @@ export function changeDisabledVal(tableData) {
     // we ofcourse form the disabledValues everytime from fresh
     // cause removing logic would be super complex, when some zoomModels
     // can overwrite others
-    if (disableInd !== -1 && defModelOptions[disableInd].disable) {
+    if (
+      disableInd !== -1 &&
+      defModelOptions[disableInd].disable &&
+      !item.emptyFieldRow
+    ) {
       defModelOptions[disableInd].disable.forEach(disItem => {
         if (disabledValues.indexOf(disItem) === -1) {
           disabledValues.push(disItem);

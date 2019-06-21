@@ -20,14 +20,18 @@ export function checkEmptyFields(manMapData, mapReqFields) {
       if (
         !find(manMapData, ['zoomModel', field]) &&
         (!find(manMapData, ['zoomModel', 'Longitude']) ||
-          (!find(manMapData, ['zoomModel', 'Latitude']) &&
-            !find(manMapData, ['zoomModel', assocItem.value])))
+          !find(manMapData, ['zoomModel', 'Latitude'])) &&
+        assocItem &&
+        !find(manMapData, ['zoomModel', assocItem.value])
       ) {
         emptyFields.push(field);
       }
     } else {
       const reqFieldItem = find(manMapData, row => {
-        return row.zoomModel === field || assocItem.value === row.zoomModel;
+        return (
+          row.zoomModel === field ||
+          (assocItem && assocItem.value === row.zoomModel)
+        );
       });
 
       if (!reqFieldItem) {

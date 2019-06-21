@@ -1,4 +1,7 @@
+/* utils */
 import find from 'lodash/find';
+/* consts */
+import { defModelOptions } from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
 
 export function checkEmptyFields(manMapData, mapReqFields) {
   const emptyFields = [];
@@ -8,26 +11,33 @@ export function checkEmptyFields(manMapData, mapReqFields) {
     //  as in zoom data model of the data
     //  then we push it in as an empty field
 
+    const assocItem = find(defModelOptions, ['assocModel', field]);
+
     // we need some extra checking logic cause there can be three value selections
     // but at least one is required
     // and we'll check if one of these fields have been selected
-    if (field === 'value') {
-      if (
-        !find(manMapData, ['zoomModel', 'Number Value']) &&
-        !find(manMapData, ['zoomModel', 'Percentage Value']) &&
-        !find(manMapData, ['zoomModel', 'Mixed Value'])
-      ) {
-        emptyFields.push(field);
-      }
-    } else if (field === 'geolocation') {
+    if (field === 'geolocation') {
       if (
         !find(manMapData, ['zoomModel', field]) &&
         (!find(manMapData, ['zoomModel', 'Longitude']) ||
-          !find(manMapData, ['zoomModel', 'Latitude']))
+          !find(manMapData, ['zoomModel', 'Latitude'])) &&
+        assocItem &&
+        !find(manMapData, ['zoomModel', assocItem.value])
       ) {
         emptyFields.push(field);
       }
-    } else if (!find(manMapData, ['zoomModel', field])) emptyFields.push(field);
+    } else {
+      const reqFieldItem = find(manMapData, row => {
+        return (
+          row.zoomModel === field ||
+          (assocItem && assocItem.value === row.zoomModel)
+        );
+      });
+
+      if (!reqFieldItem) {
+        emptyFields.push(field);
+      }
+    }
   });
 
   return emptyFields;

@@ -37,7 +37,7 @@ const propTypes = {
       subIndicator: PropTypes.bool,
       categorise: PropTypes.bool,
       indIndex: PropTypes.number,
-      allFileSources: PropTypes.array,
+      allFileSources: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
       selectedSources: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
       selectDataSource: PropTypes.func,
       selectedRegionCodes: PropTypes.arrayOf(PropTypes.string),

@@ -261,6 +261,28 @@ export function formatCountryLayerData(
         if (indName === 'transactions') {
           selectedSubInd.forEach(ssi => {
             switch (ssi) {
+              case 'Incoming Funds':
+                if (indicator.incoming_fund) {
+                  value += indicator.incoming_fund;
+                  tooltipLabels.push({
+                    subIndName: selectedSubInd,
+                    format: 'EUR',
+                    label: `${indName} - Incoming Funds`,
+                    value: indicator.incoming_fund
+                  });
+                }
+                break;
+              case 'Outgoing Commitment':
+                if (indicator.commitment) {
+                  value += indicator.commitment;
+                  tooltipLabels.push({
+                    subIndName: selectedSubInd,
+                    format: 'EUR',
+                    label: `${indName} - Incoming Funds`,
+                    value: indicator.commitment
+                  });
+                }
+                break;
               case 'Disbursement':
                 if (indicator.disbursement) {
                   value += indicator.disbursement;
@@ -546,6 +568,28 @@ export function formatCountryCenterData(
         if (indName === 'transactions') {
           selectedSubInd.forEach(ssi => {
             switch (ssi) {
+              case 'Incoming Funds':
+                if (indicator.incoming_fund) {
+                  value += indicator.incoming_fund;
+                  tooltipLabels.push({
+                    subIndName: selectedSubInd,
+                    format: 'EUR',
+                    label: `${indName} - Incoming Funds`,
+                    value: indicator.incoming_fund
+                  });
+                }
+                break;
+              case 'Outgoing Commitment':
+                if (indicator.commitment) {
+                  value += indicator.commitment;
+                  tooltipLabels.push({
+                    subIndName: selectedSubInd,
+                    format: 'EUR',
+                    label: `${indName} - Outgoing Commitment`,
+                    value: indicator.commitment
+                  });
+                }
+                break;
               case 'Disbursement':
                 if (indicator.disbursement) {
                   value += indicator.disbursement;
@@ -1166,6 +1210,12 @@ export function formatLineData(
 
             if (indName === 'transactions') {
               switch (si) {
+                case 'Incoming Funds':
+                  value += indicator.incoming_fund;
+                  break;
+                case 'Outgoing Commitment':
+                  value += indicator.commitment;
+                  break;
                 case 'Disbursement':
                   value += indItem.disbursement;
                   break;
@@ -1528,6 +1578,12 @@ export function formatBarData(
 
             if (indName === 'transactions') {
               switch (si) {
+                case 'Incoming Funds':
+                  value += indicator.incoming_fund;
+                  break;
+                case 'Outgoing Commitment':
+                  value += indicator.commitment;
+                  break;
                 case 'Disbursement':
                   value += indItem.disbursement;
                   break;
@@ -1675,6 +1731,12 @@ export function formatTableData(indicators) {
           indicator.selectedSubInd.forEach(si => {
             let value = 0;
             switch (si) {
+              case 'Incoming Funds':
+                value += indicator.incoming_fund;
+                break;
+              case 'Outgoing Commitment':
+                value += indicator.commitment;
+                break;
               case 'Disbursement':
                 value = indItem.disbursement;
                 break;
@@ -1952,6 +2014,12 @@ export function formatDonutData(
 
           let value = 0;
           switch (si) {
+            case 'Incoming Funds':
+              value += indicator.incoming_fund;
+              break;
+            case 'Outgoing Commitment':
+              value += indicator.commitment;
+              break;
             case 'Disbursement':
               value += indItem.disbursement;
               break;

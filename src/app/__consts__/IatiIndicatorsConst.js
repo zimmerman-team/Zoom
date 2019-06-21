@@ -38,12 +38,12 @@ export default [
     dataSource: 'IATI',
     subIndicators: {
       edges: [
-        // {
-        //   node: { code: '1', name: 'Incoming Funds' }
-        // },
-        // {
-        //   node: { code: '2', name: 'Outgoing Commitment' }
-        // },
+        {
+          node: { code: '1', name: 'Incoming Funds' }
+        },
+        {
+          node: { code: '2', name: 'Outgoing Commitment' }
+        },
         {
           node: { code: '3', name: 'Disbursement' }
         },

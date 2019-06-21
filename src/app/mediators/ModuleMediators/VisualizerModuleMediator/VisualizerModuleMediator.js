@@ -529,10 +529,16 @@ class VisualizerModuleMediator extends Component {
           );
           break;
         case chartTypes.focusKE:
-          data = formatGeoData(aggregationData);
+          data = formatGeoData(
+            aggregationData,
+            this.props.dropDownData.allCountries
+          );
           break;
         case chartTypes.focusNL:
-          data = formatGeoData(aggregationData);
+          data = formatGeoData(
+            aggregationData,
+            this.props.dropDownData.allCountries
+          );
           break;
         case chartTypes.lineChart: {
           const lineData = formatLineData(

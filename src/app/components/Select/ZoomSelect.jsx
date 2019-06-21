@@ -29,11 +29,16 @@ import {
 } from 'components/Select/ZoomSelect.styles';
 
 const propTypes = {
-  data: PropTypes.arrayOf(
+  data: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string
+      })
+    ),
     PropTypes.shape({
       label: PropTypes.string
     })
-  ),
+  ]),
   border: PropTypes.bool,
   placeHolderText: PropTypes.string,
   placeHolderNumber: PropTypes.number,

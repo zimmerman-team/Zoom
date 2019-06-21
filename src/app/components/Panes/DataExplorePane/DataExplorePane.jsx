@@ -27,12 +27,18 @@ const propTypes = {
   selectedInd: PropTypes.arrayOf(
     PropTypes.shape({
       indicator: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      subIndicators: PropTypes.arrayOf(
+      subIndicators: PropTypes.oneOfType([
+        PropTypes.arrayOf(
+          PropTypes.shape({
+            label: PropTypes.string,
+            value: PropTypes.string
+          })
+        ),
         PropTypes.shape({
           label: PropTypes.string,
           value: PropTypes.string
         })
-      ),
+      ]),
       dataSource: PropTypes.string,
       selectedSubInd: PropTypes.arrayOf(PropTypes.string)
     })

@@ -42,7 +42,7 @@ const propTypes = {
   search: PropTypes.bool,
   selectAll: PropTypes.bool,
   defaultAll: PropTypes.bool,
-  openDropDown: PropTypes.bool,
+  openDropDown: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   selectedRegionCodes: PropTypes.arrayOf(PropTypes.string),
   disabledValues: PropTypes.arrayOf(PropTypes.string),
   dropDownWidth: PropTypes.number,

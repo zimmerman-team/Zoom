@@ -7,6 +7,7 @@ import {
   ToolTipText,
   ToolTipValue
 } from 'components/charts/TooltipContent.styles';
+import { formatMoney } from 'app/utils/genericUtils';
 
 const TooltipContent = ({
   aggrType,
@@ -38,7 +39,7 @@ const TooltipContent = ({
         <ToolTipText>
           {valueLabel}:{' '}
           <ToolTipValue>
-            {value}
+            {format === 'EUR' ? formatMoney(value) : value}
             {nrFormat}
           </ToolTipValue>
         </ToolTipText>

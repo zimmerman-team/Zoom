@@ -37,6 +37,7 @@ const ChartLegends = props => {
         return (
           indicator.label && (
             <ChartLegendItem
+              key={indicator.label}
               color={indicator.color}
               text={indicator.label}
               dataSource={indicator.dataSource}

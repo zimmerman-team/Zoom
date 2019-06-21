@@ -3,7 +3,7 @@ import React from 'react';
 /* utils */
 import { truncateText } from 'components/GeoMap/components/ToolTips/ToolTip.util';
 import { getMeasure } from 'components/GeoMap/components/Markers/CircleMarker/CircleMarker';
-import { formatNumber } from 'utils/genericUtils';
+import { formatNumber, formatMoney } from 'utils/genericUtils';
 
 /* styles */
 import {
@@ -62,7 +62,9 @@ const markerInfo = hoverMarkerInfo => {
               <ToolTipLabel key={ttItem.label}>
                 {truncateText(ttItem.label)}:
                 <ToolTipText>
-                  {formatNumber(ttItem.value)}
+                  {ttItem.format === 'EUR'
+                    ? formatMoney(ttItem.value)
+                    : formatNumber(ttItem.value)}
                   {nrFormat}
                 </ToolTipText>
               </ToolTipLabel>

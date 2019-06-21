@@ -182,7 +182,7 @@ class ColorSelect extends React.Component {
             IconComponent={IconPointer}
           >
             {colorSetz.map(set => (
-              <ZimMenuItem value={set.index}>
+              <ZimMenuItem value={set.index} key={set.index}>
                 {set.colors.map(color => (
                   <PaletFragment key={color} colors={color} />
                 ))}

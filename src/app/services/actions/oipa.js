@@ -125,3 +125,35 @@ export function activityStatusIndFailed(error) {
     error: error
   };
 }
+
+export const TRANSACTION_IND_INITIAL = 'TRANSACTION_IND_INITIAL';
+export const TRANSACTION_IND_REQUEST = 'TRANSACTION_IND_REQUEST';
+export const TRANSACTION_IND_SUCCESS = 'TRANSACTION_IND_SUCCESS';
+export const TRANSACTION_IND_FAILED = 'TRANSACTION_IND_FAILED';
+
+export function transactionIndInitial() {
+  return {
+    type: TRANSACTION_IND_INITIAL
+  };
+}
+
+export function transactionIndRequest(values) {
+  return {
+    type: TRANSACTION_IND_REQUEST,
+    values: values
+  };
+}
+
+export function transactionIndSuccess(data) {
+  return {
+    type: TRANSACTION_IND_SUCCESS,
+    data: data
+  };
+}
+
+export function transactionIndFailed(error) {
+  return {
+    type: TRANSACTION_IND_FAILED,
+    error: error
+  };
+}

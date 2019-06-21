@@ -2,7 +2,7 @@ import React from 'react';
 
 /* utils */
 import { truncateText } from 'components/GeoMap/components/ToolTips/ToolTip.util';
-import { formatNumber } from 'utils/genericUtils';
+import { formatNumber, formatMoney } from 'utils/genericUtils';
 
 /* styles */
 import {
@@ -44,7 +44,9 @@ const layerInfo = hoverLayerInfo => {
               <ToolTipLabel key={ttItem.label}>
                 {truncateText(ttItem.label)}:
                 <ToolTipText>
-                  {formatNumber(ttItem.value)}
+                  {ttItem.format === 'EUR'
+                    ? formatMoney(ttItem.value)
+                    : formatNumber(ttItem.value)}{' '}
                   {nrFormat}
                 </ToolTipText>
               </ToolTipLabel>

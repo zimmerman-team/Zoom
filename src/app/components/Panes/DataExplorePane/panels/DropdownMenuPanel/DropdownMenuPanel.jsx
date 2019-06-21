@@ -44,7 +44,7 @@ const propTypes = {
       multiple: PropTypes.bool,
       selectAll: PropTypes.bool,
       defaultAll: PropTypes.bool,
-      openSubInd: PropTypes.bool,
+      openSubInd: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
       removeIndicator: PropTypes.func,
       placeHolderNumber: PropTypes.number,
       capitalize: PropTypes.bool,

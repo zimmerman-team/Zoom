@@ -605,6 +605,21 @@ function activityStatusInd(state = initial, action) {
   }
 }
 
+function transactionInd(state = initial, action) {
+  switch (action.type) {
+    case oipaActions.TRANSACTION_IND_INITIAL:
+      return updateInitial(state);
+    case oipaActions.TRANSACTION_IND_REQUEST:
+      return updateRequest(state, action);
+    case oipaActions.TRANSACTION_IND_SUCCESS:
+      return updateSuccess(state, action);
+    case oipaActions.TRANSACTION_IND_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
   datasetIds,
   chartTrashEmpty,
@@ -640,7 +655,8 @@ const reducers = {
   groupDeleted,
   userDeleted,
   userPersist,
-  activityStatusInd
+  activityStatusInd,
+  transactionInd
 };
 
 export default reducers;

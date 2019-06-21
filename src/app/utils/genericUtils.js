@@ -4,6 +4,13 @@ export function formatNumber(number) {
   return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
 }
 
+export function formatMoney(value) {
+  return value.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
 // Basically takes in a start year and an
 // end year as an array and makes a string array of year between them
 // including them both as well

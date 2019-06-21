@@ -8,6 +8,7 @@ import VisualizerModule from 'modules/visualizer/VisualizerModule';
 
 /* utils */
 import get from 'lodash/get';
+import find from 'lodash/find';
 import sortBy from 'lodash/sortBy';
 import isEqual from 'lodash/isEqual';
 import {
@@ -36,7 +37,12 @@ import { aggrOptions, rankOptions } from '__consts__/GraphStructOptionConsts';
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
 import * as actions from 'services/actions/general';
-import { activityStatusIndRequest } from 'app/services/actions/oipa';
+import {
+  activityStatusIndRequest,
+  transactionIndRequest,
+  activityStatusIndInitial,
+  transactionIndInitial
+} from 'app/services/actions/oipa';
 
 const propTypes = {
   publicChart: PropTypes.shape({}),
@@ -278,6 +284,13 @@ class VisualizerModuleMediator extends Component {
     ) {
       this.updateIndicators(this.state.indicatorData);
     }
+
+    if (
+      !isEqual(this.props.transactionIndData, prevProps.transactionIndData) &&
+      this.props.transactionIndData.data
+    ) {
+      this.updateIndicators(this.state.indicatorData);
+    }
   }
 
   componentWillUnmount() {
@@ -375,10 +388,25 @@ class VisualizerModuleMediator extends Component {
 
   updateChartColor() {
     const selectedInds = this.props.chartData.selectedInd.map(indItem => {
+      let subInd = [];
+      if (indItem.dataSource === 'IATI') {
+        subInd = indItem.selectedSubInd.map(si => {
+          if (indItem.subIndicators.edges) {
+            return find(indItem.subIndicators.edges, e => {
+              return e.node.code === si;
+            }).node.name;
+          }
+          return find(indItem.subIndicators, e => {
+            return e.value === si;
+          }).label;
+        });
+      } else {
+        subInd = indItem.selectedSubInd;
+      }
       return {
         indName: indItem.indLabel,
         subIndAggr: indItem.aggregate,
-        subInd: indItem.selectedSubInd,
+        subInd: subInd,
         dataSource: indItem.dataSource
       };
     });
@@ -398,26 +426,37 @@ class VisualizerModuleMediator extends Component {
   }
 
   getIatiIndData(iatiInd) {
-    console.log(iatiInd);
     switch (iatiInd) {
       case 'activity status':
-        return get(this.props.activityStatusIndData.data, 'results');
+        return get(this.props.activityStatusIndData.data, 'results', []);
+      case 'transactions':
+        return get(this.props.transactionIndData.data, 'results', []);
       default:
         return [];
     }
+  }
+
+  getIatiIndSubIndLabel(subIndArr, selectedSubIndArr) {
+    const labelArr = [];
+    selectedSubIndArr.forEach(item => {
+      labelArr.push(find(subIndArr, { value: item }).label);
+    });
+    return labelArr;
   }
 
   updateIndicators(
     indicatorData,
     indSelectedIndex = this.props.chartData.indSelectedIndex
   ) {
-    console.log(indicatorData);
+    // console.log(indicatorData);
     // this will be used for some extra formatting things
     // concerning chart keys and also for saving the subIndicators
     // of the appropriate indicators
     const selectedInd = [...this.props.chartData.selectedInd];
 
     const aggregationData = [];
+
+    // console.log(indicatorData);
 
     // formating indicator data commences!
     indicatorData.forEach(indItem => {
@@ -430,21 +469,43 @@ class VisualizerModuleMediator extends Component {
         data: indItem.isIATI
           ? this.getIatiIndData(indItem.indName)
           : indItem.indAggregation,
-        selectedSubInd: selectedInd[indItem.index].selectedSubInd,
-        subIndAggr: selectedInd[indItem.index].aggregate
+        selectedSubInd: !indItem.isIATI
+          ? selectedInd[indItem.index].selectedSubInd
+          : this.getIatiIndSubIndLabel(
+              selectedInd[indItem.index].subIndicators,
+              selectedInd[indItem.index].selectedSubInd
+            ),
+        subIndAggr: selectedInd[indItem.index].aggregate,
+        isIATI: indItem.isIATI,
+        indName: indItem.indName
       };
     });
 
-    console.log(aggregationData);
+    // console.log(aggregationData);
 
     // we just reparse it here, cause we want to
     // load in less data
     const selectedInds = selectedInd.map(indItem => {
+      let subIndRes = [];
+      if (indItem.dataSource === 'IATI') {
+        subIndRes = indItem.selectedSubInd.map(si => {
+          if (indItem.subIndicators.edges) {
+            return find(indItem.subIndicators.edges, e => {
+              return e.node.code === si;
+            }).node.name;
+          }
+          return find(indItem.subIndicators, e => {
+            return e.value === si;
+          }).label;
+        });
+      } else {
+        subIndRes = indItem.selectedSubInd;
+      }
       return {
         indName: indItem.indLabel,
         dataSource: indItem.dataSource,
         subIndAggr: indItem.aggregate,
-        subInd: indItem.selectedSubInd
+        subInd: subIndRes
       };
     });
 
@@ -455,11 +516,17 @@ class VisualizerModuleMediator extends Component {
     let indKeys = [];
 
     if (this.props.home) {
-      data = formatGeoData(aggregationData);
+      data = formatGeoData(
+        aggregationData,
+        this.props.dropDownData.allCountries
+      );
     } else {
       switch (this.props.match.params.chart) {
         case chartTypes.geoMap:
-          data = formatGeoData(aggregationData);
+          data = formatGeoData(
+            aggregationData,
+            this.props.dropDownData.allCountries
+          );
           break;
         case chartTypes.focusKE:
           data = formatGeoData(aggregationData);
@@ -618,20 +685,59 @@ class VisualizerModuleMediator extends Component {
   }
 
   loadIatiIndData(ind, countries) {
-    // console.log(ind);
-    const params = {
-      group_by: 'recipient_country',
-      aggregations: 'count',
-      recipient_country: countries.join(',').toUpperCase()
-    };
-    switch (ind.indicator) {
-      case 'activity_status':
-        this.props.dispatch(
-          activityStatusIndRequest({
-            ...params,
-            activity_status: ind.selectedSubInd.join(',')
-          })
-        );
+    if (ind.selectedSubInd.length === 0) {
+      switch (ind.indicator) {
+        case 'activity_status':
+          this.props.dispatch(activityStatusIndInitial());
+          break;
+        case 'transactions':
+          this.props.dispatch(transactionIndInitial());
+      }
+    } else {
+      let groupBy = '';
+      if (this.props.match.params.chart === 'barchart') {
+        if (this.props.chartData.specOptions[graphKeys.aggregate] === 'geo') {
+          groupBy = 'recipient_country';
+        } else {
+          groupBy = 'transaction_date_year';
+        }
+      } else if (this.props.match.params.chart === 'linechart') {
+        groupBy = 'transaction_date_year';
+      } else if (this.props.match.params.chart === 'donutchart') {
+        groupBy = 'recipient_country';
+      } else if (this.props.match.params.chart === 'tablechart') {
+        groupBy = 'recipient_country,transaction_date_year';
+      } else {
+        groupBy = 'recipient_country';
+      }
+      const params = {
+        convert_to: 'eur',
+        group_by: groupBy,
+        // transaction_date_year: this.state.selectedYear,
+        recipient_country: countries.join(',').toUpperCase(),
+        reporting_organisation_identifier: 'NL-KVK-41207989'
+      };
+      switch (ind.indicator) {
+        case 'activity_status':
+          this.props.dispatch(
+            activityStatusIndRequest({
+              ...params,
+              group_by: `${params.group_by},activity_status`,
+              aggregations: 'activity_count',
+              activity_status: ind.selectedSubInd.join(',')
+            })
+          );
+          break;
+        case 'transactions':
+          this.props.dispatch(
+            transactionIndRequest({
+              ...params,
+              aggregations:
+                'disbursement,expenditure,commitment,incoming_fund,incoming_commitment',
+              transaction_type: ind.selectedSubInd.join(',')
+            })
+          );
+      }
     }
   }
 
@@ -735,7 +841,6 @@ class VisualizerModuleMediator extends Component {
           indicatorDataQuery,
           refetchVars
         ).then(data => {
-          console.log(indItem);
           indicatorData.push({
             index: currIndex,
             indName: indItem.indLabel,
@@ -750,7 +855,10 @@ class VisualizerModuleMediator extends Component {
           // so we only update the indicators when we've retrieved the same
           // amount of indicator data as we have indicators selected
           if (indicatorData.length === selectedInds.length) {
-            this.setState({ loading: false, indicatorData });
+            this.setState(prevState => ({
+              loading: false,
+              indicatorData: prevState.indicatorData.concat(indicatorData)
+            }));
 
             const updateIndIndex =
               refetchOne ||
@@ -927,6 +1035,7 @@ class VisualizerModuleMediator extends Component {
             this.state.loading ||
             this.props.chartCreated.request ||
             this.props.dupChartCreated.request ||
+            this.props.transactionIndData.request ||
             this.props.activityStatusIndData.request
           }
           auth0Client={this.props.auth0Client}
@@ -953,6 +1062,7 @@ const mapStateToProps = state => {
     dupChartCreated: state.dupChartCreated,
     chartCreated: state.chartCreated,
     paneData: state.paneData.paneData,
+    transactionIndData: state.transactionInd,
     activityStatusIndData: state.activityStatusInd,
     dataPaneOpen: state.dataPaneOpen.open
   };

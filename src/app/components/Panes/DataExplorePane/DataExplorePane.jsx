@@ -26,7 +26,7 @@ import GraphStructurePanel from './panels/GraphStructurePanel/GraphStructurePane
 const propTypes = {
   selectedInd: PropTypes.arrayOf(
     PropTypes.shape({
-      indicator: PropTypes.string,
+      indicator: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       subIndicators: PropTypes.arrayOf(
         PropTypes.shape({
           label: PropTypes.string,

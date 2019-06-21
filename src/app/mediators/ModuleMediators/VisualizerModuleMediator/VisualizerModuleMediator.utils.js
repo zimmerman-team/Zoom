@@ -4,12 +4,16 @@ import { colorSet } from '__consts__/PaneConst';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 
 /* utils */
+import get from 'lodash/get';
+import find from 'lodash/find';
 import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
+import groupBy from 'lodash/groupBy';
 import findIndex from 'lodash/findIndex';
 
 /* styles */
 import theme from 'theme/Theme';
+import { formatMoney } from 'app/utils/genericUtils';
 
 // these are aggregation keys associated with graphql returned variables
 // 'geolocationTag' & 'date' are the graphql variables
@@ -49,84 +53,271 @@ export function formatCountryLayerData(
   indicators,
   indName,
   selectedSubInd,
-  subIndAggr
+  subIndAggr,
+  isIATI,
+  countriesPolygons
 ) {
   const countryLayers = {
     type: 'FeatureCollection',
     features: []
   };
 
-  indicators.forEach(indicator => {
-    const existLayerIndex = findIndex(countryLayers.features, feat => {
-      return indicator.geolocationTag === feat.properties.name;
-    });
-
-    // so here we check if we already added a country to the countries layers
-    // and if it has been added we just add the indicators value instead of pushing
-    // another country
-    // this needs to be done when using several data points with the same country
-    // example: data points with different years, will have same countries
-    // JSON.parse('{ "name":"John", "age":30, "city":"New York"}')
-    if (existLayerIndex === -1) {
-      countryLayers.features.push({
-        // we need to do a double parse here, cause we retrieve a json
-        // which is i dunno a double string or sth :D
-        geometry: JSON.parse(JSON.parse(indicator.geolocationPolygons)),
-        properties: {
-          tooltipLabels: [
-            {
-              subIndName: indicator.filterName,
-              format: indicator.valueFormatType,
-              label: subIndAggr
-                ? `${indName} - ${selectedSubInd.join(', ')}`
-                : `${indName} - ${indicator.filterName}`,
-              value: Math.round(indicator.value)
+  if (indName === 'activity status') {
+    const groupedCountries = groupBy(indicators, 'recipient_country.code');
+    Object.keys(groupedCountries).forEach(key => {
+      const countryArr = groupedCountries[key];
+      const tooltipLabels = [];
+      let value = 0;
+      let tmpVal = 0;
+      selectedSubInd.forEach(ssi => {
+        switch (ssi) {
+          case 'Pipeline/identification':
+            tmpVal = find(
+              countryArr,
+              ca => ca.activity_status.name === 'Pipeline/identification'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Pipeline/identification`,
+                value: tmpVal.activity_count
+              });
             }
-          ],
+            break;
+          case 'Implementation':
+            tmpVal = find(
+              countryArr,
+              ca => ca.activity_status.name === 'Implementation'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Implementation`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+          case 'Completion':
+            tmpVal = find(
+              countryArr,
+              ca => ca.activity_status.name === 'Completion'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Completion`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+          case 'Post-completion':
+            tmpVal = find(
+              countryArr,
+              ca => ca.activity_status.name === 'Post-completion'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Post-completion`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+          case 'Cancelled':
+            tmpVal = find(
+              countryArr,
+              ca => ca.activity_status.name === 'Cancelled'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Cancelled`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+          case 'Suspended':
+            tmpVal = find(
+              countryArr,
+              ca => ca.activity_status.name === 'Suspended'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Suspended`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+        }
+      });
+
+      const countryPolyInstance = find(countriesPolygons.edges, cp => {
+        return (
+          cp.node.iso2 === countryArr[0].recipient_country.code.toLowerCase()
+        );
+      });
+      countryLayers.features.push({
+        geometry: JSON.parse(JSON.parse(countryPolyInstance.node.polygons)),
+        properties: {
+          tooltipLabels: tooltipLabels,
           indName,
-          name: indicator.geolocationTag,
-          iso2: indicator.geolocationIso2,
-          geolocationType: indicator.geolocationType,
-          // we round it to two decimals
-          value: Math.round(indicator.value),
-          format: indicator.valueFormatType,
+          name: countryArr[0].recipient_country.name,
+          iso2: countryArr[0].recipient_country.code.toLowerCase(),
+          geolocationType: 'country',
+          value: value,
+          format: '',
           percentile: 0
         }
       });
-    } else {
-      const changeFeat = countryLayers.features[existLayerIndex];
-      changeFeat.properties.value += Math.round(indicator.value);
+    });
+  } else {
+    indicators.forEach(indicator => {
+      if (!isIATI) {
+        const existLayerIndex = findIndex(countryLayers.features, feat => {
+          return indicator.geolocationTag === feat.properties.name;
+        });
 
-      if (subIndAggr) {
-        // cause if its being aggregated, we will only have one
-        // tooltip label item, which will show the summed up value
-        changeFeat.properties.tooltipLabels[0].value += Math.round(
-          indicator.value
-        );
-      } else {
-        const labelInd = findIndex(changeFeat.properties.tooltipLabels, [
-          'subIndName',
-          indicator.filterName
-        ]);
-
-        // so if the sub indicators value exists, we will add up the value in the tool tip for that
-        // sub indicator
-        if (labelInd !== -1) {
-          changeFeat.properties.tooltipLabels[labelInd].value += Math.round(
-            indicator.value
-          );
+        // so here we check if we already added a country to the countries layers
+        // and if it has been added we just add the indicators value instead of pushing
+        // another country
+        // this needs to be done when using several data points with the same country
+        // example: data points with different years, will have same countries
+        // JSON.parse('{ "name":"John", "age":30, "city":"New York"}')
+        if (existLayerIndex === -1) {
+          countryLayers.features.push({
+            // we need to do a double parse here, cause we retrieve a json
+            // which is i dunno a double string or sth :D
+            geometry: JSON.parse(JSON.parse(indicator.geolocationPolygons)),
+            properties: {
+              tooltipLabels: [
+                {
+                  subIndName: indicator.filterName,
+                  format: indicator.valueFormatType,
+                  label: subIndAggr
+                    ? `${indName} - ${selectedSubInd.join(', ')}`
+                    : `${indName} - ${indicator.filterName}`,
+                  value: Math.round(indicator.value)
+                }
+              ],
+              indName,
+              name: indicator.geolocationTag,
+              iso2: indicator.geolocationIso2,
+              geolocationType: indicator.geolocationType,
+              // we round it to two decimals
+              value: Math.round(indicator.value),
+              format: indicator.valueFormatType,
+              percentile: 0
+            }
+          });
         } else {
-          // otherwise we just push in a new filter value
-          changeFeat.properties.tooltipLabels.push({
-            subIndName: indicator.filterName,
-            format: indicator.valueFormatType,
-            label: `${indName} - ${indicator.filterName}`,
-            value: Math.round(indicator.value)
+          const changeFeat = countryLayers.features[existLayerIndex];
+          changeFeat.properties.value += Math.round(indicator.value);
+
+          if (subIndAggr) {
+            // cause if its being aggregated, we will only have one
+            // tooltip label item, which will show the summed up value
+            changeFeat.properties.tooltipLabels[0].value += Math.round(
+              indicator.value
+            );
+          } else {
+            const labelInd = findIndex(changeFeat.properties.tooltipLabels, [
+              'subIndName',
+              indicator.filterName
+            ]);
+
+            // so if the sub indicators value exists, we will add up the value in the tool tip for that
+            // sub indicator
+            if (labelInd !== -1) {
+              changeFeat.properties.tooltipLabels[labelInd].value += Math.round(
+                indicator.value
+              );
+            } else {
+              // otherwise we just push in a new filter value
+              changeFeat.properties.tooltipLabels.push({
+                subIndName: indicator.filterName,
+                format: indicator.valueFormatType,
+                label: `${indName} - ${indicator.filterName}`,
+                value: Math.round(indicator.value)
+              });
+            }
+          }
+        }
+      } else {
+        let value = 0;
+        const tooltipLabels = [];
+        if (indName === 'transactions') {
+          selectedSubInd.forEach(ssi => {
+            switch (ssi) {
+              case 'Disbursement':
+                if (indicator.disbursement) {
+                  value += indicator.disbursement;
+                  tooltipLabels.push({
+                    subIndName: selectedSubInd,
+                    format: 'EUR',
+                    label: `${indName} - Disbursement`,
+                    value: indicator.disbursement
+                  });
+                }
+                break;
+              case 'Expenditure':
+                if (indicator.expenditure) {
+                  value += indicator.expenditure;
+                  tooltipLabels.push({
+                    subIndName: selectedSubInd,
+                    format: 'EUR',
+                    label: `${indName} - Expenditure`,
+                    value: indicator.expenditure
+                  });
+                }
+                break;
+              case 'Incoming Commitment':
+                if (indicator.incoming_commitment) {
+                  value += indicator.incoming_commitment;
+                  tooltipLabels.push({
+                    subIndName: selectedSubInd,
+                    format: 'EUR',
+                    label: `${indName} - Incoming Commitment`,
+                    value: indicator.incoming_commitment
+                  });
+                }
+                break;
+            }
           });
         }
+        const countryPolyInstance = find(countriesPolygons.edges, cp => {
+          return (
+            cp.node.iso2 === indicator.recipient_country.code.toLowerCase()
+          );
+        });
+        countryLayers.features.push({
+          geometry: JSON.parse(JSON.parse(countryPolyInstance.node.polygons)),
+          properties: {
+            tooltipLabels: tooltipLabels,
+            indName,
+            name: indicator.recipient_country.name,
+            iso2: indicator.recipient_country.code.toLowerCase(),
+            geolocationType: 'country',
+            value: value,
+            format: '',
+            percentile: 0
+          }
+        });
       }
-    }
-  });
+    });
+  }
 
   // And we add min and max values to be used for legends and what not
   countryLayers.minValue = Math.round(
@@ -154,84 +345,258 @@ export function formatCountryCenterData(
   indicators,
   indName,
   selectedSubInd,
-  subIndAggr
+  subIndAggr,
+  isIATI
 ) {
   const countryCenteredData = [];
 
-  indicators.forEach(indicator => {
-    const existCountryIndex = findIndex(countryCenteredData, [
-      'name',
-      indicator.geolocationTag
-    ]);
-
-    if (indicator.geolocationCenterLongLat) {
-      // so here we check if we already added a country to the countries layers
-      // and if it has been added we just add the indicators value instead of pushing
-      // another country
-      // this needs to be done when using several data points with the same country
-      // example: data points with different years, will have same countries
-      if (existCountryIndex === -1) {
-        // we need to do a double parse here, cause we retrieve a json
-        // which is i dunno a double string or sth :D
-        const coord = JSON.parse(JSON.parse(indicator.geolocationCenterLongLat))
-          .coordinates;
-        countryCenteredData.push({
-          tooltipLabels: [
-            {
-              subIndName: indicator.filterName,
-              format: indicator.valueFormatType,
-              label: subIndAggr
-                ? `${indName} - ${selectedSubInd.join(', ')}`
-                : `${indName} - ${indicator.filterName}`,
-              value: Math.round(indicator.value)
+  if (indName === 'activity status') {
+    const groupedCountries = groupBy(indicators, 'recipient_country.code');
+    Object.keys(groupedCountries).forEach(key => {
+      const countryArr = groupedCountries[key];
+      const tooltipLabels = [];
+      let value = 0;
+      let tmpVal = 0;
+      selectedSubInd.forEach(ssi => {
+        switch (ssi) {
+          case 'Pipeline/identification':
+            tmpVal = find(
+              countryArr,
+              ca => ca.activity_status.name === 'Pipeline/identification'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Pipeline/identification`,
+                value: tmpVal.activity_count
+              });
             }
-          ],
-          indName,
-          value: Math.round(indicator.value),
-          geolocationIso2: indicator.geolocationIso2,
-          geolocationType: indicator.geolocationType,
-          maxValue: 0,
-          minValue: 0,
-          longitude: coord[0],
-          latitude: coord[1],
-          name: indicator.geolocationTag
-        });
-      } else {
-        countryCenteredData[existCountryIndex].value =
-          countryCenteredData[existCountryIndex].value +
-          Math.round(indicator.value);
+            break;
+          case 'Implementation':
+            tmpVal = find(
+              countryArr,
+              ca => ca.activity_status.name === 'Implementation'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Implementation`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+          case 'Completion':
+            tmpVal = find(
+              countryArr,
+              ca => ca.activity_status.name === 'Completion'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Completion`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+          case 'Post-completion':
+            tmpVal = find(
+              countryArr,
+              ca => ca.activity_status.name === 'Post-completion'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Post-completion`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+          case 'Cancelled':
+            tmpVal = find(
+              countryArr,
+              ca => ca.activity_status.name === 'Cancelled'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Cancelled`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+          case 'Suspended':
+            tmpVal = find(
+              countryArr,
+              ca => ca.activity_status.name === 'Suspended'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Suspended`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+        }
+      });
+      countryCenteredData.push({
+        tooltipLabels: tooltipLabels,
+        indName,
+        value: value,
+        name: countryArr[0].recipient_country.name,
+        geolocationIso2: countryArr[0].recipient_country.code.toLowerCase(),
+        geolocationType: 'country',
+        longitude: countryArr[0].recipient_country.location.coordinates[0],
+        latitude: countryArr[0].recipient_country.location.coordinates[1],
+        maxValue: 0,
+        minValue: 0
+      });
+    });
+  } else {
+    indicators.forEach(indicator => {
+      if (!isIATI) {
+        const existCountryIndex = findIndex(countryCenteredData, [
+          'name',
+          indicator.geolocationTag
+        ]);
 
-        if (subIndAggr) {
-          // cause if its being aggregated, we will only have one
-          // tooltip label item, which will show the summed up value
-          countryCenteredData[
-            existCountryIndex
-          ].tooltipLabels[0].value += Math.round(indicator.value);
-        } else {
-          const labelInd = findIndex(
-            countryCenteredData[existCountryIndex].tooltipLabels,
-            ['subIndName', indicator.filterName]
-          );
-
-          // so if the sub indicators value exists, we will add up the value in the tool tip for that
-          // sub indicator
-          if (labelInd !== -1) {
-            countryCenteredData[existCountryIndex].tooltipLabels[
-              labelInd
-            ].value += Math.round(indicator.value);
-          } else {
-            // otherwise we just push in a new filter value
-            countryCenteredData[existCountryIndex].tooltipLabels.push({
-              subIndName: indicator.filterName,
-              format: indicator.valueFormatType,
-              label: `${indName} - ${indicator.filterName}`,
-              value: Math.round(indicator.value)
+        if (indicator.geolocationCenterLongLat) {
+          // so here we check if we already added a country to the countries layers
+          // and if it has been added we just add the indicators value instead of pushing
+          // another country
+          // this needs to be done when using several data points with the same country
+          // example: data points with different years, will have same countries
+          if (existCountryIndex === -1) {
+            // we need to do a double parse here, cause we retrieve a json
+            // which is i dunno a double string or sth :D
+            const coord = JSON.parse(
+              JSON.parse(indicator.geolocationCenterLongLat)
+            ).coordinates;
+            countryCenteredData.push({
+              tooltipLabels: [
+                {
+                  subIndName: indicator.filterName,
+                  format: indicator.valueFormatType,
+                  label: subIndAggr
+                    ? `${indName} - ${selectedSubInd.join(', ')}`
+                    : `${indName} - ${indicator.filterName}`,
+                  value: Math.round(indicator.value)
+                }
+              ],
+              indName,
+              value: Math.round(indicator.value),
+              geolocationIso2: indicator.geolocationIso2,
+              geolocationType: indicator.geolocationType,
+              maxValue: 0,
+              minValue: 0,
+              longitude: coord[0],
+              latitude: coord[1],
+              name: indicator.geolocationTag
             });
+          } else {
+            countryCenteredData[existCountryIndex].value =
+              countryCenteredData[existCountryIndex].value +
+              Math.round(indicator.value);
+
+            if (subIndAggr) {
+              // cause if its being aggregated, we will only have one
+              // tooltip label item, which will show the summed up value
+              countryCenteredData[
+                existCountryIndex
+              ].tooltipLabels[0].value += Math.round(indicator.value);
+            } else {
+              const labelInd = findIndex(
+                countryCenteredData[existCountryIndex].tooltipLabels,
+                ['subIndName', indicator.filterName]
+              );
+
+              // so if the sub indicators value exists, we will add up the value in the tool tip for that
+              // sub indicator
+              if (labelInd !== -1) {
+                countryCenteredData[existCountryIndex].tooltipLabels[
+                  labelInd
+                ].value += Math.round(indicator.value);
+              } else {
+                // otherwise we just push in a new filter value
+                countryCenteredData[existCountryIndex].tooltipLabels.push({
+                  subIndName: indicator.filterName,
+                  format: indicator.valueFormatType,
+                  label: `${indName} - ${indicator.filterName}`,
+                  value: Math.round(indicator.value)
+                });
+              }
+            }
           }
         }
+      } else {
+        let value = 0;
+        const tooltipLabels = [];
+        if (indName === 'transactions') {
+          selectedSubInd.forEach(ssi => {
+            switch (ssi) {
+              case 'Disbursement':
+                if (indicator.disbursement) {
+                  value += indicator.disbursement;
+                  tooltipLabels.push({
+                    subIndName: selectedSubInd,
+                    format: 'EUR',
+                    label: `${indName} - Disbursement`,
+                    value: indicator.disbursement
+                  });
+                }
+                break;
+              case 'Expenditure':
+                if (indicator.expenditure) {
+                  value += indicator.expenditure;
+                  tooltipLabels.push({
+                    subIndName: selectedSubInd,
+                    format: 'EUR',
+                    label: `${indName} - Expenditure`,
+                    value: indicator.expenditure
+                  });
+                }
+                break;
+              case 'Incoming Commitment':
+                if (indicator.incoming_commitment) {
+                  value += indicator.incoming_commitment;
+                  tooltipLabels.push({
+                    subIndName: selectedSubInd,
+                    format: 'EUR',
+                    label: `${indName} - Incoming Commitment`,
+                    value: indicator.incoming_commitment
+                  });
+                }
+                break;
+            }
+          });
+        }
+        countryCenteredData.push({
+          tooltipLabels: tooltipLabels,
+          indName,
+          value: value,
+          name: indicator.recipient_country.name,
+          geolocationIso2: indicator.recipient_country.code.toLowerCase(),
+          geolocationType: 'country',
+          longitude: indicator.recipient_country.location.coordinates[0],
+          latitude: indicator.recipient_country.location.coordinates[1],
+          maxValue: 0,
+          minValue: 0
+        });
       }
-    }
-  });
+    });
+  }
 
   const maxValue = Math.max.apply(
     Math,
@@ -406,7 +771,7 @@ export function formatDate(created) {
   )} ${date.getFullYear()}`;
 }
 
-export function formatGeoData(indAggregations) {
+export function formatGeoData(indAggregations, countriesPolygons) {
   let longLatData = [];
   let countryLayerData = {};
   const geomapData = [];
@@ -416,7 +781,9 @@ export function formatGeoData(indAggregations) {
 
   indAggregations.forEach((aggregation, index) => {
     if (aggregation.data && aggregation.data[0]) {
-      const indName = aggregation.data[0].indicatorName;
+      const indName = aggregation.isIATI
+        ? aggregation.indName
+        : aggregation.data[0].indicatorName;
 
       // so the first data item is layer legend
       if (index === 0) {
@@ -426,7 +793,9 @@ export function formatGeoData(indAggregations) {
           aggregation.data,
           indName,
           aggregation.selectedSubInd,
-          aggregation.subIndAggr
+          aggregation.subIndAggr,
+          aggregation.isIATI,
+          countriesPolygons
         );
 
         // and we push them into the indicatorData array for the geomap
@@ -447,7 +816,8 @@ export function formatGeoData(indAggregations) {
           aggregation.data,
           indName,
           aggregation.selectedSubInd,
-          aggregation.subIndAggr
+          aggregation.subIndAggr,
+          aggregation.isIATI
         );
 
         // and we push in the circle data for the indicatorData array for the geomap
@@ -627,53 +997,207 @@ export function formatLineData(
 
   indicators.forEach((indicator, index) => {
     if (indicator.data.length > 0) {
-      const existInd = indicatorNames.indexOf(indicator.data[0].indicatorName);
+      if (!indicator.isIATI) {
+        const existInd = indicatorNames.indexOf(
+          indicator.data[0].indicatorName
+        );
 
-      let indName = indicator.data[0].indicatorName;
+        let indName = indicator.data[0].indicatorName;
 
-      // so we need this logic for when a person would
-      // plot two indicators with the same name
-      // as the id needs to be unique, we just add
-      // the index as a suffix
-      if (existInd !== -1) indName = indName.concat(` (${index})`);
+        // so we need this logic for when a person would
+        // plot two indicators with the same name
+        // as the id needs to be unique, we just add
+        // the index as a suffix
+        if (existInd !== -1) indName = indName.concat(` (${index})`);
 
-      indicatorNames.push(indName);
+        indicatorNames.push(indName);
 
-      indicator.data.forEach(indItem => {
-        // yeah and cause we might receive data with the same geolocation name
-        // we add in the values for that geolocation so it wouldn't be repeated over and over
-        const existItemInd = findIndex(indicatorData, existing => {
-          return indItem[aggrKey] === existing[aggrKey];
-        });
-
-        let aggrValue = indItem.date;
-
-        if (aggrKey === 'geolocationTag') {
-          aggrValue =
-            indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
-              ? indItem.geolocationIso2
-              : indItem.geolocationTag;
-        }
-
-        const itemId = indicator.subIndAggr
-          ? indName
-          : `${indName} - ${indItem.filterName}`;
-
-        if (existItemInd === -1) {
-          indicatorData.push({
-            [aggrKey]: indItem[aggrKey],
-            [aggregate]: aggrValue,
-            [itemId]: Math.round(indItem.value),
-            [`${itemId}Format`]: indItem.valueFormatType
+        indicator.data.forEach(indItem => {
+          // yeah and cause we might receive data with the same geolocation name
+          // we add in the values for that geolocation so it wouldn't be repeated over and over
+          const existItemInd = findIndex(indicatorData, existing => {
+            return indItem[aggrKey] === existing[aggrKey];
           });
-        } else if (indicatorData[existItemInd][itemId] !== undefined) {
-          indicatorData[existItemInd][itemId] += Math.round(indItem.value);
-        } else {
-          indicatorData[existItemInd][itemId] = Math.round(indItem.value);
-          indicatorData[existItemInd][`${itemId}Format`] =
-            indItem.valueFormatType;
-        }
-      });
+
+          let aggrValue = indItem.date;
+
+          if (aggrKey === 'geolocationTag') {
+            aggrValue =
+              indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
+                ? indItem.geolocationIso2
+                : indItem.geolocationTag;
+          }
+
+          const itemId = indicator.subIndAggr
+            ? indName
+            : `${indName} - ${indItem.filterName}`;
+
+          if (existItemInd === -1) {
+            indicatorData.push({
+              [aggrKey]: indItem[aggrKey],
+              [aggregate]: aggrValue,
+              [itemId]: Math.round(indItem.value),
+              [`${itemId}Format`]: indItem.valueFormatType
+            });
+          } else if (indicatorData[existItemInd][itemId] !== undefined) {
+            indicatorData[existItemInd][itemId] += Math.round(indItem.value);
+          } else {
+            indicatorData[existItemInd][itemId] = Math.round(indItem.value);
+            indicatorData[existItemInd][`${itemId}Format`] =
+              indItem.valueFormatType;
+          }
+        });
+      } else if (indicator.indName === 'activity status') {
+        const iatiAggrKey = 'date';
+        const existInd = indicatorNames.indexOf(indicator.indName);
+        let indName = indicator.indName;
+        if (existInd !== -1) indName = indName.concat(` (${index})`);
+        indicatorNames.push(indName);
+        const groupedYears = groupBy(indicator.data, 'transaction_date_year');
+        Object.keys(groupedYears).forEach(key => {
+          const yearArr = groupedYears[key];
+          let value = 0;
+          let tmpVal = null;
+          indicator.selectedSubInd.forEach(ssi => {
+            value = 0;
+            tmpVal = null;
+            switch (ssi) {
+              case 'Pipeline/identification':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.activity_status.name === 'Pipeline/identification'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'Implementation':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.activity_status.name === 'Implementation'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'Completion':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.activity_status.name === 'Completion'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'Post-completion':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.activity_status.name === 'Post-completion'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'Cancelled':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.activity_status.name === 'Cancelled'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'Suspended':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.activity_status.name === 'Suspended'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+            }
+            const existItemInd = findIndex(indicatorData, existing => {
+              return key === existing[iatiAggrKey];
+            });
+            const aggrValue = key;
+            const itemId = `${indName} - ${ssi}`;
+            if (existItemInd === -1) {
+              if (value > 0) {
+                indicatorData.push({
+                  [iatiAggrKey]: key,
+                  [aggregate]: aggrValue,
+                  [itemId]: value,
+                  [`${itemId}Format`]: 'activities'
+                });
+              }
+            } else if (indicatorData[existItemInd][itemId] !== undefined) {
+              indicatorData[existItemInd][itemId] += value;
+            } else if (value > 0) {
+              indicatorData[existItemInd][itemId] = value;
+              indicatorData[existItemInd][`${itemId}Format`] = 'activities';
+            }
+          });
+        });
+      } else {
+        const iatiAggrKey = 'date';
+        const existInd = indicatorNames.indexOf(indicator.indName);
+
+        let indName = indicator.indName;
+
+        if (existInd !== -1) indName = indName.concat(` (${index})`);
+
+        indicatorNames.push(indName);
+
+        indicator.data.forEach(indItem => {
+          indicator.selectedSubInd.forEach(si => {
+            const existItemInd = findIndex(indicatorData, existing => {
+              return (
+                indItem.transaction_date_year.toString() ===
+                existing[iatiAggrKey].toString()
+              );
+            });
+
+            const aggrValue = indItem.transaction_date_year;
+
+            const itemId = `${indName} - ${si}`;
+
+            let value = 0;
+
+            if (indName === 'transactions') {
+              switch (si) {
+                case 'Disbursement':
+                  value += indItem.disbursement;
+                  break;
+                case 'Expenditure':
+                  value += indItem.expenditure;
+                  break;
+                case 'Incoming Commitment':
+                  value += indItem.incoming_commitment;
+                  break;
+              }
+            } else {
+              value = indItem.activity_count;
+            }
+
+            if (existItemInd === -1) {
+              if (value > 0) {
+                indicatorData.push({
+                  [iatiAggrKey]: indItem.transaction_date_year.toString(),
+                  [aggregate]: aggrValue.toString(),
+                  [itemId]: value,
+                  [`${itemId}Format`]: 'EUR'
+                });
+              }
+            } else if (indicatorData[existItemInd][itemId] !== undefined) {
+              indicatorData[existItemInd][itemId] += value;
+            } else if (value > 0) {
+              indicatorData[existItemInd][itemId] = value;
+              indicatorData[existItemInd][`${itemId}Format`] = 'EUR';
+            }
+          });
+        });
+      }
     }
   });
 
@@ -809,73 +1333,241 @@ export function formatBarData(
   }
 
   const aggrKey = aggrKeys[aggregate];
+  const iatiAggrKey =
+    aggregate === 'geo' ? 'recipient_country.code' : 'transaction_date_year';
 
   let colorInd = 0;
   indicators.forEach((indicator, index) => {
     if (indicator.data.length > 0) {
-      const existInd = barIndKeys.indexOf(indicator.data[0].indicatorName);
-      let indName = indicator.data[0].indicatorName;
+      if (!indicator.isIATI) {
+        const existInd = barIndKeys.indexOf(indicator.data[0].indicatorName);
+        let indName = indicator.data[0].indicatorName;
 
-      // so we need this logic for when a person would
-      // plot two indicators with the same name
-      // as the id needs to be unique, we just add
-      // the index as a suffix
-      if (existInd !== -1) indName = indName.concat(` (${index})`);
+        // so we need this logic for when a person would
+        // plot two indicators with the same name
+        // as the id needs to be unique, we just add
+        // the index as a suffix
+        if (existInd !== -1) indName = indName.concat(` (${index})`);
 
-      barIndKeys.push(indName);
+        barIndKeys.push(indName);
 
-      indicator.data.forEach(indItem => {
-        // yeah and cause we might receive data with the same geolocation name
-        // we add in the values for that geolocation so it wouldn't be repeated over and over
-        const existItemInd = findIndex(barChartData, existing => {
-          return indItem[aggrKey] === existing[aggrKey];
+        indicator.data.forEach(indItem => {
+          // yeah and cause we might receive data with the same geolocation name
+          // we add in the values for that geolocation so it wouldn't be repeated over and over
+          const existItemInd = findIndex(barChartData, existing => {
+            return indItem[aggrKey] === existing[aggrKey];
+          });
+
+          let aggrValue = indItem.date;
+
+          if (aggrKey === 'geolocationTag') {
+            aggrValue =
+              indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
+                ? indItem.geolocationIso2.toUpperCase()
+                : indItem.geolocationTag;
+          }
+
+          let itemId = `${indName} - ${indItem.filterName}`;
+          let label = itemId;
+
+          if (indicator.subIndAggr) {
+            itemId = indName;
+            label = `${itemId} - ${indicator.selectedSubInd.join(', ')}`;
+          }
+
+          if (existItemInd === -1) {
+            barChartData.push({
+              // so this variable will basically be used for sorting
+              // by biggest or lowest value, of joined bars
+              allValSum: Math.round(indItem.value),
+              [`${itemId}Label`]: label,
+
+              [aggrKey]: indItem[aggrKey],
+              [aggregate]: aggrValue,
+
+              [itemId]: Math.round(indItem.value),
+              [`${itemId}Color`]: colors[colorInd],
+              [`${itemId}Format`]: indItem.valueFormatType
+            });
+          } else if (barChartData[existItemInd][itemId] !== undefined) {
+            barChartData[existItemInd].allValSum += Math.round(indItem.value);
+            barChartData[existItemInd][itemId] += Math.round(indItem.value);
+          } else {
+            barChartData[existItemInd].allValSum += Math.round(indItem.value);
+            barChartData[existItemInd][itemId] = Math.round(indItem.value);
+            barChartData[existItemInd][`${itemId}Color`] = colors[colorInd];
+            barChartData[existItemInd][`${itemId}Label`] = label;
+            barChartData[existItemInd][`${itemId}Format`] =
+              indItem.valueFormatType;
+          }
         });
 
-        let aggrValue = indItem.date;
-
-        if (aggrKey === 'geolocationTag') {
-          aggrValue =
-            indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
-              ? indItem.geolocationIso2.toUpperCase()
-              : indItem.geolocationTag;
-        }
-
-        let itemId = `${indName} - ${indItem.filterName}`;
-        let label = itemId;
-
-        if (indicator.subIndAggr) {
-          itemId = indName;
-          label = `${itemId} - ${indicator.selectedSubInd.join(', ')}`;
-        }
-
-        if (existItemInd === -1) {
-          barChartData.push({
-            // so this variable will basically be used for sorting
-            // by biggest or lowest value, of joined bars
-            allValSum: Math.round(indItem.value),
-            [`${itemId}Label`]: label,
-
-            [aggrKey]: indItem[aggrKey],
-            [aggregate]: aggrValue,
-
-            [itemId]: Math.round(indItem.value),
-            [`${itemId}Color`]: colors[colorInd],
-            [`${itemId}Format`]: indItem.valueFormatType
+        if (colorInd + 1 < colors.length) colorInd += 1;
+      } else if (indicator.indName === 'activity status') {
+        const existInd = barIndKeys.indexOf(indicator.indName);
+        let indName = indicator.indName;
+        if (existInd !== -1) indName = indName.concat(` (${index})`);
+        barIndKeys.push(indName);
+        const groupedYears = groupBy(indicator.data, iatiAggrKey);
+        Object.keys(groupedYears).forEach(key => {
+          const yearArr = groupedYears[key];
+          let value = 0;
+          let tmpVal = null;
+          indicator.selectedSubInd.forEach(ssi => {
+            value = 0;
+            tmpVal = null;
+            switch (ssi) {
+              case 'Pipeline/identification':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.activity_status.name === 'Pipeline/identification'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'Implementation':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.activity_status.name === 'Implementation'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'Completion':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.activity_status.name === 'Completion'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'Post-completion':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.activity_status.name === 'Post-completion'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'Cancelled':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.activity_status.name === 'Cancelled'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'Suspended':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.activity_status.name === 'Suspended'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+            }
+            const existItemInd = findIndex(barChartData, existing => {
+              return key === existing[aggrKey];
+            });
+            const aggrValue = key;
+            const itemId = `${indName} - ${ssi}`;
+            if (existItemInd === -1) {
+              if (value > 0) {
+                barChartData.push({
+                  allValSum: value,
+                  [`${itemId}Label`]: itemId,
+                  [`${itemId}Color`]: colors[colorInd],
+                  [aggrKey]: key,
+                  [aggregate]: aggrValue,
+                  [itemId]: value,
+                  [`${itemId}Format`]: 'activities'
+                });
+              }
+            } else if (barChartData[existItemInd][itemId] !== undefined) {
+              barChartData[existItemInd][itemId] += value;
+              barChartData[existItemInd].allValSum += value;
+            } else if (value > 0) {
+              barChartData[existItemInd].allValSum += value;
+              barChartData[existItemInd][`${itemId}Color`] = colors[colorInd];
+              barChartData[existItemInd][`${itemId}Label`] = itemId;
+              barChartData[existItemInd][itemId] = value;
+              barChartData[existItemInd][`${itemId}Format`] = 'activities';
+            }
           });
-        } else if (barChartData[existItemInd][itemId] !== undefined) {
-          barChartData[existItemInd].allValSum += Math.round(indItem.value);
-          barChartData[existItemInd][itemId] += Math.round(indItem.value);
-        } else {
-          barChartData[existItemInd].allValSum += Math.round(indItem.value);
-          barChartData[existItemInd][itemId] = Math.round(indItem.value);
-          barChartData[existItemInd][`${itemId}Color`] = colors[colorInd];
-          barChartData[existItemInd][`${itemId}Label`] = label;
-          barChartData[existItemInd][`${itemId}Format`] =
-            indItem.valueFormatType;
-        }
-      });
+          if (colorInd + 1 < colors.length) colorInd += 1;
+        });
+      } else {
+        const existInd = barIndKeys.indexOf(indicator.indName);
 
-      if (colorInd + 1 < colors.length) colorInd += 1;
+        let indName = indicator.indName;
+
+        if (existInd !== -1) indName = indName.concat(` (${index})`);
+
+        barIndKeys.push(indName);
+
+        indicator.data.forEach(indItem => {
+          indicator.selectedSubInd.forEach(si => {
+            const existItemInd = findIndex(barChartData, existing => {
+              return (
+                get(indItem, iatiAggrKey).toString() ===
+                existing[aggrKey].toString()
+              );
+            });
+
+            const aggrValue = get(indItem, iatiAggrKey);
+
+            const itemId = `${indName} - ${si}`;
+
+            let value = 0;
+
+            if (indName === 'transactions') {
+              switch (si) {
+                case 'Disbursement':
+                  value += indItem.disbursement;
+                  break;
+                case 'Expenditure':
+                  value += indItem.expenditure;
+                  break;
+                case 'Incoming Commitment':
+                  value += indItem.incoming_commitment;
+                  break;
+              }
+            } else {
+              value = indItem.activity_count;
+            }
+
+            if (existItemInd === -1) {
+              if (value > 0) {
+                barChartData.push({
+                  allValSum: value,
+                  [`${itemId}Label`]: itemId,
+                  [`${itemId}Color`]: colors[colorInd],
+                  [aggrKey]: aggrValue.toString(),
+                  [aggregate]: aggrValue.toString(),
+                  [itemId]: value,
+                  [`${itemId}Format`]: 'EUR'
+                });
+              }
+            } else if (barChartData[existItemInd][itemId] !== undefined) {
+              barChartData[existItemInd][itemId] += value;
+              barChartData[existItemInd].allValSum += value;
+            } else if (value > 0) {
+              barChartData[existItemInd][itemId] = value;
+              barChartData[existItemInd][`${itemId}Format`] = 'EUR';
+              barChartData[existItemInd].allValSum += value;
+              barChartData[existItemInd][`${itemId}Color`] = colors[colorInd];
+              barChartData[existItemInd][`${itemId}Label`] = itemId;
+            }
+          });
+          if (colorInd + 1 < colors.length) colorInd += 1;
+        });
+      }
     }
   });
 
@@ -901,7 +1593,16 @@ export function formatTableData(indicators) {
   tableChartColumns.push(
     { name: `Geolocation` },
     { name: 'Date' },
-    { name: `Measure Value` },
+    {
+      name: `Measure Value`,
+      options: {
+        customBodyRender: (value, tableMeta) => {
+          if (tableMeta.rowData[3] === 'transactions')
+            return formatMoney(value);
+          return value;
+        }
+      }
+    },
     { name: 'Indicator' },
     { name: 'Sub-Indicator' },
     { name: 'Unit of measure' },
@@ -911,37 +1612,106 @@ export function formatTableData(indicators) {
 
   indicators.forEach(indicator => {
     if (indicator.data.length > 0) {
-      indicator.data.forEach(indItem => {
-        tableChartData.push([
-          //Geolocation
-          indItem.geolocationTag === null || indItem.geolocationTag.length <= 0
-            ? 'N/A'
-            : indItem.geolocationTag,
+      if (!indicator.isIATI) {
+        indicator.data.forEach(indItem => {
+          tableChartData.push([
+            //Geolocation
+            indItem.geolocationTag === null ||
+            indItem.geolocationTag.length <= 0
+              ? 'N/A'
+              : indItem.geolocationTag,
 
-          //Date
-          indItem.date === null || indItem.date.length <= 0
-            ? 'N/A'
-            : indItem.date,
+            //Date
+            indItem.date === null || indItem.date.length <= 0
+              ? 'N/A'
+              : indItem.date,
 
-          //Measure Value
-          indItem.value === null ? 'N/A' : Math.round(indItem.value),
+            //Measure Value
+            indItem.value === null ? 'N/A' : Math.round(indItem.value),
 
-          //Indicator
-          indItem.indicatorName,
+            //Indicator
+            indItem.indicatorName,
 
-          //Sub-Indicator
-          indItem.filterName,
+            //Sub-Indicator
+            indItem.filterName,
 
-          //Unit of measure
-          indItem.valueFormatType,
+            //Unit of measure
+            indItem.valueFormatType,
 
-          //ISO2 codes
-          indItem.geolocationIso2 === null ||
-          indItem.geolocationIso2.length <= 0
-            ? 'N/A'
-            : indItem.geolocationIso2.toUpperCase()
-        ]);
-      });
+            //ISO2 codes
+            indItem.geolocationIso2 === null ||
+            indItem.geolocationIso2.length <= 0
+              ? 'N/A'
+              : indItem.geolocationIso2.toUpperCase()
+          ]);
+        });
+      } else if (indicator.indName === 'activity status') {
+        indicator.data.forEach(indItem => {
+          tableChartData.push([
+            //Geolocation
+            get(indItem, 'recipient_country.name', 'N/A'),
+
+            //Date
+            get(indItem, 'transaction_date_year', 'N/A'),
+
+            //Measure Value
+            indItem.activity_count,
+
+            //Indicator
+            indicator.indName,
+
+            //Sub-Indicator
+            get(indItem, 'activity_status.name', 'N/A'),
+
+            //Unit of measure
+            'nr of activities',
+
+            //ISO2 codes
+            get(indItem, 'recipient_country.code', 'N/A').toUpperCase()
+          ]);
+        });
+      } else {
+        indicator.data.forEach(indItem => {
+          indicator.selectedSubInd.forEach(si => {
+            let value = 0;
+            switch (si) {
+              case 'Disbursement':
+                value = indItem.disbursement;
+                break;
+              case 'Expenditure':
+                value = indItem.expenditure;
+                break;
+              case 'Incoming Commitment':
+                value = indItem.incoming_commitment;
+                break;
+            }
+            if (value > 0) {
+              tableChartData.push([
+                //Geolocation
+                get(indItem, 'recipient_country.name', 'N/A'),
+
+                //Date
+                get(indItem, 'transaction_date_year', 'N/A'),
+
+                //Measure Value
+                value,
+
+                //Indicator
+                indicator.indName,
+
+                //Sub-Indicator
+                si,
+
+                //Unit of measure
+                'EUR',
+
+                //ISO2 codes
+                get(indItem, 'recipient_country.code', 'N/A').toUpperCase()
+              ]);
+            }
+          });
+        });
+      }
     }
   });
   return {
@@ -1009,58 +1779,217 @@ export function formatDonutData(
   }
 
   indicators.forEach((indicator, indIndex) => {
-    if (indicator.data[0]) {
-      let indName = indicator.data[0].indicatorName;
-      const existInd = donutChartLabels.indexOf(indName);
+    if (!indicator.isIATI) {
+      if (indicator.data[0]) {
+        let indName = indicator.data[0].indicatorName;
+        const existInd = donutChartLabels.indexOf(indName);
 
-      // so we need this logic for when a person would
-      // plot two indicators with the same name
-      // as the id needs to be unique, we just add
-      // the index as a suffix
+        // so we need this logic for when a person would
+        // plot two indicators with the same name
+        // as the id needs to be unique, we just add
+        // the index as a suffix
+        if (existInd !== -1) indName = indName.concat(` (${indIndex})`);
+
+        donutChartLabels.push(indName);
+
+        indicator.data.forEach((indItem, itemIndex) => {
+          let itemId = `${indName} - ${indItem.filterName}`;
+          let label = itemId;
+
+          if (indicator.subIndAggr) {
+            itemId = indName;
+            label = `${indName} - ${indicator.selectedSubInd.join(', ')}`;
+          }
+
+          const chartItemInd = findIndex(chartData, chartItem => {
+            if (aggrCountry) {
+              return chartItem.key === itemId;
+            }
+
+            return (
+              chartItem.key === itemId &&
+              chartItem.geolocationTag === indItem.geolocationTag
+            );
+          });
+
+          if (chartItemInd === -1) {
+            let geoName = null;
+
+            if (!aggrCountry) {
+              geoName = indItem.geolocationTag;
+              geoName = geoName.charAt(0).toUpperCase() + geoName.slice(1);
+            }
+
+            chartData.push({
+              geoName,
+              geolocationTag: indItem.geolocationTag,
+              id: `${itemId} ${itemIndex}`,
+              key: `${itemId}`,
+              label,
+              value: Math.round(indItem.value),
+              format: indItem.valueFormatType
+            });
+          } else {
+            chartData[chartItemInd].value += Math.round(indItem.value);
+          }
+        });
+      }
+    } else if (indicator.indName === 'activity status') {
+      const existInd = donutChartLabels.indexOf(indicator.indName);
+      let indName = indicator.indName;
+      if (existInd !== -1) indName = indName.concat(` (${indIndex})`);
+      donutChartLabels.push(indName);
+      const groupedCountries = groupBy(
+        indicator.data,
+        'recipient_country.code'
+      );
+      Object.keys(groupedCountries).forEach((key, index) => {
+        const countryArr = groupedCountries[key];
+        let value = 0;
+        let tmpVal = null;
+        indicator.selectedSubInd.forEach(ssi => {
+          value = 0;
+          tmpVal = null;
+          switch (ssi) {
+            case 'Pipeline/identification':
+              tmpVal = find(
+                countryArr,
+                ca => ca.activity_status.name === 'Pipeline/identification'
+              );
+              if (tmpVal) {
+                value += tmpVal.activity_count;
+              }
+              break;
+            case 'Implementation':
+              tmpVal = find(
+                countryArr,
+                ca => ca.activity_status.name === 'Implementation'
+              );
+              if (tmpVal) {
+                value += tmpVal.activity_count;
+              }
+              break;
+            case 'Completion':
+              tmpVal = find(
+                countryArr,
+                ca => ca.activity_status.name === 'Completion'
+              );
+              if (tmpVal) {
+                value += tmpVal.activity_count;
+              }
+              break;
+            case 'Post-completion':
+              tmpVal = find(
+                countryArr,
+                ca => ca.activity_status.name === 'Post-completion'
+              );
+              if (tmpVal) {
+                value += tmpVal.activity_count;
+              }
+              break;
+            case 'Cancelled':
+              tmpVal = find(
+                countryArr,
+                ca => ca.activity_status.name === 'Cancelled'
+              );
+              if (tmpVal) {
+                value += tmpVal.activity_count;
+              }
+              break;
+            case 'Suspended':
+              tmpVal = find(
+                countryArr,
+                ca => ca.activity_status.name === 'Suspended'
+              );
+              if (tmpVal) {
+                value += tmpVal.activity_count;
+              }
+              break;
+          }
+          const itemId = `${indName} - ${ssi}`;
+          const chartItemInd = findIndex(chartData, chartItem => {
+            if (aggrCountry) {
+              return chartItem.key === itemId;
+            }
+
+            return (
+              chartItem.key === itemId &&
+              chartItem.geolocationTag === countryArr[0].recipient_country.name
+            );
+          });
+          if (chartItemInd === -1) {
+            if (value > 0) {
+              chartData.push({
+                geoName: aggrCountry
+                  ? itemId
+                  : countryArr[0].recipient_country.name,
+                geolocationTag: countryArr[0].recipient_country.name,
+                id: `${itemId} ${index}`,
+                key: itemId,
+                label: itemId,
+                value: value,
+                format: 'activities'
+              });
+            }
+          } else {
+            chartData[chartItemInd].value += value;
+          }
+        });
+      });
+    } else if (indicator.indName === 'transactions') {
+      const iatiAggrKey = 'date';
+      const existInd = donutChartLabels.indexOf(indicator.indName);
+
+      let indName = indicator.indName;
+
       if (existInd !== -1) indName = indName.concat(` (${indIndex})`);
 
       donutChartLabels.push(indName);
 
-      indicator.data.forEach((indItem, itemIndex) => {
-        let itemId = `${indName} - ${indItem.filterName}`;
-        let label = itemId;
+      indicator.data.forEach((indItem, index) => {
+        indicator.selectedSubInd.forEach(si => {
+          const itemId = `${indName} - ${si}`;
 
-        if (indicator.subIndAggr) {
-          itemId = indName;
-          label = `${indName} - ${indicator.selectedSubInd.join(', ')}`;
-        }
-
-        const chartItemInd = findIndex(chartData, chartItem => {
-          if (aggrCountry) {
-            return chartItem.key === itemId;
+          let value = 0;
+          switch (si) {
+            case 'Disbursement':
+              value += indItem.disbursement;
+              break;
+            case 'Expenditure':
+              value += indItem.expenditure;
+              break;
+            case 'Incoming Commitment':
+              value += indItem.incoming_commitment;
+              break;
           }
 
-          return (
-            chartItem.key === itemId &&
-            chartItem.geolocationTag === indItem.geolocationTag
-          );
-        });
+          const chartItemInd = findIndex(chartData, chartItem => {
+            if (aggrCountry) {
+              return chartItem.key === itemId;
+            }
 
-        if (chartItemInd === -1) {
-          let geoName = null;
-
-          if (!aggrCountry) {
-            geoName = indItem.geolocationTag;
-            geoName = geoName.charAt(0).toUpperCase() + geoName.slice(1);
-          }
-
-          chartData.push({
-            geoName,
-            geolocationTag: indItem.geolocationTag,
-            id: `${itemId} ${itemIndex}`,
-            key: `${itemId}`,
-            label,
-            value: Math.round(indItem.value),
-            format: indItem.valueFormatType
+            return (
+              chartItem.key === itemId &&
+              chartItem.geolocationTag === indItem.recipient_country.name
+            );
           });
-        } else {
-          chartData[chartItemInd].value += Math.round(indItem.value);
-        }
+
+          if (chartItemInd === -1) {
+            if (value > 0) {
+              chartData.push({
+                geoName: aggrCountry ? itemId : indItem.recipient_country.name,
+                geolocationTag: indItem.recipient_country.name,
+                id: `${itemId} ${index}`,
+                key: itemId,
+                label: itemId,
+                value: value,
+                format: 'EUR'
+              });
+            }
+          } else {
+            chartData[chartItemInd].value += value;
+          }
+        });
       });
     }
   });

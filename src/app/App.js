@@ -157,6 +157,15 @@ class App extends React.Component {
                   ...FocusModuleMediator_indicatorAggregations
                   ...DatasetMediator_metaData
                   ...DashboardMediator_Indicator
+                  allCountries {
+                    edges {
+                      node {
+                        name
+                        iso2
+                        polygons
+                      }
+                    }
+                  }
                 }
               `}
               variables={{}}

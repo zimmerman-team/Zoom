@@ -96,6 +96,13 @@ export function formatMapJson(mappingJson, mapData, fileId) {
     );
   });
 
+  // NOTE: This might mess up other type column values
+  // if we ever have any, currently it works with
+  // filterColumnValues as in, the filter name
+  // is in the column header, and their values
+  // are listed in that column
+  let isColumnValues = false;
+
   zoomValues.forEach(item => {
     if (item.zoomModel === 'Mixed Value') {
       mapJson.mapping_dict.value.push(item.fileType);
@@ -132,19 +139,24 @@ export function formatMapJson(mappingJson, mapData, fileId) {
         //  filters
       }
     } else {
+      isColumnValues = true;
       // so if its not one of the normal values, its gonna be one of the column values
       const assocItem = find(defModelOptions, ['value', item.zoomModel]);
 
-      mapJson.mapping_dict[assocItem.assocModel].push(item.fileType);
       mapJson.mapping_dict.value.push(item.fileType);
+
+      mapJson.mapping_dict.value_format = [];
+
+      mapJson.extra_information.empty_entries.empty_value_format[
+        item.fileType
+      ] = item.label;
+
       mapJson.extra_information.multi_mapped.column_heading[item.fileType] =
         assocItem.assocModel;
       mapJson.extra_information.multi_mapped.column_values[item.fileType] =
         'value';
 
-      mapJson.extra_information.empty_entries.empty_value_format[
-        item.fileType
-      ] = item.label;
+      mapJson.mapping_dict[assocItem.assocModel].push(item.fileType);
 
       mapJson.filter_headings[item.fileType] = item.fileType;
     }
@@ -180,14 +192,6 @@ export function formatMapJson(mappingJson, mapData, fileId) {
 
   // and we add the meta_data id here
   mapJson.metadata_id = fileId;
-
-  console.log('mapJson', mapJson);
-
-  // TODO: Try it with filters and filter headings,
-  //  cause using indicator without filter headings breaks
-  //  declaring an empty value_format exception, BUT
-  //  maybe its because i added USD$ as a value format
-  //  try 'Number'
 
   return mapJson;
 }

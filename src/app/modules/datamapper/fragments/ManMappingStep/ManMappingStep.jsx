@@ -240,7 +240,7 @@ class ManMappingStep extends React.Component {
   selectDataType(zoomModel, fileType, prevModel, zoomModelLabel) {
     const { data } = this.props;
     const itemIndex = findIndex(data, ['fileType', fileType]);
-    const assocItem = find(defModelOptions, ['assocModel', zoomModel]);
+    const assocItem = find(defModelOptions, ['value', zoomModel]);
 
     if (
       this.props.mapReqFields.indexOf(zoomModel) !== -1 ||

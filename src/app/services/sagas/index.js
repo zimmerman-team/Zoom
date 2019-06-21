@@ -9,7 +9,6 @@ import * as authNodeActions from 'services/actions/authNodeBackend';
 
 export function* uploadRequest(action) {
   try {
-    console.log(action);
     const response = yield call(
       api.uploadRequest,
       action.values,

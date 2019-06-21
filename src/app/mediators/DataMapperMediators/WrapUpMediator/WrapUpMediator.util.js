@@ -1,6 +1,10 @@
+/* consts */
+import { normalValues, columnValues } from './WrapUpMediator.const';
+import { defModelOptions } from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
+
+/* utils */
 import filter from 'lodash/filter';
 import find from 'lodash/find';
-import { arrayOfValues } from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
 
 // so this will basically format the json for mapping
 // according to the retrieved mapping json
@@ -67,7 +71,10 @@ export function formatMapJson(mappingJson, mapData, fileId) {
       // as they need to be processed seperatly as there
       // might be two values and the zoomModel selections
       // for these values are not actual zoomModel types
-      if (item.zoomModel.toLowerCase().indexOf('value') === -1) {
+      if (
+        item.zoomModel.toLowerCase().indexOf('value') === -1 ||
+        item.zoomModel === 'value_format'
+      ) {
         // and here we do the simple mapping
         // and we will be pushing an array
         // of selections into these mapping dicts
@@ -78,24 +85,35 @@ export function formatMapJson(mappingJson, mapData, fileId) {
     }
   });
 
+  //  TODO: redo this whole value buisness in a simpler
+  //    way, seems a bit over complicated right now
   // so here we'll process the value selections
   // first we'll find the amount of values selected(max can be two)
   const zoomValues = filter(mapData, item => {
-    return arrayOfValues.indexOf(item.zoomModel) !== -1;
+    return (
+      normalValues.indexOf(item.zoomModel) !== -1 ||
+      columnValues.indexOf(item.zoomModel) !== -1
+    );
   });
+
+  // NOTE: This might mess up other type column values
+  // if we ever have any, currently it works with
+  // filterColumnValues as in, the filter name
+  // is in the column header, and their values
+  // are listed in that column
+  let isColumnValues = false;
 
   zoomValues.forEach(item => {
     if (item.zoomModel === 'Mixed Value') {
       mapJson.mapping_dict.value.push(item.fileType);
-
-      const valueFormat = find(mapData, ['zoomModel', 'value_format']);
-
-      if (valueFormat) {
-        mapJson.mapping_dict.value_format.push(valueFormat.fileType);
-      }
-    } else {
+    } else if (
+      item.zoomModel === 'Number Value' ||
+      item.zoomModel === 'Percentage Value'
+    ) {
       // so ye here we push in the selected values column
       mapJson.mapping_dict.value.push(item.fileType);
+
+      mapJson.mapping_dict.value_format = [];
 
       // and here we indicate what type of format it is
       mapJson.extra_information.empty_entries.empty_value_format[
@@ -120,6 +138,27 @@ export function formatMapJson(mappingJson, mapData, fileId) {
         // Note filter headings for these values will be added below with all other
         //  filters
       }
+    } else {
+      isColumnValues = true;
+      // so if its not one of the normal values, its gonna be one of the column values
+      const assocItem = find(defModelOptions, ['value', item.zoomModel]);
+
+      mapJson.mapping_dict.value.push(item.fileType);
+
+      mapJson.mapping_dict.value_format = [];
+
+      mapJson.extra_information.empty_entries.empty_value_format[
+        item.fileType
+      ] = item.label;
+
+      mapJson.extra_information.multi_mapped.column_heading[item.fileType] =
+        assocItem.assocModel;
+      mapJson.extra_information.multi_mapped.column_values[item.fileType] =
+        'value';
+
+      mapJson.mapping_dict[assocItem.assocModel].push(item.fileType);
+
+      mapJson.filter_headings[item.fileType] = item.fileType;
     }
   });
 

@@ -47,6 +47,7 @@ const DashboardTabNavigator = props => {
         {props.navItems.map(item => (
           <DashboardTabNavItem
             forAdmin={item.adminOnly}
+            forMod={item.moderatorAllowed}
             path={item.path}
             key={shortid.generate()}
             label={item.label}

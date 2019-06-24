@@ -77,7 +77,10 @@ const AuthUserController = {
                   result = [currentUserAuth0];
                 }
               }
-              if (currentUser.role === 'Regular user') {
+              if (
+                currentUser.role === 'Regular user' ||
+                currentUser.role === 'Data steward'
+              ) {
                 const currentUserEmail = currentUser.email;
                 const currentUserAuth0 = find(response[0].data.users, {
                   email: currentUserEmail

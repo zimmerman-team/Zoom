@@ -183,6 +183,94 @@ export function formatCountryLayerData(
         }
       });
     });
+  } else if (indName === 'sector') {
+    const groupedCountries = groupBy(indicators, 'recipient_country.code');
+    Object.keys(groupedCountries).forEach(key => {
+      const countryArr = groupedCountries[key];
+      const tooltipLabels = [];
+      let value = 0;
+      let tmpVal = 0;
+      selectedSubInd.forEach(ssi => {
+        switch (ssi) {
+          case 'Reproductive health care':
+            tmpVal = find(
+              countryArr,
+              ca => ca.sector.name === 'Reproductive health care'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Reproductive health care`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+          case 'STD control including HIV/AIDS':
+            tmpVal = find(
+              countryArr,
+              ca => ca.sector.name === 'STD control including HIV/AIDS'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - STD control including HIV/AIDS`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+          case 'Human rights':
+            tmpVal = find(countryArr, ca => ca.sector.name === 'Human rights');
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Human rights`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+          case 'Social mitigation of HIV/AIDS':
+            tmpVal = find(
+              countryArr,
+              ca => ca.sector.name === 'Social mitigation of HIV/AIDS'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Social mitigation of HIV/AIDS`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+        }
+      });
+
+      const countryPolyInstance = find(countriesPolygons.edges, cp => {
+        return (
+          cp.node.iso2 === countryArr[0].recipient_country.code.toLowerCase()
+        );
+      });
+      countryLayers.features.push({
+        geometry: JSON.parse(JSON.parse(countryPolyInstance.node.polygons)),
+        properties: {
+          tooltipLabels: tooltipLabels,
+          indName,
+          name: countryArr[0].recipient_country.name,
+          iso2: countryArr[0].recipient_country.code.toLowerCase(),
+          geolocationType: 'country',
+          value: value,
+          format: '',
+          percentile: 0
+        }
+      });
+    });
   } else {
     indicators.forEach(indicator => {
       if (!isIATI) {
@@ -467,6 +555,87 @@ export function formatCountryCenterData(
                 subIndName: selectedSubInd,
                 format: 'activities',
                 label: `${indName} - Suspended`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+        }
+      });
+      countryCenteredData.push({
+        tooltipLabels: tooltipLabels,
+        indName,
+        value: value,
+        name: countryArr[0].recipient_country.name,
+        geolocationIso2: countryArr[0].recipient_country.code.toLowerCase(),
+        geolocationType: 'country',
+        longitude: countryArr[0].recipient_country.location.coordinates[0],
+        latitude: countryArr[0].recipient_country.location.coordinates[1],
+        maxValue: 0,
+        minValue: 0
+      });
+    });
+  } else if (indName === 'sector') {
+    const groupedCountries = groupBy(indicators, 'recipient_country.code');
+    Object.keys(groupedCountries).forEach(key => {
+      const countryArr = groupedCountries[key];
+      const tooltipLabels = [];
+      let value = 0;
+      let tmpVal = 0;
+      selectedSubInd.forEach(ssi => {
+        switch (ssi) {
+          case 'Reproductive health care':
+            tmpVal = find(
+              countryArr,
+              ca => ca.sector.name === 'Reproductive health care'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Reproductive health care`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+          case 'STD control including HIV/AIDS':
+            tmpVal = find(
+              countryArr,
+              ca => ca.sector.name === 'STD control including HIV/AIDS'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - STD control including HIV/AIDS`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+          case 'Human rights':
+            tmpVal = find(countryArr, ca => ca.sector.name === 'Human rights');
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Human rights`,
+                value: tmpVal.activity_count
+              });
+            }
+            break;
+          case 'Social mitigation of HIV/AIDS':
+            tmpVal = find(
+              countryArr,
+              ca => ca.sector.name === 'Social mitigation of HIV/AIDS'
+            );
+            if (tmpVal) {
+              value += tmpVal.activity_count;
+              tooltipLabels.push({
+                subIndName: selectedSubInd,
+                format: 'activities',
+                label: `${indName} - Social mitigation of HIV/AIDS`,
                 value: tmpVal.activity_count
               });
             }
@@ -1183,6 +1352,77 @@ export function formatLineData(
             }
           });
         });
+      } else if (indicator.indName === 'sector') {
+        const iatiAggrKey = 'date';
+        const existInd = indicatorNames.indexOf(indicator.indName);
+        let indName = indicator.indName;
+        if (existInd !== -1) indName = indName.concat(` (${index})`);
+        indicatorNames.push(indName);
+        const groupedYears = groupBy(indicator.data, 'transaction_date_year');
+        Object.keys(groupedYears).forEach(key => {
+          const yearArr = groupedYears[key];
+          let value = 0;
+          let tmpVal = null;
+          indicator.selectedSubInd.forEach(ssi => {
+            value = 0;
+            tmpVal = null;
+            switch (ssi) {
+              case 'Reproductive health care':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.sector.name === 'Reproductive health care'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'STD control including HIV/AIDS':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.sector.name === 'STD control including HIV/AIDS'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'Human rights':
+                tmpVal = find(yearArr, ca => ca.sector.name === 'Human rights');
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'Social mitigation of HIV/AIDS':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.sector.name === 'Social mitigation of HIV/AIDS'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+            }
+            const existItemInd = findIndex(indicatorData, existing => {
+              return key === existing[iatiAggrKey];
+            });
+            const aggrValue = key;
+            const itemId = `${indName} - ${ssi}`;
+            if (existItemInd === -1) {
+              if (value > 0) {
+                indicatorData.push({
+                  [iatiAggrKey]: key,
+                  [aggregate]: aggrValue,
+                  [itemId]: value,
+                  [`${itemId}Format`]: 'activities'
+                });
+              }
+            } else if (indicatorData[existItemInd][itemId] !== undefined) {
+              indicatorData[existItemInd][itemId] += value;
+            } else if (value > 0) {
+              indicatorData[existItemInd][itemId] = value;
+              indicatorData[existItemInd][`${itemId}Format`] = 'activities';
+            }
+          });
+        });
       } else {
         const iatiAggrKey = 'date';
         const existInd = indicatorNames.indexOf(indicator.indName);
@@ -1552,6 +1792,84 @@ export function formatBarData(
           });
           if (colorInd + 1 < colors.length) colorInd += 1;
         });
+      } else if (indicator.indName === 'sector') {
+        const existInd = barIndKeys.indexOf(indicator.indName);
+        let indName = indicator.indName;
+        if (existInd !== -1) indName = indName.concat(` (${index})`);
+        barIndKeys.push(indName);
+        const groupedYears = groupBy(indicator.data, iatiAggrKey);
+        Object.keys(groupedYears).forEach(key => {
+          const yearArr = groupedYears[key];
+          let value = 0;
+          let tmpVal = null;
+          indicator.selectedSubInd.forEach(ssi => {
+            value = 0;
+            tmpVal = null;
+            switch (ssi) {
+              case 'Reproductive health care':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.sector.name === 'Reproductive health care'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'STD control including HIV/AIDS':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.sector.name === 'STD control including HIV/AIDS'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'Human rights':
+                tmpVal = find(yearArr, ca => ca.sector.name === 'Human rights');
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+              case 'Social mitigation of HIV/AIDS':
+                tmpVal = find(
+                  yearArr,
+                  ca => ca.sector.name === 'Social mitigation of HIV/AIDS'
+                );
+                if (tmpVal) {
+                  value += tmpVal.activity_count;
+                }
+                break;
+            }
+            const existItemInd = findIndex(barChartData, existing => {
+              return key === existing[aggrKey];
+            });
+            const aggrValue = key;
+            const itemId = `${indName} - ${ssi}`;
+            if (existItemInd === -1) {
+              if (value > 0) {
+                barChartData.push({
+                  allValSum: value,
+                  [`${itemId}Label`]: itemId,
+                  [`${itemId}Color`]: colors[colorInd],
+                  [aggrKey]: key,
+                  [aggregate]: aggrValue,
+                  [itemId]: value,
+                  [`${itemId}Format`]: 'activities'
+                });
+              }
+            } else if (barChartData[existItemInd][itemId] !== undefined) {
+              barChartData[existItemInd][itemId] += value;
+              barChartData[existItemInd].allValSum += value;
+            } else if (value > 0) {
+              barChartData[existItemInd].allValSum += value;
+              barChartData[existItemInd][`${itemId}Color`] = colors[colorInd];
+              barChartData[existItemInd][`${itemId}Label`] = itemId;
+              barChartData[existItemInd][itemId] = value;
+              barChartData[existItemInd][`${itemId}Format`] = 'activities';
+            }
+          });
+          if (colorInd + 1 < colors.length) colorInd += 1;
+        });
       } else {
         const existInd = barIndKeys.indexOf(indicator.indName);
 
@@ -1718,6 +2036,31 @@ export function formatTableData(indicators) {
 
             //Sub-Indicator
             get(indItem, 'activity_status.name', 'N/A'),
+
+            //Unit of measure
+            'nr of activities',
+
+            //ISO2 codes
+            get(indItem, 'recipient_country.code', 'N/A').toUpperCase()
+          ]);
+        });
+      } else if (indicator.indName === 'sector') {
+        indicator.data.forEach(indItem => {
+          tableChartData.push([
+            //Geolocation
+            get(indItem, 'recipient_country.name', 'N/A'),
+
+            //Date
+            get(indItem, 'transaction_date_year', 'N/A'),
+
+            //Measure Value
+            indItem.activity_count,
+
+            //Indicator
+            indicator.indName,
+
+            //Sub-Indicator
+            get(indItem, 'sector.name', 'N/A'),
 
             //Unit of measure
             'nr of activities',
@@ -1962,6 +2305,90 @@ export function formatDonutData(
               tmpVal = find(
                 countryArr,
                 ca => ca.activity_status.name === 'Suspended'
+              );
+              if (tmpVal) {
+                value += tmpVal.activity_count;
+              }
+              break;
+          }
+          const itemId = `${indName} - ${ssi}`;
+          const chartItemInd = findIndex(chartData, chartItem => {
+            if (aggrCountry) {
+              return chartItem.key === itemId;
+            }
+
+            return (
+              chartItem.key === itemId &&
+              chartItem.geolocationTag === countryArr[0].recipient_country.name
+            );
+          });
+          if (chartItemInd === -1) {
+            if (value > 0) {
+              chartData.push({
+                geoName: aggrCountry
+                  ? itemId
+                  : countryArr[0].recipient_country.name,
+                geolocationTag: countryArr[0].recipient_country.name,
+                id: `${itemId} ${index}`,
+                key: itemId,
+                label: itemId,
+                value: value,
+                format: 'activities'
+              });
+            }
+          } else {
+            chartData[chartItemInd].value += value;
+          }
+        });
+      });
+    } else if (indicator.indName === 'sector') {
+      const existInd = donutChartLabels.indexOf(indicator.indName);
+      let indName = indicator.indName;
+      if (existInd !== -1) indName = indName.concat(` (${indIndex})`);
+      donutChartLabels.push(indName);
+      const groupedCountries = groupBy(
+        indicator.data,
+        'recipient_country.code'
+      );
+      Object.keys(groupedCountries).forEach((key, index) => {
+        const countryArr = groupedCountries[key];
+        let value = 0;
+        let tmpVal = null;
+        indicator.selectedSubInd.forEach(ssi => {
+          value = 0;
+          tmpVal = null;
+          switch (ssi) {
+            case 'Reproductive health care':
+              tmpVal = find(
+                countryArr,
+                ca => ca.sector.name === 'Reproductive health care'
+              );
+              if (tmpVal) {
+                value += tmpVal.activity_count;
+              }
+              break;
+            case 'STD control including HIV/AIDS':
+              tmpVal = find(
+                countryArr,
+                ca => ca.sector.name === 'STD control including HIV/AIDS'
+              );
+              if (tmpVal) {
+                value += tmpVal.activity_count;
+              }
+              break;
+            case 'Human rights':
+              tmpVal = find(
+                countryArr,
+                ca => ca.sector.name === 'Human rights'
+              );
+              if (tmpVal) {
+                value += tmpVal.activity_count;
+              }
+              break;
+            case 'Social mitigation of HIV/AIDS':
+              tmpVal = find(
+                countryArr,
+                ca => ca.sector.name === 'Social mitigation of HIV/AIDS'
               );
               if (tmpVal) {
                 value += tmpVal.activity_count;

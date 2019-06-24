@@ -30,7 +30,23 @@ export default [
     label: 'sector',
     value: 'sector',
     dataSource: 'IATI',
-    firstYear: ''
+    firstYear: '',
+    subIndicators: {
+      edges: [
+        {
+          node: { code: '13020', name: 'Reproductive health care' }
+        },
+        {
+          node: { code: '13040', name: 'STD control including HIV/AIDS' }
+        },
+        {
+          node: { code: '15160', name: 'Human rights' }
+        },
+        {
+          node: { code: '16064', name: 'Social mitigation of HIV/AIDS' }
+        }
+      ]
+    }
   },
   {
     label: 'transactions',

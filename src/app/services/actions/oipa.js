@@ -157,3 +157,35 @@ export function transactionIndFailed(error) {
     error: error
   };
 }
+
+export const SECTOR_IND_INITIAL = 'SECTOR_IND_INITIAL';
+export const SECTOR_IND_REQUEST = 'SECTOR_IND_REQUEST';
+export const SECTOR_IND_SUCCESS = 'SECTOR_IND_SUCCESS';
+export const SECTOR_IND_FAILED = 'SECTOR_IND_FAILED';
+
+export function sectorIndInitial() {
+  return {
+    type: SECTOR_IND_INITIAL
+  };
+}
+
+export function sectorIndRequest(values) {
+  return {
+    type: SECTOR_IND_REQUEST,
+    values: values
+  };
+}
+
+export function sectorIndSuccess(data) {
+  return {
+    type: SECTOR_IND_SUCCESS,
+    data: data
+  };
+}
+
+export function sectorIndFailed(error) {
+  return {
+    type: SECTOR_IND_FAILED,
+    error: error
+  };
+}

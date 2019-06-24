@@ -620,6 +620,21 @@ function transactionInd(state = initial, action) {
   }
 }
 
+function sectorInd(state = initial, action) {
+  switch (action.type) {
+    case oipaActions.SECTOR_IND_INITIAL:
+      return updateInitial(state);
+    case oipaActions.SECTOR_IND_REQUEST:
+      return updateRequest(state, action);
+    case oipaActions.SECTOR_IND_SUCCESS:
+      return updateSuccess(state, action);
+    case oipaActions.SECTOR_IND_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
   datasetIds,
   chartTrashEmpty,
@@ -656,7 +671,8 @@ const reducers = {
   userDeleted,
   userPersist,
   activityStatusInd,
-  transactionInd
+  transactionInd,
+  sectorInd
 };
 
 export default reducers;

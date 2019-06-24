@@ -41,7 +41,9 @@ import {
   activityStatusIndRequest,
   transactionIndRequest,
   activityStatusIndInitial,
-  transactionIndInitial
+  transactionIndInitial,
+  sectorIndInitial,
+  sectorIndRequest
 } from 'app/services/actions/oipa';
 
 const propTypes = {
@@ -291,6 +293,13 @@ class VisualizerModuleMediator extends Component {
     ) {
       this.updateIndicators(this.state.indicatorData);
     }
+
+    if (
+      !isEqual(this.props.sectorIndData, prevProps.sectorIndData) &&
+      this.props.sectorIndData.data
+    ) {
+      this.updateIndicators(this.state.indicatorData);
+    }
   }
 
   componentWillUnmount() {
@@ -431,6 +440,8 @@ class VisualizerModuleMediator extends Component {
         return get(this.props.activityStatusIndData.data, 'results', []);
       case 'transactions':
         return get(this.props.transactionIndData.data, 'results', []);
+      case 'sector':
+        return get(this.props.sectorIndData.data, 'results', []);
       default:
         return [];
     }
@@ -642,8 +653,12 @@ class VisualizerModuleMediator extends Component {
           // so if its a new indicator that gets selected
           // the selectedSubInds will be empty
           selectedSubInd = [];
-          // and we just push in the first sub-indicator from the ones retrieved
-          selectedSubInd.push(subIndicators[0].value);
+          if (indItem.indName === 'activity status') {
+            selectedSubInd.push(subIndicators[2].value);
+          } else {
+            // and we just push in the first sub-indicator from the ones retrieved
+            selectedSubInd.push(subIndicators[0].value);
+          }
           // and ofcourse we refetch the data
           refetch = true;
         }
@@ -698,6 +713,9 @@ class VisualizerModuleMediator extends Component {
           break;
         case 'transactions':
           this.props.dispatch(transactionIndInitial());
+          break;
+        case 'sector':
+          this.props.dispatch(sectorIndInitial());
       }
     } else {
       let groupBy = '';
@@ -741,6 +759,16 @@ class VisualizerModuleMediator extends Component {
               aggregations:
                 'disbursement,expenditure,commitment,incoming_fund,incoming_commitment',
               transaction_type: ind.selectedSubInd.join(',')
+            })
+          );
+          break;
+        case 'sector':
+          this.props.dispatch(
+            sectorIndRequest({
+              ...params,
+              group_by: `${params.group_by},sector`,
+              aggregations: 'activity_count',
+              sector: ind.selectedSubInd.join(',')
             })
           );
       }
@@ -1040,6 +1068,7 @@ class VisualizerModuleMediator extends Component {
           loading={
             this.state.loading ||
             this.props.chartCreated.request ||
+            this.props.sectorIndData.request ||
             this.props.dupChartCreated.request ||
             this.props.transactionIndData.request ||
             this.props.activityStatusIndData.request
@@ -1070,6 +1099,7 @@ const mapStateToProps = state => {
     paneData: state.paneData.paneData,
     transactionIndData: state.transactionInd,
     activityStatusIndData: state.activityStatusInd,
+    sectorIndData: state.sectorInd,
     dataPaneOpen: state.dataPaneOpen.open
   };
 };

@@ -9,23 +9,19 @@ import GeoMap from 'components/GeoMap/GeoMap';
 import { getFocus } from 'modules/visualizer/VisualizerModule.utils';
 
 const ComponentBase = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-items: center;
-  justify-content: center;
   width: 100%;
   height: ${props => props.height};
-  flex-shrink: 0;
-
-  position: relative;
-  top: 16px;
   z-index: 0;
 `;
 
 const propTypes = {
-  saveViewport: PropTypes.func
+  saveViewport: PropTypes.func,
+  selectedYear: PropTypes.string,
+  selectYear: PropTypes.func
 };
 const defaultProps = {
+  selectedYear: '2005',
+  selectYear: null,
   saveViewport: null
 };
 
@@ -74,7 +70,7 @@ class GeomapFragment extends React.Component {
   render() {
     const { mode, ...otherProps } = this.props;
     return (
-      <ComponentBase height={mode ? '400px' : '100%'}>
+      <ComponentBase height={mode ? '400px' : '100%'} id="geo-map">
         <GeoMap
           chartMounted={this.props.chartMounted}
           viewport={this.props.viewport}

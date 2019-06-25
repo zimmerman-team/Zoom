@@ -383,7 +383,7 @@ class HomeModuleMediator extends Component {
       // indicators data point, so
       this.setState(
         {
-          selectedYear: val.firstYear,
+          selectedYear: val.lastYear,
           [indKey]: val.value,
           indSelectedIndex: index,
           subIndicators1: [],

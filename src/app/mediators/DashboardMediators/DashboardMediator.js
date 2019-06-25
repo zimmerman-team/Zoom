@@ -561,8 +561,9 @@ class DashboardMediator extends React.Component {
         totalPages={this.getViewPagesNumber()}
         changePage={this.changePage}
         greetingName={greetingName}
-        isAdministrator={get(this.props.user, 'role', '') === 'Administrator'}
-        isSuperAdmin={get(this.props.user, 'role', '') === 'Super admin'}
+        isAdministrator={get(this.props.user, 'role', '') === userRoles.admin}
+        isSuperAdmin={get(this.props.user, 'role', '') === userRoles.superAdm}
+        isModerator={get(this.props.user, 'role', '') === userRoles.mod}
         auth0Client={this.props.auth0Client}
       />
     );

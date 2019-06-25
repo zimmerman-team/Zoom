@@ -81,6 +81,7 @@ const DashboardModule = ({
   changePage,
   isSuperAdmin,
   isAdministrator,
+  isModerator,
   auth0Client
 }) => (
   <ModuleContainer>
@@ -117,6 +118,7 @@ const DashboardModule = ({
       navItems={navItems}
       isAdministrator={isAdministrator}
       isSuperAdmin={isSuperAdmin}
+      isModerator={isModerator}
       auth0Client={auth0Client}
     />
     {totalPages > 0 && (

@@ -68,6 +68,7 @@ const DashboardContent = props => {
         tabs={props.tabs}
         isAdministrator={props.isAdministrator}
         isSuperAdmin={props.isSuperAdmin}
+        isModerator={props.isModerator}
         auth0Client={props.auth0Client}
       />
     </FragmentBase>

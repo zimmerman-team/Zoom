@@ -11,7 +11,8 @@ export function data(isAdmin, isSuperAdmin, users, teams, charts, dataSets) {
       label: 'Data sets',
       path: `${Path}data-sets`,
       count: dataSets.length,
-      adminOnly: true
+      adminOnly: true,
+      moderatorAllowed: true
     },
     {
       label: 'Users',

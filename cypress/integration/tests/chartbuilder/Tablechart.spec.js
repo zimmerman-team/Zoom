@@ -23,10 +23,7 @@ describe('Chartbuilder table chart fragment e2e', function() {
 
     cy.contains('new hiv infections').click();
     cy.waitPageLoader();
-    cy.get('#MUIDataTableBodyRow-2 > :nth-child(9)').should(
-      'contain',
-      'new hiv infections'
-    );
+    cy.get('thead').should('contain', 'new hiv infections');
   });
 
   it('Should make a snapshot of the visual current state', function() {

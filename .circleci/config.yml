@@ -54,6 +54,11 @@ jobs:
               echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_DEV"' >> $BASH_ENV
               echo 'export REACT_APP_BACKEND_HOST="$DUCT_DEV"' >> $BASH_ENV
               echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
+            elif [ "${CIRCLE_BRANCH}" == "another/test/ZOOM-2045" ]; then
+              echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
+              echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_DEV"' >> $BASH_ENV
+              echo 'export REACT_APP_BACKEND_HOST="$DUCT_DEV"' >> $BASH_ENV
+              echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
             elif [ "${CIRCLE_BRANCH}" == "production" ]; then
               echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_PROD"' >> $BASH_ENV
               echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_PROD"' >> $BASH_ENV
@@ -76,6 +81,8 @@ jobs:
               ssh-keyscan "$SSH_HOST_TEST" >> ~/.ssh/known_hosts
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
               ssh-keyscan "$SSH_HOST_DEV" >> ~/.ssh/known_hosts
+            elif [ "${CIRCLE_BRANCH}" == "another/test/ZOOM-2045" ]; then
+              ssh-keyscan "$SSH_HOST_DEV" >> ~/.ssh/known_hosts
             elif [ "${CIRCLE_BRANCH}" == "production" ]; then
               ssh-keyscan "$SSH_HOST_PROD" >> ~/.ssh/known_hosts
             else
@@ -96,6 +103,8 @@ jobs:
               rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_TEST":~/zoom-v2-ui
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
               rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_DEV":~/zoom-v2-ui
+            elif [ "${CIRCLE_BRANCH}" == "another/test/ZOOM-2045" ]; then
+              rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_DEV":~/zoom-v2-ui
             elif [ "${CIRCLE_BRANCH}" == "production" ]; then
               rsync -ave  ssh ~/zoom-v2-ui/build "$SSH_USER"@"$SSH_HOST_PROD":~/zoom-v2-ui
             else
@@ -109,6 +118,8 @@ jobs:
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
               ssh "$SSH_USER"@"$SSH_HOST_TEST" "cd ~/zoom-v2-ui/; git pull; yarn install; echo '"$SSH_TEST_PASS"' | sudo -S service supervisor restart"
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
+              ssh "$SSH_USER"@"$SSH_HOST_DEV" "cd ~/zoom-v2-ui/; git pull; yarn install; echo '"$SSH_DEV_PASS"' | sudo -S service supervisor restart"
+            elif [ "${CIRCLE_BRANCH}" == "another/test/ZOOM-2045" ]; then
               ssh "$SSH_USER"@"$SSH_HOST_DEV" "cd ~/zoom-v2-ui/; git pull; yarn install; echo '"$SSH_DEV_PASS"' | sudo -S service supervisor restart"
             elif [ "${CIRCLE_BRANCH}" == "production" ]; then
               ssh "$SSH_USER"@"$SSH_HOST_PROD" "cd ~/zoom-v2-ui/; git pull; yarn install; echo '"$SSH_PROD_PASS"' | sudo -S service supervisor restart"
@@ -134,6 +145,8 @@ jobs:
               echo 'export CYPRESS_baseUrl="$REACT_APP_PROJECT_URL_TEST"' >> $BASH_ENV
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
               echo 'export CYPRESS_baseUrl="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
+            elif [ "${CIRCLE_BRANCH}" == "another/test/ZOOM-2045" ]; then
+              echo 'export CYPRESS_baseUrl="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
             elif [ "${CIRCLE_BRANCH}" == "production" ]; then
               echo 'export CYPRESS_baseUrl="$REACT_APP_PROJECT_URL_PROD"' >> $BASH_ENV
             else
@@ -154,6 +167,14 @@ jobs:
 workflows:
   version: 2
   test_build_deploy:
+  filters:
+    branches:
+      only:
+        - develop
+        - /feature-.*/
+        - master
+        - production
+        - another/test/ZOOM-2045
     jobs:
       - checkout_repo
       - build_deploy:

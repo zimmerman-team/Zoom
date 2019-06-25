@@ -6,7 +6,7 @@ export const FragmentInfoButton = styled.div`
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background-color: ${theme.color.aidsFondsRed};
+  background-color: ${theme.color.zoomGreyThree};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,9 +15,9 @@ export const FragmentInfoButton = styled.div`
   right: 0;
   top: 0;
 
-  &:hover {
-    background-color: darkgrey;
-  }
+  // &:hover {
+  //   background-color: darkgrey;
+  // }
 
   &:after {
     content: 'i';

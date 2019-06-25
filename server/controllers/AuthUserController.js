@@ -43,7 +43,7 @@ const AuthUserController = {
             .then(response => {
               let result = response[0].data.users;
               const groups = response[1].data.groups;
-              if (currentUser.role === 'Administrator') {
+              if (currentUser.role === roles.admin) {
                 result = filter(response[0].data.users, d => {
                   let pass = false;
                   const dUserGroups = filter(groups, gr =>
@@ -58,7 +58,7 @@ const AuthUserController = {
                       if (
                         dUserGroups[c1].members[c2] === d.user_id &&
                         get(d, 'app_metadata.authorization.roles[0]', '') !==
-                          'Super admin'
+                          roles.superAdm
                       ) {
                         pass = true;
                         break;
@@ -78,8 +78,8 @@ const AuthUserController = {
                 }
               }
               if (
-                currentUser.role === 'Regular user' ||
-                currentUser.role === 'Data steward'
+                currentUser.role === roles.regular ||
+                currentUser.role === roles.mod
               ) {
                 const currentUserEmail = currentUser.email;
                 const currentUserAuth0 = find(response[0].data.users, {

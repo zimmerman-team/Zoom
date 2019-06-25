@@ -64,7 +64,8 @@ class NavPane extends React.Component {
             {/*{this.props.user.role != 'Regular user' && (*/}
 
             {get(this.props.user, 'role', '') === 'Administrator' ||
-            get(this.props.user, 'role', '') === 'Super admin' ? (
+            get(this.props.user, 'role', '') === 'Super admin' ||
+            get(this.props.user, 'role', '') === 'Data steward' ? (
               <NavPaneItem to="/mapper" data-cy="nav-pane-item-1">
                 <ItemIcon>
                   <SvgIconPointer />

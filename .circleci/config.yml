@@ -167,14 +167,15 @@ jobs:
 workflows:
   version: 2
   test_build_deploy:
-    filters:
-      branches:
-        only:
-          - develop
-          - /feature-.*/
-          - master
-          - production
-          - another/test/ZOOM-2045
+    triggers:
+      filters:
+        branches:
+          only:
+            - develop
+            - /feature-.*/
+            - master
+            - production
+            - another/test/ZOOM-2045
     jobs:
       - checkout_repo
       - build_deploy:

@@ -1,7 +1,7 @@
+import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
 import styled from 'styled-components';
 
 export const MapContainer = styled.div`
-  position: relative;
   width: 100%;
   height: 100%;
 `;
@@ -17,9 +17,9 @@ export const NavContainer = styled.div`
 `;
 
 export const LegendContainer = styled.div`
-  position: fixed;
-  left: 10px;
-  top: 40px;
+  position: absolute;
+  left: 11px;
+  top: 2px;
   display: flex;
   flex-direction: column;
   width: fit-content;
@@ -38,9 +38,15 @@ export const CountyInfo = styled.div`
 `;
 
 export const ControlsContainer = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  position: relative;
   z-index: 1;
   background-color: rgba(239, 239, 239, 0.72);
+  width: fit-content;
+  margin: 16px 11px 0 auto;
+`;
+
+export const GeoYearContainer = styled(YearContainer)`
+  top: calc(100% - 186px);
+  margin: 0 auto;
+  z-index: 1;
 `;

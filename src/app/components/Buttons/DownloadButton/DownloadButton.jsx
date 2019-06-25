@@ -12,17 +12,19 @@ import { Tooltip } from 'react-tippy';
 import TableToolTip from 'components/ToolTips/TableToolTip/TableToolTip';
 
 const propTypes = {
-  handleDownload: PropTypes.func
+  handleDownload: PropTypes.func,
+  toolTipText: PropTypes.string
 };
 const defaultProps = {
-  handleDownload: () => console.log('Download')
+  handleDownload: () => console.log('Download'),
+  toolTipText: 'Download'
 };
 
 const DownloadButton = props => (
   <Tooltip
     position="bottom"
     trigger="mouseenter"
-    html={<TableToolTip margin="29px 0 0 0" text="Download CSV" />}
+    html={<TableToolTip margin="29px 0 0 0" text={props.toolTipText} />}
   >
     <ComponentBase onClick={props.handleDownload}>
       <IconDownload className="downloadButton" />

@@ -21,7 +21,8 @@ export const BaseParagraph = styled.p`
   -moz-osx-font-smoothing: grayscale;
 `;
 
-export const DescriptionParagraphBold = styled(DescriptionParagraph)`
+export const DescriptionParagraphBoldIt = styled(DescriptionParagraph)`
+  font-style: italic;
   font-weight: 700;
 `;
 

@@ -34,6 +34,11 @@ export default () =>
       useNextVariants: true
     },
     overrides: {
+      MUIDataTable: {
+        paper: {
+          width: '100%'
+        }
+      },
       MuiTypography: {
         h6,
         subtitle1: body2,

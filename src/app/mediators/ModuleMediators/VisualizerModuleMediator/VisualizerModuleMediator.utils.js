@@ -2071,100 +2071,282 @@ export function formatTableData(indicators) {
           }
         });
       } else if (indicator.indName === 'activity status') {
-        indicator.data.forEach(indItem => {
-          tableChartData.push([
-            //Geolocation
-            get(indItem, 'recipient_country.name', 'N/A'),
+        const groupedCountries = groupBy(
+          indicator.data,
+          'recipient_country.name'
+        );
+        const groupedCountriesYears = groupBy(
+          groupedCountries,
+          'transaction_date_year'
+        );
+        groupedCountriesYears[undefined].forEach(array => {
+          array.forEach(key => {
+            const indItem = key;
+            const indicatorName = indicator.indName;
+            const subIndicatorName = indItem.activity_status.name;
+            const indCol = `${indicatorName}_${subIndicatorName}`;
 
-            //Date
-            get(indItem, 'transaction_date_year', 'N/A'),
+            const indValCol = `${indCol}_value`;
+            const indFormatCol = `${indCol}_format`;
 
-            //Measure Value
-            indItem.activity_count,
+            const valIndex = findIndex(tableChartColumns, ['name', indValCol]);
+            const formatIndex = findIndex(tableChartColumns, [
+              'name',
+              indFormatCol
+            ]);
 
-            //Indicator
-            indicator.indName,
-
-            //Sub-Indicator
-            get(indItem, 'activity_status.name', 'N/A'),
-
-            //Unit of measure
-            'nr of activities',
-
-            //ISO2 codes
-            get(indItem, 'recipient_country.code', 'N/A').toUpperCase()
-          ]);
-        });
-      } else if (indicator.indName === 'sector') {
-        indicator.data.forEach(indItem => {
-          tableChartData.push([
-            //Geolocation
-            get(indItem, 'recipient_country.name', 'N/A'),
-
-            //Date
-            get(indItem, 'transaction_date_year', 'N/A'),
-
-            //Measure Value
-            indItem.activity_count,
-
-            //Indicator
-            indicator.indName,
-
-            //Sub-Indicator
-            get(indItem, 'sector.name', 'N/A'),
-
-            //Unit of measure
-            'nr of activities',
-
-            //ISO2 codes
-            get(indItem, 'recipient_country.code', 'N/A').toUpperCase()
-          ]);
-        });
-      } else {
-        indicator.data.forEach(indItem => {
-          indicator.selectedSubInd.forEach(si => {
-            let value = 0;
-            switch (si) {
-              case 'Incoming Funds':
-                value += indicator.incoming_fund;
-                break;
-              case 'Outgoing Commitment':
-                value += indicator.commitment;
-                break;
-              case 'Disbursement':
-                value = indItem.disbursement;
-                break;
-              case 'Expenditure':
-                value = indItem.expenditure;
-                break;
-              case 'Incoming Commitment':
-                value = indItem.incoming_commitment;
-                break;
+            // so if indicator format column does not exist we push it
+            // in to the start of the columns
+            if (formatIndex === -1) {
+              tableChartColumns.unshift({
+                name: indFormatCol,
+                label:
+                  indFormatCol.charAt(0).toUpperCase() + indFormatCol.slice(1)
+              });
             }
-            if (value > 0) {
-              tableChartData.push([
-                //Geolocation
-                get(indItem, 'recipient_country.name', 'N/A'),
+
+            // and if indicator value column does not exist we push it
+            // in to the start of the columns
+            if (valIndex === -1) {
+              tableChartColumns.unshift({
+                name: indValCol,
+                label: indValCol.charAt(0).toUpperCase() + indValCol.slice(1),
+                indName: indicatorName,
+                subIndName: subIndicatorName
+              });
+            }
+
+            const geoIndex = findIndex(tableChartData, item => {
+              return (
+                item.geolocationTag === indItem.recipient_country.name &&
+                item.date === indItem.transaction_date_year
+              );
+            });
+
+            if (geoIndex === -1) {
+              tableChartData.push({
+                [indValCol]:
+                  indItem.activity_count === null
+                    ? 'N/A'
+                    : indItem.activity_count,
+                [indFormatCol]: 'nr of activities',
+
+                geolocationTag:
+                  indItem.recipient_country.name === null
+                    ? 'N/A'
+                    : indItem.recipient_country.name,
 
                 //Date
-                get(indItem, 'transaction_date_year', 'N/A'),
+                date:
+                  indItem.transaction_date_year === null
+                    ? 'N/A'
+                    : indItem.transaction_date_year,
 
-                //Measure Value
-                value,
-
-                //Indicator
-                indicator.indName,
-
-                //Sub-Indicator
-                si,
-
-                //Unit of measure
-                'EUR',
-
-                //ISO2 codes
-                get(indItem, 'recipient_country.code', 'N/A').toUpperCase()
-              ]);
+                geolocationIso2:
+                  indItem.recipient_country.code === null
+                    ? 'N/A'
+                    : indItem.recipient_country.code
+              });
+            } else {
+              tableChartData[geoIndex][indValCol] =
+                indItem.activity_count === null
+                  ? 'N/A'
+                  : indItem.activity_count;
+              tableChartData[geoIndex][indFormatCol] = 'nr of activities';
             }
+          });
+        });
+      } else if (indicator.indName === 'sector') {
+        const groupedCountries = groupBy(
+          indicator.data,
+          'recipient_country.name'
+        );
+        const groupedCountriesYears = groupBy(
+          groupedCountries,
+          'transaction_date_year'
+        );
+        groupedCountriesYears[undefined].forEach(array => {
+          array.forEach(key => {
+            const indItem = key;
+            const indicatorName = indicator.indName;
+            const subIndicatorName = indItem.sector.name;
+            const indCol = `${indicatorName}_${subIndicatorName}`;
+
+            const indValCol = `${indCol}_value`;
+            const indFormatCol = `${indCol}_format`;
+
+            const valIndex = findIndex(tableChartColumns, ['name', indValCol]);
+            const formatIndex = findIndex(tableChartColumns, [
+              'name',
+              indFormatCol
+            ]);
+
+            // so if indicator format column does not exist we push it
+            // in to the start of the columns
+            if (formatIndex === -1) {
+              tableChartColumns.unshift({
+                name: indFormatCol,
+                label:
+                  indFormatCol.charAt(0).toUpperCase() + indFormatCol.slice(1)
+              });
+            }
+
+            // and if indicator value column does not exist we push it
+            // in to the start of the columns
+            if (valIndex === -1) {
+              tableChartColumns.unshift({
+                name: indValCol,
+                label: indValCol.charAt(0).toUpperCase() + indValCol.slice(1),
+                indName: indicatorName,
+                subIndName: subIndicatorName
+              });
+            }
+
+            const geoIndex = findIndex(tableChartData, item => {
+              return (
+                item.geolocationTag === indItem.recipient_country.name &&
+                item.date === indItem.transaction_date_year
+              );
+            });
+
+            if (geoIndex === -1) {
+              tableChartData.push({
+                [indValCol]:
+                  indItem.activity_count === null
+                    ? 'N/A'
+                    : indItem.activity_count,
+                [indFormatCol]: 'nr of activities',
+
+                geolocationTag:
+                  indItem.recipient_country.name === null
+                    ? 'N/A'
+                    : indItem.recipient_country.name,
+
+                //Date
+                date:
+                  indItem.transaction_date_year === null
+                    ? 'N/A'
+                    : indItem.transaction_date_year,
+
+                geolocationIso2:
+                  indItem.recipient_country.code === null
+                    ? 'N/A'
+                    : indItem.recipient_country.code
+              });
+            } else {
+              tableChartData[geoIndex][indValCol] =
+                indItem.activity_count === null
+                  ? 'N/A'
+                  : indItem.activity_count;
+              tableChartData[geoIndex][indFormatCol] = 'nr of activities';
+            }
+          });
+        });
+      } else {
+        const groupedCountries = groupBy(
+          indicator.data,
+          'recipient_country.name'
+        );
+        const groupedCountriesYears = groupBy(
+          groupedCountries,
+          'transaction_date_year'
+        );
+        groupedCountriesYears[undefined].forEach(array => {
+          indicator.selectedSubInd.forEach(si => {
+            array.forEach(key => {
+              const indItem = key;
+              const indicatorName = indicator.indName;
+              const subIndicatorName = si;
+              const indCol = `${indicatorName}_${subIndicatorName}`;
+
+              const indValCol = `${indCol}_value`;
+              const indFormatCol = `${indCol}_format`;
+
+              const valIndex = findIndex(tableChartColumns, [
+                'name',
+                indValCol
+              ]);
+              const formatIndex = findIndex(tableChartColumns, [
+                'name',
+                indFormatCol
+              ]);
+
+              // so if indicator format column does not exist we push it
+              // in to the start of the columns
+              if (formatIndex === -1) {
+                tableChartColumns.unshift({
+                  name: indFormatCol,
+                  label:
+                    indFormatCol.charAt(0).toUpperCase() + indFormatCol.slice(1)
+                });
+              }
+
+              // and if indicator value column does not exist we push it
+              // in to the start of the columns
+              if (valIndex === -1) {
+                tableChartColumns.unshift({
+                  name: indValCol,
+                  label: indValCol.charAt(0).toUpperCase() + indValCol.slice(1),
+                  indName: indicatorName,
+                  subIndName: subIndicatorName,
+                  options: {
+                    customBodyRender: value => formatMoney(value)
+                  }
+                });
+              }
+
+              const geoIndex = findIndex(tableChartData, item => {
+                return (
+                  item.geolocationTag === indItem.recipient_country.name &&
+                  item.date === indItem.transaction_date_year
+                );
+              });
+
+              let value = 0;
+              switch (si) {
+                case 'Incoming Funds':
+                  value += indItem.incoming_fund;
+                  break;
+                case 'Outgoing Commitment':
+                  value += indItem.commitment;
+                  break;
+                case 'Disbursement':
+                  value = indItem.disbursement;
+                  break;
+                case 'Expenditure':
+                  value = indItem.expenditure;
+                  break;
+                case 'Incoming Commitment':
+                  value = indItem.incoming_commitment;
+                  break;
+              }
+
+              if (geoIndex === -1) {
+                tableChartData.push({
+                  [indValCol]: value,
+                  [indFormatCol]: 'EUR',
+
+                  geolocationTag:
+                    indItem.recipient_country.name === null
+                      ? 'N/A'
+                      : indItem.recipient_country.name,
+
+                  //Date
+                  date:
+                    indItem.transaction_date_year === null
+                      ? 'N/A'
+                      : indItem.transaction_date_year,
+
+                  geolocationIso2:
+                    indItem.recipient_country.code === null
+                      ? 'N/A'
+                      : indItem.recipient_country.code
+                });
+              } else {
+                tableChartData[geoIndex][indValCol] = value;
+                tableChartData[geoIndex][indFormatCol] = 'EUR';
+              }
+            });
           });
         });
       }

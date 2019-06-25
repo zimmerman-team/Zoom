@@ -40,8 +40,7 @@ const WrapUpStep = props => (
     ) : (
       <SectionHeading>
         Your data set is being mapped, you will be notified by email when your
-        mapping is finished(Currently only - devops-zz@zimmermanzimmerman.nl get
-        this notification)
+        mapping is finished
       </SectionHeading>
     )}
   </ModuleContainer>

@@ -897,53 +897,95 @@ export function formatBarData(
 }
 
 export function formatTableData(indicators) {
-  const tableChartColumns = [];
-  tableChartColumns.push(
-    { name: `Geolocation` },
-    { name: 'Date' },
-    { name: `Measure Value` },
-    { name: 'Indicator' },
-    { name: 'Sub-Indicator' },
-    { name: 'Unit of measure' },
-    { name: 'ISO2 codes' }
-  );
+  const tableChartColumns = [
+    {
+      name: 'geolocationTag',
+      label: 'Geolocation'
+    },
+    {
+      name: 'date',
+      label: 'Date'
+    },
+    {
+      name: 'geolocationIso2',
+      label: 'ISO2 codes'
+    }
+  ];
+
   const tableChartData = [];
 
   indicators.forEach(indicator => {
     if (indicator.data.length > 0) {
       indicator.data.forEach(indItem => {
-        tableChartData.push([
-          //Geolocation
-          indItem.geolocationTag === null || indItem.geolocationTag.length <= 0
-            ? 'N/A'
-            : indItem.geolocationTag,
+        const indCol = `${indItem.indicatorName}_${indItem.filterName}`;
 
-          //Date
-          indItem.date === null || indItem.date.length <= 0
-            ? 'N/A'
-            : indItem.date,
+        const indValCol = `${indCol}_value`;
+        const indFormatCol = `${indCol}_format`;
 
-          //Measure Value
-          indItem.value === null ? 'N/A' : Math.round(indItem.value),
-
-          //Indicator
-          indItem.indicatorName,
-
-          //Sub-Indicator
-          indItem.filterName,
-
-          //Unit of measure
-          indItem.valueFormatType,
-
-          //ISO2 codes
-          indItem.geolocationIso2 === null ||
-          indItem.geolocationIso2.length <= 0
-            ? 'N/A'
-            : indItem.geolocationIso2.toUpperCase()
+        const valIndex = findIndex(tableChartColumns, ['name', indValCol]);
+        const formatIndex = findIndex(tableChartColumns, [
+          'name',
+          indFormatCol
         ]);
+
+        // so if indicator format column does not exist we push it
+        // in to the start of the columns
+        if (formatIndex === -1) {
+          tableChartColumns.unshift({
+            name: indFormatCol,
+            label: indFormatCol.charAt(0).toUpperCase() + indFormatCol.slice(1)
+          });
+        }
+
+        // and if indicator value column does not exist we push it
+        // in to the start of the columns
+        if (valIndex === -1) {
+          tableChartColumns.unshift({
+            name: indValCol,
+            label: indValCol.charAt(0).toUpperCase() + indValCol.slice(1),
+            indName: indItem.indicatorName,
+            subIndName: indItem.filterName
+          });
+        }
+
+        const geoIndex = findIndex(tableChartData, [
+          'geolocationTag',
+          indItem.geolocationTag
+        ]);
+
+        if (geoIndex === -1) {
+          tableChartData.push({
+            [indValCol]:
+              indItem.value === null ? 'N/A' : Math.round(indItem.value),
+            [indFormatCol]: indItem.valueFormatType,
+
+            geolocationTag:
+              indItem.geolocationTag === null ||
+              indItem.geolocationTag.length <= 0
+                ? 'N/A'
+                : indItem.geolocationTag,
+
+            //Date
+            date:
+              indItem.date === null || indItem.date.length <= 0
+                ? 'N/A'
+                : indItem.date,
+
+            geolocationIso2:
+              indItem.geolocationIso2 === null ||
+              indItem.geolocationIso2.length <= 0
+                ? 'N/A'
+                : indItem.geolocationIso2
+          });
+        } else {
+          tableChartData[geoIndex][indValCol] =
+            indItem.value === null ? 'N/A' : Math.round(indItem.value);
+          tableChartData[geoIndex][indFormatCol] = indItem.valueFormatType;
+        }
       });
     }
   });
+
   return {
     title: '',
     columns: tableChartColumns,

@@ -20,9 +20,7 @@ export function checkEmptyFields(manMapData, mapReqFields) {
       if (
         !find(manMapData, ['zoomModel', field]) &&
         (!find(manMapData, ['zoomModel', 'Longitude']) ||
-          !find(manMapData, ['zoomModel', 'Latitude'])) &&
-        assocItem &&
-        !find(manMapData, ['zoomModel', assocItem.value])
+          !find(manMapData, ['zoomModel', 'Latitude']))
       ) {
         emptyFields.push(field);
       }

@@ -45,7 +45,7 @@ describe('Chartbuilder table chart fragment e2e', function() {
     cy.get('[aria-label="Search"]').click();
     cy.get('.MuiInputBase-root > .MuiInputBase-input').type('kenya');
     cy.waitPageLoader();
-    cy.get('tbody>tr').should('contain', 'kenya');
+    cy.get('tbody>tr').should('contain', 'Kenya');
   });
 
   it('Should be able to delete Kenya data from table', function() {

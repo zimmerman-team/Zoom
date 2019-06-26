@@ -180,7 +180,8 @@ jobs:
 workflows:
   version: 2
   test_build_deploy:
-    - filters:
+    triggers:
+      filters:
         branches:
           only:
             - develop

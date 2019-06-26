@@ -544,7 +544,7 @@ class VizPaneMediator extends React.Component {
         convert_to: 'eur',
         aggregations: 'activity_count',
         group_by: 'transaction_date_year',
-        ordering: '-transaction_date_year',
+        order_by: '-transaction_date_year',
         recipient_country: countries.join(',').toUpperCase(),
         reporting_organisation_identifier: 'NL-KVK-41207989'
       };

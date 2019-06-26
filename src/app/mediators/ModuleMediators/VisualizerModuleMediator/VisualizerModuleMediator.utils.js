@@ -1701,6 +1701,8 @@ export function formatBarData(
   const aggrKey = aggrKeys[aggregate];
   const iatiAggrKey =
     aggregate === 'geo' ? 'recipient_country.code' : 'transaction_date_year';
+  const iatiAggrKey2 =
+    aggregate === 'geo' ? 'recipient_country.name' : 'transaction_date_year';
 
   let colorInd = 0;
   indicators.forEach((indicator, index) => {
@@ -1721,7 +1723,10 @@ export function formatBarData(
           // yeah and cause we might receive data with the same geolocation name
           // we add in the values for that geolocation so it wouldn't be repeated over and over
           const existItemInd = findIndex(barChartData, existing => {
-            return indItem[aggrKey] === existing[aggrKey];
+            return (
+              indItem[aggrKey].toString().toLowerCase() ===
+              existing[aggrKey].toString().toLowerCase()
+            );
           });
 
           let aggrValue = indItem.date;
@@ -1841,10 +1846,11 @@ export function formatBarData(
                   }
                   break;
               }
+              const aggrValue =
+                aggregate === 'geo' ? yearArr[0].recipient_country.name : key;
               const existItemInd = findIndex(barChartData, existing => {
-                return key === existing[aggrKey];
+                return aggrValue === existing[aggrKey];
               });
-              const aggrValue = key;
               let itemId = `${indName} - ${ssi}`;
               let label = itemId;
               if (indicator.subIndAggr) {
@@ -1857,8 +1863,8 @@ export function formatBarData(
                     allValSum: value,
                     [`${itemId}Label`]: label,
                     [`${itemId}Color`]: colors[colorInd],
-                    [aggrKey]: key,
-                    [aggregate]: aggrValue,
+                    [aggrKey]: aggrValue,
+                    [aggregate]: key,
                     [itemId]: value,
                     [`${itemId}Format`]: 'activities'
                   });
@@ -1931,10 +1937,11 @@ export function formatBarData(
                   }
                   break;
               }
+              const aggrValue =
+                aggregate === 'geo' ? yearArr[0].recipient_country.name : key;
               const existItemInd = findIndex(barChartData, existing => {
-                return key === existing[aggrKey];
+                return aggrValue === existing[aggrKey];
               });
-              const aggrValue = key;
               let itemId = `${indName} - ${ssi}`;
               let label = itemId;
               if (indicator.subIndAggr) {
@@ -1947,8 +1954,8 @@ export function formatBarData(
                     allValSum: value,
                     [`${itemId}Label`]: label,
                     [`${itemId}Color`]: colors[colorInd],
-                    [aggrKey]: key,
-                    [aggregate]: aggrValue,
+                    [aggrKey]: aggrValue,
+                    [aggregate]: key,
                     [itemId]: value,
                     [`${itemId}Format`]: 'activities'
                   });
@@ -1987,12 +1994,15 @@ export function formatBarData(
             indicator.selectedSubInd.forEach(si => {
               const existItemInd = findIndex(barChartData, existing => {
                 return (
-                  get(indItem, iatiAggrKey).toString() ===
-                  existing[aggrKey].toString()
+                  get(indItem, iatiAggrKey2)
+                    .toString()
+                    .toLowerCase() ===
+                  existing[aggrKey].toString().toLowerCase()
                 );
               });
 
               const aggrValue = get(indItem, iatiAggrKey);
+              const aggrValue2 = get(indItem, iatiAggrKey2);
 
               let itemId = `${indName} - ${si}`;
               let label = itemId;
@@ -2026,7 +2036,7 @@ export function formatBarData(
                     allValSum: value,
                     [`${itemId}Label`]: label,
                     [`${itemId}Color`]: colors[colorInd],
-                    [aggrKey]: aggrValue.toString(),
+                    [aggrKey]: aggrValue2.toString(),
                     [aggregate]: aggrValue.toString(),
                     [itemId]: value,
                     [`${itemId}Format`]: 'EUR'

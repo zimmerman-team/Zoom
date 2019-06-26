@@ -305,10 +305,6 @@ class VisualizerModuleMediator extends Component {
       this.props.iatiIndYear.success &&
       this.props.iatiIndYear.success !== prevProps.iatiIndYear.success
     ) {
-      const multiYear =
-        this.props.match.params.chart === 'linechart' ||
-        (this.props.match.params.chart === 'barchart' &&
-          this.props.chartData.specOptions[graphKeys.aggregate] === 'year');
       const selYears = [];
       for (
         let i = this.props.iatiIndYear.data.results[

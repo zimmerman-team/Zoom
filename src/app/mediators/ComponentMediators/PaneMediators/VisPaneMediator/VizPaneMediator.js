@@ -123,6 +123,7 @@ class VizPaneMediator extends React.Component {
     this.saveGraphOption = this.saveGraphOption.bind(this);
     this.addIndicator = this.addIndicator.bind(this);
     this.removeIndicator = this.removeIndicator.bind(this);
+
     this.getIndicators = this.getIndicators.bind(this);
   }
 

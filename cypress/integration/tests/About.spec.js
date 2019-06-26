@@ -14,8 +14,8 @@ describe('About page E2E test', function() {
     cy.get('[data-cy="about-heading"]').should('contain', 'About zoom');
   });
 
-  it('There must be 3 paragraphs', function() {
-    cy.get('[data-cy="about-paragraph"]').should('have.length', 3);
+  it('There must be 4 paragraphs', function() {
+    cy.get('[data-cy="about-paragraph"]').should('have.length', 4);
   });
 
   // So we want to make this assertion of the element actually being there.

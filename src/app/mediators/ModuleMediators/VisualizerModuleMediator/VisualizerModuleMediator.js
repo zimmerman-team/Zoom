@@ -302,6 +302,14 @@ class VisualizerModuleMediator extends Component {
     }
 
     if (
+      this.props.chartData.selectedYear !== prevProps.chartData.selectedYear
+    ) {
+      this.setState({
+        selectedYear: this.props.chartData.selectedYear
+      });
+    }
+
+    if (
       this.props.iatiIndYear.success &&
       this.props.iatiIndYear.success !== prevProps.iatiIndYear.success
     ) {

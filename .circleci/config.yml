@@ -180,8 +180,8 @@ jobs:
 workflows:
   version: 2
   test_build_deploy:
-    triggers:
-      - schedule:
+    jobs:
+      - checkout_repo:
           filters:
             branches:
               only:
@@ -191,8 +191,6 @@ workflows:
                 - production
                 - another/test/ZOOM-2045
                 - test/ZOOM-2045
-    jobs:
-      - checkout_repo
       - build_deploy:
           requires:
             - checkout_repo

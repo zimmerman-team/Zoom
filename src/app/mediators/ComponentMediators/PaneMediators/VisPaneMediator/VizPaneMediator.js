@@ -24,8 +24,8 @@ import chartTypes from '__consts__/ChartConst';
 import graphKeys from '__consts__/GraphStructKeyConst';
 import { maxYear } from '__consts__/TimeLineConst';
 import { aggrOptions } from '__consts__/GraphStructOptionConsts';
-import { iatiIndYearRequest } from 'app/services/actions/oipa';
-import { formatCountryParam } from 'app/mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
+import { iatiIndYearRequest } from 'services/actions/oipa';
+import { formatCountryParam } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 
 const propTypes = {
   display: PropTypes.string,
@@ -535,53 +535,53 @@ class VizPaneMediator extends React.Component {
       });
     });
 
-    if (selectedInd[index].dataSource === 'IATI') {
-      const countries = formatCountryParam(
-        this.props.chartData.selectedCountryVal,
-        this.props.chartData.selectedRegionVal
-      );
-      let params = {
-        convert_to: 'eur',
-        aggregations: 'activity_count',
-        group_by: 'transaction_date_year',
-        order_by: '-transaction_date_year',
-        recipient_country: countries.join(',').toUpperCase(),
-        reporting_organisation_identifier: 'NL-KVK-41207989'
-      };
-      const subIndValues = !array
-        ? item.value
-        : item.map(it => it.value).join(',');
-      switch (selectedInd[index].indicator) {
-        case 'activity_status':
-          params = {
-            ...params,
-            group_by: `${params.group_by},activity_status`,
-            activity_status: [
-              ...selectedInd[index].selectedSubInd,
-              subIndValues
-            ].join(',')
-          };
-          break;
-        case 'transactions':
-          params = {
-            ...params,
-            transaction_type: [
-              ...selectedInd[index].selectedSubInd,
-              subIndValues
-            ].join(',')
-          };
-          break;
-        case 'sector':
-          params = {
-            ...params,
-            group_by: `${params.group_by},sector`,
-            sector: [...selectedInd[index].selectedSubInd, subIndValues].join(
-              ','
-            )
-          };
-      }
-      this.props.dispatch(iatiIndYearRequest(params));
-    }
+    // if (selectedInd[index].dataSource === 'IATI') {
+    //   const countries = formatCountryParam(
+    //     this.props.chartData.selectedCountryVal,
+    //     this.props.chartData.selectedRegionVal
+    //   );
+    //   let params = {
+    //     convert_to: 'eur',
+    //     aggregations: 'activity_count',
+    //     group_by: 'transaction_date_year',
+    //     order_by: '-transaction_date_year',
+    //     recipient_country: countries.join(',').toUpperCase(),
+    //     reporting_organisation_identifier: 'NL-KVK-41207989'
+    //   };
+    //   const subIndValues = !array
+    //     ? item.value
+    //     : item.map(it => it.value).join(',');
+    //   switch (selectedInd[index].indicator) {
+    //     case 'activity_status':
+    //       params = {
+    //         ...params,
+    //         group_by: `${params.group_by},activity_status`,
+    //         activity_status: [
+    //           ...selectedInd[index].selectedSubInd,
+    //           subIndValues
+    //         ].join(',')
+    //       };
+    //       break;
+    //     case 'transactions':
+    //       params = {
+    //         ...params,
+    //         transaction_type: [
+    //           ...selectedInd[index].selectedSubInd,
+    //           subIndValues
+    //         ].join(',')
+    //       };
+    //       break;
+    //     case 'sector':
+    //       params = {
+    //         ...params,
+    //         group_by: `${params.group_by},sector`,
+    //         sector: [...selectedInd[index].selectedSubInd, subIndValues].join(
+    //           ','
+    //         )
+    //       };
+    //   }
+    //   this.props.dispatch(iatiIndYearRequest(params));
+    // }
 
     // so we set up this logic for select/deselect all logic
     // if all is selected all of the options will be passed in

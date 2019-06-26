@@ -505,8 +505,6 @@ class VisualizerModuleMediator extends Component {
 
     const aggregationData = [];
 
-    // console.log(indicatorData);
-
     // formating indicator data commences!
     indicatorData.forEach(indItem => {
       // so we format it in this way so that the loaded in 'indAggregation'
@@ -514,20 +512,22 @@ class VisualizerModuleMediator extends Component {
       // cause it might not have been loaded in with the same indexes
       // as the indicator selections, cause of promise stuff
       // the actual index was stored when initially this 'indicatorData' was formed
-      aggregationData[indItem.index] = {
-        data: indItem.isIATI
-          ? this.getIatiIndData(indItem.indName)
-          : indItem.indAggregation,
-        selectedSubInd: !indItem.isIATI
-          ? selectedInd[indItem.index].selectedSubInd
-          : this.getIatiIndSubIndLabel(
-              selectedInd[indItem.index].subIndicators,
-              selectedInd[indItem.index].selectedSubInd
-            ),
-        subIndAggr: selectedInd[indItem.index].aggregate,
-        isIATI: indItem.isIATI,
-        indName: indItem.indName
-      };
+      if (indItem.indName) {
+        aggregationData[indItem.index] = {
+          data: indItem.isIATI
+            ? this.getIatiIndData(indItem.indName)
+            : indItem.indAggregation,
+          selectedSubInd: !indItem.isIATI
+            ? selectedInd[indItem.index].selectedSubInd
+            : this.getIatiIndSubIndLabel(
+                selectedInd[indItem.index].subIndicators,
+                selectedInd[indItem.index].selectedSubInd
+              ),
+          subIndAggr: selectedInd[indItem.index].aggregate,
+          isIATI: indItem.isIATI,
+          indName: indItem.indName
+        };
+      }
     });
 
     // console.log(aggregationData);

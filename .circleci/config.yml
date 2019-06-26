@@ -176,6 +176,7 @@ jobs:
               yarn e2e:percy:record:parallel:chrome
             fi
 
+
 # WORKFLOWS
 workflows:
   version: 2

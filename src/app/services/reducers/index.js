@@ -635,6 +635,21 @@ function sectorInd(state = initial, action) {
   }
 }
 
+function iatiIndYear(state = initial, action) {
+  switch (action.type) {
+    case oipaActions.IATI_IND_YEAR_INITIAL:
+      return updateInitial(state);
+    case oipaActions.IATI_IND_YEAR_REQUEST:
+      return updateRequest(state, action);
+    case oipaActions.IATI_IND_YEAR_SUCCESS:
+      return updateSuccess(state, action);
+    case oipaActions.IATI_IND_YEAR_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
   datasetIds,
   chartTrashEmpty,
@@ -672,7 +687,8 @@ const reducers = {
   userPersist,
   activityStatusInd,
   transactionInd,
-  sectorInd
+  sectorInd,
+  iatiIndYear
 };
 
 export default reducers;

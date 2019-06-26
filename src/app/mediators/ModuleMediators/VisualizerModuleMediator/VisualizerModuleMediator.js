@@ -300,6 +300,40 @@ class VisualizerModuleMediator extends Component {
     ) {
       this.updateIndicators(this.state.indicatorData);
     }
+
+    if (
+      this.props.iatiIndYear.success &&
+      this.props.iatiIndYear.success !== prevProps.iatiIndYear.success
+    ) {
+      const multiYear =
+        this.props.match.params.chart === 'linechart' ||
+        (this.props.match.params.chart === 'barchart' &&
+          this.props.chartData.specOptions[graphKeys.aggregate] === 'year');
+      const selYears = [];
+      for (
+        let i = this.props.iatiIndYear.data.results[
+          this.props.iatiIndYear.data.results.length - 1
+        ].transaction_date_year;
+        i < this.props.iatiIndYear.data.results[0].transaction_date_year + 1;
+        i++
+      ) {
+        selYears.push(i.toString());
+      }
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          // so the year reselection functionality only works with geolocations thats why we
+          // refetch all indicators only when the aggregate option IS geolocation
+          refetch: true,
+          selectedYear: this.props.iatiIndYear.data.results[0]
+            .transaction_date_year,
+          selectedYears: selYears
+        })
+      );
+      this.setState({
+        selectedYear: this.props.iatiIndYear.data.results[0]
+          .transaction_date_year
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -558,7 +592,8 @@ class VisualizerModuleMediator extends Component {
             this.props.chartData.indKeys,
             this.props.chartData.data,
             aggregationData,
-            this.props.chartData.specOptions[graphKeys.aggregate]
+            this.props.chartData.specOptions[graphKeys.aggregate],
+            this.props.chartData.selectedYears
           );
 
           data = lineData.data;
@@ -582,7 +617,8 @@ class VisualizerModuleMediator extends Component {
             this.props.chartData.specOptions[graphKeys.aggregate],
             this.props.chartData.specOptions[graphKeys.rankBy],
             this.props.chartData.specOptions[graphKeys.horizont],
-            this.props.chartData.specOptions[graphKeys.colorPallet]
+            this.props.chartData.specOptions[graphKeys.colorPallet],
+            this.props.chartData.selectedYears
           );
 
           data = barData.data;
@@ -718,6 +754,10 @@ class VisualizerModuleMediator extends Component {
           this.props.dispatch(sectorIndInitial());
       }
     } else {
+      const multiYear =
+        this.props.match.params.chart === 'linechart' ||
+        (this.props.match.params.chart === 'barchart' &&
+          this.props.chartData.specOptions[graphKeys.aggregate] === 'year');
       let groupBy = '';
       if (this.props.match.params.chart === 'barchart') {
         if (this.props.chartData.specOptions[graphKeys.aggregate] === 'geo') {
@@ -737,7 +777,7 @@ class VisualizerModuleMediator extends Component {
       const params = {
         convert_to: 'eur',
         group_by: groupBy,
-        // transaction_date_year: this.state.selectedYear,
+        transaction_date_year: !multiYear ? this.state.selectedYear : '',
         recipient_country: countries.join(',').toUpperCase(),
         reporting_organisation_identifier: 'NL-KVK-41207989'
       };
@@ -1100,7 +1140,8 @@ const mapStateToProps = state => {
     transactionIndData: state.transactionInd,
     activityStatusIndData: state.activityStatusInd,
     sectorIndData: state.sectorInd,
-    dataPaneOpen: state.dataPaneOpen.open
+    dataPaneOpen: state.dataPaneOpen.open,
+    iatiIndYear: state.iatiIndYear
   };
 };
 

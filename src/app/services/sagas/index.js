@@ -785,6 +785,18 @@ export function* sectorIndRequest(action) {
   }
 }
 
+export function* iatiIndYearRequest(action) {
+  try {
+    const response = yield call(
+      api.transactionsAggregationsRequest,
+      action.values
+    );
+    yield put(oipaActions.iatiIndYearSuccess(response));
+  } catch (error) {
+    yield put(oipaActions.iatiIndYearFailed(error));
+  }
+}
+
 function* sagas() {
   yield [
     takeLatest('GET_DATASET_IDS_REQUEST', getDatasetIdsRequest),
@@ -848,7 +860,8 @@ function* sagas() {
     takeLatest('DELETE_AUTH_GROUP_REQUEST', deleteAuthGroupRequest),
     takeLatest('ACTIVITY_STATUS_IND_REQUEST', activityStatusIndRequest),
     takeLatest('TRANSACTION_IND_REQUEST', transactionIndRequest),
-    takeLatest('SECTOR_IND_REQUEST', sectorIndRequest)
+    takeLatest('SECTOR_IND_REQUEST', sectorIndRequest),
+    takeLatest('IATI_IND_YEAR_REQUEST', iatiIndYearRequest)
   ];
 }
 

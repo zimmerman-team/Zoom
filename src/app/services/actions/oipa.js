@@ -189,3 +189,35 @@ export function sectorIndFailed(error) {
     error: error
   };
 }
+
+export const IATI_IND_YEAR_INITIAL = 'IATI_IND_YEAR_INITIAL';
+export const IATI_IND_YEAR_REQUEST = 'IATI_IND_YEAR_REQUEST';
+export const IATI_IND_YEAR_SUCCESS = 'IATI_IND_YEAR_SUCCESS';
+export const IATI_IND_YEAR_FAILED = 'IATI_IND_YEAR_FAILED';
+
+export function iatiIndYearInitial() {
+  return {
+    type: IATI_IND_YEAR_INITIAL
+  };
+}
+
+export function iatiIndYearRequest(values) {
+  return {
+    type: IATI_IND_YEAR_REQUEST,
+    values: values
+  };
+}
+
+export function iatiIndYearSuccess(data) {
+  return {
+    type: IATI_IND_YEAR_SUCCESS,
+    data: data
+  };
+}
+
+export function iatiIndYearFailed(error) {
+  return {
+    type: IATI_IND_YEAR_FAILED,
+    error: error
+  };
+}

@@ -190,6 +190,7 @@ workflows:
               - master
               - production
               - another/test/ZOOM-2045
+              - test/ZOOM-2045
     jobs:
       - checkout_repo
       - build_deploy:

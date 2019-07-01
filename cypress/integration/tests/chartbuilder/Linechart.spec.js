@@ -13,14 +13,15 @@ describe('Chartbuilder line chart fragment e2e', function() {
     cy.log('**URL is correct**');
     cy.url().should('include', '/visualizer/linechart');
 
-    cy.log('**Plots aids related deaths**');
+    cy.log('**Plots new hiv infections**');
     cy.get(
       '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
     )
       .first()
       .click();
-    cy.contains('aids related deaths (unaids)').click();
+    cy.contains('new hiv infections').click();
     cy.get('body').click();
+    cy.wait(10000);
     cy.waitPageLoader();
     cy.get('[data-cy="legend-label"]').should('have.css', 'content');
 
@@ -30,7 +31,7 @@ describe('Chartbuilder line chart fragment e2e', function() {
       .trigger('mouseenter', { force: true });
     cy.get('[data-cy="tooltip-content"]').should(
       'have.text',
-      'Datasource: UNAIDS 2018'
+      'Datasource: Public Indicators'
     );
 
     cy.log('**Hovering over chart displays correct content**');
@@ -40,9 +41,8 @@ describe('Chartbuilder line chart fragment e2e', function() {
       .scrollIntoView()
       .trigger('mouseover', { force: true });
 
-    cy.contains('2005');
     cy.contains(
-      'aids related deaths (unaids) - adolescents (10 to 19) realistic estimate'
+      'number of new hiv infections - adolescents (10 to 19) lower bound'
     );
   });
 

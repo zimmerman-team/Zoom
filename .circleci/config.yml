@@ -155,7 +155,14 @@ workflows:
   version: 2
   test_build_deploy:
     jobs:
-      - checkout_repo
+      - checkout_repo:
+          filters:
+            branches:
+              only:
+                - develop
+                - /feature-.*/
+                - master
+                - production
       - build_deploy:
           requires:
             - checkout_repo

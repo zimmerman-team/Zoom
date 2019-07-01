@@ -54,8 +54,8 @@ class ModuleFragment extends React.Component {
           {this.props.showInfoButton && (
             <FragmentInfoButton
               data-cy="tooltip-fragment-info"
-              onMouseEnter={() => this.handleMouseEnter()}
-              onMouseLeave={() => this.handleMouseLeave()}
+              // onMouseEnter={() => this.handleMouseEnter()}
+              // onMouseLeave={() => this.handleMouseLeave()}
             />
           )}
 

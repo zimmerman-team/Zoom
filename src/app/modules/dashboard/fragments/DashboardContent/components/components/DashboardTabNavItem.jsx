@@ -71,14 +71,22 @@ const DashboardTabNavItem = props => {
     (props.user && props.user.role === userRoles.admin) ||
     props.user.role === userRoles.superAdm;
 
+  const isMod = props.user && props.user.role === userRoles.mod;
+
+  let isAllowed = false;
+
+  if (isAdmin && props.forAdmin) {
+    isAllowed = true;
+  } else if (isMod && props.forMod) {
+    isAllowed = true;
+  } else if (!props.forAdmin && !props.forMod) {
+    isAllowed = true;
+  }
+
   return (
     <ComponentBase
-      style={
-        props.forAdmin && !isAdmin
-          ? { pointerEvents: 'none', opacity: '0.4' }
-          : {}
-      }
-      to={props.forAdmin && !isAdmin ? '/dashboard/charts' : props.path}
+      style={!isAllowed ? { pointerEvents: 'none', opacity: '0.4' } : {}}
+      to={!isAllowed ? '/dashboard/charts' : props.path}
       isActive={(match, location) => {
         const selectedTab = location.pathname.substr(
           location.pathname.lastIndexOf('/')

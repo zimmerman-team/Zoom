@@ -364,6 +364,7 @@ export default createRefetchContainer(
           "filterName"
         ]
         uniqueIndicator: true
+        indicatorFileAccesibility: "a"
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
         geolocationIso2_In: $countryCode
@@ -385,6 +386,7 @@ export default createRefetchContainer(
           "filterName"
         ]
         uniqueIndicator: true
+        indicatorFileAccesibility: "a"
         orderBy: ["indicatorName"]
         aggregation: ["Sum(value)"]
         geolocationIso2_In: $countryCode
@@ -403,6 +405,7 @@ export default createRefetchContainer(
         geolocationIso2_In: $countryCode
         indicatorName_In: ["civicus score"]
         uniqueIndicator: true
+        indicatorFileAccesibility: "a"
       ) {
         indicatorName
         date
@@ -417,6 +420,7 @@ export default createRefetchContainer(
           "filterName"
         ]
         uniqueIndicator: true
+        indicatorFileAccesibility: "a"
         orderBy: ["date"]
         aggregation: ["Sum(value)"]
         geolocationIso2_In: $countryCode

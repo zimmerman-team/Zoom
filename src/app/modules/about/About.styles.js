@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import { Box } from 'grommet/components/Box';
-import { DescriptionParagraph } from 'components/sort/Paragraphs';
+import {
+  DescriptionParagraph,
+  DescriptionParagraphBoldIt
+} from 'components/sort/Paragraphs';
 import { PageHeading } from 'components/sort/Headings';
 import theme from 'theme/Theme';
 
@@ -14,9 +17,13 @@ export const AboutTitle = styled(PageHeading)`
 `;
 
 export const Text = styled(DescriptionParagraph)`
-  padding: 46px 0;
+  padding-bottom: 24px;
 `;
 
 export const RedLink = styled.a`
   color: ${theme.color.aidsFondsRed};
+`;
+
+export const PaddedParagraph = styled(DescriptionParagraphBoldIt)`
+  padding-bottom: 24px;
 `;

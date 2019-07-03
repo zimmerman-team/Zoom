@@ -53,7 +53,7 @@ const About = () => {
         </DescriptionParagraph>
         <DescriptionParagraph>
           <RedLink
-            data-cy="about-link-to-web"
+            data-cy="about-link-to-guidelines"
             target="_blank"
             rel="noopener noreferrer"
             href={`${
@@ -69,7 +69,7 @@ const About = () => {
       </DescriptionParagraph>
       <DescriptionParagraph>
         <RedLink
-          data-cy="about-link-to-web"
+          data-cy="about-link-to-geolocations"
           target="_blank"
           rel="noopener noreferrer"
           href="https://docs.google.com/spreadsheets/d/1C6PEW5sex5JjPcxZ6YHUEYcX-XvpfEL5r9VJ1xhd6i4/edit?usp=sharing"

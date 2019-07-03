@@ -53,7 +53,7 @@ const About = () => {
         </DescriptionParagraph>
         <DescriptionParagraph>
           <RedLink
-            data-cy="about-link-to-web"
+            data-cy="about-link-to-guidelines"
             target="_blank"
             rel="noopener noreferrer"
             href={`${
@@ -64,17 +64,32 @@ const About = () => {
           </RedLink>
         </DescriptionParagraph>
       </Section>
+      <Section>
+        <DescriptionParagraph>
+          You can find geolocations of ZOOM here:
+        </DescriptionParagraph>
+        <DescriptionParagraph>
+          <RedLink
+            data-cy="about-link-to-geolocations"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://docs.google.com/spreadsheets/d/1C6PEW5sex5JjPcxZ6YHUEYcX-XvpfEL5r9VJ1xhd6i4/edit?usp=sharing"
+          >
+            Geo locations for ZOOM
+          </RedLink>
+        </DescriptionParagraph>
+      </Section>
       <DescriptionParagraph>
-        You can find geolocations of ZOOM here:
+        You can find a manual of data mapping here:
       </DescriptionParagraph>
       <DescriptionParagraph>
         <RedLink
-          data-cy="about-link-to-web"
+          data-cy="about-link-to-guide"
           target="_blank"
           rel="noopener noreferrer"
-          href="https://docs.google.com/spreadsheets/d/1C6PEW5sex5JjPcxZ6YHUEYcX-XvpfEL5r9VJ1xhd6i4/edit?usp=sharing"
+          href="https://docs.google.com/document/d/1Kr6eFIwPQQVXsD_LQoBWyDi4dtT-SmNbp4ou7p_TOZA/edit?usp=sharing"
         >
-          Geo locations for ZOOM
+          Data mapping manual
         </RedLink>
       </DescriptionParagraph>
     </ModuleContainer>

@@ -24,7 +24,7 @@ describe('About page E2E test', function() {
   //   cy.get('[transform="translate(107, 207)"] > rect').trigger('mouseover');
   // });
 
-  it('Click link should redirect to Aidsfonds website', function() {
-    cy.get('[data-cy="about-link-to-web"]').click();
+  it('Click link should open up the data guidelines pdf', function() {
+    cy.get('[data-cy="about-link-to-guidelines"]').click();
   });
 });

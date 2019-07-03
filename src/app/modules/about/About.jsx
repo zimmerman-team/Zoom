@@ -1,10 +1,12 @@
 /* base */
 import React from 'react';
+import { DescriptionParagraph } from 'components/sort/Paragraphs';
 import {
-  DescriptionParagraph,
-  DescriptionParagraphBoldIt
-} from 'components/sort/Paragraphs';
-import { AboutTitle, RedLink, Text } from 'modules/about/About.styles';
+  AboutTitle,
+  RedLink,
+  Text,
+  PaddedParagraph
+} from 'modules/about/About.styles';
 import ModuleContainer from 'modules/common/modulecontainer/ModuleContainer';
 
 const propTypes = {};
@@ -14,10 +16,10 @@ const About = () => {
   return (
     <ModuleContainer title="About zoom">
       <AboutTitle data-cy="about-heading">About zoom</AboutTitle>
-      <DescriptionParagraphBoldIt data-cy="about-paragraph">
+      <PaddedParagraph data-cy="about-paragraph">
         Zoom makes data easy to use and understand. We use data visualizations
         to give the numbers meaning
-      </DescriptionParagraphBoldIt>
+      </PaddedParagraph>
       <Text data-cy="about-paragraph">
         Zoom is an open data platform that enables the collection and analysis
         of relevant information and the visualisation of the outcomes. Users of

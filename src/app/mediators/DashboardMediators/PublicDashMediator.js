@@ -11,7 +11,7 @@ class PublicDashMediator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sortBy: 'name:1',
+      sortBy: '-last_updated',
       page: 0,
       pageSize: 18,
       pageCount: 1,

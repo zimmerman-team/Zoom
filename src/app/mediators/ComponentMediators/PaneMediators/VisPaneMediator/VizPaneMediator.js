@@ -89,6 +89,8 @@ class VizPaneMediator extends React.Component {
       .concat(',')
       .concat(initialState.yearPeriod[initialState.yearPeriod.length - 1]);
 
+    this._isMounted = false;
+
     this.state = {
       allIndNames: [],
       locReselected: false,
@@ -124,6 +126,7 @@ class VizPaneMediator extends React.Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     let allCountries = [];
     let allRegions = [];
 
@@ -240,6 +243,10 @@ class VizPaneMediator extends React.Component {
         locReselected: false
       });
     }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   getIndicators() {
@@ -376,8 +383,9 @@ class VizPaneMediator extends React.Component {
         });
 
         allIndNames = sortBy(allIndNames, ['label']);
-
-        this.setState({ allIndNames });
+        if (this._isMounted) {
+          this.setState({ allIndNames });
+        }
       }
     );
   }

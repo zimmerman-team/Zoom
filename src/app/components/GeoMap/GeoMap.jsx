@@ -41,7 +41,7 @@ const propTypes = {
   }),
   viewport: PropTypes.shape({}),
   chartMounted: PropTypes.bool,
-  indicatorData: PropTypes.array,
+  indicatorData: PropTypes.any,
   selectedYear: PropTypes.string,
   disableYear: PropTypes.bool,
   selectYear: PropTypes.func,

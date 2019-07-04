@@ -15,8 +15,8 @@ import SvgIconLocation from 'assets/icons/geomap/SvgIconLocation';
 const locationLegend = (locationItems, index) => (
   <LocationLegendItem key={`legend-${index}`}>
     <LocationLegendLabel>Points of interests</LocationLegendLabel>
-    {locationItems.map(item => (
-      <LocItemContainer>
+    {locationItems.map((item, itemIndex) => (
+      <LocItemContainer key={`location-item-${itemIndex}`}>
         <ScgIconContainer>
           <SvgIconLocation color={item.color} />
         </ScgIconContainer>

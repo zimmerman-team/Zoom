@@ -101,7 +101,10 @@ order: 2;
   }
 `;
 
-const ZimMenuItem = styled(props => <MenuItem {...props} />)`
+// note because of some nonsenses happening in material ui MenuItem component
+// we get warnings about some refs when this menu item is wrapped the same way as others are
+// so currently its wrapped in a simpler way and doesn't produce the warning
+const ZimMenuItem = styled(MenuItem)`
   && {
     font-family: ${themes.font.zoomFontFamTwo};
     font-size: 14px;
@@ -182,7 +185,7 @@ class ColorSelect extends React.Component {
             IconComponent={IconPointer}
           >
             {colorSetz.map(set => (
-              <ZimMenuItem value={set.index}>
+              <ZimMenuItem key={set.index} value={set.index}>
                 {set.colors.map(color => (
                   <PaletFragment key={color} colors={color} />
                 ))}

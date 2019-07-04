@@ -204,9 +204,7 @@ class DataExplorePane extends React.Component {
         defaultAll: false,
         aggrCheck: indItem.aggregate,
         openSubInd:
-          this.props.indicatorSelected && this.props.indSelectedIndex === index
-            ? index
-            : -1,
+          this.props.indicatorSelected && this.props.indSelectedIndex === index,
         placeHolderText: 'Select sub indicator',
         selectDataSource: (val, isArray) =>
           this.props.selectSubInd(val, isArray, index),

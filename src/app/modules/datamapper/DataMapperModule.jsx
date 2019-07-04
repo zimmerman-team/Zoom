@@ -157,24 +157,29 @@ class DataMapperModule extends React.Component {
         }
 
         if (metaDataEmptyFields.length > 0) {
-          this.setState({ openSnackbar: true });
-          this.setState({ errorMessage: 'Please fill the required fields' });
-
           props.dispatch(actions.saveStepDataRequest(stepData));
-          return { metaDataEmptyFields };
-        } else {
-          return { metaDataEmptyFields, step: prevState.step + 1 };
+          return {
+            openSnackbar: true,
+            errorMessage: 'Please fill the required fields',
+            metaDataEmptyFields
+          };
         }
+
+        return { metaDataEmptyFields, step: prevState.step + 1 };
       } else if (prevState.step === 2) {
         if (!stepData.uploadData) {
-          this.setState({ openSnackbar: true });
-          this.setState({ errorMessage: 'Please upload a file' });
+          return {
+            openSnackbar: true,
+            errorMessage: 'Please upload a file'
+          };
         } else if (!stepData.manMapData || stepData.manMapData.length === 0) {
-          this.setState({ openSnackbar: true });
-          this.setState({ errorMessage: 'File uploading please wait...' });
-        } else {
-          return { step: prevState.step + 1 };
+          return {
+            openSnackbar: true,
+            errorMessage: 'File uploading please wait...'
+          };
         }
+
+        return { step: prevState.step + 1 };
       } else if (prevState.step === 4) {
         // So here we check if the fourth steps data has been saved
         // and if it contains anything because what we actually save here
@@ -182,13 +187,13 @@ class DataMapperModule extends React.Component {
         // and the user should be able to progress only if they've fixed
         // all the found errors
         if (!prevState.stepsDisabled && stepData.errorColumns.length > 0) {
-          this.setState({ openSnackbar: true });
-          this.setState({
+          return {
+            openSnackbar: true,
             errorMessage: 'Please correct errors before proceeding'
-          });
-        } else {
-          return { step: prevState.step + 1 };
+          };
         }
+
+        return { step: prevState.step + 1 };
       }
       // restriction for the manual mapping step
       else if (prevState.step === 5) {

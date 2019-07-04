@@ -22,6 +22,7 @@ const propTypes = {
   visible: PropTypes.bool,
   /** contains data for generation of tab nav items and providing the tab content with the proper components */
   users: PropTypes.array,
+  trashCount: PropTypes.number,
   trashCharts: PropTypes.array,
   removeAll: PropTypes.func,
   loading: PropTypes.bool,
@@ -34,6 +35,7 @@ const defaultProps = {
   visible: true,
   loading: false,
   removeAll: null,
+  trashCount: 0,
   trashCharts: [],
   loggedIn: true,
   isSuperAdmin: false,
@@ -48,7 +50,7 @@ const DashboardContent = props => {
       {/** tab navigator */}
       <DashboardTabNavigator
         navItems={props.navItems}
-        trashCount={props.trashCharts.length}
+        trashCount={props.trashCount}
       />
       {/** tab content */}
       <DashboardTabContent

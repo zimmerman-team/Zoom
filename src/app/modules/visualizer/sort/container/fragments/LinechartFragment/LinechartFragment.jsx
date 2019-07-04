@@ -32,12 +32,7 @@ const propTypes = {
     PropTypes.shape({
       id: PropTypes.string,
       color: PropTypes.string,
-      data: PropTypes.arrayOf(
-        PropTypes.shape({
-          x: PropTypes.string,
-          y: PropTypes.number
-        })
-      )
+      data: PropTypes.any
     })
   )
 };

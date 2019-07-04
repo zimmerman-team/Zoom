@@ -6,6 +6,7 @@ import findIndex from 'lodash/findIndex';
 /* components */
 import { DropDownCont } from 'components/Panes/DataExplorePane/DataExplorerPane.style';
 import SimpleSwitch from 'components/SimpleSwitch/SimpleSwitch';
+import ZoomSelect from 'components/Select/ZoomSelect';
 /* icons */
 import SvgIconAdd from 'assets/icons/IconAdd';
 /* styles */
@@ -16,8 +17,7 @@ import {
   IndicatorLabel,
   IndicatorRemove,
   IndLabelContainer,
-  SwitchContainer,
-  ZoomSelect
+  SwitchContainer
 } from './DropdownMenuPanel.style';
 
 const propTypes = {

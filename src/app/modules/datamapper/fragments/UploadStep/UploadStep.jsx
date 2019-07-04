@@ -21,7 +21,7 @@ const propTypes = {
   handleFileUpload: PropTypes.func,
   error: PropTypes.bool,
   loading: PropTypes.bool,
-  file: PropTypes.string
+  file: PropTypes.shape({})
 };
 const defaultProps = {
   handleFileUpload: undefined,

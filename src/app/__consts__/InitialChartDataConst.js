@@ -27,7 +27,7 @@ export const initIndItem = {
   selectedSubInd: []
 };
 
-export const devIndicatorInd = 109;
+export const devIndicatorInd = '109';
 
 export const devIndicatorName = 'aids related deaths (unaids)';
 

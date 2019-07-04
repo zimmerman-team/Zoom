@@ -30,21 +30,41 @@ const DatasetApi = {
 
   // gets all datasets of the owner
   getOwnerDatasets: (req, res) => {
-    const { authId, sortBy, searchTitle } = req.query;
+    const { authId, sortBy, searchTitle, pageSize, page } = req.query;
 
     User.findOne({ authId }, (error, author) => {
-      if (error) general.handleError(res, error);
-      else if (!author) general.handleError(res, 'User not found', 404);
-      else {
-        const sort = utils.getDashboardSortBy(sortBy);
+      if (error) {
+        general.handleError(res, error);
+      } else if (!author) {
+        general.handleError(res, 'User not found', 404);
+      } else {
+        const query = { author, name: { $regex: searchTitle, $options: 'i' } };
 
-        Dataset.find({ author, name: { $regex: searchTitle, $options: 'i' } })
-          .collation({ locale: 'en' })
-          .sort(sort)
-          .exec((setError, dataset) => {
-            if (setError) general.handleError(res, setError);
-            else res.json(dataset);
-          });
+        Dataset.countDocuments(query, (countError, count) => {
+          if (countError) {
+            general.handleError(res, countError);
+          } else {
+            const sort = utils.getDashboardSortBy(sortBy);
+            const pSize = parseInt(pageSize, 10);
+            const p = parseInt(page, 10);
+
+            Dataset.find(query)
+              .limit(pSize)
+              .skip(p * pSize)
+              .collation({ locale: 'en' })
+              .sort(sort)
+              .exec((datasetError, datasets) => {
+                if (datasetError) {
+                  general.handleError(res, datasetError);
+                } else {
+                  res.json({
+                    count,
+                    datasets
+                  });
+                }
+              });
+          }
+        });
       }
     });
   },

@@ -56,6 +56,7 @@ export class HomeModule extends Component {
           <BaseDialog open={this.state.dialogOpen} onClose={this.onClose} />
         )}
         <VisualizerModuleMediator
+          indicatorAggregations={null}
           home
           dropDownData={this.props.dropDownData}
           auth0Client={this.props.auth0Client}

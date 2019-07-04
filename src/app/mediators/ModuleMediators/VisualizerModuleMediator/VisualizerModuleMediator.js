@@ -38,6 +38,7 @@ import * as actions from 'services/actions/general';
 
 const propTypes = {
   publicChart: PropTypes.shape({}),
+  indicatorAggregations: PropTypes.shape({}),
   chartResults: PropTypes.shape({}),
   chartData: PropTypes.shape({}),
   user: PropTypes.shape({}),
@@ -78,7 +79,7 @@ const defaultProps = {
   chartData: {},
   user: {},
   paneData: {},
-  indicatorAggregations: {}
+  indicatorAggregations: null
 };
 
 // so we will start getting the indicator data with this
@@ -144,6 +145,9 @@ const indicatorDataQuery = graphql`
 class VisualizerModuleMediator extends Component {
   constructor(props) {
     super(props);
+
+    this._isMounted = false;
+
     this.state = {
       loading: false,
       selectedYear: this.props.chartData.selectedYear
@@ -163,6 +167,7 @@ class VisualizerModuleMediator extends Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     // so yeah with this we update the top bar pane with correct data
     if (!this.props.home) {
       this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.visualizer));
@@ -286,6 +291,8 @@ class VisualizerModuleMediator extends Component {
 
     // We also reset the duplicate chart redux
     this.props.dispatch(nodeActions.createDuplicateChartInitial());
+
+    this._isMounted = false;
   }
 
   storeInitialChartOptions() {
@@ -685,7 +692,7 @@ class VisualizerModuleMediator extends Component {
 
           // so we only update the indicators when we've retrieved the same
           // amount of indicator data as we have indicators selected
-          if (indicatorData.length === selectedInds.length) {
+          if (indicatorData.length === selectedInds.length && this._isMounted) {
             this.setState({ loading: false });
 
             const updateIndIndex =

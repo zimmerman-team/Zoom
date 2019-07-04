@@ -1,10 +1,16 @@
 /* base */
 import React from 'react';
+import { connect } from 'react-redux';
+
 /* utils */
 import isEqual from 'lodash/isEqual';
 
+/* actions */
+import * as actions from 'services/actions/general';
+
 /* consts */
 import { noData } from './TableChartFragment.const';
+import initialState from '__consts__/InitialChartDataConst';
 
 /* components */
 import TableChart from 'components/charts/tablechart/TableChart';
@@ -70,4 +76,4 @@ class TablechartFragment extends React.Component {
   }
 }
 
-export default TablechartFragment;
+export default connect(null)(TablechartFragment);

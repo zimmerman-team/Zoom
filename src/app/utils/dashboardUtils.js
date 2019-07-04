@@ -192,7 +192,7 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
 
 // formats datasets for the dashboard
 export function formatDatasets(datasets, history, remove) {
-  return datasets.map(dataset => {
+  return datasets.datasets.map(dataset => {
     let shared = '';
 
     if (dataset.public === 'o') {

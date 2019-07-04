@@ -177,6 +177,7 @@ const ChartController = {
   // this basically gets all public charts
   getPublic: (req, res) => {
     const { sortBy, pageSize, page, searchTitle } = req.query;
+
     Chart.countDocuments(
       {
         _public: true,
@@ -184,47 +185,54 @@ const ChartController = {
         name: { $regex: searchTitle, $options: 'i' }
       },
       (countError, count) => {
-        if (countError) general.handleError(res, countError);
-        const sort = utils.getDashboardSortBy(sortBy);
-        const pSize = parseInt(pageSize, 10);
-        const p = parseInt(page, 10);
-        Chart.find(
-          {
-            _public: true,
-            archived: false,
-            name: { $regex: searchTitle, $options: 'i' }
-          },
-          'created last_updated teams type indicatorItems _id name _public'
-        )
-          .limit(pSize)
-          .skip(p * pSize)
-          .collation({ locale: 'en' })
-          .sort(sort)
-          .populate('author', 'username authId firstName lastName')
-          .exec((chartError, charts) => {
-            if (chartError) general.handleError(res, chartError);
-            res.json({
-              count,
-              charts
+        if (countError) {
+          general.handleError(res, countError);
+        } else {
+          const sort = utils.getDashboardSortBy(sortBy);
+          const pSize = parseInt(pageSize, 10);
+          const p = parseInt(page, 10);
+          Chart.find(
+            {
+              _public: true,
+              archived: false,
+              name: { $regex: searchTitle, $options: 'i' }
+            },
+            'created last_updated teams type indicatorItems _id name _public'
+          )
+            .limit(pSize)
+            .skip(p * pSize)
+            .collation({ locale: 'en' })
+            .sort(sort)
+            .populate('author', 'username authId firstName lastName')
+            .exec((chartError, charts) => {
+              if (chartError) general.handleError(res, chartError);
+              res.json({
+                count,
+                charts
+              });
             });
-          });
+        }
       }
     );
   },
 
   // gets all user charts and team charts or archived charts of the user
   getAll: (req, res) => {
-    const { authId, sortBy, searchTitle, archived } = req.query;
+    const { authId, sortBy, searchTitle, archived, page, pageSize } = req.query;
     User.findOne({ authId }).exec((userError, author) => {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
       else {
         const sort = utils.getDashboardSortBy(sortBy);
 
+        const pSize = parseInt(pageSize, 10);
+        const p = parseInt(page, 10);
+
         const query = archived
           ? {
               author,
-              archived: true
+              archived: true,
+              name: { $regex: searchTitle, $options: 'i' }
             }
           : {
               $or: [
@@ -241,20 +249,31 @@ const ChartController = {
               ]
             };
 
-        Chart.find(
-          query,
-          'created last_updated teams _public type indicatorItems _id name archived'
-        )
-          .collation({ locale: 'en' })
-          .sort(sort)
-          .populate('author', 'username authId firstName lastName')
-          .exec((chartError, chart) => {
-            if (chartError) {
-              general.handleError(res, chartError);
-            } else {
-              res.json(chart);
-            }
-          });
+        Chart.countDocuments(query, (countError, count) => {
+          if (countError) {
+            general.handleError(res, countError);
+          } else {
+            Chart.find(
+              query,
+              'created last_updated teams _public type indicatorItems _id name archived'
+            )
+              .limit(pSize)
+              .skip(p * pSize)
+              .collation({ locale: 'en' })
+              .sort(sort)
+              .populate('author', 'username authId firstName lastName')
+              .exec((chartError, charts) => {
+                if (chartError) {
+                  general.handleError(res, chartError);
+                } else {
+                  res.json({
+                    count,
+                    charts
+                  });
+                }
+              });
+          }
+        });
       }
     });
   },

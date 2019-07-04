@@ -15,19 +15,17 @@ import {
 import { SectionHeading } from 'components/sort/Headings';
 
 const propTypes = {
-  stepData: PropTypes.arrayOf(
-    PropTypes.shape({
-      fileColumn: PropTypes.string,
-      summary: PropTypes.arrayOf(
-        PropTypes.shape({
-          label: PropTypes.string,
-          value: PropTypes.any // cause it can be number or string
-        })
-      ),
-      dataTypes: PropTypes.arrayOf(PropTypes.string),
-      blankCells: PropTypes.number
-    })
-  )
+  stepData: PropTypes.shape({
+    fileColumn: PropTypes.string,
+    summary: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        value: PropTypes.any // cause it can be number or string
+      })
+    ),
+    dataTypes: PropTypes.arrayOf(PropTypes.string),
+    blankCells: PropTypes.number
+  })
 };
 const defaultProps = {
   stepData: step1InitialData.overviewData

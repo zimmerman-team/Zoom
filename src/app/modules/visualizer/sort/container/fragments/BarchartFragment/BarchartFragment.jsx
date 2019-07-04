@@ -24,7 +24,7 @@ const Box = styled.div`
 
 const propTypes = {
   indicatorData: PropTypes.arrayOf(PropTypes.shape({})),
-  chartKeys: PropTypes.arrayOf(PropTypes.string)
+  chartKeys: PropTypes.arrayOf(PropTypes.shape({}))
 };
 const defaultProps = {
   indicatorData: [],

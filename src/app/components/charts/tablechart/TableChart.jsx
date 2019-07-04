@@ -31,8 +31,8 @@ const options = {
 const propTypes = {
   title: PropTypes.string,
   data: PropTypes.array,
-  columns: PropTypes.object,
-  options: PropTypes.object
+  columns: PropTypes.array,
+  options: PropTypes.shape({})
 };
 const defaultProps = {
   title: 'No title given',

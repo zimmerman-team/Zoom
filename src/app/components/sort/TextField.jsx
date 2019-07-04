@@ -1,18 +1,18 @@
 import React from 'react';
-import withStyles from '@material-ui/styles/withStyles';
+// import withStyles from '@material-ui/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
 import theme from 'theme/Theme';
 
 /* todo: read up https://stackoverflow.com/questions/52176177/how-to-override-textfield-of-floating-label-text-and-underline-color-in-material */
 
-const styles = theme => ({
-  error: {
-    background: 'yellow',
-    display: 'flex',
-    color: 'yellow'
-  }
-});
+// const styles = theme => ({
+//   error: {
+//     background: 'yellow',
+//     display: 'flex',
+//     color: 'yellow'
+//   }
+// });
 
 const Container = styled(props => (
   <TextField
@@ -68,4 +68,4 @@ const Container = styled(props => (
   }
 `;
 
-export default withStyles(styles)(Container);
+export default Container;

@@ -1,8 +1,14 @@
 /* base */
 import React from 'react';
 import ModuleContainer from 'modules/common/modulecontainer/ModuleContainer';
+
+/* styles */
 import { AboutTitle, Text } from 'modules/about/About.styles';
 import { DescriptionParagraphBold } from 'components/sort/Paragraphs';
+import {
+  ContactSection,
+  ParagraphHeader
+} from 'modules/CookieModule/CookieModule.style';
 
 /**
  * todo: Please write a short component description of what this component does
@@ -36,18 +42,14 @@ const CookieModule = props => {
       <Text data-cy="cookie-paragraph">
         <strong>Which cookies does Aidsfonds use?</strong>
         <p>
-          <div>
-            <u>Functional cookies</u>
-          </div>
+          <ParagraphHeader>Functional cookies</ParagraphHeader>
           These are cookies needed for the site to work properly for the
           visitor. They make it possible, for example, to select a language and
           to log in.
         </p>
 
         <p>
-          <div>
-            <u>Analytical cookies</u>
-          </div>
+          <ParagraphHeader>Analytical cookies</ParagraphHeader>
           These are cookies that we use to assess the effectiveness of the
           website and to make any necessary changes to it. For example, these
           cookies keep track of which pages are visited most frequently, the
@@ -66,16 +68,12 @@ const CookieModule = props => {
         </p>
 
         <p>
-          <div>
-            <u>Advertising cookies</u>
-          </div>
+          <ParagraphHeader>Advertising cookies</ParagraphHeader>
           This website does not use any advertising cookies.
         </p>
 
         <p>
-          <div>
-            <u>Disabling cookies</u>
-          </div>
+          <ParagraphHeader>Disabling cookies</ParagraphHeader>
           If Aidsfonds is legally obliged to request your permission before
           placing and reading cookies, then we only do so if you indicate that
           you wish us to do so. You can withdraw your permission at any time by
@@ -90,18 +88,14 @@ const CookieModule = props => {
         </p>
 
         <p>
-          <div>
-            <u>Amendments</u>
-          </div>
+          <ParagraphHeader>Amendments</ParagraphHeader>
           We may amend this cookies policy and we recommend that you consult
           this page from time to time so as to stay aware of how we use cookies.
           This cookies policy was most recently updated on 23 April 2019.
         </p>
 
         <p>
-          <div>
-            <u>Questions, feedback, and complaints</u>
-          </div>
+          <ParagraphHeader>Questions, feedback, and complaints</ParagraphHeader>
           We welcome any remarks or queries that you may have regarding this
           cookies policy. If you have any questions, please call us on +31 (0)20
           626 2669 (working days from 9 a.m. to 5 p.m.). You can also e-mail us
@@ -111,6 +105,8 @@ const CookieModule = props => {
         <p>
           Aidsfonds also has a complaints procedure. Any complaints should be
           submitted to our complaints coordinator:
+        </p>
+        <ContactSection>
           <div>Martin van Oostrom</div>
           <div>
             <a href="mailto:mvanoostrom@aidsfonds.nl">
@@ -118,7 +114,7 @@ const CookieModule = props => {
             </a>
           </div>
           <div>+31 (0)20 851 1758</div>
-        </p>
+        </ContactSection>
         <p>
           Aidsfonds is a Dutch foundation [stichting]. Our registered address is
           Keizersgracht 392, NL-1016 GB Amsterdam, The Netherlands. We are
@@ -136,10 +132,8 @@ const CookieModule = props => {
         </p>
       </Text>
       <Text data-cy="privacy-paragraph">
-        <p>
-          <div>
-            <u>Personal data</u>
-          </div>
+        <ContactSection>
+          <ParagraphHeader>Personal data</ParagraphHeader>
           The following personal data may be processed when you use our
           websites:
           <ul>
@@ -147,16 +141,14 @@ const CookieModule = props => {
               Your e-mail address, but only if you have provided it yourself.
             </li>
           </ul>
-        </p>
+        </ContactSection>
         <p>
           We will only use the above personal data – i.e. your e-mail address –
           to inform you about our work.
         </p>
 
-        <p>
-          <div>
-            <u>Legal basis</u>
-          </div>
+        <ContactSection>
+          <ParagraphHeader>Legal basis</ParagraphHeader>
           We only process your personal data if there is a legal basis for doing
           so. The relevant legal bases are:
           <ul>
@@ -170,12 +162,10 @@ const CookieModule = props => {
               you are a party.
             </li>
           </ul>
-        </p>
+        </ContactSection>
 
-        <p>
-          <div>
-            <u>Recipients</u>
-          </div>
+        <ContactSection>
+          <ParagraphHeader>Recipients</ParagraphHeader>
           We may share your personal data with the following parties:
           <ul>
             <li>
@@ -187,7 +177,7 @@ const CookieModule = props => {
               support our websites and ensure that they function properly.
             </li>
           </ul>
-        </p>
+        </ContactSection>
         <p>
           We do not pass on your personal data for commercial purposes and we do
           not transfer it to countries outside the European Economic Area (EEA).
@@ -197,9 +187,7 @@ const CookieModule = props => {
         </p>
 
         <p>
-          <div>
-            <u>Security</u>
-          </div>
+          <ParagraphHeader>Security</ParagraphHeader>
           We implement appropriate technical and organisational measures to
           protect your personal data. We conclude agreements with service
           providers that process personal data on our behalf in which we oblige
@@ -207,17 +195,15 @@ const CookieModule = props => {
         </p>
 
         <p>
-          <div>
-            <u>Retention period</u>
-          </div>
+          <ParagraphHeader>Retention period</ParagraphHeader>
           We do not retain your personal data any longer than necessary for the
           purpose of processing.
         </p>
 
         <p>
-          <div>
-            <u>Right of access, correction, and objection</u>
-          </div>
+          <ParagraphHeader>
+            Right of access, correction, and objection
+          </ParagraphHeader>
           You can ask to access your data at any time or have it corrected. If
           you object to the processing of your personal data or if you no longer
           wish to receive information from Aidsfonds, please contact us using
@@ -231,9 +217,7 @@ const CookieModule = props => {
         </p>
 
         <p>
-          <div>
-            <u>Cookies</u>
-          </div>
+          <ParagraphHeader>Cookies</ParagraphHeader>
           Our websites use cookies to collect data about your visit to our
           website. A cookie is a small text file that is placed on your computer
           when you visit this website.
@@ -244,9 +228,7 @@ const CookieModule = props => {
         </p>
 
         <p>
-          <div>
-            <u>Amendments</u>
-          </div>
+          <ParagraphHeader>Amendments</ParagraphHeader>
           We may amend this privacy policy and we recommend that you consult
           this page from time to time so as to stay aware of how we process your
           personal data. This privacy statement was most recently updated on 23
@@ -254,9 +236,7 @@ const CookieModule = props => {
         </p>
 
         <p>
-          <div>
-            <u>Questions, feedback, and complaints</u>
-          </div>
+          <ParagraphHeader>Questions, feedback, and complaints</ParagraphHeader>
           We welcome any remarks or queries that you may have regarding this
           privacy statement. You can phone us at +31(0)20 626 2669 or e-mail us
           at{' '}
@@ -266,7 +246,7 @@ const CookieModule = props => {
           We also have a complaints procedure. Any complaints should be
           submitted to our complaints coordinator:
         </p>
-        <p>
+        <ContactSection>
           <div>Martin van Oostrom</div>
           <div>
             <a href="mailto:mvanoostrom@aidsfonds.nl">
@@ -274,7 +254,7 @@ const CookieModule = props => {
             </a>
           </div>
           <div>+31 (0)20 851 1758</div>
-        </p>
+        </ContactSection>
         <p>
           Aidsfonds is a trademark of Stichting Aidsfonds – Soa Aids Nederland.
           Our registered address is Keizersgracht 392, NL-1016 GB Amsterdam, The

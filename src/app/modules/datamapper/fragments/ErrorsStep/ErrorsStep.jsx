@@ -304,7 +304,11 @@ class ErrorStep extends React.Component {
           )}
         </ButtonContainer>
         <Box>
-          <ErrorTable columns={this.state.columns} data={this.state.data} />
+          <ErrorTable
+            columns={this.state.columns}
+            data={this.state.data}
+            primaryKey="id"
+          />
         </Box>
 
         <Pagination

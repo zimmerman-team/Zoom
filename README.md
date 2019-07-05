@@ -13,12 +13,14 @@ Component-based software engineering (CBSE), also called as component-based deve
 Behavior Driven Development (BDD) is an Agile process designed to keep focus on stakeholder's value throughout the whole project. ... It is a way to do Test Driven Development (TDD) with clarity that can not be accomplished with Unit Testing. It is a way to describe and test functionality in (almost) natural language.
 
 ## Core
-### fusion
-Fusion.js is a web application framework for building high quality universal applications. It provides a modular architecture with a strong focus on testability and maintainability.
 ### react
 A JavaScript library for building declarative component-based user interfaces
 ### redux
 Redux is a predictable state container for JavaScript apps. It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test
+### relay
+Relay is a JavaScript framework for building data-driven React applications powered by GraphQL, designed from the ground up to be easy to use, extensible and, most of all, performant. Relay accomplishes this with static queries and ahead-of-time code generation.
+### express
+Express is a light-weight web application framework to help organize your web application into an MVC architecture on the server side. You can use a variety of choices for your templating language.
 
 ## Styling
 ### grommet
@@ -27,6 +29,8 @@ grommet is a react-based framework that provides accessibility, modularity, resp
 styled-components utilises tagged template literals to style your components. It removes the mapping between components and styles. This means that when you're defining your styles, you're actually creating a normal React component, that has your styles attached to it.
 ### storybook
 Storybook is a UI development environment and playground for UI components. The tool enables users to create components independently and showcase components interactively in an isolated development environment.
+### material ui
+React components for faster and easier web development. Build your own design system, or start with Material Design.
 
 ## Code quality
 ### codacy

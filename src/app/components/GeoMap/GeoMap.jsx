@@ -5,6 +5,7 @@ import MapGL, { LinearInterpolator } from 'react-map-gl';
 import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
 /* utils */
+import cloneDeep from 'lodash/cloneDeep';
 import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
 import MapControls from 'components/GeoMap/components/MapControls/MapControls';
@@ -151,9 +152,8 @@ export class GeoMap extends Component {
     // markers
     // Note: the layer will also use a different tooltip than the markers
     // cause it kind of makes sense for some cases
-    const mapStyle = {
-      ...MAP_STYLE
-    };
+    const mapStyle = cloneDeep(MAP_STYLE);
+
     const layers = find(indicatorData, ['type', 'layer']);
     if (layers) {
       const borderData = layers.borderData ? layers.borderData : layers.data;

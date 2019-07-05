@@ -76,16 +76,7 @@ class DashboardMediator extends React.Component {
     if (!isEqual(this.props.chartDeleted, prevProps.chartDeleted)) {
       this.reloadData();
 
-      this.props.dispatch(
-        actions.allArchivedChartsRequest({
-          page: 0,
-          pageSize: this.state.pageSize,
-          authId: this.props.user.authId,
-          sortBy: this.state.sort,
-          archived: true,
-          searchTitle: ''
-        })
-      );
+      this.getUserTrash(true);
 
       this.setState({ page: 0, searchKeyword: '' });
     }
@@ -415,88 +406,79 @@ class DashboardMediator extends React.Component {
   };
 
   reloadData = (type, initialLoad = true) => {
-    if (type === 'all') {
-      if (this.props.user) {
-        this.props.dispatch(
-          actions.getUserChartsRequest({
-            page: this.state.page,
-            pageSize: this.state.pageSize,
-            authId: this.props.user.authId,
-            sortBy: this.state.sort,
-            searchTitle: this.state.searchKeyword
-          })
-        );
-        this.props.dispatch(
-          actions.getUserDatasetsRequest({
-            page: this.state.page,
-            pageSize: this.state.pageSize,
-            authId: this.props.user.authId,
-            sortBy: this.state.sort,
-            searchTitle: this.state.searchKeyword
-          })
-        );
+    if (this.props.user && this.props.user.authId) {
+      if (type === 'all') {
+        this.getUserCharts();
+        this.getUserDatasets();
         this.getAllUsers(initialLoad);
         this.getAllTeams(initialLoad);
-        this.props.dispatch(
-          actions.allArchivedChartsRequest({
-            page: this.state.page,
-            pageSize: this.state.pageSize,
-            authId: this.props.user.authId,
-            sortBy: this.state.sort,
-            archived: true,
-            searchTitle: this.state.searchKeyword
-          })
-        );
-      }
-    } else {
-      switch (this.props.match.params.tab) {
-        case 'charts':
-          if (this.props.user) {
-            this.props.dispatch(
-              actions.getUserChartsRequest({
-                page: this.state.page,
-                pageSize: this.state.pageSize,
-                authId: this.props.user.authId,
-                sortBy: this.state.sort,
-                searchTitle: this.state.searchKeyword
-              })
-            );
-          }
-          break;
-        case 'data-sets':
-          if (this.props.user) {
-            this.props.dispatch(
-              actions.getUserDatasetsRequest({
-                page: this.state.page,
-                pageSize: this.state.pageSize,
-                authId: this.props.user.authId,
-                sortBy: this.state.sort,
-                searchTitle: this.state.searchKeyword
-              })
-            );
-          }
-          break;
-        case 'users':
-          this.getAllUsers(initialLoad);
-          break;
-        case 'teams':
-          this.getAllTeams(initialLoad);
-          break;
-        case 'trash':
-          this.props.dispatch(
-            actions.allArchivedChartsRequest({
-              page: this.state.page,
-              pageSize: this.state.pageSize,
-              authId: this.props.user.authId,
-              sortBy: this.state.sort,
-              archived: true,
-              searchTitle: this.state.searchKeyword
-            })
-          );
-          break;
+        this.getUserTrash();
+      } else {
+        switch (this.props.match.params.tab) {
+          case 'charts':
+            this.getUserCharts();
+            break;
+          case 'data-sets':
+            this.getUserDatasets();
+            break;
+          case 'users':
+            this.getAllUsers(initialLoad);
+            break;
+          case 'teams':
+            this.getAllTeams(initialLoad);
+            break;
+          case 'trash':
+            this.getUserTrash();
+            break;
+        }
       }
     }
   };
+
+  getUserTrash(initial = false) {
+    let page = this.state.page;
+    let searchTitle = this.state.searchKeyword;
+
+    if (initial) {
+      page = 0;
+      searchTitle = '';
+    }
+
+    this.props.dispatch(
+      actions.allArchivedChartsRequest({
+        page,
+        pageSize: this.state.pageSize,
+        authId: this.props.user.authId,
+        sortBy: this.state.sort,
+        archived: true,
+        searchTitle
+      })
+    );
+  }
+
+  getUserDatasets() {
+    this.props.dispatch(
+      actions.getUserDatasetsRequest({
+        page: this.state.page,
+        pageSize: this.state.pageSize,
+        authId: this.props.user.authId,
+        sortBy: this.state.sort,
+        searchTitle: this.state.searchKeyword
+      })
+    );
+  }
+
+  getUserCharts() {
+    this.props.dispatch(
+      actions.getUserChartsRequest({
+        page: this.state.page,
+        pageSize: this.state.pageSize,
+        authId: this.props.user.authId,
+        sortBy: this.state.sort,
+        searchTitle: this.state.searchKeyword
+      })
+    );
+  }
 
   deleteChart = chartId => {
     this.props.dispatch(

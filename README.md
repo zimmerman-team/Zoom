@@ -3,6 +3,7 @@
 
 # ZOOM V2 UI
 
+## About
 Zoom base front-end and backend setup using react, redux, react-relay and express js.
 
 ## Methodologies

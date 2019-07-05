@@ -3,7 +3,7 @@
 
 # ZOOM V2 UI
 
-Zoom base front-end setup using react and redux.
+Zoom base front-end and backend setup using react, redux, react-relay and express js.
 
 ## Methodologies
 ### component-based development

@@ -150,19 +150,13 @@ jobs:
               yarn e2e:percy:record:parallel:chrome
             fi
 
+
 # WORKFLOWS
 workflows:
   version: 2
   test_build_deploy:
     jobs:
-      - checkout_repo:
-          filters:
-            branches:
-              only:
-                - develop
-                - /feature-.*/
-                - master
-                - production
+      - checkout_repo
       - build_deploy:
           requires:
             - checkout_repo

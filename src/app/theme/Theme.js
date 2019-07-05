@@ -2,6 +2,7 @@ export default {
   fontSize: {
     pageHeadingBig: '48px',
     pageHeadingSmall: '32px',
+    smallText: '10px',
     caption: '12px',
     body2: '14px',
     subTitle2: '14px',

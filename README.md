@@ -22,6 +22,8 @@ Redux is a predictable state container for JavaScript apps. It helps you write a
 Relay is a JavaScript framework for building data-driven React applications powered by GraphQL, designed from the ground up to be easy to use, extensible and, most of all, performant. Relay accomplishes this with static queries and ahead-of-time code generation.
 ### express
 Express is a light-weight web application framework to help organize your web application into an MVC architecture on the server side. You can use a variety of choices for your templating language.
+### auth0
+Auth0 provides authentication and authorization as a service. <a href="https://auth0.com"> More about auth0 </a>
 
 ## Styling
 ### grommet
@@ -53,3 +55,42 @@ CircleCI's continuous integration and delivery platform makes it easy for teams 
 ## Performance
 ### lighthouse
 Lighthouse is an open-source, automated tool for improving the quality of web pages. You can run it against any web page, public or requiring authentication. It has audits for performance, accessibility, progressive web apps, and more.
+
+## Requirements
+
+| Name | Recommended version |
+| ---  | --- |
+| MongoDB | 4.0 |
+| watchman(facebooks) | 4.7 |
+| nodeJS | 12.6 |
+| npm | 3.5 |
+| yarn | 1.16 |
+
+## Set up
+
+ * Start the mongodb service
+ * Go to your project root folder('zoom-v2-ui')
+ * run ```yarn install```
+ * run ```yarn relay```
+ * Create a file called '.env' and add these variables to it:
+    ```
+    NODE_PATH=src/app/
+    REACT_APP_GRAPHQL_HOST=your_duct_api
+    REACT_APP_BACKEND_HOST=your_duct_api
+    REACT_APP_OIPA_HOST=https://yoda.oipa.nl
+    REACT_APP_AUTH_CUSTOM_DOMAIN=your_auth0_custom_domain
+    REACT_APP_AUTH_DOMAIN=your_auth0_normal_domain
+    REACT_APP_WIKIPEDIA_API_HOST=https://en.wikipedia.org
+    REACT_APP_PROJECT_URL=your_projects_url
+    REACT_APP_CLIENT_ID=your_auth0_client_id
+    REACT_APP_AE_API_CLIENT_ID=your_auth0_AE_api_client_id
+    REACT_APP_AE_API_CLIENT_SECRET=your_auth0_AE_api_client_secret
+    REACT_APP_AE_API_URL=your_auth0_AE_api_url
+    REACT_APP_CYPRESS_baseUrl=your_projects_url
+    REACT_APP_CYPRESS_USER=your_auth0_username_for_testing
+    REACT_APP_CYPRESS_PASS=your_auth0_user_password_for_testing
+    REACT_APP_POSTMARK_CLIENT_ID=your_postmark_clinet_id
+    REACT_APP_MAPBOX_TOKEN=pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw
+    REACT_APP_ENCRYPTION_SECRET=any_random_string
+    ```
+ * run ```yarn start``` . And your project shoud run at 'http://localhost:3000'

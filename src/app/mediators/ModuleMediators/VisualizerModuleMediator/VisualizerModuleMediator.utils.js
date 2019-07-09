@@ -1224,6 +1224,19 @@ export function getFields(type) {
 // a little function to get the groupBy array
 // depending on the type of chart and chart options
 export function getGroupBy(type, subIndAggr) {
+  const defgroupBy = [
+    'indicatorName',
+    'geolocationTag',
+    'date',
+    'geolocationType',
+    'geolocationIso2',
+    'comment',
+    'geolocationPolygons',
+    'geolocationCenterLongLat',
+    'valueFormatType',
+    'filterName'
+  ];
+
   switch (type) {
     case chartTypes.lineChart: {
       const groupBy = ['indicatorName', 'valueFormatType', 'date'];
@@ -1232,18 +1245,22 @@ export function getGroupBy(type, subIndAggr) {
       }
       return groupBy;
     }
+    case chartTypes.geoMap:
+      if (subIndAggr) {
+        defgroupBy.splice(defgroupBy.indexOf('filterName'), 1);
+      }
+      return defgroupBy;
+    case chartTypes.focusNL:
+      if (subIndAggr) {
+        defgroupBy.splice(defgroupBy.indexOf('filterName'), 1);
+      }
+      return defgroupBy;
+    case chartTypes.focusKE:
+      if (subIndAggr) {
+        defgroupBy.splice(defgroupBy.indexOf('filterName'), 1);
+      }
+      return defgroupBy;
     default:
-      return [
-        'indicatorName',
-        'geolocationTag',
-        'date',
-        'geolocationType',
-        'geolocationIso2',
-        'comment',
-        'geolocationPolygons',
-        'geolocationCenterLongLat',
-        'valueFormatType',
-        'filterName'
-      ];
+      return defgroupBy;
   }
 }

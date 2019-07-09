@@ -388,6 +388,7 @@ class VisualizerModuleMediator extends Component {
     indicatorData,
     indSelectedIndex = this.props.chartData.indSelectedIndex
   ) {
+    console.log('indicatorData', indicatorData);
     // this will be used for some extra formatting things
     // concerning chart keys and also for saving the subIndicators
     // of the appropriate indicators
@@ -510,6 +511,8 @@ class VisualizerModuleMediator extends Component {
           break;
       }
     }
+
+    console.log('data', data);
 
     // so we will use this variable to control when we want to refetch data
     // cause we only want to refetch data when a subindicator is selected
@@ -663,6 +666,11 @@ class VisualizerModuleMediator extends Component {
         // that don't have/do have geolocationIso2 field
         const iso2Undef = countriesISO2.indexOf('undefined') !== -1;
 
+        const groupBy = getGroupBy(
+          this.props.paneData.chartType,
+          indItem.aggregate
+        );
+
         const refetchVars = {
           indicator: [indicator],
           indicatorId: indicator || -1,
@@ -671,7 +679,7 @@ class VisualizerModuleMediator extends Component {
           countriesISO2: countriesISO2.length > 0 ? countriesISO2 : [null],
           OR_GeolocationIso2_Is_Null: iso2Undef,
           orderBy,
-          groupBy: getGroupBy(this.props.paneData.chartType, indItem.aggregate),
+          groupBy,
           fields: getFields(this.props.paneData.chartType)
         };
 

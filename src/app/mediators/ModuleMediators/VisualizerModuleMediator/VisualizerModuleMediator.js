@@ -10,6 +10,7 @@ import VisualizerModule from 'modules/visualizer/VisualizerModule';
 import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
 import {
+  getFields,
   aggrKeys,
   formatBarChartKeys,
   formatBarData,
@@ -22,7 +23,8 @@ import {
   formatLineData,
   formatTableData,
   getChartKeys,
-  removeIds
+  removeIds,
+  getGroupBy
 } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 /* consts */
 import initialState from '__consts__/InitialChartDataConst';
@@ -98,20 +100,12 @@ const indicatorDataQuery = graphql`
     $indicatorId: Float!
     $OR_GeolocationIso2_Is_Null: Boolean!
     $orderBy: [String]!
+    $groupBy: [String]!
+    $fields: [String]!
   ) {
     indicators: datapointsAggregation(
-      groupBy: [
-        "indicatorName"
-        "geolocationTag"
-        "date"
-        "geolocationType"
-        "geolocationIso2"
-        "comment"
-        "geolocationPolygons"
-        "geolocationCenterLongLat"
-        "valueFormatType"
-        "filterName"
-      ]
+      groupBy: $groupBy
+      fields: $fields
       aggregation: ["Sum(value)"]
       orderBy: $orderBy
       date_In: $datePeriod
@@ -676,7 +670,9 @@ class VisualizerModuleMediator extends Component {
           datePeriod,
           countriesISO2: countriesISO2.length > 0 ? countriesISO2 : [null],
           OR_GeolocationIso2_Is_Null: iso2Undef,
-          orderBy
+          orderBy,
+          groupBy: getGroupBy(this.props.paneData.chartType, indItem.aggregate),
+          fields: getFields(this.props.paneData.chartType)
         };
 
         fetchQuery(

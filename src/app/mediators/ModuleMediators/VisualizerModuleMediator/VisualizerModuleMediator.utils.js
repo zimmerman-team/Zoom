@@ -666,8 +666,6 @@ export function formatLineData(
             [itemId]: Math.round(indItem.value),
             [`${itemId}Format`]: indItem.valueFormatType
           });
-        } else if (indicatorData[existItemInd][itemId] !== undefined) {
-          indicatorData[existItemInd][itemId] += Math.round(indItem.value);
         } else {
           indicatorData[existItemInd][itemId] = Math.round(indItem.value);
           indicatorData[existItemInd][`${itemId}Format`] =
@@ -1190,5 +1188,62 @@ export function getChartKeys(
       return formatDonutKeys(indicators, colors);
     default:
       return [];
+  }
+}
+
+// a little function to get the requested field array
+// depending on the type of chart
+// right now just used to get different fields for geoCharts
+// than others, cause they have polygon requests, which other charts dont need
+export function getFields(type) {
+  const fields = [
+    'indicatorName',
+    'geolocationTag',
+    'date',
+    'geolocationType',
+    'geolocationIso2',
+    'comment',
+    'valueFormatType',
+    'filterName'
+  ];
+
+  switch (type) {
+    case chartTypes.lineChart:
+      return ['indicatorName', 'valueFormatType', 'filterName', 'date'];
+    case chartTypes.geoMap:
+      return fields.concat(['geolocationPolygons', 'geolocationCenterLongLat']);
+    case chartTypes.focusKE:
+      return fields.concat(['geolocationPolygons', 'geolocationCenterLongLat']);
+    case chartTypes.focusNL:
+      return fields.concat(['geolocationPolygons', 'geolocationCenterLongLat']);
+    default:
+      return fields;
+  }
+}
+
+// a little function to get the groupBy array
+// depending on the type of chart and chart options
+export function getGroupBy(type, subIndAggr) {
+  switch (type) {
+    case chartTypes.lineChart: {
+      const groupBy = ['indicatorName', 'valueFormatType', 'date'];
+      if (!subIndAggr) {
+        groupBy.push('filterName');
+      }
+      return groupBy;
+    }
+    default:
+      return [
+        'indicatorName',
+        'geolocationTag',
+        'date',
+        'geolocationType',
+        'geolocationIso2',
+        'comment',
+        'geolocationPolygons',
+        'geolocationCenterLongLat',
+        'valueFormatType',
+        'filterName'
+      ];
   }
 }

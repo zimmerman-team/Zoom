@@ -18,138 +18,6 @@ export const aggrKeys = {
   [aggrOptions[1].value]: 'date'
 };
 
-// Updates layer percentiles depending on the value
-// and updates the unique value amount that will be used
-// to determine the amount of color stops
-export function updatePercentiles(featureCollection) {
-  let { features } = featureCollection;
-
-  let uniqCount = 0;
-
-  if (features.length > 0) {
-    // so first we sort the values from lowest to highest
-    features = sortBy(features, ['properties.value']);
-
-    // so we'll start with the first lowest value
-    let currentValue = features[0].properties.value;
-    // and then we give percentile values to features
-    features.forEach(f => {
-      if (currentValue !== f.properties.value) {
-        uniqCount += 1;
-        currentValue = f.properties.value;
-      }
-      f.properties.percentile = uniqCount;
-    });
-  }
-
-  featureCollection.uniqCount = uniqCount;
-}
-
-export function formatCountryLayerData(
-  indicators,
-  indName,
-  selectedSubInd,
-  subIndAggr
-) {
-  const countryLayers = {
-    type: 'FeatureCollection',
-    features: []
-  };
-
-  indicators.forEach(indicator => {
-    const existLayerIndex = findIndex(countryLayers.features, feat => {
-      return indicator.geolocationTag === feat.properties.name;
-    });
-
-    // so here we check if we already added a country to the countries layers
-    // and if it has been added we just add the indicators value instead of pushing
-    // another country
-    // this needs to be done when using several data points with the same country
-    // example: data points with different years, will have same countries
-    // JSON.parse('{ "name":"John", "age":30, "city":"New York"}')
-    if (existLayerIndex === -1) {
-      countryLayers.features.push({
-        // we need to do a double parse here, cause we retrieve a json
-        // which is i dunno a double string or sth :D
-        geometry: JSON.parse(JSON.parse(indicator.geolocationPolygons)),
-        properties: {
-          tooltipLabels: [
-            {
-              subIndName: indicator.filterName,
-              format: indicator.valueFormatType,
-              label: subIndAggr
-                ? `${indName} - ${selectedSubInd.join(', ')}`
-                : `${indName} - ${indicator.filterName}`,
-              value: Math.round(indicator.value)
-            }
-          ],
-          indName,
-          name: indicator.geolocationTag,
-          iso2: indicator.geolocationIso2,
-          geolocationType: indicator.geolocationType,
-          // we round it to two decimals
-          value: Math.round(indicator.value),
-          format: indicator.valueFormatType,
-          percentile: 0
-        }
-      });
-    } else {
-      const changeFeat = countryLayers.features[existLayerIndex];
-      changeFeat.properties.value += Math.round(indicator.value);
-
-      if (subIndAggr) {
-        // cause if its being aggregated, we will only have one
-        // tooltip label item, which will show the summed up value
-        changeFeat.properties.tooltipLabels[0].value += Math.round(
-          indicator.value
-        );
-      } else {
-        const labelInd = findIndex(changeFeat.properties.tooltipLabels, [
-          'subIndName',
-          indicator.filterName
-        ]);
-
-        // so if the sub indicators value exists, we will add up the value in the tool tip for that
-        // sub indicator
-        if (labelInd !== -1) {
-          changeFeat.properties.tooltipLabels[labelInd].value += Math.round(
-            indicator.value
-          );
-        } else {
-          // otherwise we just push in a new filter value
-          changeFeat.properties.tooltipLabels.push({
-            subIndName: indicator.filterName,
-            format: indicator.valueFormatType,
-            label: `${indName} - ${indicator.filterName}`,
-            value: Math.round(indicator.value)
-          });
-        }
-      }
-    }
-  });
-
-  // And we add min and max values to be used for legends and what not
-  countryLayers.minValue = Math.round(
-    Math.min.apply(
-      Math,
-      countryLayers.features.map(feature => {
-        return feature.properties.value;
-      })
-    )
-  );
-
-  countryLayers.maxValue = Math.round(
-    Math.max.apply(
-      Math,
-      countryLayers.features.map(feature => {
-        return feature.properties.value;
-      })
-    )
-  );
-
-  return countryLayers;
-}
-
 export function formatCountryCenterData(
   indicators,
   indName,
@@ -406,9 +274,8 @@ export function formatDate(created) {
   )} ${date.getFullYear()}`;
 }
 
-export function formatGeoData(indAggregations) {
+export function formatGeoData(indAggregations, selectedInds) {
   let longLatData = [];
-  let countryLayerData = {};
   const geomapData = [];
   let countryCircleData = [];
   let colorInd = 0;
@@ -417,28 +284,28 @@ export function formatGeoData(indAggregations) {
   indAggregations.forEach((aggregation, index) => {
     if (aggregation.data && aggregation.data[0]) {
       const indName = aggregation.data[0].indicatorName;
-
       // so the first data item is layer legend
       if (index === 0) {
-        // so for the first indicator aggregation on the geomap
-        // we form the layers
-        countryLayerData = formatCountryLayerData(
-          aggregation.data,
-          indName,
-          aggregation.selectedSubInd,
-          aggregation.subIndAggr
-        );
-
-        // and we push them into the indicatorData array for the geomap
-        if (countryLayerData.features && countryLayerData.features.length > 0) {
-          updatePercentiles(countryLayerData);
-
-          geomapData.push({
-            type: 'layer',
-            data: countryLayerData,
-            legendName: ` ${indName} - ${aggregation.selectedSubInd.join(', ')}`
-          });
-        }
+        // so for the layer data we push in the url
+        // to the formed geoJson file on DUCT
+        // and we also add some extra variables
+        // for this geojson to work
+        // NOTE: with the current setup we will always
+        // get back only one node(well unless you change the queries)
+        // and it will contain all of the data we need
+        // for the map
+        geomapData.push({
+          type: 'layer',
+          url: process.env.REACT_APP_BACKEND_STATIC_HOST.concat('/').concat(
+            aggregation.data[0].geoJsonUrl
+          ),
+          legendName: ` ${
+            selectedInds[0].indName
+          } - ${selectedInds[0].subInd.join(', ')}`,
+          uniqCount: aggregation.data[0].uniqCount,
+          minValue: aggregation.data[0].minValue,
+          maxValue: aggregation.data[0].maxValue
+        });
       } else if (index === 1) {
         // the second is circle legend
         // and for the second indicator aggregation on the geomap
@@ -1195,7 +1062,7 @@ export function getChartKeys(
 // depending on the type of chart
 // right now just used to get different fields for geoCharts
 // than others, cause they have polygon requests, which other charts dont need
-export function getFields(type) {
+export function getFields(type, layer) {
   const fields = [
     'indicatorName',
     'geolocationTag',
@@ -1211,11 +1078,23 @@ export function getFields(type) {
     case chartTypes.lineChart:
       return ['indicatorName', 'valueFormatType', 'filterName', 'date'];
     case chartTypes.geoMap:
-      return fields.concat(['geolocationPolygons', 'geolocationCenterLongLat']);
+      if (layer) {
+        fields.push('geolocationPolygons');
+      }
+      fields.push('geolocationCenterLongLat');
+      return fields;
     case chartTypes.focusKE:
-      return fields.concat(['geolocationPolygons', 'geolocationCenterLongLat']);
+      if (layer) {
+        fields.push('geolocationPolygons');
+      }
+      fields.push('geolocationCenterLongLat');
+      return fields;
     case chartTypes.focusNL:
-      return fields.concat(['geolocationPolygons', 'geolocationCenterLongLat']);
+      if (layer) {
+        fields.push('geolocationPolygons');
+      }
+      fields.push('geolocationCenterLongLat');
+      return fields;
     default:
       return fields;
   }
@@ -1223,7 +1102,7 @@ export function getFields(type) {
 
 // a little function to get the groupBy array
 // depending on the type of chart and chart options
-export function getGroupBy(type, subIndAggr) {
+export function getGroupBy(type, subIndAggr, layer) {
   const defgroupBy = [
     'indicatorName',
     'geolocationTag',
@@ -1231,7 +1110,6 @@ export function getGroupBy(type, subIndAggr) {
     'geolocationType',
     'geolocationIso2',
     'comment',
-    'geolocationPolygons',
     'geolocationCenterLongLat',
     'valueFormatType',
     'filterName'
@@ -1249,15 +1127,24 @@ export function getGroupBy(type, subIndAggr) {
       if (subIndAggr) {
         defgroupBy.splice(defgroupBy.indexOf('filterName'), 1);
       }
+      if (layer) {
+        defgroupBy.push('geolocationPolygons');
+      }
       return defgroupBy;
     case chartTypes.focusNL:
       if (subIndAggr) {
         defgroupBy.splice(defgroupBy.indexOf('filterName'), 1);
       }
+      if (layer) {
+        defgroupBy.push('geolocationPolygons');
+      }
       return defgroupBy;
     case chartTypes.focusKE:
       if (subIndAggr) {
         defgroupBy.splice(defgroupBy.indexOf('filterName'), 1);
+      }
+      if (layer) {
+        defgroupBy.push('geolocationPolygons');
       }
       return defgroupBy;
     default:

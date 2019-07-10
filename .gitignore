@@ -91,3 +91,9 @@ server/data/*
 
 # exception to the rule
 !server/data/.gitkeep
+
+# exclude everything
+server/static/*
+
+# exception to the rule
+!server/static/.gitkeep

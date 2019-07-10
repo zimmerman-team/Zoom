@@ -29,6 +29,7 @@ app.use(cors());
 app.use(helmet());
 app.disable('x-powered-by');
 
+app.use(express.static('static'));
 // append /api for our http requests
 app.use('/api', router);
 

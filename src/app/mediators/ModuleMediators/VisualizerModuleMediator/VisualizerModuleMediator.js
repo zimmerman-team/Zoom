@@ -102,6 +102,7 @@ const indicatorDataQuery = graphql`
     $orderBy: [String]!
     $groupBy: [String]!
     $fields: [String]!
+    $geoJsonUrl: Boolean!
   ) {
     indicators: datapointsAggregation(
       groupBy: $groupBy
@@ -113,18 +114,23 @@ const indicatorDataQuery = graphql`
       geolocationIso2_In: $countriesISO2
       filterName_In: $subInds
       OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
+      geoJsonUrl: $geoJsonUrl
     ) {
       indicatorName
       geolocationIso2
       comment
       geolocationTag
       geolocationType
-      geolocationPolygons
       geolocationCenterLongLat
+      geolocationPolygons
       valueFormatType
       filterName
       date
       value
+      geoJsonUrl
+      uniqCount
+      minValue
+      maxValue
     }
     subIndicators: allFilters(indicatorId: $indicatorId) {
       edges {
@@ -428,7 +434,7 @@ class VisualizerModuleMediator extends Component {
     let indKeys = [];
 
     if (this.props.home) {
-      data = formatGeoData(aggregationData);
+      data = formatGeoData(aggregationData, selectedInds);
     } else {
       switch (this.props.match.params.chart) {
         case chartTypes.geoMap:
@@ -639,6 +645,16 @@ class VisualizerModuleMediator extends Component {
       }
 
       selectedInds.forEach((indItem, indIndex) => {
+        // TODO: adjust this later with the refetchOne logic
+        const isLayer =
+          index !== -1 &&
+          !refetchAll &&
+          (this.props.paneData.chartType === chartTypes.geoMap ||
+            this.props.paneData.chartType === chartTypes.focusKE ||
+            this.props.paneData.chartType === chartTypes.focusNL)
+            ? index === 0
+            : indIndex === 0;
+
         const currIndex = refetchOne ? index : indIndex;
 
         const indicator = indItem.indicator;
@@ -666,11 +682,6 @@ class VisualizerModuleMediator extends Component {
         // that don't have/do have geolocationIso2 field
         const iso2Undef = countriesISO2.indexOf('undefined') !== -1;
 
-        const groupBy = getGroupBy(
-          this.props.paneData.chartType,
-          indItem.aggregate
-        );
-
         const refetchVars = {
           indicator: [indicator],
           indicatorId: indicator || -1,
@@ -679,8 +690,13 @@ class VisualizerModuleMediator extends Component {
           countriesISO2: countriesISO2.length > 0 ? countriesISO2 : [null],
           OR_GeolocationIso2_Is_Null: iso2Undef,
           orderBy,
-          groupBy,
-          fields: getFields(this.props.paneData.chartType)
+          groupBy: getGroupBy(
+            this.props.paneData.chartType,
+            indItem.aggregate,
+            isLayer
+          ),
+          fields: getFields(this.props.paneData.chartType, isLayer),
+          geoJsonUrl: isLayer
         };
 
         fetchQuery(

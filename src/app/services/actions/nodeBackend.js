@@ -722,3 +722,35 @@ export function getDatasetIdsFailed(error) {
     error
   };
 }
+
+export const LOAD_GEO_JSON_INITIAL = 'LOAD_GEO_JSON_INITIAL';
+export const LOAD_GEO_JSON_REQUEST = 'LOAD_GEO_JSON_REQUEST';
+export const LOAD_GEO_JSON_SUCCESS = 'LOAD_GEO_JSON_SUCCESS';
+export const LOAD_GEO_JSON_FAILED = 'LOAD_GEO_JSON_FAILED';
+
+export function loadGeoJsonInitial() {
+  return {
+    type: LOAD_GEO_JSON_INITIAL
+  };
+}
+
+export function loadGeoJsonRequest(values) {
+  return {
+    type: LOAD_GEO_JSON_REQUEST,
+    values
+  };
+}
+
+export function loadGeoJsonSuccess(data) {
+  return {
+    type: LOAD_GEO_JSON_SUCCESS,
+    data
+  };
+}
+
+export function loadGeoJsonFailed(error) {
+  return {
+    type: LOAD_GEO_JSON_FAILED,
+    error
+  };
+}

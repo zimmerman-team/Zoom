@@ -1,3 +1,6 @@
+/* base */
+import axios from 'axios';
+
 /* consts */
 import chartTypes from '__consts__/ChartConst';
 import { colorSet } from '__consts__/PaneConst';
@@ -7,6 +10,7 @@ import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
 import findIndex from 'lodash/findIndex';
+import cryptoJs from 'crypto-js';
 
 /* styles */
 import theme from 'theme/Theme';
@@ -294,11 +298,14 @@ export function formatGeoData(indAggregations, selectedInds) {
         // get back only one node(well unless you change the queries)
         // and it will contain all of the data we need
         // for the map
+
+        console.log(
+          'aggregation.data[0].geoJsonUrl',
+          aggregation.data[0].geoJsonUrl
+        );
         geomapData.push({
           type: 'layer',
-          url: process.env.REACT_APP_BACKEND_STATIC_HOST.concat('/').concat(
-            aggregation.data[0].geoJsonUrl
-          ),
+          url: aggregation.data[0].geoJsonUrl,
           legendName: ` ${
             selectedInds[0].indName
           } - ${selectedInds[0].subInd.join(', ')}`,
@@ -1111,13 +1118,15 @@ export function getGroupBy(type, subIndAggr, layer) {
     'geolocationIso2',
     'comment',
     'geolocationCenterLongLat',
-    'valueFormatType',
     'filterName'
   ];
 
+  // NOTE: GROUPING BY VALUE FORMAT SHOULD NOT BE DONE HERE
+  // BECAUSE SOME VALUE FORMATS ARE OF DIFFERENT TYPE
+  // THUS WE WONT GET AGGREGATED VALUES FOR THESE DIFFERENT TYPE FORMATS
   switch (type) {
     case chartTypes.lineChart: {
-      const groupBy = ['indicatorName', 'valueFormatType', 'date'];
+      const groupBy = ['indicatorName', 'date'];
       if (!subIndAggr) {
         groupBy.push('filterName');
       }

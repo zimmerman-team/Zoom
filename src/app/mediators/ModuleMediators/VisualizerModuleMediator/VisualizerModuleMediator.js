@@ -37,6 +37,8 @@ import { aggrOptions, rankOptions } from '__consts__/GraphStructOptionConsts';
 /* actions */
 import * as nodeActions from 'services/actions/nodeBackend';
 import * as actions from 'services/actions/general';
+import cryptoJs from 'crypto-js';
+import axios from 'axios';
 
 const propTypes = {
   publicChart: PropTypes.shape({}),
@@ -103,6 +105,7 @@ const indicatorDataQuery = graphql`
     $groupBy: [String]!
     $fields: [String]!
     $geoJsonUrl: Boolean!
+    $currentGeoJson: String
   ) {
     indicators: datapointsAggregation(
       groupBy: $groupBy
@@ -115,6 +118,7 @@ const indicatorDataQuery = graphql`
       filterName_In: $subInds
       OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
       geoJsonUrl: $geoJsonUrl
+      currentGeoJson: $currentGeoJson
     ) {
       indicatorName
       geolocationIso2
@@ -164,6 +168,7 @@ class VisualizerModuleMediator extends Component {
     this.updateChartColor = this.updateChartColor.bind(this);
     this.updateRankBy = this.updateRankBy.bind(this);
     this.storeInitialChartOptions = this.storeInitialChartOptions.bind(this);
+    this.refetchDone = this.refetchDone.bind(this);
   }
 
   componentDidMount() {
@@ -696,7 +701,8 @@ class VisualizerModuleMediator extends Component {
             isLayer
           ),
           fields: getFields(this.props.paneData.chartType, isLayer),
-          geoJsonUrl: isLayer
+          geoJsonUrl: isLayer,
+          currentGeoJson: this.props.chartData.currGeoJsonFile
         };
 
         fetchQuery(
@@ -704,29 +710,96 @@ class VisualizerModuleMediator extends Component {
           indicatorDataQuery,
           refetchVars
         ).then(data => {
-          indicatorData.push({
-            index: currIndex,
-            indAggregation: data.indicators,
-            subIndicators: data.subIndicators
-          });
+          if (isLayer && data.indicators && data.indicators.length > 0) {
+            const url = process.env.REACT_APP_BACKEND_HOST.concat('/').concat(
+              data.indicators[0].geoJsonUrl
+            );
 
-          // so we only update the indicators when we've retrieved the same
-          // amount of indicator data as we have indicators selected
-          if (indicatorData.length === selectedInds.length && this._isMounted) {
-            this.setState({ loading: false });
+            // and because of mapbox CORS issues, and our DUCT backend
+            // in some cases NOT being on the same domain as the frontend
+            // we apply this workaround to download the geojson file to our
+            // zoomBackend and serve it from there
 
-            const updateIndIndex =
-              refetchOne ||
-              this.props.paneData.chartType === chartTypes.tableChart ||
-              this.props.paneData.chartType === chartTypes.geoMap ||
-              this.props.paneData.chartType === chartTypes.focusNL ||
-              this.props.paneData.chartType === chartTypes.focusKE
-                ? index
-                : -1;
-            this.updateIndicators(indicatorData, updateIndIndex);
+            // We also need to encrypt them values for our middleware to work
+            const encValues = cryptoJs.AES.encrypt(
+              JSON.stringify({ urlGeoJson: url }),
+              process.env.REACT_APP_ENCRYPTION_SECRET
+            ).toString();
+
+            axios
+              .get(`/api/loadGeoJson`, {
+                params: {
+                  payload: encValues
+                }
+              })
+              .then(response => {
+                if (!this.props.chartData.currGeoJsonFile) {
+                  const currGeoJsonFile = response.data.substring(
+                    response.data.lastIndexOf('/')
+                  );
+
+                  console.log('currGeoJsonFile', currGeoJsonFile);
+
+                  this.props.dispatch(
+                    actions.storeChartDataRequest({ currGeoJsonFile })
+                  );
+                }
+
+                const indAggregation = [
+                  {
+                    ...data.indicators[0],
+                    geoJsonUrl: response.data
+                  }
+                ];
+
+                indicatorData.push({
+                  index: currIndex,
+                  indAggregation,
+                  subIndicators: data.subIndicators
+                });
+
+                this.refetchDone(
+                  indicatorData,
+                  selectedInds,
+                  refetchOne,
+                  index
+                );
+              })
+              .catch(error => {
+                console.log('Error downloading file: ', error);
+              });
+          } else {
+            indicatorData.push({
+              index: currIndex,
+              indAggregation: data.indicators,
+              subIndicators: data.subIndicators
+            });
           }
+
+          this.refetchDone(indicatorData, selectedInds, refetchOne, index);
         });
       });
+    }
+  }
+
+  // this basically calls the update indicators when refetch is done
+  // and the refetch is done depending on the indicatorData retrieved
+  // and the selectedInd amounts
+  refetchDone(indicatorData, selectedInds, refetchOne, index) {
+    // so we only update the indicators when we've retrieved the same
+    // amount of indicator data as we have indicators selected
+    if (indicatorData.length === selectedInds.length && this._isMounted) {
+      this.setState({ loading: false });
+
+      const updateIndIndex =
+        refetchOne ||
+        this.props.paneData.chartType === chartTypes.tableChart ||
+        this.props.paneData.chartType === chartTypes.geoMap ||
+        this.props.paneData.chartType === chartTypes.focusNL ||
+        this.props.paneData.chartType === chartTypes.focusKE
+          ? index
+          : -1;
+      this.updateIndicators(indicatorData, updateIndIndex);
     }
   }
 

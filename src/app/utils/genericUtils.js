@@ -1,7 +1,9 @@
 import sortBy from 'lodash/sortBy';
 
 export function formatNumber(number) {
-  return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+  return number
+    ? number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+    : '0';
 }
 
 // Basically takes in a start year and an

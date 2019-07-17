@@ -749,8 +749,26 @@ export function* getDatasetIdsRequest(action) {
   }
 }
 
+export function* loadGeoJsonRequest(action) {
+  try {
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'loadGeoJson',
+      values: action.values
+    });
+    yield put(nodeActions.loadGeoJsonSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.loadGeoJsonFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('LOAD_GEO_JSON_REQUEST', loadGeoJsonRequest),
     takeLatest('GET_DATASET_IDS_REQUEST', getDatasetIdsRequest),
     takeLatest('EMPTY_CHART_TRASH_REQUEST', emptyChartTrashRequest),
     takeLatest('ALL_ARCHIVED_CHARTS_REQUEST', allArchivedChartsRequest),

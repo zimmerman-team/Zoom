@@ -3,6 +3,7 @@ const router = express.Router();
 const fs = require('fs');
 const url = require('url');
 const http = require('http');
+const https = require('https');
 const path = require('path');
 
 const cryptoJs = require('crypto-js');
@@ -234,16 +235,29 @@ router.get('/loadGeoJson', (req, res) => {
       flags: 'w'
     });
 
-    http.get(urlGeoJson, fileRes => {
-      fileRes
-        .on('data', data => {
-          file.write(data);
-        })
-        .on('end', () => {
-          file.end();
-          res.send(pathToFile);
-        });
-    });
+    if (process.env.REACT_APP_BACKEND_HOST.indexOf('localhost') !== -1) {
+      http.get(urlGeoJson, fileRes => {
+        fileRes
+          .on('data', data => {
+            file.write(data);
+          })
+          .on('end', () => {
+            file.end();
+            res.send(pathToFile);
+          });
+      });
+    } else {
+      https.get(urlGeoJson, fileRes => {
+        fileRes
+          .on('data', data => {
+            file.write(data);
+          })
+          .on('end', () => {
+            file.end();
+            res.send(pathToFile);
+          });
+      });
+    }
   } else {
     res.send('File deleted');
   }

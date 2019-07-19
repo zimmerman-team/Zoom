@@ -998,37 +998,22 @@ export function formatDonutData(
           label = `${indName} - ${indicator.selectedSubInd.join(', ')}`;
         }
 
-        const chartItemInd = findIndex(chartData, chartItem => {
-          if (aggrCountry) {
-            return chartItem.key === itemId;
-          }
+        let geoName = null;
 
-          return (
-            chartItem.key === itemId &&
-            chartItem.geolocationTag === indItem.geolocationTag
-          );
-        });
-
-        if (chartItemInd === -1) {
-          let geoName = null;
-
-          if (!aggrCountry) {
-            geoName = indItem.geolocationTag;
-            geoName = geoName.charAt(0).toUpperCase() + geoName.slice(1);
-          }
-
-          chartData.push({
-            geoName,
-            geolocationTag: indItem.geolocationTag,
-            id: `${itemId} ${itemIndex}`,
-            key: `${itemId}`,
-            label,
-            value: Math.round(indItem.value),
-            format: indItem.valueFormatType
-          });
-        } else {
-          chartData[chartItemInd].value += Math.round(indItem.value);
+        if (!aggrCountry) {
+          geoName = indItem.geolocationTag;
+          geoName = geoName.charAt(0).toUpperCase() + geoName.slice(1);
         }
+
+        chartData.push({
+          geoName,
+          geolocationTag: indItem.geolocationTag,
+          id: `${itemId} ${itemIndex}`,
+          key: `${itemId}`,
+          label,
+          value: Math.round(indItem.value),
+          format: indItem.valueFormatType
+        });
       });
     }
   });
@@ -1141,6 +1126,9 @@ export function getFields(type, layer) {
     case chartTypes.barChart:
       fields.splice(fields.indexOf('comment'), 1);
       return fields;
+    case chartTypes.donutChart:
+      fields.splice(fields.indexOf('comment'), 1);
+      return fields;
     case chartTypes.geoMap:
       if (layer) {
         fields.push('geolocationPolygons');
@@ -1166,7 +1154,7 @@ export function getFields(type, layer) {
 
 // a little function to get the groupBy array
 // depending on the type of chart and chart options
-export function getGroupBy(type, subIndAggr, layer, aggr) {
+export function getGroupBy(type, subIndAggr, layer, aggr, aggrCountr) {
   const defgroupBy = [
     'indicatorName',
     'geolocationTag',
@@ -1182,6 +1170,18 @@ export function getGroupBy(type, subIndAggr, layer, aggr) {
   switch (type) {
     case chartTypes.lineChart: {
       const groupBy = ['indicatorName', 'valueFormatType', 'date'];
+      if (!subIndAggr) {
+        groupBy.push('filterName');
+      }
+      return groupBy;
+    }
+    case chartTypes.donutChart: {
+      const groupBy = ['indicatorName', 'valueFormatType'];
+
+      if (!aggrCountr) {
+        groupBy.push('geolocationTag');
+      }
+
       if (!subIndAggr) {
         groupBy.push('filterName');
       }

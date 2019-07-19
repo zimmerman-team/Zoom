@@ -97,3 +97,11 @@ server/static/*
 
 # exception to the rule
 !server/static/.gitkeep
+
+# exception to the rule
+!server/static/savedGeoJsons
+
+server/static/savedGeoJsons/*
+
+# exception to the rule
+!server/static/savedGeoJsons/.gitkeep

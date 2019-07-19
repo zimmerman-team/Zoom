@@ -10,7 +10,7 @@ import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
 import findIndex from 'lodash/findIndex';
-import cryptoJs from 'crypto-js';
+import cloneDeep from 'lodash/cloneDeep';
 
 /* styles */
 import theme from 'theme/Theme';
@@ -278,12 +278,29 @@ export function formatDate(created) {
   )} ${date.getFullYear()}`;
 }
 
-export function formatGeoData(indAggregations, selectedInds) {
+export function formatGeoData(
+  indSelectedIndex,
+  currData,
+  indAggregations,
+  selectedInds
+) {
   let longLatData = [];
-  const geomapData = [];
+  let geomapData = [];
   let countryCircleData = [];
   let colorInd = 0;
   const colors = theme.color.locationColorSet;
+
+  let foundGeoIndex = -1;
+
+  if (indSelectedIndex !== -1) {
+    geomapData = geomapData.concat(currData);
+
+    // and here we need to find the item by their geoIndex
+    // in the current geomapData, the geoIndex will always
+    // reperesent the index of a selected indicator
+    // ONLY that item will be replaced in this logic
+    foundGeoIndex = findIndex(geomapData, ['geoIndex', indSelectedIndex]);
+  }
 
   indAggregations.forEach((aggregation, index) => {
     if (aggregation.data && aggregation.data[0]) {
@@ -299,20 +316,31 @@ export function formatGeoData(indAggregations, selectedInds) {
         // and it will contain all of the data we need
         // for the map
 
-        console.log(
-          'aggregation.data[0].geoJsonUrl',
-          aggregation.data[0].geoJsonUrl
-        );
-        geomapData.push({
-          type: 'layer',
-          url: aggregation.data[0].geoJsonUrl,
-          legendName: ` ${
-            selectedInds[0].indName
-          } - ${selectedInds[0].subInd.join(', ')}`,
-          uniqCount: aggregation.data[0].uniqCount,
-          minValue: aggregation.data[0].minValue,
-          maxValue: aggregation.data[0].maxValue
-        });
+        if (indSelectedIndex === -1 || foundGeoIndex === -1) {
+          geomapData.push({
+            geoIndex: index,
+            type: 'layer',
+            url: aggregation.data[0].geoJsonUrl,
+            legendName: ` ${
+              selectedInds[0].indName
+            } - ${selectedInds[0].subInd.join(', ')}`,
+            uniqCount: aggregation.data[0].uniqCount,
+            minValue: aggregation.data[0].minValue,
+            maxValue: aggregation.data[0].maxValue
+          });
+        } else {
+          geomapData[foundGeoIndex] = {
+            geoIndex: indSelectedIndex,
+            type: 'layer',
+            url: aggregation.data[0].geoJsonUrl,
+            legendName: ` ${
+              selectedInds[0].indName
+            } - ${selectedInds[0].subInd.join(', ')}`,
+            uniqCount: aggregation.data[0].uniqCount,
+            minValue: aggregation.data[0].minValue,
+            maxValue: aggregation.data[0].maxValue
+          };
+        }
       } else if (index === 1) {
         // the second is circle legend
         // and for the second indicator aggregation on the geomap
@@ -325,12 +353,20 @@ export function formatGeoData(indAggregations, selectedInds) {
         );
 
         // and we push in the circle data for the indicatorData array for the geomap
-        if (countryCircleData.length > 0) {
+        if (indSelectedIndex === -1 || foundGeoIndex === -1) {
           geomapData.push({
+            geoIndex: index,
             type: 'circle',
             data: countryCircleData,
             legendName: ` ${indName} - ${aggregation.selectedSubInd.join(', ')}`
           });
+        } else {
+          geomapData[foundGeoIndex] = {
+            geoIndex: indSelectedIndex,
+            type: 'circle',
+            data: countryCircleData,
+            legendName: ` ${indName} - ${aggregation.selectedSubInd.join(', ')}`
+          };
         }
       } else {
         // all others are long/lat indicators
@@ -342,8 +378,16 @@ export function formatGeoData(indAggregations, selectedInds) {
         );
 
         // and we push them into the indicatorData array for the geomap
-        if (longLatData.length > 0) {
+        if (indSelectedIndex === -1 || foundGeoIndex === -1) {
+          if (indSelectedIndex !== -1 && foundGeoIndex === -1) {
+            colorInd = indSelectedIndex - 2;
+
+            const colorMult = Math.floor(colorInd / colors.length);
+            colorInd -= colorMult * colors.length;
+          }
+
           geomapData.push({
+            geoIndex: index,
             type: 'location',
             color: colors[colorInd],
             data: longLatData,
@@ -355,8 +399,21 @@ export function formatGeoData(indAggregations, selectedInds) {
           } else {
             colorInd = 0;
           }
+        } else {
+          geomapData[foundGeoIndex] = {
+            geoIndex: indSelectedIndex,
+            type: 'location',
+            data: longLatData,
+            color: geomapData[foundGeoIndex].color,
+            legendName: `${indName} - ${aggregation.selectedSubInd.join(', ')}`
+          };
         }
       }
+    } else if (!aggregation.data[0] && foundGeoIndex !== -1) {
+      // so if aggregation data is empty and an item in geomap
+      // has been found for this empty data array, we
+      // remove that item
+      geomapData.splice(foundGeoIndex, 1);
     }
   });
 
@@ -1117,6 +1174,7 @@ export function getGroupBy(type, subIndAggr, layer) {
     'geolocationType',
     'geolocationIso2',
     'comment',
+    'valueFormatType',
     'geolocationCenterLongLat',
     'filterName'
   ];
@@ -1126,7 +1184,7 @@ export function getGroupBy(type, subIndAggr, layer) {
   // THUS WE WONT GET AGGREGATED VALUES FOR THESE DIFFERENT TYPE FORMATS
   switch (type) {
     case chartTypes.lineChart: {
-      const groupBy = ['indicatorName', 'date'];
+      const groupBy = ['indicatorName', 'valueFormatType', 'date'];
       if (!subIndAggr) {
         groupBy.push('filterName');
       }
@@ -1138,6 +1196,9 @@ export function getGroupBy(type, subIndAggr, layer) {
       }
       if (layer) {
         defgroupBy.push('geolocationPolygons');
+        // and we also splice off the valueFormatType for layers
+        // as they'll be handled on the backend
+        defgroupBy.splice(defgroupBy.indexOf('valueFormatType'), 1);
       }
       return defgroupBy;
     case chartTypes.focusNL:
@@ -1146,6 +1207,9 @@ export function getGroupBy(type, subIndAggr, layer) {
       }
       if (layer) {
         defgroupBy.push('geolocationPolygons');
+        // and we also splice off the valueFormatType for layers
+        // as they'll be handled on the backend
+        defgroupBy.splice(defgroupBy.indexOf('valueFormatType'), 1);
       }
       return defgroupBy;
     case chartTypes.focusKE:
@@ -1154,6 +1218,9 @@ export function getGroupBy(type, subIndAggr, layer) {
       }
       if (layer) {
         defgroupBy.push('geolocationPolygons');
+        // and we also splice off the valueFormatType for layers
+        // as they'll be handled on the backend
+        defgroupBy.splice(defgroupBy.indexOf('valueFormatType'), 1);
       }
       return defgroupBy;
     default:

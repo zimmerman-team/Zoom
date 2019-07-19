@@ -62,3 +62,21 @@ export function paginate(
 
   return sortedList.slice(pageSize * page, sliceTo);
 }
+
+// basically converts a string array to array
+// NOTE: this is not for JSON strings
+// this string arr would look something like
+// "['element', 'element2']"
+// and that ^ cannot be parsed using JSON parse
+export function convertStringArrToArr(stringArr) {
+  // so first we just remove the brackets arround the array
+  let cleanString = stringArr.substring(
+    stringArr.indexOf('[') + 1,
+    stringArr.lastIndexOf(']')
+  );
+
+  // now we remove the "'" character
+  cleanString = cleanString.replace(/'/g, '');
+
+  return cleanString.split(',');
+}

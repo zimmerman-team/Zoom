@@ -53,6 +53,8 @@ describe('Chartbuilder country focus fragment e2e', function() {
     cy.percySnapshot('Chartbuilder - Netherlands focus');
 
     cy.log('**Plots some NL specific data**');
+
+    cy.wait(8000);
     cy.get(
       '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
     )

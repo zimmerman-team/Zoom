@@ -39,7 +39,6 @@ import * as nodeActions from 'services/actions/nodeBackend';
 import * as actions from 'services/actions/general';
 import cryptoJs from 'crypto-js';
 import axios from 'axios';
-import get from 'lodash/get';
 
 const propTypes = {
   publicChart: PropTypes.shape({}),
@@ -707,7 +706,14 @@ class VisualizerModuleMediator extends Component {
 
       selectedInds.forEach((indItem, indIndex) => {
         // TODO: adjust this later with the refetchOne logic
-        const isLayer = refetchOne ? index === 0 : indIndex === 0;
+        const isGeoChart =
+          this.props.paneData.chartType === chartTypes.geoMap ||
+          this.props.paneData.chartType === chartTypes.focusKE ||
+          this.props.paneData.chartType === chartTypes.focusNL;
+
+        const isLayer = refetchOne
+          ? isGeoChart && index === 0
+          : isGeoChart && indIndex === 0;
 
         const currIndex = refetchOne ? index : indIndex;
 
@@ -747,7 +753,8 @@ class VisualizerModuleMediator extends Component {
           groupBy: getGroupBy(
             this.props.paneData.chartType,
             indItem.aggregate,
-            isLayer
+            isLayer,
+            this.props.chartData.specOptions[graphKeys.aggregate]
           ),
           fields: getFields(this.props.paneData.chartType, isLayer),
           geoJsonUrl: isLayer,

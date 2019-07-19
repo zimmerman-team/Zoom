@@ -754,7 +754,8 @@ class VisualizerModuleMediator extends Component {
             this.props.paneData.chartType,
             indItem.aggregate,
             isLayer,
-            this.props.chartData.specOptions[graphKeys.aggregate]
+            this.props.chartData.specOptions[graphKeys.aggregate],
+            this.props.chartData.specOptions[graphKeys.aggrCountry]
           ),
           fields: getFields(this.props.paneData.chartType, isLayer),
           geoJsonUrl: isLayer,

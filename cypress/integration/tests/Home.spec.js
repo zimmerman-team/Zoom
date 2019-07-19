@@ -68,6 +68,7 @@ describe('Home page geo map datamapping', function() {
     cy.wait(2000);
     cy.waitPageLoader2();
     cy.waitPageLoader();
+    cy.wait(6000);
     cy.get('[data-cy="legendLayer-label"]').should(
       'contain',
       'new hiv infections'

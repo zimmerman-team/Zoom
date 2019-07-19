@@ -586,23 +586,7 @@ function datasetIds(state = initial, action) {
   }
 }
 
-function geoJsonUrl(state = initial, action) {
-  switch (action.type) {
-    case nodeActions.LOAD_GEO_JSON_INITIAL:
-      return updateInitial(state);
-    case nodeActions.LOAD_GEO_JSON_REQUEST:
-      return updateRequest(state, action);
-    case nodeActions.LOAD_GEO_JSON_SUCCESS:
-      return updateSuccess(state, action);
-    case nodeActions.LOAD_GEO_JSON_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
 const reducers = {
-  geoJsonUrl,
   datasetIds,
   chartTrashEmpty,
   archivedCharts,

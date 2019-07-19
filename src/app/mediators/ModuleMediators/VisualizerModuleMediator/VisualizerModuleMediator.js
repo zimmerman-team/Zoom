@@ -39,6 +39,7 @@ import * as nodeActions from 'services/actions/nodeBackend';
 import * as actions from 'services/actions/general';
 import cryptoJs from 'crypto-js';
 import axios from 'axios';
+import get from 'lodash/get';
 
 const propTypes = {
   publicChart: PropTypes.shape({}),
@@ -169,6 +170,8 @@ class VisualizerModuleMediator extends Component {
     this.updateRankBy = this.updateRankBy.bind(this);
     this.storeInitialChartOptions = this.storeInitialChartOptions.bind(this);
     this.refetchDone = this.refetchDone.bind(this);
+    this.deleteGeoFiles = this.deleteGeoFiles.bind(this);
+    this.handleWindowClose = this.handleWindowClose.bind(this);
   }
 
   componentDidMount() {
@@ -177,6 +180,8 @@ class VisualizerModuleMediator extends Component {
     if (!this.props.home) {
       this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.visualizer));
     }
+
+    window.addEventListener('beforeunload', this.handleWindowClose);
 
     // we also want to reset the previously created/updated chart
     this.props.dispatch(nodeActions.createUpdateChartInitial());
@@ -209,11 +214,7 @@ class VisualizerModuleMediator extends Component {
           chartType: this.props.match.params.chart
         })
       );
-      if (
-        chartTypes.lineChart === this.props.match.params.chart ||
-        chartTypes.barChart === this.props.match.params.chart ||
-        chartTypes.donutChart === this.props.match.params.chart
-      ) {
+      if (chartTypes.tableChart !== this.props.match.params.chart) {
         this.storeInitialChartOptions();
       }
     }
@@ -253,6 +254,7 @@ class VisualizerModuleMediator extends Component {
       this.props.chartData.refetch
     ) {
       this.refetch();
+
       // and ofcourse after refetching the data
       // we reset the refetch variable back to false
       // as the data has already been fetched
@@ -273,6 +275,22 @@ class VisualizerModuleMediator extends Component {
         prevProps.chartData.specOptions[graphKeys.horizont]
     ) {
       this.updateRankBy(this.props.chartData.specOptions);
+    }
+
+    if (
+      this.props.chartData.currGeoJsonFile &&
+      this.props.paneData.chartType !== prevProps.paneData.chartType &&
+      (this.props.paneData.chartType !== chartTypes.geoMap &&
+        this.props.paneData.chartType !== chartTypes.focusKE &&
+        this.props.paneData.chartType !== chartTypes.focusNL) &&
+      (prevProps.paneData.chartType === chartTypes.geoMap ||
+        prevProps.paneData.chartType === chartTypes.focusKE ||
+        prevProps.paneData.chartType === chartTypes.focusNL)
+    ) {
+      // and here if the chartType changes, from a geochart to a non geochart
+      // and if the previous geochart had geojson file loaded
+      // we delete the geojson files from backends
+      this.deleteGeoFiles();
     }
   }
 
@@ -298,6 +316,29 @@ class VisualizerModuleMediator extends Component {
     this.props.dispatch(nodeActions.createDuplicateChartInitial());
 
     this._isMounted = false;
+
+    if (
+      this.props.chartData.currGeoJsonFile &&
+      (this.props.paneData.chartType === chartTypes.geoMap ||
+        this.props.paneData.chartType === chartTypes.focusKE ||
+        this.props.paneData.chartType === chartTypes.focusNL)
+    ) {
+      // And if one of the geo charts have been unloaded
+      // and if it did use some geoJson file
+      // we delete the geoJson files from the backend
+      this.deleteGeoFiles();
+    }
+
+    window.addEventListener('beforeunload', this.handleWindowClose);
+  }
+
+  handleWindowClose(e) {
+    // Cancel the event
+    e.preventDefault();
+
+    if (this.props.chartData.currGeoJsonFile) {
+      this.deleteGeoFiles(e);
+    }
   }
 
   storeInitialChartOptions() {
@@ -399,7 +440,6 @@ class VisualizerModuleMediator extends Component {
     indicatorData,
     indSelectedIndex = this.props.chartData.indSelectedIndex
   ) {
-    console.log('indicatorData', indicatorData);
     // this will be used for some extra formatting things
     // concerning chart keys and also for saving the subIndicators
     // of the appropriate indicators
@@ -439,17 +479,37 @@ class VisualizerModuleMediator extends Component {
     let indKeys = [];
 
     if (this.props.home) {
-      data = formatGeoData(aggregationData, selectedInds);
+      data = formatGeoData(
+        indSelectedIndex,
+        this.props.chartData.data,
+        aggregationData,
+        selectedInds
+      );
     } else {
       switch (this.props.match.params.chart) {
         case chartTypes.geoMap:
-          data = formatGeoData(aggregationData);
+          data = formatGeoData(
+            indSelectedIndex,
+            this.props.chartData.data,
+            aggregationData,
+            selectedInds
+          );
           break;
         case chartTypes.focusKE:
-          data = formatGeoData(aggregationData);
+          data = formatGeoData(
+            indSelectedIndex,
+            this.props.chartData.data,
+            aggregationData,
+            selectedInds
+          );
           break;
         case chartTypes.focusNL:
-          data = formatGeoData(aggregationData);
+          data = formatGeoData(
+            indSelectedIndex,
+            this.props.chartData.data,
+            aggregationData,
+            selectedInds
+          );
           break;
         case chartTypes.lineChart: {
           const lineData = formatLineData(
@@ -522,8 +582,6 @@ class VisualizerModuleMediator extends Component {
           break;
       }
     }
-
-    console.log('data', data);
 
     // so we will use this variable to control when we want to refetch data
     // cause we only want to refetch data when a subindicator is selected
@@ -616,10 +674,8 @@ class VisualizerModuleMediator extends Component {
     const refetchOne =
       index !== -1 &&
       !refetchAll &&
-      this.props.paneData.chartType !== chartTypes.tableChart &&
-      this.props.paneData.chartType !== chartTypes.geoMap &&
-      this.props.paneData.chartType !== chartTypes.focusKE &&
-      this.props.paneData.chartType !== chartTypes.focusNL;
+      this.props.paneData.chartType !== chartTypes.tableChart;
+
     const selectedInds = refetchOne ? [selectedInd[index]] : selectedInd;
 
     if (selectedInds.length > 0) {
@@ -651,14 +707,7 @@ class VisualizerModuleMediator extends Component {
 
       selectedInds.forEach((indItem, indIndex) => {
         // TODO: adjust this later with the refetchOne logic
-        const isLayer =
-          index !== -1 &&
-          !refetchAll &&
-          (this.props.paneData.chartType === chartTypes.geoMap ||
-            this.props.paneData.chartType === chartTypes.focusKE ||
-            this.props.paneData.chartType === chartTypes.focusNL)
-            ? index === 0
-            : indIndex === 0;
+        const isLayer = refetchOne ? index === 0 : indIndex === 0;
 
         const currIndex = refetchOne ? index : indIndex;
 
@@ -722,7 +771,10 @@ class VisualizerModuleMediator extends Component {
 
             // We also need to encrypt them values for our middleware to work
             const encValues = cryptoJs.AES.encrypt(
-              JSON.stringify({ urlGeoJson: url }),
+              JSON.stringify({
+                urlGeoJson: url,
+                prevGeoJson: this.props.chartData.currGeoJsonFile
+              }),
               process.env.REACT_APP_ENCRYPTION_SECRET
             ).toString();
 
@@ -733,17 +785,13 @@ class VisualizerModuleMediator extends Component {
                 }
               })
               .then(response => {
-                if (!this.props.chartData.currGeoJsonFile) {
-                  const currGeoJsonFile = response.data.substring(
-                    response.data.lastIndexOf('/')
-                  );
+                const currGeoJsonFile = response.data.substring(
+                  response.data.lastIndexOf('/') + 1
+                );
 
-                  console.log('currGeoJsonFile', currGeoJsonFile);
-
-                  this.props.dispatch(
-                    actions.storeChartDataRequest({ currGeoJsonFile })
-                  );
-                }
+                this.props.dispatch(
+                  actions.storeChartDataRequest({ currGeoJsonFile })
+                );
 
                 const indAggregation = [
                   {
@@ -792,11 +840,7 @@ class VisualizerModuleMediator extends Component {
       this.setState({ loading: false });
 
       const updateIndIndex =
-        refetchOne ||
-        this.props.paneData.chartType === chartTypes.tableChart ||
-        this.props.paneData.chartType === chartTypes.geoMap ||
-        this.props.paneData.chartType === chartTypes.focusNL ||
-        this.props.paneData.chartType === chartTypes.focusKE
+        refetchOne || this.props.paneData.chartType === chartTypes.tableChart
           ? index
           : -1;
       this.updateIndicators(indicatorData, updateIndIndex);
@@ -808,6 +852,7 @@ class VisualizerModuleMediator extends Component {
     // so we set the values for chart data
     this.props.dispatch(
       actions.storeChartDataRequest({
+        indSelectedIndex: -1,
         selectedYear: val,
         refetch: true,
         changesMade: true
@@ -945,6 +990,41 @@ class VisualizerModuleMediator extends Component {
     this.setState({
       loading: false
     });
+  }
+
+  deleteGeoFiles() {
+    // so we delete the file from DUCT
+    axios.delete(
+      `${process.env.REACT_APP_BACKEND_HOST}/api/generic/removeGeo/`,
+      {
+        params: {
+          fileName: this.props.chartData.currGeoJsonFile
+        }
+      }
+    );
+
+    // and then we delete the file from zoomBackend
+    // We also need to encrypt them values for our middleware to work
+    const encValues = cryptoJs.AES.encrypt(
+      JSON.stringify({
+        prevGeoJson: this.props.chartData.currGeoJsonFile
+      }),
+      process.env.REACT_APP_ENCRYPTION_SECRET
+    ).toString();
+
+    axios
+      .get(`/api/loadGeoJson`, {
+        params: {
+          payload: encValues
+        }
+      })
+      .then(() => {
+        this.props.dispatch(
+          // and just in case we set the currGeoJsonFile to null, cause this guy
+          // has already been deleted
+          actions.storeChartDataRequest({ currGeoJsonFile: null })
+        );
+      });
   }
 
   render() {

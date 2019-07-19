@@ -229,7 +229,7 @@ router.get('/loadGeoJson', (req, res) => {
 
     const pathToFile = '/static/'.concat(fileName);
 
-    const urlToFile = '/api/'.concat(pathToFile);
+    const urlToFile = '/api'.concat(pathToFile);
 
     const fullPath = path.join(__dirname, pathToFile);
 

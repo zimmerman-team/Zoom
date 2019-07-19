@@ -229,6 +229,8 @@ router.get('/loadGeoJson', (req, res) => {
 
     const pathToFile = '/static/'.concat(fileName);
 
+    const urlToFile = '/api/'.concat(pathToFile);
+
     const fullPath = path.join(__dirname, pathToFile);
 
     const file = fs.createWriteStream(fullPath, {
@@ -243,7 +245,7 @@ router.get('/loadGeoJson', (req, res) => {
           })
           .on('end', () => {
             file.end();
-            res.send(pathToFile);
+            res.send(urlToFile);
           });
       });
     } else {
@@ -254,7 +256,7 @@ router.get('/loadGeoJson', (req, res) => {
           })
           .on('end', () => {
             file.end();
-            res.send(pathToFile);
+            res.send(urlToFile);
           });
       });
     }

@@ -33,7 +33,7 @@ app.disable('x-powered-by');
 // append /api for our http requests
 app.use('/api', router);
 
-app.use('/static', express.static(path.join(__dirname, '/static')));
+app.use('/api/static', express.static(path.join(__dirname, '/static')));
 
 // launch our backend into a port
 app.listen(config.EXP_PORT, () =>

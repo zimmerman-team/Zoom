@@ -156,10 +156,8 @@ export class GeoMap extends Component {
 
     const layers = find(indicatorData, ['type', 'layer']);
     if (layers) {
-      const borderData = layers.borderData ? layers.borderData : layers.data;
-
-      mapStyle.sources.layer = { type: 'geojson', data: layers.data };
-      mapStyle.sources.outline = { type: 'geojson', data: borderData };
+      mapStyle.sources.layer = { type: 'geojson', data: layers.url };
+      mapStyle.sources.outline = { type: 'geojson', data: layers.url };
 
       if (!find(mapStyle.layers, ['id', 'outline'])) {
         mapStyle.layers.push(borderStyle);
@@ -175,7 +173,7 @@ export class GeoMap extends Component {
       // the color stop amount is formed according to
       // this value, check the variable imported 'colorStops'
       // for clarity
-      colorStopz[1][0] = layers.data.uniqCount;
+      colorStopz[1][0] = layers.uniqCount;
 
       if (!find(mapStyle.layers, ['id', 'layer'])) {
         dataLayer.paint['fill-color'].stops = colorStopz;

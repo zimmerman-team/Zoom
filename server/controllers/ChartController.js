@@ -1,18 +1,22 @@
 const fs = require('fs');
-const isEqual = require('lodash/isEqual');
+const path = require('path');
 
-const dataPath = __dirname
-  .substring(0, __dirname.indexOf('controllers') - 1)
-  .concat('/data/');
+const serverPath = __dirname.substring(0, __dirname.indexOf('controllers') - 1);
+
+const dataPath = serverPath.concat('/data/');
 
 /* consts */
-const config = require('../config/config');
+const consts = require('../config/consts');
+
+const chartTypes = consts.chartTypes;
 
 /* general */
 const general = require('./generalResponse');
 
 /* utils */
 const utils = require('../utils/general');
+const findIndex = require('lodash/findIndex');
+const isEqual = require('lodash/isEqual');
 
 const Chart = require('../models/Chart');
 const User = require('../models/User');
@@ -124,28 +128,36 @@ const ChartController = {
     const { chartId, authId, type } = req.query;
 
     User.findOne({ authId }).exec((userError, author) => {
-      if (userError) general.handleError(res, userError);
-      else if (!author) general.handleError(res, 'User not found', 404);
-      else
+      if (userError) {
+        general.handleError(res, userError);
+      } else if (!author) {
+        general.handleError(res, 'User not found', 404);
+      } else {
         Chart.findOne({ _id: chartId, author, archived: false, type })
           .populate('author')
           .exec((chartError, chart) => {
-            if (chartError) general.handleError(res, chartError);
-            else if (!chart) general.handleError(res, 'chart not found', 404);
-            else if (chart.dataFileUrl) {
+            if (chartError) {
+              general.handleError(res, chartError);
+            } else if (!chart) {
+              general.handleError(res, 'chart not found', 404);
+            } else if (chart.dataFileUrl) {
               fs.readFile(chart.dataFileUrl, 'utf8', (dataErr, data) => {
-                if (dataErr) general.handleError(res, dataErr);
-                else
+                if (dataErr) {
+                  general.handleError(res, dataErr);
+                } else {
                   res.send({
                     chart,
                     data: JSON.parse(data)
                   });
+                }
               });
-            } else
+            } else {
               res.send({
                 chart
               });
+            }
           });
+      }
     });
   },
 
@@ -156,21 +168,26 @@ const ChartController = {
     Chart.findOne({ _id: chartId, _public: true, archived: false, type })
       .populate('author')
       .exec((chartError, chart) => {
-        if (chartError) general.handleError(res, chartError);
-        else if (!chart) general.handleError(res, 'chart not found', 404);
-        else if (chart.dataFileUrl) {
+        if (chartError) {
+          general.handleError(res, chartError);
+        } else if (!chart) {
+          general.handleError(res, 'chart not found', 404);
+        } else if (chart.dataFileUrl) {
           fs.readFile(chart.dataFileUrl, 'utf8', (dataErr, data) => {
-            if (dataErr) general.handleError(res, dataErr);
-            else
+            if (dataErr) {
+              general.handleError(res, dataErr);
+            } else {
               res.send({
                 chart,
                 data: JSON.parse(data)
               });
+            }
           });
-        } else
+        } else {
           res.send({
             chart
           });
+        }
       });
   },
 
@@ -358,6 +375,67 @@ const ChartController = {
                     console.log('saving this biggo gives error', err);
                     general.handleError(res, err);
                   } else {
+                    console.log('CHART IS BEING CREATED!');
+
+                    if (
+                      type === chartTypes.geoMap ||
+                      type === chartTypes.focusKE ||
+                      type === chartTypes.focusNL
+                    ) {
+                      const layerIndex = findIndex(data, ['type', 'layer']);
+
+                      // so basically here when a geochart is being saved
+                      // AND if it has layer data, which means that there's
+                      // a geojson file created for it
+                      // we want to save this geojson in a different folder
+                      // and give it a suffix with the charts id
+                      if (layerIndex !== -1) {
+                        console.log('LAYER FOR CHART FOUND!');
+                        //set a reference to the new file name
+                        const newFileName = `${chartz.id}geo_json.json`;
+
+                        const pathToOldFile = data[layerIndex].url;
+
+                        const pathToNewFile = '/static/savedGeoJsons/'.concat(
+                          newFileName
+                        );
+
+                        const fullOldPath = path.join(
+                          serverPath,
+                          pathToOldFile
+                        );
+
+                        const fullNewPath = path.join(
+                          serverPath,
+                          pathToNewFile
+                        );
+
+                        if (fullOldPath.indexOf('savedGeoJsons') !== -1) {
+                          // so if the old path contains 'savedGeoJsons'
+                          // in its path name, most likely a creation of a duplicate
+                          // chart is happening in its edit state withouth having
+                          // any data changes, thus we will copy the geojson in this
+                          // case cause we want the original to still be there
+                          fs.createReadStream(fullOldPath).pipe(
+                            fs.createWriteStream(fullNewPath)
+                          );
+                        } else {
+                          fs.rename(fullOldPath, fullNewPath, renameError => {
+                            if (renameError) {
+                              console.log(
+                                'ERROR MOVING/RENAMING FILE',
+                                renameError
+                              );
+                            } else {
+                              console.log('Successfully renamed - AKA moved!');
+                            }
+                          });
+                        }
+
+                        data[layerIndex].url = pathToNewFile;
+                      }
+                    }
+
                     const fileUrl = `${dataPath}chartData${chartz.id}.txt`;
                     fs.writeFile(fileUrl, JSON.stringify(data), fileError => {
                       if (fileError) {
@@ -366,14 +444,16 @@ const ChartController = {
                       } else {
                         chartz.dataFileUrl = fileUrl;
                         chartz.save(urlSavErr => {
-                          if (urlSavErr) general.handleError(res, urlSavErr);
-                          else
+                          if (urlSavErr) {
+                            general.handleError(res, urlSavErr);
+                          } else {
                             res.json({
                               message: 'chart created',
                               id: chartz._id,
                               name: chartz.name,
                               chartType: type
                             });
+                          }
                         });
                       }
                     });
@@ -386,6 +466,45 @@ const ChartController = {
           } else if (author.equals(chart.author)) {
             genUniqueName(Chart, name, chart.name)
               .then(uniqueName => {
+                if (
+                  type === chartTypes.geoMap ||
+                  type === chartTypes.focusKE ||
+                  type === chartTypes.focusNL
+                ) {
+                  const layerIndex = findIndex(data, ['type', 'layer']);
+
+                  // so basically here when a geochart is being saved
+                  // AND if it has layer data, which means that there's
+                  // a geojson file created for it
+                  // we want to save this geojson in a different folder
+                  // and give it a suffix with the charts id
+                  // and we'll only rename it if it has changed
+                  if (layerIndex !== -1) {
+                    //set a reference to the new file name
+                    const newFileName = `${chart.id}geo_json.json`;
+
+                    const pathToOldFile = data[layerIndex].url;
+
+                    const pathToNewFile = '/static/savedGeoJsons/'.concat(
+                      newFileName
+                    );
+
+                    const fullOldPath = path.join(serverPath, pathToOldFile);
+
+                    const fullNewPath = path.join(serverPath, pathToNewFile);
+
+                    fs.rename(fullOldPath, fullNewPath, renameError => {
+                      if (renameError) {
+                        console.log('ERROR MOVING/RENAMING FILE');
+                      } else {
+                        console.log('Successfully renamed - AKA moved!');
+                      }
+                    });
+
+                    data[layerIndex].url = pathToNewFile;
+                  }
+                }
+
                 const fileUrl = `${dataPath}chartData${chart.id}.txt`;
                 fs.writeFile(fileUrl, JSON.stringify(data), fileError => {
                   if (fileError) {
@@ -445,13 +564,17 @@ const ChartController = {
     const { authId, chartId } = req.body;
 
     User.findOne({ authId }, (error, author) => {
-      if (error) general.handleError(res, error);
-      else if (!author) general.handleError(res, 'User not found', 404);
-      else
+      if (error) {
+        general.handleError(res, error);
+      } else if (!author) {
+        general.handleError(res, 'User not found', 404);
+      } else {
         Chart.findOne({ _id: chartId }, (chartError, chart) => {
-          if (chartError) general.handleError(res, chartError);
-          else if (!chart) general.handleError(res, 'Chart not found', 404);
-          else
+          if (chartError) {
+            general.handleError(res, chartError);
+          } else if (!chart) {
+            general.handleError(res, 'Chart not found', 404);
+          } else {
             genUniqueName(Chart, chart.name)
               .then(uniqueName => {
                 // so we'll imply this logic now
@@ -490,20 +613,153 @@ const ChartController = {
                 });
 
                 chartz.save(err => {
-                  if (err) general.handleError(res, err);
+                  if (err) {
+                    console.log('saving this biggo gives error', err);
+                    general.handleError(res, err);
+                  } else if (
+                    chartz.type === chartTypes.geoMap ||
+                    chartz.type === chartTypes.focusKE ||
+                    chartz.type === chartTypes.focusNL
+                  ) {
+                    // so if its a geochart, we want to rename its geojson
+                    // file as well, IF! it has one. So
+                    // after getting the original charts data we get the datas
+                    // file url and get the actual data in it
+                    fs.readFile(
+                      chart.dataFileUrl,
+                      'utf8',
+                      (dataErr, jsonData) => {
+                        if (dataErr) {
+                          general.handleError(res, dataErr);
+                        } else {
+                          const data = JSON.parse(jsonData);
 
-                  res.json({
-                    message: 'chart created',
-                    id: chartz._id,
-                    name: chartz.name,
-                    chartType: chartz.type
-                  });
+                          const layerIndex = findIndex(data, ['type', 'layer']);
+
+                          // so basically here when a geochart is being saved
+                          // AND if it has layer data, which means that there's
+                          // a geojson file created for it
+                          // we want to save this geojson in a different folder
+                          // and give it a suffix with the charts id
+                          if (layerIndex !== -1) {
+                            //set a reference to the new file name
+                            const newFileName = `${chartz.id}geo_json.json`;
+
+                            const pathToOldFile = data[layerIndex].url;
+
+                            const pathToNewFile = '/static/savedGeoJsons/'.concat(
+                              newFileName
+                            );
+
+                            const fullOldPath = path.join(
+                              serverPath,
+                              pathToOldFile
+                            );
+
+                            const fullNewPath = path.join(
+                              serverPath,
+                              pathToNewFile
+                            );
+
+                            // AAAND we copy it with the new ID
+                            fs.createReadStream(fullOldPath).pipe(
+                              fs.createWriteStream(fullNewPath)
+                            );
+
+                            data[layerIndex].url = pathToNewFile;
+
+                            const fileUrl = `${dataPath}chartData${
+                              chartz.id
+                            }.txt`;
+                            fs.writeFile(
+                              fileUrl,
+                              JSON.stringify(data),
+                              fileError => {
+                                if (fileError) {
+                                  console.log('fileError', fileError);
+                                  general.handleError(res, fileError);
+                                } else {
+                                  chartz.dataFileUrl = fileUrl;
+                                  chartz.save(urlSavErr => {
+                                    if (urlSavErr) {
+                                      general.handleError(res, urlSavErr);
+                                    } else {
+                                      res.json({
+                                        message: 'chart created',
+                                        id: chartz._id,
+                                        name: chartz.name,
+                                        chartType: chartz.type
+                                      });
+                                    }
+                                  });
+                                }
+                              }
+                            );
+                          } else {
+                            // so if this geo chart data did NOT contain
+                            // layers, hence did NOT contain a geojson file
+                            // we don't need to edit the data itself
+                            // so we just copy the dataFileUrl
+                            const duplicateFileUrl = `${dataPath}chartData${
+                              chartz.id
+                            }.txt`;
+                            fs.createReadStream(chart.dataFileUrl).pipe(
+                              fs.createWriteStream(duplicateFileUrl)
+                            );
+
+                            chartz.dataFileUrl = duplicateFileUrl;
+
+                            chartz.save(urlSavErr => {
+                              if (urlSavErr) {
+                                general.handleError(res, urlSavErr);
+                              } else {
+                                res.json({
+                                  message: 'chart created',
+                                  id: chartz._id,
+                                  name: chartz.name,
+                                  chartType: chartz.type
+                                });
+                              }
+                            });
+                          }
+                        }
+                      }
+                    );
+                  } else {
+                    // so if its any other chart we just need to copy
+                    // that charts data file give it this duplicates id
+                    // and update the duplicate with its own new
+                    // data files url
+                    const duplicateFileUrl = `${dataPath}chartData${
+                      chartz.id
+                    }.txt`;
+                    fs.createReadStream(chart.dataFileUrl).pipe(
+                      fs.createWriteStream(duplicateFileUrl)
+                    );
+
+                    chartz.dataFileUrl = duplicateFileUrl;
+
+                    chartz.save(urlSavErr => {
+                      if (urlSavErr) {
+                        general.handleError(res, urlSavErr);
+                      } else {
+                        res.json({
+                          message: 'chart created',
+                          id: chartz._id,
+                          name: chartz.name,
+                          chartType: chartz.type
+                        });
+                      }
+                    });
+                  }
                 });
               })
               .catch(promiseErr => {
                 general.handleError(res, promiseErr);
               });
+          }
         });
+      }
     });
   },
 
@@ -556,9 +812,72 @@ const ChartController = {
       if (userError) general.handleError(res, userError);
       else if (!author) general.handleError(res, 'User not found', 404);
       else {
-        Chart.deleteMany({ author, archived: true }).exec(delErr => {
-          if (delErr) general.handleError(res, delErr);
-          else res.json({ message: 'chart trash emptied!' });
+        Chart.find({ author, archived: true }).exec((chartError, charts) => {
+          if (chartError) {
+            general.handleError(res, chartError);
+          } else if (charts) {
+            // so here we'll want to delete all of the chart associated files
+            // and only then will we want to delete the charts themselves
+            charts.forEach(chart => {
+              if (
+                chart.type === chartTypes.geoMap ||
+                chart.type === chartTypes.focusKE ||
+                chart.type === chartTypes.focusNL
+              ) {
+                // and if its a geochart we first need to remove their geojson file
+                // if they have one and only then do we remove the
+                // dataFile itself
+                fs.readFile(chart.dataFileUrl, 'utf8', (dataErr, jsonData) => {
+                  if (dataErr) {
+                    general.handleError(res, dataErr);
+                  } else {
+                    const data = JSON.parse(jsonData);
+
+                    const layerIndex = findIndex(data, ['type', 'layer']);
+
+                    // so if we find the layer data
+                    if (layerIndex !== -1) {
+                      const fullGeoJsonPath = path.join(
+                        serverPath,
+                        data[layerIndex].url
+                      );
+                      // we check if the geojson file actually exists and then delete it
+                      if (fs.existsSync(fullGeoJsonPath)) {
+                        fs.unlink(fullGeoJsonPath, () =>
+                          console.log('GeoJson File Removed')
+                        );
+                      }
+                    }
+
+                    // and one way or another
+                    // we delete the dataFileUrl
+                    if (fs.existsSync(chart.dataFileUrl)) {
+                      fs.unlink(chart.dataFileUrl, () =>
+                        console.log('Data File Removed')
+                      );
+                    }
+                  }
+                });
+              } else if (fs.existsSync(chart.dataFileUrl)) {
+                // so if its NOT a goe chart
+                // we just want to remove the charts dataFileUrl
+                fs.unlink(chart.dataFileUrl, () =>
+                  console.log('Data File Removed')
+                );
+              }
+            });
+            // AAAND finally after deleting all of them files we can actually
+            // delete the collections from the database
+            Chart.deleteMany({ author, archived: true }).exec(delError => {
+              if (delError) {
+                general.handleError(res, delError);
+              } else {
+                res.json({ message: 'chart trash emptied!' });
+              }
+            });
+          } else {
+            general.handleError(res, 'No charts found', 404);
+          }
         });
       }
     });

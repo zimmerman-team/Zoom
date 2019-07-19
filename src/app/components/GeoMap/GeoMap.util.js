@@ -51,12 +51,7 @@ export function generateLegends(indicatorData) {
     switch (item.type) {
       case 'layer':
         legendArray.push(
-          layerLegend(
-            item.legendName,
-            index,
-            item.data.minValue,
-            item.data.maxValue
-          )
+          layerLegend(item.legendName, index, item.minValue, item.maxValue)
         );
         break;
       case 'location':

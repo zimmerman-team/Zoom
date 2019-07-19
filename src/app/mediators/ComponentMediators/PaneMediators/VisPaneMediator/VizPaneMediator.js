@@ -449,6 +449,13 @@ class VizPaneMediator extends React.Component {
           })
         );
       } else {
+        const chartType = this.props.paneData.chartType;
+
+        const isGeoChart =
+          chartType === chartTypes.focusNL ||
+          chartType === chartTypes.geoMap ||
+          chartType === chartTypes.focusKE;
+
         // so we set the values for chart data
         // * AND ALSO whenever an indicator is selected
         // the year jumps to the most recent year of the
@@ -458,8 +465,9 @@ class VizPaneMediator extends React.Component {
             // so the year reselection functionality only works with geolocations thats why we
             // refetch all indicators only when the aggregate option IS geolocation
             refetchAll:
-              this.props.chartData.specOptions[graphKeys.aggregate] ===
-                aggrOptions[0].value &&
+              (this.props.chartData.specOptions[graphKeys.aggregate] ===
+                aggrOptions[0].value ||
+                isGeoChart) &&
               this.props.chartData.selectedYear !== val.lastYear,
             selectedInd,
             indicatorSelected: true,
@@ -488,7 +496,7 @@ class VizPaneMediator extends React.Component {
         subIndicators: indItem.subIndicators,
         aggregate: indItem.aggregate,
         dataSource: indItem.dataSource,
-        selectedSubInd: [...indItem.selectedSubInd]
+        selectedSubInd: indItem.selectedSubInd.map(subInd => subInd)
       });
     });
 
@@ -517,6 +525,7 @@ class VizPaneMediator extends React.Component {
     // so we set the values for chart data
     this.props.dispatch(
       actions.storeChartDataRequest({
+        refetchAll: false,
         indSelectedIndex: index,
         refetch: true,
         selectedInd

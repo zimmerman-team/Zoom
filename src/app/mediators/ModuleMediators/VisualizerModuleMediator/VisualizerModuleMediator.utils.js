@@ -741,7 +741,7 @@ export function formatBarData(
 
   let colorInd = 0;
   indicators.forEach((indicator, index) => {
-    if (indicator.data.length > 0) {
+    if (indicator.data && indicator.data.length > 0) {
       const existInd = barIndKeys.indexOf(indicator.data[0].indicatorName);
       let indName = indicator.data[0].indicatorName;
 
@@ -791,9 +791,6 @@ export function formatBarData(
             [`${itemId}Color`]: colors[colorInd],
             [`${itemId}Format`]: indItem.valueFormatType
           });
-        } else if (barChartData[existItemInd][itemId] !== undefined) {
-          barChartData[existItemInd].allValSum += Math.round(indItem.value);
-          barChartData[existItemInd][itemId] += Math.round(indItem.value);
         } else {
           barChartData[existItemInd].allValSum += Math.round(indItem.value);
           barChartData[existItemInd][itemId] = Math.round(indItem.value);
@@ -1141,6 +1138,9 @@ export function getFields(type, layer) {
   switch (type) {
     case chartTypes.lineChart:
       return ['indicatorName', 'valueFormatType', 'filterName', 'date'];
+    case chartTypes.barChart:
+      fields.splice(fields.indexOf('comment'), 1);
+      return fields;
     case chartTypes.geoMap:
       if (layer) {
         fields.push('geolocationPolygons');
@@ -1166,7 +1166,7 @@ export function getFields(type, layer) {
 
 // a little function to get the groupBy array
 // depending on the type of chart and chart options
-export function getGroupBy(type, subIndAggr, layer) {
+export function getGroupBy(type, subIndAggr, layer, aggr) {
   const defgroupBy = [
     'indicatorName',
     'geolocationTag',
@@ -1179,12 +1179,23 @@ export function getGroupBy(type, subIndAggr, layer) {
     'filterName'
   ];
 
-  // NOTE: GROUPING BY VALUE FORMAT SHOULD NOT BE DONE HERE
-  // BECAUSE SOME VALUE FORMATS ARE OF DIFFERENT TYPE
-  // THUS WE WONT GET AGGREGATED VALUES FOR THESE DIFFERENT TYPE FORMATS
   switch (type) {
     case chartTypes.lineChart: {
       const groupBy = ['indicatorName', 'valueFormatType', 'date'];
+      if (!subIndAggr) {
+        groupBy.push('filterName');
+      }
+      return groupBy;
+    }
+    case chartTypes.barChart: {
+      let groupBy = ['indicatorName', 'valueFormatType'];
+
+      if (aggr === aggrOptions[0].value) {
+        groupBy = groupBy.concat(['geolocationTag', 'geolocationIso2']);
+      } else if (aggr === aggrOptions[1].value) {
+        groupBy.push('date');
+      }
+
       if (!subIndAggr) {
         groupBy.push('filterName');
       }

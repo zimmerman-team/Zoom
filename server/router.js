@@ -68,9 +68,7 @@ const checkJwt = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 200,
-    jwksUri: `https://${
-      process.env.REACT_APP_AUTH_CUSTOM_DOMAIN
-    }/.well-known/jwks.json`
+    jwksUri: `https://${process.env.REACT_APP_AUTH_CUSTOM_DOMAIN}/.well-known/jwks.json`
   }),
 
   // Validate the audience and the issuer.

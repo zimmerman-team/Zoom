@@ -36,9 +36,13 @@ export const FragmentBase = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  align-items: center;
   /* todo: solve this in a cleaner manner */
   padding-top: ${props => props.paddingTop || 'initial'};
-  justify-content: ${props => props.position || 'center'};
   background-color: white;
+  overflow-y: auto;
+`;
+
+export const ChartContainer = styled.div`
+  margin: auto;
+  padding-top: 40px;
 `;

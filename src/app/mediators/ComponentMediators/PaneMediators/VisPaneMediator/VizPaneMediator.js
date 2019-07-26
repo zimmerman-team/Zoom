@@ -334,7 +334,7 @@ class VizPaneMediator extends React.Component {
   }
 
   refetch(
-    selectedSources = this.state.selectedSources,
+    selectedSources = this.props.paneData.selectedSources,
     year_Range = this.state.yearRange
   ) {
     let fileSource_Name_In = '';
@@ -808,7 +808,7 @@ class VizPaneMediator extends React.Component {
         saveGraphOption={this.saveGraphOption}
         allFileSources={this.state.allFileSources}
         selectDataSource={this.selectDataSource}
-        selectedSources={this.state.selectedSources}
+        selectedSources={this.props.paneData.selectedSources}
         indNames={this.state.allIndNames}
         countries={this.state.allCountries}
         regions={this.state.allRegions}

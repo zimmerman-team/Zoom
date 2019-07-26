@@ -926,6 +926,7 @@ class VisualizerModuleMediator extends Component {
       indKeys,
       descIntro,
       specOptions,
+      selectedRegionCodes,
       created,
       yearRange
     } = this.props.chartResults.chart;
@@ -973,6 +974,7 @@ class VisualizerModuleMediator extends Component {
         authorName: author ? author.username : 'User Not Found',
         createdDate: formatDate(created),
         selectedRegionVal: removeIds(selectedRegionVal),
+        selectedRegionCodes,
         chartKeys:
           chartKeys ||
           getChartKeys(
@@ -1036,6 +1038,8 @@ class VisualizerModuleMediator extends Component {
   }
 
   render() {
+    // console.log('this.props.chartResults', this.props.chartResults);
+
     return (
       <div style={{ height: '100%' }}>
         <VisualizerModule

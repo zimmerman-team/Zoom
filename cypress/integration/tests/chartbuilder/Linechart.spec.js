@@ -8,6 +8,7 @@ describe('Chartbuilder line chart fragment e2e', function() {
   it('Should contain /linechart/ in the url', function() {
     cy.log('**Signs in and and navigates to linechart**');
     cy.signIn();
+    cy.wait(2000);
     cy.navigateToCreateLinechart();
 
     cy.log('**URL is correct**');

@@ -73,7 +73,7 @@ describe('Chartbuilder country focus fragment e2e', function() {
     cy.get('[class*=ZoomSelectstyles__DropDownContainer] > li').click({
       force: true
     });
-    cy.wait(8000);
+    cy.wait(10000);
     cy.get('[data-cy="legendLayer-label"]').should(
       'contain',
       'number of new hiv infections'

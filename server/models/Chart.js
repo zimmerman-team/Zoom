@@ -62,6 +62,7 @@ const ChartSchema = new Schema(
     selectedYears: [String],
     selectedCountryVal: [String],
     selectedRegionVal: [[]],
+    selectedRegionCodes: [],
     specOptions: { type: Map, default: {} }
   },
   {

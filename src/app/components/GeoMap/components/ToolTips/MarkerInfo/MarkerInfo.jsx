@@ -1,9 +1,8 @@
 import React from 'react';
 
 /* utils */
-import { truncateText } from 'components/GeoMap/components/ToolTips/ToolTip.util';
 import { getMeasure } from 'components/GeoMap/components/Markers/CircleMarker/CircleMarker';
-import { formatNumber } from 'utils/genericUtils';
+import { formatNumber, truncateText } from 'utils/genericUtils';
 
 /* styles */
 import {

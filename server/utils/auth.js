@@ -63,6 +63,45 @@ module.exports = {
           return 'success';
         })
         .catch(error => {
+          console.log('error', error);
+
+          return 'failure';
+        });
+    });
+  },
+  // getUserProperRoles: () => {
+  //   module.exports.getAccessToken('auth_ext').then(token => {
+  //     axios
+  //       .get(`${process.env.REACT_APP_AE_API_URL}/users/`, new Array(roleId), {
+  //         headers: {
+  //           Authorization: token
+  //         }
+  //       })
+  //       .then(response => {
+  //         return 'success';
+  //       })
+  //       .catch(error => {
+  //         console.log('error', error);
+  //
+  //         return 'failure';
+  //       });
+  //   });
+  // },
+  removeRoleFromUser: (userId, roleId) => {
+    module.exports.getAccessToken('auth_ext', true).then(token => {
+      axios
+        .delete(`${process.env.REACT_APP_AE_API_URL}/users/${userId}/roles`, {
+          headers: {
+            Authorization: token
+          },
+          data: new Array(roleId)
+        })
+        .then(response => {
+          return 'success';
+        })
+        .catch(error => {
+          console.log('error', error.response.data);
+
           return 'failure';
         });
     });
@@ -78,9 +117,7 @@ module.exports = {
         }/api/redirectToHome`;
         axios
           .post(
-            `${
-              process.env.REACT_APP_AUTH_DOMAIN
-            }/api/v2/tickets/password-change`,
+            `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/tickets/password-change`,
             {
               user_id: userId,
               result_url: redirectUrl

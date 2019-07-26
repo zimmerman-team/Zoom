@@ -2,6 +2,7 @@
 /* eslint-disable no-plusplus */
 const axios = require('axios');
 const authUtils = require('../utils/auth');
+const userUtils = require('../utils/user');
 const general = require('./generalResponse');
 const User = require('../models/User');
 const Dataset = require('../models/Dataset');
@@ -25,9 +26,7 @@ const AuthUserController = {
           axios
             .all([
               axios.get(
-                `${
-                  process.env.REACT_APP_AUTH_DOMAIN
-                }/api/v2/users?include_totals=true&q=identities.connection:"Username-Password-Authentication"`,
+                `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/users?include_totals=true&q=identities.connection:"Username-Password-Authentication"`,
                 {
                   headers: {
                     Authorization: token1
@@ -87,13 +86,14 @@ const AuthUserController = {
                 });
                 result = [currentUserAuth0];
               }
-              return res.json(result);
+
+              userUtils.updateUsersResults(result).then(() => {
+                return res.json(result);
+              });
             })
             .catch(error => {
               console.log(
-                `${error.response.data.statusCode}: ${
-                  error.response.data.message
-                }`
+                `${error.response.data.statusCode}: ${error.response.data.message}`
               );
               return res
                 .status(error.response.data.statusCode)
@@ -225,9 +225,7 @@ const AuthUserController = {
           })
           .catch(error => {
             console.log(
-              `${error.response.data.statusCode}: ${
-                error.response.data.message
-              }`
+              `${error.response.data.statusCode}: ${error.response.data.message}`
             );
             return res
               .status(error.response.data.statusCode)
@@ -305,9 +303,7 @@ const AuthUserController = {
             })
             .catch(error => {
               console.log(
-                `${error.response.data.statusCode}: ${
-                  error.response.data.message
-                }`
+                `${error.response.data.statusCode}: ${error.response.data.message}`
               );
               return res
                 .status(error.response.data.statusCode)
@@ -410,7 +406,16 @@ const AuthUserController = {
   },
 
   editUser: (req, res) => {
-    const { adminId, userId, email, name, surname } = req.body;
+    const {
+      adminId,
+      userId,
+      email,
+      name,
+      surname,
+      roleId,
+      roleLabel,
+      prevRoleId
+    } = req.body;
     authUtils.getAccessToken('management').then(token => {
       axios
         .patch(
@@ -431,8 +436,9 @@ const AuthUserController = {
         )
         .then(response => {
           User.findOne({ authId: adminId }, (adminErr, adminUser) => {
-            if (adminErr) general.handleError(res, adminErr);
-            else if (!adminUser) {
+            if (adminErr) {
+              general.handleError(res, adminErr);
+            } else if (!adminUser) {
               general.handleError(res, 'Admin user not found', 404);
             } else if (
               adminUser.role === roles.admin ||
@@ -452,7 +458,25 @@ const AuthUserController = {
                     if (userFound.lastName !== surname && surname) {
                       userFound.lastName = surname;
                     }
-                    userFound.save(error => {});
+
+                    if (userFound.role !== roleLabel && roleLabel) {
+                      userFound.role = roleLabel;
+                      // so we assign a new role to the user
+                      authUtils.assignRoleToUser(userFound.authId, roleId);
+                      // and then delete the previous role
+                      // cause auth0 don't have an edit option...
+                      authUtils.removeRoleFromUser(
+                        userFound.authId,
+                        prevRoleId
+                      );
+                    }
+
+                    userFound.save(error => {
+                      if (error) {
+                        console.log('error', error);
+                      }
+                    });
+
                     return res.json('success');
                   }
                   return res.json('success');

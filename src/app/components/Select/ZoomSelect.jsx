@@ -52,7 +52,7 @@ const propTypes = {
 const defaultProps = {
   border: false,
   categorise: false,
-  defaultAll: true,
+  defaultAll: false,
   placeHolder: 'Has no indicators',
   placeHolderText: 'Has no indicators',
   placeHolderNumber: undefined,

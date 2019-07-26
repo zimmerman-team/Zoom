@@ -205,7 +205,7 @@ describe('Datamapper e2e tests', function() {
     cy.signIn();
     cy.waitPageLoader2();
     cy.waitPageLoader();
-    cy.wait(5000);
+    cy.wait(8000);
     cy.get('[data-cy="appbar-right-button"]').click();
     cy.get('[data-cy="nav-pane-item-1"]').click();
     cy.get('[class*=Headings__BaseHeading]').should(

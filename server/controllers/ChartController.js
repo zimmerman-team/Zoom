@@ -333,6 +333,7 @@ const ChartController = {
       teams,
       specOptions,
       selectedCountryVal,
+      selectedRegionCodes,
       selectedRegionVal
     } = req.body;
 
@@ -367,6 +368,7 @@ const ChartController = {
                   selectedYears,
                   selectedCountryVal,
                   selectedRegionVal,
+                  selectedRegionCodes,
                   specOptions
                 });
 
@@ -394,9 +396,12 @@ const ChartController = {
                         //set a reference to the new file name
                         const newFileName = `${chartz.id}geo_json.json`;
 
-                        const pathToOldFile = data[layerIndex].url;
+                        const pathToOldFile = data[layerIndex].url.replace(
+                          'api/',
+                          ''
+                        );
 
-                        const pathToNewFile = '/static/savedGeoJsons/'.concat(
+                        const pathToNewFile = 'static/savedGeoJsons/'.concat(
                           newFileName
                         );
 
@@ -432,7 +437,7 @@ const ChartController = {
                           });
                         }
 
-                        data[layerIndex].url = pathToNewFile;
+                        data[layerIndex].url = '/api/'.concat(pathToNewFile);
                       }
                     }
 
@@ -483,9 +488,12 @@ const ChartController = {
                     //set a reference to the new file name
                     const newFileName = `${chart.id}geo_json.json`;
 
-                    const pathToOldFile = data[layerIndex].url;
+                    const pathToOldFile = data[layerIndex].url.replace(
+                      'api/',
+                      ''
+                    );
 
-                    const pathToNewFile = '/static/savedGeoJsons/'.concat(
+                    const pathToNewFile = 'static/savedGeoJsons/'.concat(
                       newFileName
                     );
 
@@ -501,7 +509,7 @@ const ChartController = {
                       }
                     });
 
-                    data[layerIndex].url = pathToNewFile;
+                    data[layerIndex].url = '/api/'.concat(pathToNewFile);
                   }
                 }
 
@@ -536,6 +544,7 @@ const ChartController = {
                     chart.selectedYears = selectedYears;
                     chart.selectedCountryVal = selectedCountryVal;
                     chart.selectedRegionVal = selectedRegionVal;
+                    chart.selectedRegionCodes = selectedRegionCodes;
                     chart.specOptions = specOptions;
 
                     chart.save(err2 => {
@@ -609,6 +618,7 @@ const ChartController = {
                   selectedYears: chart.selectedYears,
                   selectedCountryVal: chart.selectedCountryVal,
                   selectedRegionVal: chart.selectedRegionVal,
+                  selectedRegionCodes: chart.selectedRegionCodes,
                   specOptions: chart.specOptions
                 });
 
@@ -645,7 +655,10 @@ const ChartController = {
                             //set a reference to the new file name
                             const newFileName = `${chartz.id}geo_json.json`;
 
-                            const pathToOldFile = data[layerIndex].url;
+                            const pathToOldFile = data[layerIndex].url.replace(
+                              'api/',
+                              ''
+                            );
 
                             const pathToNewFile = '/static/savedGeoJsons/'.concat(
                               newFileName
@@ -666,11 +679,11 @@ const ChartController = {
                               fs.createWriteStream(fullNewPath)
                             );
 
-                            data[layerIndex].url = pathToNewFile;
+                            data[layerIndex].url = '/api/'.concat(
+                              pathToNewFile
+                            );
 
-                            const fileUrl = `${dataPath}chartData${
-                              chartz.id
-                            }.txt`;
+                            const fileUrl = `${dataPath}chartData${chartz.id}.txt`;
                             fs.writeFile(
                               fileUrl,
                               JSON.stringify(data),
@@ -700,9 +713,7 @@ const ChartController = {
                             // layers, hence did NOT contain a geojson file
                             // we don't need to edit the data itself
                             // so we just copy the dataFileUrl
-                            const duplicateFileUrl = `${dataPath}chartData${
-                              chartz.id
-                            }.txt`;
+                            const duplicateFileUrl = `${dataPath}chartData${chartz.id}.txt`;
                             fs.createReadStream(chart.dataFileUrl).pipe(
                               fs.createWriteStream(duplicateFileUrl)
                             );
@@ -730,9 +741,7 @@ const ChartController = {
                     // that charts data file give it this duplicates id
                     // and update the duplicate with its own new
                     // data files url
-                    const duplicateFileUrl = `${dataPath}chartData${
-                      chartz.id
-                    }.txt`;
+                    const duplicateFileUrl = `${dataPath}chartData${chartz.id}.txt`;
                     fs.createReadStream(chart.dataFileUrl).pipe(
                       fs.createWriteStream(duplicateFileUrl)
                     );
@@ -839,7 +848,7 @@ const ChartController = {
                     if (layerIndex !== -1) {
                       const fullGeoJsonPath = path.join(
                         serverPath,
-                        data[layerIndex].url
+                        data[layerIndex].url.replace('api/', '')
                       );
                       // we check if the geojson file actually exists and then delete it
                       if (fs.existsSync(fullGeoJsonPath)) {

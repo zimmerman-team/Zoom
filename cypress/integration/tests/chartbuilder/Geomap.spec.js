@@ -8,6 +8,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
   it('Should map new hiv infections data on the geo map', function() {
     cy.log('**IT NAVIGATES AND ASSERTS ON URL**');
     cy.signIn();
+    cy.wait(2000);
     cy.navigateToCreateGeo();
     cy.url().should('include', '/visualizer/geomap');
 

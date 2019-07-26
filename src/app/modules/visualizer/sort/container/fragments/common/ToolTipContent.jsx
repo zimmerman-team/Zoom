@@ -8,6 +8,9 @@ import {
   ToolTipValue
 } from 'components/charts/TooltipContent.styles';
 
+/* utils */
+import { truncateText } from 'utils/genericUtils';
+
 const TooltipContent = ({
   aggrType,
   xKey,
@@ -36,7 +39,7 @@ const TooltipContent = ({
       <Row key={index}>
         <Rect theme={{ color }} />
         <ToolTipText>
-          {valueLabel}:{' '}
+          {truncateText(valueLabel)} :{' '}
           <ToolTipValue>
             {value}
             {nrFormat}

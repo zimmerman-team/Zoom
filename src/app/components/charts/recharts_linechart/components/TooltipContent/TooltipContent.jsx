@@ -9,6 +9,9 @@ import {
   ToolTipValue
 } from 'components/charts/TooltipContent.styles';
 
+/* utils */
+import { truncateText } from 'utils/genericUtils';
+
 const TooltipContent = ({ active, payload, label }) => {
   if (active && payload) {
     return (
@@ -31,7 +34,7 @@ const TooltipContent = ({ active, payload, label }) => {
             <Row key={p.dataKey}>
               <Rect theme={{ color: p.stroke }} />
               <ToolTipText>
-                {p.name}:{' '}
+                {truncateText(p.name)} :{' '}
                 <ToolTipValue>
                   {p.value.toLocaleString(undefined, {
                     minimumFractionDigits: 0,

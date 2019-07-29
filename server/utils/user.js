@@ -15,9 +15,10 @@ module.exports = {
       usrResults.forEach((user, index) => {
         // so here we'll try to find currently loaded users from auth0
         // in our zoomBackend and if we dont find them, we add them === ezi
+
         User.findOne({ authId: user.user_id }, (userError, userFound) => {
           // so here if the user is NOT found we create them
-          if (!userFound && user.app_metadata) {
+          if (!userFound && user.app_metadata && user.user_metadata) {
             User.create({
               username: user.nickname,
               email: user.email,

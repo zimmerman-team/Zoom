@@ -767,63 +767,78 @@ class VisualizerModuleMediator extends Component {
           indicatorDataQuery,
           refetchVars
         ).then(data => {
+          // so we do this CORS work
           if (isLayer && data.indicators && data.indicators.length > 0) {
             const url = process.env.REACT_APP_BACKEND_HOST.concat('/').concat(
               data.indicators[0].geoJsonUrl
             );
 
-            // and because of mapbox CORS issues, and our DUCT backend
-            // in some cases NOT being on the same domain as the frontend
-            // we apply this workaround to download the geojson file to our
-            // zoomBackend and serve it from there
+            if (
+              process.env.REACT_APP_BACKEND_HOST.indexOf('localhost') !== -1
+            ) {
+              // and BECAUSE there's no CORS solution when running backend locally
+              // and trying to serve these geojsons we apply this geojson download functionality
 
-            // We also need to encrypt them values for our middleware to work
-            const encValues = cryptoJs.AES.encrypt(
-              JSON.stringify({
-                urlGeoJson: url,
-                prevGeoJson: this.props.chartData.currGeoJsonFile
-              }),
-              process.env.REACT_APP_ENCRYPTION_SECRET
-            ).toString();
+              // We also need to encrypt them values for our middleware to work
+              const encValues = cryptoJs.AES.encrypt(
+                JSON.stringify({
+                  urlGeoJson: url,
+                  prevGeoJson: this.props.chartData.currGeoJsonFile
+                }),
+                process.env.REACT_APP_ENCRYPTION_SECRET
+              ).toString();
 
-            axios
-              .get(`/api/loadGeoJson`, {
-                params: {
-                  payload: encValues
-                }
-              })
-              .then(response => {
-                const currGeoJsonFile = response.data.substring(
-                  response.data.lastIndexOf('/') + 1
-                );
-
-                this.props.dispatch(
-                  actions.storeChartDataRequest({ currGeoJsonFile })
-                );
-
-                const indAggregation = [
-                  {
-                    ...data.indicators[0],
-                    geoJsonUrl: response.data
+              axios
+                .get(`/api/loadGeoJson`, {
+                  params: {
+                    payload: encValues
                   }
-                ];
+                })
+                .then(response => {
+                  const currGeoJsonFile = response.data.substring(
+                    response.data.lastIndexOf('/') + 1
+                  );
 
-                indicatorData.push({
-                  index: currIndex,
-                  indAggregation,
-                  subIndicators: data.subIndicators
+                  this.props.dispatch(
+                    actions.storeChartDataRequest({ currGeoJsonFile })
+                  );
+
+                  const indAggregation = [
+                    {
+                      ...data.indicators[0],
+                      geoJsonUrl: response.data
+                    }
+                  ];
+
+                  indicatorData.push({
+                    index: currIndex,
+                    indAggregation,
+                    subIndicators: data.subIndicators
+                  });
+
+                  this.refetchDone(
+                    indicatorData,
+                    selectedInds,
+                    refetchOne,
+                    index
+                  );
+                })
+                .catch(error => {
+                  console.log('Error downloading file: ', error);
                 });
+            } else {
+              const fileName = url.substring(url.lastIndexOf('/') + 1);
 
-                this.refetchDone(
-                  indicatorData,
-                  selectedInds,
-                  refetchOne,
-                  index
-                );
-              })
-              .catch(error => {
-                console.log('Error downloading file: ', error);
+              indicatorData.push({
+                index: currIndex,
+                indAggregation: data.indicators,
+                subIndicators: data.subIndicators
               });
+
+              this.props.dispatch(
+                actions.storeChartDataRequest({ currGeoJsonFile: fileName })
+              );
+            }
           } else {
             indicatorData.push({
               index: currIndex,
@@ -1013,33 +1028,34 @@ class VisualizerModuleMediator extends Component {
       }
     );
 
-    // and then we delete the file from zoomBackend
-    // We also need to encrypt them values for our middleware to work
-    const encValues = cryptoJs.AES.encrypt(
-      JSON.stringify({
-        prevGeoJson: this.props.chartData.currGeoJsonFile
-      }),
-      process.env.REACT_APP_ENCRYPTION_SECRET
-    ).toString();
+    if (process.env.REACT_APP_BACKEND_HOST.indexOf('localhost') !== -1) {
+      // and then if DUCT is run locally
+      // we delete the file from zoomBackend
+      // We also need to encrypt them values for our middleware to work
+      const encValues = cryptoJs.AES.encrypt(
+        JSON.stringify({
+          prevGeoJson: this.props.chartData.currGeoJsonFile
+        }),
+        process.env.REACT_APP_ENCRYPTION_SECRET
+      ).toString();
 
-    axios
-      .get(`/api/loadGeoJson`, {
-        params: {
-          payload: encValues
-        }
-      })
-      .then(() => {
-        this.props.dispatch(
-          // and just in case we set the currGeoJsonFile to null, cause this guy
-          // has already been deleted
-          actions.storeChartDataRequest({ currGeoJsonFile: null })
-        );
-      });
+      axios
+        .get(`/api/loadGeoJson`, {
+          params: {
+            payload: encValues
+          }
+        })
+        .then(() => {
+          this.props.dispatch(
+            // and just in case we set the currGeoJsonFile to null, cause this guy
+            // has already been deleted
+            actions.storeChartDataRequest({ currGeoJsonFile: null })
+          );
+        });
+    }
   }
 
   render() {
-    // console.log('this.props.chartResults', this.props.chartResults);
-
     return (
       <div style={{ height: '100%' }}>
         <VisualizerModule

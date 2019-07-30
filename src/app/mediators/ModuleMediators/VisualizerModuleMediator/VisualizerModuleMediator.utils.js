@@ -315,12 +315,19 @@ export function formatGeoData(
         // get back only one node(well unless you change the queries)
         // and it will contain all of the data we need
         // for the map
+        let url = aggregation.data[0].geoJsonUrl;
+
+        // so if files are served from remote server we add the
+        // remote servers base url
+        if (process.env.REACT_APP_BACKEND_HOST.indexOf('localhost') === -1) {
+          url = process.env.REACT_APP_BACKEND_HOST.concat('/').concat(url);
+        }
 
         if (indSelectedIndex === -1 || foundGeoIndex === -1) {
           geomapData.push({
             geoIndex: index,
             type: 'layer',
-            url: aggregation.data[0].geoJsonUrl,
+            url,
             legendName: ` ${
               selectedInds[0].indName
             } - ${selectedInds[0].subInd.join(', ')}`,
@@ -332,7 +339,7 @@ export function formatGeoData(
           geomapData[foundGeoIndex] = {
             geoIndex: indSelectedIndex,
             type: 'layer',
-            url: aggregation.data[0].geoJsonUrl,
+            url,
             legendName: ` ${
               selectedInds[0].indName
             } - ${selectedInds[0].subInd.join(', ')}`,

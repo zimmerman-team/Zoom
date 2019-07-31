@@ -70,20 +70,20 @@ const DownloadTab = ({ chartTitle }) => {
           <DownloadItem data-cy="dowload-option-PNG">PNG</DownloadItem>
         </ItemContainer>
 
-        <ItemContainer disabled>
-          <ItemIcon />
-          <DownloadItem data-cy="dowload-option-JSON">JSON</DownloadItem>
-        </ItemContainer>
+        {/*<ItemContainer disabled>*/}
+        {/*<ItemIcon />*/}
+        {/*<DownloadItem data-cy="dowload-option-JSON">JSON</DownloadItem>*/}
+        {/*</ItemContainer>*/}
 
-        <ItemContainer disabled>
-          <ItemIcon />
-          <DownloadItem data-cy="dowload-option-CSV">CSV</DownloadItem>
-        </ItemContainer>
+        {/*<ItemContainer disabled>*/}
+        {/*<ItemIcon />*/}
+        {/*<DownloadItem data-cy="dowload-option-CSV">CSV</DownloadItem>*/}
+        {/*</ItemContainer>*/}
 
-        <ItemContainer disabled>
-          <ItemIcon />
-          <DownloadItem data-cy="dowload-option-XML">XML</DownloadItem>
-        </ItemContainer>
+        {/*<ItemContainer disabled>*/}
+        {/*<ItemIcon />*/}
+        {/*<DownloadItem data-cy="dowload-option-XML">XML</DownloadItem>*/}
+        {/*</ItemContainer>*/}
       </ListContainer>
     </BaseTab>
   );

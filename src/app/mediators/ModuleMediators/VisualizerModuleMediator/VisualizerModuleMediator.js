@@ -170,7 +170,6 @@ class VisualizerModuleMediator extends Component {
     this.storeInitialChartOptions = this.storeInitialChartOptions.bind(this);
     this.refetchDone = this.refetchDone.bind(this);
     this.deleteGeoFiles = this.deleteGeoFiles.bind(this);
-    this.handleWindowClose = this.handleWindowClose.bind(this);
   }
 
   componentDidMount() {
@@ -179,8 +178,6 @@ class VisualizerModuleMediator extends Component {
     if (!this.props.home) {
       this.props.dispatch(actions.dataPaneToggleRequest(paneTypes.visualizer));
     }
-
-    window.addEventListener('beforeunload', this.handleWindowClose);
 
     // we also want to reset the previously created/updated chart
     this.props.dispatch(nodeActions.createUpdateChartInitial());
@@ -326,17 +323,6 @@ class VisualizerModuleMediator extends Component {
       // and if it did use some geoJson file
       // we delete the geoJson files from the backend
       this.deleteGeoFiles();
-    }
-
-    window.addEventListener('beforeunload', this.handleWindowClose);
-  }
-
-  handleWindowClose(e) {
-    // Cancel the event
-    e.preventDefault();
-
-    if (this.props.chartData.currGeoJsonFile) {
-      this.deleteGeoFiles(e);
     }
   }
 

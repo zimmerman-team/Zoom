@@ -78,12 +78,6 @@ const checkJwt = jwt({
 
 /* -------------- MIDDLEWARE END ------------------------ */
 
-// so this should only be uncommented and used if you have
-// a clean database, and just need some data init
-// NOTE: the seeded data may not be used for the actual frontend to work
-// unless you adjust it in some proper way
-// router.get('/seedChart', ChartController.seedChart);
-
 /* -------------- CHART CONTROLLER START ------------------------ */
 
 // This is the test endpoint for user authentication with auth0
@@ -101,14 +95,9 @@ router.get('/getOnePublicChart', ChartController.getOnePublic);
 // gets all user charts and team charts
 router.get('/getAllCharts', ChartController.getAll);
 
-// gets all team charts
-router.get('/getTeamFeedCharts', ChartController.getTeamFeedCharts);
-
 router.post('/updateCreateChart', ChartController.updateCreate);
 
 router.post('/duplicateChart', ChartController.duplicateById);
-
-router.post('/updateChart', ChartController.update);
 
 router.post('/deleteChart', ChartController.delete);
 

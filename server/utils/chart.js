@@ -1,14 +1,18 @@
+const Chart = require('../models/Chart');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
 /* utils */
 const findIndex = require('lodash/findIndex');
+const general = require('../controllers/generalResponse');
+const utils = require('../utils/general');
 
 /* consts */
 const serverPath = __dirname.substring(0, __dirname.indexOf('utils') - 1);
 const consts = require('../config/consts');
 const chartTypes = consts.chartTypes;
+const dataPath = serverPath.concat('/data/');
 
 module.exports = {
   writeGeoJson: (chartz, type, data, update = false) => {
@@ -99,6 +103,108 @@ module.exports = {
         }
       } else {
         resolve(null);
+      }
+    });
+  },
+
+  // so this helper function basically gets one chart
+  // according to the passed in query
+  // and it mainly handles all errors that
+  // may occur with getting this chart
+  // and populates the response with the authors data
+  // and also handles some file reading from
+  // the charts data file
+  // it also sends out a response
+  getOneChart: (query, res) => {
+    Chart.findOne(query)
+      .populate('author')
+      .exec((chartError, chart) => {
+        if (chartError) {
+          general.handleError(res, chartError);
+        } else if (!chart) {
+          general.handleError(res, 'chart not found', 404);
+        } else if (chart.dataFileUrl) {
+          fs.readFile(chart.dataFileUrl, 'utf8', (dataErr, data) => {
+            if (dataErr) {
+              general.handleError(res, dataErr);
+            } else {
+              res.send({
+                chart,
+                data: JSON.parse(data)
+              });
+            }
+          });
+        } else {
+          res.send({
+            chart
+          });
+        }
+      });
+  },
+
+  // so this basically gets and returns
+  // many charts,
+  // makes appropriate error responses
+  // and general responses just depending on the query
+  // it also deals with pagination and sorting and etc.
+  getManyCharts: (query, sortBy, pageSize, page, res) => {
+    Chart.countDocuments(query, (countError, count) => {
+      if (countError) {
+        general.handleError(res, countError);
+      } else {
+        const sort = utils.getDashboardSortBy(sortBy);
+        const pSize = parseInt(pageSize, 10);
+        const p = parseInt(page, 10);
+        Chart.find(
+          query,
+          'created last_updated teams type indicatorItems _id name _public'
+        )
+          .limit(pSize)
+          .skip(p * pSize)
+          .collation({ locale: 'en' })
+          .sort(sort)
+          .populate('author', 'username authId firstName lastName')
+          .exec((chartError, charts) => {
+            if (chartError) {
+              general.handleError(res, chartError);
+            } else {
+              res.json({
+                count,
+                charts
+              });
+            }
+          });
+      }
+    });
+  },
+  // a helper function to save charts data files url
+  // to the chart
+  saveDataFileUrl: (chartz, fileUrl, res) => {
+    chartz.dataFileUrl = fileUrl;
+
+    chartz.save(urlSavErr => {
+      if (urlSavErr) {
+        general.handleError(res, urlSavErr);
+      } else {
+        res.json({
+          message: 'chart created',
+          id: chartz._id,
+          name: chartz.name,
+          chartType: chartz.type
+        });
+      }
+    });
+  },
+  // a helper function to write and save a charts
+  // data file url and send a response
+  writeDataFileUrl: (chartz, data, res) => {
+    const fileUrl = `${dataPath}chartData${chartz.id}.txt`;
+    fs.writeFile(fileUrl, JSON.stringify(data), fileError => {
+      if (fileError) {
+        console.log('fileError', fileError);
+        general.handleError(res, fileError);
+      } else {
+        this.saveDataFileUrl(chartz, fileUrl, res);
       }
     });
   }

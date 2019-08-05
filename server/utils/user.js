@@ -1,5 +1,7 @@
 const User = require('../models/User');
 
+const general = require('../controllers/generalResponse');
+
 module.exports = {
   updateUsersResults: usrResults => {
     return new Promise(resolve => {
@@ -41,6 +43,38 @@ module.exports = {
           }
         });
       });
+    });
+  },
+  // basically this helper function returns a user
+  // and if an error occurs or a user cannot be found
+  // it makes an error response and doesn't return nothing
+  // this also is used to check if the user is an authorized
+  // user according to the passed in roles array
+  // IF a roles variable is passed in
+  findOneUser: (authId, res, roles, checkWId) => {
+    return new Promise(resolve => {
+      User.findOne({ authId })
+        .then(acc => {
+          if (!acc) {
+            resolve();
+            general.handleError(res, 'User not found', 404);
+          } else if (roles) {
+            if (
+              roles.indexOf(acc.role) !== -1 ||
+              (checkWId && checkWId[0] === checkWId[1])
+            ) {
+              resolve(acc);
+            } else {
+              general.handleError(res, 'Unauthorized', 401);
+            }
+          } else {
+            resolve(acc);
+          }
+        })
+        .catch(error => {
+          resolve();
+          general.handleError(res, error);
+        });
     });
   }
 };

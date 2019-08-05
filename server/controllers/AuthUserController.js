@@ -247,73 +247,69 @@ const AuthUserController = {
       roleName
     } = req.body;
 
-    User.findOne({ authId: adminId }, (admError, admin) => {
-      if (admError) {
-        general.handleError(res, admError);
-      } else if (!admin) {
-        general.handleError(res, 'User not found', 404);
-      } else if (admin.role === roles.admin || roles.superAdm) {
-        authUtils.getAccessToken('management').then(token => {
-          axios
-            .post(
-              `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/users`,
-              {
-                email,
-                blocked: false,
-                email_verified: false,
-                verify_email: true,
-                password: 'wPsRZT?&&H%p2sj3',
-                given_name: name,
-                family_name: surname,
-                name: `${name} ${surname}`,
-                nickname: name,
-                connection: 'Username-Password-Authentication',
-                user_metadata: {
-                  firstName: name,
-                  lastName: surname
+    userUtils
+      .findOneUser(adminId, res, [roles.admin, roles.superAdm])
+      .then(admin => {
+        if (admin) {
+          authUtils.getAccessToken('management').then(token => {
+            axios
+              .post(
+                `${process.env.REACT_APP_AUTH_DOMAIN}/api/v2/users`,
+                {
+                  email,
+                  blocked: false,
+                  email_verified: false,
+                  verify_email: true,
+                  password: 'wPsRZT?&&H%p2sj3',
+                  given_name: name,
+                  family_name: surname,
+                  name: `${name} ${surname}`,
+                  nickname: name,
+                  connection: 'Username-Password-Authentication',
+                  user_metadata: {
+                    firstName: name,
+                    lastName: surname
+                  },
+                  app_metadata: {
+                    authorization: {
+                      groups: [groupName],
+                      roles: [roleName]
+                    }
+                  }
                 },
-                app_metadata: {
-                  authorization: {
-                    groups: [groupName],
-                    roles: [roleName]
+                {
+                  headers: {
+                    Authorization: token
                   }
                 }
-              },
-              {
-                headers: {
-                  Authorization: token
+              )
+              .then(response => {
+                if (response.status === 201) {
+                  authUtils.sendWelcomeEmail(
+                    response.data.user_id,
+                    name,
+                    surname,
+                    email
+                  );
+                  authUtils.addUserToGroup(response.data.user_id, groupId);
+                  authUtils.assignRoleToUser(response.data.user_id, roleId);
+                  return res.json('success');
                 }
-              }
-            )
-            .then(response => {
-              if (response.status === 201) {
-                authUtils.sendWelcomeEmail(
-                  response.data.user_id,
-                  name,
-                  surname,
-                  email
+                return res
+                  .status(response.data.statusCode)
+                  .send(response.data.message);
+              })
+              .catch(error => {
+                console.log(
+                  `${error.response.data.statusCode}: ${error.response.data.message}`
                 );
-                authUtils.addUserToGroup(response.data.user_id, groupId);
-                authUtils.assignRoleToUser(response.data.user_id, roleId);
-                return res.json('success');
-              }
-              return res
-                .status(response.data.statusCode)
-                .send(response.data.message);
-            })
-            .catch(error => {
-              console.log(
-                `${error.response.data.statusCode}: ${error.response.data.message}`
-              );
-              return res
-                .status(error.response.data.statusCode)
-                .send(error.response.data.message);
-            });
-        });
-      } else {
-        general.handleError(res, 'Unauthorized', 401);
-      }
-    });
+                return res
+                  .status(error.response.data.statusCode)
+                  .send(error.response.data.message);
+              });
+          });
+        }
+      });
   },
 
   deleteUser: (req, res) => {
@@ -327,68 +323,63 @@ const AuthUserController = {
         })
         .then(response => {
           if (response.status === 204) {
-            return User.findOne({ authId: userId }, (adminErr, adminUser) => {
-              if (adminErr) general.handleError(res, adminErr);
-              else if (!adminUser) {
-                general.handleError(res, 'Admin user not found', 404);
-              } else if (
-                adminUser.role === roles.admin ||
-                adminUser.role === roles.superAdm ||
-                userId === delId
-              ) {
-                // okay so here we find the user to be deleted
-                User.findOne({ authId: delId }, (delUsErr, delUser) => {
-                  if (delUsErr) {
-                    general.handleError(res, delUsErr);
-                  } else {
-                    // and then we find the datasets that should be deleted
-                    // so that we could pass their ids to the frontend
-                    // so that frontend could delete it from DUCT
-                    // cause i aint setting up graphql with zoomBackend
-                    // #Morty
-                    Dataset.find(
-                      {
-                        author: delUser
-                      },
-                      (findSetErr, setData) => {
-                        if (findSetErr) {
-                          console.log('findSetErr', findSetErr);
-                          general.handleError(res, findSetErr);
-                        } else {
-                          // and then we delete the users mapped out datasets
-                          // and then we delete the user themselves
-                          Dataset.deleteMany(
-                            {
-                              author: delUser
-                            },
-                            setDelErr => {
-                              if (setDelErr) {
-                                console.log('setDelErr', setDelErr);
-                                general.handleError(res, setDelErr);
-                              } else {
-                                // and then we delete the user themselves
-                                User.deleteOne({ authId: delId }, error => {
-                                  if (error) {
-                                    general.handleError(res, error);
-                                  } else {
-                                    res.json({
-                                      message: 'user deleted',
-                                      setData
-                                    });
-                                  }
-                                });
+            userUtils
+              .findOneUser(
+                userId,
+                res,
+                [roles.admin, roles.superAdm],
+                [userId, delId]
+              )
+              .then(adminUser => {
+                if (adminUser) {
+                  userUtils.findOneUser(delId, res).then(delUser => {
+                    if (delUser) {
+                      // and then we find the datasets that should be deleted
+                      // so that we could pass their ids to the frontend
+                      // so that frontend could delete it from DUCT
+                      // cause i aint setting up graphql with zoomBackend
+                      // #Morty
+                      Dataset.find(
+                        {
+                          author: delUser
+                        },
+                        (findSetErr, setData) => {
+                          if (findSetErr) {
+                            console.log('findSetErr', findSetErr);
+                            general.handleError(res, findSetErr);
+                          } else {
+                            // and then we delete the users mapped out datasets
+                            // and then we delete the user themselves
+                            Dataset.deleteMany(
+                              {
+                                author: delUser
+                              },
+                              setDelErr => {
+                                if (setDelErr) {
+                                  console.log('setDelErr', setDelErr);
+                                  general.handleError(res, setDelErr);
+                                } else {
+                                  // and then we delete the user themselves
+                                  User.deleteOne({ authId: delId }, error => {
+                                    if (error) {
+                                      general.handleError(res, error);
+                                    } else {
+                                      res.json({
+                                        message: 'user deleted',
+                                        setData
+                                      });
+                                    }
+                                  });
+                                }
                               }
-                            }
-                          );
+                            );
+                          }
                         }
-                      }
-                    );
-                  }
-                });
-              } else {
-                general.handleError(res, 'Unauthorized', 401);
-              }
-            });
+                      );
+                    }
+                  });
+                }
+              });
           }
           return res
             .status(response.data.statusCode)
@@ -435,60 +426,52 @@ const AuthUserController = {
           }
         )
         .then(response => {
-          User.findOne({ authId: adminId }, (adminErr, adminUser) => {
-            if (adminErr) {
-              general.handleError(res, adminErr);
-            } else if (!adminUser) {
-              general.handleError(res, 'Admin user not found', 404);
-            } else if (
-              adminUser.role === roles.admin ||
-              adminUser.role === roles.superAdm ||
-              userId === adminId
-            ) {
-              if (response.status === 200 || response.status === 201) {
-                return User.findOne({ authId: userId }, (err, userFound) => {
-                  if (userFound) {
-                    if (err) general.handleError(res, err);
-                    if (userFound.email !== email && email) {
-                      userFound.email = email;
-                    }
-                    if (userFound.firstName !== name && name) {
-                      userFound.firstName = name;
-                    }
-                    if (userFound.lastName !== surname && surname) {
-                      userFound.lastName = surname;
-                    }
-
-                    if (userFound.role !== roleLabel && roleLabel) {
-                      userFound.role = roleLabel;
-                      // so we assign a new role to the user
-                      authUtils.assignRoleToUser(userFound.authId, roleId);
-                      // and then delete the previous role
-                      // cause auth0 don't have an edit option...
-                      authUtils.removeRoleFromUser(
-                        userFound.authId,
-                        prevRoleId
-                      );
-                    }
-
-                    userFound.save(error => {
-                      if (error) {
-                        console.log('error', error);
+          userUtils
+            .findOneUser(
+              adminId,
+              res,
+              [roles.admin, roles.superAdm],
+              [userId, adminId]
+            )
+            .then(adminUser => {
+              if (adminUser) {
+                if (response.status === 200 || response.status === 201) {
+                  userUtils.findOneUser(userId, res).then(userFound => {
+                    if (userFound) {
+                      if (userFound.email !== email && email) {
+                        userFound.email = email;
                       }
-                    });
+                      if (userFound.firstName !== name && name) {
+                        userFound.firstName = name;
+                      }
+                      if (userFound.lastName !== surname && surname) {
+                        userFound.lastName = surname;
+                      }
 
-                    return res.json('success');
-                  }
-                  return res.json('success');
-                });
+                      if (userFound.role !== roleLabel && roleLabel) {
+                        userFound.role = roleLabel;
+                        // so we assign a new role to the user
+                        authUtils.assignRoleToUser(userFound.authId, roleId);
+                        // and then delete the previous role
+                        // cause auth0 don't have an edit option...
+                        authUtils.removeRoleFromUser(
+                          userFound.authId,
+                          prevRoleId
+                        );
+                      }
+
+                      userFound.save(error => {
+                        if (error) {
+                          console.log('error', error);
+                        }
+                      });
+
+                      return res.json('success');
+                    }
+                  });
+                }
               }
-              return res
-                .status(response.data.statusCode)
-                .send(response.data.message);
-            } else {
-              general.handleError(res, 'Unauthorized', 401);
-            }
-          });
+            });
         })
         .catch(error => {
           console.log(

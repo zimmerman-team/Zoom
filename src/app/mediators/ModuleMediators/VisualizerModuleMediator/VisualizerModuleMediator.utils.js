@@ -130,15 +130,22 @@ export function formatCountryCenterData(
 // according to the single selected countries
 // and according to the countries of selected regions
 // no duplicate countries should be in this param
-export function formatCountryParam(countryCodes, regionCountryCodes) {
+export function formatCountryParam(
+  countryCodes,
+  regionCountryCodes,
+  regionCodes
+) {
   let jointCountries = [];
   jointCountries = jointCountries.concat(countryCodes);
+  // and we also want to add the codes of the selected
+  // regions themselves
+  jointCountries = jointCountries.concat(regionCodes);
 
   regionCountryCodes.forEach(region => {
     if (region !== 'select all') {
       region.forEach(countryCode => {
-        if (jointCountries.indexOf(countryCode.iso2) === -1) {
-          jointCountries.push(countryCode.iso2);
+        if (jointCountries.indexOf(countryCode.iso3) === -1) {
+          jointCountries.push(countryCode.iso3);
         }
       });
     }

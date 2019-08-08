@@ -40,7 +40,7 @@ const propTypes = {
         PropTypes.shape({
           node: PropTypes.shape({
             name: PropTypes.string,
-            iso2: PropTypes.string
+            iso3: PropTypes.string
           })
         })
       )
@@ -147,7 +147,7 @@ class VizPaneMediator extends React.Component {
     } else {
       allCountries = this.props.dropDownData.allCountries.edges.map(
         indicator => {
-          return { label: indicator.node.name, value: indicator.node.iso2 };
+          return { label: indicator.node.name, value: indicator.node.iso3 };
         }
       );
 
@@ -164,7 +164,7 @@ class VizPaneMediator extends React.Component {
       allRegions = sortBy(allRegions, ['label']);
 
       // and we also push in a variable for undefined
-      allRegions.push({ label: 'undefined', value: [{ iso2: 'undefined' }] });
+      allRegions.push({ label: 'undefined', value: [{ iso3: 'undefined' }] });
     }
 
     let allFileSources = this.props.dropDownData.allFileSources.edges.map(
@@ -207,7 +207,7 @@ class VizPaneMediator extends React.Component {
     ) {
       let allCountries = this.props.dropDownData.allCountries.edges.map(
         indicator => {
-          return { label: indicator.node.name, value: indicator.node.iso2 };
+          return { label: indicator.node.name, value: indicator.node.iso3 };
         }
       );
 
@@ -226,7 +226,7 @@ class VizPaneMediator extends React.Component {
       allRegions = sortBy(allRegions, ['label']);
 
       // and we also push in a variable for undefined
-      allRegions.push({ label: 'undefined', value: [{ iso2: 'undefined' }] });
+      allRegions.push({ label: 'undefined', value: [{ iso3: 'undefined' }] });
 
       this.setState({
         locReselected: true,
@@ -632,7 +632,7 @@ class VizPaneMediator extends React.Component {
       selectedRegionsVal.forEach(region =>
         region.forEach(country =>
           allCountries.forEach(allCountry => {
-            if (country.iso2 === allCountry.value) {
+            if (country.iso3 === allCountry.value) {
               selectedCountryVal.push(allCountry);
             }
           })
@@ -861,7 +861,7 @@ export default createFragmentContainer(
         edges {
           node {
             name
-            iso2
+            iso3
           }
         }
       }
@@ -878,7 +878,7 @@ export default createFragmentContainer(
             name
             code
             country {
-              iso2
+              iso3
             }
           }
         }

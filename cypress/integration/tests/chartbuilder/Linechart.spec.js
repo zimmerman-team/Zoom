@@ -15,11 +15,7 @@ describe('Chartbuilder line chart fragment e2e', function() {
     cy.url().should('include', '/visualizer/linechart');
 
     cy.log('**Plots new hiv infections**');
-    cy.get(
-      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
-    )
-      .first()
-      .click();
+    cy.get('[data-cy="indicator-1"]').click();
     cy.contains('new hiv infections').click();
     cy.get('body').click();
     cy.wait(10000);

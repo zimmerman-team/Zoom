@@ -1,8 +1,6 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-/* consts */
-import graphKeys from '__consts__/GraphStructKeyConst';
 /* components */
 import {
   CartesianGrid,

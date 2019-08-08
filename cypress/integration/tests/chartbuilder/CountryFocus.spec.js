@@ -17,11 +17,7 @@ describe('Chartbuilder country focus fragment e2e', function() {
     cy.percySnapshot('Chartbuilder - Kenya focus');
 
     cy.log('**Plots some Kenya specific data**');
-    cy.get(
-      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
-    )
-      .first()
-      .click();
+    cy.get('[data-cy="indicator-1"]').click();
     cy.wait(10000);
     cy.get('[data-cy="geo-map-search"] input').type(
       'number of new hiv infections'
@@ -54,12 +50,8 @@ describe('Chartbuilder country focus fragment e2e', function() {
 
     cy.log('**Plots some NL specific data**');
 
-    cy.wait(8000);
-    cy.get(
-      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
-    )
-      .first()
-      .click();
+    cy.wait(15000);
+    cy.get('[data-cy="indicator-1"]').click();
     cy.wait(10000);
     cy.get('[data-cy="geo-map-search"] input').type(
       'number of new hiv infections'

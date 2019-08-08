@@ -15,11 +15,7 @@ describe('Chartbuilder bar chart fragment e2e', function() {
 
     cy.log('**Plots new hiv infections**');
     cy.wait(2000);
-    cy.get(
-      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
-    )
-      .first()
-      .click();
+    cy.get('[data-cy="indicator-1"]').click();
     cy.wait(2000);
     cy.contains('new hiv infections').click();
     cy.waitPageLoader();

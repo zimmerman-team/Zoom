@@ -250,15 +250,6 @@ class VisualizerModuleMediator extends Component {
       this.props.chartData.refetch
     ) {
       this.refetch();
-
-      // and ofcourse after refetching the data
-      // we reset the refetch variable back to false
-      // as the data has already been fetched
-      this.props.dispatch(
-        actions.storeChartDataRequest({
-          refetch: false
-        })
-      );
     }
 
     // so if the rankBy changes we only change the sorting of the chart
@@ -847,7 +838,16 @@ class VisualizerModuleMediator extends Component {
     // so we only update the indicators when we've retrieved the same
     // amount of indicator data as we have indicators selected
     if (indicatorData.length === selectedInds.length && this._isMounted) {
-      this.setState({ loading: false });
+      this.setState({ loading: false }, () =>
+        // and ofcourse after refetching the data
+        // we reset the refetch variable back to false
+        // as the data has already been fetched
+        this.props.dispatch(
+          actions.storeChartDataRequest({
+            refetch: false
+          })
+        )
+      );
 
       const updateIndIndex =
         refetchOne || this.props.paneData.chartType === chartTypes.tableChart

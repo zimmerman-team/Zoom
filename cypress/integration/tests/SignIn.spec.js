@@ -20,7 +20,7 @@ context('Sign in', () => {
   });
 
   it('Do sign-in procedure', () => {
-    cy.get('[data-cy=cookie-notice]').click();
+    cy.get('[data-cy=cookie-notice]').click({ force: true });
     cy.get('[data-cy=sidebar-toggle]').click();
     //Here we wait till the map is loaded
     cy.wait(10000);

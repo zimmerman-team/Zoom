@@ -19,7 +19,7 @@ describe('Chartbuilder table chart fragment e2e', function() {
       '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
     )
       .first()
-      .click();
+      .click({ force: true });
 
     cy.contains('new hiv infections').click();
     cy.waitPageLoader();

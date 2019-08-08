@@ -134,14 +134,14 @@ class VizPaneMediator extends React.Component {
       allCountries = [
         {
           label: 'Kenya',
-          value: 'ke'
+          value: 'ken'
         }
       ];
     } else if (this.props.paneData.chartType === chartTypes.focusNL) {
       allCountries = [
         {
           label: 'Netherlands',
-          value: 'nl'
+          value: 'nld'
         }
       ];
     } else {

@@ -12,6 +12,7 @@ describe('Chartbuilder table chart fragment e2e', function() {
     cy.waitPageLoader();
     cy.url().should('include', '/visualizer/tablechart');
 
+    cy.wait(4000);
     cy.get('[data-cy="year-2005"]').click();
     //Here we wait till the indicators have loaded.
     cy.wait(2000);

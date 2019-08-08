@@ -98,9 +98,9 @@ const indicatorDataQuery = graphql`
     $datePeriod: [String]!
     $indicator: [Int]!
     $subInds: [String]!
-    $countriesISO2: [String]!
+    $countriesISO3: [String]!
     $indicatorId: Float!
-    $OR_GeolocationIso2_Is_Null: Boolean!
+    $OR_GeolocationIso3_Is_Null: Boolean!
     $orderBy: [String]!
     $groupBy: [String]!
     $fields: [String]!
@@ -114,9 +114,9 @@ const indicatorDataQuery = graphql`
       orderBy: $orderBy
       date_In: $datePeriod
       indicatorId_In: $indicator
-      geolocationIso2_In: $countriesISO2
+      geolocationIso3_In: $countriesISO3
       filterName_In: $subInds
-      OR_GeolocationIso2_Is_Null: $OR_GeolocationIso2_Is_Null
+      OR_GeolocationIso3_Is_Null: $OR_GeolocationIso3_Is_Null
       geoJsonUrl: $geoJsonUrl
       currentGeoJson: $currentGeoJson
     ) {
@@ -710,31 +710,32 @@ class VisualizerModuleMediator extends Component {
 
         // We forming the param for countries from the selected countries of a region
         // and single selected countries
-        const countriesISO2 = formatCountryParam(
+        const countriesISO3 = formatCountryParam(
           this.props.chartData.selectedCountryVal,
-          this.props.chartData.selectedRegionVal
+          this.props.chartData.selectedRegionVal,
+          this.props.chartData.selectedRegionCodes
         );
 
         if (
           (this.props.paneData.chartType === chartTypes.focusNL ||
             this.props.paneData.chartType === chartTypes.focusKE) &&
-          countriesISO2.length > 0 &&
-          countriesISO2.indexOf('undefined') === -1
+          countriesISO3.length > 0 &&
+          countriesISO3.indexOf('undefined') === -1
         ) {
-          countriesISO2.push('undefined');
+          countriesISO3.push('undefined');
         }
 
         // so this variable basically controlls the filter param for data points
         // that don't have/do have geolocationIso2 field
-        const iso2Undef = countriesISO2.indexOf('undefined') !== -1;
+        const iso3Undef = countriesISO3.indexOf('undefined') !== -1;
 
         const refetchVars = {
           indicator: [indicator],
           indicatorId: indicator || -1,
           subInds,
           datePeriod,
-          countriesISO2: countriesISO2.length > 0 ? countriesISO2 : [null],
-          OR_GeolocationIso2_Is_Null: iso2Undef,
+          countriesISO3: countriesISO3.length > 0 ? countriesISO3 : [null],
+          OR_GeolocationIso3_Is_Null: iso3Undef,
           orderBy,
           groupBy: getGroupBy(
             this.props.paneData.chartType,

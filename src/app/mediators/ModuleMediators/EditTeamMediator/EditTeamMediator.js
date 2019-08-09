@@ -81,35 +81,26 @@ class EditTeamMediator extends React.Component {
 
   getGroupInfo = () => {
     this.props.dispatch(
-      getGroupRequest(
-        {
-          groupId: this.props.match.params.teamId
-        },
-        { Authorization: `Bearer ${this.props.user.idToken}` }
-      )
+      getGroupRequest({
+        groupId: this.props.match.params.teamId
+      })
     );
   };
 
   getAllTeams = () => {
     this.props.dispatch(
-      getGroupsRequest(
-        {
-          userId: this.props.user.authId
-        },
-        { Authorization: `Bearer ${this.props.user.idToken}` }
-      )
+      getGroupsRequest({
+        userId: this.props.user.authId
+      })
     );
   };
 
   getAllUsers = initialLoad => {
     if (initialLoad) {
       this.props.dispatch(
-        getAllUsersRequest(
-          {
-            userId: this.props.user.authId
-          },
-          { Authorization: `Bearer ${this.props.user.idToken}` }
-        )
+        getAllUsersRequest({
+          userId: this.props.user.authId
+        })
       );
     } else {
       this.setUsers(this.state.allUsers, false);
@@ -229,29 +220,7 @@ class EditTeamMediator extends React.Component {
       ) {
         this.setState({ addedOrRemovedSelf: true });
         this.props.dispatch(
-          editGroupRequest(
-            {
-              groupId: this.props.match.params.teamId,
-              name: this.state.name,
-              description: this.state.description,
-              usersToRemove: usersToDelete,
-              usersToAdd: usersToAdd,
-              user: {
-                authId: this.props.user.authId
-              },
-              team: {
-                oldName: this.state.oldTeamName,
-                newName: this.state.name
-              }
-            },
-            { Authorization: `Bearer ${this.props.user.idToken}` }
-          )
-        );
-      }
-    } else {
-      this.props.dispatch(
-        editGroupRequest(
-          {
+          editGroupRequest({
             groupId: this.props.match.params.teamId,
             name: this.state.name,
             description: this.state.description,
@@ -264,9 +233,25 @@ class EditTeamMediator extends React.Component {
               oldName: this.state.oldTeamName,
               newName: this.state.name
             }
+          })
+        );
+      }
+    } else {
+      this.props.dispatch(
+        editGroupRequest({
+          groupId: this.props.match.params.teamId,
+          name: this.state.name,
+          description: this.state.description,
+          usersToRemove: usersToDelete,
+          usersToAdd: usersToAdd,
+          user: {
+            authId: this.props.user.authId
           },
-          { Authorization: `Bearer ${this.props.user.idToken}` }
-        )
+          team: {
+            oldName: this.state.oldTeamName,
+            newName: this.state.name
+          }
+        })
       );
       if (some(usersToAdd, u => u === this.props.user.authId)) {
         this.setState({ addedOrRemovedSelf: true });

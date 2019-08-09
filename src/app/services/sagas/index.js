@@ -1,4 +1,4 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
+import { put, call, takeLatest, select } from 'redux-saga/effects';
 import * as actions from 'services/actions/index';
 import * as mutationActions from 'services/actions/mutation';
 import * as api from 'services/index';
@@ -6,6 +6,9 @@ import * as oipaActions from 'services/actions/oipa';
 import * as generalActions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
 import * as authNodeActions from 'services/actions/authNodeBackend';
+
+const userIdToken = state =>
+  state.currentUser.data && state.currentUser.data.idToken;
 
 export function* uploadRequest(action) {
   try {
@@ -518,10 +521,13 @@ export function* emptyChartTrashRequest(action) {
 
 export function* getCurrentUserRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendGetRequest, {
       endpoint: 'getUserFromAuth',
       values: action.values,
-      headers: action.headers
+      headers
     });
     yield put(authNodeActions.getCurrentUserSuccess(response.data));
   } catch (error) {
@@ -536,10 +542,13 @@ export function* getCurrentUserRequest(action) {
 
 export function* getAllUsersRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendGetRequest, {
       endpoint: 'getAllUsers',
       values: action.values,
-      headers: action.headers
+      headers
     });
     yield put(authNodeActions.getAllUsersSuccess(response.data));
   } catch (error) {
@@ -554,10 +563,13 @@ export function* getAllUsersRequest(action) {
 
 export function* getRolesRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendGetRequest, {
       endpoint: 'getUserRoles',
       values: action.values,
-      headers: action.headers
+      headers
     });
     yield put(authNodeActions.getRolesSuccess(response.data));
   } catch (error) {
@@ -572,10 +584,13 @@ export function* getRolesRequest(action) {
 
 export function* getGroupsRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendGetRequest, {
       endpoint: 'getUserGroups',
       values: action.values,
-      headers: action.headers
+      headers
     });
     yield put(authNodeActions.getGroupsSuccess(response.data));
   } catch (error) {
@@ -590,10 +605,13 @@ export function* getGroupsRequest(action) {
 
 export function* getGroupRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendGetRequest, {
       endpoint: 'getGroup',
       values: action.values,
-      headers: action.headers
+      headers
     });
     yield put(authNodeActions.getGroupSuccess(response.data));
   } catch (error) {
@@ -608,10 +626,13 @@ export function* getGroupRequest(action) {
 
 export function* editGroupRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendPostRequest, {
       endpoint: 'editGroup',
       values: action.values,
-      headers: action.headers
+      headers
     });
     yield put(authNodeActions.editGroupSuccess(response.data));
   } catch (error) {
@@ -626,10 +647,13 @@ export function* editGroupRequest(action) {
 
 export function* getAuthUserRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendGetRequest, {
       endpoint: 'getUserFromAuth',
       values: action.values,
-      headers: action.headers
+      headers
     });
     yield put(authNodeActions.getAuthUserSuccess(response.data));
   } catch (error) {
@@ -644,10 +668,13 @@ export function* getAuthUserRequest(action) {
 
 export function* addAuthUserRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendPostRequest, {
       endpoint: 'addUser',
       values: action.values,
-      headers: action.headers
+      headers
     });
     yield put(authNodeActions.addAuthUserSuccess(response.data));
   } catch (error) {
@@ -662,10 +689,13 @@ export function* addAuthUserRequest(action) {
 
 export function* deleteAuthUserRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendDeleteRequest, {
       endpoint: 'deleteUser',
       values: action.values,
-      headers: action.headers
+      headers
     });
     yield put(authNodeActions.deleteAuthUserSuccess(response.data));
   } catch (error) {
@@ -680,10 +710,13 @@ export function* deleteAuthUserRequest(action) {
 
 export function* editAuthUserRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendPostRequest, {
       endpoint: 'editUser',
       values: action.values,
-      headers: action.headers
+      headers
     });
     yield put(authNodeActions.editAuthUserSuccess(response.data));
   } catch (error) {
@@ -698,10 +731,13 @@ export function* editAuthUserRequest(action) {
 
 export function* addAuthGroupRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendPostRequest, {
       endpoint: 'addGroup',
       values: action.values,
-      headers: action.headers
+      headers
     });
     yield put(authNodeActions.addAuthGroupSuccess(response.data));
   } catch (error) {
@@ -716,10 +752,13 @@ export function* addAuthGroupRequest(action) {
 
 export function* deleteAuthGroupRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendDeleteRequest, {
       endpoint: 'deleteGroup',
       values: action.values,
-      headers: action.headers
+      headers
     });
     yield put(authNodeActions.deleteAuthGroupSuccess(response.data));
   } catch (error) {

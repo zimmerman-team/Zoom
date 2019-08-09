@@ -48,27 +48,6 @@ export function uploadRequest(values, idToken) {
   );
 }
 
-export function validateRequest(values) {
-  return handleRequest(
-    `${process.env.REACT_APP_BACKEND_HOST}/api/validate/`,
-    values
-  );
-}
-
-export function errorCorrectionRequest(values) {
-  return handleRequest(
-    `${process.env.REACT_APP_BACKEND_HOST}/api/error-correction/`,
-    values
-  );
-}
-
-export function manualMapDataRequest(values) {
-  return handleRequest(
-    `${process.env.REACT_APP_BACKEND_HOST}/api/manual-mapping/get_data/`,
-    values
-  );
-}
-
 function oipaURL(url) {
   return process.env.REACT_APP_OIPA_HOST.concat(url);
 }

@@ -83,9 +83,12 @@ class App extends React.Component {
     try {
       auth0Client.silentAuth().then(results => {
         this.props.dispatch(
-          getCurrentUserRequest({
-            userId: results.idTokenPayload.sub
-          })
+          getCurrentUserRequest(
+            {
+              userId: results.idTokenPayload.sub
+            },
+            { Authorization: `Bearer ${results.idToken}` }
+          )
         );
         this.props.dispatch(setUserIdToken(results.idToken));
         this.forceUpdate();

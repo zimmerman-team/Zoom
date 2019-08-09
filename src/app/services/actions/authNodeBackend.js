@@ -9,10 +9,11 @@ export function getCurrentUserInitial() {
   };
 }
 
-export function getCurrentUserRequest(values) {
+export function getCurrentUserRequest(values, headers) {
   return {
     type: GET_CURRENT_USER_REQUEST,
-    values
+    values,
+    headers
   };
 }
 

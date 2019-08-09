@@ -38,21 +38,15 @@ class EditUserMediator extends React.Component {
 
   componentDidMount = () => {
     this.props.dispatch(
-      getAuthUserRequest(
-        {
-          userId: this.props.match.params.userId
-        },
-        { Authorization: `Bearer ${this.props.user.idToken}` }
-      )
+      getAuthUserRequest({
+        userId: this.props.match.params.userId
+      })
     );
 
     this.props.dispatch(
-      getRolesRequest(
-        {
-          userId: this.props.user.authId
-        },
-        { Authorization: `Bearer ${this.props.user.idToken}` }
-      )
+      getRolesRequest({
+        userId: this.props.user.authId
+      })
     );
   };
 
@@ -134,19 +128,16 @@ class EditUserMediator extends React.Component {
   submitForm = e => {
     e.preventDefault();
     this.props.dispatch(
-      editAuthUserRequest(
-        {
-          adminId: this.props.user.authId,
-          userId: this.props.match.params.userId,
-          email: this.state.email,
-          name: this.state.firstName,
-          prevRoleId: this.state.prevRoleId,
-          roleId: this.state.role.value,
-          roleLabel: this.state.role.label,
-          surname: this.state.lastName
-        },
-        { Authorization: `Bearer ${this.props.user.idToken}` }
-      )
+      editAuthUserRequest({
+        adminId: this.props.user.authId,
+        userId: this.props.match.params.userId,
+        email: this.state.email,
+        name: this.state.firstName,
+        prevRoleId: this.state.prevRoleId,
+        roleId: this.state.role.value,
+        roleLabel: this.state.role.label,
+        surname: this.state.lastName
+      })
     );
   };
 

@@ -200,12 +200,9 @@ class DashboardMediator extends React.Component {
   getAllUsers = initialLoad => {
     if (initialLoad) {
       this.props.dispatch(
-        getAllUsersRequest(
-          {
-            userId: this.props.user.authId
-          },
-          { Authorization: `Bearer ${this.props.user.idToken}` }
-        )
+        getAllUsersRequest({
+          userId: this.props.user.authId
+        })
       );
     } else {
       this.setUsers(this.state.allUsers, false);
@@ -243,24 +240,18 @@ class DashboardMediator extends React.Component {
       if (window.confirm('You are about to delete yourself! Are you sure?')) {
         this.setState({ deletedSelf: true });
         this.props.dispatch(
-          deleteAuthUserRequest(
-            {
-              delId: delId,
-              userId: this.props.user.authId
-            },
-            { Authorization: `Bearer ${this.props.user.idToken}` }
-          )
+          deleteAuthUserRequest({
+            delId: delId,
+            userId: this.props.user.authId
+          })
         );
       }
     } else {
       this.props.dispatch(
-        deleteAuthUserRequest(
-          {
-            delId: delId,
-            userId: this.props.user.authId
-          },
-          { Authorization: `Bearer ${this.props.user.idToken}` }
-        )
+        deleteAuthUserRequest({
+          delId: delId,
+          userId: this.props.user.authId
+        })
       );
     }
   };
@@ -268,12 +259,9 @@ class DashboardMediator extends React.Component {
   getAllTeams = initialLoad => {
     if (initialLoad) {
       this.props.dispatch(
-        getGroupsRequest(
-          {
-            userId: this.props.user.authId
-          },
-          { Authorization: `Bearer ${this.props.user.idToken}` }
-        )
+        getGroupsRequest({
+          userId: this.props.user.authId
+        })
       );
     } else {
       this.setTeams(this.state.allTeams, false);
@@ -309,14 +297,11 @@ class DashboardMediator extends React.Component {
 
   deleteTeam = (id, name) => {
     this.props.dispatch(
-      deleteAuthGroupRequest(
-        {
-          adminId: this.props.user.authId,
-          delId: id,
-          name: name
-        },
-        { Authorization: `Bearer ${this.props.user.idToken}` }
-      )
+      deleteAuthGroupRequest({
+        adminId: this.props.user.authId,
+        delId: id,
+        name: name
+      })
     );
   };
 

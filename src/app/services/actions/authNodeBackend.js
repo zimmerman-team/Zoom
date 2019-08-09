@@ -9,11 +9,10 @@ export function getCurrentUserInitial() {
   };
 }
 
-export function getCurrentUserRequest(values, headers) {
+export function getCurrentUserRequest(values) {
   return {
     type: GET_CURRENT_USER_REQUEST,
-    values,
-    headers
+    values
   };
 }
 
@@ -42,11 +41,10 @@ export function getAllUsersInitial() {
   };
 }
 
-export function getAllUsersRequest(values, headers) {
+export function getAllUsersRequest(values) {
   return {
     type: GET_ALL_USERS_REQUEST,
-    values,
-    headers
+    values
   };
 }
 
@@ -75,11 +73,10 @@ export function getRolesInitial() {
   };
 }
 
-export function getRolesRequest(values, headers) {
+export function getRolesRequest(values) {
   return {
     type: GET_ROLES_REQUEST,
-    values,
-    headers
+    values
   };
 }
 
@@ -108,11 +105,10 @@ export function getGroupsInitial() {
   };
 }
 
-export function getGroupsRequest(values, headers) {
+export function getGroupsRequest(values) {
   return {
     type: GET_GROUPS_REQUEST,
-    values,
-    headers
+    values
   };
 }
 
@@ -141,11 +137,10 @@ export function getGroupInitial() {
   };
 }
 
-export function getGroupRequest(values, headers) {
+export function getGroupRequest(values) {
   return {
     type: GET_GROUP_REQUEST,
-    values,
-    headers
+    values
   };
 }
 
@@ -174,11 +169,10 @@ export function editGroupInitial() {
   };
 }
 
-export function editGroupRequest(values, headers) {
+export function editGroupRequest(values) {
   return {
     type: EDIT_GROUP_REQUEST,
-    values,
-    headers
+    values
   };
 }
 
@@ -207,11 +201,10 @@ export function getAuthUserInitial() {
   };
 }
 
-export function getAuthUserRequest(values, headers) {
+export function getAuthUserRequest(values) {
   return {
     type: GET_AUTH_USER_REQUEST,
-    values,
-    headers
+    values
   };
 }
 
@@ -240,11 +233,10 @@ export function addAuthUserInitial() {
   };
 }
 
-export function addAuthUserRequest(values, headers) {
+export function addAuthUserRequest(values) {
   return {
     type: ADD_AUTH_USER_REQUEST,
-    values,
-    headers
+    values
   };
 }
 
@@ -273,11 +265,10 @@ export function deleteAuthUserInitial() {
   };
 }
 
-export function deleteAuthUserRequest(values, headers) {
+export function deleteAuthUserRequest(values) {
   return {
     type: DELETE_AUTH_USER_REQUEST,
-    values,
-    headers
+    values
   };
 }
 
@@ -306,11 +297,10 @@ export function editAuthUserInitial() {
   };
 }
 
-export function editAuthUserRequest(values, headers) {
+export function editAuthUserRequest(values) {
   return {
     type: EDIT_AUTH_USER_REQUEST,
-    values,
-    headers
+    values
   };
 }
 
@@ -339,11 +329,10 @@ export function addAuthGroupInitial() {
   };
 }
 
-export function addAuthGroupRequest(values, headers) {
+export function addAuthGroupRequest(values) {
   return {
     type: ADD_AUTH_GROUP_REQUEST,
-    values,
-    headers
+    values
   };
 }
 
@@ -372,11 +361,10 @@ export function deleteAuthGroupInitial() {
   };
 }
 
-export function deleteAuthGroupRequest(values, headers) {
+export function deleteAuthGroupRequest(values) {
   return {
     type: DELETE_AUTH_GROUP_REQUEST,
-    values,
-    headers
+    values
   };
 }
 

@@ -11,12 +11,9 @@ class Callback extends React.Component {
     this.props.auth0Client.handleAuthentication().then(results => {
       this.props.dispatch(setUserIdToken(results.idToken));
       this.props.dispatch(
-        getCurrentUserRequest(
-          {
-            userId: results.idTokenPayload.sub
-          },
-          { Authorization: `Bearer ${results.idToken}` }
-        )
+        getCurrentUserRequest({
+          userId: results.idTokenPayload.sub
+        })
       );
     });
   };

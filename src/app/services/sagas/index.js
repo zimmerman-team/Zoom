@@ -465,13 +465,10 @@ export function* emptyChartTrashRequest(action) {
 
 export function* getCurrentUserRequest(action) {
   try {
-    const idToken = yield select(userIdToken);
-    const headers = { Authorization: `Bearer ${idToken}` };
-
     const response = yield call(api.nodeBackendGetRequest, {
       endpoint: 'getUserFromAuth',
       values: action.values,
-      headers
+      headers: action.headers
     });
     yield put(authNodeActions.getCurrentUserSuccess(response.data));
   } catch (error) {

@@ -3,6 +3,7 @@ import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
 import * as syncActions from 'services/actions/sync';
 import * as nodeActions from 'services/actions/nodeBackend';
+import { GET_USER_REQUEST } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -185,57 +186,10 @@ function user(state = initial, action) {
     //   return updateRequest(state, action);
     case nodeActions.GET_USER_SUCCESS:
       return updateSuccess(state, action);
-    case nodeActions.ADD_USER_SUCCESS:
-      return updateSuccess(state, action);
     case nodeActions.GET_USER_FAILED:
       return updateFailed(state, action);
     case syncActions.CLEAR_USER_DATA:
       return initial;
-    default:
-      return state;
-  }
-}
-
-function userAdded(state = initial, action) {
-  switch (action.type) {
-    case nodeActions.ADD_USER_INITIAL:
-      return updateInitial(state);
-    case nodeActions.ADD_USER_REQUEST:
-      return updateRequest(state, action);
-    case nodeActions.ADD_USER_SUCCESS:
-      return updateSuccess(state, action);
-    case nodeActions.ADD_USER_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
-function userUpdated(state = initial, action) {
-  switch (action.type) {
-    case nodeActions.UPDATE_USER_INITIAL:
-      return updateInitial(state);
-    case nodeActions.UPDATE_USER_REQUEST:
-      return updateRequest(state, action);
-    case nodeActions.UPDATE_USER_SUCCESS:
-      return updateSuccess(state, action);
-    case nodeActions.UPDATE_USER_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
-function usersTeam(state = initial, action) {
-  switch (action.type) {
-    case nodeActions.UPDATE_USERS_TEAM_INITIAL:
-      return updateInitial(state);
-    case nodeActions.UPDATE_USERS_TEAM__REQUEST:
-      return updateRequest(state, action);
-    case nodeActions.UPDATE_USERS_TEAM_SUCCESS:
-      return updateSuccess(state, action);
-    case nodeActions.UPDATE_USERS_TEAM_FAILED:
-      return updateFailed(state, action);
     default:
       return state;
   }
@@ -346,21 +300,6 @@ function publicCharts(state = initial, action) {
   }
 }
 
-function userDeleted(state = initial, action) {
-  switch (action.type) {
-    case nodeActions.DELETE_USER_INITIAL:
-      return updateInitial(state);
-    case nodeActions.DELETE_USER_REQUEST:
-      return updateRequest(state, action);
-    case nodeActions.DELETE_USER_SUCCESS:
-      return updateSuccess(state, action);
-    case nodeActions.DELETE_USER_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
 function datasetUpdated(state = initial, action) {
   switch (action.type) {
     case nodeActions.UPDATE_DATASET_INITIAL:
@@ -400,36 +339,6 @@ function chartDuplicated(state = initial, action) {
     case nodeActions.DUPLICATE_CHART_SUCCESS:
       return updateSuccess(state, action);
     case nodeActions.DUPLICATE_CHART_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
-function updateTeamAndUsersOfIt(state = initial, action) {
-  switch (action.type) {
-    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_INITIAL:
-      return updateInitial(state);
-    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT__REQUEST:
-      return updateRequest(state, action);
-    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_SUCCESS:
-      return updateSuccess(state, action);
-    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
-function groupDeleted(state = initial, action) {
-  switch (action.type) {
-    case nodeActions.DELETE_GROUP_INITIAL:
-      return updateInitial(state);
-    case nodeActions.DELETE_GROUP_REQUEST:
-      return updateRequest(state, action);
-    case nodeActions.DELETE_GROUP_SUCCESS:
-      return updateSuccess(state, action);
-    case nodeActions.DELETE_GROUP_FAILED:
       return updateFailed(state, action);
     default:
       return state;
@@ -511,9 +420,6 @@ const reducers = {
   chartResults,
   chartCreated,
   datasetAdded,
-  usersTeam,
-  userUpdated,
-  userAdded,
   user,
   allUserCharts,
   upload,
@@ -521,9 +427,6 @@ const reducers = {
   countryActivities,
   activityData,
   countryOrganisations,
-  updateTeamAndUsersOfIt,
-  groupDeleted,
-  userDeleted,
   userPersist
 };
 

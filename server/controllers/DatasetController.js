@@ -12,23 +12,6 @@ const consts = require('../config/consts');
 const roles = consts.roles;
 
 const DatasetApi = {
-  // gets data set, if its the owners data set
-  getDataset: (req, res) => {
-    const { authId, datasetId } = req.query;
-
-    userUtils.findOneUser(authId, res).then(author => {
-      if (author) {
-        Dataset.findOne({ author, datasetId }).exec((setError, dataset) => {
-          if (setError) {
-            general.handleError(res, setError);
-          } else {
-            res.json(dataset);
-          }
-        });
-      }
-    });
-  },
-
   // gets all datasets of the owner
   getOwnerDatasets: (req, res) => {
     const { authId, sortBy, searchTitle, pageSize, page } = req.query;

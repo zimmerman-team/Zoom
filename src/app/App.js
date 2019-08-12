@@ -205,9 +205,7 @@ class App extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    userAdded: state.userAdded,
-    user: state.currentUser.data,
-    userUpdated: state.userUpdated
+    user: state.currentUser.data
   };
 };
 

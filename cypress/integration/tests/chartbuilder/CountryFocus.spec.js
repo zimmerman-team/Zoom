@@ -57,7 +57,7 @@ describe('Chartbuilder country focus fragment e2e', function() {
       'number of new hiv infections'
     );
     cy.contains('number of new hiv infections').click({ force: true });
-    cy.wait(1000);
+    cy.wait(3000);
     cy.get('[class*=ZoomSelectstyles__DropDownContainer] > li').click({
       force: true
     });

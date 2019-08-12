@@ -590,11 +590,9 @@ const mapStateToProps = state => {
     userDatasets: state.userDatasets,
     chartDeleted: state.chartDeleted,
     chartDuplicated: state.chartDuplicated,
-    userDeleted: state.userDeleted,
     // yeah so actually these are the user and team charts
     userCharts: state.userCharts,
     user: state.currentUser.data,
-    teamDeleted: state.groupDeleted,
     allUsers: state.allUsers,
     groups: state.authGroups,
     deleteUser: state.deleteUser,

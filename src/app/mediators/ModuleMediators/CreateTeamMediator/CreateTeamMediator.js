@@ -207,7 +207,6 @@ class CreateTeamMediator extends React.Component {
 const mapStateToProps = state => {
   return {
     allUsers: state.allUsers,
-    usersTeam: state.usersTeam,
     user: state.currentUser.data,
     addGroup: state.addGroup
   };

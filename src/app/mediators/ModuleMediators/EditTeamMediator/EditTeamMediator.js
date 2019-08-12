@@ -309,7 +309,6 @@ const mapStateToProps = state => {
   return {
     group: state.loadedGroup,
     allUsers: state.allUsers,
-    usersTeam: state.usersTeam,
     user: state.currentUser.data,
     editGroup: state.editGroup
   };

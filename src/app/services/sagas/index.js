@@ -91,9 +91,13 @@ export function* storePaneDataRequest(action) {
 
 export function* allUserChartsRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendGetRequest, {
       endpoint: 'getAllCharts',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.allUserChartsSuccess(response.data));
   } catch (error) {
@@ -108,9 +112,13 @@ export function* allUserChartsRequest(action) {
 
 export function* getUserRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendGetRequest, {
       endpoint: 'getUser',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.getUserSuccess(response.data));
   } catch (error) {
@@ -123,79 +131,15 @@ export function* getUserRequest(action) {
   }
 }
 
-export function* deleteUserRequest(action) {
-  try {
-    const response = yield call(api.nodeBackendPostRequest, {
-      endpoint: 'deleteUser',
-      values: { delId: action.values.userId }
-    });
-    yield put(nodeActions.deleteUserSuccess(response.data));
-  } catch (error) {
-    yield put(
-      nodeActions.deleteUserFailed({
-        ...error.response,
-        result: error.response.data
-      })
-    );
-  }
-}
-
-export function* addUserRequest(action) {
-  try {
-    const response = yield call(api.nodeBackendPostRequest, {
-      endpoint: 'addNewUser',
-      values: action.values
-    });
-    yield put(nodeActions.addUserSuccess(response.data));
-  } catch (error) {
-    yield put(
-      nodeActions.addUserFailed({
-        ...error.response,
-        result: error.response.data
-      })
-    );
-  }
-}
-
-export function* updateUserRequest(action) {
-  try {
-    const response = yield call(api.nodeBackendPostRequest, {
-      endpoint: 'updateUser',
-      values: action.values
-    });
-    yield put(nodeActions.updateUserSuccess(response.data));
-  } catch (error) {
-    yield put(
-      nodeActions.updateUserFailed({
-        ...error.response,
-        result: error.response.data
-      })
-    );
-  }
-}
-
-export function* updateUsersTeamRequest(action) {
-  try {
-    const response = yield call(api.nodeBackendPostRequest, {
-      endpoint: 'updateUsersTeam',
-      values: action.values
-    });
-    yield put(nodeActions.updateUsersTeamSuccess(response.data));
-  } catch (error) {
-    yield put(
-      nodeActions.updateUsersTeamFailed({
-        ...error.response,
-        result: error.response.data
-      })
-    );
-  }
-}
-
 export function* addNewDatasetRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendPostRequest, {
       endpoint: 'addNewDataset',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.addNewDatasetSuccess(response.data));
   } catch (error) {
@@ -210,9 +154,13 @@ export function* addNewDatasetRequest(action) {
 
 export function* createUpdateChartRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendPostRequest, {
       endpoint: 'updateCreateChart',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.createUpdateChartSuccess(response.data));
   } catch (error) {
@@ -227,9 +175,13 @@ export function* createUpdateChartRequest(action) {
 
 export function* getChartRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendGetRequest, {
       endpoint: 'getChart',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.getChartSuccess(response.data));
   } catch (error) {
@@ -244,9 +196,13 @@ export function* getChartRequest(action) {
 
 export function* getUserChartsRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendGetRequest, {
       endpoint: 'getAllCharts',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.getUserChartsSuccess(response.data));
   } catch (error) {
@@ -261,9 +217,13 @@ export function* getUserChartsRequest(action) {
 
 export function* deleteChartRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendPostRequest, {
       endpoint: 'deleteChart',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.deleteChartSuccess(response.data));
   } catch (error) {
@@ -278,9 +238,13 @@ export function* deleteChartRequest(action) {
 
 export function* getUserDatasetsRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendGetRequest, {
       endpoint: 'getOwnerDatasets',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.getUserDatasetsSuccess(response.data));
   } catch (error) {
@@ -312,9 +276,13 @@ export function* getPublicChartsRequest(action) {
 
 export function* updateDatasetRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendPostRequest, {
       endpoint: 'updateDataset',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.updateDatasetSuccess(response.data));
   } catch (error) {
@@ -329,9 +297,13 @@ export function* updateDatasetRequest(action) {
 
 export function* createDuplicateChartRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendPostRequest, {
       endpoint: 'updateCreateChart',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.createDuplicateChartSuccess(response.data));
   } catch (error) {
@@ -346,9 +318,13 @@ export function* createDuplicateChartRequest(action) {
 
 export function* duplicateChartRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendPostRequest, {
       endpoint: 'duplicateChart',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.duplicateChartSuccess(response.data));
   } catch (error) {
@@ -361,45 +337,15 @@ export function* duplicateChartRequest(action) {
   }
 }
 
-export function* updateTeamAndUsersOfItRequest(action) {
-  try {
-    const response = yield call(api.nodeBackendPostRequest, {
-      endpoint: 'updateTeamAndUsersOfIt',
-      values: action.values
-    });
-    yield put(nodeActions.updateTeamAndUsersOfItSuccess(response.data));
-  } catch (error) {
-    yield put(
-      nodeActions.updateTeamAndUsersOfItFailed({
-        ...error.response,
-        result: error.response.data
-      })
-    );
-  }
-}
-
-export function* deleteTeamRequest(action) {
-  try {
-    const response = yield call(api.nodeBackendPostRequest, {
-      endpoint: 'deleteTeam',
-      values: action.values
-    });
-    yield put(nodeActions.deleteGroupSuccess(response.data));
-  } catch (error) {
-    yield put(
-      nodeActions.deleteGroupFailed({
-        ...error.response,
-        result: error.response.data
-      })
-    );
-  }
-}
-
 export function* deleteDatasetRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendDeleteRequest, {
       endpoint: 'deleteDataset',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.deleteDatasetSuccess(response.data));
   } catch (error) {
@@ -431,9 +377,13 @@ export function* getPublicChartRequest(action) {
 
 export function* allArchivedChartsRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendGetRequest, {
       endpoint: 'getAllCharts',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.allArchivedChartsSuccess(response.data));
   } catch (error) {
@@ -448,9 +398,13 @@ export function* allArchivedChartsRequest(action) {
 
 export function* emptyChartTrashRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendDeleteRequest, {
       endpoint: 'emptyChartTrash',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.emptyChartTrashSuccess(response.data));
   } catch (error) {
@@ -714,9 +668,13 @@ export function* deleteAuthGroupRequest(action) {
 
 export function* getDatasetIdsRequest(action) {
   try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
     const response = yield call(api.nodeBackendGetRequest, {
       endpoint: 'getDatasetIds',
-      values: action.values
+      values: action.values,
+      headers
     });
     yield put(nodeActions.getDatasetIdsSuccess(response.data));
   } catch (error) {
@@ -748,9 +706,6 @@ function* sagas() {
     takeLatest('STORE_PANE_DATA_REQUEST', storePaneDataRequest),
     takeLatest('STORE_CHART_DATA_REQUEST', storeChartDataRequest),
     takeLatest('ADD_NEW_DATASET_REQUEST', addNewDatasetRequest),
-    takeLatest('UPDATE_USERS_TEAM__REQUEST', updateUsersTeamRequest),
-    takeLatest('UPDATE_USER_REQUEST', updateUserRequest),
-    takeLatest('ADD_USER_REQUEST', addUserRequest),
     takeLatest('GET_USER_REQUEST', getUserRequest),
     takeLatest('ALL_USER_CHARTS_REQUEST', allUserChartsRequest),
     takeLatest('SAVE_STEP_DATA_REQUEST', saveStepDataRequest),
@@ -763,12 +718,6 @@ function* sagas() {
     takeLatest('ACTIVITY_DATA_REQUEST', activityDataRequest),
     takeLatest('COUNTRY_EXCERPT_REQUEST', countryExcerptRequest),
     takeLatest('COUNTRY_ORGANISATIONS_REQUEST', countryOrganisationsRequest),
-    takeLatest('DELETE_USER_REQUEST', deleteUserRequest),
-    takeLatest(
-      'UPDATE_TEAM_AND_USERS_OF_IT__REQUEST',
-      updateTeamAndUsersOfItRequest
-    ),
-    takeLatest('DELETE_GROUP_REQUEST', deleteTeamRequest),
     takeLatest('GET_CURRENT_USER_REQUEST', getCurrentUserRequest),
     takeLatest('GET_ALL_USERS_REQUEST', getAllUsersRequest),
     takeLatest('GET_ROLES_REQUEST', getRolesRequest),

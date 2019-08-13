@@ -3,6 +3,7 @@ import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
 import * as syncActions from 'services/actions/sync';
 import * as nodeActions from 'services/actions/nodeBackend';
+import { GET_USER_REQUEST } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -81,96 +82,6 @@ function upload(state = initial, action) {
     case actions.UPLOAD_SUCCESS:
       return updateSuccess(state, action);
     case actions.UPLOAD_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
-function validate(state = initial, action) {
-  switch (action.type) {
-    case actions.VALIDATE_INITIAL:
-      return updateInitial(state);
-    case actions.VALIDATE_REQUEST:
-      return updateRequest(state, action);
-    case actions.VALIDATE_SUCCESS:
-      return updateSuccess(state, action);
-    case actions.VALIDATE_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
-function columns(state = initial, action) {
-  switch (action.type) {
-    case actions.GET_COLUMNS_INITIAL:
-      return updateInitial(state);
-    case actions.GET_COLUMNS_REQUEST:
-      return updateRequest(state, action);
-    case actions.GET_COLUMNS_SUCCESS:
-      return updateSuccess(state, action);
-    case actions.GET_COLUMNS_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
-function fileErrors(state = initial, action) {
-  switch (action.type) {
-    case actions.GET_FILE_ERRORS_INITIAL:
-      return updateInitial(state);
-    case actions.GET_FILE_ERRORS_REQUEST:
-      return updateRequest(state, action);
-    case actions.GET_FILE_ERRORS_SUCCESS:
-      return updateSuccess(state, action);
-    case actions.GET_FILE_ERRORS_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
-function errorCorrectionSave(state = initial, action) {
-  switch (action.type) {
-    case actions.ERROR_CORRECTION_SAVE_INITIAL:
-      return updateInitial(state);
-    case actions.ERROR_CORRECTION_SAVE_REQUEST:
-      return updateRequest(state, action);
-    case actions.ERROR_CORRECTION_SAVE_SUCCESS:
-      return updateSuccess(state, action);
-    case actions.ERROR_CORRECTION_SAVE_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
-function errorCorrectionDeleteRow(state = initial, action) {
-  switch (action.type) {
-    case actions.ERROR_CORRECTION_DELETE_ROW_INITIAL:
-      return updateInitial(state);
-    case actions.ERROR_CORRECTION_DELETE_ROW_REQUEST:
-      return updateRequest(state, action);
-    case actions.ERROR_CORRECTION_DELETE_ROW_SUCCESS:
-      return updateSuccess(state, action);
-    case actions.ERROR_CORRECTION_DELETE_ROW_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
-function manualMapData(state = initial, action) {
-  switch (action.type) {
-    case actions.MANUAL_MAP_DATA_INITIAL:
-      return updateInitial(state);
-    case actions.MANUAL_MAP_DATA_REQUEST:
-      return updateRequest(state, action);
-    case actions.MANUAL_MAP_DATA_SUCCESS:
-      return updateSuccess(state, action);
-    case actions.MANUAL_MAP_DATA_FAILED:
       return updateFailed(state, action);
     default:
       return state;
@@ -275,57 +186,10 @@ function user(state = initial, action) {
     //   return updateRequest(state, action);
     case nodeActions.GET_USER_SUCCESS:
       return updateSuccess(state, action);
-    case nodeActions.ADD_USER_SUCCESS:
-      return updateSuccess(state, action);
     case nodeActions.GET_USER_FAILED:
       return updateFailed(state, action);
     case syncActions.CLEAR_USER_DATA:
       return initial;
-    default:
-      return state;
-  }
-}
-
-function userAdded(state = initial, action) {
-  switch (action.type) {
-    case nodeActions.ADD_USER_INITIAL:
-      return updateInitial(state);
-    case nodeActions.ADD_USER_REQUEST:
-      return updateRequest(state, action);
-    case nodeActions.ADD_USER_SUCCESS:
-      return updateSuccess(state, action);
-    case nodeActions.ADD_USER_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
-function userUpdated(state = initial, action) {
-  switch (action.type) {
-    case nodeActions.UPDATE_USER_INITIAL:
-      return updateInitial(state);
-    case nodeActions.UPDATE_USER_REQUEST:
-      return updateRequest(state, action);
-    case nodeActions.UPDATE_USER_SUCCESS:
-      return updateSuccess(state, action);
-    case nodeActions.UPDATE_USER_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
-function usersTeam(state = initial, action) {
-  switch (action.type) {
-    case nodeActions.UPDATE_USERS_TEAM_INITIAL:
-      return updateInitial(state);
-    case nodeActions.UPDATE_USERS_TEAM__REQUEST:
-      return updateRequest(state, action);
-    case nodeActions.UPDATE_USERS_TEAM_SUCCESS:
-      return updateSuccess(state, action);
-    case nodeActions.UPDATE_USERS_TEAM_FAILED:
-      return updateFailed(state, action);
     default:
       return state;
   }
@@ -436,21 +300,6 @@ function publicCharts(state = initial, action) {
   }
 }
 
-function userDeleted(state = initial, action) {
-  switch (action.type) {
-    case nodeActions.DELETE_USER_INITIAL:
-      return updateInitial(state);
-    case nodeActions.DELETE_USER_REQUEST:
-      return updateRequest(state, action);
-    case nodeActions.DELETE_USER_SUCCESS:
-      return updateSuccess(state, action);
-    case nodeActions.DELETE_USER_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
 function datasetUpdated(state = initial, action) {
   switch (action.type) {
     case nodeActions.UPDATE_DATASET_INITIAL:
@@ -490,36 +339,6 @@ function chartDuplicated(state = initial, action) {
     case nodeActions.DUPLICATE_CHART_SUCCESS:
       return updateSuccess(state, action);
     case nodeActions.DUPLICATE_CHART_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
-function updateTeamAndUsersOfIt(state = initial, action) {
-  switch (action.type) {
-    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_INITIAL:
-      return updateInitial(state);
-    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT__REQUEST:
-      return updateRequest(state, action);
-    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_SUCCESS:
-      return updateSuccess(state, action);
-    case nodeActions.UPDATE_TEAM_AND_USERS_OF_IT_FAILED:
-      return updateFailed(state, action);
-    default:
-      return state;
-  }
-}
-
-function groupDeleted(state = initial, action) {
-  switch (action.type) {
-    case nodeActions.DELETE_GROUP_INITIAL:
-      return updateInitial(state);
-    case nodeActions.DELETE_GROUP_REQUEST:
-      return updateRequest(state, action);
-    case nodeActions.DELETE_GROUP_SUCCESS:
-      return updateSuccess(state, action);
-    case nodeActions.DELETE_GROUP_FAILED:
       return updateFailed(state, action);
     default:
       return state;
@@ -601,25 +420,13 @@ const reducers = {
   chartResults,
   chartCreated,
   datasetAdded,
-  usersTeam,
-  userUpdated,
-  userAdded,
   user,
   allUserCharts,
   upload,
-  validate,
-  columns,
-  errorCorrectionSave,
-  errorCorrectionDeleteRow,
-  fileErrors,
-  manualMapData,
   countryExcerpt,
   countryActivities,
   activityData,
   countryOrganisations,
-  updateTeamAndUsersOfIt,
-  groupDeleted,
-  userDeleted,
   userPersist
 };
 

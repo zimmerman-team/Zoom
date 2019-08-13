@@ -332,8 +332,6 @@ const Routes = props => {
 
 const mapStateToProps = state => {
   return {
-    userUpdated: state.userUpdated,
-    userAdded: state.userAdded,
     user: state.currentUser
   };
 };

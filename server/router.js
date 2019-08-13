@@ -84,7 +84,7 @@ const checkJwt = jwt({
 // router.get('/getTest', checkJwt, ChartController.test);
 
 // gets user chart with a specified chart id, and user id ofcourse
-router.get('/getChart', ChartController.get);
+router.get('/getChart', checkJwt, ChartController.get);
 
 // gets all public charts
 router.get('/getPublicCharts', ChartController.getPublic);
@@ -93,57 +93,41 @@ router.get('/getPublicCharts', ChartController.getPublic);
 router.get('/getOnePublicChart', ChartController.getOnePublic);
 
 // gets all user charts and team charts
-router.get('/getAllCharts', ChartController.getAll);
+router.get('/getAllCharts', checkJwt, ChartController.getAll);
 
-router.post('/updateCreateChart', ChartController.updateCreate);
+router.post('/updateCreateChart', checkJwt, ChartController.updateCreate);
 
-router.post('/duplicateChart', ChartController.duplicateById);
+router.post('/duplicateChart', checkJwt, ChartController.duplicateById);
 
-router.post('/deleteChart', ChartController.delete);
+router.post('/deleteChart', checkJwt, ChartController.delete);
 
 // deletes all of users archived charts
-router.delete('/emptyChartTrash', ChartController.emptyTrash);
+router.delete('/emptyChartTrash', checkJwt, ChartController.emptyTrash);
 /* -------------- CHART CONTROLLER END ------------------------ */
 
 /* -------------- USER CONTROLLER START ----------------------- */
 
-router.get('/getUser', UserController.getUser);
+router.get('/getUser', checkJwt, UserController.getUser);
 
-router.post('/updateProfile', UserController.updateProfile);
-
-router.post('/addNewUser', UserController.addNewUser);
-
-router.post('/updateUser', UserController.updateUser);
-
-router.post('/updateUserByAdmin', UserController.updateUserByAdmin);
-
-router.post('/updateUsersTeam', UserController.updateUsersTeam);
-
-router.post('/deleteUser', UserController.deleteUser);
-
-router.post('/updateTeamAndUsersOfIt', UserController.updateTeamAndUsersOfIt);
-
-router.post('/deleteTeam', UserController.deleteTeam);
+router.post('/updateProfile', checkJwt, UserController.updateProfile);
 
 /* -------------- USER CONTROLLER END ------------------------- */
 
 /* -------------- DATASET CONTROLLER START ----------------------- */
 
-router.get('/getDataset', DatasetController.getDataset);
+router.get('/getOwnerDatasets', checkJwt, DatasetController.getOwnerDatasets);
 
-router.get('/getOwnerDatasets', DatasetController.getOwnerDatasets);
+router.get('/getDatasetIds', checkJwt, DatasetController.getDatasetIds);
 
-router.get('/getDatasetIds', DatasetController.getDatasetIds);
+router.post('/updateTeam', checkJwt, DatasetController.updateTeam);
 
-router.post('/updateTeam', DatasetController.updateTeam);
+router.post('/updatePublic', checkJwt, DatasetController.updatePublic);
 
-router.post('/updatePublic', DatasetController.updatePublic);
+router.post('/addNewDataset', checkJwt, DatasetController.addNewDataset);
 
-router.post('/addNewDataset', DatasetController.addNewDataset);
+router.post('/updateDataset', checkJwt, DatasetController.updateDataset);
 
-router.post('/updateDataset', DatasetController.updateDataset);
-
-router.delete('/deleteDataset', DatasetController.deleteDataset);
+router.delete('/deleteDataset', checkJwt, DatasetController.deleteDataset);
 
 /* -------------- DATASET CONTROLLER END ------------------------- */
 

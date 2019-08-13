@@ -60,12 +60,9 @@ class CreateTeamMediator extends React.Component {
   getAllUsers = initialLoad => {
     if (initialLoad) {
       this.props.dispatch(
-        getAllUsersRequest(
-          {
-            userId: this.props.user.authId
-          },
-          { Authorization: `Bearer ${this.props.user.idToken}` }
-        )
+        getAllUsersRequest({
+          userId: this.props.user.authId
+        })
       );
     } else {
       this.setUsers(this.state.allUsers, false);
@@ -168,14 +165,11 @@ class CreateTeamMediator extends React.Component {
     e.preventDefault();
 
     this.props.dispatch(
-      addAuthGroupRequest(
-        {
-          userId: this.props.user.authId,
-          name: this.state.name,
-          usersToAdd: this.state.users
-        },
-        { Authorization: `Bearer ${this.props.user.idToken}` }
-      )
+      addAuthGroupRequest({
+        userId: this.props.user.authId,
+        name: this.state.name,
+        usersToAdd: this.state.users
+      })
     );
   };
 
@@ -213,7 +207,6 @@ class CreateTeamMediator extends React.Component {
 const mapStateToProps = state => {
   return {
     allUsers: state.allUsers,
-    usersTeam: state.usersTeam,
     user: state.currentUser.data,
     addGroup: state.addGroup
   };

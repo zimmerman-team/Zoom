@@ -56,9 +56,7 @@ const About = () => {
             data-cy="about-link-to-guidelines"
             target="_blank"
             rel="noopener noreferrer"
-            href={`${
-              process.env.REACT_APP_GRAPHQL_HOST
-            }/static/Data guidelines_final.pdf`}
+            href={`${process.env.REACT_APP_GRAPHQL_HOST}/static/Data guidelines_final.pdf`}
           >
             Data guidelines_final.pdf
           </RedLink>

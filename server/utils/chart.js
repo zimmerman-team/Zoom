@@ -14,6 +14,25 @@ const consts = require('../config/consts');
 const chartTypes = consts.chartTypes;
 const dataPath = serverPath.concat('/data/');
 
+// just an outer function from the module exports
+// cause we want to use this same one in two different module exports
+function saveDataFileReuse(chartz, fileUrl, res) {
+  chartz.dataFileUrl = fileUrl;
+
+  chartz.save(urlSavErr => {
+    if (urlSavErr) {
+      general.handleError(res, urlSavErr);
+    } else {
+      res.json({
+        message: 'chart created',
+        id: chartz._id,
+        name: chartz.name,
+        chartType: chartz.type
+      });
+    }
+  });
+}
+
 module.exports = {
   writeGeoJson: (chartz, type, data, update = false) => {
     return new Promise(resolve => {
@@ -180,20 +199,7 @@ module.exports = {
   // a helper function to save charts data files url
   // to the chart
   saveDataFileUrl: (chartz, fileUrl, res) => {
-    chartz.dataFileUrl = fileUrl;
-
-    chartz.save(urlSavErr => {
-      if (urlSavErr) {
-        general.handleError(res, urlSavErr);
-      } else {
-        res.json({
-          message: 'chart created',
-          id: chartz._id,
-          name: chartz.name,
-          chartType: chartz.type
-        });
-      }
-    });
+    saveDataFileReuse(chartz, fileUrl, res);
   },
   // a helper function to write and save a charts
   // data file url and send a response
@@ -204,7 +210,7 @@ module.exports = {
         console.log('fileError', fileError);
         general.handleError(res, fileError);
       } else {
-        this.saveDataFileUrl(chartz, fileUrl, res);
+        saveDataFileReuse(chartz, fileUrl, res);
       }
     });
   }

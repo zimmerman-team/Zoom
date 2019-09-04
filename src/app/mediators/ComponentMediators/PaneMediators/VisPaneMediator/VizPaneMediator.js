@@ -56,7 +56,7 @@ const defaultProps = {
 const indicatorQuery = graphql`
   query VizPaneMediatorQuery(
     $year_Range: String!
-    $fileSource_Name_In: String!
+    $fileSource_Name_In: [String]!
     $country_Iso2: String
     $file_EntryId_In: String
   ) {
@@ -337,11 +337,7 @@ class VizPaneMediator extends React.Component {
     selectedSources = this.props.paneData.selectedSources,
     year_Range = this.state.yearRange
   ) {
-    let fileSource_Name_In = '';
-
-    selectedSources.forEach(source => {
-      fileSource_Name_In = fileSource_Name_In.concat(source).concat(',');
-    });
+    let fileSource_Name_In = selectedSources;
 
     fileSource_Name_In =
       fileSource_Name_In.length === 0 ? 'null' : fileSource_Name_In;

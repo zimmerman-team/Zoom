@@ -289,9 +289,9 @@ class WrapUpMediator extends React.Component {
       accessibility = 'o';
     }
 
-    const tags = metaData.tags.map(tag => {
-      return { name: tag };
-    });
+    // const tags = metaData.tags.map(tag => {
+    //   return { name: tag };
+    // });
 
     // and here we just use some random data, just to be able to upload the file
     const variables = {
@@ -318,7 +318,7 @@ class WrapUpMediator extends React.Component {
       source: this.state.sourceId
         ? this.state.sourceId
         : this.props.metaData.dataSource.value,
-      tags,
+      // tags,
       file: this.props.fileUrl
     };
 

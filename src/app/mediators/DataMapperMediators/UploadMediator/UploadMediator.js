@@ -205,7 +205,7 @@ class UploadMediator extends React.Component {
       // Location 2 is for the 'world' location
       location: '2',
       source: this.state.sourceId,
-      tags: [],
+      // tags: [],
       file: this.state.url
     };
 

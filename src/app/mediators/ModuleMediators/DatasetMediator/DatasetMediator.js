@@ -439,9 +439,9 @@ class DatasetMediator extends React.Component {
       accessibility = 'o';
     }
 
-    const tags = metaData.tags.map(tag => {
-      return { name: tag };
-    });
+    // const tags = metaData.tags.map(tag => {
+    //   return { name: tag };
+    // });
 
     // and here we just use some random data, just to be able to upload the file
     const variables = {
@@ -468,8 +468,8 @@ class DatasetMediator extends React.Component {
       surveyData: this.state.surveyId,
       source: this.state.sourceId
         ? this.state.sourceId
-        : metaData.dataSource.value,
-      tags
+        : metaData.dataSource.value
+      // tags
     };
 
     // and here we upload all the metadata for the file
@@ -546,13 +546,6 @@ export default createRefetchContainer(
             entryId
             title
             description
-            tags {
-              edges {
-                node {
-                  name
-                }
-              }
-            }
             file
             organisation
             fileTypes

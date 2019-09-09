@@ -51,7 +51,7 @@ jobs:
               echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
               echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
-              echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_DEV"' >> $BASH_ENV
+              echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_DEV"' >> $BASH_ENV4
               echo 'export REACT_APP_BACKEND_HOST="$DUCT_DEV"' >> $BASH_ENV
               echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
             elif [ "${CIRCLE_BRANCH}" == "production" ]; then
@@ -60,6 +60,11 @@ jobs:
               echo 'export REACT_APP_BACKEND_HOST="$DUCT_PROD"' >> $BASH_ENV
               echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
               echo 'export REACT_APP_AUTH_CUSTOM_DOMAIN="$REACT_APP_AUTH_PROD_CUSTOM_DOMAIN"' >> $BASH_ENV
+              echo 'export REACT_APP_AUTH_DOMAIN="$REACT_APP_PROD_AUTH_DOMAIN"' >> $BASH_ENV
+              echo 'export REACT_APP_CLIENT_ID="$REACT_APP_PROD_CLIENT_ID"' >> $BASH_ENV
+              echo 'export REACT_APP_AE_API_CLIENT_ID="$REACT_APP_PROD_AE_API_CLIENT_ID"' >> $BASH_ENV
+              echo 'export REACT_APP_AE_API_CLIENT_SECRET="$REACT_APP_PROD_AE_API_CLIENT_SECRET"' >> $BASH_ENV
+              echo 'export REACT_APP_AE_API_URL="$REACT_APP_PROD_AE_API_URL"' >> $BASH_ENV
             else
               echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
               echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_DEV"' >> $BASH_ENV

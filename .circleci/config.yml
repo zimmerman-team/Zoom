@@ -59,6 +59,7 @@ jobs:
               echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_PROD"' >> $BASH_ENV
               echo 'export REACT_APP_BACKEND_HOST="$DUCT_PROD"' >> $BASH_ENV
               echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
+              echo 'export REACT_APP_AUTH_CUSTOM_DOMAIN="$REACT_APP_AUTH_PROD_CUSTOM_DOMAIN"' >> $BASH_ENV
             else
               echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
               echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_DEV"' >> $BASH_ENV

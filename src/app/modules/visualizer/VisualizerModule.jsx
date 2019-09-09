@@ -25,10 +25,10 @@ const ModuleBase = styled.div`
 `;
 
 const propTypes = {
+  data: PropTypes.any,
   loggedIn: PropTypes.bool,
   sideBarOpen: PropTypes.bool,
   dropDownData: PropTypes.shape({}),
-  data: PropTypes.arrayOf(PropTypes.shape({})),
   dataPaneOpen: PropTypes.string,
   auth0Client: PropTypes.shape({}),
   chartKeys: PropTypes.array,

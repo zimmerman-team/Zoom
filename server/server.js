@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const config = require('./config/config');
+const path = require('path');
 const router = require('./router');
 const app = express();
 
@@ -31,6 +32,8 @@ app.disable('x-powered-by');
 
 // append /api for our http requests
 app.use('/api', router);
+
+app.use('/api/static', express.static(path.join(__dirname, '/static')));
 
 // launch our backend into a port
 app.listen(config.EXP_PORT, () =>

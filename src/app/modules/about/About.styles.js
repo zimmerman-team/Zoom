@@ -13,10 +13,12 @@ export const AboutTitle = styled(PageHeading)`
   text-align: center;
 `;
 
-export const Text = styled(DescriptionParagraph)`
-  padding: 46px 0;
-`;
+export const Text = styled(DescriptionParagraph)``;
 
 export const RedLink = styled.a`
   color: ${theme.color.aidsFondsRed};
+`;
+
+export const Section = styled.div`
+  padding-bottom: 24px;
 `;

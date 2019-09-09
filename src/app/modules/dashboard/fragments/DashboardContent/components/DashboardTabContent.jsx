@@ -80,10 +80,12 @@ const DashboardTabContent = props => {
       tabContentName = 'Charts';
       break;
     case 'data-sets':
-      targetData = isAdmin ? props.datasets : [];
+      targetData = isAdmin || props.isModerator ? props.datasets : [];
       targetUrl = '/mapper';
       leftOptionLabel =
-        props.isAdministrator || props.isSuperAdmin ? 'map data set' : null;
+        props.isAdministrator || props.isSuperAdmin || props.isModerator
+          ? 'map data set'
+          : null;
       tabContentName = 'Data sets';
       break;
     case 'users':

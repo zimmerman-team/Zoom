@@ -59,17 +59,12 @@ describe('Home page geo map datamapping', function() {
     cy.get('[data-cy="geomap-filter-button"]').click();
     cy.get('[data-cy="geo-map-container"]').click();
 
-    cy.get(
-      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
-    )
-      .first()
-      .click();
+    cy.get('[data-cy="indicator-1"]').click();
     cy.contains('new hiv infections').click();
-    cy.get('[class*=ZoomSelectstyles__Drop] > li').click();
-    cy.wait(1000);
-    cy.get('[class*=ZoomSelectstyles__Drop] > li').click();
+    cy.wait(2000);
     cy.waitPageLoader2();
     cy.waitPageLoader();
+    cy.wait(6000);
     cy.get('[data-cy="legendLayer-label"]').should(
       'contain',
       'new hiv infections'

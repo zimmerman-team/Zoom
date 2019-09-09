@@ -1,50 +1,50 @@
 /* utils */
 const utils = require('../utils/general');
+const userUtils = require('../utils/user');
 
 /* general */
 const general = require('./generalResponse');
 
 const Dataset = require('../models/Dataset');
-const User = require('../models/User');
 
 const consts = require('../config/consts');
 
 const roles = consts.roles;
 
 const DatasetApi = {
-  // gets data set, if its the owners data set
-  getDataset: (req, res) => {
-    const { authId, datasetId } = req.query;
-
-    User.findOne({ authId }, (error, author) => {
-      if (error) general.handleError(res, error);
-      else if (!author) general.handleError(res, 'User not found', 404);
-      else {
-        Dataset.findOne({ author, datasetId }).exec((setError, dataset) => {
-          if (setError) general.handleError(res, setError);
-          else res.json(dataset);
-        });
-      }
-    });
-  },
-
   // gets all datasets of the owner
   getOwnerDatasets: (req, res) => {
-    const { authId, sortBy, searchTitle } = req.query;
+    const { authId, sortBy, searchTitle, pageSize, page } = req.query;
 
-    User.findOne({ authId }, (error, author) => {
-      if (error) general.handleError(res, error);
-      else if (!author) general.handleError(res, 'User not found', 404);
-      else {
-        const sort = utils.getDashboardSortBy(sortBy);
+    userUtils.findOneUser(authId, res).then(author => {
+      if (author) {
+        const query = { author, name: { $regex: searchTitle, $options: 'i' } };
 
-        Dataset.find({ author, name: { $regex: searchTitle, $options: 'i' } })
-          .collation({ locale: 'en' })
-          .sort(sort)
-          .exec((setError, dataset) => {
-            if (setError) general.handleError(res, setError);
-            else res.json(dataset);
-          });
+        Dataset.countDocuments(query, (countError, count) => {
+          if (countError) {
+            general.handleError(res, countError);
+          } else {
+            const sort = utils.getDashboardSortBy(sortBy);
+            const pSize = parseInt(pageSize, 10);
+            const p = parseInt(page, 10);
+
+            Dataset.find(query)
+              .limit(pSize)
+              .skip(p * pSize)
+              .collation({ locale: 'en' })
+              .sort(sort)
+              .exec((datasetError, datasets) => {
+                if (datasetError) {
+                  general.handleError(res, datasetError);
+                } else {
+                  res.json({
+                    count,
+                    datasets
+                  });
+                }
+              });
+          }
+        });
       }
     });
   },
@@ -56,12 +56,8 @@ const DatasetApi = {
   getDatasetIds: (req, res) => {
     const { authId } = req.query;
 
-    User.findOne({ authId }, (error, author) => {
-      if (error) {
-        general.handleError(res, error);
-      } else if (!author) {
-        general.handleError(res, 'User not found', 404);
-      } else {
+    userUtils.findOneUser(authId, res).then(author => {
+      if (author) {
         Dataset.find(
           {
             $or: [
@@ -130,15 +126,10 @@ const DatasetApi = {
   addNewDataset: (req, res) => {
     const data = req.body;
 
-    User.findOne({ authId: data.authId }, (error, acc) => {
-      if (error) general.handleError(res, error);
-      else if (!acc) general.handleError(res, 'User not found', 404);
-      else {
-        if (
-          acc.role === roles.admin ||
-          acc.role === roles.superAdm ||
-          acc.role === roles.mod
-        ) {
+    userUtils
+      .findOneUser(data.authId, res, [roles.admin, roles.mod, roles.superAdm])
+      .then(acc => {
+        if (acc) {
           const dataset = new Dataset({
             datasetId: data.datasetId,
             author: acc,
@@ -150,69 +141,65 @@ const DatasetApi = {
 
           dataset.save(err => {
             if (err) {
-              console.log('err', error);
+              console.log('err', err);
               general.handleError(res, err);
             } else {
               res.json({ message: 'dataset saved' });
             }
           });
-        } else {
-          general.handleError(res, 'Unauthorized');
         }
-      }
-    });
+      });
   },
 
   // so this updates the dataset
   updateDataset: (req, res) => {
     const data = req.body;
 
-    User.findOne({ authId: data.authId }, (error, author) => {
-      if (error) general.handleError(res, error);
-      else if (!author) general.handleError(res, 'User not found', 404);
-      else if (
-        author.role === roles.admin ||
-        author.role === roles.superAdm ||
-        author.role === roles.mod
-      ) {
-        Dataset.findOne(
-          { author, datasetId: data.datasetId },
-          (setError, dataset) => {
-            if (setError) general.handleError(res, setError);
-            else {
-              if (data.name) dataset.name = data.name;
+    userUtils
+      .findOneUser(data.authId, res, [roles.admin, roles.mod, roles.superAdm])
+      .then(author => {
+        if (author) {
+          Dataset.findOne(
+            { author, datasetId: data.datasetId },
+            (setError, dataset) => {
+              if (setError) {
+                general.handleError(res, setError);
+              } else {
+                if (data.name) dataset.name = data.name;
 
-              if (data.teams) dataset.teams = data.teams;
+                if (data.teams) dataset.teams = data.teams;
 
-              if (data.dataSource) dataset.dataSource = data.dataSource;
+                if (data.dataSource) dataset.dataSource = data.dataSource;
 
-              if (data.public !== undefined) dataset.public = data.public;
+                if (data.public !== undefined) dataset.public = data.public;
+              }
+
+              dataset.save(err => {
+                if (err) {
+                  general.handleError(res, err);
+                } else {
+                  res.json({ message: 'dataset saved' });
+                }
+              });
             }
-
-            dataset.save(err => {
-              if (err) general.handleError(res, err);
-              else res.json({ message: 'dataset saved' });
-            });
-          }
-        );
-      } else {
-        general.handleError(res, 'Unauthorized', 401);
-      }
-    });
+          );
+        }
+      });
   },
 
   deleteDataset: (req, res) => {
     const { authId, datasetId } = req.query;
 
-    User.findOne({ authId }, (error, author) => {
-      if (error) general.handleError(res, error);
-      else if (!author) general.handleError(res, 'User not found', 404);
-      else if (author.role === 'Super admin' || author.role === 'Administrator')
+    userUtils.findOneUser(authId, res).then(author => {
+      if (author) {
         Dataset.deleteOne({ author, datasetId }, datasetErr => {
-          if (datasetErr) general.handleError(res, datasetErr);
-          else res.json({ message: 'dataset deleted' });
+          if (datasetErr) {
+            general.handleError(res, datasetErr);
+          } else {
+            res.json({ message: 'dataset deleted' });
+          }
         });
-      else general.handleError(res, 'Unauthorized', 401);
+      }
     });
   }
 };

@@ -9,7 +9,10 @@ import graphKeys from '__consts__/GraphStructKeyConst';
 import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
 import LineChart from 'components/charts/recharts_linechart/LineChart';
 /* styles */
-import { FragmentBase } from 'modules/visualizer/sort/container/VizContainer.style';
+import {
+  FragmentBase,
+  ChartContainer
+} from 'modules/visualizer/sort/container/VizContainer.style';
 
 /* mock */
 // import { LinechartMockData } from './LinechartMockData';
@@ -32,12 +35,7 @@ const propTypes = {
     PropTypes.shape({
       id: PropTypes.string,
       color: PropTypes.string,
-      data: PropTypes.arrayOf(
-        PropTypes.shape({
-          x: PropTypes.string,
-          y: PropTypes.number
-        })
-      )
+      data: PropTypes.any
     })
   )
 };
@@ -50,15 +48,17 @@ const defaultProps = {
 const LinechartFragment = props => {
   return (
     <FragmentBase>
-      <Box>
-        <LineChart
-          chartKeys={props.chartKeys}
-          data={props.indicatorData}
-          xAxisKey={props.specOptions[graphKeys.aggregate]}
-          specOptions={props.specOptions}
-        />
-      </Box>
-      <ChartLegends data={props.chartKeys} />
+      <ChartContainer>
+        <Box>
+          <LineChart
+            chartKeys={props.chartKeys}
+            data={props.indicatorData}
+            xAxisKey={props.specOptions[graphKeys.aggregate]}
+            specOptions={props.specOptions}
+          />
+        </Box>
+        <ChartLegends data={props.chartKeys} />
+      </ChartContainer>
     </FragmentBase>
   );
 };

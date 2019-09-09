@@ -3,6 +3,7 @@ import { Box } from 'grommet/components/Box';
 import { TextInput } from 'grommet/components/TextInput';
 import { Text } from 'grommet/components/Text';
 import theme from 'theme/Theme';
+import SimpleCheckbox from 'components/Checkbox/CheckBox';
 
 import ZoomButton from 'components/ZoomButton/ZoomButton';
 
@@ -70,4 +71,25 @@ export const ErrorMessage = styled(Box)`
 export const ErrorText = styled(Text)`
   color: #000000;
   font-weight: bold;
+`;
+
+export const SignInContainer = styled.div`
+  display: flex;
+`;
+
+export const PrivacyText = styled.div`
+  font-size: ${theme.fontSize.smallText};
+  font-family: ${theme.font.zoomFontFamTwo};
+`;
+
+export const PrivacyContainer = styled.div`
+  margin-left: 10px;
+  margin-top: 10px;
+  display: flex;
+  width: 40%;
+`;
+
+export const CheckBoxContainer = styled.div`
+  margin-bottom: auto;
+  margin-top: 2px;
 `;

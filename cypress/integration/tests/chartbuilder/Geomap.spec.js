@@ -5,27 +5,24 @@ beforeEach(() => {
 });
 
 describe('Chartbuilder geomap chart fragment e2e', function() {
-  it('Should map aids related deaths data on the geo map', function() {
+  it('Should map new hiv infections data on the geo map', function() {
     cy.log('**IT NAVIGATES AND ASSERTS ON URL**');
     cy.signIn();
+    cy.wait(2000);
     cy.navigateToCreateGeo();
     cy.url().should('include', '/visualizer/geomap');
 
     cy.log('**PLOTS SOME DATA**');
     //Here we wait till the indicators are loaded.
     cy.wait(2000);
-    cy.get(
-      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
-    )
-      .first()
-      .click();
-    cy.contains('aids related deaths (unaids)').click();
+    cy.get('[data-cy="indicator-1"]').click();
+    cy.contains('new hiv infections').click();
     //Here we wait till the data has been mapped
     cy.waitPageLoader();
-    cy.wait(8000);
+    cy.wait(16000);
     cy.get('[data-cy="legendLayer-label"]').should(
       'contain',
-      'aids related deaths (unaids)'
+      'new hiv infections'
     );
   });
 

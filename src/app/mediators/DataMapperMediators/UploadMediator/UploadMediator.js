@@ -18,11 +18,12 @@ import * as generalActions from 'services/actions/general';
 import UploadStep from 'modules/datamapper/fragments/UploadStep/UploadStep';
 import { SimpleErrorText } from 'components/sort/Misc';
 /* utils */
+import sortBy from 'lodash/sortBy';
 import isEqual from 'lodash/isEqual';
 import {
   formatManData,
-  formatModelOptions,
-  formatOverviewData
+  formatOverviewData,
+  defModelOptions
 } from './UploadMediator.util';
 import { formatErrorColumns } from 'mediators/DataMapperMediators/ManualMappingMediator.util';
 import Snackbar from '../../../components/Snackbar/Snackbar';
@@ -163,7 +164,7 @@ class UploadMediator extends React.Component {
       this.setState(
         {
           mappingJson,
-          modelOptions: formatModelOptions(mappingJson),
+          modelOptions: sortBy(defModelOptions, ['label']),
           fileId: response.file.entryId
         },
         this.fileValidation
@@ -204,7 +205,7 @@ class UploadMediator extends React.Component {
       // Location 2 is for the 'world' location
       location: '2',
       source: this.state.sourceId,
-      tags: [],
+      // tags: [],
       file: this.state.url
     };
 
@@ -312,9 +313,7 @@ class UploadMediator extends React.Component {
         // and we upload the file to the server
         const values = new FormData();
         values.append('file', file);
-        this.props.dispatch(
-          actions.uploadRequest(values, this.props.user.idToken)
-        );
+        this.props.dispatch(actions.uploadRequest(values));
         // we also reset the manMapData when a new file is uploaded
         // so that the loading icon would initiate
         this.setState({ file }, this.afterFileUpload);

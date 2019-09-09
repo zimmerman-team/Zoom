@@ -22,6 +22,7 @@ const propTypes = {
   changeSortBy: PropTypes.func,
   isSortByOpen: PropTypes.bool,
   setWrapperRef: PropTypes.func,
+  trashCount: PropTypes.number,
   trashCharts: PropTypes.array,
   greetingName: PropTypes.string,
   onEnterPressed: PropTypes.func,
@@ -42,6 +43,7 @@ const defaultProps = {
   greetingName: '',
   loading: false,
   changeSortBy: null,
+  trashCharts: [],
   setWrapperRef: null,
   onEnterPressed: null,
   isSortByOpen: false,
@@ -50,7 +52,7 @@ const defaultProps = {
   removeAll: null,
   users: [],
   teams: [],
-  trashCharts: [],
+  trashCount: 0,
   activeTab: 'charts',
   totalPages: 0,
   changePage: null,
@@ -64,6 +66,7 @@ const DashboardModule = ({
   sort,
   users,
   datasets,
+  trashCount,
   trashCharts,
   charts,
   teams,
@@ -81,6 +84,7 @@ const DashboardModule = ({
   changePage,
   isSuperAdmin,
   isAdministrator,
+  isModerator,
   auth0Client
 }) => (
   <ModuleContainer>
@@ -105,6 +109,7 @@ const DashboardModule = ({
       users={users}
       charts={charts}
       datasets={datasets}
+      trashCount={trashCount}
       trashCharts={trashCharts}
       removeAll={removeAll}
       teams={teams}
@@ -117,6 +122,7 @@ const DashboardModule = ({
       navItems={navItems}
       isAdministrator={isAdministrator}
       isSuperAdmin={isSuperAdmin}
+      isModerator={isModerator}
       auth0Client={auth0Client}
     />
     {totalPages > 0 && (

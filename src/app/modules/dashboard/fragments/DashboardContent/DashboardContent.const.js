@@ -1,17 +1,25 @@
 const Path = '/dashboard/';
 
-export function data(isAdmin, isSuperAdmin, users, teams, charts, dataSets) {
+export function data(
+  isAdmin,
+  isSuperAdmin,
+  users,
+  teams,
+  chartCount,
+  datasetCount
+) {
   return [
     {
       label: 'Charts',
       path: `${Path}charts`,
-      count: charts.length
+      count: chartCount
     },
     {
       label: 'Data sets',
       path: `${Path}data-sets`,
-      count: dataSets.length,
-      adminOnly: true
+      count: datasetCount,
+      adminOnly: true,
+      moderatorAllowed: true
     },
     {
       label: 'Users',

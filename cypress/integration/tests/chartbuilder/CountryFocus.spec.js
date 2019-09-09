@@ -17,16 +17,24 @@ describe('Chartbuilder country focus fragment e2e', function() {
     cy.percySnapshot('Chartbuilder - Kenya focus');
 
     cy.log('**Plots some Kenya specific data**');
-    cy.get(
-      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
-    )
-      .first()
-      .click();
-    cy.contains('aids related deaths (unaids)').click();
-
+    cy.get('[data-cy="indicator-1"]').click();
+    cy.wait(10000);
+    cy.get('[data-cy="geo-map-search"] input').type(
+      'number of new hiv infections'
+    );
+    cy.contains('number of new hiv infections').click();
+    cy.wait(1000);
+    cy.get('[class*=ZoomSelectstyles__DropDownContainer] > li').click({
+      force: true
+    });
+    cy.wait(1000);
+    cy.get('[class*=ZoomSelectstyles__DropDownContainer] > li').click({
+      force: true
+    });
+    cy.wait(8000);
     cy.get('[data-cy="legendLayer-label"]').should(
       'contain',
-      'aids related deaths (unaids)'
+      'number of new hiv infections'
     );
   });
 
@@ -41,14 +49,26 @@ describe('Chartbuilder country focus fragment e2e', function() {
     cy.percySnapshot('Chartbuilder - Netherlands focus');
 
     cy.log('**Plots some NL specific data**');
-    cy.get(
-      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
-    )
-      .first()
-      .click();
-    cy.contains('condom use').click();
 
-    cy.contains('men who have sex with men 25 plus').click();
-    cy.get('[data-cy="legendLayer-label"]').should('contain', 'condom use');
+    cy.wait(15000);
+    cy.get('[data-cy="indicator-1"]').click();
+    cy.wait(10000);
+    cy.get('[data-cy="geo-map-search"] input').type(
+      'number of new hiv infections'
+    );
+    cy.contains('number of new hiv infections').click({ force: true });
+    cy.wait(3000);
+    cy.get('[class*=ZoomSelectstyles__DropDownContainer] > li').click({
+      force: true
+    });
+    cy.wait(1000);
+    cy.get('[class*=ZoomSelectstyles__DropDownContainer] > li').click({
+      force: true
+    });
+    cy.wait(10000);
+    cy.get('[data-cy="legendLayer-label"]').should(
+      'contain',
+      'number of new hiv infections'
+    );
   });
 });

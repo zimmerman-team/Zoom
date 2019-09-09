@@ -6,6 +6,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 /* utils */
 import { formatCsvData } from 'components/charts/tablechart/TableChart.util';
+import sortBy from 'lodash/sortBy';
 
 /* consts */
 import {
@@ -24,19 +25,14 @@ const options = {
   filterType: 'dropdown',
   responsive: 'scroll',
   fixedHeader: true,
-  rowsPerPage: 100,
-  textLabels: {
-    toolbar: {
-      downloadCsv: 'Download ZOOM Format CSV'
-    }
-  }
+  rowsPerPage: 100
 };
 
 const propTypes = {
   title: PropTypes.string,
   data: PropTypes.array,
-  columns: PropTypes.object,
-  options: PropTypes.object
+  columns: PropTypes.array,
+  options: PropTypes.shape({})
 };
 const defaultProps = {
   title: 'No title given',
@@ -63,7 +59,7 @@ class TableChart extends React.Component {
   }
 
   handleDownload() {
-    const diffFormatedCsv = formatCsvData(this.props.data);
+    const diffFormatedCsv = formatCsvData(this.props.data, this.props.columns);
 
     this.setState({ diffFormatedCsv }, this.clickLink);
   }
@@ -98,8 +94,22 @@ class TableChart extends React.Component {
           options={{
             ...this.props.options,
             customToolbar: () => (
-              <DownloadButton handleDownload={() => this.handleDownload()} />
-            )
+              <DownloadButton
+                toolTipText="Download ZOOM Format CSV"
+                handleDownload={() => this.handleDownload()}
+              />
+            ),
+            customSort: (data, colInd, sort) => {
+              const sortedData = sortBy(data, row => {
+                return row.data[colInd] === undefined ? '' : row.data[colInd];
+              });
+
+              if (sort === 'asc') {
+                return sortedData;
+              }
+
+              return sortedData.reverse();
+            }
           }}
         />
       </MuiThemeProvider>

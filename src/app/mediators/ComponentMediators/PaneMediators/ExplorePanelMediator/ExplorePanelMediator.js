@@ -46,7 +46,7 @@ const defaultProps = {
 const indicatorQuery = graphql`
   query ExplorePanelMediatorQuery(
     $year_Range: String!
-    $fileSource_Name_In: String!
+    $fileSource_Name_In: [String]!
   ) {
     allIndicators(
       year_Range: $year_Range
@@ -201,11 +201,7 @@ class ExplorePanelMediator extends React.Component {
     selectedSources = this.state.selectedSources,
     year_Range = this.state.yearRange
   ) {
-    let fileSource_Name_In = '';
-
-    selectedSources.forEach(source => {
-      fileSource_Name_In = fileSource_Name_In.concat(source).concat(',');
-    });
+    let fileSource_Name_In = selectedSources;
 
     fileSource_Name_In =
       fileSource_Name_In.length === 0 ? 'null' : fileSource_Name_In;

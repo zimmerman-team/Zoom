@@ -6,6 +6,8 @@ import * as actions from 'services/actions/general';
 /* components */
 import Stepper from 'components/Stepper/Stepper';
 import Snackbar from 'components/Snackbar/Snackbar';
+/* consts */
+import { columnValues } from 'mediators/DataMapperMediators/WrapUpMediator/WrapUpMediator.const';
 
 /* utils */
 import {
@@ -45,6 +47,7 @@ class DataMapperModule extends React.Component {
       manMapEmptyValue: false,
       manMapEmptyFields: false,
       manMapEmptyFormat: false,
+      emptyValColFormat: false,
       mapStepDisabled: false,
 
       metaDataEmptyFields: [],
@@ -154,24 +157,29 @@ class DataMapperModule extends React.Component {
         }
 
         if (metaDataEmptyFields.length > 0) {
-          this.setState({ openSnackbar: true });
-          this.setState({ errorMessage: 'Please fill the required fields' });
-
           props.dispatch(actions.saveStepDataRequest(stepData));
-          return { metaDataEmptyFields };
-        } else {
-          return { metaDataEmptyFields, step: prevState.step + 1 };
+          return {
+            openSnackbar: true,
+            errorMessage: 'Please fill the required fields',
+            metaDataEmptyFields
+          };
         }
+
+        return { metaDataEmptyFields, step: prevState.step + 1 };
       } else if (prevState.step === 2) {
         if (!stepData.uploadData) {
-          this.setState({ openSnackbar: true });
-          this.setState({ errorMessage: 'Please upload a file' });
+          return {
+            openSnackbar: true,
+            errorMessage: 'Please upload a file'
+          };
         } else if (!stepData.manMapData || stepData.manMapData.length === 0) {
-          this.setState({ openSnackbar: true });
-          this.setState({ errorMessage: 'File uploading please wait...' });
-        } else {
-          return { step: prevState.step + 1 };
+          return {
+            openSnackbar: true,
+            errorMessage: 'File uploading please wait...'
+          };
         }
+
+        return { step: prevState.step + 1 };
       } else if (prevState.step === 4) {
         // So here we check if the fourth steps data has been saved
         // and if it contains anything because what we actually save here
@@ -179,13 +187,13 @@ class DataMapperModule extends React.Component {
         // and the user should be able to progress only if they've fixed
         // all the found errors
         if (!prevState.stepsDisabled && stepData.errorColumns.length > 0) {
-          this.setState({ openSnackbar: true });
-          this.setState({
+          return {
+            openSnackbar: true,
             errorMessage: 'Please correct errors before proceeding'
-          });
-        } else {
-          return { step: prevState.step + 1 };
+          };
         }
+
+        return { step: prevState.step + 1 };
       }
       // restriction for the manual mapping step
       else if (prevState.step === 5) {
@@ -206,6 +214,19 @@ class DataMapperModule extends React.Component {
           manMapEmptyFormat = true;
         }
 
+        let emptyValColFormat = false;
+
+        for (let i = 0; i < manMapData.length; i += 1) {
+          if (
+            columnValues.indexOf(manMapData[i].zoomModel) !== -1 &&
+            (!manMapData[i].label ||
+              !manMapData[i].lockedIn ||
+              manMapData[i].label.length === 0)
+          ) {
+            emptyValColFormat = true;
+          }
+        }
+
         if (
           emptyFields.length > 0 ||
           find(manMapData, item => {
@@ -215,29 +236,25 @@ class DataMapperModule extends React.Component {
             );
           })
         ) {
-          // so here we check if one of the empty manual mapping
-          // values is actually 'value' === a number for data
-          // we will not let the user populate it but just give them
-          // a message about it, cause their data needs to have a column like this
-          const emptyValue = emptyFields.indexOf('value') !== -1;
-          const manMapEmptyFields = emptyValue ? emptyFields.length > 1 : true;
+          const manMapEmptyFields = emptyFields.length > 1;
 
           stepData.manMapData = addInEmptyFieldRows(emptyFields, manMapData);
 
           props.dispatch(actions.saveStepDataRequest(stepData));
 
           return {
-            manMapEmptyValue: emptyValue,
+            emptyValColFormat,
             manMapEmptyFields,
             manMapEmptyFormat
           };
         }
         if (manMapEmptyFormat) {
-          return { manMapEmptyFormat };
+          return { manMapEmptyFormat, emptyValColFormat };
         }
         return {
           step: prevState.step + 1,
           manMapEmptyFormat,
+          emptyValColFormat,
           manMapEmptyFields: false,
           manMapEmptyValue: false
         };
@@ -277,6 +294,7 @@ class DataMapperModule extends React.Component {
         return (
           this.props.stepData.manMapData && (
             <ManMappingStep
+              emptyValColFormat={this.state.emptyValColFormat}
               emptyFormat={this.state.manMapEmptyFormat}
               emptyValue={this.state.manMapEmptyValue}
               manMapEmptyFields={this.state.manMapEmptyFields}

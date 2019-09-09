@@ -27,7 +27,7 @@ export const initIndItem = {
   selectedSubInd: []
 };
 
-export const devIndicatorInd = 109;
+export const devIndicatorInd = '109';
 
 export const devIndicatorName = 'aids related deaths (unaids)';
 
@@ -41,6 +41,10 @@ const initialState = {
   // and this ofcourse becomes false only when
   // actual chart data from the zoombackend has been loaded
   changesMade: true,
+  // so basically we'll use this variable to control
+  // the editing and removing of geojson files
+  // in the backends
+  currGeoJsonFile: null,
   yearPeriod: formatYearParam([1990, 2020]),
   chartMounted: false,
   authorName: 'You',

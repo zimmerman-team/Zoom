@@ -12,7 +12,10 @@ import ChartLegends from 'modules/visualizer/sort/container/fragments/common/Cha
 import { ResponsiveBar } from '@nivo/bar';
 import TooltipContent from 'modules/visualizer/sort/container/fragments/common/ToolTipContent';
 /* styles */
-import { FragmentBase } from 'modules/visualizer/sort/container/VizContainer.style';
+import {
+  FragmentBase,
+  ChartContainer
+} from 'modules/visualizer/sort/container/VizContainer.style';
 import graphKeys from '__consts__/GraphStructKeyConst';
 
 const Box = styled.div`
@@ -24,7 +27,7 @@ const Box = styled.div`
 
 const propTypes = {
   indicatorData: PropTypes.arrayOf(PropTypes.shape({})),
-  chartKeys: PropTypes.arrayOf(PropTypes.string)
+  chartKeys: PropTypes.arrayOf(PropTypes.shape({}))
 };
 const defaultProps = {
   indicatorData: [],
@@ -48,104 +51,106 @@ const BarchartFragment = props => {
 
   return (
     <FragmentBase>
-      <Box>
-        <ResponsiveBar
-          data={props.indicatorData}
-          keys={props.chartKeys.map(item => {
-            return item.key;
-          })}
-          margin={margin}
-          indexBy={props.specOptions[graphKeys.aggregate]}
-          tooltip={payload => (
-            <TooltipContent
-              aggrType={props.specOptions[graphKeys.aggregate]}
-              xKey={payload.data.geolocationTag || payload.data.date}
-              index={payload.index}
-              color={payload.color}
-              valueLabel={payload.data[`${payload.id}Label`]}
-              format={payload.data[`${payload.id}Format`]}
-              value={payload.value}
-            />
-          )}
-          padding={0.3}
-          groupMode={
-            props.specOptions[graphKeys.grouped] ? 'grouped' : 'stacked'
-          }
-          colorBy={d => {
-            const chartItem = find(props.chartKeys, ['key', d.id]);
-            if (chartItem) {
-              return chartItem.color;
+      <ChartContainer>
+        <Box>
+          <ResponsiveBar
+            data={props.indicatorData}
+            keys={props.chartKeys.map(item => {
+              return item.key;
+            })}
+            margin={margin}
+            indexBy={props.specOptions[graphKeys.aggregate]}
+            tooltip={payload => (
+              <TooltipContent
+                aggrType={props.specOptions[graphKeys.aggregate]}
+                xKey={payload.data.geolocationTag || payload.data.date}
+                index={payload.index}
+                color={payload.color}
+                valueLabel={payload.data[`${payload.id}Label`]}
+                format={payload.data[`${payload.id}Format`]}
+                value={payload.value}
+              />
+            )}
+            padding={0.3}
+            groupMode={
+              props.specOptions[graphKeys.grouped] ? 'grouped' : 'stacked'
             }
-            return '#38bcb2';
-          }}
-          defs={[
-            {
-              id: 'dots',
-              type: 'patternDots',
-              background: 'inherit',
-              color: '#38bcb2',
-              size: 4,
-              padding: 1,
-              stagger: true
-            },
-            {
-              id: 'lines',
-              type: 'patternLines',
-              background: 'inherit',
-              color: '#eed312',
-              rotation: -45,
-              lineWidth: 6,
-              spacing: 10
-            }
-          ]}
-          // fill={[
-          //   {
-          //     match: {
-          //       id: 'fries'
-          //     },
-          //     id: 'dots'
-          //   },
-          //   {
-          //     match: {
-          //       id: 'sandwich'
-          //     },
-          //     id: 'lines'
-          //   }
-          // ]}
+            colorBy={d => {
+              const chartItem = find(props.chartKeys, ['key', d.id]);
+              if (chartItem) {
+                return chartItem.color;
+              }
+              return '#38bcb2';
+            }}
+            defs={[
+              {
+                id: 'dots',
+                type: 'patternDots',
+                background: 'inherit',
+                color: '#38bcb2',
+                size: 4,
+                padding: 1,
+                stagger: true
+              },
+              {
+                id: 'lines',
+                type: 'patternLines',
+                background: 'inherit',
+                color: '#eed312',
+                rotation: -45,
+                lineWidth: 6,
+                spacing: 10
+              }
+            ]}
+            // fill={[
+            //   {
+            //     match: {
+            //       id: 'fries'
+            //     },
+            //     id: 'dots'
+            //   },
+            //   {
+            //     match: {
+            //       id: 'sandwich'
+            //     },
+            //     id: 'lines'
+            //   }
+            // ]}
 
-          layout={
-            props.specOptions[graphKeys.horizont] ? 'horizontal' : 'vertical'
-          }
-          borderColor="inherit:darker(1.6)"
-          axisTop={null}
-          axisRight={null}
-          axisBottom={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: '',
-            legendPosition: 'middle',
-            legendOffset: 32
-          }}
-          axisLeft={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: '',
-            legendPosition: 'middle',
-            legendOffset: -40
-          }}
-          enableLabel={false}
-          labelSkipWidth={12}
-          labelSkipHeight={12}
-          labelTextColor="inherit:darker(1.6)"
-          animate
-          motionStiffness={90}
-          motionDamping={15}
-          legends={[]}
-        />
-      </Box>
-      <ChartLegends data={props.chartKeys} />
+            layout={
+              props.specOptions[graphKeys.horizont] ? 'horizontal' : 'vertical'
+            }
+            borderColor="inherit:darker(1.6)"
+            axisTop={null}
+            axisRight={null}
+            axisBottom={{
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+              legend: '',
+              legendPosition: 'middle',
+              legendOffset: 32
+            }}
+            axisLeft={{
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+              legend: '',
+              legendPosition: 'middle',
+              legendOffset: -40
+            }}
+            enableLabel={false}
+            labelSkipWidth={12}
+            labelSkipHeight={12}
+            labelTextColor="inherit:darker(1.6)"
+            animate
+            motionStiffness={90}
+            motionDamping={15}
+            legends={[]}
+          />
+        </Box>
+        <ChartLegends data={props.chartKeys} />
+      </ChartContainer>
     </FragmentBase>
   );
 };

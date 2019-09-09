@@ -5,29 +5,22 @@ beforeEach(() => {
 });
 
 describe('Chartbuilder table chart fragment e2e', function() {
-  it('Should contain /tablechart in the url and map aids related deaths data', function() {
+  it('Should contain /tablechart in the url and map new hiv infections data', function() {
     cy.signIn();
     cy.navigateToTablechart();
     cy.waitPageLoader2();
     cy.waitPageLoader();
     cy.url().should('include', '/visualizer/tablechart');
 
+    cy.wait(4000);
     cy.get('[data-cy="year-2005"]').click();
     //Here we wait till the indicators have loaded.
     cy.wait(2000);
-    cy.get(
-      '[class*=ExpansionPanelContainer]:nth-child(4) [data-cy="zoom-select"]'
-    )
-      .first()
-      .click();
+    cy.get('[data-cy="indicator-1"]').click();
 
-    cy.contains('aids related deaths (unaids)').click();
+    cy.contains('new hiv infections').click();
     cy.waitPageLoader();
-    cy.get('#MUIDataTableBodyRow-2 > :nth-child(5)').should('contain', '2005');
-    cy.get('#MUIDataTableBodyRow-2 > :nth-child(9)').should(
-      'contain',
-      'aids related deaths (unaids)'
-    );
+    cy.get('thead').should('contain', 'new hiv infections');
   });
 
   it('Should make a snapshot of the visual current state', function() {

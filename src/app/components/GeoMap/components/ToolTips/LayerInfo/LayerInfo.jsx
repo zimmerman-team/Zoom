@@ -1,8 +1,7 @@
 import React from 'react';
 
 /* utils */
-import { truncateText } from 'components/GeoMap/components/ToolTips/ToolTip.util';
-import { formatNumber } from 'utils/genericUtils';
+import { formatNumber, truncateText } from 'utils/genericUtils';
 
 /* styles */
 import {

@@ -4,7 +4,7 @@ import Fade from '@material-ui/core/Fade';
 import { ZimmermanSnackbar, Message } from './Snackbar.style';
 
 const propTypes = {
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string,
   autoHideDuration: PropTypes.number
 };
 

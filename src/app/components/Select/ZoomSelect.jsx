@@ -46,13 +46,15 @@ const propTypes = {
   selectedRegionCodes: PropTypes.arrayOf(PropTypes.string),
   disabledValues: PropTypes.arrayOf(PropTypes.string),
   dropDownWidth: PropTypes.number,
+  dataCy: PropTypes.string,
   capitalize: PropTypes.bool
 };
 
 const defaultProps = {
   border: false,
   categorise: false,
-  defaultAll: true,
+  defaultAll: false,
+  dataCy: 'zoom-select',
   placeHolder: 'Has no indicators',
   placeHolderText: 'Has no indicators',
   placeHolderNumber: undefined,
@@ -351,7 +353,7 @@ class ZoomSelect extends React.Component {
         style={this.props.disabled ? { pointerEvents: 'none' } : {}}
         ref={this.setWrapperRef}
         compBorder={this.props.border}
-        data-cy="zoom-select"
+        data-cy={this.props.dataCy}
       >
         <SelectHeader
           capitalize={this.props.capitalize}

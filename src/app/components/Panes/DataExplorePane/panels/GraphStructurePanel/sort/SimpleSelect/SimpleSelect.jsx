@@ -101,7 +101,10 @@ const ZimSelect = styled(props => <Select {...props} />)`
   }
 `;
 
-const ZimMenuItem = styled(props => <MenuItem {...props} />)`
+// note because of some nonsenses happening in material ui MenuItem component
+// we get warnings about some refs when this menu item is wrapped the same way as others are
+// so currently its wrapped in a simpler way and doesn't produce the warning
+const ZimMenuItem = styled(MenuItem)`
   && {
     font-family: ${themes.font.zoomFontFamTwo};
     font-size: 14px;
@@ -172,7 +175,7 @@ class SimpleSelect extends React.Component {
             IconComponent={IconPointer}
           >
             {this.props.options.map(option => (
-              <ZimMenuItem value={option.value} key={option.key}>
+              <ZimMenuItem value={option.value} key={option.value}>
                 {option.label}
               </ZimMenuItem>
             ))}

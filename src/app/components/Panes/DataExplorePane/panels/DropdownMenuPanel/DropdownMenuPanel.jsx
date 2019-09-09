@@ -6,6 +6,7 @@ import findIndex from 'lodash/findIndex';
 /* components */
 import { DropDownCont } from 'components/Panes/DataExplorePane/DataExplorerPane.style';
 import SimpleSwitch from 'components/SimpleSwitch/SimpleSwitch';
+import ZoomSelect from 'components/Select/ZoomSelect';
 /* icons */
 import SvgIconAdd from 'assets/icons/IconAdd';
 /* styles */
@@ -16,8 +17,7 @@ import {
   IndicatorLabel,
   IndicatorRemove,
   IndLabelContainer,
-  SwitchContainer,
-  ZoomSelect
+  SwitchContainer
 } from './DropdownMenuPanel.style';
 
 const propTypes = {
@@ -108,6 +108,16 @@ const DropdownMenuPanel = props => {
             props.chartKeys[chartKeyInd].orientation === 'right';
         }
 
+        let dataCy = `datapane-select-${index}`;
+
+        if (detail.isIndicator) {
+          dataCy = `indicator-${detail.indIndex + 1}`;
+        }
+
+        if (detail.subIndicator) {
+          dataCy = `sub-indicator-${detail.indIndex + 1}`;
+        }
+
         return (
           // FIXME: creating a key for this listItem messes up the indicator results.
           <DropDownCont
@@ -127,7 +137,7 @@ const DropdownMenuPanel = props => {
               </IndLabelContainer>
             )}
             <ZoomSelect
-              data-cy={`datapane-select-${index}`}
+              dataCy={dataCy}
               disabledValues={detail.disabledValues}
               categorise={detail.categorise}
               multiple={detail.multiple}

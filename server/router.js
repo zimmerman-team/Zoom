@@ -1,5 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
+const url = require('url');
+const http = require('http');
+const path = require('path');
 
 const cryptoJs = require('crypto-js');
 
@@ -15,6 +19,8 @@ const EmailController = require('./controllers/EmailController');
 const AuthUserController = require('./controllers/AuthUserController');
 const AuthGroupController = require('./controllers/AuthGroupController');
 const AuthRoleController = require('./controllers/AuthRoleController');
+
+/* -------------- MIDDLEWARE START ------------------------ */
 
 router.use((req, res, next) => {
   // so here basically we'll decrypt the values retrieved from the frontend
@@ -61,9 +67,7 @@ const checkJwt = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 200,
-    jwksUri: `https://${
-      process.env.REACT_APP_AUTH_CUSTOM_DOMAIN
-    }/.well-known/jwks.json`
+    jwksUri: `https://${process.env.REACT_APP_AUTH_CUSTOM_DOMAIN}/.well-known/jwks.json`
   }),
 
   // Validate the audience and the issuer.
@@ -72,11 +76,7 @@ const checkJwt = jwt({
   algorithms: ['RS256']
 });
 
-// so this should only be uncommented and used if you have
-// a clean database, and just need some data init
-// NOTE: the seeded data may not be used for the actual frontend to work
-// unless you adjust it in some proper way
-// router.get('/seedChart', ChartController.seedChart);
+/* -------------- MIDDLEWARE END ------------------------ */
 
 /* -------------- CHART CONTROLLER START ------------------------ */
 
@@ -84,7 +84,7 @@ const checkJwt = jwt({
 // router.get('/getTest', checkJwt, ChartController.test);
 
 // gets user chart with a specified chart id, and user id ofcourse
-router.get('/getChart', ChartController.get);
+router.get('/getChart', checkJwt, ChartController.get);
 
 // gets all public charts
 router.get('/getPublicCharts', ChartController.getPublic);
@@ -93,62 +93,41 @@ router.get('/getPublicCharts', ChartController.getPublic);
 router.get('/getOnePublicChart', ChartController.getOnePublic);
 
 // gets all user charts and team charts
-router.get('/getAllCharts', ChartController.getAll);
+router.get('/getAllCharts', checkJwt, ChartController.getAll);
 
-// gets all team charts
-router.get('/getTeamFeedCharts', ChartController.getTeamFeedCharts);
+router.post('/updateCreateChart', checkJwt, ChartController.updateCreate);
 
-router.post('/updateCreateChart', ChartController.updateCreate);
+router.post('/duplicateChart', checkJwt, ChartController.duplicateById);
 
-router.post('/duplicateChart', ChartController.duplicateById);
-
-router.post('/updateChart', ChartController.update);
-
-router.post('/deleteChart', ChartController.delete);
+router.post('/deleteChart', checkJwt, ChartController.delete);
 
 // deletes all of users archived charts
-router.delete('/emptyChartTrash', ChartController.emptyTrash);
+router.delete('/emptyChartTrash', checkJwt, ChartController.emptyTrash);
 /* -------------- CHART CONTROLLER END ------------------------ */
 
 /* -------------- USER CONTROLLER START ----------------------- */
 
-router.get('/getUser', UserController.getUser);
+router.get('/getUser', checkJwt, UserController.getUser);
 
-router.post('/updateProfile', UserController.updateProfile);
-
-router.post('/addNewUser', UserController.addNewUser);
-
-router.post('/updateUser', UserController.updateUser);
-
-router.post('/updateUserByAdmin', UserController.updateUserByAdmin);
-
-router.post('/updateUsersTeam', UserController.updateUsersTeam);
-
-router.post('/deleteUser', UserController.deleteUser);
-
-router.post('/updateTeamAndUsersOfIt', UserController.updateTeamAndUsersOfIt);
-
-router.post('/deleteTeam', UserController.deleteTeam);
+router.post('/updateProfile', checkJwt, UserController.updateProfile);
 
 /* -------------- USER CONTROLLER END ------------------------- */
 
 /* -------------- DATASET CONTROLLER START ----------------------- */
 
-router.get('/getDataset', DatasetController.getDataset);
+router.get('/getOwnerDatasets', checkJwt, DatasetController.getOwnerDatasets);
 
-router.get('/getOwnerDatasets', DatasetController.getOwnerDatasets);
+router.get('/getDatasetIds', checkJwt, DatasetController.getDatasetIds);
 
-router.get('/getDatasetIds', DatasetController.getDatasetIds);
+router.post('/updateTeam', checkJwt, DatasetController.updateTeam);
 
-router.post('/updateTeam', DatasetController.updateTeam);
+router.post('/updatePublic', checkJwt, DatasetController.updatePublic);
 
-router.post('/updatePublic', DatasetController.updatePublic);
+router.post('/addNewDataset', checkJwt, DatasetController.addNewDataset);
 
-router.post('/addNewDataset', DatasetController.addNewDataset);
+router.post('/updateDataset', checkJwt, DatasetController.updateDataset);
 
-router.post('/updateDataset', DatasetController.updateDataset);
-
-router.delete('/deleteDataset', DatasetController.deleteDataset);
+router.delete('/deleteDataset', checkJwt, DatasetController.deleteDataset);
 
 /* -------------- DATASET CONTROLLER END ------------------------- */
 
@@ -158,9 +137,7 @@ router.get('/sendEmail', EmailController.sendMail);
 
 /* -------------- EMAIL CONTROLLER END ------------------------- */
 
-router.get('/redirectToHome', (req, res) => {
-  res.redirect(`${process.env.REACT_APP_PROJECT_URL}/home/#`);
-});
+/* -------------- AUTH CONTROLLER START ----------------------- */
 
 router.get('/getUserGroup', checkJwt, AuthGroupController.getUserGroup);
 
@@ -189,5 +166,62 @@ router.post('/editUser', checkJwt, AuthUserController.editUser);
 router.post('/addUser', checkJwt, AuthUserController.addUser);
 
 router.post('/addGroup', checkJwt, AuthGroupController.addGroup);
+
+/* -------------- AUTH CONTROLLER END ----------------------- */
+
+/* -------------- MISCELLANEOUS START ----------------------- */
+
+router.get('/redirectToHome', (req, res) => {
+  res.redirect(`${process.env.REACT_APP_PROJECT_URL}/home/#`);
+});
+
+// basically this guy will download a geojson file from DUCT
+// save it in this express backend, and then it will be served
+// to the mapbox of this frontend, this is mainly used
+// for development purposes, to work around cors issues
+// generated by mapbox
+// this will also be used to delete them files
+router.get('/loadGeoJson', (req, res) => {
+  const { prevGeoJson, urlGeoJson } = req.query;
+
+  if (prevGeoJson) {
+    const fullPathRem = path.join(__dirname, '/static/', prevGeoJson);
+    if (fs.existsSync(fullPathRem)) {
+      fs.unlinkSync(fullPathRem);
+    }
+  }
+
+  if (urlGeoJson) {
+    const fileName = url
+      .parse(urlGeoJson)
+      .pathname.split('/')
+      .pop();
+
+    const pathToFile = '/static/'.concat(fileName);
+
+    const urlToFile = '/api'.concat(pathToFile);
+
+    const fullPath = path.join(__dirname, pathToFile);
+
+    const file = fs.createWriteStream(fullPath, {
+      flags: 'w'
+    });
+
+    http.get(urlGeoJson, fileRes => {
+      fileRes
+        .on('data', data => {
+          file.write(data);
+        })
+        .on('end', () => {
+          file.end();
+          res.send(urlToFile);
+        });
+    });
+  } else {
+    res.send('File deleted');
+  }
+});
+
+/* -------------- MISCELLANEOUS END ----------------------- */
 
 module.exports = router;

@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 /* components */
 import {
   EditUserForm,
-  Message
+  Message,
+  Container,
+  DropDownContainer,
+  DropDownLabel
 } from 'modules/UserManagement/EditUser/EditUserModule.styles';
 
 import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
@@ -15,6 +18,7 @@ import { Tooltip } from 'react-tippy';
 import theme from 'theme/Theme';
 // import ZoomSelect from 'components/Select/ZoomSelect';
 import ZoomButton from 'components/ZoomButton/ZoomButton';
+import ZoomSelect from 'components/Select/ZoomSelect';
 
 const propTypes = {
   email: PropTypes.string,
@@ -27,19 +31,32 @@ const propTypes = {
   changeLastName: PropTypes.func,
   changeFirstName: PropTypes.func,
   submitForm: PropTypes.func,
+  changeUserRole: PropTypes.func,
+  roleOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string
+    })
+  ),
+  isAdmin: PropTypes.bool,
+  roleSelected: PropTypes.string,
   viewOnly: PropTypes.bool
 };
 const defaultProps = {
   email: '',
   success: false,
   secondaryInfoMessage: null,
+  changeUserRole: null,
+  roleOptions: [],
   errorMessage: null,
   lastName: '',
   firstName: '',
   changeEmail: null,
   changeLastName: null,
   changeFirstName: null,
+  roleSelected: '',
   submitForm: null,
+  isAdmin: false,
   viewOnly: false
 };
 
@@ -95,6 +112,24 @@ const EditUserModule = props => {
           onChange={props.changeEmail}
           disabled={props.viewOnly}
         />
+
+        {props.isAdmin && (
+          <Container>
+            {/* user role dropdown */}
+            <DropDownContainer>
+              <DropDownLabel>User role</DropDownLabel>
+              <ZoomSelect
+                border
+                search={false}
+                dropDownWidth={280}
+                placeHolderText="Select user role"
+                data={props.roleOptions}
+                selectVal={props.changeUserRole}
+                valueSelected={props.roleSelected}
+              />
+            </DropDownContainer>
+          </Container>
+        )}
 
         {!props.viewOnly && (
           <Tooltip

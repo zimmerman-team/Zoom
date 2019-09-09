@@ -126,7 +126,7 @@ class ManMappingStep extends React.Component {
                   !val.emptyFieldRow &&
                   columnValues.indexOf(val.zoomModel) === -1
                 }
-                value={val.label}
+                defaultValue={val.label}
                 onChange={e => this.changeLabel(e.target.value, val.fileType)}
                 variant="outlined"
               />

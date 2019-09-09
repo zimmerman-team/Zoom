@@ -111,6 +111,7 @@ class DuplicatorMediator extends React.Component {
         selectedYears: this.props.chartData.selectedYears,
         selectedCountryVal: this.props.chartData.selectedCountryVal,
         selectedRegionVal: this.props.chartData.selectedRegionVal,
+        selectedRegionCodes: this.props.chartData.selectedRegionCodes,
         specOptions: this.props.chartData.specOptions
       };
 

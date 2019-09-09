@@ -40,7 +40,7 @@ const propTypes = {
         PropTypes.shape({
           node: PropTypes.shape({
             name: PropTypes.string,
-            iso2: PropTypes.string
+            iso3: PropTypes.string
           })
         })
       )
@@ -56,7 +56,7 @@ const defaultProps = {
 const indicatorQuery = graphql`
   query VizPaneMediatorQuery(
     $year_Range: String!
-    $fileSource_Name_In: String!
+    $fileSource_Name_In: [String]!
     $country_Iso2: String
     $file_EntryId_In: String
   ) {
@@ -88,6 +88,8 @@ class VizPaneMediator extends React.Component {
       .concat(initialState.yearPeriod[0])
       .concat(',')
       .concat(initialState.yearPeriod[initialState.yearPeriod.length - 1]);
+
+    this._isMounted = false;
 
     this.state = {
       allIndNames: [],
@@ -124,6 +126,7 @@ class VizPaneMediator extends React.Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     let allCountries = [];
     let allRegions = [];
 
@@ -131,20 +134,20 @@ class VizPaneMediator extends React.Component {
       allCountries = [
         {
           label: 'Kenya',
-          value: 'ke'
+          value: 'ken'
         }
       ];
     } else if (this.props.paneData.chartType === chartTypes.focusNL) {
       allCountries = [
         {
           label: 'Netherlands',
-          value: 'nl'
+          value: 'nld'
         }
       ];
     } else {
       allCountries = this.props.dropDownData.allCountries.edges.map(
         indicator => {
-          return { label: indicator.node.name, value: indicator.node.iso2 };
+          return { label: indicator.node.name, value: indicator.node.iso3 };
         }
       );
 
@@ -161,7 +164,7 @@ class VizPaneMediator extends React.Component {
       allRegions = sortBy(allRegions, ['label']);
 
       // and we also push in a variable for undefined
-      allRegions.push({ label: 'undefined', value: [{ iso2: 'undefined' }] });
+      allRegions.push({ label: 'undefined', value: [{ iso3: 'undefined' }] });
     }
 
     let allFileSources = this.props.dropDownData.allFileSources.edges.map(
@@ -204,7 +207,7 @@ class VizPaneMediator extends React.Component {
     ) {
       let allCountries = this.props.dropDownData.allCountries.edges.map(
         indicator => {
-          return { label: indicator.node.name, value: indicator.node.iso2 };
+          return { label: indicator.node.name, value: indicator.node.iso3 };
         }
       );
 
@@ -223,7 +226,7 @@ class VizPaneMediator extends React.Component {
       allRegions = sortBy(allRegions, ['label']);
 
       // and we also push in a variable for undefined
-      allRegions.push({ label: 'undefined', value: [{ iso2: 'undefined' }] });
+      allRegions.push({ label: 'undefined', value: [{ iso3: 'undefined' }] });
 
       this.setState({
         locReselected: true,
@@ -240,6 +243,10 @@ class VizPaneMediator extends React.Component {
         locReselected: false
       });
     }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   getIndicators() {
@@ -327,14 +334,10 @@ class VizPaneMediator extends React.Component {
   }
 
   refetch(
-    selectedSources = this.state.selectedSources,
+    selectedSources = this.props.paneData.selectedSources,
     year_Range = this.state.yearRange
   ) {
-    let fileSource_Name_In = '';
-
-    selectedSources.forEach(source => {
-      fileSource_Name_In = fileSource_Name_In.concat(source).concat(',');
-    });
+    let fileSource_Name_In = selectedSources;
 
     fileSource_Name_In =
       fileSource_Name_In.length === 0 ? 'null' : fileSource_Name_In;
@@ -376,8 +379,9 @@ class VizPaneMediator extends React.Component {
         });
 
         allIndNames = sortBy(allIndNames, ['label']);
-
-        this.setState({ allIndNames });
+        if (this._isMounted) {
+          this.setState({ allIndNames });
+        }
       }
     );
   }
@@ -441,6 +445,13 @@ class VizPaneMediator extends React.Component {
           })
         );
       } else {
+        const chartType = this.props.paneData.chartType;
+
+        const isGeoChart =
+          chartType === chartTypes.focusNL ||
+          chartType === chartTypes.geoMap ||
+          chartType === chartTypes.focusKE;
+
         // so we set the values for chart data
         // * AND ALSO whenever an indicator is selected
         // the year jumps to the most recent year of the
@@ -450,8 +461,9 @@ class VizPaneMediator extends React.Component {
             // so the year reselection functionality only works with geolocations thats why we
             // refetch all indicators only when the aggregate option IS geolocation
             refetchAll:
-              this.props.chartData.specOptions[graphKeys.aggregate] ===
-                aggrOptions[0].value &&
+              (this.props.chartData.specOptions[graphKeys.aggregate] ===
+                aggrOptions[0].value ||
+                isGeoChart) &&
               this.props.chartData.selectedYear !== val.lastYear,
             selectedInd,
             indicatorSelected: true,
@@ -480,7 +492,7 @@ class VizPaneMediator extends React.Component {
         subIndicators: indItem.subIndicators,
         aggregate: indItem.aggregate,
         dataSource: indItem.dataSource,
-        selectedSubInd: [...indItem.selectedSubInd]
+        selectedSubInd: indItem.selectedSubInd.map(subInd => subInd)
       });
     });
 
@@ -509,6 +521,7 @@ class VizPaneMediator extends React.Component {
     // so we set the values for chart data
     this.props.dispatch(
       actions.storeChartDataRequest({
+        refetchAll: false,
         indSelectedIndex: index,
         refetch: true,
         selectedInd
@@ -615,7 +628,7 @@ class VizPaneMediator extends React.Component {
       selectedRegionsVal.forEach(region =>
         region.forEach(country =>
           allCountries.forEach(allCountry => {
-            if (country.iso2 === allCountry.value) {
+            if (country.iso3 === allCountry.value) {
               selectedCountryVal.push(allCountry);
             }
           })
@@ -791,7 +804,7 @@ class VizPaneMediator extends React.Component {
         saveGraphOption={this.saveGraphOption}
         allFileSources={this.state.allFileSources}
         selectDataSource={this.selectDataSource}
-        selectedSources={this.state.selectedSources}
+        selectedSources={this.props.paneData.selectedSources}
         indNames={this.state.allIndNames}
         countries={this.state.allCountries}
         regions={this.state.allRegions}
@@ -844,7 +857,7 @@ export default createFragmentContainer(
         edges {
           node {
             name
-            iso2
+            iso3
           }
         }
       }
@@ -861,7 +874,7 @@ export default createFragmentContainer(
             name
             code
             country {
-              iso2
+              iso3
             }
           }
         }

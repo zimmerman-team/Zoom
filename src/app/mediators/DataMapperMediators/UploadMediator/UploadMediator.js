@@ -205,7 +205,7 @@ class UploadMediator extends React.Component {
       // Location 2 is for the 'world' location
       location: '2',
       source: this.state.sourceId,
-      tags: [],
+      // tags: [],
       file: this.state.url
     };
 
@@ -313,9 +313,7 @@ class UploadMediator extends React.Component {
         // and we upload the file to the server
         const values = new FormData();
         values.append('file', file);
-        this.props.dispatch(
-          actions.uploadRequest(values, this.props.user.idToken)
-        );
+        this.props.dispatch(actions.uploadRequest(values));
         // we also reset the manMapData when a new file is uploaded
         // so that the loading icon would initiate
         this.setState({ file }, this.afterFileUpload);

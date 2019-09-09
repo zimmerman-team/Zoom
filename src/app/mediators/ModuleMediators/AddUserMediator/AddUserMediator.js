@@ -31,20 +31,14 @@ class AddUserMediator extends React.Component {
 
   componentDidMount = () => {
     this.props.dispatch(
-      getRolesRequest(
-        {
-          userId: this.props.user.authId
-        },
-        { Authorization: `Bearer ${this.props.user.idToken}` }
-      )
+      getRolesRequest({
+        userId: this.props.user.authId
+      })
     );
     this.props.dispatch(
-      getGroupsRequest(
-        {
-          userId: this.props.user.authId
-        },
-        { Authorization: `Bearer ${this.props.user.idToken}` }
-      )
+      getGroupsRequest({
+        userId: this.props.user.authId
+      })
     );
   };
 
@@ -96,19 +90,16 @@ class AddUserMediator extends React.Component {
   submitForm = e => {
     e.preventDefault();
     this.props.dispatch(
-      addAuthUserRequest(
-        {
-          adminId: this.props.user.authId,
-          email: this.state.email,
-          name: this.state.firstName,
-          surname: this.state.lastName,
-          groupId: this.state.organisation._id,
-          roleId: this.state.userRole._id,
-          groupName: this.state.organisation.name,
-          roleName: this.state.userRole.name
-        },
-        { Authorization: `Bearer ${this.props.user.idToken}` }
-      )
+      addAuthUserRequest({
+        adminId: this.props.user.authId,
+        email: this.state.email,
+        name: this.state.firstName,
+        surname: this.state.lastName,
+        groupId: this.state.organisation._id,
+        roleId: this.state.userRole._id,
+        groupName: this.state.organisation.name,
+        roleName: this.state.userRole.name
+      })
     );
   };
 

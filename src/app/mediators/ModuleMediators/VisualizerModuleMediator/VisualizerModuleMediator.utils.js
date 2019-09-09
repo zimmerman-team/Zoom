@@ -1,3 +1,6 @@
+/* base */
+import axios from 'axios';
+
 /* consts */
 import chartTypes from '__consts__/ChartConst';
 import { colorSet } from '__consts__/PaneConst';
@@ -7,6 +10,7 @@ import { aggrOptions } from '__consts__/GraphStructOptionConsts';
 import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
 import findIndex from 'lodash/findIndex';
+import cloneDeep from 'lodash/cloneDeep';
 
 /* styles */
 import theme from 'theme/Theme';
@@ -17,138 +21,6 @@ export const aggrKeys = {
   [aggrOptions[0].value]: 'geolocationTag',
   [aggrOptions[1].value]: 'date'
 };
-
-// Updates layer percentiles depending on the value
-// and updates the unique value amount that will be used
-// to determine the amount of color stops
-export function updatePercentiles(featureCollection) {
-  let { features } = featureCollection;
-
-  let uniqCount = 0;
-
-  if (features.length > 0) {
-    // so first we sort the values from lowest to highest
-    features = sortBy(features, ['properties.value']);
-
-    // so we'll start with the first lowest value
-    let currentValue = features[0].properties.value;
-    // and then we give percentile values to features
-    features.forEach(f => {
-      if (currentValue !== f.properties.value) {
-        uniqCount += 1;
-        currentValue = f.properties.value;
-      }
-      f.properties.percentile = uniqCount;
-    });
-  }
-
-  featureCollection.uniqCount = uniqCount;
-}
-
-export function formatCountryLayerData(
-  indicators,
-  indName,
-  selectedSubInd,
-  subIndAggr
-) {
-  const countryLayers = {
-    type: 'FeatureCollection',
-    features: []
-  };
-
-  indicators.forEach(indicator => {
-    const existLayerIndex = findIndex(countryLayers.features, feat => {
-      return indicator.geolocationTag === feat.properties.name;
-    });
-
-    // so here we check if we already added a country to the countries layers
-    // and if it has been added we just add the indicators value instead of pushing
-    // another country
-    // this needs to be done when using several data points with the same country
-    // example: data points with different years, will have same countries
-    // JSON.parse('{ "name":"John", "age":30, "city":"New York"}')
-    if (existLayerIndex === -1) {
-      countryLayers.features.push({
-        // we need to do a double parse here, cause we retrieve a json
-        // which is i dunno a double string or sth :D
-        geometry: JSON.parse(JSON.parse(indicator.geolocationPolygons)),
-        properties: {
-          tooltipLabels: [
-            {
-              subIndName: indicator.filterName,
-              format: indicator.valueFormatType,
-              label: subIndAggr
-                ? `${indName} - ${selectedSubInd.join(', ')}`
-                : `${indName} - ${indicator.filterName}`,
-              value: Math.round(indicator.value)
-            }
-          ],
-          indName,
-          name: indicator.geolocationTag,
-          iso2: indicator.geolocationIso2,
-          geolocationType: indicator.geolocationType,
-          // we round it to two decimals
-          value: Math.round(indicator.value),
-          format: indicator.valueFormatType,
-          percentile: 0
-        }
-      });
-    } else {
-      const changeFeat = countryLayers.features[existLayerIndex];
-      changeFeat.properties.value += Math.round(indicator.value);
-
-      if (subIndAggr) {
-        // cause if its being aggregated, we will only have one
-        // tooltip label item, which will show the summed up value
-        changeFeat.properties.tooltipLabels[0].value += Math.round(
-          indicator.value
-        );
-      } else {
-        const labelInd = findIndex(changeFeat.properties.tooltipLabels, [
-          'subIndName',
-          indicator.filterName
-        ]);
-
-        // so if the sub indicators value exists, we will add up the value in the tool tip for that
-        // sub indicator
-        if (labelInd !== -1) {
-          changeFeat.properties.tooltipLabels[labelInd].value += Math.round(
-            indicator.value
-          );
-        } else {
-          // otherwise we just push in a new filter value
-          changeFeat.properties.tooltipLabels.push({
-            subIndName: indicator.filterName,
-            format: indicator.valueFormatType,
-            label: `${indName} - ${indicator.filterName}`,
-            value: Math.round(indicator.value)
-          });
-        }
-      }
-    }
-  });
-
-  // And we add min and max values to be used for legends and what not
-  countryLayers.minValue = Math.round(
-    Math.min.apply(
-      Math,
-      countryLayers.features.map(feature => {
-        return feature.properties.value;
-      })
-    )
-  );
-
-  countryLayers.maxValue = Math.round(
-    Math.max.apply(
-      Math,
-      countryLayers.features.map(feature => {
-        return feature.properties.value;
-      })
-    )
-  );
-
-  return countryLayers;
-}
 
 export function formatCountryCenterData(
   indicators,
@@ -258,15 +130,22 @@ export function formatCountryCenterData(
 // according to the single selected countries
 // and according to the countries of selected regions
 // no duplicate countries should be in this param
-export function formatCountryParam(countryCodes, regionCountryCodes) {
+export function formatCountryParam(
+  countryCodes,
+  regionCountryCodes,
+  regionCodes
+) {
   let jointCountries = [];
   jointCountries = jointCountries.concat(countryCodes);
+  // and we also want to add the codes of the selected
+  // regions themselves
+  jointCountries = jointCountries.concat(regionCodes);
 
   regionCountryCodes.forEach(region => {
     if (region !== 'select all') {
       region.forEach(countryCode => {
-        if (jointCountries.indexOf(countryCode.iso2) === -1) {
-          jointCountries.push(countryCode.iso2);
+        if (jointCountries.indexOf(countryCode.iso3) === -1) {
+          jointCountries.push(countryCode.iso3);
         }
       });
     }
@@ -406,38 +285,75 @@ export function formatDate(created) {
   )} ${date.getFullYear()}`;
 }
 
-export function formatGeoData(indAggregations) {
+export function formatGeoData(
+  indSelectedIndex,
+  currData,
+  indAggregations,
+  selectedInds
+) {
   let longLatData = [];
-  let countryLayerData = {};
-  const geomapData = [];
+  let geomapData = [];
   let countryCircleData = [];
   let colorInd = 0;
   const colors = theme.color.locationColorSet;
 
+  let foundGeoIndex = -1;
+
+  if (indSelectedIndex !== -1) {
+    geomapData = geomapData.concat(currData);
+
+    // and here we need to find the item by their geoIndex
+    // in the current geomapData, the geoIndex will always
+    // reperesent the index of a selected indicator
+    // ONLY that item will be replaced in this logic
+    foundGeoIndex = findIndex(geomapData, ['geoIndex', indSelectedIndex]);
+  }
+
   indAggregations.forEach((aggregation, index) => {
     if (aggregation.data && aggregation.data[0]) {
       const indName = aggregation.data[0].indicatorName;
-
       // so the first data item is layer legend
       if (index === 0) {
-        // so for the first indicator aggregation on the geomap
-        // we form the layers
-        countryLayerData = formatCountryLayerData(
-          aggregation.data,
-          indName,
-          aggregation.selectedSubInd,
-          aggregation.subIndAggr
-        );
+        // so for the layer data we push in the url
+        // to the formed geoJson file on DUCT
+        // and we also add some extra variables
+        // for this geojson to work
+        // NOTE: with the current setup we will always
+        // get back only one node(well unless you change the queries)
+        // and it will contain all of the data we need
+        // for the map
+        let url = aggregation.data[0].geoJsonUrl;
 
-        // and we push them into the indicatorData array for the geomap
-        if (countryLayerData.features && countryLayerData.features.length > 0) {
-          updatePercentiles(countryLayerData);
+        // so if files are served from remote server we add the
+        // remote servers base url
+        if (process.env.REACT_APP_BACKEND_HOST.indexOf('localhost') === -1) {
+          url = process.env.REACT_APP_BACKEND_HOST.concat('/').concat(url);
+        }
 
+        if (indSelectedIndex === -1 || foundGeoIndex === -1) {
           geomapData.push({
+            geoIndex: index,
             type: 'layer',
-            data: countryLayerData,
-            legendName: ` ${indName} - ${aggregation.selectedSubInd.join(', ')}`
+            url,
+            legendName: ` ${
+              selectedInds[0].indName
+            } - ${selectedInds[0].subInd.join(', ')}`,
+            uniqCount: aggregation.data[0].uniqCount,
+            minValue: aggregation.data[0].minValue,
+            maxValue: aggregation.data[0].maxValue
           });
+        } else {
+          geomapData[foundGeoIndex] = {
+            geoIndex: indSelectedIndex,
+            type: 'layer',
+            url,
+            legendName: ` ${
+              selectedInds[0].indName
+            } - ${selectedInds[0].subInd.join(', ')}`,
+            uniqCount: aggregation.data[0].uniqCount,
+            minValue: aggregation.data[0].minValue,
+            maxValue: aggregation.data[0].maxValue
+          };
         }
       } else if (index === 1) {
         // the second is circle legend
@@ -451,12 +367,20 @@ export function formatGeoData(indAggregations) {
         );
 
         // and we push in the circle data for the indicatorData array for the geomap
-        if (countryCircleData.length > 0) {
+        if (indSelectedIndex === -1 || foundGeoIndex === -1) {
           geomapData.push({
+            geoIndex: index,
             type: 'circle',
             data: countryCircleData,
             legendName: ` ${indName} - ${aggregation.selectedSubInd.join(', ')}`
           });
+        } else {
+          geomapData[foundGeoIndex] = {
+            geoIndex: indSelectedIndex,
+            type: 'circle',
+            data: countryCircleData,
+            legendName: ` ${indName} - ${aggregation.selectedSubInd.join(', ')}`
+          };
         }
       } else {
         // all others are long/lat indicators
@@ -468,8 +392,16 @@ export function formatGeoData(indAggregations) {
         );
 
         // and we push them into the indicatorData array for the geomap
-        if (longLatData.length > 0) {
+        if (indSelectedIndex === -1 || foundGeoIndex === -1) {
+          if (indSelectedIndex !== -1 && foundGeoIndex === -1) {
+            colorInd = indSelectedIndex - 2;
+
+            const colorMult = Math.floor(colorInd / colors.length);
+            colorInd -= colorMult * colors.length;
+          }
+
           geomapData.push({
+            geoIndex: index,
             type: 'location',
             color: colors[colorInd],
             data: longLatData,
@@ -481,8 +413,21 @@ export function formatGeoData(indAggregations) {
           } else {
             colorInd = 0;
           }
+        } else {
+          geomapData[foundGeoIndex] = {
+            geoIndex: indSelectedIndex,
+            type: 'location',
+            data: longLatData,
+            color: geomapData[foundGeoIndex].color,
+            legendName: `${indName} - ${aggregation.selectedSubInd.join(', ')}`
+          };
         }
       }
+    } else if (!aggregation.data[0] && foundGeoIndex !== -1) {
+      // so if aggregation data is empty and an item in geomap
+      // has been found for this empty data array, we
+      // remove that item
+      geomapData.splice(foundGeoIndex, 1);
     }
   });
 
@@ -666,8 +611,6 @@ export function formatLineData(
             [itemId]: Math.round(indItem.value),
             [`${itemId}Format`]: indItem.valueFormatType
           });
-        } else if (indicatorData[existItemInd][itemId] !== undefined) {
-          indicatorData[existItemInd][itemId] += Math.round(indItem.value);
         } else {
           indicatorData[existItemInd][itemId] = Math.round(indItem.value);
           indicatorData[existItemInd][`${itemId}Format`] =
@@ -812,7 +755,7 @@ export function formatBarData(
 
   let colorInd = 0;
   indicators.forEach((indicator, index) => {
-    if (indicator.data.length > 0) {
+    if (indicator.data && indicator.data.length > 0) {
       const existInd = barIndKeys.indexOf(indicator.data[0].indicatorName);
       let indName = indicator.data[0].indicatorName;
 
@@ -862,9 +805,6 @@ export function formatBarData(
             [`${itemId}Color`]: colors[colorInd],
             [`${itemId}Format`]: indItem.valueFormatType
           });
-        } else if (barChartData[existItemInd][itemId] !== undefined) {
-          barChartData[existItemInd].allValSum += Math.round(indItem.value);
-          barChartData[existItemInd][itemId] += Math.round(indItem.value);
         } else {
           barChartData[existItemInd].allValSum += Math.round(indItem.value);
           barChartData[existItemInd][itemId] = Math.round(indItem.value);
@@ -1072,37 +1012,22 @@ export function formatDonutData(
           label = `${indName} - ${indicator.selectedSubInd.join(', ')}`;
         }
 
-        const chartItemInd = findIndex(chartData, chartItem => {
-          if (aggrCountry) {
-            return chartItem.key === itemId;
-          }
+        let geoName = null;
 
-          return (
-            chartItem.key === itemId &&
-            chartItem.geolocationTag === indItem.geolocationTag
-          );
-        });
-
-        if (chartItemInd === -1) {
-          let geoName = null;
-
-          if (!aggrCountry) {
-            geoName = indItem.geolocationTag;
-            geoName = geoName.charAt(0).toUpperCase() + geoName.slice(1);
-          }
-
-          chartData.push({
-            geoName,
-            geolocationTag: indItem.geolocationTag,
-            id: `${itemId} ${itemIndex}`,
-            key: `${itemId}`,
-            label,
-            value: Math.round(indItem.value),
-            format: indItem.valueFormatType
-          });
-        } else {
-          chartData[chartItemInd].value += Math.round(indItem.value);
+        if (!aggrCountry) {
+          geoName = indItem.geolocationTag;
+          geoName = geoName.charAt(0).toUpperCase() + geoName.slice(1);
         }
+
+        chartData.push({
+          geoName,
+          geolocationTag: indItem.geolocationTag,
+          id: `${itemId} ${itemIndex}`,
+          key: `${itemId}`,
+          label,
+          value: Math.round(indItem.value),
+          format: indItem.valueFormatType
+        });
       });
     }
   });
@@ -1190,5 +1115,140 @@ export function getChartKeys(
       return formatDonutKeys(indicators, colors);
     default:
       return [];
+  }
+}
+
+// a little function to get the requested field array
+// depending on the type of chart
+// right now just used to get different fields for geoCharts
+// than others, cause they have polygon requests, which other charts dont need
+export function getFields(type, layer) {
+  const fields = [
+    'indicatorName',
+    'geolocationTag',
+    'date',
+    'geolocationType',
+    'geolocationIso2',
+    'comment',
+    'valueFormatType',
+    'filterName'
+  ];
+
+  switch (type) {
+    case chartTypes.lineChart:
+      return ['indicatorName', 'valueFormatType', 'filterName', 'date'];
+    case chartTypes.barChart:
+      fields.splice(fields.indexOf('comment'), 1);
+      return fields;
+    case chartTypes.donutChart:
+      fields.splice(fields.indexOf('comment'), 1);
+      return fields;
+    case chartTypes.geoMap:
+      if (layer) {
+        fields.push('geolocationPolygons');
+      }
+      fields.push('geolocationCenterLongLat');
+      return fields;
+    case chartTypes.focusKE:
+      if (layer) {
+        fields.push('geolocationPolygons');
+      }
+      fields.push('geolocationCenterLongLat');
+      return fields;
+    case chartTypes.focusNL:
+      if (layer) {
+        fields.push('geolocationPolygons');
+      }
+      fields.push('geolocationCenterLongLat');
+      return fields;
+    default:
+      return fields;
+  }
+}
+
+// a little function to get the groupBy array
+// depending on the type of chart and chart options
+export function getGroupBy(type, subIndAggr, layer, aggr, aggrCountr) {
+  const defgroupBy = [
+    'indicatorName',
+    'geolocationTag',
+    'date',
+    'geolocationType',
+    'geolocationIso2',
+    'comment',
+    'valueFormatType',
+    'geolocationCenterLongLat',
+    'filterName'
+  ];
+
+  switch (type) {
+    case chartTypes.lineChart: {
+      const groupBy = ['indicatorName', 'valueFormatType', 'date'];
+      if (!subIndAggr) {
+        groupBy.push('filterName');
+      }
+      return groupBy;
+    }
+    case chartTypes.donutChart: {
+      const groupBy = ['indicatorName', 'valueFormatType'];
+
+      if (!aggrCountr) {
+        groupBy.push('geolocationTag');
+      }
+
+      if (!subIndAggr) {
+        groupBy.push('filterName');
+      }
+      return groupBy;
+    }
+    case chartTypes.barChart: {
+      let groupBy = ['indicatorName', 'valueFormatType'];
+
+      if (aggr === aggrOptions[0].value) {
+        groupBy = groupBy.concat(['geolocationTag', 'geolocationIso2']);
+      } else if (aggr === aggrOptions[1].value) {
+        groupBy.push('date');
+      }
+
+      if (!subIndAggr) {
+        groupBy.push('filterName');
+      }
+      return groupBy;
+    }
+    case chartTypes.geoMap:
+      if (subIndAggr) {
+        defgroupBy.splice(defgroupBy.indexOf('filterName'), 1);
+      }
+      if (layer) {
+        defgroupBy.push('geolocationPolygons');
+        // and we also splice off the valueFormatType for layers
+        // as they'll be handled on the backend
+        defgroupBy.splice(defgroupBy.indexOf('valueFormatType'), 1);
+      }
+      return defgroupBy;
+    case chartTypes.focusNL:
+      if (subIndAggr) {
+        defgroupBy.splice(defgroupBy.indexOf('filterName'), 1);
+      }
+      if (layer) {
+        defgroupBy.push('geolocationPolygons');
+        // and we also splice off the valueFormatType for layers
+        // as they'll be handled on the backend
+        defgroupBy.splice(defgroupBy.indexOf('valueFormatType'), 1);
+      }
+      return defgroupBy;
+    case chartTypes.focusKE:
+      if (subIndAggr) {
+        defgroupBy.splice(defgroupBy.indexOf('filterName'), 1);
+      }
+      if (layer) {
+        defgroupBy.push('geolocationPolygons');
+        // and we also splice off the valueFormatType for layers
+        // as they'll be handled on the backend
+        defgroupBy.splice(defgroupBy.indexOf('valueFormatType'), 1);
+      }
+      return defgroupBy;
+    default:
+      return defgroupBy;
   }
 }

@@ -8,6 +8,8 @@ const find = require('lodash/find');
 const filter = require('lodash/filter');
 const consts = require('../config/consts');
 
+const userUtils = require('../utils/user');
+
 const roles = consts.roles;
 
 const AuthGroupController = {
@@ -85,9 +87,7 @@ const AuthGroupController = {
           })
           .catch(error => {
             console.log(
-              `${error.response.data.statusCode}: ${
-                error.response.data.message
-              }`
+              `${error.response.data.statusCode}: ${error.response.data.message}`
             );
             return res
               .status(error.response.data.statusCode)
@@ -182,52 +182,47 @@ const AuthGroupController = {
             }
           )
           .then(response => {
-            User.findOne({ authId: userId }, (adminErr, adminUser) => {
-              if (adminErr) general.handleError(res, adminErr);
-              else if (!adminUser) {
-                general.handleError(res, 'Admin user not found', 404);
-              } else if (adminUser.role === roles.superAdm) {
-                if (response.status === 200 || response.status === 204) {
-                  if (usersToAdd.length > 0) {
-                    return axios
-                      .patch(
-                        `${process.env.REACT_APP_AE_API_URL}/groups/${
-                          response.data._id
-                        }/members`,
-                        usersToAdd,
-                        {
-                          headers: {
-                            Authorization: token
+            return userUtils
+              .findOneUser(userId, res, [roles.superAdm])
+              .then(adminUser => {
+                if (adminUser) {
+                  if (response.status === 200 || response.status === 204) {
+                    if (usersToAdd.length > 0) {
+                      return axios
+                        .patch(
+                          `${process.env.REACT_APP_AE_API_URL}/groups/${response.data._id}/members`,
+                          usersToAdd,
+                          {
+                            headers: {
+                              Authorization: token
+                            }
                           }
-                        }
-                      )
-                      .then(response1 => {
-                        if (response1.status === 204) {
-                          usersToAdd.forEach(updatU => {
-                            User.findOneAndUpdate(
-                              { authId: updatU },
-                              { $push: { teams: name } },
-                              (err, node) => {
-                                if (err) console.log(err);
-                              }
-                            );
-                          });
-                          return res.json('success');
-                        }
-                        return res
-                          .status(response1.status)
-                          .send(response1.data.statusText);
-                      });
+                        )
+                        .then(response1 => {
+                          if (response1.status === 204) {
+                            usersToAdd.forEach(updatU => {
+                              User.findOneAndUpdate(
+                                { authId: updatU },
+                                { $push: { teams: name } },
+                                (err, node) => {
+                                  if (err) console.log(err);
+                                }
+                              );
+                            });
+                            return res.json('success');
+                          }
+                          return res
+                            .status(response1.status)
+                            .send(response1.data.statusText);
+                        });
+                    }
+                    return res.json('success');
                   }
-                  return res.json('success');
+                  return res
+                    .status(response.status)
+                    .send(response.data.statusText);
                 }
-                return res
-                  .status(response.status)
-                  .send(response.data.statusText);
-              } else {
-                general.handleError(res, 'unauthorized', 401);
-              }
-            });
+              });
           })
           .catch(error => {
             return res
@@ -304,19 +299,10 @@ const AuthGroupController = {
             get(response, '[1].status', 204) === 204 &&
             get(response, '[2].status', 204) === 204
           ) {
-            return User.findOne(
-              { authId: user.authId },
-              (adminErr, adminUser) => {
-                if (adminErr) {
-                  return general.handleError(res, adminErr);
-                }
-                if (!adminUser) {
-                  return general.handleError(res, 'User not found', 404);
-                }
-                if (
-                  adminUser.role === roles.admin ||
-                  adminUser.role === roles.superAdm
-                ) {
+            return userUtils
+              .findOneUser(user.authId, res, [roles.admin, roles.superAdm])
+              .then(adminUser => {
+                if (adminUser) {
                   // Remove team from selected users
                   if (usersToRemove.length > 0) {
                     usersToRemove.forEach(u => {
@@ -357,9 +343,7 @@ const AuthGroupController = {
                   }
                   return res.json('success');
                 }
-                return general.handleError(res, 'unauthorized', 401);
-              }
-            );
+              });
           }
           return res
             .status(response[0].status)
@@ -386,29 +370,25 @@ const AuthGroupController = {
           }
         })
         .then(response => {
-          User.findOne({ authId: adminId }, (adminErr, adminUser) => {
-            if (adminErr) general.handleError(res, adminErr);
-            else if (!adminUser) {
-              general.handleError(res, 'Admin user not found', 404);
-            } else if (
-              adminUser.role === roles.admin ||
-              adminUser.role === roles.superAdm
-            ) {
-              if (response.status === 204) {
-                User.updateMany(
-                  { teams: { $eq: name } },
-                  { $pull: { teams: name } },
-                  (err, node) => {
-                    if (err) console.log(err);
-                  }
-                );
-                return res.json('success');
+          userUtils
+            .findOneUser(adminId, res, [roles.admin, roles.superAdm])
+            .then(adminUser => {
+              if (adminUser) {
+                if (response.status === 204) {
+                  User.updateMany(
+                    { teams: { $eq: name } },
+                    { $pull: { teams: name } },
+                    (err, node) => {
+                      if (err) console.log(err);
+                    }
+                  );
+                  return res.json('success');
+                }
+                return res
+                  .status(response.status)
+                  .send(response.data.statusText);
               }
-              return res.status(response.status).send(response.data.statusText);
-            } else {
-              general.handleError(res, 'Unauthorized', 401);
-            }
-          });
+            });
         })
         .catch(error => {
           // console.log(error.response);

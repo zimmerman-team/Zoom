@@ -12,7 +12,8 @@ const propTypes = {
 const SidebarNavListItem = styled(props => {
   const show =
     (props.type === 'private' && props.loggedIn) || props.type === 'public';
-  return show && <ListItem button disableRipple {...props} />;
+  const { loggedIn, ...otherProps } = props;
+  return show && <ListItem button disableRipple {...otherProps} />;
 })`
   && {
     display: flex;

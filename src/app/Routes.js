@@ -143,7 +143,10 @@ const Routes = props => {
             path="/visualizer/:chart/:code/:tab"
             render={() =>
               props.user.data ? (
-                <VisualizerModuleMediator dropDownData={props} />
+                <VisualizerModuleMediator
+                  dropDownData={props}
+                  indicatorAggregations={null}
+                />
               ) : (
                 <Redirect to="/" />
               )
@@ -154,7 +157,11 @@ const Routes = props => {
             exact
             path="/public/:chart/:code/:tab"
             render={() => (
-              <VisualizerModuleMediator publicPage dropDownData={props} />
+              <VisualizerModuleMediator
+                publicPage
+                dropDownData={props}
+                indicatorAggregations={null}
+              />
             )}
           />
           <Route
@@ -269,7 +276,7 @@ const Routes = props => {
             path="/dashboard/:tab"
             render={() =>
               props.user.data ? (
-                <DashboardMediator auth0Client={auth0Client} />
+                <DashboardMediator auth0Client={auth0Client} Indicator={null} />
               ) : (
                 <Redirect to="/" />
               )
@@ -325,8 +332,6 @@ const Routes = props => {
 
 const mapStateToProps = state => {
   return {
-    userUpdated: state.userUpdated,
-    userAdded: state.userAdded,
     user: state.currentUser
   };
 };

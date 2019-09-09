@@ -5,6 +5,7 @@ import MapGL, { LinearInterpolator } from 'react-map-gl';
 import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
 /* utils */
+import cloneDeep from 'lodash/cloneDeep';
 import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
 import MapControls from 'components/GeoMap/components/MapControls/MapControls';
@@ -41,7 +42,7 @@ const propTypes = {
   }),
   viewport: PropTypes.shape({}),
   chartMounted: PropTypes.bool,
-  indicatorData: PropTypes.array,
+  indicatorData: PropTypes.any,
   selectedYear: PropTypes.string,
   disableYear: PropTypes.bool,
   selectYear: PropTypes.func,
@@ -151,15 +152,12 @@ export class GeoMap extends Component {
     // markers
     // Note: the layer will also use a different tooltip than the markers
     // cause it kind of makes sense for some cases
-    const mapStyle = {
-      ...MAP_STYLE
-    };
+    const mapStyle = cloneDeep(MAP_STYLE);
+
     const layers = find(indicatorData, ['type', 'layer']);
     if (layers) {
-      const borderData = layers.borderData ? layers.borderData : layers.data;
-
-      mapStyle.sources.layer = { type: 'geojson', data: layers.data };
-      mapStyle.sources.outline = { type: 'geojson', data: borderData };
+      mapStyle.sources.layer = { type: 'geojson', data: layers.url };
+      mapStyle.sources.outline = { type: 'geojson', data: layers.url };
 
       if (!find(mapStyle.layers, ['id', 'outline'])) {
         mapStyle.layers.push(borderStyle);
@@ -175,7 +173,7 @@ export class GeoMap extends Component {
       // the color stop amount is formed according to
       // this value, check the variable imported 'colorStops'
       // for clarity
-      colorStopz[1][0] = layers.data.uniqCount;
+      colorStopz[1][0] = layers.uniqCount;
 
       if (!find(mapStyle.layers, ['id', 'layer'])) {
         dataLayer.paint['fill-color'].stops = colorStopz;

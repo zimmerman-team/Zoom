@@ -35,6 +35,8 @@ import userRoles from '__consts__/UserRoleConst';
 class DashboardMediator extends React.Component {
   state = {
     page: 0,
+    pageSize: 12,
+    itemCount: 0,
     users: [],
     teams: [],
     sort: '-last_updated',
@@ -74,16 +76,9 @@ class DashboardMediator extends React.Component {
     if (!isEqual(this.props.chartDeleted, prevProps.chartDeleted)) {
       this.reloadData();
 
-      // we also want to load in the deleted charts
-      // though maybe would be enough to just get there count in the future
-      // TODO implement retrieving only the count of the archived charts
-      this.props.dispatch(
-        actions.allArchivedChartsRequest({
-          authId: this.props.user.authId,
-          sortBy: this.state.sort,
-          archived: true
-        })
-      );
+      this.getUserTrash(true);
+
+      this.setState({ page: 0, searchKeyword: '' });
     }
 
     // we format the charts
@@ -184,7 +179,7 @@ class DashboardMediator extends React.Component {
       !isEqual(this.props.chartTrashEmpty, prevProps.chartTrashEmpty) &&
       get(this.props.chartTrashEmpty, 'data.message', '').length > 0
     ) {
-      this.setState({ trashCharts: [] });
+      this.reloadData();
     }
 
     // Get all users from back-end through auth0 API
@@ -205,12 +200,9 @@ class DashboardMediator extends React.Component {
   getAllUsers = initialLoad => {
     if (initialLoad) {
       this.props.dispatch(
-        getAllUsersRequest(
-          {
-            userId: this.props.user.authId
-          },
-          { Authorization: `Bearer ${this.props.user.idToken}` }
-        )
+        getAllUsersRequest({
+          userId: this.props.user.authId
+        })
       );
     } else {
       this.setUsers(this.state.allUsers, false);
@@ -248,24 +240,18 @@ class DashboardMediator extends React.Component {
       if (window.confirm('You are about to delete yourself! Are you sure?')) {
         this.setState({ deletedSelf: true });
         this.props.dispatch(
-          deleteAuthUserRequest(
-            {
-              delId: delId,
-              userId: this.props.user.authId
-            },
-            { Authorization: `Bearer ${this.props.user.idToken}` }
-          )
+          deleteAuthUserRequest({
+            delId: delId,
+            userId: this.props.user.authId
+          })
         );
       }
     } else {
       this.props.dispatch(
-        deleteAuthUserRequest(
-          {
-            delId: delId,
-            userId: this.props.user.authId
-          },
-          { Authorization: `Bearer ${this.props.user.idToken}` }
-        )
+        deleteAuthUserRequest({
+          delId: delId,
+          userId: this.props.user.authId
+        })
       );
     }
   };
@@ -273,12 +259,9 @@ class DashboardMediator extends React.Component {
   getAllTeams = initialLoad => {
     if (initialLoad) {
       this.props.dispatch(
-        getGroupsRequest(
-          {
-            userId: this.props.user.authId
-          },
-          { Authorization: `Bearer ${this.props.user.idToken}` }
-        )
+        getGroupsRequest({
+          userId: this.props.user.authId
+        })
       );
     } else {
       this.setTeams(this.state.allTeams, false);
@@ -314,14 +297,11 @@ class DashboardMediator extends React.Component {
 
   deleteTeam = (id, name) => {
     this.props.dispatch(
-      deleteAuthGroupRequest(
-        {
-          adminId: this.props.user.authId,
-          delId: id,
-          name: name
-        },
-        { Authorization: `Bearer ${this.props.user.idToken}` }
-      )
+      deleteAuthGroupRequest({
+        adminId: this.props.user.authId,
+        delId: id,
+        name: name
+      })
     );
   };
 
@@ -383,88 +363,107 @@ class DashboardMediator extends React.Component {
 
   getViewPagesNumber = () => {
     switch (this.props.match.params.tab) {
-      case 'charts':
-        return this.state.charts.length / 12;
-      case 'datasets':
-        return this.state.datasets.length / 12;
+      case 'charts': {
+        const chartCount = this.props.userCharts.data
+          ? this.props.userCharts.data.count
+          : 0;
+        return chartCount / this.state.pageSize;
+      }
+      case 'data-sets': {
+        const datasetCount = this.props.userDatasets.data
+          ? this.props.userDatasets.data.count
+          : 0;
+        return datasetCount / this.state.pageSize;
+      }
       case 'users':
-        return this.state.allUsers.length / 12;
+        return this.state.allUsers.length / this.state.pageSize;
       case 'teams':
-        return this.state.allTeams.length / 12;
+        return this.state.allTeams.length / this.state.pageSize;
+      case 'trash': {
+        const trashCount = this.props.archivedCharts.data
+          ? this.props.archivedCharts.data.count
+          : 0;
+        return trashCount / this.state.pageSize;
+      }
       default:
         return 0;
     }
   };
 
   reloadData = (type, initialLoad = true) => {
-    if (type === 'all') {
-      if (this.props.user) {
-        this.props.dispatch(
-          actions.getUserChartsRequest({
-            authId: this.props.user.authId,
-            sortBy: this.state.sort,
-            searchTitle: this.state.searchKeyword
-          })
-        );
-        this.props.dispatch(
-          actions.getUserDatasetsRequest({
-            authId: this.props.user.authId,
-            sortBy: this.state.sort,
-            searchTitle: this.state.searchKeyword
-          })
-        );
+    if (this.props.user && this.props.user.authId) {
+      if (type === 'all') {
+        this.getUserCharts();
+        this.getUserDatasets();
         this.getAllUsers(initialLoad);
         this.getAllTeams(initialLoad);
-        this.props.dispatch(
-          actions.allArchivedChartsRequest({
-            authId: this.props.user.authId,
-            sortBy: this.state.sort,
-            archived: true
-          })
-        );
-      }
-    } else {
-      switch (this.props.match.params.tab) {
-        case 'charts':
-          if (this.props.user) {
-            this.props.dispatch(
-              actions.getUserChartsRequest({
-                authId: this.props.user.authId,
-                sortBy: this.state.sort,
-                searchTitle: this.state.searchKeyword
-              })
-            );
-          }
-          break;
-        case 'data-sets':
-          if (this.props.user) {
-            this.props.dispatch(
-              actions.getUserDatasetsRequest({
-                authId: this.props.user.authId,
-                sortBy: this.state.sort,
-                searchTitle: this.state.searchKeyword
-              })
-            );
-          }
-          break;
-        case 'users':
-          this.getAllUsers(initialLoad);
-          break;
-        case 'teams':
-          this.getAllTeams(initialLoad);
-          break;
-        case 'trash':
-          this.props.dispatch(
-            actions.allArchivedChartsRequest({
-              authId: this.props.user.authId,
-              sortBy: this.state.sort,
-              archived: true
-            })
-          );
-          break;
+        this.getUserTrash();
+      } else {
+        switch (this.props.match.params.tab) {
+          case 'charts':
+            this.getUserCharts();
+            break;
+          case 'data-sets':
+            this.getUserDatasets();
+            break;
+          case 'users':
+            this.getAllUsers(initialLoad);
+            break;
+          case 'teams':
+            this.getAllTeams(initialLoad);
+            break;
+          case 'trash':
+            this.getUserTrash();
+            break;
+        }
       }
     }
   };
+
+  getUserTrash(initial = false) {
+    let page = this.state.page;
+    let searchTitle = this.state.searchKeyword;
+
+    if (initial) {
+      page = 0;
+      searchTitle = '';
+    }
+
+    this.props.dispatch(
+      actions.allArchivedChartsRequest({
+        page,
+        pageSize: this.state.pageSize,
+        authId: this.props.user.authId,
+        sortBy: this.state.sort,
+        archived: true,
+        searchTitle
+      })
+    );
+  }
+
+  getUserDatasets() {
+    this.props.dispatch(
+      actions.getUserDatasetsRequest({
+        page: this.state.page,
+        pageSize: this.state.pageSize,
+        authId: this.props.user.authId,
+        sortBy: this.state.sort,
+        searchTitle: this.state.searchKeyword
+      })
+    );
+  }
+
+  getUserCharts() {
+    this.props.dispatch(
+      actions.getUserChartsRequest({
+        page: this.state.page,
+        pageSize: this.state.pageSize,
+        authId: this.props.user.authId,
+        sortBy: this.state.sort,
+        searchTitle: this.state.searchKeyword
+      })
+    );
+  }
 
   deleteChart = chartId => {
     this.props.dispatch(
@@ -517,6 +516,18 @@ class DashboardMediator extends React.Component {
   }
 
   render = () => {
+    const chartCount = this.props.userCharts.data
+      ? this.props.userCharts.data.count
+      : 0;
+
+    const trashCount = this.props.archivedCharts.data
+      ? this.props.archivedCharts.data.count
+      : 0;
+
+    const datasetCount = this.props.userDatasets.data
+      ? this.props.userDatasets.data.count
+      : 0;
+
     const greetingName =
       get(this.props.user, 'firstName', '') !== ''
         ? `${get(this.props.user, 'firstName', '')} ${get(
@@ -534,6 +545,7 @@ class DashboardMediator extends React.Component {
           this.props.deleteGroup.request
         }
         // tabs={tabs}
+        trashCount={trashCount}
         page={this.state.page}
         removeAll={this.emptyTrashChart.bind(this)}
         trashCharts={this.state.trashCharts}
@@ -555,8 +567,8 @@ class DashboardMediator extends React.Component {
           get(this.props.user, 'role', '') === 'Super admin',
           this.state.allUsers,
           this.state.allTeams,
-          this.state.charts,
-          this.state.datasets
+          chartCount,
+          datasetCount
         )}
         totalPages={this.getViewPagesNumber()}
         changePage={this.changePage}
@@ -578,11 +590,9 @@ const mapStateToProps = state => {
     userDatasets: state.userDatasets,
     chartDeleted: state.chartDeleted,
     chartDuplicated: state.chartDuplicated,
-    userDeleted: state.userDeleted,
     // yeah so actually these are the user and team charts
     userCharts: state.userCharts,
     user: state.currentUser.data,
-    teamDeleted: state.groupDeleted,
     allUsers: state.allUsers,
     groups: state.authGroups,
     deleteUser: state.deleteUser,

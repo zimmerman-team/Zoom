@@ -12,6 +12,17 @@ import {
 /* components */
 import Checkbox from 'components/Checkbox/CheckBox';
 
+function genKey() {
+  return (
+    Math.random()
+      .toString(36)
+      .substring(2, 15) +
+    Math.random()
+      .toString(36)
+      .substring(2, 15)
+  );
+}
+
 // so yeah here the columns will need to be formatted according to the data
 export function formatColumns(
   tableData,
@@ -29,9 +40,9 @@ export function formatColumns(
     columns.push({
       property: 'id',
       header: (
-        <HeaderCheckBox key={0}>
+        <HeaderCheckBox key={genKey()}>
           <Checkbox
-            key={0}
+            key={genKey()}
             checked={checkedRows}
             onChange={(event, checked) => checkRows('all', checked)}
           />
@@ -40,7 +51,7 @@ export function formatColumns(
       render: val => (
         <CheckBox>
           <Checkbox
-            key={val.index}
+            key={genKey()}
             checked={val.checked}
             onChange={() => checkRows(val.index)}
           />
@@ -63,22 +74,25 @@ export function formatColumns(
           property: key,
           header:
             key === 'index' ? (
-              <ErrorColHeader key={`header-${index}`}>{key}</ErrorColHeader>
+              <ErrorColHeader key={genKey()}>{key}</ErrorColHeader>
             ) : (
-              <ErrorColHeader key={`header-${index}`}>
-                <HeaderName>{key}</HeaderName>
-                <IgnoreHeaderCheckBox key={`ignore-header-checkbox-${index}`}>
+              <ErrorColHeader key={genKey()}>
+                <HeaderName key={genKey()}>{key}</HeaderName>
+                <IgnoreHeaderCheckBox key={genKey()}>
                   <Checkbox
-                    key={`checkbox-${index}`}
+                    key={genKey()}
                     checked={ignoredErrors.indexOf(key) !== -1}
                     onChange={() => ignoreErrors(key)}
                   />
-                  <IgnorHeaderLabel>Ignore errors</IgnorHeaderLabel>
+                  <IgnorHeaderLabel key={genKey()}>
+                    Ignore errors
+                  </IgnorHeaderLabel>
                 </IgnoreHeaderCheckBox>
               </ErrorColHeader>
             ),
           render: val => (
             <ErrorCell
+              key={genKey()}
               onClick={
                 key !== 'index'
                   ? () => handleCellClick(val[key], key, val.index)

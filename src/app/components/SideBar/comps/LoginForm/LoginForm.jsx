@@ -4,9 +4,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 /* actions */
 import * as syncActions from 'services/actions/sync';
-/* components */
-import theme from 'theme/Theme';
+/* icons */
 import IconSignIn from 'assets/icons/IconSignIn';
+/* components */
+import SimpleCheckbox from 'components/Checkbox/CheckBox';
+import ForgetPassword from 'components/SideBar/comps/ForgetPassword/ForgetPassword';
+/* utils */
+import get from 'lodash/get';
+import isEqual from 'lodash/isEqual';
+/* styles */
+import theme from 'theme/Theme';
 import {
   ComponentBase,
   ErrorMessage,
@@ -16,12 +23,12 @@ import {
   Link,
   LoginHeader,
   LoginHeaderLabel,
-  TextField
+  TextField,
+  SignInContainer,
+  PrivacyText,
+  PrivacyContainer,
+  CheckBoxContainer
 } from 'components/SideBar/comps/LoginForm/LoginForm.styles';
-import ForgetPassword from 'components/SideBar/comps/ForgetPassword/ForgetPassword';
-/* utils */
-import get from 'lodash/get';
-import isEqual from 'lodash/isEqual';
 
 const propTypes = {
   loginStatusMessage: PropTypes.shape({
@@ -47,7 +54,8 @@ export class LoginForm extends React.Component {
       username: '',
       password: '',
       error: null,
-      view: 'login'
+      view: 'login',
+      privAccepted: true
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -55,6 +63,7 @@ export class LoginForm extends React.Component {
     this.onUsernameChange = this.onUsernameChange.bind(this);
     this.onPasswordChange = this.onPasswordChange.bind(this);
     this.setStatusMessage = this.setStatusMessage.bind(this);
+    this.cantSignIn = this.cantSignIn.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -82,11 +91,13 @@ export class LoginForm extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    this.props.auth0Client.signIn(
-      this.state.username,
-      this.state.password,
-      this.setStatusMessage
-    );
+    if (!this.cantSignIn()) {
+      this.props.auth0Client.signIn(
+        this.state.username,
+        this.state.password,
+        this.setStatusMessage
+      );
+    }
   }
 
   setStatusMessage(message) {
@@ -98,6 +109,14 @@ export class LoginForm extends React.Component {
       error: null,
       view: prevState.view === 'login' ? 'forget_password' : 'login'
     }));
+  }
+
+  cantSignIn() {
+    return (
+      this.state.username === '' ||
+      this.state.password === '' ||
+      !this.state.privAccepted
+    );
   }
 
   render() {
@@ -158,16 +177,32 @@ export class LoginForm extends React.Component {
                   data-cy="sidebar-pass-email-input"
                 />
 
-                <FormButton
-                  type="submit"
-                  onClick={this.onSubmit}
-                  disabled={
-                    this.state.username === '' || this.state.password === ''
-                  }
-                  data-cy="sidebar-login-button"
-                >
-                  Sign in
-                </FormButton>
+                <SignInContainer>
+                  <FormButton
+                    type="submit"
+                    onClick={this.onSubmit}
+                    disabled={this.cantSignIn()}
+                    data-cy="sidebar-login-button"
+                  >
+                    Sign in
+                  </FormButton>
+                  <PrivacyContainer>
+                    <CheckBoxContainer>
+                      <SimpleCheckbox
+                        checked={this.state.privAccepted}
+                        onChange={(event, checked) =>
+                          this.setState({ privAccepted: checked })
+                        }
+                      />
+                    </CheckBoxContainer>
+                    <PrivacyText>
+                      I agree to the{' '}
+                      <a href="/cookies" target="_blank">
+                        cookie policy and the privacy statement
+                      </a>
+                    </PrivacyText>
+                  </PrivacyContainer>
+                </SignInContainer>
               </React.Fragment>
             )}
 

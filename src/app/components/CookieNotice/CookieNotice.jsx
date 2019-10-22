@@ -20,8 +20,8 @@ const propTypes = {
 };
 const defaultProps = {
   cookieText:
-    'aidsfonds.org uses cookies to offer the best website experience possible and to anonymously analyze website behaviour. More information. ',
-  cookieButtonText: 'accepteren',
+    'Aidsfonds.org uses cookies to offer the best website experience possible and to anonymously analyze website behaviour. ',
+  cookieButtonText: 'x',
   cookieLinkText: 'More information'
 };
 
@@ -43,7 +43,6 @@ function CookieNotice(props) {
               {props.cookieLinkText}
             </CookieInfoLink>
           </CookieMessage>
-          <Spacer />
           <CookieButton
             data-cy="cookie-notice"
             onClick={() => {

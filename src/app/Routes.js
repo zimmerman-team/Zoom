@@ -104,6 +104,8 @@ const DashboardMediator = lazy(() =>
 );
 */
 
+import { PrivacyModule } from 'modules/PrivacyModule/PrivacyModule';
+
 import DashboardMediator from 'mediators/DashboardMediators/DashboardMediator';
 import auth0Client from './auth/Auth';
 
@@ -284,6 +286,7 @@ const Routes = props => {
           />
           <Route path="/about" render={() => <About />} />
           <Route path="/cookies" render={() => <CookieModule />} />
+          <Route path="/privacy" render={() => <PrivacyModule />} />
           <Route
             path="/mapper"
             render={() =>

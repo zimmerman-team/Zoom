@@ -22,3 +22,15 @@ export const RedLink = styled.a`
 export const Section = styled.div`
   padding-bottom: 24px;
 `;
+
+export const AboutLogo = styled.img`
+  width: 200px;
+  height: ${props => props.height || 'fit-content'};
+  margin: auto;
+`;
+
+export const LogoContainer = styled.div`
+  margin-top: 60px;
+  display: flex;
+  flex-wrap: wrap;
+`;

@@ -147,13 +147,10 @@ class App extends React.Component {
               environment={this.state.currentEnv}
               query={graphql`
                 query AppQuery {
-                  ...ExplorePanelMediator_dropDownData
                   ...VizPaneMediator_dropDownData
-                  ...HomeModuleMediator_indicatorAggregations
                   ...CountryDetailMediator_indicatorAggregations
                   ...MetaDataMediator_dropDownData
                   ...CorrectErrorsMediator_fileCorrection
-                  ...FocusModuleMediator_indicatorAggregations
                   ...DatasetMediator_metaData
                   ...DashboardMediator_Indicator
                 }

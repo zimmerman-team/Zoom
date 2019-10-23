@@ -121,6 +121,7 @@ class App extends React.Component {
     };
     if (get(this.props.user, 'idToken', null)) {
       url = `${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`;
+
       headers = {
         Authorization: `Bearer ${this.props.user.idToken}`,
         'Content-Type': 'application/json'
@@ -147,13 +148,10 @@ class App extends React.Component {
               environment={this.state.currentEnv}
               query={graphql`
                 query AppQuery {
-                  ...ExplorePanelMediator_dropDownData
                   ...VizPaneMediator_dropDownData
-                  ...HomeModuleMediator_indicatorAggregations
                   ...CountryDetailMediator_indicatorAggregations
                   ...MetaDataMediator_dropDownData
                   ...CorrectErrorsMediator_fileCorrection
-                  ...FocusModuleMediator_indicatorAggregations
                   ...DatasetMediator_metaData
                   ...DashboardMediator_Indicator
                 }

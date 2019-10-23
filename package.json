@@ -99,7 +99,8 @@
     "e2e:percy:record:parallel": "percy exec -- cypress run --record --key d2ad6432-35fe-48a4-b5bf-8a98c4f8289a --parallel",
     "cy:open": "cypress open",
     "cy:verify": "cypress verify",
-    "relay": "relay-compiler --src ./src --schema ./data/schema.json --extensions js jsx"
+    "relay": "relay-compiler --src ./src --schema ./data/schema.json --extensions js jsx",
+    "eslint": "eslint ./src"
   },
   "husky": {
     "hooks": {

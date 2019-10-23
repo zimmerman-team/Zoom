@@ -31,12 +31,6 @@ const HomeModule = lazy(() =>
 
 import HomeModule from 'modules/home/HomeModule';
 
-/*const FocusModuleMediator = lazy(() =>
-  import('mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator')
-);*/
-
-import FocusModuleMediator from 'mediators/ModuleMediators/FocusModuleMediator/FocusModuleMediator';
-
 /*
 const VisualizerModuleMediator = lazy(() =>
   import(
@@ -129,16 +123,6 @@ const Routes = props => {
             exact
             path="/home"
             render={() => <HomeModule dropDownData={props} />}
-          />
-          <Route
-            exact
-            path="/focus/:iso2"
-            render={() => (
-              <FocusModuleMediator
-                indicatorAggregations={props}
-                dropDownData={props}
-              />
-            )}
           />
           <Route
             exact

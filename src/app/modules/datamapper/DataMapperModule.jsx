@@ -248,7 +248,7 @@ class DataMapperModule extends React.Component {
             manMapEmptyFormat
           };
         }
-        if (manMapEmptyFormat) {
+        if (manMapEmptyFormat || emptyValColFormat) {
           return { manMapEmptyFormat, emptyValColFormat };
         }
         return {

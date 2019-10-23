@@ -33,10 +33,10 @@ export const CookieMessage = styled.p`
   font-size: ${CookieMessageFontSize};
   font-family: ${CookieNoticeFontFam};
   font-weight: ${CookieNoticeFontWeight};
+  margin: auto;
   max-width: 674px;
   width: 100%;
   line-height: 25.6px;
-  margin: 0;
 `;
 
 export const Spacer = styled.div`
@@ -48,9 +48,9 @@ export const CookieButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 276px;
-  width: 100%;
-  height: 62px;
+  width: fit-content;
+  padding: 0 8px 5px 8px;
+  height: fit-content;
   text-decoration: none;
   color: ${CookieNoticeTextColor};
   font-family: ${CookieNoticeFontFam};
@@ -58,11 +58,11 @@ export const CookieButton = styled.div`
   font-size: ${CookieButtonFontSize};
   border-radius: 50px;
   border: 2px solid ${CookieButtonBorderColor};
-  line-height: 56px;
   cursor: pointer;
   &:hover {
     opacity: ${HoverOpacity};
   }
+  margin: 8px 8px auto 0;
 `;
 
 export const CookieInfoLink = styled(NavLink)`

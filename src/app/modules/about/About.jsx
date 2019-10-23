@@ -4,8 +4,20 @@ import {
   DescriptionParagraph,
   DescriptionParagraphBoldIt
 } from 'components/sort/Paragraphs';
-import { AboutTitle, RedLink, Text, Section } from 'modules/about/About.styles';
+import {
+  AboutTitle,
+  RedLink,
+  Text,
+  Section,
+  AboutLogo,
+  LogoContainer
+} from 'modules/about/About.styles';
 import ModuleContainer from 'modules/common/modulecontainer/ModuleContainer';
+
+/* images */
+import aidsfondsLogo from 'assets/images/logo-aidsfonds.jpg';
+import leidenLogo from 'assets/images/Logo_LUC_The_Hague.jpg';
+import zzLogo from 'assets/images/ZZ logo.png';
 
 const propTypes = {};
 const defaultProps = {};
@@ -90,6 +102,11 @@ const About = () => {
           Data mapping manual
         </RedLink>
       </DescriptionParagraph>
+      <LogoContainer>
+        <AboutLogo alt="aidsfonds" src={aidsfondsLogo} height="112px" />
+        <AboutLogo alt="leiden" src={leidenLogo} height="73px" />
+        <AboutLogo alt="zz" src={zzLogo} height="54px" />
+      </LogoContainer>
     </ModuleContainer>
   );
 };

@@ -104,5 +104,33 @@ export const data = [
     icon: <IconAbout />,
     env: 'development',
     type: 'public'
+  },
+  {
+    label: 'Cookies policy',
+    path: `${pathPrefix}cookies`,
+    icon: <IconAbout />,
+    env: 'production',
+    type: 'public'
+  },
+  {
+    label: 'Cookies policy',
+    path: `${pathPrefix}cookies`,
+    icon: <IconAbout />,
+    env: 'development',
+    type: 'public'
+  },
+  {
+    label: 'Privacy statement',
+    path: `${pathPrefix}privacy`,
+    icon: <IconAbout />,
+    env: 'production',
+    type: 'public'
+  },
+  {
+    label: 'Privacy statement',
+    path: `${pathPrefix}privacy`,
+    icon: <IconAbout />,
+    env: 'development',
+    type: 'public'
   }
 ];

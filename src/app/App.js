@@ -121,6 +121,7 @@ class App extends React.Component {
     };
     if (get(this.props.user, 'idToken', null)) {
       url = `${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`;
+
       headers = {
         Authorization: `Bearer ${this.props.user.idToken}`,
         'Content-Type': 'application/json'

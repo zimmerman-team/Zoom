@@ -119,6 +119,8 @@ router.get('/getOwnerDatasets', checkJwt, DatasetController.getOwnerDatasets);
 
 router.get('/getDatasetIds', checkJwt, DatasetController.getDatasetIds);
 
+router.get('/getDataset', checkJwt, DatasetController.getDataset);
+
 router.post('/updateTeam', checkJwt, DatasetController.updateTeam);
 
 router.post('/updatePublic', checkJwt, DatasetController.updatePublic);

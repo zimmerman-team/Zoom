@@ -1,8 +1,10 @@
 /* base */
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 /* actions */
 import * as actions from 'services/actions/general';
+import * as nodeActions from 'services/actions/nodeBackend';
 /* components */
 import Stepper from 'components/Stepper/Stepper';
 import Snackbar from 'components/Snackbar/Snackbar';
@@ -16,6 +18,7 @@ import {
 } from 'modules/datamapper/DataMapperModule.util';
 import find from 'lodash/find';
 import { Helmet } from 'react-helmet';
+import isEqual from 'lodash/isEqual';
 /* styles */
 import {
   ModuleContainer,
@@ -49,6 +52,7 @@ class DataMapperModule extends React.Component {
       manMapEmptyFormat: false,
       emptyValColFormat: false,
       mapStepDisabled: false,
+      loading: Object.entries(this.props.stepData).length !== 0,
 
       metaDataEmptyFields: [],
       stepsDisabled: false,
@@ -62,9 +66,56 @@ class DataMapperModule extends React.Component {
     this.nextDisabled = this.nextDisabled.bind(this);
   }
 
+  componentDidMount() {
+    // so if its the edit dataset page
+    // we will call the stepData from the zoomBackend
+    if (this.props.match.path.indexOf('dataset') !== -1) {
+      this.props.dispatch(
+        nodeActions.getDatasetRequest({
+          authId: this.props.user.authId,
+          datasetId: this.props.match.params.id
+        })
+      );
+      this.setState({ loading: true });
+    } else {
+      this.props.dispatch(actions.saveStepDataInitial());
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    // and when we have retrieved the datasets data we update the stepData
+    // redux variable with the data from it
+    if (
+      !isEqual(this.props.dataset.data, prevProps.dataset.data) &&
+      this.props.dataset.data
+    ) {
+      if (!isEqual(this.props.dataset.data.stepData, this.props.stepData)) {
+        // console.log('this does get called', this.props.dataset.data.stepData);
+        if (this.props.dataset.data.stepData) {
+          this.props.dispatch(
+            actions.saveStepDataRequest(this.props.dataset.data.stepData)
+          );
+          this.setState({ loading: true });
+        } else {
+          this.props.dispatch(actions.saveStepDataInitial());
+        }
+      } else {
+        this.setState({ loading: false });
+      }
+    }
+
+    if (
+      this.state.loading &&
+      !isEqual(this.props.stepData, prevProps.stepData)
+    ) {
+      this.setState({ loading: false });
+    }
+  }
+
   componentWillUnmount() {
     // and we reset the values in the reducer
-    this.props.dispatch(actions.saveStepDataInitial());
+    // this.props.dispatch(actions.saveStepDataInitial());
+    this.props.dispatch(nodeActions.getDatasetInitial());
   }
 
   // basically checks if next button should be disabled
@@ -335,50 +386,56 @@ class DataMapperModule extends React.Component {
     }
 
     return (
-      <ModuleContainer>
-        <Helmet>
-          <title>Zoom - Convert Data</title>
-        </Helmet>
-        <Snackbar
-          message={this.state.errorMessage}
-          open={this.state.openSnackbar}
-          onClose={() => this.setState({ openSnackbar: false })}
-        />
-        <ModuleHeader>
-          <Stepper
-            step={this.state.step}
-            nextStep={this.nextStep}
-            prevStep={this.prevStep}
-            nextDisabled={this.nextDisabled()}
-          />
-        </ModuleHeader>
+      <>
+        {!this.state.loading && (
+          <ModuleContainer>
+            <Helmet>
+              <title>Zoom - Convert Data</title>
+            </Helmet>
+            <Snackbar
+              message={this.state.errorMessage}
+              open={this.state.openSnackbar}
+              onClose={() => this.setState({ openSnackbar: false })}
+            />
+            <ModuleHeader>
+              <Stepper
+                step={this.state.step}
+                nextStep={this.nextStep}
+                prevStep={this.prevStep}
+                nextDisabled={this.nextDisabled()}
+              />
+            </ModuleHeader>
 
-        <ModuleContent
-          style={
-            moduleDisabled ? { pointerEvents: 'none', opacity: '0.4' } : {}
-          }
-        >
-          {this.renderStep()}
-        </ModuleContent>
+            <ModuleContent
+              style={
+                moduleDisabled ? { pointerEvents: 'none', opacity: '0.4' } : {}
+              }
+            >
+              {this.renderStep()}
+            </ModuleContent>
 
-        <ModuleFooter>
-          <Stepper
-            onlyButtons
-            step={this.state.step}
-            nextStep={this.nextStep}
-            prevStep={this.prevStep}
-            nextDisabled={this.nextDisabled()}
-          />
-        </ModuleFooter>
-      </ModuleContainer>
+            <ModuleFooter>
+              <Stepper
+                onlyButtons
+                step={this.state.step}
+                nextStep={this.nextStep}
+                prevStep={this.prevStep}
+                nextDisabled={this.nextDisabled()}
+              />
+            </ModuleFooter>
+          </ModuleContainer>
+        )}
+      </>
     );
   }
 }
 
 const mapStateToProps = state => {
   return {
-    stepData: state.stepData.stepzData
+    dataset: state.dataset,
+    stepData: state.stepData.stepzData,
+    user: state.currentUser.data
   };
 };
 
-export default connect(mapStateToProps)(DataMapperModule);
+export default withRouter(connect(mapStateToProps)(DataMapperModule));

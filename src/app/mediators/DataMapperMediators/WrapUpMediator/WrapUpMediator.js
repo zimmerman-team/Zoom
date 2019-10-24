@@ -157,7 +157,7 @@ class WrapUpMediator extends React.Component {
           metaData: {
             ...this.props.stepData.metaData,
             dataSource: {
-              ...this.props.stepData.metaData.dataSource,
+              label: response.fileSource.name,
               key: response.fileSource.entryId,
               value: response.fileSource.entryId
             }

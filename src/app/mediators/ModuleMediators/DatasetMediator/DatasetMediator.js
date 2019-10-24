@@ -255,61 +255,7 @@ class DatasetMediator extends React.Component {
     this.props.relay.refetch(refetchVars);
   }
 
-  saveDataset() {
-    const { stepMetaData } = this.props;
-
-    const metaDataEmptyFields = [];
-
-    // we check if the title is empty
-    if (!stepMetaData.title || stepMetaData.title.length === 0) {
-      metaDataEmptyFields.push('title');
-    }
-
-    // we check if the description is empty
-    if (!stepMetaData.desc || stepMetaData.desc.length === 0) {
-      metaDataEmptyFields.push('desc');
-    }
-
-    // we check if the datasource is empty
-    if (
-      !stepMetaData.dataSource.value ||
-      stepMetaData.dataSource.value.length === 0
-    ) {
-      metaDataEmptyFields.push('dataSource');
-    }
-
-    // we check if the organisation is empty
-    if (!stepMetaData.org || stepMetaData.org.length === 0) {
-      metaDataEmptyFields.push('org');
-    }
-
-    // we check if the year is empty
-    if (
-      !stepMetaData.year ||
-      stepMetaData.year.length === 0 ||
-      !/^\d+$/.test(stepMetaData.year) ||
-      stepMetaData.year.length > 4
-    ) {
-      metaDataEmptyFields.push('year');
-    }
-
-    if (metaDataEmptyFields.length > 0) {
-      this.setState({
-        openSnackbar: true,
-        errorMessage: 'Please fill the required fields',
-        metaDataEmptyFields
-      });
-    } else if (this.props.stepMetaData.surveyData === 'Yes') {
-      // we add the survey data
-      this.updateSurveyData();
-    } else if (this.props.stepMetaData.dataSource.key === 'other') {
-      this.updateDataSource(this.props.stepMetaData.dataSource.value);
-    } else {
-      // otherwise we just add the existing source id
-      // and then add the metadata
-      this.updateMetaData();
-    }
-  }
+  saveDataset() {}
 
   handleSourceCompleted(response) {
     if (response) {

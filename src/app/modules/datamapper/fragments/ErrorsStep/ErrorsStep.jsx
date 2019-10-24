@@ -307,7 +307,7 @@ class ErrorStep extends React.Component {
           <ErrorTable
             columns={this.state.columns}
             data={this.state.data}
-            primaryKey="id"
+            primaryKey="index"
           />
         </Box>
 

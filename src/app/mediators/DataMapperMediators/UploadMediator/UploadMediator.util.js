@@ -66,22 +66,22 @@ export const defModelOptions = [
     assocModel: 'value_format',
     disable: ['value_format', 'Value_format Value Column']
   },
-  // {
-  //   label: 'Indicator Value Column',
-  //   value: 'Indicator Value Column',
-  //   assocModel: 'indicator',
-  //   disable: [
-  //     'Mixed Value',
-  //     'Number Value',
-  //     'Percentage Value',
-  //     'Filter Value Column',
-  //     'Date Value Column',
-  //     'Geolocation Value Column',
-  //     'Value_format Value Column',
-  //     'indicator',
-  //     'value_format'
-  //   ]
-  // },
+  {
+    label: 'Indicator Value Column',
+    value: 'Indicator Value Column',
+    assocModel: 'indicator',
+    disable: [
+      'Mixed Value',
+      'Number Value',
+      'Percentage Value',
+      'Filter Value Column',
+      'Date Value Column',
+      'Geolocation Value Column',
+      'Value_format Value Column',
+      'indicator',
+      'value_format'
+    ]
+  },
   {
     label: 'Filter Value Column',
     value: 'Filter Value Column',

@@ -117,7 +117,10 @@ class MetaDataMediator extends React.Component {
       stepData.metaData = step1InitialData.metaData;
       stepData.environment = this.props.relay.environment;
       this.props.dispatch(actions.saveStepDataRequest(stepData));
-    } else if (typeof this.props.stepData.environment === 'string') {
+    } else if (
+      typeof this.props.stepData.environment === 'string' ||
+      !this.props.stepData.environment
+    ) {
       const stepData = { ...this.props.stepData };
       stepData.environment = this.props.relay.environment;
       this.props.dispatch(actions.saveStepDataRequest(stepData));

@@ -10,6 +10,7 @@ import Stepper from 'components/Stepper/Stepper';
 import Snackbar from 'components/Snackbar/Snackbar';
 /* consts */
 import { columnValues } from 'mediators/DataMapperMediators/WrapUpMediator/WrapUpMediator.const';
+import { defModelOptions } from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
 
 /* utils */
 import {
@@ -90,10 +91,15 @@ class DataMapperModule extends React.Component {
       this.props.dataset.data
     ) {
       if (!isEqual(this.props.dataset.data.stepData, this.props.stepData)) {
-        // console.log('this does get called', this.props.dataset.data.stepData);
         if (this.props.dataset.data.stepData) {
           this.props.dispatch(
-            actions.saveStepDataRequest(this.props.dataset.data.stepData)
+            actions.saveStepDataRequest({
+              ...this.props.dataset.data.stepData,
+              uploadData: {
+                ...this.props.dataset.data.stepData.uploadData,
+                modelOptions: defModelOptions
+              }
+            })
           );
           this.setState({ loading: true });
         } else {
@@ -173,6 +179,8 @@ class DataMapperModule extends React.Component {
         // and this bool will be used to save the general state if some
         // fields are undefined
         const metaDataEmptyFields = [];
+
+        console.log('stepData.metaData', stepData.metaData);
 
         // we check if the title is empty
         if (!stepData.metaData.title || stepData.metaData.title.length === 0) {
@@ -372,6 +380,63 @@ class DataMapperModule extends React.Component {
     }
   }
 
+  //TODO: make this work
+  saveMetadata() {
+    const { stepMetaData } = this.props;
+
+    const metaDataEmptyFields = [];
+
+    // we check if the title is empty
+    if (!stepMetaData.title || stepMetaData.title.length === 0) {
+      metaDataEmptyFields.push('title');
+    }
+
+    // we check if the description is empty
+    if (!stepMetaData.desc || stepMetaData.desc.length === 0) {
+      metaDataEmptyFields.push('desc');
+    }
+
+    // we check if the datasource is empty
+    if (
+      !stepMetaData.dataSource.value ||
+      stepMetaData.dataSource.value.length === 0
+    ) {
+      metaDataEmptyFields.push('dataSource');
+    }
+
+    // we check if the organisation is empty
+    if (!stepMetaData.org || stepMetaData.org.length === 0) {
+      metaDataEmptyFields.push('org');
+    }
+
+    // we check if the year is empty
+    if (
+      !stepMetaData.year ||
+      stepMetaData.year.length === 0 ||
+      !/^\d+$/.test(stepMetaData.year) ||
+      stepMetaData.year.length > 4
+    ) {
+      metaDataEmptyFields.push('year');
+    }
+
+    if (metaDataEmptyFields.length > 0) {
+      this.setState({
+        openSnackbar: true,
+        errorMessage: 'Please fill the required fields',
+        metaDataEmptyFields
+      });
+    } else if (this.props.stepMetaData.surveyData === 'Yes') {
+      // we add the survey data
+      this.updateSurveyData();
+    } else if (this.props.stepMetaData.dataSource.key === 'other') {
+      this.updateDataSource(this.props.stepMetaData.dataSource.value);
+    } else {
+      // otherwise we just add the existing source id
+      // and then add the metadata
+      this.updateMetaData();
+    }
+  }
+
   render() {
     let moduleDisabled = false;
 
@@ -399,6 +464,8 @@ class DataMapperModule extends React.Component {
             />
             <ModuleHeader>
               <Stepper
+                saveMetadata={() => this.saveMetadata()}
+                path={this.props.match.path}
                 step={this.state.step}
                 nextStep={this.nextStep}
                 prevStep={this.prevStep}
@@ -416,6 +483,8 @@ class DataMapperModule extends React.Component {
 
             <ModuleFooter>
               <Stepper
+                saveMetadata={() => this.saveMetadata()}
+                path={this.props.match.path}
                 onlyButtons
                 step={this.state.step}
                 nextStep={this.nextStep}

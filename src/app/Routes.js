@@ -291,7 +291,7 @@ const Routes = props => {
               (get(props.user, 'data.role', '') === userRoles.admin ||
                 get(props.user, 'data.role', '') === userRoles.superAdm ||
                 get(props.user, 'data.role', '') === userRoles.mod) ? (
-                <DatasetMediator dropDownData={props} metaData={props} />
+                <DataMapperModule dropDownData={props} fileCorrection={props} />
               ) : (
                 <Redirect to="/" />
               )

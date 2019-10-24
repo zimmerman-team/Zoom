@@ -3,7 +3,6 @@ import * as actions from 'services/actions/index';
 import * as oipaActions from 'services/actions/oipa';
 import * as syncActions from 'services/actions/sync';
 import * as nodeActions from 'services/actions/nodeBackend';
-import { GET_USER_REQUEST } from 'services/actions/nodeBackend';
 
 const initial = {
   values: null,
@@ -405,7 +404,23 @@ function datasetIds(state = initial, action) {
   }
 }
 
+function dataset(state = initial, action) {
+  switch (action.type) {
+    case nodeActions.GET_DATASET_INITIAL:
+      return updateInitial(state);
+    case nodeActions.GET_DATASET_REQUEST:
+      return updateRequest(state, action);
+    case nodeActions.GET_DATASET_SUCCESS:
+      return updateSuccess(state, action);
+    case nodeActions.GET_DATASET_FAILED:
+      return updateFailed(state, action);
+    default:
+      return state;
+  }
+}
+
 const reducers = {
+  dataset,
   datasetIds,
   chartTrashEmpty,
   archivedCharts,

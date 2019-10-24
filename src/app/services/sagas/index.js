@@ -687,8 +687,30 @@ export function* getDatasetIdsRequest(action) {
   }
 }
 
+export function* getDatasetRequest(action) {
+  try {
+    const idToken = yield select(userIdToken);
+    const headers = { Authorization: `Bearer ${idToken}` };
+
+    const response = yield call(api.nodeBackendGetRequest, {
+      endpoint: 'getDataset',
+      values: action.values,
+      headers
+    });
+    yield put(nodeActions.getDatasetSuccess(response.data));
+  } catch (error) {
+    yield put(
+      nodeActions.getDatasetFailed({
+        ...error.response,
+        result: error.response.data
+      })
+    );
+  }
+}
+
 function* sagas() {
   yield [
+    takeLatest('GET_DATASET_REQUEST', getDatasetRequest),
     takeLatest('GET_DATASET_IDS_REQUEST', getDatasetIdsRequest),
     takeLatest('EMPTY_CHART_TRASH_REQUEST', emptyChartTrashRequest),
     takeLatest('ALL_ARCHIVED_CHARTS_REQUEST', allArchivedChartsRequest),

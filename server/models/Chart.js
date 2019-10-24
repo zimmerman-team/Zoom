@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-
+mongoose.set('useCreateIndex', true);
 const User = require('../models/User');
 
 mongoose.Promise = global.Promise; // use ES6 promises

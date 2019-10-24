@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-
+mongoose.set('useCreateIndex', true);
 const DatasetSchema = new Schema(
   {
     // so this will be the datasets id that we get

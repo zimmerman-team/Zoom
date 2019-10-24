@@ -7,7 +7,7 @@ const config = require('./config/config');
 const path = require('path');
 const router = require('./router');
 const app = express();
-
+mongoose.set('useCreateIndex', true);
 mongoose
   .connect(config.DB, {
     useNewUrlParser: true,

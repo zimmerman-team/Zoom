@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-
+mongoose.set('useCreateIndex', true);
 const UserSchema = new Schema({
   username: String,
   email: { type: String, unique: true },

@@ -162,8 +162,6 @@ export function formatMapJson(mappingJson, mapData, fileId) {
     }
   });
 
-  console.log('mapJson', mapJson);
-
   // There's also some functionality needed for when
   // a value has not been selected
   // so yeah that happens here

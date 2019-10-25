@@ -49,6 +49,22 @@ const DatasetApi = {
     });
   },
 
+  getDataset: (req, res) => {
+    const { authId, datasetId } = req.query;
+
+    userUtils.findOneUser(authId, res).then(author => {
+      if (author) {
+        Dataset.findOne({ datasetId }, (err, dataset) => {
+          if (err) {
+            general.handleError(res, err);
+          } else {
+            res.send(dataset);
+          }
+        });
+      }
+    });
+  },
+
   // basically gets the dataset IDs of the user mapped out datasets
   // and of the datasets that have been shared with this users team
   // it also returns the datasetIds which are available to the
@@ -136,7 +152,8 @@ const DatasetApi = {
             name: data.name,
             teams: data.teams,
             dataSource: data.dataSource,
-            public: data.public
+            public: data.public,
+            stepData: data.stepData
           });
 
           dataset.save(err => {
@@ -165,13 +182,25 @@ const DatasetApi = {
               if (setError) {
                 general.handleError(res, setError);
               } else {
-                if (data.name) dataset.name = data.name;
+                if (data.name) {
+                  dataset.name = data.name;
+                }
 
-                if (data.teams) dataset.teams = data.teams;
+                if (data.teams) {
+                  dataset.teams = data.teams;
+                }
 
-                if (data.dataSource) dataset.dataSource = data.dataSource;
+                if (data.dataSource) {
+                  dataset.dataSource = data.dataSource;
+                }
 
-                if (data.public !== undefined) dataset.public = data.public;
+                if (data.public !== undefined) {
+                  dataset.public = data.public;
+                }
+
+                if (data.stepData !== undefined) {
+                  dataset.stepData = data.stepData;
+                }
               }
 
               dataset.save(err => {

@@ -11,7 +11,8 @@ const DatasetSchema = new Schema(
     team: { type: String, default: '' },
     teams: [{ type: String }],
     public: { type: String, default: 'p' },
-    dataSource: { type: String, required: true }
+    dataSource: { type: String, required: true },
+    stepData: {}
   },
   {
     timestamps: { createdAt: 'created', updatedAt: 'last_updated' }

@@ -24,12 +24,20 @@ import Step from '@material-ui/core/Step';
 const propTypes = {
   data: PropTypes.object,
   onlyButtons: PropTypes.bool,
-  nextDisabled: PropTypes.bool
+  nextDisabled: PropTypes.bool,
+  path: PropTypes.string,
+  saveMetadata: PropTypes.func,
+  step: PropTypes.number,
+  oldDataset: PropTypes.bool
 };
 const defaultProps = {
+  oldDataset: false,
   data: undefined,
   onlyButtons: false,
-  nextDisabled: true
+  nextDisabled: true,
+  path: 'mapper',
+  step: 1,
+  saveMetadata: () => console.log('default step metadata save')
 };
 
 class Stepperz extends React.Component {
@@ -98,7 +106,10 @@ class Stepperz extends React.Component {
           <ButtonContainer margin="small">
             <ZoomButton
               style={{
-                backgroundColor: nextDisabled ? theme.color.zoomGreySix : '',
+                backgroundColor:
+                  nextDisabled || this.props.oldDataset
+                    ? theme.color.zoomGreySix
+                    : '',
                 ...stepButStyle
               }}
               onClick={this.props.step !== 6 ? this.props.nextStep : undefined}
@@ -106,6 +117,18 @@ class Stepperz extends React.Component {
               <ButtonLabel>next</ButtonLabel>
             </ZoomButton>
           </ButtonContainer>
+          {this.props.path.indexOf('dataset') !== -1 && this.props.step === 1 && (
+            <ButtonContainer margin="medium">
+              <ZoomButton
+                style={{
+                  backgroundColor: nextDisabled ? theme.color.zoomGreySix : ''
+                }}
+                onClick={() => this.props.saveMetadata()}
+              >
+                <ButtonLabel>Save Metadata</ButtonLabel>
+              </ZoomButton>
+            </ButtonContainer>
+          )}
         </Box>
       </ComponentBase>
     );

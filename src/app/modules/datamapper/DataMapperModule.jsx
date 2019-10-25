@@ -5,6 +5,10 @@ import { withRouter } from 'react-router';
 /* actions */
 import * as actions from 'services/actions/general';
 import * as nodeActions from 'services/actions/nodeBackend';
+
+/* mutations */
+import SurveyMutation from 'mediators/DataMapperMediators/WrapUpMediator/mutations/SurveyMutation';
+
 /* components */
 import Stepper from 'components/Stepper/Stepper';
 import Snackbar from 'components/Snackbar/Snackbar';
@@ -15,7 +19,8 @@ import { defModelOptions } from 'mediators/DataMapperMediators/UploadMediator/Up
 /* utils */
 import {
   addInEmptyFieldRows,
-  checkEmptyFields
+  checkEmptyFields,
+  checkMetadata
 } from 'modules/datamapper/DataMapperModule.util';
 import find from 'lodash/find';
 import { Helmet } from 'react-helmet';
@@ -34,6 +39,8 @@ import UploadMediator from 'mediators/DataMapperMediators/UploadMediator/UploadM
 import OverviewStep from 'modules/datamapper/fragments/OverviewStep/OverviewStep';
 import CorrectErrorsMediator from 'mediators/DataMapperMediators/CorrectErrorsMediator/CorrectErrorsMediator';
 import WrapUpMediator from 'mediators/DataMapperMediators/WrapUpMediator/WrapUpMediator';
+import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
+import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
 
 class DataMapperModule extends React.Component {
   constructor(props) {
@@ -53,7 +60,7 @@ class DataMapperModule extends React.Component {
       manMapEmptyFormat: false,
       emptyValColFormat: false,
       mapStepDisabled: false,
-      loading: Object.entries(this.props.stepData).length !== 0,
+      loading: props.edit,
 
       metaDataEmptyFields: [],
       stepsDisabled: false,
@@ -65,9 +72,20 @@ class DataMapperModule extends React.Component {
     this.nextStep = this.nextStep.bind(this);
     this.prevStep = this.prevStep.bind(this);
     this.nextDisabled = this.nextDisabled.bind(this);
+    this.saveMetadata = this.saveMetadata.bind(this);
+    this.handleSourceCompleted = this.handleSourceCompleted.bind(this);
+    this.handleSourceError = this.handleSourceError.bind(this);
+    this.updateDataSource = this.updateDataSource.bind(this);
+    this.handleSurveyCompleted = this.handleSurveyCompleted.bind(this);
+    this.handleSurveyError = this.handleSurveyError.bind(this);
+    this.updateSurveyData = this.updateSurveyData.bind(this);
+    this.handleMetaDataCompleted = this.handleMetaDataCompleted.bind(this);
+    this.handleMetaDataError = this.handleMetaDataError.bind(this);
+    this.updateMetaData = this.updateMetaData.bind(this);
   }
 
   componentDidMount() {
+    this.props.dispatch(actions.saveStepDataInitial());
     // so if its the edit dataset page
     // we will call the stepData from the zoomBackend
     if (this.props.match.path.indexOf('dataset') !== -1) {
@@ -78,8 +96,6 @@ class DataMapperModule extends React.Component {
         })
       );
       this.setState({ loading: true });
-    } else {
-      this.props.dispatch(actions.saveStepDataInitial());
     }
   }
 
@@ -101,8 +117,11 @@ class DataMapperModule extends React.Component {
               }
             })
           );
-          this.setState({ loading: true });
+          this.setState({
+            loading: true
+          });
         } else {
+          this.setState({ loading: false });
           this.props.dispatch(actions.saveStepDataInitial());
         }
       } else {
@@ -120,7 +139,7 @@ class DataMapperModule extends React.Component {
 
   componentWillUnmount() {
     // and we reset the values in the reducer
-    // this.props.dispatch(actions.saveStepDataInitial());
+    this.props.dispatch(actions.saveStepDataInitial());
     this.props.dispatch(nodeActions.getDatasetInitial());
   }
 
@@ -178,48 +197,26 @@ class DataMapperModule extends React.Component {
       if (prevState.step === 1) {
         // and this bool will be used to save the general state if some
         // fields are undefined
-        const metaDataEmptyFields = [];
-
-        console.log('stepData.metaData', stepData.metaData);
-
-        // we check if the title is empty
-        if (!stepData.metaData.title || stepData.metaData.title.length === 0) {
-          metaDataEmptyFields.push('title');
-        }
-
-        // we check if the description is empty
-        if (!stepData.metaData.desc || stepData.metaData.desc.length === 0) {
-          metaDataEmptyFields.push('desc');
-        }
-
-        // we check if the datasource is empty
-        if (
-          !stepData.metaData.dataSource.value ||
-          stepData.metaData.dataSource.value.length === 0
-        ) {
-          metaDataEmptyFields.push('dataSource');
-        }
-
-        // we check if the organisation is empty
-        if (!stepData.metaData.org || stepData.metaData.org.length === 0) {
-          metaDataEmptyFields.push('org');
-        }
-
-        // we check if the year is empty
-        if (
-          !stepData.metaData.year ||
-          stepData.metaData.year.length === 0 ||
-          !/^\d+$/.test(this.props.stepData.metaData.year) ||
-          this.props.stepData.metaData.year.length > 4
-        ) {
-          metaDataEmptyFields.push('year');
-        }
+        const metaDataEmptyFields = checkMetadata(stepData);
 
         if (metaDataEmptyFields.length > 0) {
           props.dispatch(actions.saveStepDataRequest(stepData));
           return {
             openSnackbar: true,
             errorMessage: 'Please fill the required fields',
+            metaDataEmptyFields
+          };
+        }
+
+        if (
+          this.props.match.path.indexOf('dataset') !== -1 &&
+          (!this.props.dataset.data ||
+            !this.props.dataset.data.stepData ||
+            !this.props.dataset.data.stepData.overviewData)
+        ) {
+          return {
+            openSnackbar: true,
+            errorMessage: `Only datasets mapped out after ${process.env.REACT_APP_OLD_INFO_DATE} can have all of their data edited`,
             metaDataEmptyFields
           };
         }
@@ -327,11 +324,227 @@ class DataMapperModule extends React.Component {
     });
   }
 
+  updateSurveyData() {
+    const { metaData } = this.props.stepData;
+
+    const dataCleaningTechniques = [];
+    metaData.q51.forEach(q => {
+      dataCleaningTechniques.push(q.value.trim());
+    });
+    const variables = {
+      id: this.state.surveyId,
+      haveYouTestedTool: metaData.q1,
+      whoDidYouTestWith: metaData.q2.map(q => {
+        return q.value;
+      }),
+      consideredSenstive: metaData.q21,
+      askSensitive: metaData.q22,
+      selectRespondents: metaData.q3Text,
+      howManyRespondents: metaData.q4Text,
+      staffTrained: metaData.q22,
+      editSheet: metaData.q5,
+      dataCleaningTechniques,
+      otherCleaningTechnique:
+        dataCleaningTechniques.indexOf('0') !== -1 ? metaData.q51Text : ''
+    };
+
+    // and here we upload all the metadata for the file
+    SurveyMutation.commit(
+      this.props.stepData.environment,
+      variables,
+      this.handleSurveyCompleted,
+      this.handleSurveyError
+    );
+  }
+
+  saveMetadata() {
+    const metaDataEmptyFields = checkMetadata(this.props.stepData);
+
+    if (metaDataEmptyFields.length > 0) {
+      this.setState({
+        openSnackbar: true,
+        errorMessage: 'Please fill the required fields',
+        metaDataEmptyFields
+      });
+    } else if (this.props.stepData.metaData.surveyData === 'Yes') {
+      // we add the survey data
+      this.updateSurveyData();
+    } else if (this.props.stepData.metaData.dataSource.key === 'other') {
+      this.updateDataSource(this.props.stepData.metaData.dataSource.value);
+    } else {
+      // otherwise we just add the existing source id
+      // and then add the metadata
+      this.updateMetaData();
+    }
+  }
+
+  handleSurveyCompleted(response, error) {
+    if (error) {
+      console.log('error adding survey data:', error);
+    } else if (response) {
+      this.setState(
+        {
+          surveyId: response.surveyData.id
+        },
+        this.afterSurvey
+      );
+    }
+  }
+
+  handleSourceCompleted(response) {
+    if (response) {
+      this.setState(
+        {
+          sourceId: response.fileSource.entryId,
+          sourceName: response.fileSource.name
+        },
+        this.updateMetaData
+      );
+    }
+  }
+
+  handleSourceError(error) {
+    console.log('error adding data source: ', error);
+  }
+
+  updateDataSource(name) {
+    AddSourceMutation.commit(
+      this.props.stepData.environment,
+      name,
+      this.handleSourceCompleted,
+      this.handleSourceError
+    );
+  }
+
+  afterSurvey() {
+    if (this.props.stepData.metaData.dataSource.key === 'other') {
+      this.updateDataSource(this.props.stepData.metaData.dataSource.value);
+    } else {
+      this.updateMetaData();
+    }
+  }
+
+  handleSurveyError(error) {
+    console.log('error adding survey data: ', error);
+  }
+
+  handleMetaDataCompleted(response, error) {
+    if (error) {
+      console.log('error uploading file:', error);
+    } else if (response) {
+      let teams = [];
+
+      // and after everything is done mapping we can actually
+      // save the dataset into our zoom backend
+      let accessibility = 'p';
+
+      if (this.props.stepData.metaData.accessibility === 'Public') {
+        accessibility = 'a';
+      } else if (this.props.stepData.metaData.accessibility === 'Team') {
+        accessibility = 'o';
+        teams = this.props.user.groups.map(group => group.name);
+      }
+
+      // and after everything is done mapping we can actually
+      // save the dataset into our zoom backend
+      this.props.dispatch(
+        nodeActions.updateDatasetRequest({
+          authId: this.props.user.authId,
+          datasetId: this.props.match.params.id,
+          name: this.props.stepData.metaData.title,
+          dataSource:
+            this.state.sourceName ||
+            this.props.stepData.metaData.dataSource.label,
+          teams,
+          public: accessibility,
+          stepData: {
+            ...this.props.stepData,
+            metaData: {
+              ...this.props.stepData.metaData,
+              dataSource:
+                this.props.stepData.metaData.dataSource.label.toLowerCase() ===
+                'add new'
+                  ? {
+                      label: this.state.sourceName,
+                      key: this.state.sourceId,
+                      value: this.state.sourceId
+                    }
+                  : this.props.stepData.metaData.dataSource
+            }
+          }
+        })
+      );
+
+      this.props.history.push('/dashboard');
+    }
+  }
+
+  handleMetaDataError(error) {
+    console.log('error uploading file: ', error);
+  }
+
+  updateMetaData() {
+    const { metaData } = this.props.stepData;
+
+    // This is shared data set 'p' for private, 'o' for team and 'a' public for all
+    let accessibility = 'p';
+
+    if (metaData.accessibility === 'Public') {
+      accessibility = 'a';
+    } else if (metaData.accessibility === 'Team') {
+      accessibility = 'o';
+    }
+
+    // const tags = metaData.tags.map(tag => {
+    //   return { name: tag };
+    // });
+
+    // and here we just use some random data, just to be able to upload the file
+    const variables = {
+      id: parseInt(this.props.match.params.id, 10),
+      title: metaData.title,
+      description: metaData.desc,
+      containsSubnationalData: true,
+      organisation: metaData.org,
+      maintainer: 'Unavailable',
+      methodology: 'Unavailable',
+      defineMethodology: 'Unavailable',
+      updateFrequency: 'Unavailable',
+      comments: 'Unavailable',
+      accessibility,
+      dataQuality: 'Unavailable',
+      dateOfDataset: metaData.year,
+      fileTypes: 'csv',
+      file: this.props.stepData.uploadData.url,
+      numberOfRows: '1',
+      // Location should always be 2, until we start using different data
+      // or we get more selections in the metadata step.
+      // Location 2 is for the 'world' location
+      location: '2',
+      surveyData:
+        this.state.surveyId || this.props.stepData.wrapUpData.surveyId || null,
+      source: this.state.sourceId || metaData.dataSource.value
+      // tags
+    };
+
+    // and here we upload all the metadata for the file
+    AddFileMutation.commit(
+      this.props.stepData.environment,
+      variables,
+      this.handleMetaDataCompleted,
+      this.handleMetaDataError
+    );
+  }
+
   renderStep() {
     switch (this.state.step) {
       case 1:
         return (
           <MetaDataMediator
+            metaData={this.props.metaData}
+            path={this.props.match.path}
+            id={this.props.match.params.id}
+            alwaysSave
             dropDownData={this.props.dropDownData}
             metaDataEmptyFields={this.state.metaDataEmptyFields}
           />
@@ -380,63 +593,6 @@ class DataMapperModule extends React.Component {
     }
   }
 
-  //TODO: make this work
-  saveMetadata() {
-    const { stepMetaData } = this.props;
-
-    const metaDataEmptyFields = [];
-
-    // we check if the title is empty
-    if (!stepMetaData.title || stepMetaData.title.length === 0) {
-      metaDataEmptyFields.push('title');
-    }
-
-    // we check if the description is empty
-    if (!stepMetaData.desc || stepMetaData.desc.length === 0) {
-      metaDataEmptyFields.push('desc');
-    }
-
-    // we check if the datasource is empty
-    if (
-      !stepMetaData.dataSource.value ||
-      stepMetaData.dataSource.value.length === 0
-    ) {
-      metaDataEmptyFields.push('dataSource');
-    }
-
-    // we check if the organisation is empty
-    if (!stepMetaData.org || stepMetaData.org.length === 0) {
-      metaDataEmptyFields.push('org');
-    }
-
-    // we check if the year is empty
-    if (
-      !stepMetaData.year ||
-      stepMetaData.year.length === 0 ||
-      !/^\d+$/.test(stepMetaData.year) ||
-      stepMetaData.year.length > 4
-    ) {
-      metaDataEmptyFields.push('year');
-    }
-
-    if (metaDataEmptyFields.length > 0) {
-      this.setState({
-        openSnackbar: true,
-        errorMessage: 'Please fill the required fields',
-        metaDataEmptyFields
-      });
-    } else if (this.props.stepMetaData.surveyData === 'Yes') {
-      // we add the survey data
-      this.updateSurveyData();
-    } else if (this.props.stepMetaData.dataSource.key === 'other') {
-      this.updateDataSource(this.props.stepMetaData.dataSource.value);
-    } else {
-      // otherwise we just add the existing source id
-      // and then add the metadata
-      this.updateMetaData();
-    }
-  }
-
   render() {
     let moduleDisabled = false;
 
@@ -449,6 +605,12 @@ class DataMapperModule extends React.Component {
     ) {
       moduleDisabled = true;
     }
+
+    const oldDataset =
+      this.props.match.path.indexOf('dataset') !== -1 &&
+      (!this.props.dataset.data ||
+        !this.props.dataset.data.stepData ||
+        !this.props.dataset.data.stepData.overviewData);
 
     return (
       <>
@@ -464,6 +626,7 @@ class DataMapperModule extends React.Component {
             />
             <ModuleHeader>
               <Stepper
+                oldDataset={oldDataset}
                 saveMetadata={() => this.saveMetadata()}
                 path={this.props.match.path}
                 step={this.state.step}
@@ -483,6 +646,7 @@ class DataMapperModule extends React.Component {
 
             <ModuleFooter>
               <Stepper
+                oldDataset={oldDataset}
                 saveMetadata={() => this.saveMetadata()}
                 path={this.props.match.path}
                 onlyButtons

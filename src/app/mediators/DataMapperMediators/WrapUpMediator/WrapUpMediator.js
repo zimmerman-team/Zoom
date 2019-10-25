@@ -151,6 +151,19 @@ class WrapUpMediator extends React.Component {
 
   handleSourceCompleted(response, error) {
     if (response) {
+      this.props.dispatch(
+        generalActions.saveStepDataRequest({
+          ...this.props.stepData,
+          metaData: {
+            ...this.props.stepData.metaData,
+            dataSource: {
+              label: response.fileSource.name,
+              key: response.fileSource.entryId,
+              value: response.fileSource.entryId
+            }
+          }
+        })
+      );
       this.setState(
         {
           sourceId: response.fileSource.entryId,
@@ -361,17 +374,30 @@ class WrapUpMediator extends React.Component {
         teams = this.props.user.groups.map(group => group.name);
       }
 
-      this.props.dispatch(
-        nodeActions.addNewDatasetRequest({
-          authId: this.props.user.authId,
-          datasetId: this.props.fileId,
-          name: this.props.metaData.title,
-          dataSource:
-            this.state.sourceName || this.props.metaData.dataSource.label,
-          teams,
-          public: accessibility
-        })
-      );
+      const datasetData = {
+        authId: this.props.user.authId,
+        datasetId: this.props.fileId,
+        name: this.props.metaData.title,
+        dataSource:
+          this.state.sourceName || this.props.metaData.dataSource.label,
+        teams,
+        public: accessibility,
+        stepData: {
+          ...this.props.stepData,
+          uploadData: {
+            ...this.props.stepData.uploadData,
+            file: {
+              name: this.props.stepData.uploadData.file.name
+            }
+          }
+        }
+      };
+
+      if (this.props.dataset.data) {
+        this.props.dispatch(nodeActions.updateDatasetRequest(datasetData));
+      } else {
+        this.props.dispatch(nodeActions.addNewDatasetRequest(datasetData));
+      }
     }
 
     this.setState({ loading: false, mappingErrors });
@@ -429,7 +455,8 @@ const mapStateToProps = state => {
     fileUrl: state.stepData.stepzData.uploadData.url,
     mappingJson: state.stepData.stepzData.uploadData.mappingJson,
     mappingData: state.stepData.stepzData.manMapData,
-    stepData: state.stepData.stepzData
+    stepData: state.stepData.stepzData,
+    dataset: state.dataset
   };
 };
 

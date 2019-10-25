@@ -525,3 +525,35 @@ export function getDatasetIdsFailed(error) {
     error
   };
 }
+
+export const GET_DATASET_INITIAL = 'GET_DATASET_INITIAL';
+export const GET_DATASET_REQUEST = 'GET_DATASET_REQUEST';
+export const GET_DATASET_SUCCESS = 'GET_DATASET_SUCCESS';
+export const GET_DATASET_FAILED = 'GET_DATASET_FAILED';
+
+export function getDatasetInitial() {
+  return {
+    type: GET_DATASET_INITIAL
+  };
+}
+
+export function getDatasetRequest(values) {
+  return {
+    type: GET_DATASET_REQUEST,
+    values
+  };
+}
+
+export function getDatasetSuccess(data) {
+  return {
+    type: GET_DATASET_SUCCESS,
+    data
+  };
+}
+
+export function getDatasetFailed(error) {
+  return {
+    type: GET_DATASET_FAILED,
+    error
+  };
+}

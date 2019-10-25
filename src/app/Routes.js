@@ -85,8 +85,6 @@ import PublicDashMediator from 'mediators/DashboardMediators/PublicDashMediator'
   import('mediators/ModuleMediators/DatasetMediator/DatasetMediator')
 );*/
 
-import DatasetMediator from 'mediators/ModuleMediators/DatasetMediator/DatasetMediator';
-
 // const About = lazy(() => import('modules/about/About'));
 
 import About from 'modules/about/About';
@@ -291,7 +289,12 @@ const Routes = props => {
               (get(props.user, 'data.role', '') === userRoles.admin ||
                 get(props.user, 'data.role', '') === userRoles.superAdm ||
                 get(props.user, 'data.role', '') === userRoles.mod) ? (
-                <DatasetMediator dropDownData={props} metaData={props} />
+                <DataMapperModule
+                  edit
+                  dropDownData={props}
+                  fileCorrection={props}
+                  metaData={props}
+                />
               ) : (
                 <Redirect to="/" />
               )

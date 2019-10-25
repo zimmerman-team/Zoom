@@ -71,3 +71,42 @@ export function addInEmptyFieldRows(emptyFields, manMapData) {
 
   return data;
 }
+
+export function checkMetadata(stepData) {
+  const metaDataEmptyFields = [];
+
+  // we check if the title is empty
+  if (!stepData.metaData.title || stepData.metaData.title.length === 0) {
+    metaDataEmptyFields.push('title');
+  }
+
+  // we check if the description is empty
+  if (!stepData.metaData.desc || stepData.metaData.desc.length === 0) {
+    metaDataEmptyFields.push('desc');
+  }
+
+  // we check if the datasource is empty
+  if (
+    !stepData.metaData.dataSource.value ||
+    stepData.metaData.dataSource.value.length === 0
+  ) {
+    metaDataEmptyFields.push('dataSource');
+  }
+
+  // we check if the organisation is empty
+  if (!stepData.metaData.org || stepData.metaData.org.length === 0) {
+    metaDataEmptyFields.push('org');
+  }
+
+  // we check if the year is empty
+  if (
+    !stepData.metaData.year ||
+    stepData.metaData.year.length === 0 ||
+    !/^\d+$/.test(stepData.metaData.year) ||
+    stepData.metaData.year.length > 4
+  ) {
+    metaDataEmptyFields.push('year');
+  }
+
+  return metaDataEmptyFields;
+}

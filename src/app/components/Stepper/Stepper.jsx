@@ -27,9 +27,11 @@ const propTypes = {
   nextDisabled: PropTypes.bool,
   path: PropTypes.string,
   saveMetadata: PropTypes.func,
-  step: PropTypes.number
+  step: PropTypes.number,
+  oldDataset: PropTypes.bool
 };
 const defaultProps = {
+  oldDataset: false,
   data: undefined,
   onlyButtons: false,
   nextDisabled: true,
@@ -104,7 +106,10 @@ class Stepperz extends React.Component {
           <ButtonContainer margin="small">
             <ZoomButton
               style={{
-                backgroundColor: nextDisabled ? theme.color.zoomGreySix : '',
+                backgroundColor:
+                  nextDisabled || this.props.oldDataset
+                    ? theme.color.zoomGreySix
+                    : '',
                 ...stepButStyle
               }}
               onClick={this.props.step !== 6 ? this.props.nextStep : undefined}

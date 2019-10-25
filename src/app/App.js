@@ -152,7 +152,7 @@ class App extends React.Component {
                   ...CountryDetailMediator_indicatorAggregations
                   ...MetaDataMediator_dropDownData
                   ...CorrectErrorsMediator_fileCorrection
-                  ...DatasetMediator_metaData
+                  ...MetaDataMediator_metaData
                   ...DashboardMediator_Indicator
                 }
               `}

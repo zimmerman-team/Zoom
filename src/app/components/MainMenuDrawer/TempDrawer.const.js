@@ -113,7 +113,7 @@ export const data = [
     type: 'public'
   },
   {
-    label: 'Cookies policy',
+    label: 'Cooky policy',
     path: `${pathPrefix}cookies`,
     icon: <IconAbout />,
     env: 'development',

@@ -162,7 +162,7 @@ export class AppBar extends React.Component {
         this.props.dataPaneOpen === paneTypes.none
           ? paneTypes.pubPane
           : paneTypes.none;
-      buttonLabel = paneType !== paneTypes.none ? 'Geo map filters' : 'Hide';
+      buttonLabel = paneType !== paneTypes.none ? 'Plot indicators' : 'Hide';
     }
 
     let paneIcon =

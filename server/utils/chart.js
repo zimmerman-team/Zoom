@@ -34,7 +34,7 @@ function saveDataFileReuse(chartz, fileUrl, res) {
 }
 
 module.exports = {
-  writeGeoJson: (chartz, type, data, update = false) => {
+  writeTiles: (chartz, type, data, update = false) => {
     return new Promise(resolve => {
       if (
         type === chartTypes.geoMap ||
@@ -55,20 +55,20 @@ module.exports = {
 
           const pathToOldFile = data[layerIndex].url.replace('api/', '');
 
-          const pathToNewFile = 'static/savedGeoJsons/'.concat(newFileName);
+          const pathToNewFile = 'static/savedTiles/'.concat(newFileName);
 
           const fullOldPath = path.join(serverPath, pathToOldFile);
 
           const fullNewPath = path.join(serverPath, pathToNewFile);
 
-          if (fullOldPath.indexOf('savedGeoJsons') !== -1) {
+          if (fullOldPath.indexOf('savedTiles') !== -1) {
             if (!update) {
-              // so if the old path contains 'savedGeoJsons'
+              // so if the old path contains 'savedTiles'
               // in its path name, most likely a creation of a duplicate
               // chart is happening in its edit state withouth having
-              // any data changes, thus we will copy the geojson in this
+              // any data changes, thus we will copy the tile file in this
               // case cause we want the original to still be there
-              // OR if geojson files are
+              // OR if tile files are
               // actually served from a remote server where we've allowed
               // CORS for static files
               fs.createReadStream(fullOldPath).pipe(
@@ -80,28 +80,6 @@ module.exports = {
             } else {
               resolve(null);
             }
-          } else if (
-            process.env.REACT_APP_BACKEND_HOST.indexOf('localhost') === -1
-          ) {
-            const urlGeoJson = data[layerIndex].url;
-
-            const file = fs.createWriteStream(fullNewPath, {
-              flags: 'w'
-            });
-
-            https.get(urlGeoJson, fileRes => {
-              fileRes
-                .on('data', fileData => {
-                  file.write(fileData);
-                })
-                .on('end', () => {
-                  file.end();
-
-                  const newUrl = '/api/'.concat(pathToNewFile);
-
-                  resolve({ layerIndex, newUrl });
-                });
-            });
           } else {
             // otherwise DUCT has been run locally and geojson file
             // has already been saved in zoomBackend, so we just need

@@ -1,9 +1,10 @@
 /* base */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import MapGL, { LinearInterpolator } from 'react-map-gl';
+import MapGL, { LinearInterpolator, StaticMap } from 'react-map-gl';
 import isEqual from 'lodash/isEqual';
 import { withRouter } from 'react-router';
+import axios from 'axios';
 /* utils */
 import cloneDeep from 'lodash/cloneDeep';
 import find from 'lodash/find';
@@ -14,7 +15,7 @@ import ErrorBoundaryFallback from 'components/ErrorBoundaryFallback/ErrorBoundar
 import { ErrorBoundary } from 'react-error-boundary';
 import { generateLegends, generateMarkers } from './GeoMap.util';
 /* styles */
-import { borderStyle, dataLayer, colorStops } from './components/map-style';
+import { dataLayer } from './components/map-style';
 import {
   ControlsContainer,
   LegendContainer,
@@ -27,6 +28,13 @@ import theme from 'theme/Theme';
 import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
 import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
+import DeckGL from '@deck.gl/react';
+import { GeoJsonLayer } from '@deck.gl/layers';
+
+import { TileLayer } from '@deck.gl/geo-layers';
+import { VectorTile } from '@mapbox/vector-tile';
+import Protobuf from 'pbf';
+import { getColorByPct } from 'utils/genericUtils';
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
@@ -67,9 +75,6 @@ export class GeoMap extends Component {
     super(props);
 
     this.state = {
-      mapStyle: {
-        ...MAP_STYLE
-      },
       markerArray: [],
       legends: [],
       hoverLayerInfo: null,
@@ -89,12 +94,27 @@ export class GeoMap extends Component {
         keyboard: true,
         doubleClickZoom: false,
         minZoom: this.props.zoom,
-        maxZoom: 20
+        maxZoom: 8
       },
       hoverMarkerInfo: null,
-      values: [12, 16]
+      values: [12, 16],
+      tileUrl: null,
+      colorStops: [
+        {
+          percentile: 0,
+          color: [255, 255, 255],
+          percentage: 0.0
+        },
+        {
+          percentile: 8,
+          color: [9, 0, 255],
+          percentage: 1.0
+        }
+      ],
+      tileZoom: 6
     };
 
+    this._setLayerInfo = this._setLayerInfo.bind(this);
     this._handleMapLoaded = this._handleMapLoaded.bind(this);
     this.setMarkerInfo = this.setMarkerInfo.bind(this);
     this.handleZoomIn = this.handleZoomIn.bind(this);
@@ -145,73 +165,6 @@ export class GeoMap extends Component {
     // so yeah because of annoying
   }
 
-  updateMap(indicatorData) {
-    // So because the layers are a part of this map, and not just a component
-    // that we can put in the map(at least thats how we do it right now)
-    // we will generate the layers here, and differently than all other indicator
-    // markers
-    // Note: the layer will also use a different tooltip than the markers
-    // cause it kind of makes sense for some cases
-    const mapStyle = cloneDeep(MAP_STYLE);
-
-    const layers = find(indicatorData, ['type', 'layer']);
-    if (layers) {
-      mapStyle.sources.layer = { type: 'geojson', data: layers.url };
-      mapStyle.sources.outline = { type: 'geojson', data: layers.url };
-
-      if (!find(mapStyle.layers, ['id', 'outline'])) {
-        mapStyle.layers.push(borderStyle);
-      }
-
-      // so here we change the data layers color stops
-      // according to the amount of actually unique values
-      // in our geomap data, so that the layers on the map
-      // would reflect the legend of the map
-      const colorStopz = colorStops;
-      // and this [1][0] is the actual value that we
-      // want to adjust in these color stops as
-      // the color stop amount is formed according to
-      // this value, check the variable imported 'colorStops'
-      // for clarity
-      colorStopz[1][0] = layers.uniqCount;
-
-      if (!find(mapStyle.layers, ['id', 'layer'])) {
-        dataLayer.paint['fill-color'].stops = colorStopz;
-
-        mapStyle.layers.push(dataLayer);
-      } else {
-        // and when we get new data into the layers we want to update
-        // the color stops according to this new data
-
-        // so we find the layer containing our color stops
-        const layerColInd = findIndex(mapStyle.layers, ['id', 'layer']);
-
-        mapStyle.layers[layerColInd].paint['fill-color'].stops = colorStopz;
-      }
-    } else {
-      // so if no layers are loaded we want to make sure that
-      // there are no layers and no borders in that mapstyle of ours
-      // cause of stupid referencing the MAP_STYLE object has the
-      // layers pushed, whilst it shouldn't
-
-      const borderInd = findIndex(mapStyle.layers, ['id', 'outline']);
-
-      if (borderInd !== -1) mapStyle.layers.splice(borderInd, 1);
-
-      const layerInd = findIndex(mapStyle.layers, ['id', 'layer']);
-
-      if (layerInd !== -1) mapStyle.layers.splice(layerInd, 1);
-    }
-
-    // and all of the generic markers that can be just put in the map, like separate components
-    // will be generated like this, and will use the same marker tooltip
-    const markerArray = generateMarkers(indicatorData, this.setMarkerInfo);
-    // and in a similar way we generate legends
-    const legends = generateLegends(indicatorData);
-
-    this.setState({ markerArray, legends, mapStyle });
-  }
-
   setMarkerInfo(indicator) {
     this.setState({
       hoverMarkerInfo: indicator
@@ -224,22 +177,6 @@ export class GeoMap extends Component {
     if (this.props.chartMounted && this.props.saveViewport) {
       this.props.saveViewport(viewport);
     }
-  };
-
-  _setLayerInfo = event => {
-    let hoverLayerInfo = null;
-    const { features } = event;
-
-    const feature = features && features.find(f => f.layer.id === 'layer');
-    if (feature) {
-      hoverLayerInfo = {
-        lngLat: event.lngLat,
-        properties: feature.properties
-      };
-    }
-    this.setState({
-      hoverLayerInfo
-    });
   };
 
   _showLayerInfo() {
@@ -287,6 +224,59 @@ export class GeoMap extends Component {
 
   setYearSelectorRef(node) {
     this.yearSelectorRef = node;
+  }
+
+  _setLayerInfo = event => {
+    let hoverLayerInfo = null;
+    const { object } = event;
+
+    if (object) {
+      hoverLayerInfo = {
+        lngLat: event.lngLat,
+        properties: object.properties
+      };
+    }
+    this.setState({
+      hoverLayerInfo
+    });
+  };
+
+  updateMap(indicatorData) {
+    const layers = find(indicatorData, ['type', 'layer']);
+
+    let tileUrl = this.state.tileUrl;
+    let tileZoom = this.state.tileZoom;
+    let colorStops = this.state.colorStops;
+
+    if (layers) {
+      colorStops = [];
+      tileUrl = layers.url;
+      tileZoom = layers.zoom;
+
+      for (let i = 0; i < layers.uniqCount + 1; i += 1) {
+        const percentage = i / layers.uniqCount;
+
+        colorStops.push({
+          percentile: i,
+          color: getColorByPct(percentage),
+          percentage
+        });
+      }
+    } else {
+      // so if no layers are loaded we want to make sure that
+      // there are no layers and no borders in that mapstyle of ours
+      // cause of stupid referencing the MAP_STYLE object has the
+      // layers pushed, whilst it shouldn't
+      tileUrl = null;
+    }
+
+    // and all of the generic markers that can be just put in the map, like separate components
+    // will be generated like this, and will use the same marker tooltip
+    const markerArray = generateMarkers(indicatorData, this.setMarkerInfo);
+    // and in a similar way we generate legends
+    const legends = generateLegends(indicatorData);
+
+    this.setState({ markerArray, legends, tileUrl, tileZoom });
   }
 
   handleZoomIn() {
@@ -345,67 +335,159 @@ export class GeoMap extends Component {
   }
 
   render() {
-    const { viewport, settings, mapStyle, markerArray, legends } = this.state;
+    const { viewport, settings, markerArray, legends } = this.state;
+
+    const tileLayer =
+      this.state.tileUrl &&
+      new TileLayer({
+        stroked: true,
+        pickable: true,
+
+        opacity: 0.2,
+
+        getLineColor: [0, 128, 239],
+        getFillColor: layer => {
+          const colorItem = find(this.state.colorStops, [
+            'percentile',
+            layer.properties.percentile
+          ]);
+          if (colorItem) {
+            return colorItem.color;
+          }
+          return [9, 0, 255];
+        },
+
+        maxZoom: this.state.tileZoom,
+
+        getLineWidth: () => {
+          return 2;
+        },
+        lineWidthMinPixels: 2,
+
+        getTileData: ({ x, y, z }) => {
+          // const mapSource = `https://a.tiles.mapbox.com/v4/mapbox.mapbox-streets-v7/${z}/${x}/${y}.vector.pbf?access_token=${MapboxAccessToken}`;
+          const mapSource = `/api/mbtiles/${encodeURIComponent(
+            this.state.tileUrl
+          )}/${z}/${x}/${y}.pbf`;
+
+          return fetch(mapSource)
+            .then(response => {
+              if (response.status === 200) {
+                return response.arrayBuffer();
+              }
+              return null;
+            })
+            .then(buffer => {
+              if (buffer) {
+                const tile = new VectorTile(new Protobuf(buffer));
+                const features = [];
+                for (const layerName in tile.layers) {
+                  const vectorTileLayer = tile.layers[layerName];
+                  for (let i = 0; i < vectorTileLayer.length; i += 1) {
+                    const vectorTileFeature = vectorTileLayer.feature(i);
+                    const feature = vectorTileFeature.toGeoJSON(x, y, z);
+                    features.push(feature);
+                  }
+                }
+                return features;
+              }
+              return [];
+            });
+        },
+
+        onHover: event => {
+          // console.log('hover object.properties', object && object.properties);
+          console.log('hover event', event);
+          // this._setLayerInfo(object);
+        },
+
+        onClick: event => {
+          // console.log('hover object.properties', object && object.properties);
+          console.log('click event', event);
+          // this._onCountryClick(object);
+        }
+      });
+
+    const test = true;
 
     return (
-      /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
-      <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
-        <MapContainer data-cy="geo-map-container">
-          <MapGL
-            {...viewport}
-            {...settings}
-            scrollZoom
-            width="100%"
-            height="100%"
-            mapStyle={mapStyle}
-            onViewportChange={this._updateViewport}
-            onHover={this._setLayerInfo}
-            onClick={this._onCountryClick}
-            onLoad={this._handleMapLoaded}
-            mapboxApiAccessToken={MAPBOX_TOKEN}
-            // mapOptions={this.props.mapOptions}
-            ref={map => (this.mapRef = map)}
-            attributionControl
-            // bounds={ya}
-            // so commenting this out cause it causes the
-            // onHover to NOT receive features...
-            // dunno why though seems like just a bug in this react-map-gl library
-            // cause the on click does receive the features...
-            // reuseMaps
-          >
-            <ControlsContainer ref={this.setMapControlsRef}>
-              <MapControls
-                onZoomIn={this.handleZoomIn}
-                onZoomOut={this.handleZoomOut}
-                onFullScreen={this.handleFullscreen}
-              />
-            </ControlsContainer>
-            {/*So this is the layer tooltip, and we seperate it from the
+      <>
+        {test ? (
+          <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+            <MapContainer data-cy="geo-map-container">
+              <DeckGL
+                initialViewState={viewport}
+                controller
+                layers={tileLayer ? [tileLayer] : []}
+                // onViewStateChange={this._updateViewport}
+                // onLoad={this._handleMapLoaded}
+              >
+                <StaticMap
+                  mapboxApiAccessToken={MAPBOX_TOKEN}
+                  mapStyle={MAP_STYLE}
+                />
+              </DeckGL>
+            </MapContainer>
+          </ErrorBoundary>
+        ) : (
+          <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+            <MapContainer data-cy="geo-map-container">
+              <MapGL
+                {...viewport}
+                {...settings}
+                scrollZoom
+                width="100%"
+                height="100%"
+                onViewStateChange={this._updateViewport}
+                onHover={this._setLayerInfo}
+                onClick={this._onCountryClick}
+                onLoad={this._handleMapLoaded}
+                mapboxApiAccessToken={MAPBOX_TOKEN}
+                // mapOptions={this.props.mapOptions}
+                ref={map => (this.mapRef = map)}
+                attributionControl
+                // bounds={ya}
+                // so commenting this out cause it causes the
+                // onHover to NOT receive features...
+                // dunno why though seems like just a bug in this react-map-gl library
+                // cause the on click does receive the features...
+                // reuseMaps
+              >
+                <ControlsContainer ref={this.setMapControlsRef}>
+                  <MapControls
+                    onZoomIn={this.handleZoomIn}
+                    onZoomOut={this.handleZoomOut}
+                    onFullScreen={this.handleFullscreen}
+                  />
+                </ControlsContainer>
+                {/*So this is the layer tooltip, and we seperate it from the
               martker tooltip, cause its functionality as a tooltip is a bit different
               and also because we implement the layers a bit more differently
               than normal markers*/}
-            {this._showLayerInfo()}
+                {this._showLayerInfo()}
 
-            {this._showMarkerInfo()}
+                {this._showMarkerInfo()}
 
-            {markerArray}
+                {markerArray}
 
-            {/*contains zoom in/out and fullscreen toggle*/}
+                {/*contains zoom in/out and fullscreen toggle*/}
 
-            <LegendContainer>{legends}</LegendContainer>
-            <GeoYearContainer
-              ref={this.setYearSelectorRef}
-              bottom="0"
-              backgroundColor={theme.color.aidsFondsWhiteOpacity}
-            >
-              <CustomYearSelector
-                selectedYear={this.props.selectedYear}
-                selectYear={this.props.selectYear}
-              />
-            </GeoYearContainer>
-          </MapGL>
-        </MapContainer>
-      </ErrorBoundary>
+                <LegendContainer>{legends}</LegendContainer>
+                <GeoYearContainer
+                  ref={this.setYearSelectorRef}
+                  bottom="0"
+                  backgroundColor={theme.color.aidsFondsWhiteOpacity}
+                >
+                  <CustomYearSelector
+                    selectedYear={this.props.selectedYear}
+                    selectYear={this.props.selectYear}
+                  />
+                </GeoYearContainer>
+              </MapGL>
+            </MapContainer>
+          </ErrorBoundary>
+        )}
+      </>
     );
   }
 }
@@ -414,3 +496,74 @@ GeoMap.propTypes = propTypes;
 GeoMap.defaultProps = defaultProps;
 
 export default withRouter(GeoMap);
+
+{
+  /* if doesnt work try moving this to deck gl or applying all of these in some different way */
+}
+{
+  /*<ControlsContainer ref={this.setMapControlsRef}>*/
+}
+{
+  /*  <MapControls*/
+}
+{
+  /*    onZoomIn={this.handleZoomIn}*/
+}
+{
+  /*    onZoomOut={this.handleZoomOut}*/
+}
+{
+  /*    onFullScreen={this.handleFullscreen}*/
+}
+{
+  /*  />*/
+}
+{
+  /*</ControlsContainer>*/
+}
+
+{
+  /*{this._showLayerInfo()}*/
+}
+
+{
+  /*{this._showMarkerInfo()}*/
+}
+
+{
+  /*{markerArray}*/
+}
+
+{
+  /*<LegendContainer>{legends}</LegendContainer>*/
+}
+{
+  /*<GeoYearContainer*/
+}
+{
+  /*ref={this.setYearSelectorRef}*/
+}
+{
+  /*bottom="0"*/
+}
+{
+  /*backgroundColor={theme.color.aidsFondsWhiteOpacity}*/
+}
+{
+  /*  >*/
+}
+{
+  /*  <CustomYearSelector*/
+}
+{
+  /*selectedYear={this.props.selectedYear}*/
+}
+{
+  /*selectYear={this.props.selectYear}*/
+}
+{
+  /*/>*/
+}
+{
+  /*</GeoYearContainer>*/
+}

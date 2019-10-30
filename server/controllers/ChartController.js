@@ -201,15 +201,13 @@ const ChartController = {
                     console.log('saving this biggo gives error', err);
                     general.handleError(res, err);
                   } else {
-                    chartUtils
-                      .writeGeoJson(chartz, type, data)
-                      .then(geoJsonData => {
-                        if (geoJsonData && geoJsonData.layerIndex !== -1) {
-                          data[geoJsonData.layerIndex].url = geoJsonData.newUrl;
-                        }
+                    chartUtils.writeTiles(chartz, type, data).then(tileData => {
+                      if (tileData && tileData.layerIndex !== -1) {
+                        data[tileData.layerIndex].url = tileData.newUrl;
+                      }
 
-                        chartUtils.writeDataFileUrl(chartz, data, res);
-                      });
+                      chartUtils.writeDataFileUrl(chartz, data, res);
+                    });
                   }
                 });
               })
@@ -220,10 +218,10 @@ const ChartController = {
             genUniqueName(Chart, name, chart.name)
               .then(uniqueName => {
                 chartUtils
-                  .writeGeoJson(chart, type, data, true)
-                  .then(geoJsonData => {
-                    if (geoJsonData && geoJsonData.layerIndex !== -1) {
-                      data[geoJsonData.layerIndex].url = geoJsonData.newUrl;
+                  .writeTiles(chart, type, data, true)
+                  .then(tileData => {
+                    if (tileData && tileData.layerIndex !== -1) {
+                      data[tileData.layerIndex].url = tileData.newUrl;
                     }
 
                     chart.name = uniqueName;
@@ -326,7 +324,7 @@ const ChartController = {
                     chartz.type === chartTypes.focusKE ||
                     chartz.type === chartTypes.focusNL
                   ) {
-                    // so if its a geochart, we want to rename its geojson
+                    // so if its a geochart, we want to rename its tile
                     // file as well, IF! it has one. So
                     // after getting the original charts data we get the datas
                     // file url and get the actual data in it
@@ -343,8 +341,8 @@ const ChartController = {
 
                           // so basically here when a geochart is being saved
                           // AND if it has layer data, which means that there's
-                          // a geojson file created for it
-                          // we want to save this geojson in a different folder
+                          // a tile file created for it
+                          // we want to save this tile in a different folder
                           // and give it a suffix with the charts id
                           if (layerIndex !== -1) {
                             //set a reference to the new file name
@@ -355,7 +353,7 @@ const ChartController = {
                               ''
                             );
 
-                            const pathToNewFile = '/static/savedGeoJsons/'.concat(
+                            const pathToNewFile = '/static/savedTiles/'.concat(
                               newFileName
                             );
 
@@ -381,7 +379,7 @@ const ChartController = {
                             chartUtils.writeDataFileUrl(chartz, data, res);
                           } else {
                             // so if this geo chart data did NOT contain
-                            // layers, hence did NOT contain a geojson file
+                            // layers, hence did NOT contain a tile file
                             // we don't need to edit the data itself
                             // so we just copy the dataFileUrl
                             const duplicateFileUrl = `${dataPath}chartData${chartz.id}.txt`;
@@ -481,14 +479,14 @@ const ChartController = {
 
                     // so if we find the layer data
                     if (layerIndex !== -1) {
-                      const fullGeoJsonPath = path.join(
+                      const fullTilePath = path.join(
                         serverPath,
                         data[layerIndex].url.replace('api/', '')
                       );
                       // we check if the geojson file actually exists and then delete it
-                      if (fullGeoJsonPath && fs.existsSync(fullGeoJsonPath)) {
-                        fs.unlink(fullGeoJsonPath, () =>
-                          console.log('GeoJson File Removed')
+                      if (fullTilePath && fs.existsSync(fullTilePath)) {
+                        fs.unlink(fullTilePath, () =>
+                          console.log('Tile File Removed')
                         );
                       }
                     }

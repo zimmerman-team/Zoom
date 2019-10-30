@@ -14,14 +14,3 @@ export const dataLayer = {
     'fill-opacity': 0.68
   }
 };
-
-// This is used for borders
-export const borderStyle = {
-  id: 'outline',
-  source: 'outline',
-  type: 'line',
-  paint: {
-    'line-width': 1.5,
-    'line-color': '#0080ef'
-  }
-};

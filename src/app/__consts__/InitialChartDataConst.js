@@ -44,7 +44,7 @@ const initialState = {
   // so basically we'll use this variable to control
   // the editing and removing of geojson files
   // in the backends
-  currGeoJsonFile: null,
+  currTileFile: null,
   yearPeriod: formatYearParam([1990, 2020]),
   chartMounted: false,
   authorName: 'You',

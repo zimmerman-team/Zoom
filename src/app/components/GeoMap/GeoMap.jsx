@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 /* base */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -27,6 +28,8 @@ import theme from 'theme/Theme';
 import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
 import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
 import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
+import Cluster from 'components/GeoMap/components/Cluster/Cluster';
+import { ClusterElement } from 'components/GeoMap/components/Cluster/ClusterElement';
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
@@ -92,9 +95,11 @@ export class GeoMap extends Component {
         maxZoom: 20
       },
       hoverMarkerInfo: null,
-      values: [12, 16]
+      values: [12, 16],
+      clusterRadius: 160
     };
 
+    this.handleClusterClick = this.handleClusterClick.bind(this);
     this._handleMapLoaded = this._handleMapLoaded.bind(this);
     this.setMarkerInfo = this.setMarkerInfo.bind(this);
     this.handleZoomIn = this.handleZoomIn.bind(this);
@@ -296,6 +301,15 @@ export class GeoMap extends Component {
     });
   }
 
+  handleClusterClick(zoom, longitude, latitude) {
+    this._updateViewport({
+      ...this.state.viewport,
+      zoom,
+      longitude,
+      latitude
+    });
+  }
+
   handleZoomOut() {
     if (this.state.viewport.zoom >= this.state.settings.minZoom) {
       this._updateViewport({
@@ -344,8 +358,12 @@ export class GeoMap extends Component {
     );
   }
 
+  setClusterRadius = e => {
+    this.setState({ clusterRadius: e.target.value });
+  };
+
   render() {
-    const { viewport, settings, mapStyle, markerArray, legends } = this.state;
+    const { viewport, settings, mapStyle, markerArray, legends, clusterRadius } = this.state;
 
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
@@ -375,9 +393,11 @@ export class GeoMap extends Component {
           >
             <ControlsContainer ref={this.setMapControlsRef}>
               <MapControls
+                clusterRadius={clusterRadius}
                 onZoomIn={this.handleZoomIn}
                 onZoomOut={this.handleZoomOut}
                 onFullScreen={this.handleFullscreen}
+                setClusterRadius={this.setClusterRadius}
               />
             </ControlsContainer>
             {/*So this is the layer tooltip, and we seperate it from the
@@ -388,7 +408,24 @@ export class GeoMap extends Component {
 
             {this._showMarkerInfo()}
 
-            {markerArray}
+            {this.mapRef && (
+              <Cluster
+                map={this.mapRef.getMap()}
+                radius={clusterRadius}
+                extent={512}
+                nodeSize={40}
+                minZoom={viewport.minZoom}
+                maxZoom={viewport.maxZoom}
+                element={clusterProps => (
+                  <ClusterElement
+                    {...clusterProps}
+                    onClick={this.handleClusterClick}
+                  />
+                )}
+              >
+                {markerArray}
+              </Cluster>
+            )}
 
             {/*contains zoom in/out and fullscreen toggle*/}
 

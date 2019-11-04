@@ -95,7 +95,8 @@ export class GeoMap extends Component {
         maxZoom: 20
       },
       hoverMarkerInfo: null,
-      values: [12, 16]
+      values: [12, 16],
+      clusterRadius: 160
     };
 
     this.handleClusterClick = this.handleClusterClick.bind(this);
@@ -107,6 +108,107 @@ export class GeoMap extends Component {
     this.setMapControlsRef = this.setMapControlsRef.bind(this);
     this.setYearSelectorRef = this.setYearSelectorRef.bind(this);
   }
+
+  // componentDidMount = () => {
+  //   if (this.mapRef) {
+  //     const mapInstance = this.mapRef.getMap();
+  //     mapInstance.on('load', () => {
+  //       // Add a new source from our GeoJSON data and set the
+  //       // 'cluster' option to true. GL-JS will add the point_count property to your source data.
+  //       mapInstance.addSource('earthquakes', {
+  //         type: 'geojson',
+  //         // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+  //         // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
+  //         data:
+  //           'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson',
+  //         cluster: true,
+  //         clusterMaxZoom: 14, // Max zoom to cluster points on
+  //         clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+  //       });
+  //       mapInstance.addLayer({
+  //         id: 'clusters',
+  //         type: 'circle',
+  //         source: 'earthquakes',
+  //         filter: ['has', 'point_count'],
+  //         paint: {
+  //           // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+  //           // with three steps to implement three types of circles:
+  //           //   * Blue, 20px circles when point count is less than 100
+  //           //   * Yellow, 30px circles when point count is between 100 and 750
+  //           //   * Pink, 40px circles when point count is greater than or equal to 750
+  //           'circle-color': [
+  //             'step',
+  //             ['get', 'point_count'],
+  //             '#51bbd6',
+  //             100,
+  //             '#f1f075',
+  //             750,
+  //             '#f28cb1'
+  //           ],
+  //           'circle-radius': [
+  //             'step',
+  //             ['get', 'point_count'],
+  //             20,
+  //             100,
+  //             30,
+  //             750,
+  //             40
+  //           ]
+  //         }
+  //       });
+
+  //       mapInstance.addLayer({
+  //         id: 'cluster-count',
+  //         type: 'symbol',
+  //         source: 'earthquakes',
+  //         filter: ['has', 'point_count'],
+  //         layout: {
+  //           'text-field': '{point_count_abbreviated}',
+  //           'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+  //           'text-size': 12
+  //         }
+  //       });
+
+  //       mapInstance.addLayer({
+  //         id: 'unclustered-point',
+  //         type: 'circle',
+  //         source: 'earthquakes',
+  //         filter: ['!', ['has', 'point_count']],
+  //         paint: {
+  //           'circle-color': '#11b4da',
+  //           'circle-radius': 4,
+  //           'circle-stroke-width': 1,
+  //           'circle-stroke-color': '#fff'
+  //         }
+  //       });
+
+  //       // inspect a cluster on click
+  //       mapInstance.on('click', 'clusters', e => {
+  //         const features = mapInstance.queryRenderedFeatures(e.point, {
+  //           layers: ['clusters']
+  //         });
+  //         const clusterId = features[0].properties.cluster_id;
+  //         mapInstance
+  //           .getSource('earthquakes')
+  //           .getClusterExpansionZoom(clusterId, (err, zoom) => {
+  //             if (err) return;
+
+  //             mapInstance.easeTo({
+  //               center: features[0].geometry.coordinates,
+  //               zoom: zoom
+  //             });
+  //           });
+  //       });
+
+  //       mapInstance.on('mouseenter', 'clusters', () => {
+  //         mapInstance.getCanvas().style.cursor = 'pointer';
+  //       });
+  //       mapInstance.on('mouseleave', 'clusters', () => {
+  //         mapInstance.getCanvas().style.cursor = '';
+  //       });
+  //     });
+  //   }
+  // };
 
   componentDidUpdate(prevProps) {
     if (!isEqual(this.props.indicatorData, prevProps.indicatorData)) {
@@ -357,8 +459,12 @@ export class GeoMap extends Component {
     );
   }
 
+  setClusterRadius = e => {
+    this.setState({ clusterRadius: e.target.value });
+  };
+
   render() {
-    const { viewport, settings, mapStyle, markerArray, legends } = this.state;
+    const { viewport, settings, mapStyle, markerArray, legends, clusterRadius } = this.state;
 
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
@@ -388,9 +494,11 @@ export class GeoMap extends Component {
           >
             <ControlsContainer ref={this.setMapControlsRef}>
               <MapControls
+                clusterRadius={clusterRadius}
                 onZoomIn={this.handleZoomIn}
                 onZoomOut={this.handleZoomOut}
                 onFullScreen={this.handleFullscreen}
+                setClusterRadius={this.setClusterRadius}
               />
             </ControlsContainer>
             {/*So this is the layer tooltip, and we seperate it from the
@@ -404,9 +512,11 @@ export class GeoMap extends Component {
             {this.mapRef && (
               <Cluster
                 map={this.mapRef.getMap()}
-                radius={20}
+                radius={clusterRadius}
                 extent={512}
                 nodeSize={40}
+                minZoom={viewport.minZoom}
+                maxZoom={viewport.maxZoom}
                 element={clusterProps => (
                   <ClusterElement
                     {...clusterProps}

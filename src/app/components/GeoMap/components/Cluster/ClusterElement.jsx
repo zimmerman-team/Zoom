@@ -1,26 +1,38 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* base */
 import React from 'react';
-/* styles */
+/* components */
 import styled from 'styled-components';
+/* project comps */
+import SvgCircleMarker from 'assets/icons/CircleMarkerIcon';
 
-const ClusterCircle = styled.div`
-  cursor: pointer;
-  border-radius: 50%;
+/* consts */
+const maxSize = 105;
+const Value = styled.div`
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
   text-align: center;
-  display: table-cell;
-  vertical-align: middle;
-  width: ${props => props.count * 15}px;
-  height: ${props => props.count * 15}px;
-  background-color: rgba(255, 255, 255, 0.6);
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 7px);
 `;
 
 export const ClusterElement = props => {
+  const clusterValue = props.cluster.properties.point_count;
   return (
-    <ClusterCircle
+    <div
+      style={{ cursor: 'pointer' }}
       onClick={() => props.onClick(props.zoom, props.longitude, props.latitude)}
-      count={props.cluster.properties.point_count}
     >
-      {props.cluster.properties.point_count}
-    </ClusterCircle>
+      <SvgCircleMarker
+        width={clusterValue * 15 < maxSize ? clusterValue * 15 : maxSize}
+        height={clusterValue * 15 < maxSize ? clusterValue * 15 : maxSize}
+      />
+      <Value>{clusterValue}</Value>
+    </div>
   );
 };

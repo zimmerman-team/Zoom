@@ -333,6 +333,7 @@ export function formatGeoData(
               selectedInds[0].indName
             } - ${selectedInds[0].subInd.join(', ')}`,
             uniqCount: aggregation.data[0].uniqCount,
+            tileName: aggregation.data[0].tileName,
             zoom: aggregation.data[0].zoom,
             minValue: aggregation.data[0].minValue,
             maxValue: aggregation.data[0].maxValue
@@ -345,6 +346,8 @@ export function formatGeoData(
             legendName: ` ${
               selectedInds[0].indName
             } - ${selectedInds[0].subInd.join(', ')}`,
+            tileName: aggregation.data[0].tileName,
+            zoom: aggregation.data[0].zoom,
             uniqCount: aggregation.data[0].uniqCount,
             minValue: aggregation.data[0].minValue,
             maxValue: aggregation.data[0].maxValue

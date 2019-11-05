@@ -103,6 +103,8 @@ router.post('/deleteChart', checkJwt, ChartController.delete);
 
 // deletes all of users archived charts
 router.delete('/emptyChartTrash', checkJwt, ChartController.emptyTrash);
+
+// router.get('/rewrite', ChartController.rewriteGeojsonToTiles);
 /* -------------- CHART CONTROLLER END ------------------------ */
 
 /* -------------- USER CONTROLLER START ----------------------- */

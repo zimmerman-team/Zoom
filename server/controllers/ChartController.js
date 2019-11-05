@@ -1,4 +1,6 @@
 const fs = require('fs');
+
+const { promises: fsPromises } = require('fs');
 const path = require('path');
 const https = require('https');
 
@@ -19,6 +21,7 @@ const chartUtils = require('../utils/chart');
 const userUtils = require('../utils/user');
 const findIndex = require('lodash/findIndex');
 const isEqual = require('lodash/isEqual');
+const tippecanoe = require('tippecanoe');
 
 const Chart = require('../models/Chart');
 const User = require('../models/User');
@@ -105,6 +108,105 @@ const ChartController = {
     };
 
     chartUtils.getManyCharts(query, sortBy, pageSize, page, res);
+  },
+
+  rewriteGeojsonToTiles: async (req, res) => {
+    Chart.find(
+      {
+        type: ['geomap', 'focusKE', 'focusNL']
+      },
+      async (error, charts) => {
+        if (error) {
+          res.json(error);
+        } else {
+          const promises = charts.map(async chart => {
+            if (
+              chart.indicatorItems &&
+              chart.indicatorItems[0] &&
+              chart.indicatorItems[0].indicator &&
+              chart.dataFileUrl
+            ) {
+              const file = await fsPromises
+                .readFile(chart.dataFileUrl, 'utf8')
+                .catch(err => {
+                  // console.log('error: ', err);
+                });
+
+              if (file && file[0]) {
+                const jsonFile = JSON.parse(file);
+                const layerInd = findIndex(jsonFile, ['geoIndex', 0]);
+
+                if (layerInd !== -1 && !jsonFile[layerInd].tileName) {
+                  let filePath = jsonFile[layerInd].url;
+
+                  const tileUrl = filePath.replace(
+                    'savedGeoJsons',
+                    'savedTiles'
+                  );
+
+                  if (filePath.indexOf('/api') !== -1) {
+                    filePath = filePath.substring(4);
+                  }
+
+                  const tileName = filePath.substring(
+                    filePath.indexOf('savedGeoJsons/') + 14,
+                    filePath.indexOf('.json')
+                  );
+
+                  const fullPath = path.join(serverPath, filePath);
+
+                  const fullTilePath = fullPath.replace(
+                    'savedGeoJsons',
+                    'savedTiles'
+                  );
+
+                  const jsonData = JSON.parse(fs.readFileSync(fullPath));
+
+                  jsonData.features = jsonData.features.map(feature => {
+                    return {
+                      ...feature,
+                      type: 'Feature'
+                    };
+                  });
+
+                  fs.writeFileSync(fullPath, JSON.stringify(jsonData));
+
+                  tippecanoe(
+                    [fullPath],
+                    {
+                      zg: false,
+                      readParallel: true,
+                      layer: tileName,
+                      output: fullTilePath,
+                      maximumZoom: 10
+                    },
+                    { echo: true }
+                  );
+
+                  fs.unlinkSync(fullPath);
+
+                  jsonFile[layerInd] = {
+                    ...jsonFile[layerInd],
+                    tileName,
+                    zoom: 10,
+                    url: tileUrl
+                  };
+
+                  fs.writeFileSync(chart.dataFileUrl, JSON.stringify(jsonFile));
+                }
+              }
+              return file;
+            } else {
+              return null;
+            }
+          });
+
+          await Promise.all(promises);
+
+          res.json({ msg: 'success!' });
+        }
+      }
+    );
   },
 
   // gets all user charts and team charts or archived charts of the user

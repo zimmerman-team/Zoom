@@ -100,7 +100,6 @@ import { PrivacyModule } from 'modules/PrivacyModule/PrivacyModule';
 
 import DashboardMediator from 'mediators/DashboardMediators/DashboardMediator';
 import auth0Client from './auth/Auth';
-import { DeckGlTest } from 'modules/DeckGlTest/DeckGl';
 
 // const ManMappingStep = lazy(() =>
 //   import('modules/datamapper/fragments/ManMappingStep/ManMappingStep')
@@ -314,7 +313,6 @@ const Routes = props => {
           />
 
           <Route exact path="/component" render={() => <DataExplorePanel />} />
-          <Route exact path="/deckGL" render={() => <DeckGlTest />} />
           {/*<Route exact path="/step" render={() => <ManMappingStep />} />*/}
         </Switch>
       </Suspense>

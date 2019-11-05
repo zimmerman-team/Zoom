@@ -132,6 +132,7 @@ const indicatorDataQuery = graphql`
       date
       value
       tileUrl
+      tileName
       zoom
       uniqCount
       minValue
@@ -918,6 +919,8 @@ class VisualizerModuleMediator extends Component {
       yearRange
     } = this.props.chartResults.chart;
 
+    console.log('this.props.chartResults', this.props.chartResults);
+
     const selectedInds = [];
 
     const selectedInd = indicatorItems.map(indItem => {
@@ -1026,8 +1029,6 @@ class VisualizerModuleMediator extends Component {
   }
 
   render() {
-    console.log('this.props.chartData.data', this.props.chartData.data);
-
     return (
       <div style={{ height: '100%' }}>
         <VisualizerModule

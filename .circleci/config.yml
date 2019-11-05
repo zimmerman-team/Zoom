@@ -49,6 +49,7 @@ jobs:
               echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_TEST"' >> $BASH_ENV
               echo 'export REACT_APP_BACKEND_HOST="$DUCT_TEST"' >> $BASH_ENV
               echo 'export REACT_APP_EXPRESS_BACKEND_BASE_URL="$REACT_APP_EXPRESS_BACKEND_BASE_URL"' >> $BASH_ENV
+              echo 'export REACT_APP_MONGO_DB="$REACT_APP_MONGO_DB_TEST"' >> $BASH_ENV
             elif [ "${CIRCLE_BRANCH}" == "feature" ]; then
               echo 'export REACT_APP_PROJECT_URL="$REACT_APP_PROJECT_URL_DEV"' >> $BASH_ENV
               echo 'export REACT_APP_GRAPHQL_HOST="$DUCT_DEV"' >> $BASH_ENV4

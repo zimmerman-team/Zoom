@@ -383,7 +383,14 @@ export class GeoMap extends Component {
   };
 
   render() {
-    const { viewport, settings, mapStyle, markerArray, legends, clusterRadius } = this.state;
+    const {
+      viewport,
+      settings,
+      mapStyle,
+      markerArray,
+      legends,
+      clusterRadius
+    } = this.state;
 
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/

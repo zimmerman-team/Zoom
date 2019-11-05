@@ -96,3 +96,30 @@ export function truncateText(text) {
 
   return newText;
 }
+
+export function getColorByPct(pct) {
+  const percentColors = [
+    { pct: 0.0, color: { r: 0xff, g: 0xff, b: 0xff } },
+    { pct: 1.0, color: { r: 0x09, g: 0x00, b: 0xff } }
+  ];
+
+  let i = 1;
+  for (let j = 1; j < percentColors.length - 1; j += 1) {
+    if (pct <= percentColors[j].pct) {
+      i = j;
+      break;
+    }
+  }
+  const lower = percentColors[i - 1];
+  const upper = percentColors[i];
+  const range = upper.pct - lower.pct;
+  const rangePct = (pct - lower.pct) / range;
+  const pctLower = 1 - rangePct;
+  const pctUpper = rangePct;
+  const color = {
+    r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
+    g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
+    b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
+  };
+  return [color.r, color.g, color.b];
+}

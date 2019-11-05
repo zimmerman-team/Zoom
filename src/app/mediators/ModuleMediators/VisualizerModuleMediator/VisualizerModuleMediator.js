@@ -104,8 +104,8 @@ const indicatorDataQuery = graphql`
     $orderBy: [String]!
     $groupBy: [String]!
     $fields: [String]!
-    $geoJsonUrl: Boolean!
-    $currentGeoJson: String
+    $tileUrl: Boolean!
+    $currentTiles: String
   ) {
     indicators: datapointsAggregation(
       groupBy: $groupBy
@@ -117,8 +117,8 @@ const indicatorDataQuery = graphql`
       geolocationIso3_In: $countriesISO3
       filterName_In: $subInds
       OR_GeolocationIso3_Is_Null: $OR_GeolocationIso3_Is_Null
-      geoJsonUrl: $geoJsonUrl
-      currentGeoJson: $currentGeoJson
+      tileUrl: $tileUrl
+      currentTiles: $currentTiles
     ) {
       indicatorName
       geolocationIso2
@@ -131,7 +131,9 @@ const indicatorDataQuery = graphql`
       filterName
       date
       value
-      geoJsonUrl
+      tileUrl
+      tileName
+      zoom
       uniqCount
       minValue
       maxValue
@@ -265,7 +267,7 @@ class VisualizerModuleMediator extends Component {
     }
 
     if (
-      this.props.chartData.currGeoJsonFile &&
+      this.props.chartData.currTileFile &&
       this.props.paneData.chartType !== prevProps.paneData.chartType &&
       (this.props.paneData.chartType !== chartTypes.geoMap &&
         this.props.paneData.chartType !== chartTypes.focusKE &&
@@ -275,8 +277,8 @@ class VisualizerModuleMediator extends Component {
         prevProps.paneData.chartType === chartTypes.focusNL)
     ) {
       // and here if the chartType changes, from a geochart to a non geochart
-      // and if the previous geochart had geojson file loaded
-      // we delete the geojson files from backends
+      // and if the previous geochart had tile file loaded
+      // we delete the tile files from backends
       this.deleteGeoFiles();
     }
   }
@@ -305,7 +307,7 @@ class VisualizerModuleMediator extends Component {
     this._isMounted = false;
 
     if (
-      this.props.chartData.currGeoJsonFile &&
+      this.props.chartData.currTileFile &&
       (this.props.paneData.chartType === chartTypes.geoMap ||
         this.props.paneData.chartType === chartTypes.focusKE ||
         this.props.paneData.chartType === chartTypes.focusNL)
@@ -736,8 +738,8 @@ class VisualizerModuleMediator extends Component {
             this.props.chartData.specOptions[graphKeys.aggrCountry]
           ),
           fields: getFields(this.props.paneData.chartType, isLayer),
-          geoJsonUrl: isLayer,
-          currentGeoJson: this.props.chartData.currGeoJsonFile
+          tileUrl: isLayer,
+          currentTiles: this.props.chartData.currTileFile
         };
 
         fetchQuery(
@@ -748,75 +750,59 @@ class VisualizerModuleMediator extends Component {
           // so we do this CORS work
           if (isLayer && data.indicators && data.indicators.length > 0) {
             const url = process.env.REACT_APP_BACKEND_HOST.concat('/').concat(
-              data.indicators[0].geoJsonUrl
+              data.indicators[0].tileUrl
             );
 
-            if (
-              process.env.REACT_APP_BACKEND_HOST.indexOf('localhost') !== -1
-            ) {
-              // and BECAUSE there's no CORS solution when running backend locally
-              // and trying to serve these geojsons we apply this geojson download functionality
+            // and BECAUSE there's no CORS solution when running backend locally
+            // and trying to serve these geojsons we apply this geojson download functionality
 
-              // We also need to encrypt them values for our middleware to work
-              const encValues = cryptoJs.AES.encrypt(
-                JSON.stringify({
-                  urlGeoJson: url,
-                  prevGeoJson: this.props.chartData.currGeoJsonFile
-                }),
-                process.env.REACT_APP_ENCRYPTION_SECRET
-              ).toString();
+            // We also need to encrypt them values for our middleware to work
+            const encValues = cryptoJs.AES.encrypt(
+              JSON.stringify({
+                tileUrl: url,
+                prevTiles: this.props.chartData.currTileFile
+              }),
+              process.env.REACT_APP_ENCRYPTION_SECRET
+            ).toString();
 
-              axios
-                .get(`/api/loadGeoJson`, {
-                  params: {
-                    payload: encValues
+            axios
+              .get(`/api/loadTiles`, {
+                params: {
+                  payload: encValues
+                }
+              })
+              .then(response => {
+                const currTileFile = response.data.substring(
+                  response.data.lastIndexOf('/') + 1
+                );
+
+                this.props.dispatch(
+                  actions.storeChartDataRequest({ currTileFile })
+                );
+
+                const indAggregation = [
+                  {
+                    ...data.indicators[0],
+                    tileUrl: response.data
                   }
-                })
-                .then(response => {
-                  const currGeoJsonFile = response.data.substring(
-                    response.data.lastIndexOf('/') + 1
-                  );
+                ];
 
-                  this.props.dispatch(
-                    actions.storeChartDataRequest({ currGeoJsonFile })
-                  );
-
-                  const indAggregation = [
-                    {
-                      ...data.indicators[0],
-                      geoJsonUrl: response.data
-                    }
-                  ];
-
-                  indicatorData.push({
-                    index: currIndex,
-                    indAggregation,
-                    subIndicators: data.subIndicators
-                  });
-
-                  this.refetchDone(
-                    indicatorData,
-                    selectedInds,
-                    refetchOne,
-                    index
-                  );
-                })
-                .catch(error => {
-                  console.log('Error downloading file: ', error);
+                indicatorData.push({
+                  index: currIndex,
+                  indAggregation,
+                  subIndicators: data.subIndicators
                 });
-            } else {
-              const fileName = url.substring(url.lastIndexOf('/') + 1);
 
-              indicatorData.push({
-                index: currIndex,
-                indAggregation: data.indicators,
-                subIndicators: data.subIndicators
+                this.refetchDone(
+                  indicatorData,
+                  selectedInds,
+                  refetchOne,
+                  index
+                );
+              })
+              .catch(error => {
+                console.log('Error downloading file: ', error);
               });
-
-              this.props.dispatch(
-                actions.storeChartDataRequest({ currGeoJsonFile: fileName })
-              );
-            }
           } else {
             indicatorData.push({
               index: currIndex,
@@ -933,6 +919,8 @@ class VisualizerModuleMediator extends Component {
       yearRange
     } = this.props.chartResults.chart;
 
+    console.log('this.props.chartResults', this.props.chartResults);
+
     const selectedInds = [];
 
     const selectedInd = indicatorItems.map(indItem => {
@@ -1007,39 +995,37 @@ class VisualizerModuleMediator extends Component {
   deleteGeoFiles() {
     // so we delete the file from DUCT
     axios.delete(
-      `${process.env.REACT_APP_BACKEND_HOST}/api/generic/removeGeo/`,
+      `${process.env.REACT_APP_BACKEND_HOST}/api/generic/removeTiles/`,
       {
         params: {
-          fileName: this.props.chartData.currGeoJsonFile
+          fileName: this.props.chartData.currTileFile
         }
       }
     );
 
-    if (process.env.REACT_APP_BACKEND_HOST.indexOf('localhost') !== -1) {
-      // and then if DUCT is run locally
-      // we delete the file from zoomBackend
-      // We also need to encrypt them values for our middleware to work
-      const encValues = cryptoJs.AES.encrypt(
-        JSON.stringify({
-          prevGeoJson: this.props.chartData.currGeoJsonFile
-        }),
-        process.env.REACT_APP_ENCRYPTION_SECRET
-      ).toString();
+    // and then if DUCT is run locally
+    // we delete the file from zoomBackend
+    // We also need to encrypt them values for our middleware to work
+    const encValues = cryptoJs.AES.encrypt(
+      JSON.stringify({
+        prevTiles: this.props.chartData.currTileFile
+      }),
+      process.env.REACT_APP_ENCRYPTION_SECRET
+    ).toString();
 
-      axios
-        .get(`/api/loadGeoJson`, {
-          params: {
-            payload: encValues
-          }
-        })
-        .then(() => {
-          this.props.dispatch(
-            // and just in case we set the currGeoJsonFile to null, cause this guy
-            // has already been deleted
-            actions.storeChartDataRequest({ currGeoJsonFile: null })
-          );
-        });
-    }
+    axios
+      .get(`/api/loadTiles`, {
+        params: {
+          payload: encValues
+        }
+      })
+      .then(() => {
+        this.props.dispatch(
+          // and just in case we set the currTileFile to null, cause this guy
+          // has already been deleted
+          actions.storeChartDataRequest({ currTileFile: null })
+        );
+      });
   }
 
   render() {

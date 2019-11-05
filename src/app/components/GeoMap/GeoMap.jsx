@@ -158,15 +158,29 @@ export class GeoMap extends Component {
     // Note: the layer will also use a different tooltip than the markers
     // cause it kind of makes sense for some cases
     const mapStyle = cloneDeep(MAP_STYLE);
+    const borderVecStyle = cloneDeep(borderStyle);
+    const dataVecLayers = cloneDeep(dataLayer);
 
     const layers = find(indicatorData, ['type', 'layer']);
     if (layers) {
-      mapStyle.sources.layer = { type: 'geojson', data: layers.url };
-      mapStyle.sources.outline = { type: 'geojson', data: layers.url };
+      mapStyle.sources['vector-layers'] = {
+        type: 'vector',
+        tiles: [
+          `http://localhost:4200/api/mbtiles/${encodeURIComponent(
+            layers.url
+          )}/{z}/{x}/{y}.pbf`
+        ],
+        maxzoom: layers.zoom
+      };
 
-      if (!find(mapStyle.layers, ['id', 'outline'])) {
-        mapStyle.layers.push(borderStyle);
+      let borderInd = findIndex(mapStyle.layers, ['id', 'outline']);
+
+      if (borderInd === -1) {
+        mapStyle.layers.push(borderVecStyle);
+        borderInd = mapStyle.layers.length - 1;
       }
+
+      mapStyle.layers[borderInd]['source-layer'] = layers.tileName;
 
       // so here we change the data layers color stops
       // according to the amount of actually unique values
@@ -181,9 +195,10 @@ export class GeoMap extends Component {
       colorStopz[1][0] = layers.uniqCount;
 
       if (!find(mapStyle.layers, ['id', 'layer'])) {
-        dataLayer.paint['fill-color'].stops = colorStopz;
+        dataVecLayers['source-layer'] = layers.tileName;
+        dataVecLayers.paint['fill-color'].stops = colorStopz;
 
-        mapStyle.layers.push(dataLayer);
+        mapStyle.layers.push(dataVecLayers);
       } else {
         // and when we get new data into the layers we want to update
         // the color stops according to this new data
@@ -192,6 +207,7 @@ export class GeoMap extends Component {
         const layerColInd = findIndex(mapStyle.layers, ['id', 'layer']);
 
         mapStyle.layers[layerColInd].paint['fill-color'].stops = colorStopz;
+        mapStyle.layers[layerColInd]['source-layer'] = layers.tileName;
       }
     } else {
       // so if no layers are loaded we want to make sure that
@@ -201,11 +217,15 @@ export class GeoMap extends Component {
 
       const borderInd = findIndex(mapStyle.layers, ['id', 'outline']);
 
-      if (borderInd !== -1) mapStyle.layers.splice(borderInd, 1);
+      if (borderInd !== -1) {
+        mapStyle.layers.splice(borderInd, 1);
+      }
 
       const layerInd = findIndex(mapStyle.layers, ['id', 'layer']);
 
-      if (layerInd !== -1) mapStyle.layers.splice(layerInd, 1);
+      if (layerInd !== -1) {
+        mapStyle.layers.splice(layerInd, 1);
+      }
     }
 
     // and all of the generic markers that can be just put in the map, like separate components

@@ -34,6 +34,14 @@ const MapControls = props => (
     >
       <IconOnlyFullScreen />
     </ButtonContainer>
+    {/* <div>
+      <input
+        type="number"
+        onChange={props.setClusterRadius}
+        value={props.clusterRadius}
+        style={{ width: 32 }}
+      />
+    </div> */}
     {/*</DisabledElement>*/}
   </ComponentBase>
 );

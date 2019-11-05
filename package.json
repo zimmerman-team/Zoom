@@ -15,6 +15,7 @@
     "@nivo/pie": "^0.55.0",
     "@nivo/treemap": "^0.57.0",
     "@storybook/react": "5.0.11",
+    "@turf/helpers": "^6.1.4",
     "auth0-js": "^9.10.2",
     "axios": "0.18.1",
     "body-parser": "^1.19.0",
@@ -84,6 +85,7 @@
     "storybook-react-router": "^1.0.5",
     "styled-components": "4.2.0",
     "tippecanoe": "^0.3.0",
+    "supercluster": "^6.0.2",
     "trim-right": "^1.0.1",
     "universal-cookie": "^3.1.0"
   },

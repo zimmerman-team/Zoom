@@ -9,7 +9,7 @@ const router = require('./router');
 const app = express();
 mongoose.set('useCreateIndex', true);
 mongoose
-  .connect(config.DB, {
+  .connect(process.env.REACT_APP_MONGO_DB, {
     useNewUrlParser: true,
     autoIndex: app.get('env') === 'development'
   })

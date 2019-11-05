@@ -3,7 +3,7 @@ jobs:
   #  CHECKOUT REPOSITORY
   checkout_repo:
     docker:
-      - image: circleci/node:10.13.0
+      - image: circleci/node:11.15.0
     working_directory: ~/zoom-v2-ui
     steps:
       - checkout
@@ -25,7 +25,7 @@ jobs:
   #  BUILD SOURCE AND DEPLOY TO SERVER
   build_deploy:
     docker:
-      - image: circleci/node:10.13.0
+      - image: circleci/node:11.15.0
     working_directory: ~/zoom-v2-ui
     steps:
       - checkout
@@ -124,7 +124,7 @@ jobs:
 
   test_e2e:
     docker:
-      - image: circleci/node:10.13.0-browsers
+      - image: circleci/node:11.15.0-browsers
     parallelism: 2
     working_directory: ~/zoom-v2-ui
     steps:

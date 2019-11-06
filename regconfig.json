@@ -1,0 +1,21 @@
+{
+  "core": {
+    "workingDir": ".reg",
+    "actualDir": ".loki/current",
+    "thresholdRate": 0,
+    "addIgnore": true,
+    "ximgdiff": {
+      "invocationType": "client"
+    }
+  },
+  "plugins": {
+    "reg-keygen-git-hash-plugin": true,
+    "reg-notify-github-plugin": {
+      "clientId": "MzQ1tzAxM7I016/Kz8/VLTPSLc3UNzM2NDcy1a/KzM1NLcpNzNOFswA=",
+      "prComment": true
+    },
+    "reg-notify-slack-plugin": {
+      "webhookUrl": "https://hooks.slack.com/services/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"
+    }
+  }
+}

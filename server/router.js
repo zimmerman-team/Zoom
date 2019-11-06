@@ -3,6 +3,7 @@ const router = express.Router();
 const fs = require('fs');
 const url = require('url');
 const http = require('http');
+const https = require('https');
 const path = require('path');
 
 const cryptoJs = require('crypto-js');
@@ -211,7 +212,9 @@ router.get('/loadTiles', (req, res) => {
       flags: 'w'
     });
 
-    http.get(tileUrl, fileRes => {
+    const fetchToUse = process.env.NODE_ENV === 'development' ? http : https;
+
+    fetchToUse.get(tileUrl, fileRes => {
       fileRes
         .on('data', data => {
           file.write(data);

@@ -166,9 +166,9 @@ export class GeoMap extends Component {
       mapStyle.sources['vector-layers'] = {
         type: 'vector',
         tiles: [
-          `http://localhost:4200/api/mbtiles/${encodeURIComponent(
-            layers.url
-          )}/{z}/{x}/{y}.pbf`
+          `${
+            process.env.REACT_APP_PROJECT_URL
+          }/api/mbtiles/${encodeURIComponent(layers.url)}/{z}/{x}/{y}.pbf`
         ],
         maxzoom: layers.zoom
       };

@@ -16,7 +16,8 @@ See the public charts created with Zoom here: https://zoom.aidsfonds.nl/
 | ---  | --- |
 | MongoDB | 4.0 |
 | watchman(facebooks) | 4.7 |
-| nodeJS | 12.6 |
+| nodeJS | 11.15.0 |
+| tippecanoe | 1.34.6 |
 | npm | 3.5 |
 | yarn | 1.16 |
 
@@ -48,8 +49,15 @@ See the public charts created with Zoom here: https://zoom.aidsfonds.nl/
     REACT_APP_POSTMARK_CLIENT_ID=your_postmark_clinet_id
     REACT_APP_MAPBOX_TOKEN=pk.eyJ1IjoiemltbWVybWFuMjAxNCIsImEiOiJhNUhFM2YwIn0.sedQBdUN7PJ1AjknVVyqZw
     REACT_APP_ENCRYPTION_SECRET=any_random_string
+    REACT_APP_OLD_INFO_DATE=25-10-2019
+    REACT_APP_MONGO_DB=mongodb://localhost:27017/zoom
+    REACT_APP_BACKEND_PORT=4200
     ```
- * run ```yarn start``` . And your project shoud run at 'http://localhost:3000'
+ * run ```yarn start``` . And your project shoud run at 'http://localhost:3000' . And the express backend should be running on http://localhost:4200 , but all of the requests are proxied on the frontend when you make an express backend api call like this '/api/expressBackendCall'.
+
+## Extra info
+  * Make sure tippecanoe works as any other command, meaning you can call a command like this 'tippecanoe -v' anywhere in your user folder and get the version of tippecanoe you're using
+  * For server deployment make sure to run the backend seperately and set up a proxy on the frontends base url on '/api/' location, to proxy to the local instance running, for the current zoom all of this is done using supervisor and nginx.
 
 
 ## Methodologies

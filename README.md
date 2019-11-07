@@ -17,6 +17,7 @@ See the public charts created with Zoom here: https://zoom.aidsfonds.nl/
 | MongoDB | 4.0 |
 | watchman(facebooks) | 4.7 |
 | nodeJS | 11.15.0 |
+| libsqlite3-dev | - |
 | tippecanoe | 1.34.6 |
 | npm | 3.5 |
 | yarn | 1.16 |

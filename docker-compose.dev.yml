@@ -1,0 +1,48 @@
+version: '2'
+
+services:
+  client:
+    extends:
+      file: docker-compose.yml
+      service: client
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app/src
+      # hack for node_modules to exist inside src dir
+      - /app/src/node_modules
+    links:
+      - api
+    networks:
+      - webappnetwork
+
+  api:
+    extends:
+      file: docker-compose.yml
+      service: server
+    ports:
+      - '4200:4200'
+    volumes:
+      - .:/app/src
+      # hack for node_modules to exist inside src dir
+      - /app/src/node_modules
+    depends_on:
+      - mongodb
+    networks:
+      - webappnetwork
+
+  mongodb:
+    image: mongo
+    restart: always
+    container_name: mongodb
+    volumes:
+      - ./data-node:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --noauth --smallfiles
+    networks:
+      - webappnetwork
+
+networks:
+  webappnetwork:
+    driver: bridge

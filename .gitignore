@@ -78,6 +78,7 @@ yarn-error.log
 .idea/modules.xml
 .idea/workspace.xml
 .idea/zoom-v2-ui.iml
+data-node/*
 
 .DS_Store
 

@@ -4,9 +4,23 @@ const testvalues = {
   chartTitleEdited: 'edited_cypress_test_chart'
 };
 
+let indicatorValues = [];
+
+function getIndicatorValues(amount){
+  for (let index = 0; index < amount; index++) {
+    cy.get('[class *= ZoomSelectstyles__DropDownItem]:not([class *= ZoomSelectstyles__CategoryItem]) div').eq(index).then(($el) => {
+      const indicatorValue = $el.text();
+      cy.log(indicatorValue);
+      indicatorValues.push(indicatorValue)
+    })
+  }
+}
+
 function plotData() {
   cy.get('[data-cy="indicator-1"]').click();
-  cy.contains(testvalues.indicator).click();
+
+  getIndicatorValues(2);
+  cy.contains(indicatorValues[0]).click();
 
   //Here we wait till the data has been mapped
   cy.waitPageLoader();
@@ -38,7 +52,7 @@ beforeEach(() => {
 });
 
 describe('Chartbuilder geomap chart fragment e2e', function() {
-  it('Should be able to save, edit, preview, download and delete a chart', function() {
+  it('Should be able to save, edit, preview, download and (indefinite) delete a chart', function() {
     cy.signIn();
     cy.wait(2000);
     cy.navigateToCreateGeo();
@@ -78,6 +92,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
       'contain.text',
       testvalues.indicator
     );
+
     typeChartTitle(testvalues.chartTitleEdited);
 
     cy.get('[data-cy=geomap-close-save-button]').click();
@@ -94,6 +109,13 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
       .first()
       .click();
     cy.wait(5000);
+    cy.queryByText(testvalues.chartTitleEdited).should('not.exist');
+
+    cy.log('**REMOVE CHARTS INDEFINITE**')
+    cy.get('[href="/dashboard/trash"]').click();
+    cy.queryByText(testvalues.chartTitleEdited).should('exist');
+    cy.get('[class *=GridListOptionstyles__RemoveButton]').click();
+    cy.wait(2000);
     cy.queryByText(testvalues.chartTitleEdited).should('not.exist');
   });
 });

@@ -149,3 +149,20 @@ Cypress.Commands.add('navigateToTablechart', () => {
 Cypress.Commands.add('navigateToBarchart', () => {
   cy.visit('/visualizer/barchart/vizID/edit');
 });
+
+//https://stackoverflow.com/questions/55516990/cypress-testing-pseudo-css-class-before
+function unquote(str) {
+  return str.replace(/(^")|("$)/g, '');
+}
+
+Cypress.Commands.add(
+  'after',
+  {
+      prevSubject: 'element',
+  },
+  (el, property) => {
+      const win = el[0].ownerDocument.defaultView;
+      const after = win.getComputedStyle(el[0], 'after');
+      return unquote(after.getPropertyValue(property));
+  },
+);

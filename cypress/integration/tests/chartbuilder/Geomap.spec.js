@@ -1,10 +1,10 @@
 const testvalues = {
-  indicator: "new hiv infections",
-  chartTitle: "cypress_test_chart",
-  chartTitleEdited: "edited_cypress_test_chart"
-}
+  indicator: 'new hiv infections',
+  chartTitle: 'cypress_test_chart',
+  chartTitleEdited: 'edited_cypress_test_chart'
+};
 
-function plotData(){
+function plotData() {
   cy.get('[data-cy="indicator-1"]').click();
   cy.contains(testvalues.indicator).click();
 
@@ -18,15 +18,17 @@ function plotData(){
 }
 
 function typeChartTitle(title) {
-  cy.location().then((location) => {
-    cy.get(`[href="/visualizer/geomap/${location.pathname.split('/')[3]}/context"]`).click();
+  cy.location().then(location => {
+    cy.get(
+      `[href="/visualizer/geomap/${location.pathname.split('/')[3]}/context"]`
+    ).click();
     cy.waitPageLoader();
     cy.waitPageLoader2();
     cy.get('[class *= MuiInputBase-input]')
       .first()
       .clear()
       .type(title);
-  })
+  });
 }
 
 beforeEach(() => {
@@ -41,43 +43,57 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     cy.wait(2000);
     cy.navigateToCreateGeo();
     cy.wait(5000);
-    cy.log("**PLOTTING CHART**");
+    cy.log('**PLOTTING CHART**');
     plotData();
     typeChartTitle(testvalues.chartTitle);
 
-    cy.log("**PREVIEW CHART**");
+    cy.log('**PREVIEW CHART**');
     cy.get('[href="/visualizer/geomap/vizID/preview"]').click();
     cy.get('[class*= ContextHeader]').should(
       'contain.text',
       testvalues.chartTitle
     );
 
-    cy.log("DOWNLOAD CHART");
+    cy.log('DOWNLOAD CHART');
     cy.get('[href="/visualizer/geomap/vizID/download"]').click();
     cy.get('[data-cy="dowload-option-PNG"]').click();
     //todo: test if file is actually being downloaded
 
-    cy.log("**SAVING CHART**");
+    cy.log('**SAVING CHART**');
     cy.get('[data-cy=geomap-close-save-button]').click();
     cy.wait(5000);
-    cy.get(":nth-child(1) > [class*= GridItemstyles]").first().should('contain.text', testvalues.chartTitle)
+    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+      .first()
+      .should('contain.text', testvalues.chartTitle);
 
-    cy.log("**EDITING CHART**");
+    cy.log('**EDITING CHART**');
     cy.wait(5000);
-    cy.get(":nth-child(1) > [class*= GridItemstyles]").first().trigger('mouseover');
-    cy.get("[class *= GridItemToolbar]:nth-child(1)").first().click();
-    cy.get('[data-cy="indicator-1"]').should('contain.text', testvalues.indicator);
-    typeChartTitle(testvalues.chartTitleEdited)
+    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+      .first()
+      .trigger('mouseover');
+    cy.get('[class *= GridItemToolbar]:nth-child(1)')
+      .first()
+      .click();
+    cy.get('[data-cy="indicator-1"]').should(
+      'contain.text',
+      testvalues.indicator
+    );
+    typeChartTitle(testvalues.chartTitleEdited);
 
     cy.get('[data-cy=geomap-close-save-button]').click();
-    cy.get(":nth-child(1) > [class*= GridItemstyles]").first().should('contain.text', testvalues.chartTitle)
+    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+      .first()
+      .should('contain.text', testvalues.chartTitle);
 
-    cy.log("**DELETING CHART**");
+    cy.log('**DELETING CHART**');
     cy.wait(5000);
-    cy.get(":nth-child(1) > [class*= GridItemstyles]").first().trigger('mouseover');
-    cy.get("[class *= GridItemToolbar]:nth-child(4)").first().click();
+    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+      .first()
+      .trigger('mouseover');
+    cy.get('[class *= GridItemToolbar]:nth-child(4)')
+      .first()
+      .click();
     cy.wait(5000);
-    cy.queryByText(testvalues.chartTitleEdited).should("not.exist")
+    cy.queryByText(testvalues.chartTitleEdited).should('not.exist');
   });
 });
-

@@ -5,6 +5,7 @@ const testvalues = {
 }
 
 function plotData(){
+  cy.waitForIndicatorsLoad();
   cy.get('[data-cy="indicator-1"]').click();
   cy.contains(testvalues.indicator).click();
 

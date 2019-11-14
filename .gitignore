@@ -1,5 +1,9 @@
 yarn.lock
 
+# docker
+.data
+.docker.env
+
 # Logs
 logs
 *.log

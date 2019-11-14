@@ -1,13 +1,22 @@
-FROM node:10.16
+FROM node:8.7.0-alpine
 
-RUN npm -g install yarn
+WORKDIR usr/src/app
 
-RUN mkdir -p /app/src
-WORKDIR /app/src
-ENV PATH /app/src/node_modules/.bin:${PATH}
+COPY package*.json ./
 
-ADD package.json /app/src
-ADD yarn.lock /app/src
-RUN yarn install
+RUN npm install
 
-ADD . /app/src
+COPY . .
+
+RUN sed -i "s/localhost:4200/server:4200/" package.json
+
+RUN apk add --no-cache libcrypto1.0 libgcc libstdc++
+
+COPY --from=icalialabs/watchman:4-alpine3.4 /usr/local/bin/watchman* /usr/local/bin/
+
+RUN mkdir -p /usr/local/var/run/watchman \
+    && touch /usr/local/var/run/watchman/.not-empty
+
+RUN npm run relay
+
+CMD ["npm", "run", "start"]

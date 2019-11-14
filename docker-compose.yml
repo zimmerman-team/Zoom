@@ -1,8 +1,14 @@
-version: '2'
+version: '3'
 services:
-  # See: http://jdlm.info/articles/2016/03/06/lessons-building-node-app-docker.html
-  client:
-    build: .
+  mongodb:
+    image: mongo:3.6.2
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./.data/mongodb:/data/db
 
   server:
+    build: .
+
+  client:
     build: .

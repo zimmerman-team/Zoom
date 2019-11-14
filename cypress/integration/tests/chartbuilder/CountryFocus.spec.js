@@ -1,20 +1,33 @@
+/* eslint-disable func-names */
 const testvalues = {
-  indicator: "avg. height men",
   chartTitle: "cypress_test_chart",
   chartTitleEdited: "edited_cypress_test_chart"
 }
 
-function plotData(){
-  cy.waitForIndicatorsLoad();
-  cy.get('[data-cy="indicator-1"]').click();
-  cy.contains(testvalues.indicator).click();
+const indicatorValues = [];
 
+function getIndicatorValues(amount) {
+  cy.get('[data-cy="indicator-1"]').click();
+  for (let index = 0; index < amount; index++) {
+    cy.get(
+      '[class *= ZoomSelectstyles__DropDownItem]:not([class *= ZoomSelectstyles__CategoryItem]) div'
+    )
+      .eq(index)
+      .then($el => {
+        const indicatorValue = $el.text();
+        indicatorValues.push(indicatorValue);
+      });
+  }
+}
+
+function plotData(indicatorIndex) {
+  cy.contains(indicatorValues[indicatorIndex]).click();
   //Here we wait till the data has been mapped
   cy.waitPageLoader();
-  cy.wait(16000);
+  cy.wait(20000);
   cy.get('[data-cy="legendLayer-label"]').should(
     'contain',
-    testvalues.indicator
+    indicatorValues[indicatorIndex]
   );
 }
 
@@ -37,13 +50,17 @@ beforeEach(() => {
 });
 
 describe('Chartbuilder country focus NL fragment e2e', function() {
-  it('Should be able to save, edit, preview, download and delete a chart', function() {
+  it('Should be able to navigate to country focus NL and save indicator values', function(){
     cy.signIn();
     cy.wait(2000);
     cy.navigateToCountryFocusNetherlands();
     cy.wait(5000);
+    getIndicatorValues(2);
+  })
+
+  it('Should be able to save, edit, preview, download and delete a chart', function() {
     cy.log("**PLOTTING CHART**");
-    plotData();
+    plotData(0);
     typeChartTitle(testvalues.chartTitle, "focusNL");
 
     cy.log("**PREVIEW CHART**");
@@ -67,7 +84,12 @@ describe('Chartbuilder country focus NL fragment e2e', function() {
     cy.wait(5000);
     cy.get(":nth-child(1) > [class*= GridItemstyles]").first().trigger('mouseover');
     cy.get("[class *= GridItemToolbar]:nth-child(1)").first().click();
-    cy.get('[data-cy="indicator-1"]').should('contain.text', testvalues.indicator);
+    cy.get('[data-cy="indicator-1"]').click();
+    plotData(1)
+    cy.get('[data-cy="indicator-1"]').should(
+      'contain.text',
+      indicatorValues[1]
+    );
     typeChartTitle(testvalues.chartTitleEdited, "focusNL")
 
     cy.get('[data-cy=geomap-close-save-button]').click();
@@ -79,6 +101,14 @@ describe('Chartbuilder country focus NL fragment e2e', function() {
     cy.get("[class *= GridItemToolbar]:nth-child(4)").first().click();
     cy.wait(5000);
     cy.queryByText(testvalues.chartTitleEdited).should("not.exist")
+
+    cy.log('**REMOVE CHARTS INDEFINITE**');
+    cy.get('[href="/dashboard/trash"]').click();
+    cy.queryByText(testvalues.chartTitleEdited).should('exist');
+    cy.get('[class *=GridListOptionstyles__RemoveButton]').click();
+    cy.wait(2000);
+    cy.queryByText(testvalues.chartTitleEdited).should('not.exist');
+
   });
 });
 
@@ -113,7 +143,12 @@ describe('Chartbuilder country focus KE fragment e2e', function() {
     cy.wait(5000);
     cy.get(":nth-child(1) > [class*= GridItemstyles]").first().trigger('mouseover');
     cy.get("[class *= GridItemToolbar]:nth-child(1)").first().click();
-    cy.get('[data-cy="indicator-1"]').should('contain.text', testvalues.indicator);
+    cy.get('[data-cy="indicator-1"]').click();
+    plotData(1)
+    cy.get('[data-cy="indicator-1"]').should(
+      'contain.text',
+      indicatorValues[1]
+    );
     typeChartTitle(testvalues.chartTitleEdited, "focusKE")
 
     cy.get('[data-cy=geomap-close-save-button]').click();
@@ -125,6 +160,13 @@ describe('Chartbuilder country focus KE fragment e2e', function() {
     cy.get("[class *= GridItemToolbar]:nth-child(4)").first().click();
     cy.wait(5000);
     cy.queryByText(testvalues.chartTitleEdited).should("not.exist")
+
+    cy.log('**REMOVE CHARTS INDEFINITE**');
+    cy.get('[href="/dashboard/trash"]').click();
+    cy.queryByText(testvalues.chartTitleEdited).should('exist');
+    cy.get('[class *=GridListOptionstyles__RemoveButton]').click();
+    cy.wait(2000);
+    cy.queryByText(testvalues.chartTitleEdited).should('not.exist');
   });
 });
 

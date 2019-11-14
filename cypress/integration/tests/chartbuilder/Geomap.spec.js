@@ -24,7 +24,7 @@ function plotData(indicatorIndex) {
   cy.contains(indicatorValues[indicatorIndex]).click();
   //Here we wait till the data has been mapped
   cy.waitPageLoader();
-  cy.wait(1000);
+  cy.wait(6000);
   cy.get('[data-cy="legendLayer-label"]').should(
     'contain',
     indicatorValues[indicatorIndex]
@@ -93,14 +93,14 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
       .first()
       .click();
     cy.get('[data-cy="indicator-1"]').click();
-    plotData(1)
+    plotData(1);
     typeChartTitle(testvalues.chartTitleEdited);
     cy.get('[data-cy=geomap-close-save-button]').click();
 
-    cy.log('**CHECKING IF EDITS ARE SUCCESFULL**')
+    cy.log('**CHECKING IF EDITS ARE SUCCESFULL**');
     cy.get(':nth-child(1) > [class*= GridItemstyles]')
       .first()
-      .should('contain.text', testvalues.chartTitleEdited)
+      .should('contain.text', testvalues.chartTitleEdited);
     cy.wait(5000);
     cy.get(':nth-child(1) > [class*= GridItemstyles]')
       .first()

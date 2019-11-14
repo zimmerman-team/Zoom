@@ -55,7 +55,7 @@ beforeEach(() => {
 describe('Chartbuilder barchart chart fragment e2e', function() {
   it('Should navigate to geomap and save indicator values', function() {
     cy.signIn();
-    cy.wait(2000);
+    cy.wait(6000);
     cy.navigateToBarchart();
     cy.wait(5000);
     getIndicatorValues(2);

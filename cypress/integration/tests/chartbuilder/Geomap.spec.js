@@ -93,7 +93,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
       .first()
       .click();
     cy.get('[data-cy="indicator-1"]').click();
-    plotData(1)
+    plotData(1);
     cy.get('[data-cy="indicator-1"]').should(
       'contain.text',
       indicatorValues[1]

@@ -32,8 +32,12 @@ function plotData(indicatorIndex) {
 }
 
 function typeChartTitle(title, fragment) {
-  cy.location().then((location) => {
-    cy.get(`[href="/visualizer/${fragment}/${location.pathname.split('/')[3]}/context"]`).click();
+  cy.location().then(location => {
+    cy.get(
+      `[href="/visualizer/${fragment}/${
+        location.pathname.split('/')[3]
+      }/context"]`
+    ).click();
     cy.waitPageLoader();
     cy.waitPageLoader2();
     cy.get('[class *= MuiInputBase-input]')
@@ -50,50 +54,56 @@ beforeEach(() => {
 });
 
 describe('Chartbuilder country focus NL fragment e2e', function() {
-  it('Should be able to navigate to country focus NL and save indicator values', function(){
+  it('Should be able to navigate to country focus NL and save indicator values', function() {
     cy.signIn();
     cy.wait(2000);
     cy.navigateToCountryFocusNetherlands();
-    cy.wait(5000);
+    cy.wait(10000);
     getIndicatorValues(2);
-  })
+  });
 
   it('Should be able to save, edit, preview, download and delete a chart', function() {
-    cy.log("**PLOTTING CHART**");
+    cy.log('**PLOTTING CHART**');
     plotData(0);
-    typeChartTitle(testvalues.chartTitle, "focusNL");
+    typeChartTitle(testvalues.chartTitle, 'focusNL');
 
-    cy.log("**PREVIEW CHART**");
+    cy.log('**PREVIEW CHART**');
     cy.get('[href="/visualizer/focusNL/vizID/preview"]').click();
     cy.get('[class*= ContextHeader]').should(
       'contain.text',
       testvalues.chartTitle
     );
 
-    cy.log("DOWNLOAD CHART");
+    cy.log('DOWNLOAD CHART');
     cy.get('[href="/visualizer/focusNL/vizID/download"]').click();
     cy.get('[data-cy="dowload-option-PNG"]').click();
     //todo: test if file is actually being downloaded
 
-    cy.log("**SAVING CHART**");
+    cy.log('**SAVING CHART**');
     cy.get('[data-cy=geomap-close-save-button]').click();
     cy.wait(5000);
-    cy.get(":nth-child(1) > [class*= GridItemstyles]").first().should('contain.text', testvalues.chartTitle)
-
-    cy.log("**EDITING CHART**");
-    cy.wait(5000);
-    cy.get(":nth-child(1) > [class*= GridItemstyles]").first().trigger('mouseover');
-    cy.get("[class *= GridItemToolbar]:nth-child(1)").first().click();
-    cy.wait(16000)
-    cy.get('[data-cy="indicator-1"]').click();
-    plotData(1)
-    typeChartTitle(testvalues.chartTitleEdited, "focusNL");
-    cy.get('[data-cy=geomap-close-save-button]').click();
-
-    cy.log('**CHECKING IF EDITS ARE SUCCESFULL**')
     cy.get(':nth-child(1) > [class*= GridItemstyles]')
       .first()
-      .should('contain.text', testvalues.chartTitleEdited)
+      .should('contain.text', testvalues.chartTitle);
+
+    cy.log('**EDITING CHART**');
+    cy.wait(5000);
+    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+      .first()
+      .trigger('mouseover');
+    cy.get('[class *= GridItemToolbar]:nth-child(1)')
+      .first()
+      .click();
+    cy.wait(16000);
+    cy.get('[data-cy="indicator-1"]').click();
+    plotData(1);
+    typeChartTitle(testvalues.chartTitleEdited, 'focusNL');
+    cy.get('[data-cy=geomap-close-save-button]').click();
+
+    cy.log('**CHECKING IF EDITS ARE SUCCESFULL**');
+    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+      .first()
+      .should('contain.text', testvalues.chartTitleEdited);
     cy.wait(5000);
     cy.get(':nth-child(1) > [class*= GridItemstyles]')
       .first()
@@ -111,12 +121,16 @@ describe('Chartbuilder country focus NL fragment e2e', function() {
     );
     cy.get('[data-cy=geomap-close-save-button]').click();
 
-    cy.log("**DELETING CHART**");
+    cy.log('**DELETING CHART**');
     cy.wait(5000);
-    cy.get(":nth-child(1) > [class*= GridItemstyles]").first().trigger('mouseover');
-    cy.get("[class *= GridItemToolbar]:nth-child(4)").first().click();
+    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+      .first()
+      .trigger('mouseover');
+    cy.get('[class *= GridItemToolbar]:nth-child(4)')
+      .first()
+      .click();
     cy.wait(5000);
-    cy.queryByText(testvalues.chartTitleEdited).should("not.exist")
+    cy.queryByText(testvalues.chartTitleEdited).should('not.exist');
 
     cy.log('**REMOVE CHARTS INDEFINITE**');
     cy.get('[href="/dashboard/trash"]').click();
@@ -126,4 +140,3 @@ describe('Chartbuilder country focus NL fragment e2e', function() {
     cy.queryByText(testvalues.chartTitleEdited).should('not.exist');
   });
 });
-

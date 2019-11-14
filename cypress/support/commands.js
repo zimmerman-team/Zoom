@@ -109,7 +109,10 @@ Cypress.Commands.add('waitPageLoader2', (timeout = 1750000) => {
 });
 
 Cypress.Commands.add('waitForIndicatorsLoad', (timeout = 1750000) => {
-  cy.get('[data-cy=indicator-1]', { timeout }).should('not.have.text', 'Select indicator(0)');
+  cy.get('[data-cy=indicator-1]', { timeout }).should(
+    'not.have.text',
+    'Select indicator(0)'
+  );
 });
 
 // --------- Hover ---------

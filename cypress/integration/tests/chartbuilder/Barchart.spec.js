@@ -68,10 +68,7 @@ describe('Chartbuilder barchart chart fragment e2e', function() {
 
     cy.log('**PREVIEW CHART**');
     cy.get('[href="/visualizer/barchart/vizID/preview"]').click();
-    cy.get('[class*= ContextHeader]').should(
-      'contain.text',
-      testvalues.chartTitle
-    );
+    cy.get('[class*= ContextHeader]').should('contain', testvalues.chartTitle);
 
     cy.log('DOWNLOAD CHART');
     cy.get('[href="/visualizer/barchart/vizID/download"]').click();
@@ -83,7 +80,7 @@ describe('Chartbuilder barchart chart fragment e2e', function() {
     cy.wait(5000);
     cy.get(':nth-child(1) > [class*= GridItemstyles]')
       .first()
-      .should('contain.text', testvalues.chartTitle);
+      .should('contain', testvalues.chartTitle);
 
     cy.log('**EDITING CHART**');
     cy.wait(5000);
@@ -102,7 +99,7 @@ describe('Chartbuilder barchart chart fragment e2e', function() {
     cy.log('**CHECKING IF EDITS ARE SUCCESFULL**');
     cy.get(':nth-child(1) > [class*= GridItemstyles]')
       .first()
-      .should('contain.text', testvalues.chartTitleEdited);
+      .should('contain', testvalues.chartTitleEdited);
     cy.wait(5000);
     cy.get(':nth-child(1) > [class*= GridItemstyles]')
       .first()

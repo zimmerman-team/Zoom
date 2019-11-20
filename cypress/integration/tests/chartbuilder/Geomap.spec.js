@@ -24,7 +24,7 @@ function plotData(indicatorIndex) {
   cy.contains(indicatorValues[indicatorIndex]).click();
   //Here we wait till the data has been mapped
   cy.waitPageLoader();
-  cy.wait(1000);
+  cy.wait(6000);
   cy.get('[data-cy="legendLayer-label"]').should(
     'contain',
     indicatorValues[indicatorIndex]
@@ -67,7 +67,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
 
     cy.log('**PREVIEW CHART**');
     cy.get('[href="/visualizer/geomap/vizID/preview"]').click();
-    cy.get('[class*= ContextHeader]').should(
+    cy.get('[class*= ContextHeader__Title]').should(
       'contain.text',
       testvalues.chartTitle
     );
@@ -80,29 +80,29 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     cy.log('**SAVING CHART**');
     cy.get('[data-cy=geomap-close-save-button]').click();
     cy.wait(5000);
-    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+    cy.get(':nth-child(1) > [class*= GridItemstyles__GridItemHeading]')
       .first()
       .should('contain.text', testvalues.chartTitle);
 
     cy.log('**EDITING CHART**');
     cy.wait(5000);
-    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+    cy.get(':nth-child(1) > [class*= GridItemstyles__GridItemHeading]')
       .first()
       .trigger('mouseover');
     cy.get('[class *= GridItemToolbar]:nth-child(1)')
       .first()
       .click();
     cy.get('[data-cy="indicator-1"]').click();
-    plotData(1)
+    plotData(1);
     typeChartTitle(testvalues.chartTitleEdited);
     cy.get('[data-cy=geomap-close-save-button]').click();
 
-    cy.log('**CHECKING IF EDITS ARE SUCCESFULL**')
-    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+    cy.log('**CHECKING IF EDITS ARE SUCCESFULL**');
+    cy.get(':nth-child(1) > [class*= GridItemstyles__GridItemHeading]')
       .first()
-      .should('contain.text', testvalues.chartTitleEdited)
+      .should('contain.text', testvalues.chartTitleEdited);
     cy.wait(5000);
-    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+    cy.get(':nth-child(1) > [class*= GridItemstyles__GridItemHeading]')
       .first()
       .trigger('mouseover');
     cy.get('[class *= GridItemToolbar]:nth-child(1)')
@@ -113,14 +113,14 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
       indicatorValues[1]
     );
     cy.get('[data-cy="legendLayer-label"]').should(
-      'contain.text',
+      'contain',
       indicatorValues[1]
     );
     cy.get('[data-cy=geomap-close-save-button]').click();
 
     cy.log('**DELETING CHART**');
     cy.wait(5000);
-    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+    cy.get(':nth-child(1) > [class*= GridItemstyles__GridItemHeading]')
       .first()
       .trigger('mouseover');
     cy.get('[class *= GridItemToolbar]:nth-child(4)')

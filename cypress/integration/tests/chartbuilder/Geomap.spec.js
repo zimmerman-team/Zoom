@@ -67,7 +67,7 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
 
     cy.log('**PREVIEW CHART**');
     cy.get('[href="/visualizer/geomap/vizID/preview"]').click();
-    cy.get('[class*= ContextHeader]').should(
+    cy.get('[class*= ContextHeader__Title]').should(
       'contain.text',
       testvalues.chartTitle
     );
@@ -80,13 +80,13 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     cy.log('**SAVING CHART**');
     cy.get('[data-cy=geomap-close-save-button]').click();
     cy.wait(5000);
-    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+    cy.get(':nth-child(1) > [class*= GridItemstyles__GridItemHeading]')
       .first()
       .should('contain.text', testvalues.chartTitle);
 
     cy.log('**EDITING CHART**');
     cy.wait(5000);
-    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+    cy.get(':nth-child(1) > [class*= GridItemstyles__GridItemHeading]')
       .first()
       .trigger('mouseover');
     cy.get('[class *= GridItemToolbar]:nth-child(1)')
@@ -98,11 +98,11 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
     cy.get('[data-cy=geomap-close-save-button]').click();
 
     cy.log('**CHECKING IF EDITS ARE SUCCESFULL**');
-    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+    cy.get(':nth-child(1) > [class*= GridItemstyles__GridItemHeading]')
       .first()
       .should('contain.text', testvalues.chartTitleEdited);
     cy.wait(5000);
-    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+    cy.get(':nth-child(1) > [class*= GridItemstyles__GridItemHeading]')
       .first()
       .trigger('mouseover');
     cy.get('[class *= GridItemToolbar]:nth-child(1)')
@@ -113,14 +113,14 @@ describe('Chartbuilder geomap chart fragment e2e', function() {
       indicatorValues[1]
     );
     cy.get('[data-cy="legendLayer-label"]').should(
-      'contain.text',
+      'contain',
       indicatorValues[1]
     );
     cy.get('[data-cy=geomap-close-save-button]').click();
 
     cy.log('**DELETING CHART**');
     cy.wait(5000);
-    cy.get(':nth-child(1) > [class*= GridItemstyles]')
+    cy.get(':nth-child(1) > [class*= GridItemstyles__GridItemHeading]')
       .first()
       .trigger('mouseover');
     cy.get('[class *= GridItemToolbar]:nth-child(4)')

@@ -109,7 +109,10 @@ Cypress.Commands.add('waitPageLoader2', (timeout = 1750000) => {
 });
 
 Cypress.Commands.add('waitForIndicatorsLoad', (timeout = 1750000) => {
-  cy.get('[data-cy=indicator-1]', { timeout }).should('not.have.text', 'Select indicator(0)');
+  cy.get('[data-cy=indicator-1]', { timeout }).should(
+    'not.have.text',
+    'Select indicator(0)'
+  );
 });
 
 // --------- Hover ---------
@@ -162,11 +165,11 @@ function unquote(str) {
 Cypress.Commands.add(
   'after',
   {
-      prevSubject: 'element',
+    prevSubject: 'element'
   },
   (el, property) => {
-      const win = el[0].ownerDocument.defaultView;
-      const after = win.getComputedStyle(el[0], 'after');
-      return unquote(after.getPropertyValue(property));
-  },
+    const win = el[0].ownerDocument.defaultView;
+    const after = win.getComputedStyle(el[0], 'after');
+    return unquote(after.getPropertyValue(property));
+  }
 );

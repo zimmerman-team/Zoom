@@ -212,7 +212,8 @@ router.get('/loadTiles', (req, res) => {
       flags: 'w'
     });
 
-    const fetchToUse = process.env.NODE_ENV === 'development' ? http : https;
+    const fetchToUse =
+      process.env.REACT_APP_GRAPHQL_HOST.indexOf('https') !== -1 ? https : http;
 
     fetchToUse.get(tileUrl, fileRes => {
       fileRes

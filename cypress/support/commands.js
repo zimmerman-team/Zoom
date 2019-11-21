@@ -157,6 +157,10 @@ Cypress.Commands.add('navigateToBarchart', () => {
   cy.visit('/visualizer/barchart/vizID/edit');
 });
 
+Cypress.Commands.add('navigateToDonutchart', () => {
+  cy.visit('/visualizer/donutchart/vizID/edit');
+});
+
 //https://stackoverflow.com/questions/55516990/cypress-testing-pseudo-css-class-before
 function unquote(str) {
   return str.replace(/(^")|("$)/g, '');

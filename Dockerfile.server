@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 # install packages
 COPY package.json ./
-RUN yarn install --silent --prod
+RUN yarn install --silent
 COPY server server/
 COPY src src/
 

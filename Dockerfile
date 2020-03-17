@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 # install packages
 COPY package.json ./
-RUN npm install --silent --prod
+RUN npm install --silent
 COPY . .
 
 # watchman and relay

@@ -87,6 +87,7 @@
     "tippecanoe": "^0.3.0",
     "supercluster": "^6.0.2",
     "trim-right": "^1.0.1",
+    "dotenv-expand": "5.1.0",
     "universal-cookie": "^3.1.0"
   },
   "scripts": {
@@ -165,7 +166,6 @@
     "cypress-cucumber-preprocessor": "^1.11.0",
     "cypress-image-snapshot": "^3.0.1",
     "cypressautomocker": "^1.0.5",
-    "dotenv-expand": "5.1.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
     "eslint": "^5.16.0",

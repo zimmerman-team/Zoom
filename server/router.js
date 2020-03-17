@@ -68,7 +68,9 @@ const checkJwt = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 200,
-    jwksUri: `https://${process.env.REACT_APP_AUTH_CUSTOM_DOMAIN}/.well-known/jwks.json`
+    jwksUri: `https://${
+      process.env.REACT_APP_AUTH_CUSTOM_DOMAIN
+    }/.well-known/jwks.json`
   }),
 
   // Validate the audience and the issuer.
@@ -212,18 +214,27 @@ router.get('/loadTiles', (req, res) => {
       flags: 'w'
     });
 
-    const fetchToUse = process.env.NODE_ENV === 'development' ? http : https;
+    const fetchToUse =
+      process.env.NODE_ENV === 'development' ||
+      process.env.REACT_APP_PROJECT_URL.slice(0, 5) === 'http:'
+        ? http
+        : https;
 
-    fetchToUse.get(tileUrl, fileRes => {
-      fileRes
-        .on('data', data => {
-          file.write(data);
-        })
-        .on('end', () => {
-          file.end();
-          res.send(urlToFile);
-        });
-    });
+    fetchToUse.get(
+      process.env.REACT_APP_IS_DOCKER
+        ? tileUrl.replace('localhost', 'app')
+        : tileUrl,
+      fileRes => {
+        fileRes
+          .on('data', data => {
+            file.write(data);
+          })
+          .on('end', () => {
+            file.end();
+            res.send(urlToFile);
+          });
+      }
+    );
   } else {
     res.send('File deleted');
   }

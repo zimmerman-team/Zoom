@@ -1,0 +1,14 @@
+# base
+FROM node:12.6.0-alpine as build
+WORKDIR /usr/src/app
+
+# install packages
+COPY package.json ./
+RUN yarn install --silent --prod
+COPY server server/
+COPY src src/
+
+EXPOSE 4200
+
+# run
+CMD ["sh","-c","npm run run-back"]

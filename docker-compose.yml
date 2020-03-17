@@ -6,9 +6,39 @@ services:
       - '27017:27017'
     volumes:
       - ./.data/mongodb:/data/db
+    networks:
+      - mongo
 
   server:
-    build: .
+    build:
+      context: '.'
+      dockerfile: 'Dockerfile.server'
+    env_file:
+      - .docker.env
+    ports:
+      - '4200:4200'
+    depends_on:
+      - mongodb
+    networks:
+      - mongo
+      - server
+      - duct_default
 
   client:
-    build: .
+    build: '.'
+    env_file:
+      - .docker.env
+    ports:
+      - '3000:80'
+    depends_on:
+      - server
+    networks:
+      - server
+
+networks:
+  mongo:
+    driver: bridge
+  server:
+    driver: bridge
+  duct_default:
+    external: true

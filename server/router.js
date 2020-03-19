@@ -216,8 +216,7 @@ router.get('/loadTiles', (req, res) => {
 
     const fetchToUse =
       process.env.NODE_ENV === 'development' ||
-      process.env.REACT_APP_PROJECT_URL.slice(0, 5) === 'http:' ||
-      process.env.REACT_APP_IS_DOCKER
+      process.env.REACT_APP_PROJECT_URL.slice(0, 5) === 'http:'
         ? http
         : https;
 

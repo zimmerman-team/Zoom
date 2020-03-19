@@ -97,7 +97,7 @@
     "test": "node scripts/test.js",
     "start-back": "nodemon --inspect server/server.js",
     "start-fullstack": "nodemon --inspect server/server & node scripts/start.js",
-    "run-back": "REACT_APP_IS_DOCKER=true node server/server.js",
+    "run-back": "NODE_ENV=production REACT_APP_IS_DOCKER=true node server/server.js",
     "storybook": "start-storybook -s ./public -p 6006",
     "build-storybook": "build-storybook",
     "e2e": "cypress run",

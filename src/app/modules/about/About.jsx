@@ -13,11 +13,10 @@ import {
   LogoContainer
 } from 'modules/about/About.styles';
 import ModuleContainer from 'modules/common/modulecontainer/ModuleContainer';
-
 /* images */
 import aidsfondsLogo from 'assets/images/logo-aidsfonds.jpg';
 import leidenLogo from 'assets/images/Logo_LUC_The_Hague.jpg';
-import zzLogo from 'assets/images/ZZ logo.png';
+import zzLogo from 'assets/images/ZZlogo.png';
 
 const propTypes = {};
 const defaultProps = {};
@@ -68,7 +67,9 @@ const About = () => {
             data-cy="about-link-to-guidelines"
             target="_blank"
             rel="noopener noreferrer"
-            href={`${process.env.REACT_APP_GRAPHQL_HOST}/static/Data guidelines_final.pdf`}
+            href={`${
+              process.env.REACT_APP_GRAPHQL_HOST
+            }/static/Data guidelines_final.pdf`}
           >
             Data guidelines_final.pdf
           </RedLink>
@@ -105,7 +106,7 @@ const About = () => {
       <LogoContainer>
         <AboutLogo alt="aidsfonds" src={aidsfondsLogo} height="112px" />
         <AboutLogo alt="leiden" src={leidenLogo} height="73px" />
-        <AboutLogo alt="zz" src={zzLogo} height="54px" />
+        <AboutLogo alt="zz" src={zzLogo} height="auto" />
       </LogoContainer>
     </ModuleContainer>
   );

@@ -108,6 +108,13 @@ Cypress.Commands.add('waitPageLoader2', (timeout = 1750000) => {
   cy.get('[data-cy=loader2]', { timeout }).should('not.be.visible');
 });
 
+Cypress.Commands.add('waitForIndicatorsLoad', (timeout = 1750000) => {
+  cy.get('[data-cy=indicator-1]', { timeout }).should(
+    'not.have.text',
+    'Select indicator(0)'
+  );
+});
+
 // --------- Hover ---------
 Cypress.Commands.add('hover', (selectorHoverItem, selectorShowItem, n = 0) => {
   cy.get(selectorHoverItem)
@@ -149,3 +156,24 @@ Cypress.Commands.add('navigateToTablechart', () => {
 Cypress.Commands.add('navigateToBarchart', () => {
   cy.visit('/visualizer/barchart/vizID/edit');
 });
+
+Cypress.Commands.add('navigateToDonutchart', () => {
+  cy.visit('/visualizer/donutchart/vizID/edit');
+});
+
+//https://stackoverflow.com/questions/55516990/cypress-testing-pseudo-css-class-before
+function unquote(str) {
+  return str.replace(/(^")|("$)/g, '');
+}
+
+Cypress.Commands.add(
+  'after',
+  {
+    prevSubject: 'element'
+  },
+  (el, property) => {
+    const win = el[0].ownerDocument.defaultView;
+    const after = win.getComputedStyle(el[0], 'after');
+    return unquote(after.getPropertyValue(property));
+  }
+);

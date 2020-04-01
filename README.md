@@ -85,8 +85,8 @@ See the public charts created with Zoom here: https://zoom.aidsfonds.nl/
   REACT_APP_MONGO_DB=mongodb://mongodb:27017/zoom
   REACT_APP_BACKEND_PORT=4200
   ```
-- run `make build`
-- run `make runserver`
+- run `docker-compose build`
+- run `docker-compose up`
 - And your project should run at 'http://localhost:3000'
 
 ## Extra info

@@ -36,6 +36,7 @@ app.use('/api', router);
 app.use('/api/static', express.static(path.join(__dirname, '/static')));
 
 // launch our backend into a port
-app.listen(process.env.REACT_APP_BACKEND_PORT, () =>
-  console.log(`LISTENING ON PORT ${process.env.REACT_APP_BACKEND_PORT}`)
-);
+app.listen(process.env.REACT_APP_BACKEND_PORT, () => {
+  console.log(process.env.REACT_APP_PROJECT_URL.slice(0, 4));
+  console.log(`LISTENING ON PORT ${process.env.REACT_APP_BACKEND_PORT}`);
+});

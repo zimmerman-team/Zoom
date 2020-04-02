@@ -86,6 +86,8 @@ See the public charts created with Zoom here: https://zoom.aidsfonds.nl/
   REACT_APP_BACKEND_PORT=4200
   ```
 - run `docker-compose build`
+  Note: in case the build fails try to increase memory allocation in Docker settings.
+
 - run `docker-compose up`
 - And your project should run at 'http://localhost:3000'
 

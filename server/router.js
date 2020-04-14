@@ -191,6 +191,8 @@ router.get('/redirectToHome', (req, res) => {
 router.get('/loadTiles', (req, res) => {
   const { prevTiles, tileUrl } = req.query;
 
+  console.log(tileUrl);
+
   if (prevTiles) {
     const fullPathRem = path.join(__dirname, '/static/', prevTiles);
     if (fs.existsSync(fullPathRem)) {
@@ -215,10 +217,7 @@ router.get('/loadTiles', (req, res) => {
     });
 
     const fetchToUse =
-      process.env.NODE_ENV === 'development' ||
-      process.env.REACT_APP_PROJECT_URL.slice(0, 5) === 'http:'
-        ? http
-        : https;
+      process.env.REACT_APP_BACKEND_HOST.slice(0, 5) === 'http:' ? http : https;
 
     fetchToUse.get(
       process.env.REACT_APP_IS_DOCKER

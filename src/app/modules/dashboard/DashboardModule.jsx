@@ -3,11 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 /* components */
-import { ModuleContainer } from 'modules/dashboard/DashboardModule.styles';
-import DashboardContent from 'modules/dashboard/fragments/DashboardContent/DashboardContent';
+import { ModuleContainer } from 'app/modules/dashboard/DashboardModule.styles';
+import DashboardContent from 'app/modules/dashboard/fragments/DashboardContent/DashboardContent';
 import DashboardHeader from './fragments/DashboardHeader/DashboardHeader';
-import Searchbox from 'modules/dashboard/fragments/Searchbox/Searchbox';
-import Pagination from 'components/Pagination/Pagination';
+import Searchbox from 'app/modules/dashboard/fragments/Searchbox/Searchbox';
+import Pagination from 'app/components/Pagination/Pagination';
 
 const propTypes = {
   tabs: PropTypes.arrayOf(

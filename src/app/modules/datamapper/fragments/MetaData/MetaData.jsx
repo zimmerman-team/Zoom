@@ -4,15 +4,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'grommet/components/Box';
 /* custom components */
-import ZoomSelect from 'components/Select/ZoomSelect';
-import CheckboxesGroup from 'components/CheckboxesGroup/CheckboxesGroup';
-import RadioButtonGroup from 'components/RadioButtonGroup/RadioButtonGroup';
-import TextField from 'components/sort/TextField';
-import InputFieldLabel from 'components/InputFieldLabel/InputFieldLabel';
-import InputFieldDivider from 'components/Dividers/InputFieldDivider';
-import SimpleParagraphText from 'components/Texts/SimpleParagraphText/SimpleParagraphText';
+import ZoomSelect from 'app/components/Select/ZoomSelect';
+import CheckboxesGroup from 'app/components/CheckboxesGroup/CheckboxesGroup';
+import RadioButtonGroup from 'app/components/RadioButtonGroup/RadioButtonGroup';
+import TextField from 'app/components/sort/TextField';
+import InputFieldLabel from 'app/components/InputFieldLabel/InputFieldLabel';
+import InputFieldDivider from 'app/components/Dividers/InputFieldDivider';
+import SimpleParagraphText from 'app/components/Texts/SimpleParagraphText/SimpleParagraphText';
 /* style */
-import { SectionHeading } from 'components/sort/Headings';
+import { SectionHeading } from 'app/components/sort/Headings';
 import {
   DataSourceTextCont,
   FieldContainer,
@@ -22,9 +22,9 @@ import {
   SelectSurround,
   TwoFieldContainer
 } from './MetaData.style';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 /* const data */
-import { step1InitialData } from '__consts__/DataMapperStepConsts';
+import { step1InitialData } from 'app/__consts__/DataMapperStepConsts';
 import {
   checkBoxOptions2,
   checkBoxOptions3,

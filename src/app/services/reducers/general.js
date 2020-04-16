@@ -1,10 +1,10 @@
 import update from 'immutability-helper';
-import * as actions from 'services/actions/general';
+import * as actions from 'app/services/actions/general';
 
 /* consts */
-import paneTypes from '__consts__/PaneTypesConst';
-import initialState from '__consts__/InitialChartDataConst';
-import initialPaneState from '__consts__/InitialPaneDataConst';
+import paneTypes from 'app/__consts__/PaneTypesConst';
+import initialState from 'app/__consts__/InitialChartDataConst';
+import initialPaneState from 'app/__consts__/InitialPaneDataConst';
 
 const initial = {
   open: paneTypes.none,

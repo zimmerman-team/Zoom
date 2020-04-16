@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PublicChartLibraryModule from 'modules/PublicChartLibrary/PublicChartLibraryModule';
+import PublicChartLibraryModule from 'app/modules/PublicChartLibrary/PublicChartLibraryModule';
 /* utils */
 import isEqual from 'lodash/isEqual';
-import { formatChartData } from 'utils/dashboardUtils';
+import { formatChartData } from 'app/utils/dashboardUtils';
 /* actions */
-import * as actions from 'services/actions/nodeBackend';
+import * as actions from 'app/services/actions/nodeBackend';
 
 class PublicDashMediator extends React.Component {
   constructor(props) {

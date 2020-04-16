@@ -5,18 +5,18 @@ import MUIDataTable from 'mui-datatables';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 /* utils */
-import { formatCsvData } from 'components/charts/tablechart/TableChart.util';
+import { formatCsvData } from 'app/components/charts/tablechart/TableChart.util';
 import sortBy from 'lodash/sortBy';
 
 /* consts */
 import {
   noData,
   noDatCols
-} from 'modules/visualizer/sort/container/fragments/TablechartFragment/TableChartFragment.const';
+} from 'app/modules/visualizer/sort/container/fragments/TablechartFragment/TableChartFragment.const';
 
 /* components */
 import getTheme from './TableChart.styles';
-import DownloadButton from 'components/Buttons/DownloadButton/DownloadButton';
+import DownloadButton from 'app/components/Buttons/DownloadButton/DownloadButton';
 import { CSVLink } from 'react-csv';
 
 // For a list of all options: https://github.com/gregnb/mui-datatables

@@ -6,16 +6,16 @@ import styled from 'styled-components';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 /* consts */
-import paneTypes from '__consts__/PaneTypesConst';
-import initialState from '__consts__/InitialChartDataConst';
+import paneTypes from 'app/__consts__/PaneTypesConst';
+import initialState from 'app/__consts__/InitialChartDataConst';
 /* components */
-import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';
-import VizContainer from 'modules/visualizer/sort/container/VizContainer';
-import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
+import VizSidebar from 'app/modules/visualizer/sort/sidebar/VizSidebar';
+import VizContainer from 'app/modules/visualizer/sort/container/VizContainer';
+import ProgressIcon from 'app/components/ProgressIcon/ProgressIcon';
 
 /* utils */
 import { formatWindowTitle } from './VisualizerModule.utils';
-// import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
+// import BaseDialog from 'app/components/Dialog/BaseDialog/BaseDialog';
 
 const ModuleBase = styled.div`
   width: 100%;

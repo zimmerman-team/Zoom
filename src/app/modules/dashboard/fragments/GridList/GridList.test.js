@@ -1,7 +1,7 @@
 /* base */
 import React from 'react';
 import { shallow } from 'enzyme';
-import GridList from 'modules/dashboard/fragments/GridList/GridList';
+import GridList from 'app/modules/dashboard/fragments/GridList/GridList';
 /* components */
 import {
   Container,
@@ -10,7 +10,7 @@ import {
   GridListItemRowLabel,
   GridListItemRowValue,
   GridListItemTitle
-} from 'modules/dashboard/fragments/GridList/GridList.styles';
+} from 'app/modules/dashboard/fragments/GridList/GridList.styles';
 
 const items = [
   { id: 'mock_id', title: 'mock title', info: { date: '01/01/01' } }

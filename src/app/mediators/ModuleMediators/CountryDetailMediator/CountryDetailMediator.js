@@ -1,13 +1,14 @@
 /* base */
-import React from 'react';
-import PropTypes from 'prop-types';
-import connect from 'react-redux/es/connect/connect';
-import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';
-import { createRefetchContainer, graphql } from 'react-relay';
-import { withRouter } from 'react-router';
+import React from "react";
+import PropTypes from "prop-types";
+import connect from "react-redux/es/connect/connect";
+import CountryDetailModule from "app/modules/countrydetail/CountryDetailModule";
+import graphql from "babel-plugin-relay/macro";
+import { createRefetchContainer } from "react-relay";
+import { withRouter } from "react-router";
 /* helpers */
-import get from 'lodash/get';
-import isEqual from 'lodash/isEqual';
+import get from "lodash/get";
+import isEqual from "lodash/isEqual";
 import {
   formatBarChartInfoIndicators,
   formatEcoLineData,
@@ -15,13 +16,13 @@ import {
   formatPieChartData,
   formatProjectData,
   formatWikiExcerpts,
-  getProjectCountNCommitment
-} from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils';
+  getProjectCountNCommitment,
+} from "app/mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.utils";
 /* actions */
-import * as actions from 'services/actions/index';
-import * as oipaActions from 'services/actions/oipa';
+import * as actions from "app/services/actions/index";
+import * as oipaActions from "app/services/actions/oipa";
 /* mock */
-import mock from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
+import mock from "app/mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock";
 
 const propTypes = {
   excerpts: PropTypes.shape({
@@ -35,7 +36,7 @@ const propTypes = {
       exsectionformat: PropTypes.string,
       formatversion: PropTypes.number,
       titles: PropTypes.string,
-      format: PropTypes.string
+      format: PropTypes.string,
     }),
     request: PropTypes.bool,
     success: PropTypes.bool,
@@ -47,23 +48,23 @@ const propTypes = {
             pageid: PropTypes.number,
             ns: PropTypes.number,
             title: PropTypes.string,
-            extract: PropTypes.string
+            extract: PropTypes.string,
           })
-        )
-      })
+        ),
+      }),
     }),
     error: PropTypes.shape({
       status: PropTypes.string,
       statusText: PropTypes.string,
-      result: PropTypes.object
-    })
+      result: PropTypes.object,
+    }),
   }),
   countryActivities: PropTypes.shape({
     values: PropTypes.shape({
       recipient_country: PropTypes.string,
       page: PropTypes.number,
       page_size: PropTypes.number,
-      fields: PropTypes.string
+      fields: PropTypes.string,
     }),
     request: PropTypes.bool,
     success: PropTypes.bool,
@@ -71,33 +72,33 @@ const propTypes = {
       count: PropTypes.number,
       next: PropTypes.string,
       previous: PropTypes.string,
-      results: PropTypes.array
+      results: PropTypes.array,
     }),
     error: PropTypes.shape({
       status: PropTypes.string,
       statusText: PropTypes.string,
-      result: PropTypes.object
-    })
+      result: PropTypes.object,
+    }),
   }),
   indicatorAggregations: PropTypes.shape({
     country: PropTypes.arrayOf(
       PropTypes.shape({
         indicatorName: PropTypes.string,
         geolocationTag: PropTypes.string,
-        value: PropTypes.number
+        value: PropTypes.number,
       })
     ),
     global: PropTypes.arrayOf(
       PropTypes.shape({
         indicatorName: PropTypes.string,
-        value: PropTypes.number
+        value: PropTypes.number,
       })
     ),
     aidsEpidemic: PropTypes.arrayOf(
       PropTypes.shape({
         indicatorName: PropTypes.string,
         date: PropTypes.string,
-        value: PropTypes.number
+        value: PropTypes.number,
       })
     ),
     ecoIndicators: PropTypes.arrayOf(
@@ -105,15 +106,15 @@ const propTypes = {
         filterName: PropTypes.string,
         indicatorName: PropTypes.string,
         date: PropTypes.string,
-        value: PropTypes.number
+        value: PropTypes.number,
       })
-    )
-  })
+    ),
+  }),
 };
 const defaultProps = {
   excerpts: {},
   countryActivities: {},
-  indicatorAggregations: {}
+  indicatorAggregations: {},
 };
 
 class CountryDetailMediator extends React.Component {
@@ -125,27 +126,27 @@ class CountryDetailMediator extends React.Component {
     projectData: [],
     countryOrgCommitments: [],
     countryOrgDisbursements: [],
-    excerpts: ['', ''],
+    excerpts: ["", ""],
     barChartIndicators: mock.barChartIndicators,
-    aidsEpIndicators: mock.lineChartInd.map(lci => lci.name.split(' - ')[0]),
+    aidsEpIndicators: mock.lineChartInd.map((lci) => lci.name.split(" - ")[0]),
     subIndicators: mock.subIndicators,
     aidsLineChartData: [],
-    countryName: '',
+    countryName: "",
     infoBarData: [],
-    projectSort: '-activity_budget_value',
+    projectSort: "-activity_budget_value",
     isSortByOpen: false,
     ecoIndicatorsData: [],
     ecoChartKeys: [],
-    projectsLoading: false
+    projectsLoading: false,
   };
 
   componentDidMount = () => {
-    document.addEventListener('mousedown', this.handleClickOutside);
+    document.addEventListener("mousedown", this.handleClickOutside);
     // We dispatch wiki api here, cause this is the place where we get the country name
     const nonZoomCountryName = get(
       mock.isoCountries,
       [this.props.match.params.iso2.toUpperCase()],
-      ''
+      ""
     );
     const wikiParams = this.state.wikiParams;
     wikiParams.titles = nonZoomCountryName;
@@ -159,7 +160,7 @@ class CountryDetailMediator extends React.Component {
     // We get country participating orgs
     const transactionParams = this.state.transactionParams;
     transactionParams.recipient_country = this.props.match.params.iso2.toUpperCase();
-    transactionParams.group_by = 'participating_organisation';
+    transactionParams.group_by = "participating_organisation";
     this.props.dispatch(
       oipaActions.countryOrganisationsRequest(transactionParams)
     );
@@ -169,7 +170,7 @@ class CountryDetailMediator extends React.Component {
     this.refetch();
   };
 
-  componentDidUpdate = prevProps => {
+  componentDidUpdate = (prevProps) => {
     // We format the loaded country activities here and save it in state
     if (
       !isEqual(
@@ -178,15 +179,15 @@ class CountryDetailMediator extends React.Component {
       )
     ) {
       const projectData = formatProjectData(
-        get(this.props.countryActivities, 'data.results', [])
+        get(this.props.countryActivities, "data.results", [])
       );
       const projectInfo = getProjectCountNCommitment(
-        get(this.props.countryActivities, 'data.results', [])
+        get(this.props.countryActivities, "data.results", [])
       );
       this.setState({
         projectData,
         projectInfo,
-        projectsLoading: this.props.countryActivities.request
+        projectsLoading: this.props.countryActivities.request,
       });
     }
 
@@ -206,8 +207,8 @@ class CountryDetailMediator extends React.Component {
       // from the indicators
       const countryName = get(
         this.props.indicatorAggregations,
-        'country[0].geolocationTag',
-        ''
+        "country[0].geolocationTag",
+        ""
       );
       // Here we format the bar chart indicator data
       const infoBarData = formatBarChartInfoIndicators(
@@ -230,7 +231,7 @@ class CountryDetailMediator extends React.Component {
         countryName,
         aidsLineChartData,
         ecoIndicatorsData: ecoData.data,
-        ecoChartKeys: ecoData.chartKeys
+        ecoChartKeys: ecoData.chartKeys,
         // wikiParams
       });
     }
@@ -243,30 +244,30 @@ class CountryDetailMediator extends React.Component {
       )
     ) {
       const countryOrgCommitments = formatPieChartData(
-        get(this.props.countryOrganisations, 'data.results', []),
-        'participating_organisation',
-        'commitment'
+        get(this.props.countryOrganisations, "data.results", []),
+        "participating_organisation",
+        "commitment"
       );
       const countryOrgDisbursements = formatPieChartData(
-        get(this.props.countryOrganisations, 'data.results', []),
-        'participating_organisation',
-        'disbursement'
+        get(this.props.countryOrganisations, "data.results", []),
+        "participating_organisation",
+        "disbursement"
       );
       this.setState({ countryOrgCommitments, countryOrgDisbursements });
     }
   };
 
   componentWillUnmount = () => {
-    document.removeEventListener('mousedown', this.handleClickOutside);
+    document.removeEventListener("mousedown", this.handleClickOutside);
   };
 
   setIsSortByOpen = () => {
-    this.setState(prevState => ({
-      isSortByOpen: !prevState.isSortByOpen
+    this.setState((prevState) => ({
+      isSortByOpen: !prevState.isSortByOpen,
     }));
   };
 
-  setWrapperRef = node => {
+  setWrapperRef = (node) => {
     this.wrapperRef = node;
   };
 
@@ -275,28 +276,28 @@ class CountryDetailMediator extends React.Component {
       countryCode: [this.props.match.params.iso2.toLowerCase()],
       barChartIndicators: this.state.barChartIndicators,
       aidsEpIndicators: this.state.aidsEpIndicators,
-      subInds: this.state.subIndicators
+      subInds: this.state.subIndicators,
     });
   };
 
-  changeSortBy = e => {
+  changeSortBy = (e) => {
     const value = e.target.id;
     this.setState(
       {
-        projectSort: value
+        projectSort: value,
       },
       () => {
         this.props.dispatch(
           oipaActions.countryActivitiesRequest({
             ...this.state.transParams,
-            ordering: value
+            ordering: value,
           })
         );
       }
     );
   };
 
-  handleClickOutside = event => {
+  handleClickOutside = (event) => {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.setState({ isSortByOpen: false });
     }
@@ -316,7 +317,7 @@ class CountryDetailMediator extends React.Component {
         aidsEpIndicators={mock.lineChartInd}
         countryOrganisations={{
           commitment: this.state.countryOrgCommitments,
-          disbursement: this.state.countryOrgDisbursements
+          disbursement: this.state.countryOrgDisbursements,
         }}
         projectSort={this.state.projectSort}
         changeSortBy={this.changeSortBy}
@@ -326,7 +327,7 @@ class CountryDetailMediator extends React.Component {
         projectsLoading={this.state.projectsLoading}
         civicSpace={get(
           this.props.indicatorAggregations.civicSpace,
-          '[0].value',
+          "[0].value",
           0
         )}
       />
@@ -334,11 +335,11 @@ class CountryDetailMediator extends React.Component {
   };
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     excerpts: state.countryExcerpt,
     countryActivities: state.countryActivities,
-    countryOrganisations: state.countryOrganisations
+    countryOrganisations: state.countryOrganisations,
   };
 };
 

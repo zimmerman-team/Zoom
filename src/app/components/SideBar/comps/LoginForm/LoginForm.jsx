@@ -3,17 +3,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 /* actions */
-import * as syncActions from 'services/actions/sync';
+import * as syncActions from 'app/services/actions/sync';
 /* icons */
-import IconSignIn from 'assets/icons/IconSignIn';
+import IconSignIn from 'app/assets/icons/IconSignIn';
 /* components */
-import SimpleCheckbox from 'components/Checkbox/CheckBox';
-import ForgetPassword from 'components/SideBar/comps/ForgetPassword/ForgetPassword';
+import SimpleCheckbox from 'app/components/Checkbox/CheckBox';
+import ForgetPassword from 'app/components/SideBar/comps/ForgetPassword/ForgetPassword';
 /* utils */
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 /* styles */
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 import {
   ComponentBase,
   ErrorMessage,
@@ -28,7 +28,7 @@ import {
   PrivacyText,
   PrivacyContainer,
   CheckBoxContainer
-} from 'components/SideBar/comps/LoginForm/LoginForm.styles';
+} from 'app/components/SideBar/comps/LoginForm/LoginForm.styles';
 
 const propTypes = {
   loginStatusMessage: PropTypes.shape({

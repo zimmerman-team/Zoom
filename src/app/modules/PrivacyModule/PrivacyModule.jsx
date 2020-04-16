@@ -1,15 +1,15 @@
 import React from 'react';
 
 /* components */
-import ModuleContainer from 'modules/common/modulecontainer/ModuleContainer';
+import ModuleContainer from 'app/modules/common/modulecontainer/ModuleContainer';
 import { Link } from 'react-router-dom';
 
 /* styles */
-import { AboutTitle, Text } from 'modules/about/About.styles';
+import { AboutTitle, Text } from 'app/modules/about/About.styles';
 import {
   ContactSection,
   ParagraphHeader
-} from 'modules/CookieModule/CookieModule.style';
+} from 'app/modules/CookieModule/CookieModule.style';
 
 export const PrivacyModule = () => {
   return (

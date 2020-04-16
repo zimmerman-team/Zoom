@@ -1,4 +1,4 @@
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 export const IATIDetailBarChartMockData = [
   {

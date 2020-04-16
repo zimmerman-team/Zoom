@@ -2,8 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import SvgIconUser from 'assets/icons/IconUser';
-import Theme from 'theme/Theme';
+import SvgIconUser from 'app/assets/icons/IconUser';
+import Theme from 'app/theme/Theme';
 
 /**
  * todo: Please write a short component description of what this component does

@@ -1,44 +1,44 @@
 /* base */
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 /* material ui */
-import Drawer from '@material-ui/core/Drawer';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import IconClose from 'assets/icons/IconClose';
+import Drawer from "@material-ui/core/Drawer";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import IconClose from "app/assets/icons/IconClose";
 
-import { data } from './TempDrawer.const';
-import LoginForm from 'components/SideBar/comps/LoginForm/LoginForm';
+import { data } from "./TempDrawer.const";
+import LoginForm from "app/components/SideBar/comps/LoginForm/LoginForm";
 import {
   LoginBox,
   SidebarClosButton,
   SidebarNavList,
   ZoomLink,
-  ZoomListItemText
-} from './TempDrawer.style';
-import SidebarNavListItem from './common/SidebarNavListItem';
+  ZoomListItemText,
+} from "./TempDrawer.style";
+import SidebarNavListItem from "./common/SidebarNavListItem";
 
 const propTypes = {
   open: PropTypes.bool,
   toggleSideBar: PropTypes.func,
   items: PropTypes.array,
-  env: PropTypes.string
+  env: PropTypes.string,
 };
 const defaultProps = {
   open: undefined,
   items: data,
-  env: process.env.NODE_ENV
+  env: process.env.NODE_ENV,
 };
 
 class MainMenuDrawer extends React.Component {
   state = {
-    open: this.props.open
+    open: this.props.open,
   };
 
   render() {
     const sideList = (
       <React.Fragment>
         {data.map(
-          item =>
+          (item) =>
             process.env.NODE_ENV === item.env && (
               <ZoomLink
                 to={item.path}

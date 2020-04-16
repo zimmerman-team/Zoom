@@ -1,4 +1,4 @@
-import SvgIconLocation from 'assets/icons/geomap/SvgIconLocation';
+import SvgIconLocation from 'app/assets/icons/geomap/SvgIconLocation';
 import { Marker } from 'react-map-gl';
 import React from 'react';
 

@@ -1,13 +1,13 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { countryDetailMockData } from '__mocks__/countryDetailMock';
-// import LineChart from 'components/charts/linechart/LineChart';
-import LineChart2 from 'components/charts/recharts_linechart/LineChart';
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
+import { countryDetailMockData } from 'app/__mocks__/countryDetailMock';
+// import LineChart from 'app/components/charts/linechart/LineChart';
+import LineChart2 from 'app/components/charts/recharts_linechart/LineChart';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';
 /* styles */
-import { ChartContainer } from 'modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic.style';
+import { ChartContainer } from 'app/modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic.style';
 
 const propTypes = {
   // data: PropTypes.object,

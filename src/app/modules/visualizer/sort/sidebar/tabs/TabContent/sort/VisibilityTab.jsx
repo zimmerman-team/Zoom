@@ -2,8 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import themes from 'theme/Theme';
-import BaseTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/common/BaseTab';
+import themes from 'app/theme/Theme';
+import BaseTab from 'app/modules/visualizer/sort/sidebar/tabs/TabContent/sort/common/BaseTab';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -15,8 +15,8 @@ import get from 'lodash/get';
 import pull from 'lodash/pull';
 import find from 'lodash/find';
 /* actions */
-import * as actions from 'services/actions/general';
-import ZoomSelect from 'components/Select/ZoomSelect';
+import * as actions from 'app/services/actions/general';
+import ZoomSelect from 'app/components/Select/ZoomSelect';
 
 /** Button component description */
 

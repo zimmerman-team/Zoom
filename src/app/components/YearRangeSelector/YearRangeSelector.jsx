@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 /* consts */
-import { maxYear, minYear } from '__consts__/TimeLineConst';
+import { maxYear, minYear } from 'app/__consts__/TimeLineConst';
 /* utils */
 import isEqual from 'lodash/isEqual';
-import { formatYearLabels } from 'utils/YearSelectUtil';
+import { formatYearLabels } from 'app/utils/YearSelectUtil';
 /* styles */
 import {
   ComponentBase,

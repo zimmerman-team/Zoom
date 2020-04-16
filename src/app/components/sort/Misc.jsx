@@ -1,4 +1,4 @@
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 import styled from 'styled-components';
 import { Checkmark } from 'grommet-icons/icons/Checkmark';
 import { Close } from 'grommet-icons/icons/Close';

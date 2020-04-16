@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
-import { formPath } from 'modules/visualizer/VisualizerModule.utils';
+import theme from 'app/theme/Theme';
+import { formPath } from 'app/modules/visualizer/VisualizerModule.utils';
 
 /**
  * todo: Please write a short component description of what this component does

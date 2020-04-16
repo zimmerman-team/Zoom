@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import InputField from 'components/InputField/InputField';
+import InputField from 'app/components/InputField/InputField';
 // Components
 import { FormField } from 'grommet/components/FormField';
 import { TextInput } from 'grommet/components/TextInput';

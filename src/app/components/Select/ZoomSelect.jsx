@@ -2,13 +2,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 /* components */
-import SelectHeader from 'components/Select/components/SelectHeader/SelectHeader';
+import SelectHeader from 'app/components/Select/components/SelectHeader/SelectHeader';
 import { Tooltip } from 'react-tippy';
-import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
-import DropDownCheckbox from 'components/DropDownCheckBox/DropDownCheckbox';
-import SearchField from 'components/Select/components/SearchField/SearchField';
+import SimpleToolTip from 'app/components/ToolTips/SimpleToolTip/SimpleToolTip';
+import DropDownCheckbox from 'app/components/DropDownCheckBox/DropDownCheckbox';
+import SearchField from 'app/components/Select/components/SearchField/SearchField';
 /* icons */
-import ResetIconSmall from 'assets/icons/ResetIconSmall';
+import ResetIconSmall from 'app/assets/icons/ResetIconSmall';
 /* utils */
 import filter from 'lodash/filter';
 import isEqual from 'lodash/isEqual';
@@ -26,7 +26,7 @@ import {
   OptionsContainer,
   ResetContainer,
   SelectAll
-} from 'components/Select/ZoomSelect.styles';
+} from 'app/components/Select/ZoomSelect.styles';
 
 const propTypes = {
   data: PropTypes.arrayOf(

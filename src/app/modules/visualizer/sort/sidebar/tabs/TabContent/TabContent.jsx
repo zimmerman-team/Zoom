@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Route, withRouter } from 'react-router-dom';
-import { formPath } from 'modules/visualizer/VisualizerModule.utils';
+import { formPath } from 'app/modules/visualizer/VisualizerModule.utils';
 import shortid from 'shortid';
 
 /**

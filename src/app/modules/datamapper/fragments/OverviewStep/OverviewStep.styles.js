@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { Box } from 'grommet/components/Box';
-import ColumnHeader from 'components/ZoomTable/ColumnHeader';
-import theme from 'theme/Theme';
-import CellValue from 'components/ZoomTable/CellValue';
-import ZoomTable from 'components/ZoomTable/ZoomTable';
+import ColumnHeader from 'app/components/ZoomTable/ColumnHeader';
+import theme from 'app/theme/Theme';
+import CellValue from 'app/components/ZoomTable/CellValue';
+import ZoomTable from 'app/components/ZoomTable/ZoomTable';
 
 export const ModuleContainer = styled(Box)`
   width: 100%;

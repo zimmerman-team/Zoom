@@ -2,8 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import AidsEpidemic from './AidsEpidemic';
 // Components
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-import LineChart from 'components/charts/recharts_linechart/LineChart';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
+import LineChart from 'app/components/charts/recharts_linechart/LineChart';
 
 const wrapper = shallow(<AidsEpidemic />);
 

@@ -1,9 +1,10 @@
 /* base */
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import theme from 'theme/Theme';
-import EditableTitle from 'components/chartcontext/common/EditableTitle';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import theme from "app/theme/Theme";
+import EditableTitle from "app/components/chartcontext/common/EditableTitle";
+import "styled-components/macro";
 /* components */
 
 /**
@@ -23,20 +24,42 @@ const ComponentBase = styled.div`
 
 const Title = styled.h3`
   color: ${theme.color.zoomBlack};
-  letter-spacing: 0;
   font-family: ${theme.font.zoomFontFamOne};
-  font-size: 32px;
-  font-weight: 400;
-  line-height: 1;
   margin: 0;
   margin-bottom: 5px;
+  font-size: 56px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
 `;
 
-const Details = styled.span`
-  line-height: 1;
-  font-size: 11px;
+export const Details = styled.p`
   color: ${theme.color.zoomBlack};
   font-family: ${theme.font.zoomFontFamTwo};
+  font-size: 16px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.25;
+  letter-spacing: normal;
+  text-align: center;
+  margin: 0;
+`;
+
+export const DetailsSecondary = styled.p`
+  color: ${theme.color.zoomBlack};
+  font-family: ${theme.font.zoomFontFamTwo};
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  line-height: 1.43;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
 `;
 
 const propTypes = {
@@ -48,16 +71,24 @@ const propTypes = {
   noBottom: PropTypes.bool
 };
 const defaultProps = {
-  title: 'Untitled chart 01',
+  title: "Untitled chart 01",
   edit: false,
   saveTitle: undefined,
-  authorName: 'Jane Doe',
-  createdDate: 'January 12th 2019',
+  authorName: "Jane Doe",
+  createdDate: "January 12th 2019",
   noBottom: false
 };
 const ContextHeader = props => {
   return (
-    <ComponentBase style={{ paddingBottom: props.noBottom ? '0' : '' }}>
+    <ComponentBase
+      css={`
+        && {
+          padding-top: 10px;
+          padding-bottom: ${props.noBottom ? "0" : "35px"};
+        }
+      `}
+      // style={{ paddingBottom: props.noBottom ? "0" : "" }}
+    >
       {props.edit ? (
         <EditableTitle
           defaultValue={props.title}
@@ -66,10 +97,6 @@ const ContextHeader = props => {
       ) : (
         <Title>{props.title}</Title>
       )}
-
-      <Details>
-        By {props.authorName} {props.createdDate && `| ${props.createdDate}`}
-      </Details>
     </ComponentBase>
   );
 };

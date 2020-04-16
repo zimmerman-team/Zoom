@@ -1,136 +1,136 @@
-import React from 'react';
-import IconHome from 'assets/icons/IconHome';
-import IconCharts from 'assets/icons/IconCharts';
-import IconAbout from 'assets/icons/IconAbout';
+import React from "react";
+import IconHome from "app/assets/icons/IconHome";
+import IconCharts from "app/assets/icons/IconCharts";
+import IconAbout from "app/assets/icons/IconAbout";
 
-const pathPrefix = '/';
+const pathPrefix = "/";
 export const data = [
   //////////////////////////////////////////////////////////////////////////////
   // HOME
   {
-    label: 'Home',
+    label: "Home",
     path: `${pathPrefix}home`,
     icon: <IconHome />,
-    env: 'production',
-    type: 'public'
+    env: "production",
+    type: "public",
   },
   {
-    label: 'Home',
+    label: "Home",
     path: `${pathPrefix}home`,
     icon: <IconHome />,
-    env: 'development',
-    type: 'public'
+    env: "development",
+    type: "public",
   },
   //////////////////////////////////////////////////////////////////////////////
   // COUNTRY DETAIL
   {
-    label: 'Country Detail',
+    label: "Country Detail",
     path: `${pathPrefix}country/ke`,
     icon: <IconCharts />,
-    env: 'development',
-    type: 'private'
+    env: "development",
+    type: "private",
   },
   //////////////////////////////////////////////////////////////////////////////
   // IATI DETAIL
   {
-    label: 'IATI Detail',
+    label: "IATI Detail",
     path: `${pathPrefix}iati`,
     icon: <IconCharts />,
-    env: 'development',
-    type: 'private'
+    env: "development",
+    type: "private",
   },
   //////////////////////////////////////////////////////////////////////////////
   // DATA MAPPER
   {
-    label: 'Datamapper',
+    label: "Datamapper",
     path: `${pathPrefix}mapper`,
     icon: <IconCharts />,
-    env: 'development',
-    type: 'private'
+    env: "development",
+    type: "private",
   },
   //////////////////////////////////////////////////////////////////////////////
   // HOME
   {
-    label: 'Visualizer',
+    label: "Visualizer",
     path: `${pathPrefix}visualizer/geomap/vizID/edit`,
     icon: <IconCharts />,
-    env: 'development',
-    type: 'private'
+    env: "development",
+    type: "private",
   },
   //////////////////////////////////////////////////////////////////////////////
   // DASHBOARD
   {
-    label: 'Dashboard',
+    label: "Dashboard",
     path: `${pathPrefix}dashboard`,
     icon: <IconCharts />,
-    env: 'development',
-    type: 'private'
+    env: "development",
+    type: "private",
   },
   {
-    label: 'Dashboard',
+    label: "Dashboard",
     path: `${pathPrefix}dashboard`,
     icon: <IconCharts />,
-    env: 'production',
-    type: 'private'
+    env: "production",
+    type: "private",
   },
   //////////////////////////////////////////////////////////////////////////////
   // PUBLIC CHARTS
   {
-    label: 'Public Charts',
+    label: "Public Charts",
     path: `${pathPrefix}public/chart-library`,
     icon: <IconCharts />,
-    env: 'production',
-    type: 'public'
+    env: "production",
+    type: "public",
   },
   {
-    label: 'Public Charts',
+    label: "Public Charts",
     path: `${pathPrefix}public/chart-library`,
     icon: <IconCharts />,
-    env: 'development',
-    type: 'public'
+    env: "development",
+    type: "public",
   },
   //////////////////////////////////////////////////////////////////////////////
   // ABOUT
   {
-    label: 'About ZOOM',
+    label: "About ZOOM",
     path: `${pathPrefix}about`,
     icon: <IconAbout />,
-    env: 'production',
-    type: 'public'
+    env: "production",
+    type: "public",
   },
   {
-    label: 'About ZOOM',
+    label: "About ZOOM",
     path: `${pathPrefix}about`,
     icon: <IconAbout />,
-    env: 'development',
-    type: 'public'
+    env: "development",
+    type: "public",
   },
   {
-    label: 'Cooky policy',
+    label: "Cooky policy",
     path: `${pathPrefix}cookies`,
     icon: <IconAbout />,
-    env: 'production',
-    type: 'public'
+    env: "production",
+    type: "public",
   },
   {
-    label: 'Cooky policy',
+    label: "Cooky policy",
     path: `${pathPrefix}cookies`,
     icon: <IconAbout />,
-    env: 'development',
-    type: 'public'
+    env: "development",
+    type: "public",
   },
   {
-    label: 'Privacy statement',
+    label: "Privacy statement",
     path: `${pathPrefix}privacy`,
     icon: <IconAbout />,
-    env: 'production',
-    type: 'public'
+    env: "production",
+    type: "public",
   },
   {
-    label: 'Privacy statement',
+    label: "Privacy statement",
     path: `${pathPrefix}privacy`,
     icon: <IconAbout />,
-    env: 'development',
-    type: 'public'
-  }
+    env: "development",
+    type: "public",
+  },
 ];

@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
-import { createFragmentContainer, graphql } from 'react-relay';
-import { connect } from 'react-redux';
-import { fetchQuery } from 'relay-runtime';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
-import VisualizerModule from 'modules/visualizer/VisualizerModule';
+import React, { Component } from "react";
+import graphql from "babel-plugin-relay/macro";
+import { createFragmentContainer } from "react-relay";
+import { connect } from "react-redux";
+import { fetchQuery } from "relay-runtime";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router";
+import VisualizerModule from "app/modules/visualizer/VisualizerModule";
 
 /* utils */
-import isEqual from 'lodash/isEqual';
-import sortBy from 'lodash/sortBy';
+import isEqual from "lodash/isEqual";
+import sortBy from "lodash/sortBy";
 import {
   getFields,
   aggrKeys,
@@ -24,21 +25,24 @@ import {
   formatTableData,
   getChartKeys,
   removeIds,
-  getGroupBy
-} from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
+  getGroupBy,
+} from "app/mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils";
 /* consts */
-import initialState from '__consts__/InitialChartDataConst';
-import paneTypes from '__consts__/PaneTypesConst';
-import chartTypes from '__consts__/ChartConst';
-import initialPaneState from '__consts__/InitialPaneDataConst';
-import { colorSet } from '__consts__/PaneConst';
-import graphKeys from '__consts__/GraphStructKeyConst';
-import { aggrOptions, rankOptions } from '__consts__/GraphStructOptionConsts';
+import initialState from "app/__consts__/InitialChartDataConst";
+import paneTypes from "app/__consts__/PaneTypesConst";
+import chartTypes from "app/__consts__/ChartConst";
+import initialPaneState from "app/__consts__/InitialPaneDataConst";
+import { colorSet } from "app/__consts__/PaneConst";
+import graphKeys from "app/__consts__/GraphStructKeyConst";
+import {
+  aggrOptions,
+  rankOptions,
+} from "app/__consts__/GraphStructOptionConsts";
 /* actions */
-import * as nodeActions from 'services/actions/nodeBackend';
-import * as actions from 'services/actions/general';
-import cryptoJs from 'crypto-js';
-import axios from 'axios';
+import * as nodeActions from "app/services/actions/nodeBackend";
+import * as actions from "app/services/actions/general";
+import cryptoJs from "crypto-js";
+import axios from "axios";
 
 const propTypes = {
   publicChart: PropTypes.shape({}),
@@ -55,22 +59,22 @@ const propTypes = {
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
-            name: PropTypes.string
-          })
+            name: PropTypes.string,
+          }),
         })
-      )
+      ),
     }),
     allCountries: PropTypes.shape({
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
             name: PropTypes.string,
-            iso2: PropTypes.string
-          })
+            iso2: PropTypes.string,
+          }),
         })
-      )
-    })
-  })
+      ),
+    }),
+  }),
 };
 
 const defaultProps = {
@@ -83,7 +87,7 @@ const defaultProps = {
   chartData: {},
   user: {},
   paneData: {},
-  indicatorAggregations: null
+  indicatorAggregations: null,
 };
 
 // so we will start getting the indicator data with this
@@ -158,7 +162,7 @@ class VisualizerModuleMediator extends Component {
       loading: false,
       selectedYear: this.props.chartData.selectedYear
         ? this.props.chartData.selectedYear
-        : initialState.yearPeriod[0]
+        : initialState.yearPeriod[0],
     };
 
     this.refetch = this.refetch.bind(this);
@@ -194,13 +198,13 @@ class VisualizerModuleMediator extends Component {
       this.props.dispatch(
         actions.storePaneDataRequest({
           ...initialPaneState,
-          chartType: chartTypes.geoMap
+          chartType: chartTypes.geoMap,
         })
       );
-    } else if (this.props.match.params.code !== 'vizID') {
+    } else if (this.props.match.params.code !== "vizID") {
       this.setState(
         {
-          loading: true
+          loading: true,
         },
         this.loadChartData
       );
@@ -209,7 +213,7 @@ class VisualizerModuleMediator extends Component {
       this.props.dispatch(
         actions.storePaneDataRequest({
           ...initialPaneState,
-          chartType: this.props.match.params.chart
+          chartType: this.props.match.params.chart,
         })
       );
       if (chartTypes.tableChart !== this.props.match.params.chart) {
@@ -269,9 +273,9 @@ class VisualizerModuleMediator extends Component {
     if (
       this.props.chartData.currTileFile &&
       this.props.paneData.chartType !== prevProps.paneData.chartType &&
-      (this.props.paneData.chartType !== chartTypes.geoMap &&
+      this.props.paneData.chartType !== chartTypes.geoMap &&
         this.props.paneData.chartType !== chartTypes.focusKE &&
-        this.props.paneData.chartType !== chartTypes.focusNL) &&
+        this.props.paneData.chartType !== chartTypes.focusNL &&
       (prevProps.paneData.chartType === chartTypes.geoMap ||
         prevProps.paneData.chartType === chartTypes.focusKE ||
         prevProps.paneData.chartType === chartTypes.focusNL)
@@ -288,13 +292,13 @@ class VisualizerModuleMediator extends Component {
 
     this.props.dispatch(
       actions.storeChartDataRequest({
-        ...initialState
+        ...initialState,
       })
     );
 
     this.props.dispatch(
       actions.storePaneDataRequest({
-        ...initialPaneState
+        ...initialPaneState,
       })
     );
 
@@ -331,7 +335,7 @@ class VisualizerModuleMediator extends Component {
 
     const specOptions = {
       [graphKeys.colorPallet]: colorSet[1].colors,
-      [graphKeys.aggregate]: aggrOptions[0].value
+      [graphKeys.aggregate]: aggrOptions[0].value,
     };
 
     if (chartTypes.lineChart === this.props.match.params.chart) {
@@ -359,7 +363,7 @@ class VisualizerModuleMediator extends Component {
         // so we refetch data for development environment
         // cause we want that default indicator to be selected
         // always
-        refetch: process.env.NODE_ENV === 'development'
+        refetch: process.env.NODE_ENV === "development",
       })
     );
   }
@@ -368,35 +372,35 @@ class VisualizerModuleMediator extends Component {
     let barChartData = [];
 
     if (
-      (specOptions[graphKeys.rankBy] === 'high' &&
+      (specOptions[graphKeys.rankBy] === "high" &&
         specOptions[graphKeys.horizont]) ||
-      (specOptions[graphKeys.rankBy] === 'low' &&
+      (specOptions[graphKeys.rankBy] === "low" &&
         !specOptions[graphKeys.horizont])
     ) {
-      barChartData = sortBy(this.props.chartData.data, ['allValSum']);
+      barChartData = sortBy(this.props.chartData.data, ["allValSum"]);
     } else if (
-      (specOptions[graphKeys.rankBy] === 'high' &&
+      (specOptions[graphKeys.rankBy] === "high" &&
         !specOptions[graphKeys.horizont]) ||
-      (specOptions[graphKeys.rankBy] === 'low' &&
+      (specOptions[graphKeys.rankBy] === "low" &&
         specOptions[graphKeys.horizont])
     ) {
-      barChartData = sortBy(this.props.chartData.data, ['allValSum']).reverse();
+      barChartData = sortBy(this.props.chartData.data, ["allValSum"]).reverse();
     }
 
     this.props.dispatch(
       actions.storeChartDataRequest({
-        data: barChartData
+        data: barChartData,
       })
     );
   }
 
   updateChartColor() {
-    const selectedInds = this.props.chartData.selectedInd.map(indItem => {
+    const selectedInds = this.props.chartData.selectedInd.map((indItem) => {
       return {
         indName: indItem.indLabel,
         subIndAggr: indItem.aggregate,
         subInd: indItem.selectedSubInd,
-        dataSource: indItem.dataSource
+        dataSource: indItem.dataSource,
       };
     });
 
@@ -409,7 +413,7 @@ class VisualizerModuleMediator extends Component {
 
     this.props.dispatch(
       actions.storeChartDataRequest({
-        chartKeys
+        chartKeys,
       })
     );
   }
@@ -426,7 +430,7 @@ class VisualizerModuleMediator extends Component {
     const aggregationData = [];
 
     // formating indicator data commences!
-    indicatorData.forEach(indItem => {
+    indicatorData.forEach((indItem) => {
       // so we format it in this way so that the loaded in 'indAggregation'
       // data would be formated for the same selected indicator index elements
       // cause it might not have been loaded in with the same indexes
@@ -435,18 +439,18 @@ class VisualizerModuleMediator extends Component {
       aggregationData[indItem.index] = {
         data: indItem.indAggregation,
         selectedSubInd: selectedInd[indItem.index].selectedSubInd,
-        subIndAggr: selectedInd[indItem.index].aggregate
+        subIndAggr: selectedInd[indItem.index].aggregate,
       };
     });
 
     // we just reparse it here, cause we want to
     // load in less data
-    const selectedInds = selectedInd.map(indItem => {
+    const selectedInds = selectedInd.map((indItem) => {
       return {
         indName: indItem.indLabel,
         dataSource: indItem.dataSource,
         subIndAggr: indItem.aggregate,
-        subInd: indItem.selectedSubInd
+        subInd: indItem.selectedSubInd,
       };
     });
 
@@ -571,13 +575,13 @@ class VisualizerModuleMediator extends Component {
     // load in the subindicators as selectable options
     if (this.props.chartData.indicatorSelected) {
       // formatting the subindicator data commences!
-      indicatorData.forEach(indItem => {
-        let subIndicators = indItem.subIndicators.edges.map(indicator => {
+      indicatorData.forEach((indItem) => {
+        let subIndicators = indItem.subIndicators.edges.map((indicator) => {
           return { label: indicator.node.name, value: indicator.node.name };
         });
 
         // and we sort them
-        subIndicators = sortBy(subIndicators, ['label']);
+        subIndicators = sortBy(subIndicators, ["label"]);
         let selectedSubInd = selectedInd[indItem.index].selectedSubInd;
 
         if (indSelectedIndex === indItem.index && subIndicators[0]) {
@@ -596,7 +600,7 @@ class VisualizerModuleMediator extends Component {
         selectedInd[indItem.index] = {
           ...selectedInd[indItem.index],
           selectedSubInd,
-          subIndicators
+          subIndicators,
         };
       });
     }
@@ -618,7 +622,7 @@ class VisualizerModuleMediator extends Component {
         selectedInd,
         chartKeys,
         indKeys,
-        data
+        data,
       })
     );
 
@@ -641,9 +645,9 @@ class VisualizerModuleMediator extends Component {
 
     let datePeriod = [
       this.props.chartData.selectedYear,
-      `${this.props.chartData.selectedYear}.0`
+      `${this.props.chartData.selectedYear}.0`,
     ];
-    let orderBy = ['date'];
+    let orderBy = ["date"];
 
     // so if an indicators data is selected we will receive an
     // index of the indicator, and if indicators index is -1
@@ -658,7 +662,7 @@ class VisualizerModuleMediator extends Component {
 
     if (selectedInds.length > 0) {
       this.setState({
-        loading: true
+        loading: true,
       });
 
       if (
@@ -666,7 +670,7 @@ class VisualizerModuleMediator extends Component {
         this.props.paneData.chartType === chartTypes.barChart
       ) {
         orderBy = [
-          aggrKeys[this.props.chartData.specOptions[graphKeys.aggregate]]
+          aggrKeys[this.props.chartData.specOptions[graphKeys.aggregate]],
         ];
 
         // so the first option in the axis options is 'geo' so if aggregated by geolocation
@@ -678,7 +682,7 @@ class VisualizerModuleMediator extends Component {
           aggrOptions[1].value
         ) {
           datePeriod = this.props.chartData.selectedYears.concat(
-            this.props.chartData.selectedYears.map(sy => `${sy}.0`)
+            this.props.chartData.selectedYears.map((sy) => `${sy}.0`)
           );
         }
       }
@@ -699,7 +703,7 @@ class VisualizerModuleMediator extends Component {
         const indicator = indItem.indicator;
 
         const subInds =
-          indItem.selectedSubInd.length > 0 ? indItem.selectedSubInd : ['null'];
+          indItem.selectedSubInd.length > 0 ? indItem.selectedSubInd : ["null"];
 
         // We forming the param for countries from the selected countries of a region
         // and single selected countries
@@ -713,14 +717,14 @@ class VisualizerModuleMediator extends Component {
           (this.props.paneData.chartType === chartTypes.focusNL ||
             this.props.paneData.chartType === chartTypes.focusKE) &&
           countriesISO3.length > 0 &&
-          countriesISO3.indexOf('undefined') === -1
+          countriesISO3.indexOf("undefined") === -1
         ) {
-          countriesISO3.push('undefined');
+          countriesISO3.push("undefined");
         }
 
         // so this variable basically controlls the filter param for data points
         // that don't have/do have geolocationIso2 field
-        const iso3Undef = countriesISO3.indexOf('undefined') !== -1;
+        const iso3Undef = countriesISO3.indexOf("undefined") !== -1;
 
         const refetchVars = {
           indicator: [indicator],
@@ -739,17 +743,17 @@ class VisualizerModuleMediator extends Component {
           ),
           fields: getFields(this.props.paneData.chartType, isLayer),
           tileUrl: isLayer,
-          currentTiles: this.props.chartData.currTileFile
+          currentTiles: this.props.chartData.currTileFile,
         };
 
         fetchQuery(
           this.props.relay.environment,
           indicatorDataQuery,
           refetchVars
-        ).then(data => {
+        ).then((data) => {
           // so we do this CORS work
           if (isLayer && data.indicators && data.indicators.length > 0) {
-            const url = process.env.REACT_APP_BACKEND_HOST.concat('/').concat(
+            const url = process.env.REACT_APP_BACKEND_HOST.concat("/").concat(
               data.indicators[0].tileUrl
             );
 
@@ -760,7 +764,7 @@ class VisualizerModuleMediator extends Component {
             const encValues = cryptoJs.AES.encrypt(
               JSON.stringify({
                 tileUrl: url,
-                prevTiles: this.props.chartData.currTileFile
+                prevTiles: this.props.chartData.currTileFile,
               }),
               process.env.REACT_APP_ENCRYPTION_SECRET
             ).toString();
@@ -768,12 +772,12 @@ class VisualizerModuleMediator extends Component {
             axios
               .get(`/api/loadTiles`, {
                 params: {
-                  payload: encValues
-                }
+                  payload: encValues,
+                },
               })
-              .then(response => {
+              .then((response) => {
                 const currTileFile = response.data.substring(
-                  response.data.lastIndexOf('/') + 1
+                  response.data.lastIndexOf("/") + 1
                 );
 
                 this.props.dispatch(
@@ -783,14 +787,14 @@ class VisualizerModuleMediator extends Component {
                 const indAggregation = [
                   {
                     ...data.indicators[0],
-                    tileUrl: response.data
-                  }
+                    tileUrl: response.data,
+                  },
                 ];
 
                 indicatorData.push({
                   index: currIndex,
                   indAggregation,
-                  subIndicators: data.subIndicators
+                  subIndicators: data.subIndicators,
                 });
 
                 this.refetchDone(
@@ -800,14 +804,14 @@ class VisualizerModuleMediator extends Component {
                   index
                 );
               })
-              .catch(error => {
-                console.log('Error downloading file: ', error);
+              .catch((error) => {
+                console.log("Error downloading file: ", error);
               });
           } else {
             indicatorData.push({
               index: currIndex,
               indAggregation: data.indicators,
-              subIndicators: data.subIndicators
+              subIndicators: data.subIndicators,
             });
           }
 
@@ -830,7 +834,7 @@ class VisualizerModuleMediator extends Component {
         // as the data has already been fetched
         this.props.dispatch(
           actions.storeChartDataRequest({
-            refetch: false
+            refetch: false,
           })
         )
       );
@@ -851,7 +855,7 @@ class VisualizerModuleMediator extends Component {
         indSelectedIndex: -1,
         selectedYear: val,
         refetch: true,
-        changesMade: true
+        changesMade: true,
       })
     );
   }
@@ -861,7 +865,7 @@ class VisualizerModuleMediator extends Component {
       actions.storeChartDataRequest({
         selectedYears: array,
         refetch: true,
-        changesMade: true
+        changesMade: true,
       })
     );
   }
@@ -869,7 +873,7 @@ class VisualizerModuleMediator extends Component {
   saveViewport(viewPort) {
     this.props.dispatch(
       actions.storeChartDataRequest({
-        specOptions: viewPort
+        specOptions: viewPort,
       })
     );
   }
@@ -880,15 +884,15 @@ class VisualizerModuleMediator extends Component {
         this.props.dispatch(
           nodeActions.getPublicChartRequest({
             chartId: this.props.match.params.code,
-            type: this.props.match.params.chart
+            type: this.props.match.params.chart,
           })
         );
-      } else if (this.props.match.params.code !== 'vizID' && this.props.user) {
+      } else if (this.props.match.params.code !== "vizID" && this.props.user) {
         this.props.dispatch(
           nodeActions.getChartRequest({
             authId: this.props.user.authId,
             chartId: this.props.match.params.code,
-            type: this.props.match.params.chart
+            type: this.props.match.params.chart,
           })
         );
       }
@@ -916,19 +920,19 @@ class VisualizerModuleMediator extends Component {
       specOptions,
       selectedRegionCodes,
       created,
-      yearRange
+      yearRange,
     } = this.props.chartResults.chart;
 
-    console.log('this.props.chartResults', this.props.chartResults);
+    console.log("this.props.chartResults", this.props.chartResults);
 
     const selectedInds = [];
 
-    const selectedInd = indicatorItems.map(indItem => {
+    const selectedInd = indicatorItems.map((indItem) => {
       selectedInds.push({
         indName: indItem.indLabel,
         subIndAggr: indItem.aggregate,
         subInds: indItem.selectedSubInd,
-        dataSource: indItem.dataSource
+        dataSource: indItem.dataSource,
       });
       return {
         indicator: indItem.indicator,
@@ -936,7 +940,7 @@ class VisualizerModuleMediator extends Component {
         subIndicators: indItem.allSubIndicators,
         selectedSubInd: indItem.subIndicators,
         aggregate: indItem.aggregate,
-        dataSource: indItem.dataSource
+        dataSource: indItem.dataSource,
       };
     });
 
@@ -961,7 +965,7 @@ class VisualizerModuleMediator extends Component {
         desc: description,
         selectedInd,
         indicatorSelected: false,
-        authorName: author ? author.username : 'User Not Found',
+        authorName: author ? author.username : "User Not Found",
         createdDate: formatDate(created),
         selectedRegionVal: removeIds(selectedRegionVal),
         selectedRegionCodes,
@@ -974,7 +978,7 @@ class VisualizerModuleMediator extends Component {
             []
           ),
         indKeys,
-        specOptions
+        specOptions,
       })
     );
 
@@ -983,12 +987,12 @@ class VisualizerModuleMediator extends Component {
       actions.storePaneDataRequest({
         chartType: type,
         selectedSources,
-        yearRange
+        yearRange,
       })
     );
 
     this.setState({
-      loading: false
+      loading: false,
     });
   }
 
@@ -998,8 +1002,8 @@ class VisualizerModuleMediator extends Component {
       `${process.env.REACT_APP_BACKEND_HOST}/api/generic/removeTiles/`,
       {
         params: {
-          fileName: this.props.chartData.currTileFile
-        }
+          fileName: this.props.chartData.currTileFile,
+        },
       }
     );
 
@@ -1008,7 +1012,7 @@ class VisualizerModuleMediator extends Component {
     // We also need to encrypt them values for our middleware to work
     const encValues = cryptoJs.AES.encrypt(
       JSON.stringify({
-        prevTiles: this.props.chartData.currTileFile
+        prevTiles: this.props.chartData.currTileFile,
       }),
       process.env.REACT_APP_ENCRYPTION_SECRET
     ).toString();
@@ -1016,8 +1020,8 @@ class VisualizerModuleMediator extends Component {
     axios
       .get(`/api/loadTiles`, {
         params: {
-          payload: encValues
-        }
+          payload: encValues,
+        },
       })
       .then(() => {
         this.props.dispatch(
@@ -1030,7 +1034,7 @@ class VisualizerModuleMediator extends Component {
 
   render() {
     return (
-      <div style={{ height: '100%' }}>
+      <div style={{ height: "100%" }}>
         <VisualizerModule
           chartData={this.props.chartData}
           home={this.props.home}
@@ -1061,7 +1065,7 @@ class VisualizerModuleMediator extends Component {
 VisualizerModuleMediator.propTypes = propTypes;
 VisualizerModuleMediator.defaultProps = defaultProps;
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     chartResults: state.chartResults.data,
     chartData: state.chartData.chartData,
@@ -1069,7 +1073,7 @@ const mapStateToProps = state => {
     dupChartCreated: state.dupChartCreated,
     chartCreated: state.chartCreated,
     paneData: state.paneData.paneData,
-    dataPaneOpen: state.dataPaneOpen.open
+    dataPaneOpen: state.dataPaneOpen.open,
   };
 };
 

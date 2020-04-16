@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { AppBar } from 'components/AppBar/AppBar';
+import { AppBar } from 'app/components/AppBar/AppBar';
 /* components */
 import { Box } from 'grommet/components/Box';
 import {
@@ -9,7 +9,7 @@ import {
   MenuButton,
   PaneButton,
   PaneButtonText
-} from 'components/AppBar/AppBar.styles';
+} from 'app/components/AppBar/AppBar.styles';
 
 const wrapper = shallow(<AppBar location={{ pathname: '/home' }} />);
 

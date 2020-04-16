@@ -3,11 +3,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 /* consts */
-import paneTypes from '__consts__/PaneTypesConst';
+import paneTypes from 'app/__consts__/PaneTypesConst';
 /* actions */
-import * as actions from 'services/actions/general';
+import * as actions from 'app/services/actions/general';
 /* icons */
-import SvgIconPointer from 'assets/icons/IconPointer';
+import SvgIconPointer from 'app/assets/icons/IconPointer';
 import { convertDataItems, createChartItems } from './NavPane.const';
 /* styles */
 import {

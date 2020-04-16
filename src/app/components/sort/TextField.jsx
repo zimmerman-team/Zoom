@@ -2,7 +2,7 @@ import React from 'react';
 // import withStyles from '@material-ui/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 /* todo: read up https://stackoverflow.com/questions/52176177/how-to-override-textfield-of-floating-label-text-and-underline-color-in-material */
 

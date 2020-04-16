@@ -8,9 +8,9 @@ import {
   HeaderName,
   IgnoreHeaderCheckBox,
   IgnorHeaderLabel
-} from 'modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
+} from 'app/modules/datamapper/fragments/ErrorsStep/ErrorStep.styles';
 /* components */
-import Checkbox from 'components/Checkbox/CheckBox';
+import Checkbox from 'app/components/Checkbox/CheckBox';
 
 function genKey() {
   return (

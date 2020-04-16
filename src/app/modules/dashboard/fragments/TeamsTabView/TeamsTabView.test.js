@@ -1,12 +1,12 @@
 /* base */
 import React from 'react';
 import { shallow } from 'enzyme';
-import TeamsTabView from 'modules/dashboard/fragments/TeamsTabView/TeamsTabView';
+import TeamsTabView from 'app/modules/dashboard/fragments/TeamsTabView/TeamsTabView';
 /* components */
-import SvgIconPlus from 'assets/icons/IconPlus';
-import SvgIconSort from 'assets/icons/IconSort';
-import { NoItems } from 'modules/dashboard/DashboardModule.styles';
-import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
+import SvgIconPlus from 'app/assets/icons/IconPlus';
+import SvgIconSort from 'app/assets/icons/IconSort';
+import { NoItems } from 'app/modules/dashboard/DashboardModule.styles';
+import SortbyDialog from 'app/components/Dialog/SortbyDialog/SortbyDialog';
 import { AddTeamLink, ControlsRow, ViewContainer } from './TeamsTabView.styles';
 import GridList from '../GridList/GridList';
 

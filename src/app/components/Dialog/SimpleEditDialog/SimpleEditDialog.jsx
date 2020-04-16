@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 /* components */
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import TextField from 'components/sort/TextField';
-import ZoomButton from 'components/ZoomButton/ZoomButton';
+import TextField from 'app/components/sort/TextField';
+import ZoomButton from 'app/components/ZoomButton/ZoomButton';
 /* styles */
 import { ButtonContainer, ButtonsContainer } from './SimpleEditDialog.style';
 

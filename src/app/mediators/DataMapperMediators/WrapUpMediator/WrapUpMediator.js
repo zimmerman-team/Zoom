@@ -1,21 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import connect from 'react-redux/es/connect/connect';
+/* eslint-disable */
+
+import React from "react";
+import PropTypes from "prop-types";
+import connect from "react-redux/es/connect/connect";
 /* actions */
-import * as generalActions from 'services/actions/general';
-import * as nodeActions from 'services/actions/nodeBackend';
+import * as generalActions from "app/services/actions/general";
+import * as nodeActions from "app/services/actions/nodeBackend";
 /* components */
-import WrapUpStep from 'modules/datamapper/fragments/WrapUpStep/WrapUpStep';
+import WrapUpStep from "app/modules/datamapper/fragments/WrapUpStep/WrapUpStep";
 /* mutations */
-import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
-import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
-import SurveyMutation from 'mediators/DataMapperMediators/WrapUpMediator/mutations/SurveyMutation';
-import MappingMutation from 'mediators/DataMapperMediators/WrapUpMediator/mutations/MappingMutation';
+import AddFileMutation from "app/mediators/DataMapperMediators/mutations/UploadFileMutation";
+import AddSourceMutation from "app/mediators/DataMapperMediators/mutations/AddSourceMutation";
+import SurveyMutation from "app/mediators/DataMapperMediators/WrapUpMediator/mutations/SurveyMutation";
+import MappingMutation from "app/mediators/DataMapperMediators/WrapUpMediator/mutations/MappingMutation";
 /* consts */
-import { uploadInitialstate } from '__consts__/UploadMediatorConst';
-import { step1InitialData } from '__consts__/DataMapperStepConsts';
+import { uploadInitialstate } from "app/__consts__/UploadMediatorConst";
+import { step1InitialData } from "app/__consts__/DataMapperStepConsts";
 /* utils */
-import { formatMapJson } from 'mediators/DataMapperMediators/WrapUpMediator/WrapUpMediator.util';
+import { formatMapJson } from "app/mediators/DataMapperMediators/WrapUpMediator/WrapUpMediator.util";
 
 const propTypes = {
   environment: PropTypes.shape({}),
@@ -26,7 +28,7 @@ const propTypes = {
     dataSource: PropTypes.shape({
       key: PropTypes.string,
       label: PropTypes.string,
-      value: PropTypes.string
+      value: PropTypes.string,
     }),
     shared: PropTypes.Boolean,
     surveyData: PropTypes.Boolean,
@@ -34,7 +36,7 @@ const propTypes = {
     q2: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string
+        value: PropTypes.string,
       })
     ),
     q21: PropTypes.string,
@@ -42,19 +44,19 @@ const propTypes = {
     q3: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string
+        value: PropTypes.string,
       })
     ),
     q4: PropTypes.shape({
       key: PropTypes.string,
       label: PropTypes.string,
-      value: PropTypes.string
+      value: PropTypes.string,
     }),
     q5: PropTypes.string,
     q51: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string
+        value: PropTypes.string,
       })
     ),
     errorColumns: PropTypes.arrayOf(PropTypes.string),
@@ -65,10 +67,10 @@ const propTypes = {
     fileSources: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string
+        value: PropTypes.string,
       })
     ),
-    environment: PropTypes.shape({})
+    environment: PropTypes.shape({}),
   }),
   file: PropTypes.shape({}),
   fileId: PropTypes.string,
@@ -80,29 +82,29 @@ const propTypes = {
       fileType: PropTypes.string,
       zoomModel: PropTypes.string,
       label: PropTypes.string,
-      selectDisabled: PropTypes.bool
+      selectDisabled: PropTypes.bool,
     })
   ),
   wrapUpData: PropTypes.shape({
     sourceId: PropTypes.string,
-    surveyId: PropTypes.string
+    surveyId: PropTypes.string,
   }),
   disableMapStep: PropTypes.func,
   saveStepData: PropTypes.func,
-  disableSteps: PropTypes.func
+  disableSteps: PropTypes.func,
 };
 const defaultProps = {
   metaData: step1InitialData,
   file: uploadInitialstate.file,
   fileId: uploadInitialstate.fileId,
-  fileUrl: '',
+  fileUrl: "",
   environment: {},
   wrapUpData: {},
   mappingJson: uploadInitialstate.mappingJson,
   mappingData: uploadInitialstate.manMapData,
   disableMapStep: undefined,
   saveStepData: undefined,
-  disableSteps: undefined
+  disableSteps: undefined,
 };
 
 class WrapUpMediator extends React.Component {
@@ -114,7 +116,7 @@ class WrapUpMediator extends React.Component {
       mappingErrors: [],
       sourceName: undefined,
       sourceId: undefined,
-      surveyId: ''
+      surveyId: "",
     };
 
     this.handleSourceCompleted = this.handleSourceCompleted.bind(this);
@@ -137,10 +139,10 @@ class WrapUpMediator extends React.Component {
   componentDidMount() {
     if (!this.props.stepsDisabled) {
       this.props.disableSteps();
-      if (this.props.metaData.surveyData === 'Yes') {
+      if (this.props.metaData.surveyData === "Yes") {
         // we add the survey data
         this.addSurveyData();
-      } else if (this.props.metaData.dataSource.key === 'other') {
+      } else if (this.props.metaData.dataSource.key === "other") {
         this.addDataSource(this.props.metaData.dataSource.value);
       }
       // otherwise we just add the existing source id
@@ -159,15 +161,15 @@ class WrapUpMediator extends React.Component {
             dataSource: {
               label: response.fileSource.name,
               key: response.fileSource.entryId,
-              value: response.fileSource.entryId
-            }
-          }
+              value: response.fileSource.entryId,
+            },
+          },
         })
       );
       this.setState(
         {
           sourceId: response.fileSource.entryId,
-          sourceName: response.fileSource.name
+          sourceName: response.fileSource.name,
         },
         this.addMetaData
       );
@@ -175,7 +177,7 @@ class WrapUpMediator extends React.Component {
   }
 
   handleSourceError(error) {
-    console.log('error adding data source: ', error);
+    console.log("error adding data source: ", error);
   }
 
   addDataSource(name) {
@@ -199,7 +201,7 @@ class WrapUpMediator extends React.Component {
 
     stepData.wrapUpData = {
       sourceId: this.state.sourceId,
-      surveyId: this.state.surveyId
+      surveyId: this.state.surveyId,
     };
     this.props.dispatch(generalActions.saveStepDataRequest(stepData));
   }
@@ -210,11 +212,11 @@ class WrapUpMediator extends React.Component {
   }
 
   handleSurveyCompleted(response, error) {
-    if (error) console.log('error adding survey data:', error);
+    if (error) console.log("error adding survey data:", error);
     if (response) {
       this.setState(
         {
-          surveyId: response.surveyData.id
+          surveyId: response.surveyData.id,
         },
         this.afterSurvey
       );
@@ -222,7 +224,7 @@ class WrapUpMediator extends React.Component {
   }
 
   afterSurvey() {
-    if (this.props.metaData.dataSource.key === 'other') {
+    if (this.props.metaData.dataSource.key === "other") {
       this.addDataSource(this.props.metaData.dataSource.value);
     } else this.addMetaData();
 
@@ -230,7 +232,7 @@ class WrapUpMediator extends React.Component {
   }
 
   handleSurveyError(error) {
-    console.log('error adding survey data: ', error);
+    console.log("error adding survey data: ", error);
   }
 
   addSurveyData() {
@@ -238,13 +240,13 @@ class WrapUpMediator extends React.Component {
       const { metaData } = this.props;
 
       const dataCleaningTechniques = [];
-      metaData.q51.forEach(q => {
+      metaData.q51.forEach((q) => {
         dataCleaningTechniques.push(q.value.trim());
       });
 
       const variables = {
         haveYouTestedTool: metaData.q1,
-        whoDidYouTestWith: metaData.q2.map(q => {
+        whoDidYouTestWith: metaData.q2.map((q) => {
           return q.value;
         }),
         consideredSenstive: metaData.q21,
@@ -253,12 +255,12 @@ class WrapUpMediator extends React.Component {
         selectRespondents: metaData.q3Text,
         howManyRespondents: metaData.q4Text,
         editSheet: metaData.q5,
-        dataCleaningTechniques
+        dataCleaningTechniques,
       };
 
       // so if other choice has been selected, we add in the
       // text value in other
-      if (dataCleaningTechniques.indexOf('0') !== -1) {
+      if (dataCleaningTechniques.indexOf("0") !== -1) {
         variables.otherCleaningTechnique = metaData.q51Text;
       }
 
@@ -278,13 +280,13 @@ class WrapUpMediator extends React.Component {
   }
 
   handleMetaDataCompleted(response, error) {
-    if (error) console.log('error uploading file:', error);
+    if (error) console.log("error uploading file:", error);
 
     if (response) this.addMapping();
   }
 
   handleMetaDataError(error) {
-    console.log('error uploading file: ', error);
+    console.log("error uploading file: ", error);
   }
 
   addMetaData() {
@@ -292,14 +294,14 @@ class WrapUpMediator extends React.Component {
 
     const fileType = /[.]/.exec(this.props.file.name)
       ? /[^.]+$/.exec(this.props.file.name)
-      : [''];
+      : [""];
 
-    let accessibility = 'p';
+    let accessibility = "p";
 
-    if (metaData.accessibility === 'Public') {
-      accessibility = 'a';
-    } else if (metaData.accessibility === 'Team') {
-      accessibility = 'o';
+    if (metaData.accessibility === "Public") {
+      accessibility = "a";
+    } else if (metaData.accessibility === "Team") {
+      accessibility = "o";
     }
 
     // const tags = metaData.tags.map(tag => {
@@ -313,30 +315,30 @@ class WrapUpMediator extends React.Component {
       description: metaData.desc,
       containsSubnationalData: true,
       organisation: metaData.org,
-      maintainer: 'Unavailable field',
-      methodology: 'Unavailable field',
-      defineMethodology: 'Unavailable field',
-      updateFrequency: 'Unavailable field',
-      comments: 'Unavailable field',
+      maintainer: "Unavailable field",
+      methodology: "Unavailable field",
+      defineMethodology: "Unavailable field",
+      updateFrequency: "Unavailable field",
+      comments: "Unavailable field",
       dateOfDataset: metaData.year,
       accessibility,
-      dataQuality: 'Unavailable field',
-      numberOfRows: '1',
+      dataQuality: "Unavailable field",
+      numberOfRows: "1",
       fileTypes: fileType[0],
       // Location should always be 2, until we start using different data
       // or we get more selections in the metadata step.
       // Location 2 is for the 'world' location
-      location: '2',
+      location: "2",
 
       source: this.state.sourceId
         ? this.state.sourceId
         : this.props.metaData.dataSource.value,
       // tags,
-      file: this.props.fileUrl
+      file: this.props.fileUrl,
     };
 
     if (
-      this.props.metaData.surveyData === 'Yes' &&
+      this.props.metaData.surveyData === "Yes" &&
       this.state.surveyId &&
       this.state.surveyId.length > 0
     ) {
@@ -365,13 +367,13 @@ class WrapUpMediator extends React.Component {
 
       // and after everything is done mapping we can actually
       // save the dataset into our zoom backend
-      let accessibility = 'p';
+      let accessibility = "p";
 
-      if (this.props.metaData.accessibility === 'Public') {
-        accessibility = 'a';
-      } else if (this.props.metaData.accessibility === 'Team') {
-        accessibility = 'o';
-        teams = this.props.user.groups.map(group => group.name);
+      if (this.props.metaData.accessibility === "Public") {
+        accessibility = "a";
+      } else if (this.props.metaData.accessibility === "Team") {
+        accessibility = "o";
+        teams = this.props.user.groups.map((group) => group.name);
       }
 
       const datasetData = {
@@ -387,10 +389,10 @@ class WrapUpMediator extends React.Component {
           uploadData: {
             ...this.props.stepData.uploadData,
             file: {
-              name: this.props.stepData.uploadData.file.name
-            }
-          }
-        }
+              name: this.props.stepData.uploadData.file.name,
+            },
+          },
+        },
       };
 
       if (this.props.dataset.data) {
@@ -422,7 +424,7 @@ class WrapUpMediator extends React.Component {
     );
 
     const variables = {
-      data
+      data,
     };
 
     MappingMutation.commit(
@@ -443,7 +445,7 @@ class WrapUpMediator extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     user: state.currentUser.data,
     datasetAdded: state.datasetAdded,
@@ -456,7 +458,7 @@ const mapStateToProps = state => {
     mappingJson: state.stepData.stepzData.uploadData.mappingJson,
     mappingData: state.stepData.stepzData.manMapData,
     stepData: state.stepData.stepzData,
-    dataset: state.dataset
+    dataset: state.dataset,
   };
 };
 

@@ -2,12 +2,12 @@ import styled from 'styled-components';
 import { Box } from 'grommet/components/Box';
 import { TextInput } from 'grommet/components/TextInput';
 
-import ZoomButton from 'components/ZoomButton/ZoomButton';
-import IconSort from 'assets/icons/IconSort';
-import theme from 'theme/Theme';
-import ColumnHeader from 'components/ZoomTable/ColumnHeader';
-import ZoomTable from 'components/ZoomTable/ZoomTable';
-import CellValue from 'components/ZoomTable/CellValue';
+import ZoomButton from 'app/components/ZoomButton/ZoomButton';
+import IconSort from 'app/assets/icons/IconSort';
+import theme from 'app/theme/Theme';
+import ColumnHeader from 'app/components/ZoomTable/ColumnHeader';
+import ZoomTable from 'app/components/ZoomTable/ZoomTable';
+import CellValue from 'app/components/ZoomTable/CellValue';
 
 export const CreateTeamForm = styled.form`
   padding: 0 40px;

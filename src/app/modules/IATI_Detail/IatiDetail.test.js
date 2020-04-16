@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import IatiDetail from 'modules/IATI_Detail/IatiDetail';
+import IatiDetail from 'app/modules/IATI_Detail/IatiDetail';
 // Components
-import Sectors from 'modules/IATI_Detail/fragments/Sectors/Sectors';
-import TotalBudget from 'modules/IATI_Detail/fragments/TotalBudget/TotalBudget';
-import Header from 'modules/IATI_Detail/fragments/Header/Header';
+import Sectors from 'app/modules/IATI_Detail/fragments/Sectors/Sectors';
+import TotalBudget from 'app/modules/IATI_Detail/fragments/TotalBudget/TotalBudget';
+import Header from 'app/modules/IATI_Detail/fragments/Header/Header';
 
 const wrapper = shallow(<IatiDetail />);
 

@@ -2,10 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 /* components */
-import SvgIconPlus from 'assets/icons/IconPlus';
-import SvgIconSort from 'assets/icons/IconSort';
-import { NoItems } from 'modules/dashboard/DashboardModule.styles';
-import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
+import SvgIconPlus from 'app/assets/icons/IconPlus';
+import SvgIconSort from 'app/assets/icons/IconSort';
+import { NoItems } from 'app/modules/dashboard/DashboardModule.styles';
+import SortbyDialog from 'app/components/Dialog/SortbyDialog/SortbyDialog';
 import { AddUserLink, ControlsRow, ViewContainer } from './UsersTabView.styles';
 import GridList from '../GridList/GridList';
 

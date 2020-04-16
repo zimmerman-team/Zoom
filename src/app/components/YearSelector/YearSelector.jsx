@@ -2,14 +2,14 @@
 import React from 'react';
 import isEqual from 'lodash/isEqual';
 /* consts */
-import { maxYear, minYear } from '__consts__/TimeLineConst';
+import { maxYear, minYear } from 'app/__consts__/TimeLineConst';
 /* styles */
 import {
   ComponentBase,
   CustomHandle,
   RangeContainer,
   YearLabel
-} from 'components/YearSelector/YearSelector.styles';
+} from 'app/components/YearSelector/YearSelector.styles';
 
 const propTypes = {};
 

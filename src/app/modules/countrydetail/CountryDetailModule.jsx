@@ -3,17 +3,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box } from 'grommet/components/Box';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 import { Helmet } from 'react-helmet';
 
-import CountryInfo from 'modules/countrydetail/fragments/CountryInfo/CountryInfo';
-import HumanRights from 'modules/countrydetail/fragments/HumanRights';
-import CivicSpace from 'modules/countrydetail/fragments/CivicSpace/CivicSpace';
-import AidsEpidemic from 'modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic';
-import EconomicIndicators from 'modules/countrydetail/fragments/EconomicIndicators';
-import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTransactions';
-import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';
-import Projects from 'modules/countrydetail/fragments/Projects/Projects';
+import CountryInfo from 'app/modules/countrydetail/fragments/CountryInfo/CountryInfo';
+import HumanRights from 'app/modules/countrydetail/fragments/HumanRights';
+import CivicSpace from 'app/modules/countrydetail/fragments/CivicSpace/CivicSpace';
+import AidsEpidemic from 'app/modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic';
+import EconomicIndicators from 'app/modules/countrydetail/fragments/EconomicIndicators';
+import AidsfondsTransactions from 'app/modules/countrydetail/fragments/AidsfondsTransactions';
+import PageNavigation from 'app/modules/countrydetail/fragments/PageNavigation';
+import Projects from 'app/modules/countrydetail/fragments/Projects/Projects';
 /* utils */
 import { capitalize } from './CountryDetailModule.utilis';
 

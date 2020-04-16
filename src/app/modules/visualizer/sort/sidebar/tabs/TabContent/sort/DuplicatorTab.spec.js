@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import ZoomButton from 'components/ZoomButton/ZoomButton';
+import ZoomButton from 'app/components/ZoomButton/ZoomButton';
 
-import BaseTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/common/BaseTab';
-import DuplicatorTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/DuplicatorTab';
+import BaseTab from 'app/modules/visualizer/sort/sidebar/tabs/TabContent/sort/common/BaseTab';
+import DuplicatorTab from 'app/modules/visualizer/sort/sidebar/tabs/TabContent/sort/DuplicatorTab';
 
 const wrapper = shallow(<DuplicatorTab />);
 

@@ -3,12 +3,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 /* components */
-import GeoMap from 'components/GeoMap/GeoMap';
-import { ModuleContainer } from 'modules/focus/FocuseModule.styles';
-import ExplorePanelMediator from 'mediators/ComponentMediators/PaneMediators/ExplorePanelMediator/ExplorePanelMediator';
-import paneTypes from '__consts__/PaneTypesConst';
-import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
-import NavPane from 'components/Panes/NavPane/NavPane';
+import GeoMap from 'app/components/GeoMap/GeoMap';
+import { ModuleContainer } from 'app/modules/focus/FocuseModule.styles';
+import ExplorePanelMediator from 'app/mediators/ComponentMediators/PaneMediators/ExplorePanelMediator/ExplorePanelMediator';
+import paneTypes from 'app/__consts__/PaneTypesConst';
+import DataPaneContainer from 'app/components/Panes/DataPaneContainer/DataPaneContainer';
+import NavPane from 'app/components/Panes/NavPane/NavPane';
 
 const propTypes = {
   indicators: PropTypes.arrayOf(PropTypes.shape)

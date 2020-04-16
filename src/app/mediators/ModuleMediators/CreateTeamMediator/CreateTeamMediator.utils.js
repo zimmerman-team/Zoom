@@ -1,7 +1,7 @@
 import filter from 'lodash/filter';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import { paginate } from 'utils/genericUtils';
+import { paginate } from 'app/utils/genericUtils';
 
 export function formatUsersData(data, initialLoad, page, sort, search) {
   let allUsers = data;

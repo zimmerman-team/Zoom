@@ -1,9 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import TreeMap from 'components/charts/treemap/TreeMap';
+import TreeMap from 'app/components/charts/treemap/TreeMap';
 // Components
 import { ResponsiveTreeMapHtml } from '@nivo/treemap';
-import { ComponentBase } from 'components/charts/treemap/TreeMap.styles';
+import { ComponentBase } from 'app/components/charts/treemap/TreeMap.styles';
 
 const wrapper = shallow(<TreeMap />);
 

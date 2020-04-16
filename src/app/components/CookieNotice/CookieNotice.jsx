@@ -9,8 +9,8 @@ import {
   CookieInfoLink,
   CookieMessage,
   Spacer
-} from 'components/CookieNotice/CookieNotice.style';
-import ErrorBoundaryFallback from 'components/ErrorBoundaryFallback/ErrorBoundaryFallback';
+} from 'app/components/CookieNotice/CookieNotice.style';
+import ErrorBoundaryFallback from 'app/components/ErrorBoundaryFallback/ErrorBoundaryFallback';
 import { ErrorBoundary } from 'react-error-boundary';
 
 const propTypes = {

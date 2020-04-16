@@ -10,10 +10,10 @@ import {
   editGroupRequest,
   getGroupsRequest,
   getAllUsersRequest
-} from 'services/actions/authNodeBackend';
+} from 'app/services/actions/authNodeBackend';
 /* components */
-import CreateTeamModule from 'modules/UserManagement/CreateTeam/CreateTeamModule';
-import { formatUsersData } from 'mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator.utils';
+import CreateTeamModule from 'app/modules/UserManagement/CreateTeam/CreateTeamModule';
+import { formatUsersData } from 'app/mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator.utils';
 /* utils */
 import get from 'lodash/get';
 import find from 'lodash/find';

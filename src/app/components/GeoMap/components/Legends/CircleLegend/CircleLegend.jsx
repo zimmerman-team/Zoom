@@ -1,16 +1,16 @@
 import React from 'react';
 /* icon */
-import CircleMarkerIcon from 'assets/icons/CircleMarkerIcon';
+import CircleMarkerIcon from 'app/assets/icons/CircleMarkerIcon';
 /* styles */
-import { LegendItem } from 'components/GeoMap/components/Legends/Legend.styles';
+import { LegendItem } from 'app/components/GeoMap/components/Legends/Legend.styles';
 import {
   CircleLegendItem,
   CircleLegendLabel,
   CircleLegendNum,
   CircleNumber
-} from 'components/GeoMap/components/Legends/CircleLegend/CircleLegend.styles';
+} from 'app/components/GeoMap/components/Legends/CircleLegend/CircleLegend.styles';
 /* utils */
-import { formatNumber } from 'utils/genericUtils';
+import { formatNumber } from 'app/utils/genericUtils';
 /* components */
 import Dotdotdot from 'react-dotdotdot';
 

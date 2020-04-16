@@ -7,12 +7,12 @@ import {
   getAllUsersRequest,
   addAuthGroupRequest,
   addAuthGroupInitial
-} from 'services/actions/authNodeBackend';
+} from 'app/services/actions/authNodeBackend';
 /* utils */
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 /* components */
-import CreateTeamModule from 'modules/UserManagement/CreateTeam/CreateTeamModule';
+import CreateTeamModule from 'app/modules/UserManagement/CreateTeam/CreateTeamModule';
 import { formatUsersData } from './CreateTeamMediator.utils';
 
 class CreateTeamMediator extends React.Component {

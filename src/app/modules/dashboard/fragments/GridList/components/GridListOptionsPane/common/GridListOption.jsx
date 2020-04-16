@@ -10,7 +10,7 @@ import {
   RemoveButton,
   SortIconButton
 } from './GridListOption.styles';
-import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
+import SortbyDialog from 'app/components/Dialog/SortbyDialog/SortbyDialog';
 
 const sortByOptions = [
   { label: 'Last Updated (asc)', value: 'last_updated' },

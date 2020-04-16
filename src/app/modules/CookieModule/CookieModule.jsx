@@ -1,13 +1,13 @@
 /* base */
 import React from 'react';
-import ModuleContainer from 'modules/common/modulecontainer/ModuleContainer';
+import ModuleContainer from 'app/modules/common/modulecontainer/ModuleContainer';
 
 /* styles */
-import { AboutTitle, Text } from 'modules/about/About.styles';
+import { AboutTitle, Text } from 'app/modules/about/About.styles';
 import {
   ContactSection,
   ParagraphHeader
-} from 'modules/CookieModule/CookieModule.style';
+} from 'app/modules/CookieModule/CookieModule.style';
 
 /**
  * todo: Please write a short component description of what this component does

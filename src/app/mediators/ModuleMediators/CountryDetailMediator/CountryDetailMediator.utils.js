@@ -4,10 +4,10 @@ import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
 import sortBy from 'lodash/sortBy';
 import filter from 'lodash/filter';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 import { split } from 'sentence-splitter';
 /* mock */
-import mock from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
+import mock from 'app/mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
 
 /*
   Formats project data so it would be acceptable

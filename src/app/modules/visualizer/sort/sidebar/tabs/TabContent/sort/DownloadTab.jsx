@@ -1,9 +1,9 @@
 /* base */
 import React from 'react';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
-import BaseTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/common/BaseTab';
-import IconDownload from 'assets/icons/sidebar/IconDownload';
+import theme from 'app/theme/Theme';
+import BaseTab from 'app/modules/visualizer/sort/sidebar/tabs/TabContent/sort/common/BaseTab';
+import IconDownload from 'app/assets/icons/sidebar/IconDownload';
 import html2canvas from 'html2canvas';
 
 /**

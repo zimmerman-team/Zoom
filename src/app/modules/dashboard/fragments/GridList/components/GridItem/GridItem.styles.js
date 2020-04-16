@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Theme from 'theme/Theme';
+import Theme from 'app/theme/Theme';
 import { NavLink } from 'react-router-dom';
 
 export const ComponentBase = styled.div`

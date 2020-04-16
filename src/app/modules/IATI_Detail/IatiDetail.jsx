@@ -2,9 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Sectors from 'modules/IATI_Detail/fragments/Sectors/Sectors';
-import TotalBudget from 'modules/IATI_Detail/fragments/TotalBudget/TotalBudget';
-import Header from 'modules/IATI_Detail/fragments/Header/Header';
+import Sectors from 'app/modules/IATI_Detail/fragments/Sectors/Sectors';
+import TotalBudget from 'app/modules/IATI_Detail/fragments/TotalBudget/TotalBudget';
+import Header from 'app/modules/IATI_Detail/fragments/Header/Header';
 import { Helmet } from 'react-helmet';
 
 const propTypes = {

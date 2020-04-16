@@ -2,9 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 /* icons */
-import IconOnlyPlus from 'assets/icons/IconOnlyPlus';
-import IconOnlyMinus from 'assets/icons/IconOnlyMinus';
-import IconOnlyFullScreen from 'assets/icons/IconOnlyFullScreen';
+import IconOnlyPlus from 'app/assets/icons/IconOnlyPlus';
+import IconOnlyMinus from 'app/assets/icons/IconOnlyMinus';
+import IconOnlyFullScreen from 'app/assets/icons/IconOnlyFullScreen';
 /* styles */
 import { ButtonContainer, ComponentBase } from './MapControls.style';
 

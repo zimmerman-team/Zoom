@@ -1,27 +1,29 @@
+/* eslint-disable */
+
 /* base */
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 /* consts */
-import chartTypes from '__consts__/ChartConst';
+import chartTypes from "app/__consts__/ChartConst";
 /* utils */
 /* icons */
-import IconRedIndicators from 'assets/icons/IconRedIndicators';
-import IconRedLocation from 'assets/icons/IconRedLocation';
-import IconRedPeriod from 'assets/icons/IconRedPeriod';
-import IconGraphStructure from 'assets/icons/data_explorer/IconGraphStructure';
-import ResetIcon from 'assets/icons/IconReset';
+import IconRedIndicators from "app/assets/icons/IconRedIndicators";
+import IconRedLocation from "app/assets/icons/IconRedLocation";
+import IconRedPeriod from "app/assets/icons/IconRedPeriod";
+import IconGraphStructure from "app/assets/icons/data_explorer/IconGraphStructure";
+import ResetIcon from "app/assets/icons/IconReset";
 /* styles */
 import {
   ComponentBase,
   PanelAccordion,
-  ResetContainer
-} from './DataExplorerPane.style';
-import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
-import { Tooltip } from 'react-tippy';
-import ExpansionPanelContainer from './sort/ExpansionPanelContainer';
-import TimePeriodPanel from './panels/TimePeriodPanel/TimePeriodPanel';
-import DropdownMenuPanel from './panels/DropdownMenuPanel/DropdownMenuPanel';
-import GraphStructurePanel from './panels/GraphStructurePanel/GraphStructurePanel';
+  ResetContainer,
+} from "./DataExplorerPane.style";
+import SimpleToolTip from "app/components/ToolTips/SimpleToolTip/SimpleToolTip";
+import { Tooltip } from "react-tippy";
+import ExpansionPanelContainer from "./sort/ExpansionPanelContainer";
+import TimePeriodPanel from "./panels/TimePeriodPanel/TimePeriodPanel";
+import DropdownMenuPanel from "./panels/DropdownMenuPanel/DropdownMenuPanel";
+import GraphStructurePanel from "./panels/GraphStructurePanel/GraphStructurePanel";
 
 const propTypes = {
   selectedInd: PropTypes.arrayOf(
@@ -30,11 +32,11 @@ const propTypes = {
       subIndicators: PropTypes.arrayOf(
         PropTypes.shape({
           label: PropTypes.string,
-          value: PropTypes.string
+          value: PropTypes.string,
         })
       ),
       dataSource: PropTypes.string,
-      selectedSubInd: PropTypes.arrayOf(PropTypes.string)
+      selectedSubInd: PropTypes.arrayOf(PropTypes.string),
     })
   ),
   chartKeys: PropTypes.arrayOf(PropTypes.shape({})),
@@ -42,13 +44,13 @@ const propTypes = {
   indNames: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
-      value: PropTypes.string
+      value: PropTypes.string,
     })
   ),
   countries: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
-      value: PropTypes.string
+      value: PropTypes.string,
     })
   ),
   disabledValues: PropTypes.arrayOf(PropTypes.string),
@@ -57,30 +59,30 @@ const propTypes = {
       label: PropTypes.string,
       value: PropTypes.arrayOf(
         PropTypes.shape({
-          iso2: PropTypes.string
+          iso2: PropTypes.string,
         })
-      )
+      ),
     })
   ),
   selectedCountryVal: PropTypes.arrayOf(PropTypes.string),
   selectedCountryLabels: PropTypes.arrayOf(
     PropTypes.arrayOf(
       PropTypes.shape({
-        label: PropTypes.string
+        label: PropTypes.string,
       })
     )
   ),
   selectedRegionVal: PropTypes.arrayOf(
     PropTypes.arrayOf(
       PropTypes.shape({
-        iso2: PropTypes.string
+        iso2: PropTypes.string,
       })
     )
   ),
   selectedRegionCodes: PropTypes.arrayOf(PropTypes.string),
   selectedRegionLabels: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.array
+    PropTypes.array,
   ]),
   selectCountry: PropTypes.func,
   /* todo: solve the issue of this prop sometimes receiving a boolean */
@@ -101,7 +103,7 @@ const propTypes = {
   indicatorSelected: PropTypes.bool,
   saveGraphOption: PropTypes.func,
   subIndAggrToggle: PropTypes.func,
-  resetAll: PropTypes.func
+  resetAll: PropTypes.func,
 };
 
 const defaultProps = {
@@ -134,43 +136,43 @@ const defaultProps = {
   selectInd: null,
   selectSubInd: null,
   subIndAggrToggle: null,
-  resetAll: null
+  resetAll: null,
 };
 
 class DataExplorePane extends React.Component {
   state = {
-    activeIndex: []
+    activeIndex: [],
   };
 
   generateIndicatorPanels() {
     const indPanels = [];
 
     this.props.selectedInd.forEach((indItem, index) => {
-      let labelNumb = index + 1 + '';
+      let labelNumb = index + 1 + "";
 
-      labelNumb = labelNumb.length > 1 ? labelNumb : '0'.concat(labelNumb);
+      labelNumb = labelNumb.length > 1 ? labelNumb : "0".concat(labelNumb);
 
       const isGeoChart =
         this.props.chartType === chartTypes.focusNL ||
         this.props.chartType === chartTypes.geoMap ||
         this.props.chartType === chartTypes.focusKE;
 
-      let addIndLabel = 'Add Indicator';
+      let addIndLabel = "Add Indicator";
 
       let indicatorLabel = `Indicator ${labelNumb}`;
 
       if (isGeoChart) {
-        addIndLabel = 'Add Long/Lat Indicator';
+        addIndLabel = "Add Long/Lat Indicator";
 
         switch (index) {
           case 0:
-            indicatorLabel = indicatorLabel.concat(' (layer)');
+            indicatorLabel = indicatorLabel.concat(" (layer)");
             break;
           case 1:
-            indicatorLabel = indicatorLabel.concat(' (bubble)');
+            indicatorLabel = indicatorLabel.concat(" (bubble)");
             break;
           default:
-            indicatorLabel = indicatorLabel.concat(' (point)');
+            indicatorLabel = indicatorLabel.concat(" (point)");
             break;
         }
       }
@@ -182,13 +184,13 @@ class DataExplorePane extends React.Component {
         isIndicator: true,
         indicatorLabel,
         categorise: true,
-        placeHolderText: 'Select indicator',
+        placeHolderText: "Select indicator",
         placeHolderNumber: this.props.indNames.length,
-        selectDataSource: val => this.props.selectInd(val, index),
+        selectDataSource: (val) => this.props.selectInd(val, index),
         allFileSources: this.props.indNames,
         selectedSources: indItem.indLabel,
         valueSelected: indItem.indLabel,
-        reset: () => this.props.selectInd('reset', index)
+        reset: () => this.props.selectInd("reset", index),
       });
 
       // and we push in the sub-indicator dropdown data
@@ -205,11 +207,11 @@ class DataExplorePane extends React.Component {
         aggrCheck: indItem.aggregate,
         openSubInd:
           this.props.indicatorSelected && this.props.indSelectedIndex === index,
-        placeHolderText: 'Select sub indicator',
+        placeHolderText: "Select sub indicator",
         selectDataSource: (val, isArray) =>
           this.props.selectSubInd(val, isArray, index),
         allFileSources: indItem.subIndicators,
-        selectedSources: indItem.selectedSubInd
+        selectedSources: indItem.selectedSubInd,
       });
     });
 
@@ -236,7 +238,7 @@ class DataExplorePane extends React.Component {
       {
         multiple: true,
         selectAll: true,
-        placeHolderText: 'Select country',
+        placeHolderText: "Select country",
         placeHolderNumber: this.props.countries.length,
         selectDataSource: this.props.selectCountry,
         allFileSources: this.props.countries,
@@ -244,15 +246,15 @@ class DataExplorePane extends React.Component {
         selectedSources: this.props.selectedCountryVal,
         valueSelected: this.props.selectedCountryLabel,
         capitalize: true,
-        reset: () => this.props.selectCountry('reset')
-      }
+        reset: () => this.props.selectCountry("reset"),
+      },
     ];
 
     if (!isFocus) {
       geoPanel.unshift({
         multiple: true,
         selectAll: true,
-        placeHolderText: 'Select region',
+        placeHolderText: "Select region",
         placeHolderNumber: this.props.regions.length,
         selectDataSource: this.props.selectRegion,
         allFileSources: this.props.regions,
@@ -261,7 +263,7 @@ class DataExplorePane extends React.Component {
         selectedRegionCodes: this.props.selectedRegionCodes,
         valueSelected: this.props.selectedRegionLabels,
         capitalize: true,
-        reset: () => this.props.selectRegion('reset')
+        reset: () => this.props.selectRegion("reset"),
       });
     }
 
@@ -270,7 +272,7 @@ class DataExplorePane extends React.Component {
         <PanelAccordion
           animate
           multiple
-          onActive={newActiveIndex =>
+          onActive={(newActiveIndex) =>
             this.setState({ activeIndex: newActiveIndex })
           }
         >
@@ -287,15 +289,15 @@ class DataExplorePane extends React.Component {
                 {
                   multiple: true,
                   selectAll: true,
-                  placeHolderText: 'Select datasource',
+                  placeHolderText: "Select datasource",
                   placeHolderNumber: this.props.allFileSources.length,
                   selectDataSource: this.props.selectDataSource,
                   allFileSources: this.props.allFileSources,
                   defaultAll: this.props.locationSelected,
                   selectedSources: this.props.selectedSources,
                   valueSelected: this.props.selectedSources,
-                  reset: () => this.props.selectDataSource('reset')
-                }
+                  reset: () => this.props.selectDataSource("reset"),
+                },
               ]}
             />
           </ExpansionPanelContainer>

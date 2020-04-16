@@ -1,15 +1,15 @@
 /* base */
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Box } from 'grommet/components/Box';
-import { Menu } from 'grommet-icons/icons/Menu';
-import theme from 'theme/Theme';
-import { Link, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React from "react";
+import PropTypes from "prop-types";
+import { Box } from "grommet/components/Box";
+import { Menu } from "grommet-icons/icons/Menu";
+import theme from "app/theme/Theme";
+import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 /* consts */
-import paneTypes from '__consts__/PaneTypesConst';
+import paneTypes from "app/__consts__/PaneTypesConst";
 /* utils */
-import isEqual from 'lodash/isEqual';
+import isEqual from "lodash/isEqual";
 /* components */
 import {
   AidsFondLogo,
@@ -19,19 +19,19 @@ import {
   PaneButton,
   PaneButtonText,
   PaneButtonTextVar,
-  PaneButtonVar
-} from 'components/AppBar/AppBar.styles';
-import Snackbar from 'components/Snackbar/Snackbar';
+  PaneButtonVar,
+} from "app/components/AppBar/AppBar.styles";
+import Snackbar from "app/components/Snackbar/Snackbar";
 /* icons */
-import SvgIconPlus from 'assets/icons/IconPlus';
-import SvgIconCloseSmall from 'assets/icons/IconCloseSmaller';
-import SvgIconBack from 'assets/icons/IconBack';
+import SvgIconPlus from "app/assets/icons/IconPlus";
+import SvgIconCloseSmall from "app/assets/icons/IconCloseSmaller";
+import SvgIconBack from "app/assets/icons/IconBack";
 /* actions */
-import * as actions from 'services/actions/general';
-import * as nodeActions from 'services/actions/nodeBackend';
+import * as actions from "app/services/actions/general";
+import * as nodeActions from "app/services/actions/nodeBackend";
 
 const propTypes = {
-  toggleSideBar: PropTypes.func
+  toggleSideBar: PropTypes.func,
 };
 const defaultProps = {
   // toggleSideBar: undefined,
@@ -45,8 +45,8 @@ export class AppBar extends React.Component {
       auth: true,
       anchorEl: null,
       paneButton: null,
-      errorMessage: 'Error',
-      openSnackbar: false
+      errorMessage: "Error",
+      openSnackbar: false,
     };
 
     this.closeSave = this.closeSave.bind(this);
@@ -70,14 +70,14 @@ export class AppBar extends React.Component {
     // so that the edited chart would appear with the new data in the dashboard
     if (!isEqual(this.props.chartCreated, prevProps.chartCreated)) {
       if (this.props.chartCreated.data) {
-        this.props.history.push('/dashboard');
+        this.props.history.push("/dashboard");
       } else if (
         this.props.chartCreated.error &&
         this.props.chartCreated.error.result
       ) {
         this.setState({
           openSnackbar: true,
-          errorMessage: JSON.stringify(this.props.chartCreated.error.result)
+          errorMessage: JSON.stringify(this.props.chartCreated.error.result),
         });
       }
     }
@@ -100,7 +100,7 @@ export class AppBar extends React.Component {
         data: this.props.chartData.data,
         chartKeys: this.props.chartData.chartKeys,
         indKeys: this.props.chartData.indKeys,
-        indicatorItems: this.props.chartData.selectedInd.map(indData => {
+        indicatorItems: this.props.chartData.selectedInd.map((indData) => {
           return {
             indicator: indData.indicator,
             indLabel: indData.indLabel,
@@ -114,7 +114,7 @@ export class AppBar extends React.Component {
             // data from zoombackend, we don't want to be refetching
             // anything
             allSubIndicators: indData.subIndicators,
-            dataSource: indData.dataSource
+            dataSource: indData.dataSource,
           };
         }),
         selectedSources: this.props.paneData.selectedSources,
@@ -124,45 +124,45 @@ export class AppBar extends React.Component {
         selectedCountryVal: this.props.chartData.selectedCountryVal,
         selectedRegionVal: this.props.chartData.selectedRegionVal,
         selectedRegionCodes: this.props.chartData.selectedRegionCodes,
-        specOptions: this.props.chartData.specOptions
+        specOptions: this.props.chartData.specOptions,
       };
 
       this.props.dispatch(nodeActions.createUpdateChartRequest(chartData));
     } else {
-      this.setState({ openSnackbar: true, errorMessage: 'Unauthorized' });
+      this.setState({ openSnackbar: true, errorMessage: "Unauthorized" });
     }
   }
 
   loadPaneButton() {
-    let paneButton = '';
-    let buttonLabel = '';
-    let paneType = 'none';
+    let paneButton = "";
+    let buttonLabel = "";
+    let paneType = "none";
 
     if (this.props.user.data) {
       if (this.props.dataPaneOpen === paneTypes.none) {
         if (
-          this.props.location.pathname.indexOf('/home') !== -1 ||
-          this.props.location.pathname.indexOf('/dashboard') !== -1
+          this.props.location.pathname.indexOf("/home") !== -1 ||
+          this.props.location.pathname.indexOf("/dashboard") !== -1
         ) {
           paneType = paneTypes.privPane;
-          buttonLabel = 'Create';
-        } else if (this.props.location.pathname.indexOf('/visualizer') !== -1) {
+          buttonLabel = "Create";
+        } else if (this.props.location.pathname.indexOf("/visualizer") !== -1) {
           paneType = paneTypes.visualizer;
-          buttonLabel = 'Show Filters';
+          buttonLabel = "Show Filters";
         }
       } else {
         paneType = paneTypes.none;
         buttonLabel =
-          this.props.location.pathname.indexOf('/visualizer') !== -1
-            ? 'Hide Filters'
-            : 'Close';
+          this.props.location.pathname.indexOf("/visualizer") !== -1
+            ? "Hide Filters"
+            : "Close";
       }
     } else {
       paneType =
         this.props.dataPaneOpen === paneTypes.none
           ? paneTypes.pubPane
           : paneTypes.none;
-      buttonLabel = paneType !== paneTypes.none ? 'Plot indicators' : 'Hide';
+      buttonLabel = paneType !== paneTypes.none ? "Plot indicators" : "Hide";
     }
 
     let paneIcon =
@@ -174,18 +174,18 @@ export class AppBar extends React.Component {
       this.props.dataPaneOpen === paneTypes.convertData
     ) {
       paneType = paneTypes.privPane;
-      buttonLabel = 'back';
+      buttonLabel = "back";
       paneIcon = <SvgIconBack />;
     }
 
     switch (true) {
-      case this.props.location.pathname === '/home' ||
-        this.props.location.pathname.indexOf('/dashboard') !== -1 ||
-        this.props.location.pathname === '/focus/NL' ||
-        this.props.location.pathname === '/focus/nl' ||
-        this.props.location.pathname === '/focus/KE' ||
-        this.props.location.pathname === '/focus/ke' ||
-        this.props.location.pathname === '/callback':
+      case this.props.location.pathname === "/home" ||
+        this.props.location.pathname.indexOf("/dashboard") !== -1 ||
+        this.props.location.pathname === "/focus/NL" ||
+        this.props.location.pathname === "/focus/nl" ||
+        this.props.location.pathname === "/focus/KE" ||
+        this.props.location.pathname === "/focus/ke" ||
+        this.props.location.pathname === "/callback":
         paneButton = (
           <PaneButton
             data-cy="geomap-filter-button"
@@ -200,7 +200,7 @@ export class AppBar extends React.Component {
           </PaneButton>
         );
         break;
-      case this.props.location.pathname.indexOf('/visualizer') !== -1:
+      case this.props.location.pathname.indexOf("/visualizer") !== -1:
         paneButton = (
           <PaneButContainer>
             <PaneButtonVar
@@ -271,13 +271,13 @@ export class AppBar extends React.Component {
 AppBar.propTypes = propTypes;
 AppBar.defaultProps = defaultProps;
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     chartData: state.chartData.chartData,
     paneData: state.paneData.paneData,
     user: state.currentUser,
     chartCreated: state.chartCreated,
-    dataPaneOpen: state.dataPaneOpen.open
+    dataPaneOpen: state.dataPaneOpen.open,
   };
 };
 

@@ -1,16 +1,16 @@
 /* base */
 import React from 'react';
-import DuplicatorTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/DuplicatorTab';
+import DuplicatorTab from 'app/modules/visualizer/sort/sidebar/tabs/TabContent/sort/DuplicatorTab';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 /* actions */
-import * as nodeActions from 'services/actions/nodeBackend';
+import * as nodeActions from 'app/services/actions/nodeBackend';
 /* utils */
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 /* consts */
 /* components */
-import Snackbar from 'components/Snackbar/Snackbar';
+import Snackbar from 'app/components/Snackbar/Snackbar';
 
 const propTypes = {
   chartData: PropTypes.shape({}),

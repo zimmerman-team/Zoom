@@ -1,7 +1,7 @@
 /* base */
 import React from 'react';
 import { shallow } from 'enzyme';
-import DashboardModule from 'modules/dashboard/DashboardModule';
+import DashboardModule from 'app/modules/dashboard/DashboardModule';
 /* components */
 import {
   HeaderGreeting,
@@ -10,11 +10,11 @@ import {
   PageHeading,
   SearchBox,
   ViewContainer
-} from 'modules/dashboard/DashboardModule.styles';
-import SvgIconUser from 'assets/icons/IconUser';
-import TabContainer from 'modules/dashboard/fragments/TabContainer/TabContainer';
+} from 'app/modules/dashboard/DashboardModule.styles';
+import SvgIconUser from 'app/assets/icons/IconUser';
+import TabContainer from 'app/modules/dashboard/fragments/TabContainer/TabContainer';
 /* consts */
-import tabs from '__consts__/DashboardTabsConsts';
+import tabs from 'app/__consts__/DashboardTabsConsts';
 
 const wrapper = shallow(<DashboardModule tabs={tabs} users={[]} teams={[]} />);
 

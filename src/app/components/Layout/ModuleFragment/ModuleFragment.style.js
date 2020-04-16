@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 import { Box } from 'grommet/components/Box';
 
 export const FragmentInfoButton = styled.div`

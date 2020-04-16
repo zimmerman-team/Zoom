@@ -1,20 +1,25 @@
+// @ts-nocheck
+/* eslint-disable */
+
 /* DATAMAPPER STEP 1 */
 
 /* base */
-import React from 'react';
-import PropTypes from 'prop-types';
-import MetaData from 'modules/datamapper/fragments/MetaData/MetaData';
-import { createRefetchContainer, graphql } from 'react-relay';
-import { connect } from 'react-redux';
+import React from "react";
+import PropTypes from "prop-types";
+import MetaData from "app/modules/datamapper/fragments/MetaData/MetaData";
+import graphql from "babel-plugin-relay/macro";
+import { createRefetchContainer } from "react-relay";
+
+import { connect } from "react-redux";
 /* actions */
-import * as actions from 'services/actions/general';
+import * as actions from "app/services/actions/general";
 /* utils */
-import findIndex from 'lodash/findIndex';
-import sortBy from 'lodash/sortBy';
-import isEqual from 'lodash/isEqual';
+import findIndex from "lodash/findIndex";
+import sortBy from "lodash/sortBy";
+import isEqual from "lodash/isEqual";
 /* consts */
-import { step1InitialData } from '__consts__/DataMapperStepConsts';
-import { fetchQuery } from 'relay-runtime';
+import { step1InitialData } from "app/__consts__/DataMapperStepConsts";
+import { fetchQuery } from "relay-runtime";
 
 const surveyQuery = graphql`
   query MetaDataMediatorQuery($entryId: Float!) {
@@ -44,11 +49,11 @@ const propTypes = {
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
-            name: PropTypes.string
-          })
+            name: PropTypes.string,
+          }),
         })
-      )
-    })
+      ),
+    }),
   }),
   id: PropTypes.number,
   path: PropTypes.string,
@@ -63,7 +68,7 @@ const propTypes = {
     dataSource: PropTypes.shape({
       key: PropTypes.string,
       label: PropTypes.string,
-      value: PropTypes.string
+      value: PropTypes.string,
     }),
     accessibility: PropTypes.string,
     surveyData: PropTypes.Boolean,
@@ -71,7 +76,7 @@ const propTypes = {
     q2: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string
+        value: PropTypes.string,
       })
     ),
     q21: PropTypes.string,
@@ -79,19 +84,19 @@ const propTypes = {
     q3: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string
+        value: PropTypes.string,
       })
     ),
     q4: PropTypes.shape({
       key: PropTypes.string,
       label: PropTypes.string,
-      value: PropTypes.string
+      value: PropTypes.string,
     }),
     q5: PropTypes.string,
     q51: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string
+        value: PropTypes.string,
       })
     ),
     sourceText: PropTypes.string,
@@ -102,21 +107,21 @@ const propTypes = {
     fileSources: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string
+        value: PropTypes.string,
       })
-    )
-  })
+    ),
+  }),
 };
 
 const defaultProps = {
   dropDownData: {},
-  path: 'mapper',
+  path: "mapper",
   id: -1,
   alwaysSave: false,
   dataSetEdit: false,
   saveStepData: undefined,
   stepData: step1InitialData,
-  environment: null
+  environment: null,
 };
 
 class MetaDataMediator extends React.Component {
@@ -128,7 +133,7 @@ class MetaDataMediator extends React.Component {
       dataLoaded: false,
       data: props.stepData.metaData
         ? props.stepData.metaData
-        : step1InitialData.metaData
+        : step1InitialData.metaData,
     };
 
     this.simpleChange = this.simpleChange.bind(this);
@@ -142,11 +147,11 @@ class MetaDataMediator extends React.Component {
 
   componentDidMount() {
     if (
-      this.props.path.indexOf('dataset') !== -1 &&
+      this.props.path.indexOf("dataset") !== -1 &&
       Object.keys(this.props.stepData).length === 0
     ) {
       this.props.relay.refetch({
-        entryId: this.props.id
+        entryId: this.props.id,
       });
     } else if (!this.props.stepData.metaData) {
       // so we set the initial state of the step data
@@ -155,7 +160,7 @@ class MetaDataMediator extends React.Component {
       stepData.environment = this.props.relay.environment;
       this.props.dispatch(actions.saveStepDataRequest(stepData));
     } else if (
-      typeof this.props.stepData.environment === 'string' ||
+      typeof this.props.stepData.environment === "string" ||
       !this.props.stepData.environment
     ) {
       const stepData = { ...this.props.stepData };
@@ -163,11 +168,13 @@ class MetaDataMediator extends React.Component {
       this.props.dispatch(actions.saveStepDataRequest(stepData));
     }
 
-    let fileSources = this.props.dropDownData.allFileSources.edges.map(node => {
-      return { label: node.node.name, value: node.node.entryId };
-    });
-    fileSources = sortBy(fileSources, ['label']);
-    this.simpleChange(fileSources, 'fileSources');
+    let fileSources = this.props.dropDownData.allFileSources.edges.map(
+      (node) => {
+        return { label: node.node.name, value: node.node.entryId };
+      }
+    );
+    fileSources = sortBy(fileSources, ["label"]);
+    this.simpleChange(fileSources, "fileSources");
   }
 
   componentDidUpdate(prevProps) {
@@ -182,13 +189,13 @@ class MetaDataMediator extends React.Component {
     ) {
       this.setState({
         dataLoaded: true,
-        data: this.props.stepData.metaData
+        data: this.props.stepData.metaData,
       });
     }
 
     if (
       !isEqual(this.props.stepData, prevProps.stepData) &&
-      (typeof this.props.stepData.environment === 'string' ||
+      (typeof this.props.stepData.environment === "string" ||
         !this.props.stepData.environment)
     ) {
       const stepData = { ...this.props.stepData };
@@ -201,7 +208,7 @@ class MetaDataMediator extends React.Component {
     if (!isEqual(this.props.metaData, prevProps.metaData)) {
       this.setState(
         {
-          newMetaLoading: true
+          newMetaLoading: true,
         },
         () => this.getGQLMetadata()
       );
@@ -213,7 +220,7 @@ class MetaDataMediator extends React.Component {
     ) {
       this.setState({
         newMetaLoading: false,
-        data: this.props.stepData.metaData
+        data: this.props.stepData.metaData,
       });
     }
   }
@@ -221,35 +228,35 @@ class MetaDataMediator extends React.Component {
   onChipAdd(value) {
     const { tags } = this.state.data;
     tags.push(value);
-    this.simpleChange(tags, 'tags');
+    this.simpleChange(tags, "tags");
   }
 
   onChipDelete(index) {
     const { tags } = this.state.data;
     tags.splice(index, 1);
-    this.simpleChange(tags, 'tags');
+    this.simpleChange(tags, "tags");
   }
 
   getGQLMetadata() {
     const { node: fileMetaData } = this.props.metaData.allFiles.edges[0];
 
-    const yearEndInd = fileMetaData.dateOfDataset.indexOf('-');
+    const yearEndInd = fileMetaData.dateOfDataset.indexOf("-");
 
     const year =
       yearEndInd !== -1
         ? fileMetaData.dateOfDataset.substring(0, yearEndInd)
         : fileMetaData.dateOfDataset;
 
-    let accessibility = 'Private';
+    let accessibility = "Private";
 
-    if (fileMetaData.accessibility.toLowerCase() === 'a') {
-      accessibility = 'Public';
-    } else if (fileMetaData.accessibility.toLowerCase() === 'o') {
-      accessibility = 'Team';
+    if (fileMetaData.accessibility.toLowerCase() === "a") {
+      accessibility = "Public";
+    } else if (fileMetaData.accessibility.toLowerCase() === "o") {
+      accessibility = "Team";
     }
 
     const file = fileMetaData.file.substring(
-      fileMetaData.file.indexOf('datasets')
+      fileMetaData.file.indexOf("datasets")
     );
 
     let metaStepData = {
@@ -262,39 +269,39 @@ class MetaDataMediator extends React.Component {
       dataSource: {
         key: fileMetaData.source.entryId,
         label: fileMetaData.source.name,
-        value: fileMetaData.source.entryId
+        value: fileMetaData.source.entryId,
       },
       accessibility,
-      surveyData: 'Yes'
+      surveyData: "Yes",
     };
 
     if (fileMetaData.surveyData) {
       const refetchVars = {
-        entryId: fileMetaData.surveyData.entryId
+        entryId: fileMetaData.surveyData.entryId,
       };
 
       fetchQuery(this.props.relay.environment, surveyQuery, refetchVars).then(
-        data => {
+        (data) => {
           // so we set the initial state of the step data
           const { node: actualSurveyData } = data.allSurveyDatas.edges[0];
 
-          metaStepData.surveyData = 'Yes';
+          metaStepData.surveyData = "Yes";
 
-          const q2 = actualSurveyData.whoDidYouTestWith.split(',');
+          const q2 = actualSurveyData.whoDidYouTestWith.split(",");
 
           const q51 = [];
 
-          actualSurveyData.dataCleaningTechniques.split(',').forEach(item => {
-            if (item.indexOf('None') === -1) {
-              const newIt = item.length > 0 ? item.trim() : '2';
+          actualSurveyData.dataCleaningTechniques.split(",").forEach((item) => {
+            if (item.indexOf("None") === -1) {
+              const newIt = item.length > 0 ? item.trim() : "2";
               q51.push({ label: newIt, value: newIt });
             }
           });
 
           const surveyStepData = {
             q1: actualSurveyData.haveYouTestedTool,
-            q2: q2.map(item => {
-              const newIt = item.length > 0 ? item.trim() : '2';
+            q2: q2.map((item) => {
+              const newIt = item.length > 0 ? item.trim() : "2";
 
               return { label: newIt, value: newIt };
             }),
@@ -306,19 +313,19 @@ class MetaDataMediator extends React.Component {
             q3Text: actualSurveyData.selectRespondents,
             q4Text: actualSurveyData.howManyRespondents,
             // will be adjusted later on
-            q51Text: actualSurveyData.otherCleaningTechnique
+            q51Text: actualSurveyData.otherCleaningTechnique,
           };
 
           metaStepData = {
             ...metaStepData,
-            ...surveyStepData
+            ...surveyStepData,
           };
 
           const stepData = { ...this.props.stepData };
           stepData.metaData = metaStepData;
           stepData.environment = this.props.relay.environment;
           stepData.uploadData = {
-            url: file
+            url: file,
           };
           this.props.dispatch(actions.saveStepDataRequest(stepData));
         }
@@ -328,7 +335,7 @@ class MetaDataMediator extends React.Component {
       stepData.metaData = metaStepData;
       stepData.environment = this.props.relay.environment;
       stepData.uploadData = {
-        url: file
+        url: file,
       };
       this.props.dispatch(actions.saveStepDataRequest(stepData));
     }
@@ -358,14 +365,14 @@ class MetaDataMediator extends React.Component {
 
   checkBoxChange(value, question) {
     const check = this.state.data[question];
-    const checkInd = findIndex(check, ['label', value]);
+    const checkInd = findIndex(check, ["label", value]);
 
     if (checkInd === -1) {
       // so if a checked doesnt exist we add it
       // and if it does exist we remove it
       check.push({
         label: value,
-        value
+        value,
       });
     } else {
       check.splice(checkInd, 1);
@@ -378,13 +385,13 @@ class MetaDataMediator extends React.Component {
   // of change logic, cause of those freetexts as well
   dropDownChange(value, question, qText) {
     let val = value.value;
-    if (val === 'other') val = this.state.data[qText];
+    if (val === "other") val = this.state.data[qText];
 
     this.simpleChange(
       {
         key: value.value,
         label: value.label,
-        value: val
+        value: val,
       },
       question
     );
@@ -393,34 +400,34 @@ class MetaDataMediator extends React.Component {
   // and we'll have a specific text change
   // if 'other' option is chosen from the dropdowns
   otherDropdownText(value, question, qText, options) {
-    if (this.state.data[question].key === 'other') {
+    if (this.state.data[question].key === "other") {
       this.simpleChange(
         {
           key: this.state.data[question].key,
           label: this.state.data[question].label,
-          value
+          value,
         },
         question
       );
-    } else if (this.state.data[question].key === '') {
-      const labelInd = findIndex(options, ['value', 'other']);
+    } else if (this.state.data[question].key === "") {
+      const labelInd = findIndex(options, ["value", "other"]);
       this.simpleChange(
         {
-          key: 'other',
+          key: "other",
           label: options[labelInd].label,
-          value
+          value,
         },
         question
       );
     }
 
-    const existingItem = findIndex(options, ['label', value]);
+    const existingItem = findIndex(options, ["label", value]);
     if (existingItem !== -1) {
       this.simpleChange(
         {
           key: value,
           label: value,
-          value: options[existingItem].value
+          value: options[existingItem].value,
         },
         question
       );
@@ -452,9 +459,9 @@ class MetaDataMediator extends React.Component {
 MetaDataMediator.propTypes = propTypes;
 MetaDataMediator.defaultProps = defaultProps;
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    stepData: state.stepData.stepzData
+    stepData: state.stepData.stepzData,
   };
 };
 

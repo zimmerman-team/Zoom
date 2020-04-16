@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Theme from 'theme/Theme';
+import Theme from 'app/theme/Theme';
 
 const TabIconButton = styled.div`
   margin-bottom: 10px;

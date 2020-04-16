@@ -7,10 +7,10 @@ import {
   Title,
   ToolTipText,
   ToolTipValue
-} from 'components/charts/TooltipContent.styles';
+} from 'app/components/charts/TooltipContent.styles';
 
 /* utils */
-import { truncateText } from 'utils/genericUtils';
+import { truncateText } from 'app/utils/genericUtils';
 
 const TooltipContent = ({ active, payload, label }) => {
   if (active && payload) {

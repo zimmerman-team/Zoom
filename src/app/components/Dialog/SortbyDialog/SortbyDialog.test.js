@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
+import SortbyDialog from 'app/components/Dialog/SortbyDialog/SortbyDialog';
 // Components
 import { ComponentBase, OptionRow } from './SortbyDialog.styles';
 

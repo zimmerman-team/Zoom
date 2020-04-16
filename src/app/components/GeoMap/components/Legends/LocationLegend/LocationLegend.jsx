@@ -1,16 +1,18 @@
-import React from 'react';
+/* eslint-disable */
 
-import Dotdotdot from 'react-dotdotdot';
+import React from "react";
+
+import Dotdotdot from "react-dotdotdot";
 
 import {
   LocationLegendItem,
   LocationName,
   LocItemContainer,
   LocationLegendLabel,
-  ScgIconContainer
-} from './LocationLegend.style';
+  ScgIconContainer,
+} from "./LocationLegend.style";
 
-import SvgIconLocation from 'assets/icons/geomap/SvgIconLocation';
+import SvgIconLocation from "app/assets/icons/geomap/SvgIconLocation";
 
 const locationLegend = (locationItems, index) => (
   <LocationLegendItem key={`legend-${index}`}>

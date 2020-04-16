@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 // Components
 import { ResponsiveBar } from '@nivo/bar';
-import { ComponentBase } from 'components/charts/barcharts/vertical/BarChartVertical.styles';
+import { ComponentBase } from 'app/components/charts/barcharts/vertical/BarChartVertical.styles';
 import BarChartVertical from './BarChartVertical';
 
 const wrapper = shallow(<BarChartVertical />);

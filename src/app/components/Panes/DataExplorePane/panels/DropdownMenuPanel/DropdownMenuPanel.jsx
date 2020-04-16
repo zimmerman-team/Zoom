@@ -1,14 +1,16 @@
+/* eslint-disable */
+
 /* base */
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 /* utils */
-import findIndex from 'lodash/findIndex';
+import findIndex from "lodash/findIndex";
 /* components */
-import { DropDownCont } from 'components/Panes/DataExplorePane/DataExplorerPane.style';
-import SimpleSwitch from 'components/SimpleSwitch/SimpleSwitch';
-import ZoomSelect from 'components/Select/ZoomSelect';
+import { DropDownCont } from "app/components/Panes/DataExplorePane/DataExplorerPane.style";
+import SimpleSwitch from "app/components/SimpleSwitch/SimpleSwitch";
+import ZoomSelect from "app/components/Select/ZoomSelect";
 /* icons */
-import SvgIconAdd from 'assets/icons/IconAdd';
+import SvgIconAdd from "app/assets/icons/IconAdd";
 /* styles */
 import {
   AddContainer,
@@ -17,8 +19,8 @@ import {
   IndicatorLabel,
   IndicatorRemove,
   IndLabelContainer,
-  SwitchContainer
-} from './DropdownMenuPanel.style';
+  SwitchContainer,
+} from "./DropdownMenuPanel.style";
 
 const propTypes = {
   handleAxisSwitch: PropTypes.func,
@@ -48,9 +50,9 @@ const propTypes = {
       removeIndicator: PropTypes.func,
       placeHolderNumber: PropTypes.number,
       capitalize: PropTypes.bool,
-      reset: PropTypes.func
+      reset: PropTypes.func,
     })
-  )
+  ),
 };
 
 const defaultProps = {
@@ -65,10 +67,10 @@ const defaultProps = {
       addIndicator: null,
       subIndicator: false,
       sectionAdd: false,
-      addIndLabel: 'Add Indicator',
+      addIndLabel: "Add Indicator",
       aggrCheck: false,
       indIndex: -1,
-      indicatorLabel: 'Indicator',
+      indicatorLabel: "Indicator",
       categorise: false,
       allFileSources: [],
       selectedSources: [],
@@ -81,12 +83,12 @@ const defaultProps = {
       removeIndicator: null,
       placeHolderNumber: undefined,
       capitalize: false,
-      reset: undefined
-    }
-  ]
+      reset: undefined,
+    },
+  ],
 };
 
-const DropdownMenuPanel = props => {
+const DropdownMenuPanel = (props) => {
   return (
     <React.Fragment>
       {props.panelDetails.map((detail, index) => {
@@ -98,14 +100,14 @@ const DropdownMenuPanel = props => {
           detail.indIndex !== -1
         ) {
           const chartKeyInd = findIndex(props.chartKeys, [
-            'indIndex',
-            detail.indIndex
+            "indIndex",
+            detail.indIndex,
           ]);
 
           // so right is true, left is false
           axisChecked =
             chartKeyInd !== -1 &&
-            props.chartKeys[chartKeyInd].orientation === 'right';
+            props.chartKeys[chartKeyInd].orientation === "right";
         }
 
         let dataCy = `datapane-select-${index}`;
@@ -123,7 +125,7 @@ const DropdownMenuPanel = props => {
           <DropDownCont
             key={index}
             style={{
-              marginTop: detail.isIndicator && index !== 0 ? '30px' : ''
+              marginTop: detail.isIndicator && index !== 0 ? "30px" : "",
             }}
           >
             {detail.indicatorLabel && (
@@ -162,7 +164,7 @@ const DropdownMenuPanel = props => {
                   <SimpleSwitch
                     defaultCheck={axisChecked}
                     label="Switch Axis"
-                    onSwitch={checked =>
+                    onSwitch={(checked) =>
                       props.handleAxisSwitch(checked, detail.indIndex)
                     }
                   />
@@ -171,7 +173,7 @@ const DropdownMenuPanel = props => {
                   <SimpleSwitch
                     defaultCheck={detail.aggrCheck}
                     label="(Dis)aggregate"
-                    onSwitch={checked =>
+                    onSwitch={(checked) =>
                       props.subIndAggrToggle(checked, detail.indIndex)
                     }
                   />

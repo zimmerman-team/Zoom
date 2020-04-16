@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Box } from 'grommet/components/Box';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 export const DetailList = styled.ul`
   list-style: none;

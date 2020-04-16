@@ -1,5 +1,5 @@
 import React from 'react';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 import styled from 'styled-components';
 
 const ComponentBase = styled.div`

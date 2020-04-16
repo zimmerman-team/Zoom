@@ -5,9 +5,9 @@ import {
   LabelContainer,
   PointerContainer,
   Span
-} from 'components/Select/components/SelectHeader/SelectHeader.styles';
+} from 'app/components/Select/components/SelectHeader/SelectHeader.styles';
 
-import IconPointer from 'assets/icons/IconPointer';
+import IconPointer from 'app/assets/icons/IconPointer';
 
 const propTypes = {
   headerStyle: PropTypes.object,

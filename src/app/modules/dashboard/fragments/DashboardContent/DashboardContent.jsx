@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 // import { FragmentBase } from './DashboardTabContent.style';
-import DashboardTabNavigator from 'modules/dashboard/fragments/DashboardContent/components/DashboardTabNavigator';
-import DashboardTabContent from 'modules/dashboard/fragments/DashboardContent/components/DashboardTabContent';
+import DashboardTabNavigator from 'app/modules/dashboard/fragments/DashboardContent/components/DashboardTabNavigator';
+import DashboardTabContent from 'app/modules/dashboard/fragments/DashboardContent/components/DashboardTabContent';
 
 const FragmentBase = styled.div`
   display: flex;

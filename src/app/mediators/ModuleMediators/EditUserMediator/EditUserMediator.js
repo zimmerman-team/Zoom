@@ -3,19 +3,19 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
 /* components */
-import EditUserModule from 'modules/UserManagement/EditUser/EditUserModule';
+import EditUserModule from 'app/modules/UserManagement/EditUser/EditUserModule';
 /* actions */
 import {
   getAuthUserRequest,
   editAuthUserRequest,
   getRolesRequest
-} from 'services/actions/authNodeBackend';
+} from 'app/services/actions/authNodeBackend';
 /* utils */
 import isEqual from 'lodash/isEqual';
 import find from 'lodash/find';
 
 /* consts */
-import userRoles from '__consts__/UserRoleConst';
+import userRoles from 'app/__consts__/UserRoleConst';
 
 class EditUserMediator extends React.Component {
   state = {

@@ -1,7 +1,7 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 import { ComponentBase, OptionRow } from './SortbyDialog.styles';
 /* components */
 

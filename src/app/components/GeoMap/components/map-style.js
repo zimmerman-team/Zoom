@@ -1,27 +1,30 @@
-export const colorStops = [[0, '#FFFFFF'], [8, '#0900FF']];
+export const colorStops = [
+  [0, "#B7D0DD"],
+  [8, "#0E80A9"]
+];
 
 // For more information on data-driven styles, see https://www.mapbox.com/help/gl-dds-ref/
 export const dataLayer = {
-  id: 'layer',
-  source: 'vector-layers',
-  type: 'fill',
+  id: "layer",
+  source: "vector-layers",
+  type: "fill",
   interactive: true,
   paint: {
-    'fill-color': {
-      property: 'percentile',
+    "fill-color": {
+      property: "percentile",
       stops: colorStops
     },
-    'fill-opacity': 0.68
+    "fill-opacity": 0.68
   }
 };
 
 // This is used for borders
 export const borderStyle = {
-  id: 'outline',
-  source: 'vector-layers',
-  type: 'line',
+  id: "outline",
+  source: "vector-layers",
+  type: "line",
   paint: {
-    'line-width': 1.5,
-    'line-color': '#0080ef'
+    "line-width": 1,
+    "line-color": "#ffffff"
   }
 };

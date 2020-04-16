@@ -1,8 +1,8 @@
 import { Box } from 'grommet/components/Box';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 import styled from 'styled-components';
-import { BaseParagraph } from 'components/sort/Paragraphs';
-import { SectionHeading } from 'components/sort/Headings';
+import { BaseParagraph } from 'app/components/sort/Paragraphs';
+import { SectionHeading } from 'app/components/sort/Headings';
 
 export const fragmentContentWidth = '1024px';
 

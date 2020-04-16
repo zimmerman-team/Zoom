@@ -1,14 +1,14 @@
 /* base */
 import React from 'react';
 import styled from 'styled-components';
-import { countryDetailMockData } from '__mocks__/countryDetailMock';
+import { countryDetailMockData } from 'app/__mocks__/countryDetailMock';
 import {
   ConditionMet,
   ConditionUnmet,
   StigmaList,
   StigmaListItem
-} from 'components/sort/Misc';
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
+} from 'app/components/sort/Misc';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';
 
 const ItemText = styled.p`

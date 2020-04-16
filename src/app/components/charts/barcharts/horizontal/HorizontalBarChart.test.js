@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import HorizontalBarChart from 'components/charts/barcharts/horizontal/HorizontalBarChart';
+import HorizontalBarChart from 'app/components/charts/barcharts/horizontal/HorizontalBarChart';
 /* components */
 import {
   Bar,
@@ -12,9 +12,9 @@ import {
   LegendContainer,
   LegendText,
   Value
-} from 'components/charts/barcharts/horizontal/HorizontalBarChart.styles';
+} from 'app/components/charts/barcharts/horizontal/HorizontalBarChart.styles';
 /* mock */
-import barChartMockData from '__mocks__/barChartHorizontalMock';
+import barChartMockData from 'app/__mocks__/barChartHorizontalMock';
 
 const wrapper = shallow(
   <HorizontalBarChart data={barChartMockData} countryName="Kenya" />

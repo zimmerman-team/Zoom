@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Box } from 'grommet/components/Box';
 import { Accordion } from 'grommet/components/Accordion';
 import { AccordionPanel } from 'grommet/components/AccordionPanel';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 export const ComponentBase = styled.div`
   z-index: 8;

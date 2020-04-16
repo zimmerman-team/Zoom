@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import ChartLegendItem from 'modules/visualizer/sort/container/fragments/common/ChartLegendItem';
+import ChartLegendItem from 'app/modules/visualizer/sort/container/fragments/common/ChartLegendItem';
 
 /**
  * todo: Please write a short component description of what this component does

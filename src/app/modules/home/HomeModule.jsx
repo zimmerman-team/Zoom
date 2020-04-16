@@ -6,14 +6,14 @@ import PropTypes from 'prop-types';
 import Cookies from 'universal-cookie';
 
 /* consts */
-import paneTypes from '__consts__/PaneTypesConst';
+import paneTypes from 'app/__consts__/PaneTypesConst';
 
 /* components */
-import NavPane from 'components/Panes/NavPane/NavPane';
-import BaseDialog from 'components/Dialog/BaseDialog/BaseDialog';
-import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
-import VizPaneMediator from 'mediators/ComponentMediators/PaneMediators/VisPaneMediator/VizPaneMediator';
-import VisualizerModuleMediator from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator';
+import NavPane from 'app/components/Panes/NavPane/NavPane';
+import BaseDialog from 'app/components/Dialog/BaseDialog/BaseDialog';
+import DataPaneContainer from 'app/components/Panes/DataPaneContainer/DataPaneContainer';
+import VizPaneMediator from 'app/mediators/ComponentMediators/PaneMediators/VisPaneMediator/VizPaneMediator';
+import VisualizerModuleMediator from 'app/mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator';
 
 const propTypes = {
   auth0Client: PropTypes.shape({}),

@@ -9,10 +9,10 @@ import {
   InputContainer,
   InputLabel,
   InputLabelContainer
-} from 'modules/datamapper/fragments/ErrorsStep/components/FindReplace/FindReplace.styles';
+} from 'app/modules/datamapper/fragments/ErrorsStep/components/FindReplace/FindReplace.styles';
 import PropTypes from 'prop-types';
-import ZoomButton from 'components/ZoomButton/ZoomButton';
-import ZoomSelect from 'components/Select/ZoomSelect';
+import ZoomButton from 'app/components/ZoomButton/ZoomButton';
+import ZoomSelect from 'app/components/Select/ZoomSelect';
 
 const propTypes = {
   open: PropTypes.bool,

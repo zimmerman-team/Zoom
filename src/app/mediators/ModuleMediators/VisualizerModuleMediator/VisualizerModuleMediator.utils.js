@@ -1,25 +1,25 @@
 /* base */
-import axios from 'axios';
+import axios from "axios";
 
 /* consts */
-import chartTypes from '__consts__/ChartConst';
-import { colorSet } from '__consts__/PaneConst';
-import { aggrOptions } from '__consts__/GraphStructOptionConsts';
+import chartTypes from "app/__consts__/ChartConst";
+import { colorSet } from "app/__consts__/PaneConst";
+import { aggrOptions } from "app/__consts__/GraphStructOptionConsts";
 
 /* utils */
-import sortBy from 'lodash/sortBy';
-import filter from 'lodash/filter';
-import findIndex from 'lodash/findIndex';
-import cloneDeep from 'lodash/cloneDeep';
+import sortBy from "lodash/sortBy";
+import filter from "lodash/filter";
+import findIndex from "lodash/findIndex";
+import cloneDeep from "lodash/cloneDeep";
 
 /* styles */
-import theme from 'theme/Theme';
+import theme from "app/theme/Theme";
 
 // these are aggregation keys associated with graphql returned variables
 // 'geolocationTag' & 'date' are the graphql variables
 export const aggrKeys = {
-  [aggrOptions[0].value]: 'geolocationTag',
-  [aggrOptions[1].value]: 'date'
+  [aggrOptions[0].value]: "geolocationTag",
+  [aggrOptions[1].value]: "date",
 };
 
 export function formatCountryCenterData(
@@ -30,10 +30,10 @@ export function formatCountryCenterData(
 ) {
   const countryCenteredData = [];
 
-  indicators.forEach(indicator => {
+  indicators.forEach((indicator) => {
     const existCountryIndex = findIndex(countryCenteredData, [
-      'name',
-      indicator.geolocationTag
+      "name",
+      indicator.geolocationTag,
     ]);
 
     if (indicator.geolocationCenterLongLat) {
@@ -53,10 +53,10 @@ export function formatCountryCenterData(
               subIndName: indicator.filterName,
               format: indicator.valueFormatType,
               label: subIndAggr
-                ? `${indName} - ${selectedSubInd.join(', ')}`
+                ? `${indName} - ${selectedSubInd.join(", ")}`
                 : `${indName} - ${indicator.filterName}`,
-              value: Math.round(indicator.value)
-            }
+              value: Math.round(indicator.value),
+            },
           ],
           indName,
           value: Math.round(indicator.value),
@@ -66,7 +66,7 @@ export function formatCountryCenterData(
           minValue: 0,
           longitude: coord[0],
           latitude: coord[1],
-          name: indicator.geolocationTag
+          name: indicator.geolocationTag,
         });
       } else {
         countryCenteredData[existCountryIndex].value =
@@ -82,7 +82,7 @@ export function formatCountryCenterData(
         } else {
           const labelInd = findIndex(
             countryCenteredData[existCountryIndex].tooltipLabels,
-            ['subIndName', indicator.filterName]
+            ["subIndName", indicator.filterName]
           );
 
           // so if the sub indicators value exists, we will add up the value in the tool tip for that
@@ -97,7 +97,7 @@ export function formatCountryCenterData(
               subIndName: indicator.filterName,
               format: indicator.valueFormatType,
               label: `${indName} - ${indicator.filterName}`,
-              value: Math.round(indicator.value)
+              value: Math.round(indicator.value),
             });
           }
         }
@@ -107,18 +107,18 @@ export function formatCountryCenterData(
 
   const maxValue = Math.max.apply(
     Math,
-    countryCenteredData.map(indicator => {
+    countryCenteredData.map((indicator) => {
       return indicator.value;
     })
   );
   const minValue = Math.min.apply(
     Math,
-    countryCenteredData.map(indicator => {
+    countryCenteredData.map((indicator) => {
       return indicator.value;
     })
   );
 
-  countryCenteredData.forEach(indicator => {
+  countryCenteredData.forEach((indicator) => {
     indicator.maxValue = Math.round(maxValue);
     indicator.minValue = Math.round(minValue);
   });
@@ -141,9 +141,9 @@ export function formatCountryParam(
   // regions themselves
   jointCountries = jointCountries.concat(regionCodes);
 
-  regionCountryCodes.forEach(region => {
-    if (region !== 'select all') {
-      region.forEach(countryCode => {
+  regionCountryCodes.forEach((region) => {
+    if (region !== "select all") {
+      region.forEach((countryCode) => {
         if (jointCountries.indexOf(countryCode.iso3) === -1) {
           jointCountries.push(countryCode.iso3);
         }
@@ -162,22 +162,22 @@ export function formatLongLatData(
 ) {
   const longLatData = [];
 
-  indicators.forEach(indicator => {
-    if (indicator.geolocationTag.indexOf(',') !== -1) {
+  indicators.forEach((indicator) => {
+    if (indicator.geolocationTag.indexOf(",") !== -1) {
       const existPointIndex = findIndex(longLatData, [
-        'name',
-        indicator.geolocationTag
+        "name",
+        indicator.geolocationTag,
       ]);
 
       if (existPointIndex === -1) {
         let long = indicator.geolocationTag.substring(
           0,
-          indicator.geolocationTag.indexOf(',')
+          indicator.geolocationTag.indexOf(",")
         );
         long = parseFloat(long);
 
         let lat = indicator.geolocationTag.substring(
-          indicator.geolocationTag.indexOf(',') + 1
+          indicator.geolocationTag.indexOf(",") + 1
         );
         lat = parseFloat(lat);
 
@@ -188,16 +188,16 @@ export function formatLongLatData(
                 subIndName: indicator.filterName,
                 format: indicator.valueFormatType,
                 label: subIndAggr
-                  ? `${indName} - ${selectedSubInd.join(', ')}`
+                  ? `${indName} - ${selectedSubInd.join(", ")}`
                   : `${indName} - ${indicator.filterName}`,
-                value: Math.round(indicator.value)
-              }
+                value: Math.round(indicator.value),
+              },
             ],
             indName,
             longitude: long,
             latitude: lat,
             name: indicator.comment || indicator.geolocationTag,
-            value: Math.round(indicator.value)
+            value: Math.round(indicator.value),
           });
         }
       } else {
@@ -211,7 +211,7 @@ export function formatLongLatData(
         } else {
           const labelInd = findIndex(
             longLatData[existPointIndex].tooltipLabels,
-            ['subIndName', indicator.filterName]
+            ["subIndName", indicator.filterName]
           );
 
           // so if the sub indicators value exists, we will add up the value in the tool tip for that
@@ -226,7 +226,7 @@ export function formatLongLatData(
               subIndName: indicator.filterName,
               format: indicator.valueFormatType,
               label: `${indName} - ${indicator.filterName}`,
-              value: Math.round(indicator.value)
+              value: Math.round(indicator.value),
             });
           }
         }
@@ -240,8 +240,8 @@ export function formatLongLatData(
 // removes the ID variable from region array, because for some reason
 // mongoose generates and returns ids for objects stored in a model...
 export function removeIds(regionArray) {
-  return regionArray.map(countryArray => {
-    return countryArray.map(country => {
+  return regionArray.map((countryArray) => {
+    return countryArray.map((country) => {
       return { iso2: country.iso2 };
     });
   });
@@ -265,18 +265,18 @@ function ordinal_suffix_of(i) {
 // formats date according to design
 export function formatDate(created) {
   const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const date = new Date(created);
@@ -306,7 +306,7 @@ export function formatGeoData(
     // in the current geomapData, the geoIndex will always
     // reperesent the index of a selected indicator
     // ONLY that item will be replaced in this logic
-    foundGeoIndex = findIndex(geomapData, ['geoIndex', indSelectedIndex]);
+    foundGeoIndex = findIndex(geomapData, ["geoIndex", indSelectedIndex]);
   }
 
   indAggregations.forEach((aggregation, index) => {
@@ -327,30 +327,30 @@ export function formatGeoData(
         if (indSelectedIndex === -1 || foundGeoIndex === -1) {
           geomapData.push({
             geoIndex: index,
-            type: 'layer',
+            type: "layer",
             url,
             legendName: ` ${
               selectedInds[0].indName
-            } - ${selectedInds[0].subInd.join(', ')}`,
+            } - ${selectedInds[0].subInd.join(", ")}`,
             uniqCount: aggregation.data[0].uniqCount,
             tileName: aggregation.data[0].tileName,
             zoom: aggregation.data[0].zoom,
             minValue: aggregation.data[0].minValue,
-            maxValue: aggregation.data[0].maxValue
+            maxValue: aggregation.data[0].maxValue,
           });
         } else {
           geomapData[foundGeoIndex] = {
             geoIndex: indSelectedIndex,
-            type: 'layer',
+            type: "layer",
             url,
             legendName: ` ${
               selectedInds[0].indName
-            } - ${selectedInds[0].subInd.join(', ')}`,
+            } - ${selectedInds[0].subInd.join(", ")}`,
             tileName: aggregation.data[0].tileName,
             zoom: aggregation.data[0].zoom,
             uniqCount: aggregation.data[0].uniqCount,
             minValue: aggregation.data[0].minValue,
-            maxValue: aggregation.data[0].maxValue
+            maxValue: aggregation.data[0].maxValue,
           };
         }
       } else if (index === 1) {
@@ -368,16 +368,20 @@ export function formatGeoData(
         if (indSelectedIndex === -1 || foundGeoIndex === -1) {
           geomapData.push({
             geoIndex: index,
-            type: 'circle',
+            type: "circle",
             data: countryCircleData,
-            legendName: ` ${indName} - ${aggregation.selectedSubInd.join(', ')}`
+            legendName: ` ${indName} - ${aggregation.selectedSubInd.join(
+              ", "
+            )}`,
           });
         } else {
           geomapData[foundGeoIndex] = {
             geoIndex: indSelectedIndex,
-            type: 'circle',
+            type: "circle",
             data: countryCircleData,
-            legendName: ` ${indName} - ${aggregation.selectedSubInd.join(', ')}`
+            legendName: ` ${indName} - ${aggregation.selectedSubInd.join(
+              ", "
+            )}`,
           };
         }
       } else {
@@ -400,10 +404,10 @@ export function formatGeoData(
 
           geomapData.push({
             geoIndex: index,
-            type: 'location',
+            type: "location",
             color: colors[colorInd],
             data: longLatData,
-            legendName: `${indName} - ${aggregation.selectedSubInd.join(', ')}`
+            legendName: `${indName} - ${aggregation.selectedSubInd.join(", ")}`,
           });
 
           if (colorInd + 1 < colors.length) {
@@ -414,10 +418,10 @@ export function formatGeoData(
         } else {
           geomapData[foundGeoIndex] = {
             geoIndex: indSelectedIndex,
-            type: 'location',
+            type: "location",
             data: longLatData,
             color: geomapData[foundGeoIndex].color,
-            legendName: `${indName} - ${aggregation.selectedSubInd.join(', ')}`
+            legendName: `${indName} - ${aggregation.selectedSubInd.join(", ")}`,
           };
         }
       }
@@ -446,10 +450,10 @@ export function formatChartLegends(
   let colorInd = 0;
   selectedInds.forEach((indItem, index) => {
     let curKeyInd = -1;
-    let orientation = 'left';
+    let orientation = "left";
 
     if (currKeys.length > 0) {
-      curKeyInd = findIndex(currKeys, ['indIndex', index]);
+      curKeyInd = findIndex(currKeys, ["indIndex", index]);
     }
 
     if (curKeyInd !== -1) {
@@ -467,13 +471,13 @@ export function formatChartLegends(
 
       if (indItem.subIndAggr) {
         chartKeys.push({
-          label: `${indName} - ${indItem.subInd.join(', ')}`,
+          label: `${indName} - ${indItem.subInd.join(", ")}`,
           name: indName,
           color: colors[colorInd],
           dataSource: indItem.dataSource,
           indIndex: index,
           indIndexedName: indName,
-          orientation
+          orientation,
         });
 
         if (colorInd + 1 < colors.length) {
@@ -482,7 +486,7 @@ export function formatChartLegends(
           colorInd = 0;
         }
       } else {
-        indItem.subInd.forEach(selSubInd => {
+        indItem.subInd.forEach((selSubInd) => {
           const key = `${indName} - ${selSubInd}`;
 
           chartKeys.push({
@@ -492,7 +496,7 @@ export function formatChartLegends(
             dataSource: indItem.dataSource,
             indIndex: index,
             indIndexedName: indName,
-            orientation
+            orientation,
           });
 
           if (colorInd + 1 < colors.length) {
@@ -507,8 +511,8 @@ export function formatChartLegends(
         label: undefined,
         name: undefined,
         indIndex: index,
-        color: '',
-        orientation
+        color: "",
+        orientation,
       });
     }
   });
@@ -544,11 +548,11 @@ export function formatLineData(
     // has been changed we remove the current data of this
     // indicator cause we have recalled all of it and need to
     // replace it
-    let keysToRemove = filter(currChartKeys, ['indIndex', indSelectedIndex]);
+    let keysToRemove = filter(currChartKeys, ["indIndex", indSelectedIndex]);
 
     if (keysToRemove.length > 0) {
-      keysToRemove.forEach(keyItem => {
-        indicatorData.forEach(item => {
+      keysToRemove.forEach((keyItem) => {
+        indicatorData.forEach((item) => {
           if (item[keyItem.name]) {
             // and then we just delete it
             delete item[keyItem.name];
@@ -582,16 +586,16 @@ export function formatLineData(
 
       indicatorNames.push(indName);
 
-      indicator.data.forEach(indItem => {
+      indicator.data.forEach((indItem) => {
         // yeah and cause we might receive data with the same geolocation name
         // we add in the values for that geolocation so it wouldn't be repeated over and over
-        const existItemInd = findIndex(indicatorData, existing => {
+        const existItemInd = findIndex(indicatorData, (existing) => {
           return indItem[aggrKey] === existing[aggrKey];
         });
 
         let aggrValue = indItem.date;
 
-        if (aggrKey === 'geolocationTag') {
+        if (aggrKey === "geolocationTag") {
           aggrValue =
             indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
               ? indItem.geolocationIso2
@@ -607,7 +611,7 @@ export function formatLineData(
             [aggrKey]: indItem[aggrKey],
             [aggregate]: aggrValue,
             [itemId]: Math.round(indItem.value),
-            [`${itemId}Format`]: indItem.valueFormatType
+            [`${itemId}Format`]: indItem.valueFormatType,
           });
         } else {
           indicatorData[existItemInd][itemId] = Math.round(indItem.value);
@@ -625,7 +629,7 @@ export function formatLineData(
 
   return {
     data: sortBy(indicatorData, [aggregate]),
-    indKeys: indicatorNames
+    indKeys: indicatorNames,
   };
 }
 
@@ -657,11 +661,11 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
           key: indName,
           dataSource: indItem.dataSource,
           indName,
-          label: `${indName} - ${indItem.subInd.join(', ')}`,
+          label: `${indName} - ${indItem.subInd.join(", ")}`,
           color: colors[colorInd],
           // this will be used for data manipulation
           // to optimise indicator data refetching
-          indIndex: index
+          indIndex: index,
         });
 
         if (colorInd + 1 < colors.length) {
@@ -670,7 +674,7 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
           colorInd = 0;
         }
       } else {
-        indItem.subInd.forEach(subIndName => {
+        indItem.subInd.forEach((subIndName) => {
           const key = `${indName} - ${subIndName}`;
 
           chartKeys.push({
@@ -682,7 +686,7 @@ export function formatBarChartKeys(selectedInd, colors = colorSet[0].colors) {
             color: colors[colorInd],
             // this will be used for data manipulation
             // to optimise indicator data refetching
-            indIndex: index
+            indIndex: index,
           });
 
           if (colorInd + 1 < colors.length) {
@@ -724,11 +728,11 @@ export function formatBarData(
     // has been changed we remove the current data of this
     // indicator cause we have recalled all of it and need to
     // replace it
-    let keysToRemove = filter(currChartKeys, ['indIndex', indSelectedIndex]);
+    let keysToRemove = filter(currChartKeys, ["indIndex", indSelectedIndex]);
 
     if (keysToRemove.length > 0) {
-      keysToRemove.forEach(keyItem => {
-        barChartData.forEach(item => {
+      keysToRemove.forEach((keyItem) => {
+        barChartData.forEach((item) => {
           if (item[keyItem.key]) {
             // so if the key exists we first substract its
             // value from the 'allValSum' item so that
@@ -765,16 +769,16 @@ export function formatBarData(
 
       barIndKeys.push(indName);
 
-      indicator.data.forEach(indItem => {
+      indicator.data.forEach((indItem) => {
         // yeah and cause we might receive data with the same geolocation name
         // we add in the values for that geolocation so it wouldn't be repeated over and over
-        const existItemInd = findIndex(barChartData, existing => {
+        const existItemInd = findIndex(barChartData, (existing) => {
           return indItem[aggrKey] === existing[aggrKey];
         });
 
         let aggrValue = indItem.date;
 
-        if (aggrKey === 'geolocationTag') {
+        if (aggrKey === "geolocationTag") {
           aggrValue =
             indItem.geolocationIso2 && indItem.geolocationIso2.length > 0
               ? indItem.geolocationIso2.toUpperCase()
@@ -786,7 +790,7 @@ export function formatBarData(
 
         if (indicator.subIndAggr) {
           itemId = indName;
-          label = `${itemId} - ${indicator.selectedSubInd.join(', ')}`;
+          label = `${itemId} - ${indicator.selectedSubInd.join(", ")}`;
         }
 
         if (existItemInd === -1) {
@@ -801,7 +805,7 @@ export function formatBarData(
 
             [itemId]: Math.round(indItem.value),
             [`${itemId}Color`]: colors[colorInd],
-            [`${itemId}Format`]: indItem.valueFormatType
+            [`${itemId}Format`]: indItem.valueFormatType,
           });
         } else {
           barChartData[existItemInd].allValSum += Math.round(indItem.value);
@@ -819,51 +823,51 @@ export function formatBarData(
 
   let sortedData = [];
 
-  if ((rankBy === 'high' && horizontal) || (rankBy === 'low' && !horizontal)) {
-    sortedData = sortBy(barChartData, ['allValSum']);
+  if ((rankBy === "high" && horizontal) || (rankBy === "low" && !horizontal)) {
+    sortedData = sortBy(barChartData, ["allValSum"]);
   } else if (
-    (rankBy === 'high' && !horizontal) ||
-    (rankBy === 'low' && horizontal)
+    (rankBy === "high" && !horizontal) ||
+    (rankBy === "low" && horizontal)
   ) {
-    sortedData = sortBy(barChartData, ['allValSum']).reverse();
+    sortedData = sortBy(barChartData, ["allValSum"]).reverse();
   }
 
   return {
     data: sortedData,
-    indKeys: barIndKeys
+    indKeys: barIndKeys,
   };
 }
 
 export function formatTableData(indicators) {
   const tableChartColumns = [
     {
-      name: 'geolocationTag',
-      label: 'Geolocation'
+      name: "geolocationTag",
+      label: "Geolocation",
     },
     {
-      name: 'date',
-      label: 'Date'
+      name: "date",
+      label: "Date",
     },
     {
-      name: 'geolocationIso2',
-      label: 'ISO2 codes'
-    }
+      name: "geolocationIso2",
+      label: "ISO2 codes",
+    },
   ];
 
   const tableChartData = [];
 
-  indicators.forEach(indicator => {
+  indicators.forEach((indicator) => {
     if (indicator.data.length > 0) {
-      indicator.data.forEach(indItem => {
+      indicator.data.forEach((indItem) => {
         const indCol = `${indItem.indicatorName}_${indItem.filterName}`;
 
         const indValCol = `${indCol}_value`;
         const indFormatCol = `${indCol}_format`;
 
-        const valIndex = findIndex(tableChartColumns, ['name', indValCol]);
+        const valIndex = findIndex(tableChartColumns, ["name", indValCol]);
         const formatIndex = findIndex(tableChartColumns, [
-          'name',
-          indFormatCol
+          "name",
+          indFormatCol,
         ]);
 
         // so if indicator format column does not exist we push it
@@ -871,7 +875,7 @@ export function formatTableData(indicators) {
         if (formatIndex === -1) {
           tableChartColumns.unshift({
             name: indFormatCol,
-            label: indFormatCol.charAt(0).toUpperCase() + indFormatCol.slice(1)
+            label: indFormatCol.charAt(0).toUpperCase() + indFormatCol.slice(1),
           });
         }
 
@@ -882,42 +886,42 @@ export function formatTableData(indicators) {
             name: indValCol,
             label: indValCol.charAt(0).toUpperCase() + indValCol.slice(1),
             indName: indItem.indicatorName,
-            subIndName: indItem.filterName
+            subIndName: indItem.filterName,
           });
         }
 
         const geoIndex = findIndex(tableChartData, [
-          'geolocationTag',
-          indItem.geolocationTag
+          "geolocationTag",
+          indItem.geolocationTag,
         ]);
 
         if (geoIndex === -1) {
           tableChartData.push({
             [indValCol]:
-              indItem.value === null ? 'N/A' : Math.round(indItem.value),
+              indItem.value === null ? "N/A" : Math.round(indItem.value),
             [indFormatCol]: indItem.valueFormatType,
 
             geolocationTag:
               indItem.geolocationTag === null ||
               indItem.geolocationTag.length <= 0
-                ? 'N/A'
+                ? "N/A"
                 : indItem.geolocationTag,
 
             //Date
             date:
               indItem.date === null || indItem.date.length <= 0
-                ? 'N/A'
+                ? "N/A"
                 : indItem.date,
 
             geolocationIso2:
               indItem.geolocationIso2 === null ||
               indItem.geolocationIso2.length <= 0
-                ? 'N/A'
-                : indItem.geolocationIso2
+                ? "N/A"
+                : indItem.geolocationIso2,
           });
         } else {
           tableChartData[geoIndex][indValCol] =
-            indItem.value === null ? 'N/A' : Math.round(indItem.value);
+            indItem.value === null ? "N/A" : Math.round(indItem.value);
           tableChartData[geoIndex][indFormatCol] = indItem.valueFormatType;
         }
       });
@@ -925,9 +929,9 @@ export function formatTableData(indicators) {
   });
 
   return {
-    title: '',
+    title: "",
     columns: tableChartColumns,
-    rows: tableChartData
+    rows: tableChartData,
   };
 }
 
@@ -954,10 +958,10 @@ export function formatDonutData(
     // has been changed we remove the current data of this
     // indicator cause we have recalled all of it and need to
     // replace it
-    const keysToRemove = filter(currChartKeys, ['indIndex', indSelectedIndex]);
+    const keysToRemove = filter(currChartKeys, ["indIndex", indSelectedIndex]);
 
     if (keysToRemove.length > 0) {
-      currData.forEach(item => {
+      currData.forEach((item) => {
         let pushItem = true;
 
         for (let i = 0; i < keysToRemove.length; i += 1) {
@@ -975,7 +979,7 @@ export function formatDonutData(
         }
       });
 
-      keysToRemove.forEach(keyItem => {
+      keysToRemove.forEach((keyItem) => {
         const remIndKeyIndex = donutChartLabels.indexOf(keyItem.indIndexedName);
 
         if (remIndKeyIndex !== -1) {
@@ -1007,7 +1011,7 @@ export function formatDonutData(
 
         if (indicator.subIndAggr) {
           itemId = indName;
-          label = `${indName} - ${indicator.selectedSubInd.join(', ')}`;
+          label = `${indName} - ${indicator.selectedSubInd.join(", ")}`;
         }
 
         let geoName = null;
@@ -1024,7 +1028,7 @@ export function formatDonutData(
           key: `${itemId}`,
           label,
           value: Math.round(indItem.value),
-          format: indItem.valueFormatType
+          format: indItem.valueFormatType,
         });
       });
     }
@@ -1032,7 +1036,7 @@ export function formatDonutData(
 
   return {
     data: chartData,
-    indKeys: donutChartLabels
+    indKeys: donutChartLabels,
   };
 }
 
@@ -1056,7 +1060,7 @@ export function formatDonutKeys(selectedInds, colors) {
       indNames.push(name);
 
       if (indItem.subIndAggr) {
-        const itemId = `${name} - ${indItem.subInd.join(', ')}`;
+        const itemId = `${name} - ${indItem.subInd.join(", ")}`;
 
         chartKeys.push({
           label: itemId,
@@ -1064,7 +1068,7 @@ export function formatDonutKeys(selectedInds, colors) {
           indIndex: index,
           indIndexedName: name,
           dataSource: indItem.dataSource,
-          color: colors[colorInd]
+          color: colors[colorInd],
         });
 
         if (colorInd + 1 < colors.length) {
@@ -1073,7 +1077,7 @@ export function formatDonutKeys(selectedInds, colors) {
           colorInd = 0;
         }
       } else {
-        indItem.subInd.forEach(subInd => {
+        indItem.subInd.forEach((subInd) => {
           const itemId = `${name} - ${subInd}`;
 
           chartKeys.push({
@@ -1082,7 +1086,7 @@ export function formatDonutKeys(selectedInds, colors) {
             indIndex: index,
             indIndexedName: name,
             dataSource: indItem.dataSource,
-            color: colors[colorInd]
+            color: colors[colorInd],
           });
 
           if (colorInd + 1 < colors.length) {
@@ -1122,42 +1126,42 @@ export function getChartKeys(
 // than others, cause they have polygon requests, which other charts dont need
 export function getFields(type, layer) {
   const fields = [
-    'indicatorName',
-    'geolocationTag',
-    'date',
-    'geolocationType',
-    'geolocationIso2',
-    'comment',
-    'valueFormatType',
-    'filterName'
+    "indicatorName",
+    "geolocationTag",
+    "date",
+    "geolocationType",
+    "geolocationIso2",
+    "comment",
+    "valueFormatType",
+    "filterName",
   ];
 
   switch (type) {
     case chartTypes.lineChart:
-      return ['indicatorName', 'valueFormatType', 'filterName', 'date'];
+      return ["indicatorName", "valueFormatType", "filterName", "date"];
     case chartTypes.barChart:
-      fields.splice(fields.indexOf('comment'), 1);
+      fields.splice(fields.indexOf("comment"), 1);
       return fields;
     case chartTypes.donutChart:
-      fields.splice(fields.indexOf('comment'), 1);
+      fields.splice(fields.indexOf("comment"), 1);
       return fields;
     case chartTypes.geoMap:
       if (layer) {
-        fields.push('geolocationPolygons');
+        fields.push("geolocationPolygons");
       }
-      fields.push('geolocationCenterLongLat');
+      fields.push("geolocationCenterLongLat");
       return fields;
     case chartTypes.focusKE:
       if (layer) {
-        fields.push('geolocationPolygons');
+        fields.push("geolocationPolygons");
       }
-      fields.push('geolocationCenterLongLat');
+      fields.push("geolocationCenterLongLat");
       return fields;
     case chartTypes.focusNL:
       if (layer) {
-        fields.push('geolocationPolygons');
+        fields.push("geolocationPolygons");
       }
-      fields.push('geolocationCenterLongLat');
+      fields.push("geolocationCenterLongLat");
       return fields;
     default:
       return fields;
@@ -1168,82 +1172,82 @@ export function getFields(type, layer) {
 // depending on the type of chart and chart options
 export function getGroupBy(type, subIndAggr, layer, aggr, aggrCountr) {
   const defgroupBy = [
-    'indicatorName',
-    'geolocationTag',
-    'date',
-    'geolocationType',
-    'geolocationIso2',
-    'comment',
-    'valueFormatType',
-    'geolocationCenterLongLat',
-    'filterName'
+    "indicatorName",
+    "geolocationTag",
+    "date",
+    "geolocationType",
+    "geolocationIso2",
+    "comment",
+    "valueFormatType",
+    "geolocationCenterLongLat",
+    "filterName",
   ];
 
   switch (type) {
     case chartTypes.lineChart: {
-      const groupBy = ['indicatorName', 'valueFormatType', 'date'];
+      const groupBy = ["indicatorName", "valueFormatType", "date"];
       if (!subIndAggr) {
-        groupBy.push('filterName');
+        groupBy.push("filterName");
       }
       return groupBy;
     }
     case chartTypes.donutChart: {
-      const groupBy = ['indicatorName', 'valueFormatType'];
+      const groupBy = ["indicatorName", "valueFormatType"];
 
       if (!aggrCountr) {
-        groupBy.push('geolocationTag');
+        groupBy.push("geolocationTag");
       }
 
       if (!subIndAggr) {
-        groupBy.push('filterName');
+        groupBy.push("filterName");
       }
       return groupBy;
     }
     case chartTypes.barChart: {
-      let groupBy = ['indicatorName', 'valueFormatType'];
+      let groupBy = ["indicatorName", "valueFormatType"];
 
       if (aggr === aggrOptions[0].value) {
-        groupBy = groupBy.concat(['geolocationTag', 'geolocationIso2']);
+        groupBy = groupBy.concat(["geolocationTag", "geolocationIso2"]);
       } else if (aggr === aggrOptions[1].value) {
-        groupBy.push('date');
+        groupBy.push("date");
       }
 
       if (!subIndAggr) {
-        groupBy.push('filterName');
+        groupBy.push("filterName");
       }
       return groupBy;
     }
     case chartTypes.geoMap:
       if (subIndAggr) {
-        defgroupBy.splice(defgroupBy.indexOf('filterName'), 1);
+        defgroupBy.splice(defgroupBy.indexOf("filterName"), 1);
       }
       if (layer) {
-        defgroupBy.push('geolocationPolygons');
+        defgroupBy.push("geolocationPolygons");
         // and we also splice off the valueFormatType for layers
         // as they'll be handled on the backend
-        defgroupBy.splice(defgroupBy.indexOf('valueFormatType'), 1);
+        defgroupBy.splice(defgroupBy.indexOf("valueFormatType"), 1);
       }
       return defgroupBy;
     case chartTypes.focusNL:
       if (subIndAggr) {
-        defgroupBy.splice(defgroupBy.indexOf('filterName'), 1);
+        defgroupBy.splice(defgroupBy.indexOf("filterName"), 1);
       }
       if (layer) {
-        defgroupBy.push('geolocationPolygons');
+        defgroupBy.push("geolocationPolygons");
         // and we also splice off the valueFormatType for layers
         // as they'll be handled on the backend
-        defgroupBy.splice(defgroupBy.indexOf('valueFormatType'), 1);
+        defgroupBy.splice(defgroupBy.indexOf("valueFormatType"), 1);
       }
       return defgroupBy;
     case chartTypes.focusKE:
       if (subIndAggr) {
-        defgroupBy.splice(defgroupBy.indexOf('filterName'), 1);
+        defgroupBy.splice(defgroupBy.indexOf("filterName"), 1);
       }
       if (layer) {
-        defgroupBy.push('geolocationPolygons');
+        defgroupBy.push("geolocationPolygons");
         // and we also splice off the valueFormatType for layers
         // as they'll be handled on the backend
-        defgroupBy.splice(defgroupBy.indexOf('valueFormatType'), 1);
+        defgroupBy.splice(defgroupBy.indexOf("valueFormatType"), 1);
       }
       return defgroupBy;
     default:

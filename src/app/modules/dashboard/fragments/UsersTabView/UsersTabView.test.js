@@ -1,12 +1,12 @@
 /* base */
 import React from 'react';
 import { shallow } from 'enzyme';
-import UsersTabView from 'modules/dashboard/fragments/UsersTabView/UsersTabView';
+import UsersTabView from 'app/modules/dashboard/fragments/UsersTabView/UsersTabView';
 /* components */
-import SvgIconPlus from 'assets/icons/IconPlus';
-import SvgIconSort from 'assets/icons/IconSort';
-import { NoItems } from 'modules/dashboard/DashboardModule.styles';
-import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
+import SvgIconPlus from 'app/assets/icons/IconPlus';
+import SvgIconSort from 'app/assets/icons/IconSort';
+import { NoItems } from 'app/modules/dashboard/DashboardModule.styles';
+import SortbyDialog from 'app/components/Dialog/SortbyDialog/SortbyDialog';
 import { AddUserLink, ControlsRow, ViewContainer } from './UsersTabView.styles';
 import GridList from '../GridList/GridList';
 

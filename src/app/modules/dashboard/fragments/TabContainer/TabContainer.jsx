@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 /* components */
-import Theme from 'theme/Theme';
+import Theme from 'app/theme/Theme';
 import {
   CenterTabs,
   Container,

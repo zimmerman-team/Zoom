@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 import { Box } from 'grommet/components/Box';
 import StepConnector from '@material-ui/core/StepConnector';
 import withStyles from '@material-ui/styles/withStyles';
-import ZoomButton from 'components/ZoomButton/ZoomButton';
+import ZoomButton from 'app/components/ZoomButton/ZoomButton';
 /* styles */
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 import {
   ButtonContainer,
   ButtonLabel,

@@ -4,26 +4,26 @@ import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 import { Route, withRouter } from 'react-router';
 /* consts */
-import graphKeys from '__consts__/GraphStructKeyConst';
-import chartTypes from '__consts__/ChartConst';
+import graphKeys from 'app/__consts__/GraphStructKeyConst';
+import chartTypes from 'app/__consts__/ChartConst';
 
-import ContextPreview from 'components/ContextPreview/ContextPreview';
-import BarchartFragment from 'modules/visualizer/sort/container/fragments/BarchartFragment/BarchartFragment';
-import GeomapFragment from 'modules/visualizer/sort/container/fragments/GeomapFragment/GeomapFragment';
+import ContextPreview from 'app/components/ContextPreview/ContextPreview';
+import BarchartFragment from 'app/modules/visualizer/sort/container/fragments/BarchartFragment/BarchartFragment';
+import GeomapFragment from 'app/modules/visualizer/sort/container/fragments/GeomapFragment/GeomapFragment';
 
-import LinechartFragment from 'modules/visualizer/sort/container/fragments/LinechartFragment/LinechartFragment';
-import TablechartFragment from 'modules/visualizer/sort/container/fragments/TablechartFragment/TablechartFragment';
-import DonutchartFragment from 'modules/visualizer/sort/container/fragments/DonutchartFragment/DonutchartFragment';
+import LinechartFragment from 'app/modules/visualizer/sort/container/fragments/LinechartFragment/LinechartFragment';
+import TablechartFragment from 'app/modules/visualizer/sort/container/fragments/TablechartFragment/TablechartFragment';
+import DonutchartFragment from 'app/modules/visualizer/sort/container/fragments/DonutchartFragment/DonutchartFragment';
 import { ComponentBase, PreviewTextContainer } from './VizContainer.style';
 import CustomYearSelector from '../../../../components/CustomYearSelector/CustomYearSelector';
 import { YearContainer } from '../../../../components/CustomYearSelector/CustomYearSelector.style';
 
-import YearRangeSelector from 'components/YearRangeSelector/YearRangeSelector';
-import { aggrOptions } from '__consts__/GraphStructOptionConsts';
+import YearRangeSelector from 'app/components/YearRangeSelector/YearRangeSelector';
+import { aggrOptions } from 'app/__consts__/GraphStructOptionConsts';
 
 /* style */
-import theme from 'theme/Theme';
-import initialState from '__consts__/InitialChartDataConst';
+import theme from 'app/theme/Theme';
+import initialState from 'app/__consts__/InitialChartDataConst';
 
 /**
  * todo: Please write a short component description of what this component does

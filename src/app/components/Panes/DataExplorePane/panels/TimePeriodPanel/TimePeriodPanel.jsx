@@ -1,7 +1,7 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import YearSelector from 'components/YearSelector/YearSelector';
+import YearSelector from 'app/components/YearSelector/YearSelector';
 
 const propTypes = {
   isYearSelect: PropTypes.bool,

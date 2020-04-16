@@ -1,4 +1,4 @@
-import Theme from 'theme/Theme';
+import Theme from 'app/theme/Theme';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 

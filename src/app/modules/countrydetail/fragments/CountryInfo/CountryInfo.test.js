@@ -3,14 +3,14 @@ import { shallow } from 'enzyme';
 import CountryInfo from './CountryInfo';
 // Components
 import { Box } from 'grommet/components/Box';
-import HorizontalBarChart from 'components/charts/barcharts/horizontal/HorizontalBarChart';
-import { SimpleText } from 'components/sort/Misc';
+import HorizontalBarChart from 'app/components/charts/barcharts/horizontal/HorizontalBarChart';
+import { SimpleText } from 'app/components/sort/Misc';
 import {
   PageIntroInitial,
   PageIntroSecondary
-} from 'components/sort/Paragraphs';
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-import { CountryName } from 'modules/countrydetail/fragments/CountryInfo/CountryInfo.styles';
+} from 'app/components/sort/Paragraphs';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
+import { CountryName } from 'app/modules/countrydetail/fragments/CountryInfo/CountryInfo.styles';
 
 const wrapper = shallow(<CountryInfo />);
 

@@ -7,7 +7,7 @@ import { Select } from 'grommet/components/Select';
 import { CheckBox } from 'grommet/components/CheckBox';
 import { Box } from 'grommet/components/Box';
 
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 const CustomSelect = styled(Select)`
   font-family: ${theme.font.zoomFontFamOne};

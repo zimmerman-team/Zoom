@@ -3,11 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 import { connect } from 'react-redux';
 
 /* consts */
-import userRoles from '__consts__/UserRoleConst';
+import userRoles from 'app/__consts__/UserRoleConst';
 
 /**
  * todo: Please write a short component description of what this component does

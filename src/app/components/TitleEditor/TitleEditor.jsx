@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 const TitleEditor = styled(props => <input {...props} />)`
   color: ${theme.color.zoomBlack};

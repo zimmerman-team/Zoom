@@ -1,11 +1,11 @@
 /* base */
 import React from 'react';
 import { shallow } from 'enzyme';
-import { GeoMap } from 'components/GeoMap/GeoMap';
+import { GeoMap } from 'app/components/GeoMap/GeoMap';
 /* components */
 import MapGL from 'react-map-gl';
-import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
-import MapControls from 'components/GeoMap/components/MapControls/MapControls';
+import CustomYearSelector from 'app/components/CustomYearSelector/CustomYearSelector';
+import MapControls from 'app/components/GeoMap/components/MapControls/MapControls';
 import Fullscreen from 'react-full-screen';
 
 import {
@@ -13,7 +13,7 @@ import {
   LegendContainer,
   MapContainer
 } from './GeoMap.style';
-import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
+import { YearContainer } from 'app/components/CustomYearSelector/CustomYearSelector.style';
 
 const wrapper = shallow(<GeoMap />);
 

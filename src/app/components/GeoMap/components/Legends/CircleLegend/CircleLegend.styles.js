@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { LegendLabel } from 'components/GeoMap/components/Legends/Legend.styles';
-import theme from 'theme/Theme';
+import { LegendLabel } from 'app/components/GeoMap/components/Legends/Legend.styles';
+import theme from 'app/theme/Theme';
 
 export const CircleLegendItem = styled.div`
   display: flex;

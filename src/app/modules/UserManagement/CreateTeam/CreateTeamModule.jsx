@@ -11,16 +11,16 @@ import {
   TableBox,
   TextField,
   UsersTable
-} from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
+} from 'app/modules/UserManagement/CreateTeam/CreateTeamModule.styles';
 
-import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
-import Pagination from 'components/Pagination/Pagination';
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-import InputField from 'components/InputField/InputField';
-import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
-import IconSearch from 'assets/icons/IconSearch';
-import getColumns from 'modules/UserManagement/CreateTeam/comps/TableColumns';
-import theme from 'theme/Theme';
+import ProgressIcon from 'app/components/ProgressIcon/ProgressIcon';
+import Pagination from 'app/components/Pagination/Pagination';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
+import InputField from 'app/components/InputField/InputField';
+import SimpleToolTip from 'app/components/ToolTips/SimpleToolTip/SimpleToolTip';
+import IconSearch from 'app/assets/icons/IconSearch';
+import getColumns from 'app/modules/UserManagement/CreateTeam/comps/TableColumns';
+import theme from 'app/theme/Theme';
 
 const propTypes = {
   success: PropTypes.bool,

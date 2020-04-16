@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import CreateTeamModule from 'modules/UserManagement/CreateTeam/CreateTeamModule';
+import CreateTeamModule from 'app/modules/UserManagement/CreateTeam/CreateTeamModule';
 // Components
 import {
   CreateTeamForm,
@@ -8,11 +8,11 @@ import {
   TableBox,
   TextField,
   UsersTable
-} from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
+} from 'app/modules/UserManagement/CreateTeam/CreateTeamModule.styles';
 import { Text } from 'grommet/components/Text';
-import Pagination from 'components/Pagination/Pagination';
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-import InputField from 'components/InputField/InputField';
+import Pagination from 'app/components/Pagination/Pagination';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
+import InputField from 'app/components/InputField/InputField';
 
 const wrapper = shallow(<CreateTeamModule />);
 

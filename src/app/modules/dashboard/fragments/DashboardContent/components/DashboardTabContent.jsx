@@ -2,17 +2,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 import { connect } from 'react-redux';
 /* consts */
-import paneTypes from '__consts__/PaneTypesConst';
+import paneTypes from 'app/__consts__/PaneTypesConst';
 /* components */
-import GridList from 'modules/dashboard/fragments/GridList/GridList';
-import GridListOptionsPane from 'modules/dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
-import NavPane from 'components/Panes/NavPane/NavPane';
-import DataPaneContainer from 'components/Panes/DataPaneContainer/DataPaneContainer';
-import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
-import userRoles from '__consts__/UserRoleConst';
+import GridList from 'app/modules/dashboard/fragments/GridList/GridList';
+import GridListOptionsPane from 'app/modules/dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
+import NavPane from 'app/components/Panes/NavPane/NavPane';
+import DataPaneContainer from 'app/components/Panes/DataPaneContainer/DataPaneContainer';
+import ProgressIcon from 'app/components/ProgressIcon/ProgressIcon';
+import userRoles from 'app/__consts__/UserRoleConst';
 
 /* todo: logic in this component seems somewhat convoluted, needs some cleaning up */
 

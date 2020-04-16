@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 // Components
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-import BarChartVertical from 'components/charts/barcharts/vertical/BarChartVertical';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
+import BarChartVertical from 'app/components/charts/barcharts/vertical/BarChartVertical';
 import TotalBudget from './TotalBudget';
 
 const wrapper = shallow(<TotalBudget />);

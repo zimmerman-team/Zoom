@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import theme from 'theme/Theme';
-import ZoomButton from 'components/ZoomButton/ZoomButton';
+import theme from 'app/theme/Theme';
+import ZoomButton from 'app/components/ZoomButton/ZoomButton';
 
 export const ComponentBase = styled.div`
   position: absolute;

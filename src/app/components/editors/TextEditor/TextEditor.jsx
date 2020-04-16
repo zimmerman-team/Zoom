@@ -1,7 +1,7 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import ZimmermanQuill from 'components/ZimmermanQuill/ZimmermanQuil';
+import ZimmermanQuill from 'app/components/ZimmermanQuill/ZimmermanQuil';
 
 /**
  * todo: Please write a short component description of what this component does

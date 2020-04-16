@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 /* todo: needs further tweaking from a design perspective and speccing from a business perspective */
 export const TextContainer = styled.div`

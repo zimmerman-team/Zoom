@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 import { Box } from 'grommet/components/Box';
 import get from 'lodash/get';
-import Theme from 'theme/Theme';
+import Theme from 'app/theme/Theme';
 
 const ComponentBase = styled(Box)`
   height: 280px;

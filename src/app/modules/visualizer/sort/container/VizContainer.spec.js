@@ -1,9 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import ContextPreview from 'components/ContextPreview/ContextPreview';
-import VizContainer from 'modules/visualizer/sort/container/VizContainer';
-import GeoMap from 'components/GeoMap/GeoMap';
+import ContextPreview from 'app/components/ContextPreview/ContextPreview';
+import VizContainer from 'app/modules/visualizer/sort/container/VizContainer';
+import GeoMap from 'app/components/GeoMap/GeoMap';
 
 const wrapper = shallow(<VizContainer />);
 

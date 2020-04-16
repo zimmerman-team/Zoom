@@ -6,7 +6,7 @@ import Switch from '@material-ui/core/Switch';
 
 import withStyles from '@material-ui/styles/withStyles';
 
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 /**
  * todo: Please write a short component description of what this component does

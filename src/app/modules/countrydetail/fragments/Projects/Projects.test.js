@@ -2,8 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Projects from './Projects';
 // Components
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-import ProjectList from 'components/Lists/ProjectList/ProjectList';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
+import ProjectList from 'app/components/Lists/ProjectList/ProjectList';
 
 const wrapper = shallow(<Projects />);
 

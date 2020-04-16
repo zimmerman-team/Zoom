@@ -1,7 +1,7 @@
 /* utils */
 import find from 'lodash/find';
 /* consts */
-import { defModelOptions } from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
+import { defModelOptions } from 'app/mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
 
 export function checkEmptyFields(manMapData, mapReqFields) {
   const emptyFields = [];

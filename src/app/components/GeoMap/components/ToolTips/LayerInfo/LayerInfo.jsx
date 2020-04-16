@@ -1,7 +1,7 @@
 import React from 'react';
 
 /* utils */
-import { formatNumber, truncateText } from 'utils/genericUtils';
+import { formatNumber, truncateText } from 'app/utils/genericUtils';
 
 /* styles */
 import {
@@ -10,7 +10,7 @@ import {
   ToolTipText,
   ToolTipTitle,
   ValueContainer
-} from 'components/GeoMap/components/ToolTips/ToolTip.style';
+} from 'app/components/GeoMap/components/ToolTips/ToolTip.style';
 
 // This component is specific for the react-map-gl, thus there's no story books
 // or unit tests for it as a seperate component

@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Sectors from 'modules/IATI_Detail/fragments/Sectors/Sectors';
+import Sectors from 'app/modules/IATI_Detail/fragments/Sectors/Sectors';
 // Components
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-import TreeMap from 'components/charts/treemap/TreeMap';
-import { treeMapMockData } from '__mocks__/treeMapMock';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
+import TreeMap from 'app/components/charts/treemap/TreeMap';
+import { treeMapMockData } from 'app/__mocks__/treeMapMock';
 
 const wrapper = shallow(<Sectors data={treeMapMockData} />);
 

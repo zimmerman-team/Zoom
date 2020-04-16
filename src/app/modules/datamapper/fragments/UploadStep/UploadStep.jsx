@@ -9,13 +9,13 @@ import {
   TextContainer,
   UploadContainer,
   UploadedContainer
-} from 'modules/datamapper/fragments/UploadStep/UploadStep.styles';
-import theme from 'theme/Theme';
+} from 'app/modules/datamapper/fragments/UploadStep/UploadStep.styles';
+import theme from 'app/theme/Theme';
 /* icons */
-import IconUpload from 'assets/icons/IconUpload';
+import IconUpload from 'app/assets/icons/IconUpload';
 /* component */
-import { SectionHeading } from 'components/sort/Headings';
-import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
+import { SectionHeading } from 'app/components/sort/Headings';
+import ProgressIcon from 'app/components/ProgressIcon/ProgressIcon';
 
 const propTypes = {
   handleFileUpload: PropTypes.func,

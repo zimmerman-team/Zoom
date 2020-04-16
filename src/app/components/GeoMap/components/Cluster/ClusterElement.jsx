@@ -5,7 +5,7 @@ import React from 'react';
 /* components */
 import styled from 'styled-components';
 /* project comps */
-import SvgCircleMarker from 'assets/icons/CircleMarkerIcon';
+import SvgCircleMarker from 'app/assets/icons/CircleMarkerIcon';
 
 /* consts */
 const maxSize = 105;

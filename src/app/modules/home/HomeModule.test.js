@@ -1,14 +1,14 @@
 /* base */
 import React from 'react';
 import { shallow } from 'enzyme';
-import { HomeModule } from 'modules/home/HomeModule';
+import { HomeModule } from 'app/modules/home/HomeModule';
 /* components */
-import GeoMap from 'components/GeoMap/GeoMap';
+import GeoMap from 'app/components/GeoMap/GeoMap';
 import {
   ControlPanelContainer,
   ModuleContainer
-} from 'modules/home/HomeModule.styles';
-import ExplorePanelMediator from 'mediators/ComponentMediators/PaneMediators/ExplorePanelMediator/ExplorePanelMediator';
+} from 'app/modules/home/HomeModule.styles';
+import ExplorePanelMediator from 'app/mediators/ComponentMediators/PaneMediators/ExplorePanelMediator/ExplorePanelMediator';
 
 const wrapper = shallow(<HomeModule dataPaneOpen />);
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 export const IconLabel = styled.label`
   color: ${theme.color.aidsFondsRed};

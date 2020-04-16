@@ -3,7 +3,7 @@ import find from 'lodash/find';
 import sumBy from 'lodash/sumBy';
 import DateTime from 'luxon/src/datetime';
 
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 function convertISOToDate(date) {
   return date

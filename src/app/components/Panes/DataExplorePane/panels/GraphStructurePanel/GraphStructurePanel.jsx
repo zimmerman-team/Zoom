@@ -3,13 +3,13 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 /* components */
-import ColorSelect from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/ColorSelect/ColorSelect';
-import SimpleSelect from 'components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/SimpleSelect/SimpleSelect';
-import SimpleSwitch from 'components/SimpleSwitch/SimpleSwitch';
+import ColorSelect from 'app/components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/ColorSelect/ColorSelect';
+import SimpleSelect from 'app/components/Panes/DataExplorePane/panels/GraphStructurePanel/sort/SimpleSelect/SimpleSelect';
+import SimpleSwitch from 'app/components/SimpleSwitch/SimpleSwitch';
 /* consts */
-import chartTypes from '__consts__/ChartConst';
-import graphKeys from '__consts__/GraphStructKeyConst';
-import { aggrOptions, rankOptions } from '__consts__/GraphStructOptionConsts';
+import chartTypes from 'app/__consts__/ChartConst';
+import graphKeys from 'app/__consts__/GraphStructKeyConst';
+import { aggrOptions, rankOptions } from 'app/__consts__/GraphStructOptionConsts';
 
 /**
  *

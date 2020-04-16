@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
-import TabNavigatorItem from 'modules/visualizer/sort/sidebar/tabs/TabNavigator/common/TabNavigatorItem';
+import TabNavigatorItem from 'app/modules/visualizer/sort/sidebar/tabs/TabNavigator/common/TabNavigatorItem';
 
 /**
  * todo: Please write a short component description of what this component does

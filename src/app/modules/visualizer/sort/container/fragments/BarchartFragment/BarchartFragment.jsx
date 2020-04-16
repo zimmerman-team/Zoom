@@ -8,15 +8,15 @@ import { connect } from 'react-redux';
 import find from 'lodash/find';
 
 /* components */
-import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
+import ChartLegends from 'app/modules/visualizer/sort/container/fragments/common/ChartLegends';
 import { ResponsiveBar } from '@nivo/bar';
-import TooltipContent from 'modules/visualizer/sort/container/fragments/common/ToolTipContent';
+import TooltipContent from 'app/modules/visualizer/sort/container/fragments/common/ToolTipContent';
 /* styles */
 import {
   FragmentBase,
   ChartContainer
-} from 'modules/visualizer/sort/container/VizContainer.style';
-import graphKeys from '__consts__/GraphStructKeyConst';
+} from 'app/modules/visualizer/sort/container/VizContainer.style';
+import graphKeys from 'app/__consts__/GraphStructKeyConst';
 
 const Box = styled.div`
   width: 100%;

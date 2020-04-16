@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 export const ComponentBase = styled.div`
   padding: 3px 5px;

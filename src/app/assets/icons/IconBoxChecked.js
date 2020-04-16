@@ -1,5 +1,5 @@
 import React from 'react';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 const SvgComponent = props => (
   <svg width={16} height={16} {...props}>

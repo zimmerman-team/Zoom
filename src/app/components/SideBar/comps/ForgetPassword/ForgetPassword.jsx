@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import { connect } from 'react-redux';
 /* actions */
-import * as syncActions from 'services/actions/sync';
+import * as syncActions from 'app/services/actions/sync';
 /* components */
 import {
   ForgotPassLink,

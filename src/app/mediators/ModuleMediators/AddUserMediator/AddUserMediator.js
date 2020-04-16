@@ -7,13 +7,13 @@ import {
   getGroupsRequest,
   addAuthUserInitial,
   addAuthUserRequest
-} from 'services/actions/authNodeBackend';
+} from 'app/services/actions/authNodeBackend';
 /* utils */
 import get from 'lodash/get';
 import sortBy from 'lodash/sortBy';
 import isEqual from 'lodash/isEqual';
 /* components */
-import AddUserModule from 'modules/UserManagement/AddUser/AddUserModule';
+import AddUserModule from 'app/modules/UserManagement/AddUser/AddUserModule';
 
 class AddUserMediator extends React.Component {
   state = {

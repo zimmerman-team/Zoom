@@ -1,5 +1,5 @@
 import update from 'immutability-helper';
-import * as syncActions from 'services/actions/sync';
+import * as syncActions from 'app/services/actions/sync';
 
 const initial = {
   data: null

@@ -2,9 +2,9 @@ import React from 'react';
 import isEqual from 'lodash/isEqual';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { setUserIdToken } from 'services/actions/sync';
-import { getCurrentUserRequest } from 'services/actions/authNodeBackend';
-import ModuleContainer from 'modules/common/modulecontainer/ModuleContainer';
+import { setUserIdToken } from 'app/services/actions/sync';
+import { getCurrentUserRequest } from 'app/services/actions/authNodeBackend';
+import ModuleContainer from 'app/modules/common/modulecontainer/ModuleContainer';
 
 class Callback extends React.Component {
   componentDidMount = () => {

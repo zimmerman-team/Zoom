@@ -6,19 +6,19 @@ import { connect } from 'react-redux';
 /* utils */
 import find from 'lodash/find';
 /* consts */
-import graphKeys from '__consts__/GraphStructKeyConst';
+import graphKeys from 'app/__consts__/GraphStructKeyConst';
 /* components */
-import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
+import ChartLegends from 'app/modules/visualizer/sort/container/fragments/common/ChartLegends';
 import { ResponsivePie } from '@nivo/pie';
-import TooltipContent from 'modules/visualizer/sort/container/fragments/common/ToolTipContent';
+import TooltipContent from 'app/modules/visualizer/sort/container/fragments/common/ToolTipContent';
 /* styles */
 import {
   FragmentBase,
   ChartContainer
-} from 'modules/visualizer/sort/container/VizContainer.style';
+} from 'app/modules/visualizer/sort/container/VizContainer.style';
 
 /* styles */
-//import { LineYearContainer } from 'modules/visualizer/sort/container/VizContainer.style';
+//import { LineYearContainer } from 'app/modules/visualizer/sort/container/VizContainer.style';
 
 const Box = styled.div`
   width: 1024px;

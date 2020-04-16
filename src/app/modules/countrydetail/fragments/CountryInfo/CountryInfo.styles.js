@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Box } from 'grommet/components/Box';
-import { PageHeading } from 'components/sort/Headings';
+import { PageHeading } from 'app/components/sort/Headings';
 
 export const CountryInfoContainer = styled(Box)``;
 export const CountryName = styled(PageHeading)`

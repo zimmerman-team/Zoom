@@ -1,4 +1,4 @@
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 export default [
   {
     indicator: '2012',

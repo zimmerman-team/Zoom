@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 const propTypes = {};
 const defaultProps = {};

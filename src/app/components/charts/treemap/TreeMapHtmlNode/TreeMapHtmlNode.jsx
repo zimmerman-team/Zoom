@@ -7,7 +7,7 @@ import {
   TextContainer,
   TreeNodeBase
 } from './TreeMapHtmlNode.styles';
-import Theme from 'theme/Theme';
+import Theme from 'app/theme/Theme';
 
 const TreeMapHtmlNode = ({ node, style }) => {
   if (style.width <= 0 || style.height <= 0) return null;

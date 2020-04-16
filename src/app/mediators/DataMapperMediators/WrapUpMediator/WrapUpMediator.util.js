@@ -1,6 +1,6 @@
 /* consts */
 import { normalValues, columnValues } from './WrapUpMediator.const';
-import { defModelOptions } from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
+import { defModelOptions } from 'app/mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
 
 /* utils */
 import filter from 'lodash/filter';

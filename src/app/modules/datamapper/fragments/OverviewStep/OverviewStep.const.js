@@ -1,11 +1,11 @@
 import React from 'react';
-import CellValue from 'components/ZoomTable/CellValue';
+import CellValue from 'app/components/ZoomTable/CellValue';
 import {
   Cell,
   CellLine,
   CellText,
   ColHeader
-} from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
+} from 'app/modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
 
 const Const = {
   columns: [

@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import LineChart from 'components/charts/recharts_linechart/LineChart';
+import LineChart from 'app/components/charts/recharts_linechart/LineChart';
 /* components */
 import {
   CartesianGrid,
@@ -11,7 +11,7 @@ import {
   XAxis,
   YAxis
 } from 'recharts';
-import mock from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
+import mock from 'app/mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator.mock';
 
 const wrapper = shallow(<LineChart indicators={mock.lineChartInd} />);
 

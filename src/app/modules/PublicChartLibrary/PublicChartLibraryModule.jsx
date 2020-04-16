@@ -8,14 +8,14 @@ import {
   ModuleContainer,
   ModuleTitle,
   ViewContainer
-} from 'modules/dashboard/DashboardModule.styles';
+} from 'app/modules/dashboard/DashboardModule.styles';
 
-import Searchbox from 'modules/dashboard/fragments/Searchbox/Searchbox';
+import Searchbox from 'app/modules/dashboard/fragments/Searchbox/Searchbox';
 import GridListOptionsPane from '../dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
 import Pagination from '../../components/Pagination/Pagination';
 import GridList from '../dashboard/fragments/GridList/GridList';
-import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
-import theme from 'theme/Theme';
+import ProgressIcon from 'app/components/ProgressIcon/ProgressIcon';
+import theme from 'app/theme/Theme';
 // import data from './PublicChartLibraryModule.const';
 
 const Box = styled.div`

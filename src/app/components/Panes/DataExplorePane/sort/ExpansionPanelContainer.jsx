@@ -1,13 +1,13 @@
 /* base */
 import React from 'react';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 /* components */
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpansionPanelContent from 'components/Panes/DataExplorePane/sort/ExpansionPanelContent';
-import ExpansionPanelHeader from 'components/Panes/DataExplorePane/sort/ExpansionPanelHeader';
-import ExpansionPanel from 'components/Panes/DataExplorePane/sort/ExpansionPanel';
-import IconContainer from 'components/Panes/DataExplorePane/sort/IconContainer';
+import ExpansionPanelContent from 'app/components/Panes/DataExplorePane/sort/ExpansionPanelContent';
+import ExpansionPanelHeader from 'app/components/Panes/DataExplorePane/sort/ExpansionPanelHeader';
+import ExpansionPanel from 'app/components/Panes/DataExplorePane/sort/ExpansionPanel';
+import IconContainer from 'app/components/Panes/DataExplorePane/sort/IconContainer';
 
 const ComponentBase = styled.div`
   border-bottom: 1px solid ${theme.color.zoomGreyEleven};

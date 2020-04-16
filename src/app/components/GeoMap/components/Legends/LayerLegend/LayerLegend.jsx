@@ -6,10 +6,10 @@ import {
   LegendLabel,
   LegendNumber,
   LegendNumberContainer
-} from 'components/GeoMap/components/Legends/Legend.styles';
-import { ColorGradient } from 'components/GeoMap/components/Legends/LayerLegend/LayerLegend.styles';
+} from 'app/components/GeoMap/components/Legends/Legend.styles';
+import { ColorGradient } from 'app/components/GeoMap/components/Legends/LayerLegend/LayerLegend.styles';
 /* utils */
-import { formatNumber } from 'utils/genericUtils';
+import { formatNumber } from 'app/utils/genericUtils';
 
 const layerLegend = (legendName, index, min, max) => {
   const third = Math.round((max - min) / 3);

@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import BaseTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/common/BaseTab';
-import EditorTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/EditorTab';
+import BaseTab from 'app/modules/visualizer/sort/sidebar/tabs/TabContent/sort/common/BaseTab';
+import EditorTab from 'app/modules/visualizer/sort/sidebar/tabs/TabContent/sort/EditorTab';
 
 const wrapper = shallow(<EditorTab />);
 

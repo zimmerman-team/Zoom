@@ -1,112 +1,32 @@
-import React, { Suspense } from 'react';
-import { connect } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
-// Utils
-import get from 'lodash/get';
-import PageLoader from 'modules/common/pageloader/PageLoader';
-// always active
+// @ts-nocheck
 
-import DataExplorePanel from 'components/Panes/DataExplorePane/DataExplorePane';
-import LoginCallback from 'components/LoginCallback/LoginCallback';
-import ProfileSettingsModule from './modules/profilesettings/ProfileSettingsModule';
-import DataMapperModule from 'modules/datamapper/DataMapperModule';
-
-/* consts */
-import userRoles from '__consts__/UserRoleConst';
-
-// Modules lazy load
-/*const CountryDetailMediator = lazy(() =>
-  import(
-    'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator'
-  )
-);*/
-
-import CountryDetailMediator from 'mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator';
-
-/*
-const HomeModule = lazy(() =>
-  import('modules/home/HomeModule')
-);
-*/
-
-import HomeModule from 'modules/home/HomeModule';
-
-/*
-const VisualizerModuleMediator = lazy(() =>
-  import(
-    'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator'
-  )
-);
-*/
-
-import VisualizerModuleMediator from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator';
-
-/*
-const IatiDetailMediator = lazy(() =>
-  import('mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator')
-);
-*/
-
-import IatiDetailMediator from 'mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator';
-
-/*const AddUserMediator = lazy(() =>
-  import('mediators/ModuleMediators/AddUserMediator/AddUserMediator')
-);*/
-
-import AddUserMediator from 'mediators/ModuleMediators/AddUserMediator/AddUserMediator';
-
-/*const EditUserMediator = lazy(() =>
-  import('mediators/ModuleMediators/EditUserMediator/EditUserMediator')
-);*/
-
-import EditUserMediator from 'mediators/ModuleMediators/EditUserMediator/EditUserMediator';
-
-/*const CreateTeamMediator = lazy(() =>
-  import('mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator')
-);*/
-
-import CreateTeamMediator from 'mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator';
-
-/*
-const EditTeamMediator = lazy(() =>
-  import('mediators/ModuleMediators/EditTeamMediator/EditTeamMediator')
-);
-*/
-
-import EditTeamMediator from 'mediators/ModuleMediators/EditTeamMediator/EditTeamMediator';
-
-/*const PublicDashMediator = lazy(() =>
-  import('mediators/DashboardMediators/PublicDashMediator')
-);*/
-
-import PublicDashMediator from 'mediators/DashboardMediators/PublicDashMediator';
-
-/*const DatasetMediator = lazy(() =>
-  import('mediators/ModuleMediators/DatasetMediator/DatasetMediator')
-);*/
-
-// const About = lazy(() => import('modules/about/About'));
-
-import About from 'modules/about/About';
-import CookieModule from 'modules/CookieModule/CookieModule';
-
-/*
-const DashboardMediator = lazy(() =>
-  import('mediators/DashboardMediators/DashboardMediator')
-);
-*/
-
-import { PrivacyModule } from 'modules/PrivacyModule/PrivacyModule';
-
-import DashboardMediator from 'mediators/DashboardMediators/DashboardMediator';
-import auth0Client from './auth/Auth';
-
-// const ManMappingStep = lazy(() =>
-//   import('modules/datamapper/fragments/ManMappingStep/ManMappingStep')
-// );
+import React, { Suspense } from "react";
+import { connect } from "react-redux";
+import { Redirect, Route, Switch } from "react-router-dom";
+import get from "lodash/get";
+import PageLoader from "app/modules/common/pageloader/PageLoader";
+import DataExplorePanel from "app/components/Panes/DataExplorePane/DataExplorePane";
+import LoginCallback from "app/components/LoginCallback/LoginCallback";
+import ProfileSettingsModule from "./modules/profilesettings/ProfileSettingsModule";
+import DataMapperModule from "app/modules/datamapper/DataMapperModule";
+import userRoles from "./__consts__/UserRoleConst";
+import CountryDetailMediator from "app/mediators/ModuleMediators/CountryDetailMediator/CountryDetailMediator";
+import HomeModule from "app/modules/home/HomeModule";
+import VisualizerModuleMediator from "app/mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator";
+import IatiDetailMediator from "app/mediators/ModuleMediators/IatiDetailMediator/IatiDetailMediator";
+import AddUserMediator from "app/mediators/ModuleMediators/AddUserMediator/AddUserMediator";
+import EditUserMediator from "app/mediators/ModuleMediators/EditUserMediator/EditUserMediator";
+import CreateTeamMediator from "app/mediators/ModuleMediators/CreateTeamMediator/CreateTeamMediator";
+import EditTeamMediator from "app/mediators/ModuleMediators/EditTeamMediator/EditTeamMediator";
+import PublicDashMediator from "app/mediators/DashboardMediators/PublicDashMediator";
+import About from "app/modules/about/About";
+import CookieModule from "app/modules/CookieModule/CookieModule";
+import { PrivacyModule } from "app/modules/PrivacyModule/PrivacyModule";
+import DashboardMediator from "app/mediators/DashboardMediators/DashboardMediator";
+import auth0Client from "./auth/Auth";
 
 // Routes
-const Routes = props => {
+const Routes = (props) => {
   return (
     <React.Fragment>
       <Suspense fallback={<PageLoader />}>
@@ -165,8 +85,8 @@ const Routes = props => {
             path="/add-user"
             render={() =>
               props.user.data &&
-              (get(props.user, 'data.role', '') === userRoles.admin ||
-                get(props.user, 'data.role', '') === userRoles.superAdm) ? (
+              (get(props.user, "data.role", "") === userRoles.admin ||
+                get(props.user, "data.role", "") === userRoles.superAdm) ? (
                 <AddUserMediator user={props.user.data} />
               ) : (
                 <Redirect to="/" />
@@ -176,16 +96,16 @@ const Routes = props => {
           <Route
             exact
             path="/edit-user/:userId"
-            render={rProps => {
+            render={(rProps) => {
               const isRegularUserEditSelf =
-                get(props.user.data, 'role', '') === userRoles.regular ||
-                get(props.user.data, 'role', '') === userRoles.mod
-                  ? get(props.user.data, 'authId', '') ===
+                get(props.user.data, "role", "") === userRoles.regular ||
+                get(props.user.data, "role", "") === userRoles.mod
+                  ? get(props.user.data, "authId", "") ===
                     rProps.match.params.userId
                   : false;
               return props.user.data &&
-                (get(props.user, 'data.role', '') === userRoles.admin ||
-                  get(props.user, 'data.role', '') === userRoles.superAdm ||
+                (get(props.user, "data.role", "") === userRoles.admin ||
+                  get(props.user, "data.role", "") === userRoles.superAdm ||
                   isRegularUserEditSelf) ? (
                 <EditUserMediator />
               ) : (
@@ -196,16 +116,16 @@ const Routes = props => {
           <Route
             exact
             path="/view-user/:userId"
-            render={rProps => {
+            render={(rProps) => {
               const isRegularUserEditSelf =
-                get(props.user.data, 'role', '') === userRoles.regular ||
-                get(props.user.data, 'role', '') === userRoles.mod
-                  ? get(props.user.data, 'authId', '') ===
+                get(props.user.data, "role", "") === userRoles.regular ||
+                get(props.user.data, "role", "") === userRoles.mod
+                  ? get(props.user.data, "authId", "") ===
                     rProps.match.params.userId
                   : false;
               return props.user.data &&
-                (get(props.user, 'data.role', '') === userRoles.admin ||
-                  get(props.user, 'data.role', '') === userRoles.superAdm ||
+                (get(props.user, "data.role", "") === userRoles.admin ||
+                  get(props.user, "data.role", "") === userRoles.superAdm ||
                   isRegularUserEditSelf) ? (
                 <EditUserMediator viewOnly />
               ) : (
@@ -218,7 +138,7 @@ const Routes = props => {
             path="/create-team"
             render={() =>
               props.user.data &&
-              get(props.user, 'data.role', '') === userRoles.superAdm ? (
+              get(props.user, "data.role", "") === userRoles.superAdm ? (
                 <CreateTeamMediator />
               ) : (
                 <Redirect to="/" />
@@ -230,8 +150,8 @@ const Routes = props => {
             path="/edit-team/:teamId"
             render={() =>
               props.user.data &&
-              (get(props.user, 'data.role', '') === userRoles.admin ||
-                get(props.user, 'data.role', '') === userRoles.superAdm) ? (
+              (get(props.user, "data.role", "") === userRoles.admin ||
+                get(props.user, "data.role", "") === userRoles.superAdm) ? (
                 <EditTeamMediator />
               ) : (
                 <Redirect to="/" />
@@ -243,8 +163,8 @@ const Routes = props => {
             path="/view-team/:teamId"
             render={() =>
               props.user.data &&
-              (get(props.user, 'data.role', '') === userRoles.admin ||
-                get(props.user, 'data.role', '') === userRoles.superAdm) ? (
+              (get(props.user, "data.role", "") === userRoles.admin ||
+                get(props.user, "data.role", "") === userRoles.superAdm) ? (
                 <EditTeamMediator viewOnly />
               ) : (
                 <Redirect to="/" />
@@ -273,9 +193,9 @@ const Routes = props => {
             path="/mapper"
             render={() =>
               props.user.data &&
-              (get(props.user, 'data.role', '') === userRoles.admin ||
-                get(props.user, 'data.role', '') === userRoles.superAdm ||
-                get(props.user, 'data.role', '') === userRoles.mod) ? (
+              (get(props.user, "data.role", "") === userRoles.admin ||
+                get(props.user, "data.role", "") === userRoles.superAdm ||
+                get(props.user, "data.role", "") === userRoles.mod) ? (
                 <DataMapperModule dropDownData={props} fileCorrection={props} />
               ) : (
                 <Redirect to="/" />
@@ -286,9 +206,9 @@ const Routes = props => {
             path="/dataset/:id"
             render={() =>
               props.user.data &&
-              (get(props.user, 'data.role', '') === userRoles.admin ||
-                get(props.user, 'data.role', '') === userRoles.superAdm ||
-                get(props.user, 'data.role', '') === userRoles.mod) ? (
+              (get(props.user, "data.role", "") === userRoles.admin ||
+                get(props.user, "data.role", "") === userRoles.superAdm ||
+                get(props.user, "data.role", "") === userRoles.mod) ? (
                 <DataMapperModule
                   edit
                   dropDownData={props}
@@ -320,9 +240,9 @@ const Routes = props => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    user: state.currentUser
+    user: state.currentUser,
   };
 };
 

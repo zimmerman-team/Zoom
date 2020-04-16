@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { LoginForm } from 'components/SideBar/comps/LoginForm/LoginForm';
+import { LoginForm } from 'app/components/SideBar/comps/LoginForm/LoginForm';
 /* Components */
-import IconSignIn from 'assets/icons/IconSignIn';
+import IconSignIn from 'app/assets/icons/IconSignIn';
 import {
   ComponentBase,
   FormButton,

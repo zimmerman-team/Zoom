@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import NoSsr from '@material-ui/core/NoSsr';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 export default styled(props => (
   <NoSsr>

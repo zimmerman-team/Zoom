@@ -2,11 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { countryDetailMockData } from '__mocks__/countryDetailMock';
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
+import { countryDetailMockData } from 'app/__mocks__/countryDetailMock';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll/modules';
-import LineChart2 from 'components/charts/recharts_linechart/LineChart';
-import { ChartContainer } from 'modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic.style';
+import LineChart2 from 'app/components/charts/recharts_linechart/LineChart';
+import { ChartContainer } from 'app/modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic.style';
 
 const ComponentBase = styled.div``;
 

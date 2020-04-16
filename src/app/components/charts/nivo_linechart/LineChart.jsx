@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ResponsiveLine } from '@nivo/line';
-import { ComponentBase } from 'components/charts/nivo_linechart/LineChart.styles';
+import { ComponentBase } from 'app/components/charts/nivo_linechart/LineChart.styles';
 
 const propTypes = {
   data: PropTypes.arrayOf(

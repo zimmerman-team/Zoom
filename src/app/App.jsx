@@ -1,33 +1,41 @@
-import React from 'react';
-import { connect } from 'react-redux';
-// import { Provider } from 'react-redux';
-import JssProvider from 'react-jss/lib/JssProvider';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { graphql, QueryRenderer } from 'react-relay';
-import { Environment, Network, RecordSource, Store } from 'relay-runtime';
-import auth0Client from 'auth/Auth';
+// @ts-nocheck
+/* eslint-disable */
+
+import React from "react";
+import { connect } from "react-redux";
+
+import JssProvider from "react-jss/lib/JssProvider";
+import { BrowserRouter as Router } from "react-router-dom";
+import graphql from "babel-plugin-relay/macro";
+import { QueryRenderer } from "react-relay";
+
+import { Environment, Network, RecordSource, Store } from "relay-runtime";
+import auth0Client from "./auth/Auth";
 import {
   createGenerateClassName,
   MuiThemeProvider,
-  createMuiTheme
-} from '@material-ui/core/styles';
+  createMuiTheme,
+} from "@material-ui/core/styles";
 
 /* actions */
-import { setUserIdToken } from 'services/actions/sync';
-import { getUserRequest } from 'services/actions/nodeBackend';
-import { getCurrentUserRequest } from 'services/actions/authNodeBackend';
+import { setUserIdToken } from "app/services/actions/sync";
+import { getUserRequest } from "app/services/actions/nodeBackend";
+import { getCurrentUserRequest } from "app/services/actions/authNodeBackend";
 
 /* utils */
-import get from 'lodash/get';
-import isEqual from 'lodash/isEqual';
+import get from "lodash/get";
+import isEqual from "lodash/isEqual";
 
 // Routes
-import Routes from './Routes';
-import { Grommet } from 'grommet/components/Grommet';
-import { ZoomTheme } from 'styles/ZoomTheme';
+import Routes from "./Routes";
+import { Grommet } from "grommet/components/Grommet";
+import { ZoomTheme } from "app/styles/ZoomTheme";
 
 /* global app components */
-import AppBar from 'components/AppBar/AppBar';
+import AppBar from "app/components/AppBar/AppBar";
+
+import MainMenuDrawer from "app/components/MainMenuDrawer/MainMenuDrawer";
+import CookieNotice from "app/components/CookieNotice/CookieNotice";
 
 const theme = createMuiTheme({
   /*transitions: {
@@ -35,24 +43,21 @@ const theme = createMuiTheme({
     create: () => 'none'
   },*/
   typography: {
-    useNextVariants: true
+    useNextVariants: true,
   },
 
   props: {
     // Name of the component ⚛️
     MuiButtonBase: {
       // The properties to apply
-      disableRipple: true // No more ripple, on the whole application 💣!
-    }
-  }
+      disableRipple: true, // No more ripple, on the whole application 💣!
+    },
+  },
 });
-
-import MainMenuDrawer from 'components/MainMenuDrawer/MainMenuDrawer';
-import CookieNotice from 'components/CookieNotice/CookieNotice';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
-  productionPrefix: 'production'
+  productionPrefix: "production",
 });
 
 class App extends React.Component {
@@ -60,12 +65,12 @@ class App extends React.Component {
     showSidebar: false,
     currentEnv: new Environment({
       network: Network.create(),
-      store: new Store(new RecordSource())
-    })
+      store: new Store(new RecordSource()),
+    }),
   };
 
   componentWillMount = () => {
-    if (window.location.href.includes('/home/#')) {
+    if (window.location.href.includes("/home/#")) {
       this.setState({ showSidebar: true });
     }
   };
@@ -74,18 +79,18 @@ class App extends React.Component {
     this.setState({
       currentEnv: new Environment({
         network: Network.create(this.fetchQuery),
-        store: new Store(new RecordSource())
-      })
+        store: new Store(new RecordSource()),
+      }),
     });
-    if (window.location.pathname.indexOf('/callback') !== -1) {
+    if (window.location.pathname.indexOf("/callback") !== -1) {
       return;
     }
     try {
-      auth0Client.silentAuth().then(results => {
+      auth0Client.silentAuth().then((results) => {
         this.props.dispatch(
           getCurrentUserRequest(
             {
-              userId: results.idTokenPayload.sub
+              userId: results.idTokenPayload.sub,
             },
             { Authorization: `Bearer ${results.idToken}` }
           )
@@ -98,7 +103,7 @@ class App extends React.Component {
     }
   };
 
-  componentDidUpdate = prevProps => {
+  componentDidUpdate = (prevProps) => {
     if (
       !isEqual(this.props.user, prevProps.user) &&
       this.props.user &&
@@ -108,8 +113,8 @@ class App extends React.Component {
       this.setState({
         currentEnv: new Environment({
           network: Network.create(this.fetchQuery),
-          store: new Store(new RecordSource())
-        })
+          store: new Store(new RecordSource()),
+        }),
       });
     }
   };
@@ -117,24 +122,24 @@ class App extends React.Component {
   fetchQuery = (operation, variables) => {
     let url = `${process.env.REACT_APP_GRAPHQL_HOST}/public-graphql/`;
     let headers = {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     };
-    if (get(this.props.user, 'idToken', null)) {
+    if (get(this.props.user, "idToken", null)) {
       url = `${process.env.REACT_APP_GRAPHQL_HOST}/graphql/`;
 
       headers = {
         Authorization: `Bearer ${this.props.user.idToken}`,
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       };
     }
     return fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers: headers,
       body: JSON.stringify({
         query: operation.text,
-        variables
-      })
-    }).then(response => {
+        variables,
+      }),
+    }).then((response) => {
       return response.json();
     });
   };
@@ -143,7 +148,7 @@ class App extends React.Component {
     return (
       <JssProvider generateClassName={generateClassName}>
         <MuiThemeProvider theme={theme}>
-          <Grommet theme={ZoomTheme} style={{ height: '100%' }}>
+          <Grommet theme={ZoomTheme} style={{ height: "100%" }}>
             <QueryRenderer
               environment={this.state.currentEnv}
               query={graphql`
@@ -166,7 +171,7 @@ class App extends React.Component {
                         <AppBar
                           toggleSideBar={() =>
                             this.setState({
-                              showSidebar: !this.state.showSidebar
+                              showSidebar: !this.state.showSidebar,
                             })
                           }
                         />
@@ -176,7 +181,7 @@ class App extends React.Component {
                           open={this.state.showSidebar}
                           toggleSideBar={() =>
                             this.setState({
-                              showSidebar: !this.state.showSidebar
+                              showSidebar: !this.state.showSidebar,
                             })
                           }
                         />
@@ -187,7 +192,7 @@ class App extends React.Component {
                 }
                 if (error) {
                   return (
-                    <div>{get(error, 'source.errors[0].message', '')}</div>
+                    <div>{get(error, "source.errors[0].message", "")}</div>
                   );
                 }
                 return <div data-cy="loader2">Loading</div>;
@@ -201,9 +206,9 @@ class App extends React.Component {
   };
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    user: state.currentUser.data
+    user: state.currentUser.data,
   };
 };
 

@@ -1,14 +1,14 @@
 /* base */
 import React from 'react';
 /* components */
-import Checkbox from 'components/Checkbox/CheckBox';
+import Checkbox from 'app/components/Checkbox/CheckBox';
 import {
   SortByIcon,
   UsersTableCellValue,
   UsersTableColHeader
-} from 'modules/UserManagement/CreateTeam/CreateTeamModule.styles';
-import theme from 'theme/Theme';
-import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
+} from 'app/modules/UserManagement/CreateTeam/CreateTeamModule.styles';
+import theme from 'app/theme/Theme';
+import SortbyDialog from 'app/components/Dialog/SortbyDialog/SortbyDialog';
 
 const sortByOptions = [
   { label: 'Name (asc)', value: 'name' },

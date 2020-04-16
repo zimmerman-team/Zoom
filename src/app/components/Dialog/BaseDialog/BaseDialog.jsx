@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box } from 'grommet/components/Box';
 import { Layer } from 'grommet/components/Layer';
-import { SimpleText } from 'components/sort/Misc';
-import { DialogHeading } from 'components/sort/Headings';
-import ZoomButton from 'components/ZoomButton/ZoomButton';
-import theme from 'theme/Theme';
+import { SimpleText } from 'app/components/sort/Misc';
+import { DialogHeading } from 'app/components/sort/Headings';
+import ZoomButton from 'app/components/ZoomButton/ZoomButton';
+import theme from 'app/theme/Theme';
 
 const DialogLayer = styled(Layer)`
   width: 840px;

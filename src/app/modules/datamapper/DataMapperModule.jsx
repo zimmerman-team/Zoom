@@ -3,25 +3,25 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 /* actions */
-import * as actions from 'services/actions/general';
-import * as nodeActions from 'services/actions/nodeBackend';
+import * as actions from 'app/services/actions/general';
+import * as nodeActions from 'app/services/actions/nodeBackend';
 
 /* mutations */
-import SurveyMutation from 'mediators/DataMapperMediators/WrapUpMediator/mutations/SurveyMutation';
+import SurveyMutation from 'app/mediators/DataMapperMediators/WrapUpMediator/mutations/SurveyMutation';
 
 /* components */
-import Stepper from 'components/Stepper/Stepper';
-import Snackbar from 'components/Snackbar/Snackbar';
+import Stepper from 'app/components/Stepper/Stepper';
+import Snackbar from 'app/components/Snackbar/Snackbar';
 /* consts */
-import { columnValues } from 'mediators/DataMapperMediators/WrapUpMediator/WrapUpMediator.const';
-import { defModelOptions } from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
+import { columnValues } from 'app/mediators/DataMapperMediators/WrapUpMediator/WrapUpMediator.const';
+import { defModelOptions } from 'app/mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
 
 /* utils */
 import {
   addInEmptyFieldRows,
   checkEmptyFields,
   checkMetadata
-} from 'modules/datamapper/DataMapperModule.util';
+} from 'app/modules/datamapper/DataMapperModule.util';
 import find from 'lodash/find';
 import { Helmet } from 'react-helmet';
 import isEqual from 'lodash/isEqual';
@@ -33,14 +33,14 @@ import {
   ModuleHeader
 } from './DataMapperModule.styles';
 /* fragments */
-import ManMappingStep from 'modules/datamapper/fragments/ManMappingStep/ManMappingStep';
-import MetaDataMediator from 'mediators/DataMapperMediators/MetaDataMediator/MetaDataMediator';
-import UploadMediator from 'mediators/DataMapperMediators/UploadMediator/UploadMediator';
-import OverviewStep from 'modules/datamapper/fragments/OverviewStep/OverviewStep';
-import CorrectErrorsMediator from 'mediators/DataMapperMediators/CorrectErrorsMediator/CorrectErrorsMediator';
-import WrapUpMediator from 'mediators/DataMapperMediators/WrapUpMediator/WrapUpMediator';
-import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
-import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
+import ManMappingStep from 'app/modules/datamapper/fragments/ManMappingStep/ManMappingStep';
+import MetaDataMediator from 'app/mediators/DataMapperMediators/MetaDataMediator/MetaDataMediator';
+import UploadMediator from 'app/mediators/DataMapperMediators/UploadMediator/UploadMediator';
+import OverviewStep from 'app/modules/datamapper/fragments/OverviewStep/OverviewStep';
+import CorrectErrorsMediator from 'app/mediators/DataMapperMediators/CorrectErrorsMediator/CorrectErrorsMediator';
+import WrapUpMediator from 'app/mediators/DataMapperMediators/WrapUpMediator/WrapUpMediator';
+import AddSourceMutation from 'app/mediators/DataMapperMediators/mutations/AddSourceMutation';
+import AddFileMutation from 'app/mediators/DataMapperMediators/mutations/UploadFileMutation';
 
 class DataMapperModule extends React.Component {
   constructor(props) {

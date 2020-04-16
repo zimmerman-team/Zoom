@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { Box } from 'grommet/components/Box';
-import { SectionHeading } from 'components/sort/Headings';
+import { SectionHeading } from 'app/components/sort/Headings';
 import TextField from '@material-ui/core/TextField';
-import theme from 'theme/Theme';
-import ZoomTable from 'components/ZoomTable/ZoomTable';
-import ColumnHeader from 'components/ZoomTable/ColumnHeader';
-import CellValue from 'components/ZoomTable/CellValue';
+import theme from 'app/theme/Theme';
+import ZoomTable from 'app/components/ZoomTable/ZoomTable';
+import ColumnHeader from 'app/components/ZoomTable/ColumnHeader';
+import CellValue from 'app/components/ZoomTable/CellValue';
 
 export const ModuleContainer = styled(Box)`
   width: 100%;

@@ -1,7 +1,7 @@
 // (C) Copyright 2017-2018 Hewlett Packard Enterprise Development LP
 import { css } from 'styled-components';
 
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 const isObject = item =>
   item && typeof item === 'object' && !Array.isArray(item);
 

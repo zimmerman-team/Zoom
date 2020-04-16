@@ -1,9 +1,9 @@
 /* base */
 import React from 'react';
 import styled from 'styled-components';
-import { FragmentContainer, FragmentContent } from 'components/sort/Fragments';
-import theme from 'theme/Theme';
-import { countryDetailMockData } from '__mocks__/countryDetailMock';
+import { FragmentContainer, FragmentContent } from 'app/components/sort/Fragments';
+import theme from 'app/theme/Theme';
+import { countryDetailMockData } from 'app/__mocks__/countryDetailMock';
 import { Box } from 'grommet/components/Box';
 import { scroller } from 'react-scroll';
 

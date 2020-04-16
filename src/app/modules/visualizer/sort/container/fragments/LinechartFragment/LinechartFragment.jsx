@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 /* consts */
-import graphKeys from '__consts__/GraphStructKeyConst';
+import graphKeys from 'app/__consts__/GraphStructKeyConst';
 /* components */
-import ChartLegends from 'modules/visualizer/sort/container/fragments/common/ChartLegends';
-import LineChart from 'components/charts/recharts_linechart/LineChart';
+import ChartLegends from 'app/modules/visualizer/sort/container/fragments/common/ChartLegends';
+import LineChart from 'app/components/charts/recharts_linechart/LineChart';
 /* styles */
 import {
   FragmentBase,
   ChartContainer
-} from 'modules/visualizer/sort/container/VizContainer.style';
+} from 'app/modules/visualizer/sort/container/VizContainer.style';
 
 /* mock */
 // import { LinechartMockData } from './LinechartMockData';

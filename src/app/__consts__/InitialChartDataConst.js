@@ -1,5 +1,5 @@
-import { formatYearParam } from 'utils/genericUtils';
-import { formatDate } from 'mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
+import { formatYearParam } from 'app/utils/genericUtils';
+import { formatDate } from 'app/mediators/ModuleMediators/VisualizerModuleMediator/VisualizerModuleMediator.utils';
 
 let today = new Date();
 const dd = String(today.getDate()).padStart(2, '0');

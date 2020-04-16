@@ -2,9 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import TabNavigator from 'modules/visualizer/sort/sidebar/tabs/TabNavigator/TabNavigator';
-import TabContent from 'modules/visualizer/sort/sidebar/tabs/TabContent/TabContent';
-import data from 'modules/visualizer/sort/sidebar/VizSidebar.const';
+import TabNavigator from 'app/modules/visualizer/sort/sidebar/tabs/TabNavigator/TabNavigator';
+import TabContent from 'app/modules/visualizer/sort/sidebar/tabs/TabContent/TabContent';
+import data from 'app/modules/visualizer/sort/sidebar/VizSidebar.const';
 import { ComponentBase } from './VizSidebar.style';
 
 /**

@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import {
   LegendItem,
   LegendLabel
-} from 'components/GeoMap/components/Legends/Legend.styles';
-import theme from 'theme/Theme';
+} from 'app/components/GeoMap/components/Legends/Legend.styles';
+import theme from 'app/theme/Theme';
 
 export const LocationLegendItem = styled(LegendItem)``;
 

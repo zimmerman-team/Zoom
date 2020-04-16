@@ -8,18 +8,18 @@ import {
   DropDownContainer,
   DropDownLabel,
   Message
-} from 'modules/UserManagement/AddUser/AddUserModule.styles';
+} from 'app/modules/UserManagement/AddUser/AddUserModule.styles';
 
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-import InputField from 'components/InputField/InputField';
-import SimpleToolTip from 'components/ToolTips/SimpleToolTip/SimpleToolTip';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
+import InputField from 'app/components/InputField/InputField';
+import SimpleToolTip from 'app/components/ToolTips/SimpleToolTip/SimpleToolTip';
 import { Tooltip } from 'react-tippy';
 
-import userManagementMockData from '__mocks__/userManagementMock';
+import userManagementMockData from 'app/__mocks__/userManagementMock';
 
-import theme from 'theme/Theme';
-import ZoomSelect from 'components/Select/ZoomSelect';
-import ZoomButton from 'components/ZoomButton/ZoomButton';
+import theme from 'app/theme/Theme';
+import ZoomSelect from 'app/components/Select/ZoomSelect';
+import ZoomButton from 'app/components/ZoomButton/ZoomButton';
 
 const propTypes = {
   email: PropTypes.string,

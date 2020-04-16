@@ -1,7 +1,7 @@
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 import { TextInput } from 'grommet/components/TextInput';
 import styled from 'styled-components';
-import { PageHeading as _PageHeading } from 'components/sort/Headings';
+import { PageHeading as _PageHeading } from 'app/components/sort/Headings';
 
 export const ModuleContainer = styled.div`
   padding: 40px 140px 0 140px;

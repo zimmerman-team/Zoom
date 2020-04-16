@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Popup } from 'react-map-gl';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 export const ToolTipContainer = styled(Popup)`
   z-index: 1;

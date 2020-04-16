@@ -1,6 +1,6 @@
 import update from 'immutability-helper';
-import * as authNodeActions from 'services/actions/authNodeBackend';
-import * as syncActions from 'services/actions/sync';
+import * as authNodeActions from 'app/services/actions/authNodeBackend';
+import * as syncActions from 'app/services/actions/sync';
 
 const initial = {
   values: null,

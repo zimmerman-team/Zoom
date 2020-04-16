@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FormControl from '@material-ui/core/FormControl';
-import RadioButton from 'components/RadioButton/RadioButton';
-import FormLabel from 'components/RadioButtonGroup/FormLabel';
-import RadioGroup from 'components/RadioButtonGroup/RadioGroup';
+import RadioButton from 'app/components/RadioButton/RadioButton';
+import FormLabel from 'app/components/RadioButtonGroup/FormLabel';
+import RadioGroup from 'app/components/RadioButtonGroup/RadioGroup';
 
 const propTypes = {
   options: PropTypes.array,

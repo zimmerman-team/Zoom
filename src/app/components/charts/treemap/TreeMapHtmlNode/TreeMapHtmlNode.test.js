@@ -1,14 +1,14 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import TreeMapHtmlNode from 'components/charts/treemap/TreeMapHtmlNode/TreeMapHtmlNode';
+import TreeMapHtmlNode from 'app/components/charts/treemap/TreeMapHtmlNode/TreeMapHtmlNode';
 // Components
 import {
   NodeLabel,
   NodeValue,
   TextContainer,
   TreeNodeBase
-} from 'components/charts/treemap/TreeMapHtmlNode/TreeMapHtmlNode.styles';
-import { treeMapNodeMockData } from '__mocks__/treeMapMock';
+} from 'app/components/charts/treemap/TreeMapHtmlNode/TreeMapHtmlNode.styles';
+import { treeMapNodeMockData } from 'app/__mocks__/treeMapMock';
 
 const wrapper = shallow(
   <TreeMapHtmlNode

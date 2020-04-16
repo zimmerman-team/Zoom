@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import { Box } from 'grommet/components/Box';
 import { TextInput } from 'grommet/components/TextInput';
 import { Text } from 'grommet/components/Text';
-import theme from 'theme/Theme';
-import SimpleCheckbox from 'components/Checkbox/CheckBox';
+import theme from 'app/theme/Theme';
+import SimpleCheckbox from 'app/components/Checkbox/CheckBox';
 
-import ZoomButton from 'components/ZoomButton/ZoomButton';
+import ZoomButton from 'app/components/ZoomButton/ZoomButton';
 
 export const ComponentBase = styled.form`
   padding: 20px;

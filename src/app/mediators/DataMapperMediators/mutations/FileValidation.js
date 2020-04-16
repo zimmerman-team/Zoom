@@ -1,4 +1,7 @@
-import { commitMutation, graphql } from 'react-relay';
+/* eslint-disable */
+
+import graphql from "babel-plugin-relay/macro";
+import { commitMutation } from "react-relay";
 
 // TODO: move the mutation files to the correct places
 
@@ -15,8 +18,8 @@ const mutation = graphql`
 function commit(environment, id, handleCompleted, handleError) {
   const variables = {
     input: {
-      id
-    }
+      id,
+    },
   };
 
   commitMutation(environment, {
@@ -25,7 +28,7 @@ function commit(environment, id, handleCompleted, handleError) {
     onCompleted: (response, errors) => {
       handleCompleted(response, errors);
     },
-    onError: error => handleError(error)
+    onError: (error) => handleError(error),
   });
 }
 

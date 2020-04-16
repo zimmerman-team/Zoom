@@ -8,9 +8,9 @@ import {
   ErrorTitle,
   ModuleContainer
 } from './WrapUpStep.styles';
-import { SectionHeading } from 'components/sort/Headings';
+import { SectionHeading } from 'app/components/sort/Headings';
 /* components */
-import ProgressIcon from 'components/ProgressIcon/ProgressIcon';
+import ProgressIcon from 'app/components/ProgressIcon/ProgressIcon';
 
 const propTypes = {
   loading: PropTypes.bool

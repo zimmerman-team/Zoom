@@ -1,11 +1,11 @@
 import { put, call, takeLatest, select } from 'redux-saga/effects';
-import * as actions from 'services/actions/index';
-import * as mutationActions from 'services/actions/mutation';
-import * as api from 'services/index';
-import * as oipaActions from 'services/actions/oipa';
-import * as generalActions from 'services/actions/general';
-import * as nodeActions from 'services/actions/nodeBackend';
-import * as authNodeActions from 'services/actions/authNodeBackend';
+import * as actions from 'app/services/actions/index';
+import * as mutationActions from 'app/services/actions/mutation';
+import * as api from 'app/services/index';
+import * as oipaActions from 'app/services/actions/oipa';
+import * as generalActions from 'app/services/actions/general';
+import * as nodeActions from 'app/services/actions/nodeBackend';
+import * as authNodeActions from 'app/services/actions/authNodeBackend';
 
 const userIdToken = state =>
   state.currentUser.data && state.currentUser.data.idToken;

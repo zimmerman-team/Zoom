@@ -5,7 +5,7 @@ import * as PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 /* utils */
 import map from 'lodash/map';
-import { formPath } from 'modules/dashboard/fragments/GridList/components/GridItem/GridItem.util';
+import { formPath } from 'app/modules/dashboard/fragments/GridList/components/GridItem/GridItem.util';
 /* components...*/
 import GridItemText from './common/GridItemText';
 import GridItemToolbar from './common/GridItemToolbar';

@@ -13,7 +13,7 @@ import {
   Separator,
   TitleContainer,
   Value
-} from 'components/Lists/ProjectList/ProjectList.styles';
+} from 'app/components/Lists/ProjectList/ProjectList.styles';
 
 const projectData = [
   {

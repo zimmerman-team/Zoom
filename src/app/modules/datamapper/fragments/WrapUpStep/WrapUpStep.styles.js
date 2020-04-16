@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Box } from 'grommet/components/Box';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 export const ModuleContainer = styled(Box)`
   background-color: ${theme.color.aidsFondsWhite};

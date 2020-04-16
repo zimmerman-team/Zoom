@@ -1,8 +1,8 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { countryDetailMockData } from '__mocks__/countryDetailMock';
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
+import { countryDetailMockData } from 'app/__mocks__/countryDetailMock';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
 import { Element } from 'react-scroll';
 import { Tooltip } from 'react-tippy';
 import {

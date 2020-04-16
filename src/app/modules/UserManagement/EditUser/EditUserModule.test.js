@@ -1,16 +1,16 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import EditUserModule from 'modules/UserManagement/EditUser/EditUserModule';
+import EditUserModule from 'app/modules/UserManagement/EditUser/EditUserModule';
 // Components
 import {
   DropDownContainer,
   DropDownLabel,
   EditUserForm,
   SubmitButton
-} from 'modules/UserManagement/EditUser/EditUserModule.styles';
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-import InputField from 'components/InputField/InputField';
-import FormSelect from 'components/FormSelect/FormSelect';
+} from 'app/modules/UserManagement/EditUser/EditUserModule.styles';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
+import InputField from 'app/components/InputField/InputField';
+import FormSelect from 'app/components/FormSelect/FormSelect';
 import { Box } from 'grommet/components/Box';
 
 const wrapper = shallow(<EditUserModule />);

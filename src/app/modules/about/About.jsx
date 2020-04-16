@@ -3,7 +3,7 @@ import React from 'react';
 import {
   DescriptionParagraph,
   DescriptionParagraphBoldIt
-} from 'components/sort/Paragraphs';
+} from 'app/components/sort/Paragraphs';
 import {
   AboutTitle,
   RedLink,
@@ -11,12 +11,12 @@ import {
   Section,
   AboutLogo,
   LogoContainer
-} from 'modules/about/About.styles';
-import ModuleContainer from 'modules/common/modulecontainer/ModuleContainer';
+} from 'app/modules/about/About.styles';
+import ModuleContainer from 'app/modules/common/modulecontainer/ModuleContainer';
 /* images */
-import aidsfondsLogo from 'assets/images/logo-aidsfonds.jpg';
-import leidenLogo from 'assets/images/Logo_LUC_The_Hague.jpg';
-import zzLogo from 'assets/images/ZZlogo.png';
+import aidsfondsLogo from 'app/assets/images/logo-aidsfonds.jpg';
+import leidenLogo from 'app/assets/images/Logo_LUC_The_Hague.jpg';
+import zzLogo from 'app/assets/images/ZZlogo.png';
 
 const propTypes = {};
 const defaultProps = {};

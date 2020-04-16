@@ -1,9 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import VisualizerModule from 'modules/visualizer/VisualizerModule';
+import VisualizerModule from 'app/modules/visualizer/VisualizerModule';
 
-import VizSidebar from 'modules/visualizer/sort/sidebar/VizSidebar';
-import VizContainer from 'modules/visualizer/sort/container/VizContainer';
+import VizSidebar from 'app/modules/visualizer/sort/sidebar/VizSidebar';
+import VizContainer from 'app/modules/visualizer/sort/container/VizContainer';
 
 const wrapper = shallow(<VisualizerModule />);
 

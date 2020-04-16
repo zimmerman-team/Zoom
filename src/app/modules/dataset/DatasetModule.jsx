@@ -1,5 +1,5 @@
 import React from 'react';
-import MetaDataMediator from 'mediators/DataMapperMediators/MetaDataMediator/MetaDataMediator';
+import MetaDataMediator from 'app/mediators/DataMapperMediators/MetaDataMediator/MetaDataMediator';
 /* styles */
 import {
   ButtonContainer,
@@ -9,11 +9,11 @@ import {
   ModuleSection,
   TopModuleSection
 } from './DatasetModule.style';
-import { stepButStyle } from 'components/Stepper/Stepper.style';
+import { stepButStyle } from 'app/components/Stepper/Stepper.style';
 /* components */
-import ZoomButton from 'components/ZoomButton/ZoomButton';
+import ZoomButton from 'app/components/ZoomButton/ZoomButton';
 import PropTypes from 'prop-types';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 const propTypes = {
   dropDownData: PropTypes.shape({

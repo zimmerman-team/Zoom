@@ -1,9 +1,9 @@
 /* base */
 import React from 'react';
 import PropTypes from 'prop-types';
-import theme from 'theme/Theme';
-import TreeMap from 'components/charts/treemap/TreeMap';
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
+import theme from 'app/theme/Theme';
+import TreeMap from 'app/components/charts/treemap/TreeMap';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
 
 const propTypes = {
   data: PropTypes.shape({

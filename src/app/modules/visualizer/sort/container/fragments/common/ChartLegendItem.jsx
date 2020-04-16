@@ -2,8 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import theme from 'theme/Theme';
-import FragmentInfoButton from 'components/Layout/ModuleFragment/common/FragmentInfoButton';
+import theme from 'app/theme/Theme';
+import FragmentInfoButton from 'app/components/Layout/ModuleFragment/common/FragmentInfoButton';
 
 import { Tooltip } from 'react-tippy';
 

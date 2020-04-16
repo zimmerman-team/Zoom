@@ -1,14 +1,14 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import CountryDetailModule from 'modules/countrydetail/CountryDetailModule';
-import CountryInfo from 'modules/countrydetail/fragments/CountryInfo/CountryInfo';
-import AidsEpidemic from 'modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic';
-import EconomicIndicators from 'modules/countrydetail/fragments/EconomicIndicators';
-import CivicSpace from 'modules/countrydetail/fragments/CivicSpace/CivicSpace';
-import HumanRights from 'modules/countrydetail/fragments/HumanRights';
-import AidsfondsTransactions from 'modules/countrydetail/fragments/AidsfondsTransactions';
-import PageNavigation from 'modules/countrydetail/fragments/PageNavigation';
-import Projects from 'modules/countrydetail/fragments/Projects/Projects';
+import CountryDetailModule from 'app/modules/countrydetail/CountryDetailModule';
+import CountryInfo from 'app/modules/countrydetail/fragments/CountryInfo/CountryInfo';
+import AidsEpidemic from 'app/modules/countrydetail/fragments/AidsEpidemic/AidsEpidemic';
+import EconomicIndicators from 'app/modules/countrydetail/fragments/EconomicIndicators';
+import CivicSpace from 'app/modules/countrydetail/fragments/CivicSpace/CivicSpace';
+import HumanRights from 'app/modules/countrydetail/fragments/HumanRights';
+import AidsfondsTransactions from 'app/modules/countrydetail/fragments/AidsfondsTransactions';
+import PageNavigation from 'app/modules/countrydetail/fragments/PageNavigation';
+import Projects from 'app/modules/countrydetail/fragments/Projects/Projects';
 
 storiesOf('Country Detail|Modules/Fragments', module)
   .add('0. Full Page', () => <CountryDetailModule />)

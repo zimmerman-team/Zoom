@@ -3,11 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 import styled from 'styled-components';
-import TextEditor from 'components/editors/TextEditor/TextEditor';
-import DescriptionEditor from 'components/chartcontext/common/DescriptionEditor';
-import ContextHeader from 'components/chartcontext/common/ContextHeader';
+import TextEditor from 'app/components/editors/TextEditor/TextEditor';
+import DescriptionEditor from 'app/components/chartcontext/common/DescriptionEditor';
+import ContextHeader from 'app/components/chartcontext/common/ContextHeader';
 /* actions */
-import * as actions from 'services/actions/general';
+import * as actions from 'app/services/actions/general';
 
 /**
  * todo: Please write a short component description of what this component does

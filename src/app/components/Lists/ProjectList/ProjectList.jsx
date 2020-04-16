@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-// import { projectsMockData } from '__mocks__/projectsMock';
+// import { projectsMockData } from 'app/__mocks__/projectsMock';
 import { Box } from 'grommet/components/Box';
 import {
   Label,
@@ -14,7 +14,7 @@ import {
   Separator,
   TitleContainer,
   Value
-} from 'components/Lists/ProjectList/ProjectList.styles';
+} from 'app/components/Lists/ProjectList/ProjectList.styles';
 
 const propTypes = {
   projectData: PropTypes.arrayOf(

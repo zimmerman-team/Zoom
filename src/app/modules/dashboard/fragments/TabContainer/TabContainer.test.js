@@ -1,7 +1,7 @@
 /* base */
 import React from 'react';
 import { shallow } from 'enzyme';
-import TabContainer from 'modules/dashboard/fragments/TabContainer/TabContainer';
+import TabContainer from 'app/modules/dashboard/fragments/TabContainer/TabContainer';
 /* components */
 import {
   CenterTabs,
@@ -9,9 +9,9 @@ import {
   Tab,
   TabBadge,
   TabText
-} from 'modules/dashboard/fragments/TabContainer/TabContainer.styles';
+} from 'app/modules/dashboard/fragments/TabContainer/TabContainer.styles';
 /* consts */
-import tabs from '__consts__/DashboardTabsConsts';
+import tabs from 'app/__consts__/DashboardTabsConsts';
 
 const wrapper = shallow(
   <TabContainer

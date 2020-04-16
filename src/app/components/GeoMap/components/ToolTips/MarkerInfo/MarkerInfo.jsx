@@ -1,8 +1,8 @@
 import React from 'react';
 
 /* utils */
-import { getMeasure } from 'components/GeoMap/components/Markers/CircleMarker/CircleMarker';
-import { formatNumber, truncateText } from 'utils/genericUtils';
+import { getMeasure } from 'app/components/GeoMap/components/Markers/CircleMarker/CircleMarker';
+import { formatNumber, truncateText } from 'app/utils/genericUtils';
 
 /* styles */
 import {
@@ -11,7 +11,7 @@ import {
   ToolTipText,
   ToolTipTitle,
   ValueContainer
-} from 'components/GeoMap/components/ToolTips/ToolTip.style';
+} from 'app/components/GeoMap/components/ToolTips/ToolTip.style';
 
 // So if the marker changes in size depending on its value we use
 // this function to get the offset top of the popup

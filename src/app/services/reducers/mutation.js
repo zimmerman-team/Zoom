@@ -1,6 +1,6 @@
 import update from 'immutability-helper';
 
-import * as actions from 'services/actions/mutation';
+import * as actions from 'app/services/actions/mutation';
 
 const initial = {
   data: null,

@@ -2,8 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { ModuleTitle } from 'modules/dashboard/DashboardModule.styles';
-import UserGreeting from 'modules/dashboard/fragments/DashboardHeader/component/UserGreeting/UserGreeting';
+import { ModuleTitle } from 'app/modules/dashboard/DashboardModule.styles';
+import UserGreeting from 'app/modules/dashboard/fragments/DashboardHeader/component/UserGreeting/UserGreeting';
 
 const ComponentBase = styled.header`
   display: flex;

@@ -1,6 +1,6 @@
 /* base */
 import React from 'react';
-import BaseTab from 'modules/visualizer/sort/sidebar/tabs/TabContent/sort/common/BaseTab';
+import BaseTab from 'app/modules/visualizer/sort/sidebar/tabs/TabContent/sort/common/BaseTab';
 
 /**
  * todo: Please write a short component description of what this component does

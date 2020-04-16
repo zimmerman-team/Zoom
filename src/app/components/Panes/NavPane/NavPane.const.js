@@ -1,5 +1,5 @@
 /* consts */
-import paneTypes from '__consts__/PaneTypesConst';
+import paneTypes from 'app/__consts__/PaneTypesConst';
 
 export const startItems = [
   {

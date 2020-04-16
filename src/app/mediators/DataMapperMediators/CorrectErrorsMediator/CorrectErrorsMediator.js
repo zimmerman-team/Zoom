@@ -1,34 +1,35 @@
 /* DATAMAPPER STEP 4 */
 
 /* base */
-import React from 'react';
-import PropTypes from 'prop-types';
-import { createRefetchContainer, graphql } from 'react-relay';
-import ErrorStep from 'modules/datamapper/fragments/ErrorsStep/ErrorsStep';
-import connect from 'react-redux/es/connect/connect';
+import React from "react";
+import PropTypes from "prop-types";
+import graphql from "babel-plugin-relay/macro";
+import { createRefetchContainer } from "react-relay";
+import ErrorStep from "app/modules/datamapper/fragments/ErrorsStep/ErrorsStep";
+import connect from "react-redux/es/connect/connect";
 /* mutations */
-import FileErrorResultMutation from 'mediators/DataMapperMediators/CorrectErrorsMediator/mutations/FileErrorResultMutation';
-import FileValidationMutation from 'mediators/DataMapperMediators/mutations/FileValidation';
+import FileErrorResultMutation from "app/mediators/DataMapperMediators/CorrectErrorsMediator/mutations/FileErrorResultMutation";
+import FileValidationMutation from "app/mediators/DataMapperMediators/mutations/FileValidation";
 /* utils */
-import get from 'lodash/get';
-import findIndex from 'lodash/findIndex';
-import { formatErrorCells } from './CorrectErrorsMediator.util';
-import * as generalActions from 'services/actions/general';
-import { formatOverviewData } from 'mediators/DataMapperMediators/UploadMediator/UploadMediator.util';
-import { formatErrorColumns } from 'mediators/DataMapperMediators/ManualMappingMediator.util';
+import get from "lodash/get";
+import findIndex from "lodash/findIndex";
+import { formatErrorCells } from "./CorrectErrorsMediator.util";
+import * as generalActions from "app/services/actions/general";
+import { formatOverviewData } from "app/mediators/DataMapperMediators/UploadMediator/UploadMediator.util";
+import { formatErrorColumns } from "app/mediators/DataMapperMediators/ManualMappingMediator.util";
 
 const propTypes = {
   fileId: PropTypes.string,
   relay: PropTypes.shape({}),
   fileCorrection: PropTypes.shape({}),
-  stepsDisabled: PropTypes.bool
+  stepsDisabled: PropTypes.bool,
 };
 
 const defaultProps = {
   stepsDisabled: false,
-  fileId: '-1',
+  fileId: "-1",
   relay: {},
-  fileCorrection: {}
+  fileCorrection: {},
 };
 
 class CorrectErrorsMediator extends React.Component {
@@ -55,7 +56,7 @@ class CorrectErrorsMediator extends React.Component {
           ? props.stepData.errorData.ignoredErrors
           : [],
       loading: false,
-      rowCount: 100
+      rowCount: 100,
     };
 
     this.handleValidationCompleted = this.handleValidationCompleted.bind(this);
@@ -79,7 +80,7 @@ class CorrectErrorsMediator extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.fileId !== '-1') this.refetch();
+    if (this.props.fileId !== "-1") this.refetch();
   }
 
   handleValidationCompleted(response, error) {
@@ -107,11 +108,11 @@ class CorrectErrorsMediator extends React.Component {
 
       this.getFileCellsErrors();
     }
-    if (error) console.log('file validation error', error);
+    if (error) console.log("file validation error", error);
   }
 
   handleValidationError(error) {
-    console.log('error validating file: ', error);
+    console.log("error validating file: ", error);
   }
 
   fileValidation() {
@@ -152,12 +153,12 @@ class CorrectErrorsMediator extends React.Component {
           JSON.parse(response.fileErrorCorrection.result)
         );
 
-        const errorTableData = JSON.parse(results.data_table).map(row => {
+        const errorTableData = JSON.parse(results.data_table).map((row) => {
           // so we want this logic, so that when we load new data into the view
           // the previously checked rows would still be checked
           const checkInd = findIndex(this.state.errorTableData, [
-            'index',
-            row.index
+            "index",
+            row.index,
           ]);
 
           const checked =
@@ -167,7 +168,7 @@ class CorrectErrorsMediator extends React.Component {
 
           return {
             ...row,
-            checked
+            checked,
           };
         });
 
@@ -184,10 +185,10 @@ class CorrectErrorsMediator extends React.Component {
         );
 
         if (this.state.columnHeaders.length === 0) {
-          const columnHeaders = results.columns.map(column => {
+          const columnHeaders = results.columns.map((column) => {
             return {
               label: column,
-              value: column
+              value: column,
             };
           });
 
@@ -209,7 +210,7 @@ class CorrectErrorsMediator extends React.Component {
             correctCommand: command,
             rowCount,
             loading: false,
-            errorsExists: !this.state.errorsChecked
+            errorsExists: !this.state.errorsChecked,
           },
           this.afterErrorTableUpdate
         );
@@ -220,7 +221,7 @@ class CorrectErrorsMediator extends React.Component {
   afterErrorTableUpdate() {
     if (this.state.rowsDeleted) {
       // we also reset the checkboxes
-      this.checkRows('all', false);
+      this.checkRows("all", false);
       this.setState({ rowsDeleted: false });
     }
 
@@ -229,14 +230,14 @@ class CorrectErrorsMediator extends React.Component {
       const stepData = { ...this.props.stepData };
       stepData.errorData = {
         ...stepData.errorData,
-        errorsExists: this.state.errorsExists
+        errorsExists: this.state.errorsExists,
       };
       this.props.dispatch(generalActions.saveStepDataRequest(stepData));
     }
   }
 
   handleCellsErrorsError(error) {
-    console.log('error while getting file cells and their errors: ', error);
+    console.log("error while getting file cells and their errors: ", error);
   }
 
   getFileCellsErrors(
@@ -267,7 +268,7 @@ class CorrectErrorsMediator extends React.Component {
     const input = {
       id: command.file_id,
       // cause it needs to be passed in as a double stringified json ...
-      command: JSON.stringify(JSON.stringify(command))
+      command: JSON.stringify(JSON.stringify(command)),
     };
 
     this.setState({ correctCommand: command, page, loading: true }, () =>
@@ -285,7 +286,7 @@ class CorrectErrorsMediator extends React.Component {
       JSON.parse(
         get(
           this.props.fileCorrection,
-          'allFileErrorCorrection.edges[0].node.command',
+          "allFileErrorCorrection.edges[0].node.command",
           // so yeah this will basically be a double stringified empty json
           // cause we receive double stringified JSONS from backend as 'command' ^
           JSON.stringify(JSON.stringify({}))
@@ -333,7 +334,7 @@ class CorrectErrorsMediator extends React.Component {
 
   refetch() {
     const refetchVars = {
-      entryId: this.props.fileId
+      entryId: this.props.fileId,
     };
 
     this.props.relay.refetch(refetchVars, null, () =>
@@ -353,26 +354,26 @@ class CorrectErrorsMediator extends React.Component {
   }
 
   checkRows(index, checked) {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       let errorTableData = [];
 
       let checkedRows = false;
-      if (index === 'all') {
+      if (index === "all") {
         // so if all is checked === true, it means that all rows are checked
         // and viceversa unchecked so we can set the checked rows thingy here
         checkedRows = checked;
 
-        errorTableData = prevState.errorTableData.map(row => {
+        errorTableData = prevState.errorTableData.map((row) => {
           return {
             ...row,
-            checked
+            checked,
           };
         });
       } else {
         errorTableData = [...prevState.errorTableData];
-        const actualInd = findIndex(errorTableData, ['index', index]);
+        const actualInd = findIndex(errorTableData, ["index", index]);
         errorTableData[actualInd].checked = !errorTableData[actualInd].checked;
-        checkedRows = findIndex(errorTableData, ['checked', true]) !== -1;
+        checkedRows = findIndex(errorTableData, ["checked", true]) !== -1;
       }
       return { errorTableData, checkedRows };
     });
@@ -383,7 +384,7 @@ class CorrectErrorsMediator extends React.Component {
 
     const delIndex = [];
 
-    this.state.errorTableData.forEach(row => {
+    this.state.errorTableData.forEach((row) => {
       if (row.checked) {
         delIndex.push(parseInt(row.index, 10));
       }
@@ -427,7 +428,7 @@ class CorrectErrorsMediator extends React.Component {
 
     stepData.errorData = {
       ...stepData.errorData,
-      ignoredErrors
+      ignoredErrors,
     };
     stepData.errorColumns = errorColumns;
 
@@ -477,10 +478,10 @@ class CorrectErrorsMediator extends React.Component {
 CorrectErrorsMediator.propTypes = propTypes;
 CorrectErrorsMediator.defaultProps = defaultProps;
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     fileId: state.stepData.stepzData.uploadData.fileId,
-    stepData: state.stepData.stepzData
+    stepData: state.stepData.stepzData,
   };
 };
 

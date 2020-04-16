@@ -3,13 +3,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 /* components */
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
-import ProjectList from 'components/Lists/ProjectList/ProjectList';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
+import ProjectList from 'app/components/Lists/ProjectList/ProjectList';
 import { Element } from 'react-scroll/modules';
-import SvgIconSort from 'assets/icons/IconSort';
-import SortbyDialog from 'components/Dialog/SortbyDialog/SortbyDialog';
+import SvgIconSort from 'app/assets/icons/IconSort';
+import SortbyDialog from 'app/components/Dialog/SortbyDialog/SortbyDialog';
 /* mock */
-import { countryDetailMockData } from '__mocks__/countryDetailMock';
+import { countryDetailMockData } from 'app/__mocks__/countryDetailMock';
 
 export const ControlsRow = styled.div`
   width: 100%;

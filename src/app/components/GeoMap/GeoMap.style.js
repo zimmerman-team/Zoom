@@ -1,5 +1,5 @@
-import { YearContainer } from 'components/CustomYearSelector/CustomYearSelector.style';
-import styled from 'styled-components';
+import { YearContainer } from "app/components/CustomYearSelector/CustomYearSelector.style";
+import styled from "styled-components";
 
 export const MapContainer = styled.div`
   width: 100%;

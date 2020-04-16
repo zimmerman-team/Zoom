@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import InputBase from '@material-ui/core/InputBase';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 const EditableTitle = styled(props => <InputBase {...props} />)`
   && {

@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import ReactQuill from 'react-quill';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 const formats = [
   'header',

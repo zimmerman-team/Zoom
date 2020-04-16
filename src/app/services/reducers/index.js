@@ -1,8 +1,8 @@
 import update from 'immutability-helper';
-import * as actions from 'services/actions/index';
-import * as oipaActions from 'services/actions/oipa';
-import * as syncActions from 'services/actions/sync';
-import * as nodeActions from 'services/actions/nodeBackend';
+import * as actions from 'app/services/actions/index';
+import * as oipaActions from 'app/services/actions/oipa';
+import * as syncActions from 'app/services/actions/sync';
+import * as nodeActions from 'app/services/actions/nodeBackend';
 
 const initial = {
   values: null,

@@ -2,9 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ResponsiveTreeMapHtml } from '@nivo/treemap';
-import TreeMapHtmlNode from 'components/charts/treemap/TreeMapHtmlNode/TreeMapHtmlNode';
+import TreeMapHtmlNode from 'app/components/charts/treemap/TreeMapHtmlNode/TreeMapHtmlNode';
 import { ComponentBase } from './TreeMap.styles';
-import Theme from 'theme/Theme';
+import Theme from 'app/theme/Theme';
 
 const propTypes = {
   data: PropTypes.shape({

@@ -1,35 +1,35 @@
 /* eslint-disable no-return-assign */
 /* base */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import MapGL, { LinearInterpolator } from 'react-map-gl';
-import isEqual from 'lodash/isEqual';
-import { withRouter } from 'react-router';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import MapGL, { LinearInterpolator } from "react-map-gl";
+import isEqual from "lodash/isEqual";
+import { withRouter } from "react-router";
 /* utils */
-import cloneDeep from 'lodash/cloneDeep';
-import find from 'lodash/find';
-import findIndex from 'lodash/findIndex';
-import MapControls from 'components/GeoMap/components/MapControls/MapControls';
-import MAP_STYLE from 'components/GeoMap/data/map-style-basic-v8';
-import ErrorBoundaryFallback from 'components/ErrorBoundaryFallback/ErrorBoundaryFallback';
-import { ErrorBoundary } from 'react-error-boundary';
-import { generateLegends, generateMarkers } from './GeoMap.util';
+import cloneDeep from "lodash/cloneDeep";
+import find from "lodash/find";
+import findIndex from "lodash/findIndex";
+import MapControls from "app/components/GeoMap/components/MapControls/MapControls";
+import MAP_STYLE from "app/components/GeoMap/data/map-style-basic-v8";
+import ErrorBoundaryFallback from "app/components/ErrorBoundaryFallback/ErrorBoundaryFallback";
+import ErrorBoundary from "react-error-boundary";
+import { generateLegends, generateMarkers } from "./GeoMap.util";
 /* styles */
-import { borderStyle, dataLayer, colorStops } from './components/map-style';
+import { borderStyle, dataLayer, colorStops } from "./components/map-style";
 import {
   ControlsContainer,
   LegendContainer,
   MapContainer,
   GeoYearContainer
-} from './GeoMap.style';
-import theme from 'theme/Theme';
+} from "./GeoMap.style";
+import theme from "app/theme/Theme";
 
 /* components */
-import markerInfo from './components/ToolTips/MarkerInfo/MarkerInfo';
-import layerInfo from './components/ToolTips/LayerInfo/LayerInfo';
-import CustomYearSelector from 'components/CustomYearSelector/CustomYearSelector';
-import Cluster from 'components/GeoMap/components/Cluster/Cluster';
-import { ClusterElement } from 'components/GeoMap/components/Cluster/ClusterElement';
+import markerInfo from "./components/ToolTips/MarkerInfo/MarkerInfo";
+import layerInfo from "./components/ToolTips/LayerInfo/LayerInfo";
+import CustomYearSelector from "app/components/CustomYearSelector/CustomYearSelector";
+import Cluster from "app/components/GeoMap/components/Cluster/Cluster";
+import { ClusterElement } from "app/components/GeoMap/components/Cluster/ClusterElement";
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
@@ -161,10 +161,10 @@ export class GeoMap extends Component {
     const borderVecStyle = cloneDeep(borderStyle);
     const dataVecLayers = cloneDeep(dataLayer);
 
-    const layers = find(indicatorData, ['type', 'layer']);
+    const layers = find(indicatorData, ["type", "layer"]);
     if (layers) {
-      mapStyle.sources['vector-layers'] = {
-        type: 'vector',
+      mapStyle.sources["vector-layers"] = {
+        type: "vector",
         tiles: [
           `${
             process.env.REACT_APP_PROJECT_URL
@@ -173,14 +173,14 @@ export class GeoMap extends Component {
         maxzoom: layers.zoom
       };
 
-      let borderInd = findIndex(mapStyle.layers, ['id', 'outline']);
+      let borderInd = findIndex(mapStyle.layers, ["id", "outline"]);
 
       if (borderInd === -1) {
         mapStyle.layers.push(borderVecStyle);
         borderInd = mapStyle.layers.length - 1;
       }
 
-      mapStyle.layers[borderInd]['source-layer'] = layers.tileName;
+      mapStyle.layers[borderInd]["source-layer"] = layers.tileName;
 
       // so here we change the data layers color stops
       // according to the amount of actually unique values
@@ -194,9 +194,9 @@ export class GeoMap extends Component {
       // for clarity
       colorStopz[1][0] = layers.uniqCount;
 
-      if (!find(mapStyle.layers, ['id', 'layer'])) {
-        dataVecLayers['source-layer'] = layers.tileName;
-        dataVecLayers.paint['fill-color'].stops = colorStopz;
+      if (!find(mapStyle.layers, ["id", "layer"])) {
+        dataVecLayers["source-layer"] = layers.tileName;
+        dataVecLayers.paint["fill-color"].stops = colorStopz;
 
         mapStyle.layers.push(dataVecLayers);
       } else {
@@ -204,10 +204,10 @@ export class GeoMap extends Component {
         // the color stops according to this new data
 
         // so we find the layer containing our color stops
-        const layerColInd = findIndex(mapStyle.layers, ['id', 'layer']);
+        const layerColInd = findIndex(mapStyle.layers, ["id", "layer"]);
 
-        mapStyle.layers[layerColInd].paint['fill-color'].stops = colorStopz;
-        mapStyle.layers[layerColInd]['source-layer'] = layers.tileName;
+        mapStyle.layers[layerColInd].paint["fill-color"].stops = colorStopz;
+        mapStyle.layers[layerColInd]["source-layer"] = layers.tileName;
       }
     } else {
       // so if no layers are loaded we want to make sure that
@@ -215,13 +215,13 @@ export class GeoMap extends Component {
       // cause of stupid referencing the MAP_STYLE object has the
       // layers pushed, whilst it shouldn't
 
-      const borderInd = findIndex(mapStyle.layers, ['id', 'outline']);
+      const borderInd = findIndex(mapStyle.layers, ["id", "outline"]);
 
       if (borderInd !== -1) {
         mapStyle.layers.splice(borderInd, 1);
       }
 
-      const layerInd = findIndex(mapStyle.layers, ['id', 'layer']);
+      const layerInd = findIndex(mapStyle.layers, ["id", "layer"]);
 
       if (layerInd !== -1) {
         mapStyle.layers.splice(layerInd, 1);
@@ -255,7 +255,7 @@ export class GeoMap extends Component {
     let hoverLayerInfo = null;
     const { features } = event;
 
-    const feature = features && features.find(f => f.layer.id === 'layer');
+    const feature = features && features.find(f => f.layer.id === "layer");
     if (feature) {
       hoverLayerInfo = {
         lngLat: event.lngLat,
@@ -289,15 +289,15 @@ export class GeoMap extends Component {
     ) {
       const { features } = event;
 
-      const feature = features && features.find(f => f.layer.id === 'layer');
-      if (feature && feature.properties.geolocationType === 'country') {
+      const feature = features && features.find(f => f.layer.id === "layer");
+      if (feature && feature.properties.geolocationType === "country") {
         this.props.outerHistory.push(`/country/${feature.properties.iso2}`);
       }
     }
   };
 
   _handleMapLoaded = event => {
-    if (this.props.location.pathname === '/focus') {
+    if (this.props.location.pathname === "/focus") {
       this.setState({
         settings: {
           dragPan: false
@@ -345,7 +345,7 @@ export class GeoMap extends Component {
   handleFullscreen() {
     const isInFullScreen = this.isInFullScreen();
 
-    const docElm = document.getElementById('geo-map');
+    const docElm = document.getElementById("geo-map");
     if (!isInFullScreen) {
       if (docElm.requestFullscreen) {
         docElm.requestFullscreen();

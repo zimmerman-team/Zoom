@@ -1,36 +1,37 @@
 /* base */
-import React from 'react';
+import React from "react";
 // import { matchPath } from 'react-router';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { createFragmentContainer, graphql } from 'react-relay';
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import graphql from "babel-plugin-relay/macro";
+import { createFragmentContainer } from "react-relay";
 /* mutations */
-import DeleteFileMutation from 'mediators/DashboardMediators/mutations/DeleteFile';
+import DeleteFileMutation from "app/mediators/DashboardMediators/mutations/DeleteFile";
 /* actions */
-import * as syncActions from 'services/actions/sync';
-import * as actions from 'services/actions/nodeBackend';
-import * as generalActions from 'services/actions/general';
+import * as syncActions from "app/services/actions/sync";
+import * as actions from "app/services/actions/nodeBackend";
+import * as generalActions from "app/services/actions/general";
 import {
   getGroupsRequest,
   getAllUsersRequest,
   deleteAuthUserRequest,
-  deleteAuthGroupRequest
-} from 'services/actions/authNodeBackend';
+  deleteAuthGroupRequest,
+} from "app/services/actions/authNodeBackend";
 /* utils */
-import get from 'lodash/get';
-import isEqual from 'lodash/isEqual';
+import get from "lodash/get";
+import isEqual from "lodash/isEqual";
 import {
   formatChartData,
   formatDatasets,
   formatTeamsTabData,
-  formatUsersTabData
-} from 'utils/dashboardUtils';
+  formatUsersTabData,
+} from "app/utils/dashboardUtils";
 /* components */
-import DashboardModule from 'modules/dashboard/DashboardModule';
+import DashboardModule from "app/modules/dashboard/DashboardModule";
 /* consts */
-import { data } from 'modules/dashboard/fragments/DashboardContent/DashboardContent.const';
-import paneTypes from '__consts__/PaneTypesConst';
-import userRoles from '__consts__/UserRoleConst';
+import { data } from "app/modules/dashboard/fragments/DashboardContent/DashboardContent.const";
+import paneTypes from "app/__consts__/PaneTypesConst";
+import userRoles from "app/__consts__/UserRoleConst";
 
 class DashboardMediator extends React.Component {
   state = {
@@ -39,8 +40,8 @@ class DashboardMediator extends React.Component {
     itemCount: 0,
     users: [],
     teams: [],
-    sort: '-last_updated',
-    searchKeyword: '',
+    sort: "-last_updated",
+    searchKeyword: "",
     charts: [],
     trashCharts: [],
     datasets: [],
@@ -48,29 +49,29 @@ class DashboardMediator extends React.Component {
     isSortByOpen: false,
     allUsers: [],
     allTeams: [],
-    deletedSelf: false
+    deletedSelf: false,
   };
 
   componentDidMount = () => {
     if (
-      (this.props.match.params.tab === 'teams' ||
-        this.props.match.params.tab === 'data-sets') &&
+      (this.props.match.params.tab === "teams" ||
+        this.props.match.params.tab === "data-sets") &&
       this.props.user.role !== userRoles.admin
     ) {
-      this.props.history.replace('/dashboard/charts');
+      this.props.history.replace("/dashboard/charts");
     }
     // also when this component loads we want to reset the pane
     // to its default state for this component
     this.props.dispatch(generalActions.dataPaneToggleRequest(paneTypes.none));
 
-    this.reloadData('all');
+    this.reloadData("all");
     /* todo: not sure if this is the best way to handle this, see if it can be refactored */
-    document.addEventListener('mousedown', this.handleClickOutside);
+    document.addEventListener("mousedown", this.handleClickOutside);
   };
 
-  componentDidUpdate = prevProps => {
+  componentDidUpdate = (prevProps) => {
     if (!isEqual(this.props.user, prevProps.user) && this.props.user) {
-      this.reloadData('all');
+      this.reloadData("all");
     }
 
     if (!isEqual(this.props.chartDeleted, prevProps.chartDeleted)) {
@@ -78,7 +79,7 @@ class DashboardMediator extends React.Component {
 
       this.getUserTrash(true);
 
-      this.setState({ page: 0, searchKeyword: '' });
+      this.setState({ page: 0, searchKeyword: "" });
     }
 
     // we format the charts
@@ -94,7 +95,7 @@ class DashboardMediator extends React.Component {
           this.props.history,
           this.deleteChart,
           this.duplicateChart.bind(this)
-        )
+        ),
       });
     }
 
@@ -104,7 +105,7 @@ class DashboardMediator extends React.Component {
       this.props.archivedCharts.data
     ) {
       this.setState({
-        trashCharts: formatChartData(this.props.archivedCharts.data)
+        trashCharts: formatChartData(this.props.archivedCharts.data),
       });
     }
 
@@ -118,7 +119,7 @@ class DashboardMediator extends React.Component {
           this.props.userDatasets.data,
           this.props.history,
           this.deleteDataset
-        )
+        ),
       });
     }
 
@@ -136,7 +137,7 @@ class DashboardMediator extends React.Component {
       // and we delete the users datasets from DUCT according to the
       // setData returned from the zoomBackend
 
-      this.props.deleteUser.data.setData.forEach(dataset => {
+      this.props.deleteUser.data.setData.forEach((dataset) => {
         DeleteFileMutation.commit(
           this.props.relay.environment,
           dataset.datasetId,
@@ -177,7 +178,7 @@ class DashboardMediator extends React.Component {
     // emptying was succesfull
     if (
       !isEqual(this.props.chartTrashEmpty, prevProps.chartTrashEmpty) &&
-      get(this.props.chartTrashEmpty, 'data.message', '').length > 0
+      get(this.props.chartTrashEmpty, "data.message", "").length > 0
     ) {
       this.reloadData();
     }
@@ -194,14 +195,14 @@ class DashboardMediator extends React.Component {
   };
 
   componentWillUnmount = () => {
-    document.removeEventListener('mousedown', this.handleClickOutside);
+    document.removeEventListener("mousedown", this.handleClickOutside);
   };
 
-  getAllUsers = initialLoad => {
+  getAllUsers = (initialLoad) => {
     if (initialLoad) {
       this.props.dispatch(
         getAllUsersRequest({
-          userId: this.props.user.authId
+          userId: this.props.user.authId,
         })
       );
     } else {
@@ -222,27 +223,27 @@ class DashboardMediator extends React.Component {
     );
     this.setState({
       users: result.users,
-      allUsers: result.allUsers
+      allUsers: result.allUsers,
     });
   };
 
-  editUser = userId => {
+  editUser = (userId) => {
     this.props.history.push(`/edit-user/${userId}`);
   };
 
-  viewUser = userId => {
+  viewUser = (userId) => {
     this.props.history.push(`/view-user/${userId}`);
   };
 
-  deleteUser = delId => {
+  deleteUser = (delId) => {
     if (delId === this.props.user.authId) {
       // eslint-disable-next-line no-alert
-      if (window.confirm('You are about to delete yourself! Are you sure?')) {
+      if (window.confirm("You are about to delete yourself! Are you sure?")) {
         this.setState({ deletedSelf: true });
         this.props.dispatch(
           deleteAuthUserRequest({
             delId: delId,
-            userId: this.props.user.authId
+            userId: this.props.user.authId,
           })
         );
       }
@@ -250,17 +251,17 @@ class DashboardMediator extends React.Component {
       this.props.dispatch(
         deleteAuthUserRequest({
           delId: delId,
-          userId: this.props.user.authId
+          userId: this.props.user.authId,
         })
       );
     }
   };
 
-  getAllTeams = initialLoad => {
+  getAllTeams = (initialLoad) => {
     if (initialLoad) {
       this.props.dispatch(
         getGroupsRequest({
-          userId: this.props.user.authId
+          userId: this.props.user.authId,
         })
       );
     } else {
@@ -283,15 +284,15 @@ class DashboardMediator extends React.Component {
     );
     this.setState({
       teams: result.teams,
-      allTeams: result.allTeams
+      allTeams: result.allTeams,
     });
   };
 
-  viewTeam = id => {
+  viewTeam = (id) => {
     this.props.history.push(`/view-team/${id}`);
   };
 
-  editTeam = id => {
+  editTeam = (id) => {
     this.props.history.push(`/edit-team/${id}`);
   };
 
@@ -300,55 +301,55 @@ class DashboardMediator extends React.Component {
       deleteAuthGroupRequest({
         adminId: this.props.user.authId,
         delId: id,
-        name: name
+        name: name,
       })
     );
   };
 
-  setWrapperRef = node => {
+  setWrapperRef = (node) => {
     this.wrapperRef = node;
   };
 
   setIsSortByOpen = () => {
-    this.setState(prevState => ({
-      isSortByOpen: !prevState.isSortByOpen
+    this.setState((prevState) => ({
+      isSortByOpen: !prevState.isSortByOpen,
     }));
   };
 
-  changeSortBy = e => {
+  changeSortBy = (e) => {
     this.setState(
       {
-        sort: e.target.id
+        sort: e.target.id,
       },
       () => {
         const initialLoad =
-          this.props.match.params.tab !== 'users' &&
-          this.props.match.params.tab !== 'teams';
-        this.reloadData('sort', initialLoad);
+          this.props.match.params.tab !== "users" &&
+          this.props.match.params.tab !== "teams";
+        this.reloadData("sort", initialLoad);
       }
     );
   };
 
-  changePage = e => {
+  changePage = (e) => {
     this.setState(
       {
-        page: e.selected
+        page: e.selected,
       },
       () => {
-        this.reloadData('', false);
+        this.reloadData("", false);
       }
     );
   };
 
-  handleClickOutside = event => {
+  handleClickOutside = (event) => {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.setState({ isSortByOpen: false });
     }
   };
 
-  changeSearchKeyword = e => {
+  changeSearchKeyword = (e) => {
     this.setState({ searchKeyword: e.target.value }, () => {
-      if (this.state.searchKeyword === '') {
+      if (this.state.searchKeyword === "") {
         this.onEnterPressed();
       }
     });
@@ -356,30 +357,30 @@ class DashboardMediator extends React.Component {
 
   onEnterPressed = () => {
     const initialLoad =
-      this.props.match.params.tab !== 'users' &&
-      this.props.match.params.tab !== 'teams';
-    this.reloadData('search', initialLoad);
+      this.props.match.params.tab !== "users" &&
+      this.props.match.params.tab !== "teams";
+    this.reloadData("search", initialLoad);
   };
 
   getViewPagesNumber = () => {
     switch (this.props.match.params.tab) {
-      case 'charts': {
+      case "charts": {
         const chartCount = this.props.userCharts.data
           ? this.props.userCharts.data.count
           : 0;
         return chartCount / this.state.pageSize;
       }
-      case 'data-sets': {
+      case "data-sets": {
         const datasetCount = this.props.userDatasets.data
           ? this.props.userDatasets.data.count
           : 0;
         return datasetCount / this.state.pageSize;
       }
-      case 'users':
+      case "users":
         return this.state.allUsers.length / this.state.pageSize;
-      case 'teams':
+      case "teams":
         return this.state.allTeams.length / this.state.pageSize;
-      case 'trash': {
+      case "trash": {
         const trashCount = this.props.archivedCharts.data
           ? this.props.archivedCharts.data.count
           : 0;
@@ -392,7 +393,7 @@ class DashboardMediator extends React.Component {
 
   reloadData = (type, initialLoad = true) => {
     if (this.props.user && this.props.user.authId) {
-      if (type === 'all') {
+      if (type === "all") {
         this.getUserCharts();
         this.getUserDatasets();
         this.getAllUsers(initialLoad);
@@ -400,19 +401,19 @@ class DashboardMediator extends React.Component {
         this.getUserTrash();
       } else {
         switch (this.props.match.params.tab) {
-          case 'charts':
+          case "charts":
             this.getUserCharts();
             break;
-          case 'data-sets':
+          case "data-sets":
             this.getUserDatasets();
             break;
-          case 'users':
+          case "users":
             this.getAllUsers(initialLoad);
             break;
-          case 'teams':
+          case "teams":
             this.getAllTeams(initialLoad);
             break;
-          case 'trash':
+          case "trash":
             this.getUserTrash();
             break;
         }
@@ -426,7 +427,7 @@ class DashboardMediator extends React.Component {
 
     if (initial) {
       page = 0;
-      searchTitle = '';
+      searchTitle = "";
     }
 
     this.props.dispatch(
@@ -436,7 +437,7 @@ class DashboardMediator extends React.Component {
         authId: this.props.user.authId,
         sortBy: this.state.sort,
         archived: true,
-        searchTitle
+        searchTitle,
       })
     );
   }
@@ -448,7 +449,7 @@ class DashboardMediator extends React.Component {
         pageSize: this.state.pageSize,
         authId: this.props.user.authId,
         sortBy: this.state.sort,
-        searchTitle: this.state.searchKeyword
+        searchTitle: this.state.searchKeyword,
       })
     );
   }
@@ -460,25 +461,25 @@ class DashboardMediator extends React.Component {
         pageSize: this.state.pageSize,
         authId: this.props.user.authId,
         sortBy: this.state.sort,
-        searchTitle: this.state.searchKeyword
+        searchTitle: this.state.searchKeyword,
       })
     );
   }
 
-  deleteChart = chartId => {
+  deleteChart = (chartId) => {
     this.props.dispatch(
       actions.deleteChartRequest({
         authId: this.props.user.authId,
-        chartId
+        chartId,
       })
     );
   };
 
-  deleteDataset = datasetId => {
+  deleteDataset = (datasetId) => {
     this.props.dispatch(
       actions.deleteDatasetRequest({
         authId: this.props.user.authId,
-        datasetId
+        datasetId,
       })
     );
 
@@ -491,18 +492,18 @@ class DashboardMediator extends React.Component {
   };
 
   handleFileDeleteCompleted(response, error) {
-    if (error) console.log('Error deleting file', error);
+    if (error) console.log("Error deleting file", error);
   }
 
   handleFileDeleteError(error) {
-    if (error) console.log('Error deleting file', error);
+    if (error) console.log("Error deleting file", error);
   }
 
   duplicateChart(chartId) {
     this.props.dispatch(
       actions.duplicateChartRequest({
         authId: this.props.user.authId,
-        chartId
+        chartId,
       })
     );
   }
@@ -510,7 +511,7 @@ class DashboardMediator extends React.Component {
   emptyTrashChart() {
     this.props.dispatch(
       actions.emptyChartTrashRequest({
-        authId: this.props.user.authId
+        authId: this.props.user.authId,
       })
     );
   }
@@ -529,13 +530,13 @@ class DashboardMediator extends React.Component {
       : 0;
 
     const greetingName =
-      get(this.props.user, 'firstName', '') !== ''
-        ? `${get(this.props.user, 'firstName', '')} ${get(
+      get(this.props.user, "firstName", "") !== ""
+        ? `${get(this.props.user, "firstName", "")} ${get(
             this.props.user,
-            'lastName',
-            ''
+            "lastName",
+            ""
           )}`
-        : get(this.props.user, 'email', '');
+        : get(this.props.user, "email", "");
     return (
       <DashboardModule
         loading={
@@ -563,8 +564,8 @@ class DashboardMediator extends React.Component {
         changeSearchKeyword={this.changeSearchKeyword}
         teams={this.state.teams}
         navItems={data(
-          get(this.props.user, 'role', '') === 'Administrator',
-          get(this.props.user, 'role', '') === 'Super admin',
+          get(this.props.user, "role", "") === "Administrator",
+          get(this.props.user, "role", "") === "Super admin",
           this.state.allUsers,
           this.state.allTeams,
           chartCount,
@@ -573,16 +574,16 @@ class DashboardMediator extends React.Component {
         totalPages={this.getViewPagesNumber()}
         changePage={this.changePage}
         greetingName={greetingName}
-        isAdministrator={get(this.props.user, 'role', '') === userRoles.admin}
-        isSuperAdmin={get(this.props.user, 'role', '') === userRoles.superAdm}
-        isModerator={get(this.props.user, 'role', '') === userRoles.mod}
+        isAdministrator={get(this.props.user, "role", "") === userRoles.admin}
+        isSuperAdmin={get(this.props.user, "role", "") === userRoles.superAdm}
+        isModerator={get(this.props.user, "role", "") === userRoles.mod}
         auth0Client={this.props.auth0Client}
       />
     );
   };
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     chartTrashEmpty: state.chartTrashEmpty,
     archivedCharts: state.archivedCharts,
@@ -596,7 +597,7 @@ const mapStateToProps = state => {
     allUsers: state.allUsers,
     groups: state.authGroups,
     deleteUser: state.deleteUser,
-    deleteGroup: state.deleteGroup
+    deleteGroup: state.deleteGroup,
   };
 };
 

@@ -7,8 +7,8 @@ import Input from '@material-ui/core/Input/index';
 import InputLabel from '@material-ui/core/InputLabel/index';
 import MenuItem from '@material-ui/core/MenuItem/index';
 import FormControl from '@material-ui/core/FormControl/index';
-import themes from 'theme/Theme';
-import IconPointer from 'assets/icons/IconPointer';
+import themes from 'app/theme/Theme';
+import IconPointer from 'app/assets/icons/IconPointer';
 
 /**
  * todo: Please write a short component description of what this component does

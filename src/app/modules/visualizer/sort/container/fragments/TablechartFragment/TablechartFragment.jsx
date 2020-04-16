@@ -6,15 +6,15 @@ import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 
 /* actions */
-import * as actions from 'services/actions/general';
+import * as actions from 'app/services/actions/general';
 
 /* consts */
 import { noData } from './TableChartFragment.const';
-import initialState from '__consts__/InitialChartDataConst';
+import initialState from 'app/__consts__/InitialChartDataConst';
 
 /* components */
-import TableChart from 'components/charts/tablechart/TableChart';
-import { FragmentBase } from 'modules/visualizer/sort/container/VizContainer.style';
+import TableChart from 'app/components/charts/tablechart/TableChart';
+import { FragmentBase } from 'app/modules/visualizer/sort/container/VizContainer.style';
 
 class TablechartFragment extends React.Component {
   constructor(props) {

@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /* icons */
-import IconDownload from 'assets/icons/toolpanel/IconDownload';
+import IconDownload from 'app/assets/icons/toolpanel/IconDownload';
 
 /* styles */
 import { ComponentBase } from './DownloadButton.style';
 
 /* components*/
 import { Tooltip } from 'react-tippy';
-import TableToolTip from 'components/ToolTips/TableToolTip/TableToolTip';
+import TableToolTip from 'app/components/ToolTips/TableToolTip/TableToolTip';
 
 const propTypes = {
   handleDownload: PropTypes.func,

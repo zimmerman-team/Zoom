@@ -5,14 +5,14 @@ import connect from 'react-redux/es/connect/connect';
 /* components */
 import { Box } from 'grommet/components/Box';
 /* consts */
-import { step1InitialData } from '__consts__/DataMapperStepConsts';
-import Const from 'modules/datamapper/fragments/OverviewStep/OverviewStep.const';
+import { step1InitialData } from 'app/__consts__/DataMapperStepConsts';
+import Const from 'app/modules/datamapper/fragments/OverviewStep/OverviewStep.const';
 /* styles */
 import {
   ModuleContainer,
   OverviewTable
-} from 'modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
-import { SectionHeading } from 'components/sort/Headings';
+} from 'app/modules/datamapper/fragments/OverviewStep/OverviewStep.styles';
+import { SectionHeading } from 'app/components/sort/Headings';
 
 const propTypes = {
   stepData: PropTypes.shape({

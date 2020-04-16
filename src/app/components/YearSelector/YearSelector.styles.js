@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import './YearSelector.css';
 import Range from 'rc-slider/es/Range';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 
 export const YearLabel = styled.div`
   color: ${theme.color.zoomBlack};

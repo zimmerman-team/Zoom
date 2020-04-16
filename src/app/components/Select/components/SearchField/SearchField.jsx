@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import NoSsr from '@material-ui/core/NoSsr';
-import theme from 'theme/Theme';
+import theme from 'app/theme/Theme';
 import TextField from '@material-ui/core/TextField';
 
 export default styled(props => (

@@ -2,10 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
-import ModuleFragment from 'components/Layout/ModuleFragment/ModuleFragment';
+import ModuleFragment from 'app/components/Layout/ModuleFragment/ModuleFragment';
 
-import { PageHeading } from 'components/sort/Headings';
-import theme from 'theme/Theme';
+import { PageHeading } from 'app/components/sort/Headings';
+import theme from 'app/theme/Theme';
 import {
   DetailList,
   DetailListItem,

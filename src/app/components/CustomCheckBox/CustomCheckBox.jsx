@@ -4,7 +4,7 @@ import {
   CheckBoxStyle,
   ComponentBase,
   EmptyInput
-} from 'components/CustomCheckBox/CustomCheckBox.styles';
+} from 'app/components/CustomCheckBox/CustomCheckBox.styles';
 
 /*TODO: rename this component to something better*/
 const propTypes = {

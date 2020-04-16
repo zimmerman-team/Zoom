@@ -6,17 +6,17 @@ import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
 
 /* mutations */
-import AddFileMutation from 'mediators/DataMapperMediators/mutations/UploadFileMutation';
-import AddSourceMutation from 'mediators/DataMapperMediators/mutations/AddSourceMutation';
-import FileValidationMutation from 'mediators/DataMapperMediators/mutations/FileValidation';
+import AddFileMutation from 'app/mediators/DataMapperMediators/mutations/UploadFileMutation';
+import AddSourceMutation from 'app/mediators/DataMapperMediators/mutations/AddSourceMutation';
+import FileValidationMutation from 'app/mediators/DataMapperMediators/mutations/FileValidation';
 /* consts */
-import { step1InitialData } from '__consts__/DataMapperStepConsts';
+import { step1InitialData } from 'app/__consts__/DataMapperStepConsts';
 /* actions */
-import * as actions from 'services/actions';
-import * as generalActions from 'services/actions/general';
+import * as actions from 'app/services/actions';
+import * as generalActions from 'app/services/actions/general';
 /* components */
-import UploadStep from 'modules/datamapper/fragments/UploadStep/UploadStep';
-import { SimpleErrorText } from 'components/sort/Misc';
+import UploadStep from 'app/modules/datamapper/fragments/UploadStep/UploadStep';
+import { SimpleErrorText } from 'app/components/sort/Misc';
 /* utils */
 import sortBy from 'lodash/sortBy';
 import isEqual from 'lodash/isEqual';
@@ -25,7 +25,7 @@ import {
   formatOverviewData,
   defModelOptions
 } from './UploadMediator.util';
-import { formatErrorColumns } from 'mediators/DataMapperMediators/ManualMappingMediator.util';
+import { formatErrorColumns } from 'app/mediators/DataMapperMediators/ManualMappingMediator.util';
 import Snackbar from '../../../components/Snackbar/Snackbar';
 
 const propTypes = {

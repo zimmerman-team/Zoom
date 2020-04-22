@@ -13,26 +13,26 @@ import { getFocus } from "app/modules/visualizer/VisualizerModule.utils";
 
 const ComponentBase = styled.div`
   width: 100%;
-  height: ${(props) => props.height};
+  height: ${props => props.height};
   z-index: 0;
 `;
 
 const propTypes = {
   saveViewport: PropTypes.func,
   selectedYear: PropTypes.string,
-  selectYear: PropTypes.func,
+  selectYear: PropTypes.func
 };
 const defaultProps = {
   selectedYear: "2005",
   selectYear: null,
-  saveViewport: null,
+  saveViewport: null
 };
 
 class GeomapFragment extends React.Component {
   state = {
-    zoom: 2,
+    zoom: 1,
     longitude: 0,
-    latitude: 15,
+    latitude: 15
   };
 
   componentWillMount = () => {
@@ -43,11 +43,11 @@ class GeomapFragment extends React.Component {
     const isKE = location.pathname.includes("KE");
     const boundsNL = [
       [0.2252, 50.2378],
-      [10.756, 54.2068],
+      [10.756, 54.2068]
     ];
     const boundsKE = [
       [26.82, -7.15],
-      [50.89, 7.57],
+      [50.89, 7.57]
     ];
 
     if (isNL) {
@@ -55,14 +55,14 @@ class GeomapFragment extends React.Component {
         latitude: 52.1326,
         longitude: 5.2913,
         zoom: 7,
-        bounds: boundsNL,
+        bounds: boundsNL
       });
     } else if (isKE) {
       this.setState({
         latitude: 0.0236,
         longitude: 37.9062,
         zoom: 6,
-        bounds: boundsKE,
+        bounds: boundsKE
       });
     }
   };
@@ -71,7 +71,7 @@ class GeomapFragment extends React.Component {
     if (this.props.chartType !== prevProps.chartType) {
       this.setState({
         /* morty, i don't know bout this solution */
-        focus: getFocus(this.props.chartType),
+        focus: getFocus(this.props.chartType)
       });
     }
   }
@@ -79,7 +79,7 @@ class GeomapFragment extends React.Component {
   render() {
     const { mode, ...otherProps } = this.props;
     return (
-      <ComponentBase height={mode ? "400px" : "100%"} id="geo-map">
+      <ComponentBase height={mode ? "772px" : "100%"} id="geo-map">
         <GeoMap
           chartMounted={this.props.chartMounted}
           viewport={this.props.viewport}
@@ -96,10 +96,10 @@ class GeomapFragment extends React.Component {
 GeomapFragment.propTypes = propTypes;
 GeomapFragment.defaultProps = defaultProps;
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     chartMounted: state.chartData.chartData.chartMounted,
-    viewport: state.chartData.chartData.specOptions,
+    viewport: state.chartData.chartData.specOptions
   };
 };
 

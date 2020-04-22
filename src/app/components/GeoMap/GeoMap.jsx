@@ -60,7 +60,7 @@ const defaultProps = {
   longitude: 0,
   viewport: {},
   chartMounted: false,
-  zoom: 2,
+  zoom: 1,
   saveViewport: null,
   mapOptions: {}
 };

@@ -1,6 +1,9 @@
 /// <reference types="node" />
 /// <reference types="react" />
 /// <reference types="react-dom" />
+/// <reference types="styled-components/cssprop" />
+
+import { CSSProp } from "styled-components";
 
 declare namespace NodeJS {
   interface ProcessEnv {
@@ -67,4 +70,16 @@ declare module "*.module.sass" {
 
 declare module "babel-plugin-relay/macro" {
   export { graphql } from "react-relay";
+}
+
+declare module "styled-components" {
+  export interface DefaultTheme {
+    // Your theme stuff here
+  }
+}
+
+declare module "react" {
+  interface Attributes {
+    css?: CSSProp;
+  }
 }

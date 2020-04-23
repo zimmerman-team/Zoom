@@ -11,17 +11,17 @@ import PropTypes from "prop-types";
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
+interface FocusParams {
+  latitude: number;
+  longitude: number;
+  zoom: number;
+}
+
 interface GeoMapParams {
   latitude: number;
   longitude: number;
   zoom: number;
-  /* todo: don't know about this focus object tbh, might refactor this */
-  focus: object;
-  // PropTypes.shape({
-  //                        latitude: PropTypes.number,
-  //                        longitude: PropTypes.number,
-  //                        zoom: PropTypes.number
-  //                      }),
+  focus: FocusParams;
   viewport: object;
   chartMounted: boolean;
   indicatorData: any;

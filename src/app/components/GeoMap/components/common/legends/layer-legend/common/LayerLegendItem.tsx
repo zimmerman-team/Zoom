@@ -1,5 +1,5 @@
-import * as React from 'react';
-import 'styled-components/macro';
+import * as React from "react";
+import "styled-components/macro";
 
 interface LayerLegendItemParams {
   amount: number;
@@ -16,22 +16,21 @@ export const LayerLegendItem = (props: LayerLegendItemParams) => {
     >
       <div
         css={`
-          width: 55px;
+          width: 90px;
           height: 8px;
           background: ${props.color};
-          margin-bottom: 8px;
+          //margin-bottom: 8px;
         `}
       />
 
       <div
         css={`
-          color: rgb(74, 74, 74);
-          font-size: 14px;
-          font-weight: normal;
-          text-align: center;
-          letter-spacing: 0;
-          line-height: 14px;
-          box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.5);
+          display: flex;
+          justify-content: center;
+          color: rgb(42, 42, 42);
+          font-size: 10px;
+          font-weight: 500;
+          line-height: 26px;
         `}
       >
         {`${props.amount}k`}

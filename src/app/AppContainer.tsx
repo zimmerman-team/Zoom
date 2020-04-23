@@ -20,28 +20,34 @@ import syncReducers from "app/services/reducers/sync";
 import authNodeReducers from "app/services/reducers/authNodeBackend";
 import sagas from "app/services/sagas";
 import generalReducers from "app/services/reducers/general";
+import theme from "app/theme/MaterialTheme";
+import {
+  ThemeProvider,
+  StylesProvider,
+  createGenerateClassName
+} from "@material-ui/core/styles";
 
 const sagaMiddleware = createSagaMiddleware();
 const history = createHistory();
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
   ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-      stateSanitizer: process.env.NODE_ENV !== "development",
+      stateSanitizer: process.env.NODE_ENV !== "development"
     })
   : compose;
 
 const encryptor = createEncryptor({
   secretKey: "my-super-secret-key",
-  onError: (error) => {
+  onError: error => {
     // Handle the error
-  },
+  }
 });
 
 const persistConfig = {
   key: "root",
   storage: storageSession,
   whitelist: ["open", "user", "currentUser"],
-  transforms: [encryptor],
+  transforms: [encryptor]
 };
 
 const store = createStore(
@@ -52,7 +58,7 @@ const store = createStore(
       ...mutationReducers,
       ...syncReducers,
       ...generalReducers,
-      ...authNodeReducers,
+      ...authNodeReducers
     })
   ),
   composeEnhancers(applyMiddleware(sagaMiddleware, routerMiddleware(history)))
@@ -66,7 +72,10 @@ export const AppContainer = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+        {/*<ThemeProvider theme={theme}>*/}
+        {/*<CssBaseline />*/}
         <App />
+        {/*</ThemeProvider>*/}
       </PersistGate>
     </Provider>
   );

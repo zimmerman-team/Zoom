@@ -3,14 +3,20 @@ import "styled-components/macro";
 import { LegendBase } from "app/components/GeoMap/components/common/legends/common/LegendBase";
 import { BubbleLegendItem } from "app/components/GeoMap/components/common/legends/bubble-legend/common/BubbleLegendItem";
 import { LegendHeader } from "app/components/GeoMap/components/common/legends/common/LegendHeaderParams";
+import { formatNumber } from "app/utils/genericUtils";
 
 interface LegendParams {
   title?: string;
   type?: string;
+  index?: number;
+  min?: number;
+  max?: number;
 }
 
 export const BubbleLegend = (props: LegendParams) => {
-  console.log("Marker legend");
+  const third = Math.round((props.max - props.min) / 3);
+  const firstThird = props.min + third;
+  const secondThird = firstThird + third;
 
   return (
     <LegendBase>
@@ -25,10 +31,10 @@ export const BubbleLegend = (props: LegendParams) => {
           height: 96px;
         `}
       >
-        <BubbleLegendItem amount={150} size={96} last />
-        <BubbleLegendItem amount={100} size={70} />
-        <BubbleLegendItem amount={50} size={48} />
-        <BubbleLegendItem amount={10} size={16} first />
+        <BubbleLegendItem amount={formatNumber(props.min)} size={96} last />
+        <BubbleLegendItem amount={formatNumber(props.firstThird)} size={70} />
+        <BubbleLegendItem amount={formatNumber(props.secondThird)} size={48} />
+        <BubbleLegendItem amount={formatNumber(props.max)} size={16} first />
       </div>
     </LegendBase>
   );

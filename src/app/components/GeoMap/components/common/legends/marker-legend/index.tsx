@@ -1,5 +1,7 @@
 import * as React from "react";
 import "styled-components/macro";
+
+import Dotdotdot from "react-dotdotdot";
 import { LegendBase } from "app/components/GeoMap/components/common/legends/common/LegendBase";
 import { MarkerLegendItem } from "app/components/GeoMap/components/common/legends/marker-legend/common/MarkerLegendItem";
 import { LegendHeader } from "app/components/GeoMap/components/common/legends/common/LegendHeaderParams";
@@ -10,7 +12,7 @@ interface LegendParams {
 }
 
 export const MarkerLegend = (props: LegendParams) => {
-  console.log("Marker legend");
+  // console.log("Marker legend");
 
   return (
     <LegendBase>

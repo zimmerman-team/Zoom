@@ -1,17 +1,17 @@
-import React from 'react';
-import Dotdotdot from 'react-dotdotdot';
+import React from "react";
+import Dotdotdot from "react-dotdotdot";
 /* styles */
 import {
   LegendItem,
   LegendLabel,
   LegendNumber,
   LegendNumberContainer
-} from 'app/components/GeoMap/components/Legends/Legend.styles';
-import { ColorGradient } from 'app/components/GeoMap/components/Legends/LayerLegend/LayerLegend.styles';
+} from "app/components/GeoMap/components/Legends/Legend.styles";
+import { ColorGradient } from "app/components/GeoMap/components/Legends/LayerLegend/LayerLegend.styles";
 /* utils */
-import { formatNumber } from 'app/utils/genericUtils';
+import { formatNumber } from "app/utils/genericUtils";
 
-const layerLegend = (legendName, index, min, max) => {
+export const layerLegend = (legendName, index, min, max) => {
   const third = Math.round((max - min) / 3);
 
   const firstThird = min + third;
@@ -34,5 +34,3 @@ const layerLegend = (legendName, index, min, max) => {
     )
   );
 };
-
-export default layerLegend;

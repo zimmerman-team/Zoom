@@ -3,6 +3,8 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import { AppContainer } from "app/AppContainer";
 import * as serviceWorker from "./serviceWorker";
+// eslint-disable-next-line
+import * as _ from "styled-components/cssprop";
 
 ReactDOM.render(
   // <React.StrictMode>

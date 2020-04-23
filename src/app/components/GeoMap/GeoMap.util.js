@@ -5,7 +5,7 @@ import filter from "lodash/filter";
 
 /* components */
 import locationMarker from "./components/Markers/LocationMarker/LocationMarker";
-import layerLegend from "./components/Legends/LayerLegend/LayerLegend";
+import { layerLegend } from "./components/Legends/LayerLegend/LayerLegend";
 import locationLegend from "./components/Legends/LocationLegend/LocationLegend";
 import circleMarker from "./components/Markers/CircleMarker/CircleMarker";
 import circleLegend from "./components/Legends/CircleLegend/CircleLegend";
@@ -17,10 +17,10 @@ import circleLegend from "./components/Legends/CircleLegend/CircleLegend";
 export function generateMarkers(indicatorData, setMarkerInfo) {
   const markerArray = {
     circle: [],
-    location: [],
+    location: []
   };
 
-  indicatorData.forEach((item) => {
+  indicatorData.forEach(item => {
     switch (item.type) {
       case "location": {
         const locationMarkers = item.data.map((indicator, index) =>
@@ -50,6 +50,8 @@ export function generateLegends(indicatorData) {
 
   const locationItems = [];
 
+  //console.log("indicatorData", indicatorData);
+
   indicatorData.forEach((item, index) => {
     switch (item.type) {
       case "layer":
@@ -60,7 +62,7 @@ export function generateLegends(indicatorData) {
       case "location":
         locationItems.push({
           name: item.legendName,
-          color: item.color,
+          color: item.color
         });
         break;
       case "circle":

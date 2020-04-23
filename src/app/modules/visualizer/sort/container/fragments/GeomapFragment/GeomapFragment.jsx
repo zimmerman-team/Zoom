@@ -79,7 +79,7 @@ class GeomapFragment extends React.Component {
   render() {
     const { mode, ...otherProps } = this.props;
     return (
-      <ComponentBase height={mode ? "772px" : "100%"} id="geo-map">
+      <ComponentBase height={mode ? "400px" : "100%"} id="geo-map">
         <GeoMap
           chartMounted={this.props.chartMounted}
           viewport={this.props.viewport}

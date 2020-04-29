@@ -51,5 +51,5 @@ export const yearMockData: TimelineYearItem[] = [
   { year: "2067" },
   { year: "2068" },
   { year: "2069" },
-  { year: "2070", last: true }
+  { year: "2070", last: true },
 ];

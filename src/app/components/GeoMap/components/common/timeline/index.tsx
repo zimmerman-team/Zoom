@@ -2,85 +2,18 @@
 /* eslint-disable */
 
 import * as React from "react";
-import { css } from "styled-components/macro";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import RefreshIcon from "@material-ui/icons/Refresh";
 import { TimelineYearItem } from "app/components/GeoMap/components/common/timeline/common/TimelineYearItem";
 import { yearMockData } from "./yearMockData";
 import { TimelineYearIndicator } from "app/components/GeoMap/components/common/timeline/common/TimelineYearIndicator";
-
-const ArrowButtonStyle = css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #646464;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.5;
-  }
-`;
-
-const TimelineContainerStyle = css`
-  position: absolute;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  //width: calc(100vw - 40px);
-  padding: 20px;
-`;
-
-const ItemContainerStyle = css`
-  display: flex;
-`;
-
-const TimeLineBottomLabelStyle = css`
-  color: #008ed5;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1;
-`;
-
-const ResetButton = () => {
-  return (
-    <div
-      css={`
-        display: flex;
-        align-items: center;
-        width: calc(100% - 24px);
-        justify-content: flex-end;
-        color: #008ed5;
-        cursor: pointer;
-      `}
-    >
-      <RefreshIcon
-        css={`
-          width: 15px !important;
-          height: 15px !important;
-        `}
-      />
-
-      <div
-        css={`
-          font-size: 12px;
-          font-weight: 500;
-          font-stretch: normal;
-          font-style: normal;
-          //line-height: 0;
-          letter-spacing: normal;
-        `}
-      >
-        Reset
-      </div>
-    </div>
-  );
-};
+import { ResetButton } from "./common/ResetButton";
+import {
+  TimelineContainerStyle,
+  ArrowButtonStyle,
+  ItemContainerStyle,
+  TimeLineBottomLabelStyle,
+} from "./style";
 
 export interface TimelineContainerParams {
   empty?: number;

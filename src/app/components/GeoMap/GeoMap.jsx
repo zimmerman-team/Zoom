@@ -21,7 +21,7 @@ import {
   ControlsContainer,
   // LegendContainer,
   MapContainer,
-  GeoYearContainer
+  GeoYearContainer,
 } from "./GeoMap.style";
 import theme from "app/theme/Theme";
 
@@ -38,7 +38,7 @@ import { LegendContainer } from "app/components/GeoMap/components/common/legends
 import {
   clusterLayer,
   clusterCountLayer,
-  unclusteredPointLayer
+  unclusteredPointLayer,
 } from "app/components/GeoMapV2/common/layers";
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -51,7 +51,7 @@ const propTypes = {
   focus: PropTypes.shape({
     latitude: PropTypes.number,
     longitude: PropTypes.number,
-    zoom: PropTypes.number
+    zoom: PropTypes.number,
   }),
   viewport: PropTypes.shape({}),
   chartMounted: PropTypes.bool,
@@ -60,7 +60,7 @@ const propTypes = {
   disableYear: PropTypes.bool,
   selectYear: PropTypes.func,
   saveViewport: PropTypes.func,
-  mapOptions: PropTypes.object
+  mapOptions: PropTypes.object,
 };
 
 const defaultProps = {
@@ -72,7 +72,7 @@ const defaultProps = {
   chartMounted: false,
   zoom: 1,
   saveViewport: null,
-  mapOptions: {}
+  mapOptions: {},
 };
 
 export class GeoMap extends Component {
@@ -81,11 +81,11 @@ export class GeoMap extends Component {
 
     this.state = {
       mapStyle: {
-        ...MAP_STYLE
+        ...MAP_STYLE,
       },
       markerArray: {
         circle: [],
-        location: []
+        location: [],
       },
       legends: [],
       hoverLayerInfo: null,
@@ -94,7 +94,7 @@ export class GeoMap extends Component {
         longitude: this.props.longitude,
         zoom: this.props.zoom,
         transitionInterpolator: new LinearInterpolator(),
-        transitionDuration: 1000
+        transitionDuration: 1000,
       },
       settings: {
         dragPan: true,
@@ -105,11 +105,14 @@ export class GeoMap extends Component {
         keyboard: true,
         doubleClickZoom: false,
         minZoom: this.props.zoom,
-        maxZoom: 20
+        maxZoom: 20,
       },
       hoverMarkerInfo: null,
       values: [12, 16],
-      clusterRadius: 160
+      clusterRadius: 160,
+      enableLayers: true,
+      enableBubble: true,
+      enablePoints: true,
     };
 
     this.handleClusterClick = this.handleClusterClick.bind(this);
@@ -136,8 +139,8 @@ export class GeoMap extends Component {
           ...this.state.viewport,
           latitude: this.props.focus.latitude,
           longitude: this.props.focus.longitude,
-          zoom: this.props.focus.zoom
-        }
+          zoom: this.props.focus.zoom,
+        },
       });
     }
 
@@ -153,8 +156,8 @@ export class GeoMap extends Component {
           // for everything to work properly
           // cause sometimes saved data from the backend
           // passes this in as NOT a function
-          transitionInterpolator: new LinearInterpolator()
-        }
+          transitionInterpolator: new LinearInterpolator(),
+        },
       });
     }
   }
@@ -181,9 +184,9 @@ export class GeoMap extends Component {
         tiles: [
           `${
             process.env.REACT_APP_PROJECT_URL
-          }/api/mbtiles/${encodeURIComponent(layers.url)}/{z}/{x}/{y}.pbf`
+          }/api/mbtiles/${encodeURIComponent(layers.url)}/{z}/{x}/{y}.pbf`,
         ],
-        maxzoom: layers.zoom
+        maxzoom: layers.zoom,
       };
 
       let borderInd = findIndex(mapStyle.layers, ["id", "outline"]);
@@ -254,11 +257,11 @@ export class GeoMap extends Component {
 
   setMarkerInfo(indicator) {
     this.setState({
-      hoverMarkerInfo: indicator
+      hoverMarkerInfo: indicator,
     });
   }
 
-  _updateViewport = viewport => {
+  _updateViewport = (viewport) => {
     this.setState({ viewport });
 
     if (this.props.chartMounted && this.props.saveViewport) {
@@ -266,19 +269,19 @@ export class GeoMap extends Component {
     }
   };
 
-  _setLayerInfo = event => {
+  _setLayerInfo = (event) => {
     let hoverLayerInfo = null;
     const { features } = event;
 
-    const feature = features && features.find(f => f.layer.id === "layer");
+    const feature = features && features.find((f) => f.layer.id === "layer");
     if (feature) {
       hoverLayerInfo = {
         lngLat: event.lngLat,
-        properties: feature.properties
+        properties: feature.properties,
       };
     }
     this.setState({
-      hoverLayerInfo
+      hoverLayerInfo,
     });
   };
 
@@ -294,7 +297,7 @@ export class GeoMap extends Component {
     return markerInfo(hoverMarkerInfo);
   }
 
-  _onCountryClick = event => {
+  _onCountryClick = (event) => {
     // so we basically use these refs for map control buttons and year selector buttons
     // to have priority over the countries clicked, cause previously the country
     // would have the click priority which should NOT be the case
@@ -304,19 +307,19 @@ export class GeoMap extends Component {
     ) {
       const { features } = event;
 
-      const feature = features && features.find(f => f.layer.id === "layer");
+      const feature = features && features.find((f) => f.layer.id === "layer");
       if (feature && feature.properties.geolocationType === "country") {
         this.props.outerHistory.push(`/country/${feature.properties.iso2}`);
       }
     }
   };
 
-  _handleMapLoaded = event => {
+  _handleMapLoaded = (event) => {
     if (this.props.location.pathname === "/focus") {
       this.setState({
         settings: {
-          dragPan: false
-        }
+          dragPan: false,
+        },
       });
     }
   };
@@ -332,7 +335,7 @@ export class GeoMap extends Component {
   handleZoomIn() {
     this._updateViewport({
       ...this.state.viewport,
-      zoom: this.state.viewport.zoom + 0.1
+      zoom: this.state.viewport.zoom + 0.1,
     });
   }
 
@@ -341,7 +344,7 @@ export class GeoMap extends Component {
       ...this.state.viewport,
       zoom,
       longitude,
-      latitude
+      latitude,
     });
   }
 
@@ -352,7 +355,7 @@ export class GeoMap extends Component {
         zoom:
           this.state.viewport.zoom - 0.1 > this.state.settings.minZoom
             ? this.state.viewport.zoom - 0.1
-            : this.state.settings.minZoom
+            : this.state.settings.minZoom,
       });
     }
   }
@@ -393,7 +396,7 @@ export class GeoMap extends Component {
     );
   }
 
-  setClusterRadius = e => {
+  setClusterRadius = (e) => {
     this.setState({ clusterRadius: e.target.value });
   };
 
@@ -404,27 +407,40 @@ export class GeoMap extends Component {
       mapStyle,
       markerArray,
       legends,
-      clusterRadius
+      clusterRadius,
+      enableLayers,
+      enableBubble,
+      enablePoints,
     } = this.state;
 
     return (
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
       <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
         <MapContainer data-cy="geo-map-container">
+          <GeoYearContainer
+            ref={this.setYearSelectorRef}
+            bottom="0"
+            backgroundColor={theme.color.aidsFondsWhiteOpacity}
+          >
+            <CustomYearSelector
+              selectedYear={this.props.selectedYear}
+              selectYear={this.props.selectYear}
+            />
+          </GeoYearContainer>
           <MapGL
             {...viewport}
             {...settings}
             scrollZoom
             width="100%"
             height="100%"
-            mapStyle={mapStyle}
+            mapStyle={enableLayers ? mapStyle : { ...MAP_STYLE }}
             onViewportChange={this._updateViewport}
             onHover={this._setLayerInfo}
             onClick={this._onCountryClick}
             onLoad={this._handleMapLoaded}
             mapboxApiAccessToken={MAPBOX_TOKEN}
             // mapOptions={this.props.mapOptions}
-            ref={map => (this.mapRef = map)}
+            ref={(map) => (this.mapRef = map)}
             attributionControl
             // bounds={ya}
             // so commenting this out cause it causes the
@@ -442,15 +458,18 @@ export class GeoMap extends Component {
                 setClusterRadius={this.setClusterRadius}
               />
             </ControlsContainer>
+
+            {enablePoints && markerArray.location}
+
             {/*So this is the layer tooltip, and we seperate it from the
               martker tooltip, cause its functionality as a tooltip is a bit different
               and also because we implement the layers a bit more differently
               than normal markers*/}
-            {this._showLayerInfo()}
+            {enableLayers && this._showLayerInfo()}
 
             {this._showMarkerInfo()}
 
-            {this.mapRef && (
+            {enableBubble && this.mapRef && (
               <Cluster
                 map={this.mapRef.getMap()}
                 radius={clusterRadius}
@@ -458,7 +477,7 @@ export class GeoMap extends Component {
                 nodeSize={40}
                 minZoom={viewport.minZoom}
                 maxZoom={viewport.maxZoom}
-                element={clusterProps => (
+                element={(clusterProps) => (
                   <ClusterElement
                     {...clusterProps}
                     onClick={this.handleClusterClick}
@@ -469,8 +488,6 @@ export class GeoMap extends Component {
               </Cluster>
             )}
 
-            {markerArray.location}
-
             {/*contains zoom in/out and fullscreen toggle*/}
 
             {/*{console.log("legends", legends)}*/}
@@ -478,17 +495,27 @@ export class GeoMap extends Component {
             {/*{console.log("sjsjsj", this.props.indicatorData)}*/}
 
             {/*<LegendContainer>{legends}</LegendContainer>*/}
-            <LegendContainer data={this.props.indicatorData} />
-            <GeoYearContainer
-              ref={this.setYearSelectorRef}
-              bottom="0"
-              backgroundColor={theme.color.aidsFondsWhiteOpacity}
-            >
-              <CustomYearSelector
-                selectedYear={this.props.selectedYear}
-                selectYear={this.props.selectYear}
-              />
-            </GeoYearContainer>
+            <LegendContainer
+              enableLayers={enableLayers}
+              enableBubble={enableBubble}
+              enablePoints={enablePoints}
+              data={this.props.indicatorData}
+              changeEnableLayers={(value) =>
+                this.setState({
+                  enableLayers: value,
+                })
+              }
+              changeEnableBubble={(value) =>
+                this.setState({
+                  enableBubble: value,
+                })
+              }
+              changeEnablePoints={(value) =>
+                this.setState({
+                  enablePoints: value,
+                })
+              }
+            />
 
             {/*<Source*/}
             {/*  type="geojson"*/}

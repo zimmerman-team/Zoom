@@ -2,7 +2,7 @@ import * as React from "react";
 import "styled-components/macro";
 import RefreshIcon from "@material-ui/icons/Refresh";
 
-export const ResetButton = () => {
+export const ResetButton = (props: { onClick?: () => void }) => {
   return (
     <div
       css={`
@@ -13,6 +13,7 @@ export const ResetButton = () => {
         color: #008ed5;
         cursor: pointer;
       `}
+      onClick={props.onClick}
     >
       <RefreshIcon
         css={`

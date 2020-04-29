@@ -9,6 +9,9 @@ import { LegendHeader } from "app/components/GeoMap/components/common/legends/co
 interface LegendParams {
   title?: string;
   type?: string;
+  index?: number;
+  enabled?: boolean;
+  changeEnabled: Function;
 }
 
 export const MarkerLegend = (props: LegendParams) => {
@@ -17,7 +20,11 @@ export const MarkerLegend = (props: LegendParams) => {
   return (
     <LegendBase>
       {/* legend title */}
-      <LegendHeader title={props.title} />
+      <LegendHeader
+        title={props.title}
+        enabled={props.enabled}
+        changeEnabled={props.changeEnabled}
+      />{" "}
       <div
         css={`
           display: flex;

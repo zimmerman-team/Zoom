@@ -15,6 +15,7 @@ interface LegendParams {
   min?: number;
   max?: number;
   index?: number;
+  changeEnabled: Function;
 }
 
 export const LayerLegend = (props: LegendParams) => {
@@ -28,7 +29,11 @@ export const LayerLegend = (props: LegendParams) => {
   return (
     <LegendBase>
       {/* legend header */}
-      <LegendHeader title={props.title} />
+      <LegendHeader
+        title={props.title}
+        enabled={props.enabled}
+        changeEnabled={props.changeEnabled}
+      />
 
       {/* legend items */}
       <div

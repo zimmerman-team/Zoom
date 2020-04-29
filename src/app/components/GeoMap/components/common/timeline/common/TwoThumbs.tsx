@@ -2,6 +2,7 @@
 /* @ts-nocheck */
 
 import * as React from "react";
+// @ts-ignore
 import { Range, getTrackBackground } from "react-range";
 import "styled-components/macro";
 import { TimelineYearItem } from "app/components/GeoMap/components/common/timeline/common/TimelineYearItem";
@@ -39,7 +40,7 @@ const RangeSlideThumb = ({ props, isDragged }) => {
         style={{
           height: "16px",
           width: "5px",
-          backgroundColor: isDragged ? "#548BF4" : "#CCC"
+          backgroundColor: isDragged ? "#548BF4" : "#CCC",
         }}
       />
     </div>
@@ -58,7 +59,7 @@ const RangeSliderTrack = ({ props, children, values }) => {
         height: "28px",
         display: "flex",
         width: "100%",
-        overflow: "hidden"
+        overflow: "hidden",
       }}
     >
       <div
@@ -72,9 +73,9 @@ const RangeSliderTrack = ({ props, children, values }) => {
             values: values,
             colors: ["#ccc", "#548BF4", "#ccc"],
             min: MIN,
-            max: MAX
+            max: MAX,
           }),
-          alignSelf: "center"
+          alignSelf: "center",
         }}
       >
         {children}
@@ -102,7 +103,7 @@ const RangeSliderTrack = ({ props, children, values }) => {
 
 class TwoThumbs extends React.Component {
   state = {
-    values: [25, 75]
+    values: [25, 75],
   };
 
   render() {
@@ -111,7 +112,7 @@ class TwoThumbs extends React.Component {
         style={{
           display: "flex",
           justifyContent: "center",
-          flexWrap: "wrap"
+          flexWrap: "wrap",
         }}
       >
         <Range
@@ -119,7 +120,7 @@ class TwoThumbs extends React.Component {
           step={STEP}
           min={MIN}
           max={MAX}
-          onChange={values => {
+          onChange={(values) => {
             this.setState({ values });
           }}
           renderTrack={({ props, children }) => (

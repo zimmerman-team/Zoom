@@ -14,27 +14,36 @@ const PurpleSwitch = withStyles({
       color: "#ffffff",
       "& + $track": {
         backgroundColor: "#1f8efa",
-        opacity: 1
+        opacity: 1,
         // border: "none"
-      }
+      },
     },
     "&$focusVisible $thumb": {
-      color: "#1f8efa"
+      color: "#1f8efa",
       // border: "6px solid #fff"
-    }
+    },
   },
   checked: {},
-  track: {}
+  track: {},
 })(Switch);
 
-export const LegendSwitch = () => {
+interface LegendSwitchParams {
+  enabled: boolean;
+  onChange: Function;
+}
+
+export const LegendSwitch = (props: LegendSwitchParams) => {
   const [state, setState] = React.useState({
-    checkedA: true
+    checkedA: props.enabled,
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+    props.onChange(event.target.checked);
   };
+
+  React.useEffect(() => setState({ ...state, checkedA: props.enabled }), [
+    props.enabled,
+  ]);
 
   return (
     <>

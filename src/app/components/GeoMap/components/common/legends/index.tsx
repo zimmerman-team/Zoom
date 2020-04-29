@@ -3,17 +3,18 @@ import "styled-components/macro";
 import { MarkerLegend } from "app/components/GeoMap/components/common/legends/marker-legend";
 import { BubbleLegend } from "app/components/GeoMap/components/common/legends/bubble-legend";
 import { LayerLegend } from "app/components/GeoMap/components/common/legends/layer-legend";
-// import { LayerLegend } from './layer-legend';
-// import { PointLegend } from './point-legend';
 
 interface LegendContainerParams {
-  data: array;
+  data: any;
+  enableLayers: boolean;
+  enableBubble: boolean;
+  enablePoints: boolean;
+  changeEnableLayers: Function;
+  changeEnableBubble: Function;
+  changeEnablePoints: Function;
 }
 
 export const LegendContainer = (props: LegendContainerParams) => {
-  //console.log("legend");
-
-  // console.log("lets boogie", props.data);
   return (
     <div
       css={`
@@ -28,7 +29,7 @@ export const LegendContainer = (props: LegendContainerParams) => {
       `}
     >
       {props.data &&
-        props.data.map(legend => (
+        props.data.map((legend) => (
           <React.Fragment>
             {legend.type == "layer" && (
               <LayerLegend
@@ -36,6 +37,8 @@ export const LegendContainer = (props: LegendContainerParams) => {
                 index={legend.index}
                 min={legend.minValue}
                 max={legend.maxValue}
+                enabled={props.enableLayers}
+                changeEnabled={props.changeEnableLayers}
               />
             )}
 
@@ -45,11 +48,18 @@ export const LegendContainer = (props: LegendContainerParams) => {
                 index={legend.index}
                 min={legend.data[0].minValue}
                 max={legend.data[0].maxValue}
+                enabled={props.enableBubble}
+                changeEnabled={props.changeEnableBubble}
               />
             )}
 
             {legend.type == "location" && (
-              <MarkerLegend title={legend.legendName} index={legend.index} />
+              <MarkerLegend
+                title={legend.legendName}
+                index={legend.index}
+                enabled={props.enablePoints}
+                changeEnabled={props.changeEnablePoints}
+              />
             )}
           </React.Fragment>
         ))}

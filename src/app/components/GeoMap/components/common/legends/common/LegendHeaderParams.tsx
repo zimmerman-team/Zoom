@@ -6,6 +6,8 @@ import { LegendSwitch } from "app/components/GeoMap/components/common/legends/co
 
 interface LegendHeaderParams {
   title: string;
+  enabled: boolean;
+  changeEnabled: Function;
 }
 
 export const LegendHeader = (props: LegendHeaderParams) => {
@@ -19,7 +21,7 @@ export const LegendHeader = (props: LegendHeaderParams) => {
       `}
     >
       <LegendTitle title={props.title} />
-      <LegendSwitch />
+      <LegendSwitch enabled={props.enabled} onChange={props.changeEnabled} />
     </div>
   );
 };

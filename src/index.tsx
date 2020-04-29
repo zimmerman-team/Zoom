@@ -4,6 +4,7 @@ import "./index.css";
 import { AppContainer } from "app/AppContainer";
 import * as serviceWorker from "./serviceWorker";
 // eslint-disable-next-line
+// @ts-ignore
 import * as _ from "styled-components/cssprop";
 
 ReactDOM.render(

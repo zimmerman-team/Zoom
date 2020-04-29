@@ -3,7 +3,7 @@ import "styled-components/macro";
 
 interface LayerLegendItemParams {
   amount: number;
-  color?: number;
+  color?: string;
 }
 export const LayerLegendItem = (props: LayerLegendItemParams) => {
   return (

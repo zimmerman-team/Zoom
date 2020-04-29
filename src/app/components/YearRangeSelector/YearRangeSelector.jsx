@@ -1,31 +1,45 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 /* consts */
-import { maxYear, minYear } from 'app/__consts__/TimeLineConst';
+import { maxYear, minYear } from "app/__consts__/TimeLineConst";
 /* utils */
-import isEqual from 'lodash/isEqual';
-import { formatYearLabels } from 'app/utils/YearSelectUtil';
+import isEqual from "lodash/isEqual";
+import { formatYearLabels } from "app/utils/YearSelectUtil";
 /* styles */
 import {
   ComponentBase,
   EndControl,
   SelectedYearLabel,
   StartControl,
-  YearLabel
-} from './YearRangeSelector.style';
+  YearLabel,
+} from "./YearRangeSelector.style";
+
+/* tmp */
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import { TimelineYearItem } from "app/components/GeoMap/components/common/timeline/common/TimelineYearItem";
+// import { yearMockData } from "app/components/GeoMap/components/common/timeline/yearMockData";
+import { TimelineYearIndicator } from "app/components/GeoMap/components/common/timeline/common/TimelineYearIndicator";
+import { ResetButton } from "app/components/GeoMap/components/common/timeline/common/ResetButton";
+import {
+  TimelineContainerStyle,
+  ArrowButtonStyle,
+  ItemContainerStyle,
+  TimeLineBottomLabelStyle,
+} from "app/components/GeoMap/components/common/timeline/style";
 
 const propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
   selectYearRange: PropTypes.func,
-  selectedYears: PropTypes.arrayOf(PropTypes.string)
+  selectedYears: PropTypes.arrayOf(PropTypes.string),
 };
 
 const defaultProps = {
   min: minYear,
   max: maxYear,
   selectYearRange: null,
-  selectedYears: ['2002', '2003', '2004', '2005', '2006', '2007', '2008']
+  selectedYears: ["2002", "2003", "2004", "2005", "2006", "2007", "2008"],
 };
 
 class YearRangeSelector extends React.Component {
@@ -34,8 +48,9 @@ class YearRangeSelector extends React.Component {
 
     this.state = {
       numArray: [],
-      mouseDown: 'none',
-      selectedYears: props.selectedYears
+      mouseDown: "none",
+      selectedYears: props.selectedYears,
+      initSelectedYears: props.selectedYears,
     };
 
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
@@ -44,12 +59,13 @@ class YearRangeSelector extends React.Component {
     this.renderYearLabels = this.renderYearLabels.bind(this);
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleMoveOutside = this.handleMoveOutside.bind(this);
+    this.handleResetBtnClick = this.handleResetBtnClick.bind(this);
   }
 
   componentDidMount() {
     // we will use this to detect if the 'mouse dragg' has exited the component
     // we need to set the mouseDown to none then
-    document.addEventListener('mouseover', this.handleMoveOutside);
+    document.addEventListener("mouseover", this.handleMoveOutside);
     // we generate the year array here
     const numArray = [];
 
@@ -67,14 +83,14 @@ class YearRangeSelector extends React.Component {
 
     if (
       this.state.mouseDown !== prevState.mouseDown &&
-      this.state.mouseDown === 'none'
+      this.state.mouseDown === "none"
     ) {
       this.props.selectYearRange(this.state.selectedYears);
     }
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mouseover', this.handleMoveOutside);
+    document.removeEventListener("mouseover", this.handleMoveOutside);
   }
 
   /**
@@ -91,15 +107,15 @@ class YearRangeSelector extends React.Component {
     if (
       this.wrapperRef &&
       !this.wrapperRef.contains(event.target) &&
-      this.state.mouseDown !== 'none'
+      this.state.mouseDown !== "none"
     ) {
-      this.setState({ mouseDown: 'none' });
+      this.setState({ mouseDown: "none" });
     }
   }
 
   handleMouseEnter(number) {
-    if (this.state.mouseDown !== 'none') {
-      this.setState(prevState => {
+    if (this.state.mouseDown !== "none") {
+      this.setState((prevState) => {
         const selectedYears = [...prevState.selectedYears];
 
         const numberInt = parseInt(number, 10);
@@ -114,10 +130,10 @@ class YearRangeSelector extends React.Component {
           (numberInt > endInt && endInt + 1 !== numberInt) ||
           (numberInt > startInt &&
             numberInt < endInt &&
-            ((prevState.mouseDown === 'start' && startInt + 1 !== numberInt) ||
-              (prevState.mouseDown === 'end' && endInt - 1 !== numberInt)))
+            ((prevState.mouseDown === "start" && startInt + 1 !== numberInt) ||
+              (prevState.mouseDown === "end" && endInt - 1 !== numberInt)))
         ) {
-          return { mouseDown: 'none' };
+          return { mouseDown: "none" };
         }
 
         const yearInd = selectedYears.indexOf(number);
@@ -136,55 +152,66 @@ class YearRangeSelector extends React.Component {
   }
 
   handleMouseUp() {
-    this.setState({ mouseDown: 'none' });
+    this.setState({ mouseDown: "none" });
+  }
+
+  handleResetBtnClick() {
+    this.props.selectYearRange(this.state.initSelectedYears);
   }
 
   renderYearLabels(number, index) {
-    let yearLabels = '';
+    let yearLabels = "";
 
     const { min, max } = this.props;
 
     if (number === this.state.selectedYears[0]) {
       yearLabels = (
-        <StartControl
-          onMouseDown={() => this.handleMouseDown('start')}
+        <TimelineYearItem
+          first
+          selected
+          onMouseDown={() => this.handleMouseDown("start")}
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
-          {formatYearLabels(number, min, max)}
-        </StartControl>
+          {/* {formatYearLabels(number, min, max)} */}
+          {number}
+        </TimelineYearItem>
       );
     } else if (
       number === this.state.selectedYears[this.state.selectedYears.length - 1]
     ) {
       yearLabels = (
-        <EndControl
+        <TimelineYearItem
+          last
+          selected
           key={`year-${index}`}
-          onMouseDown={() => this.handleMouseDown('end')}
+          onMouseDown={() => this.handleMouseDown("end")}
           onMouseUp={() => this.handleMouseUp()}
         >
-          {formatYearLabels(number, min, max)}
-        </EndControl>
+          {/* {formatYearLabels(number, min, max)} */}
+          {number}
+        </TimelineYearItem>
       );
     } else if (this.state.selectedYears.indexOf(number) !== -1) {
       yearLabels = (
-        <SelectedYearLabel
+        <TimelineYearItem
+          selected
           onMouseEnter={() => this.handleMouseEnter(number)}
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
-          {formatYearLabels(number, min, max)}
-        </SelectedYearLabel>
+          {/* {formatYearLabels(number, min, max)} */}
+        </TimelineYearItem>
       );
     } else {
       yearLabels = (
-        <YearLabel
+        <TimelineYearItem
           onMouseEnter={() => this.handleMouseEnter(number)}
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
-          {formatYearLabels(number, min, max)}
-        </YearLabel>
+          {/* {formatYearLabels(number, min, max)} */}
+        </TimelineYearItem>
       );
     }
 
@@ -193,9 +220,54 @@ class YearRangeSelector extends React.Component {
 
   render() {
     return (
-      <ComponentBase ref={this.setWrapperRef}>
-        {this.state.numArray.map(this.renderYearLabels)}
-      </ComponentBase>
+      <div css={TimelineContainerStyle}>
+        <div
+          css={`
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+          `}
+        >
+          <div css={ArrowButtonStyle}>
+            <ArrowBackIosIcon />
+          </div>
+          <div
+            css={`
+              position: relative;
+              margin-left: 5px;
+              margin-right: 5px;
+            `}
+          >
+            <div
+              css={`
+                display: flex;
+                justify-content: space-between;
+                position: absolute;
+                width: 100%;
+                top: -12px;
+              `}
+            >
+              <TimelineYearIndicator>
+                {this.state.numArray[0]}
+              </TimelineYearIndicator>
+              <TimelineYearIndicator>
+                {this.state.numArray[this.state.numArray.length - 1]}
+              </TimelineYearIndicator>
+            </div>
+
+            <div css={ItemContainerStyle} ref={this.setWrapperRef}>
+              {this.state.numArray.map(this.renderYearLabels)}
+            </div>
+          </div>
+
+          <div css={ArrowButtonStyle}>
+            <ArrowForwardIosIcon />
+          </div>
+        </div>
+
+        <div css={TimeLineBottomLabelStyle}>please select a year range</div>
+        <ResetButton onClick={this.handleResetBtnClick} />
+      </div>
     );
   }
 }

@@ -1,4 +1,3 @@
-import { YearContainer } from "app/components/CustomYearSelector/CustomYearSelector.style";
 import styled from "styled-components";
 
 export const MapContainer = styled.div`
@@ -45,8 +44,11 @@ export const ControlsContainer = styled.div`
   margin: 16px 11px 0 auto;
 `;
 
-export const GeoYearContainer = styled(YearContainer)`
-  top: calc(100% - 186px);
-  margin: 0 auto;
+export const GeoYearContainer = styled.div`
   z-index: 1;
+  bottom: 0px;
+  width: 100%;
+  display: flex;
+  position: absolute;
+  justify-content: center;
 `;

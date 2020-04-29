@@ -9,8 +9,10 @@ interface LegendParams {
   title?: string;
   type?: string;
   index?: number;
+  enabled?: boolean;
   min?: number;
   max?: number;
+  changeEnabled: Function;
 }
 
 export const BubbleLegend = (props: LegendParams) => {
@@ -21,7 +23,11 @@ export const BubbleLegend = (props: LegendParams) => {
   return (
     <LegendBase>
       {/* legend title */}
-      <LegendHeader title={props.title} />
+      <LegendHeader
+        title={props.title}
+        enabled={props.enabled}
+        changeEnabled={props.changeEnabled}
+      />
       <div
         css={`
           display: flex;
@@ -32,8 +38,8 @@ export const BubbleLegend = (props: LegendParams) => {
         `}
       >
         <BubbleLegendItem amount={formatNumber(props.min)} size={96} last />
-        <BubbleLegendItem amount={formatNumber(props.firstThird)} size={70} />
-        <BubbleLegendItem amount={formatNumber(props.secondThird)} size={48} />
+        <BubbleLegendItem amount={formatNumber(firstThird)} size={70} />
+        <BubbleLegendItem amount={formatNumber(secondThird)} size={48} />
         <BubbleLegendItem amount={formatNumber(props.max)} size={16} first />
       </div>
     </LegendBase>

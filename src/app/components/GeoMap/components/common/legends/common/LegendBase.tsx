@@ -2,7 +2,7 @@ import * as React from "react";
 import "styled-components/macro";
 
 interface LegendBaseParams {
-  children: React.ReactElement;
+  children: React.ReactElement[];
 }
 export const LegendBase = (props: LegendBaseParams) => {
   return (

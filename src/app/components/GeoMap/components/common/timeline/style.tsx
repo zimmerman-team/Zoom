@@ -18,6 +18,10 @@ export const TimelineContainerStyle = css`
   flex-direction: column;
   //width: calc(100vw - 40px);
   padding: 20px;
+
+  * {
+    user-select: none;
+  }
 `;
 export const ItemContainerStyle = css`
   display: flex;

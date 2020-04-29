@@ -1,9 +1,10 @@
-import sortBy from 'lodash/sortBy';
+import sortBy from "lodash/sortBy";
 
 export function formatNumber(number) {
+  // console.log(number);
   return number
-    ? number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
-    : '0';
+    ? number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
+    : "0";
 }
 
 // Basically takes in a start year and an
@@ -27,10 +28,10 @@ export function formatYearParam(val) {
 // so this basically reformats the string to an array
 export function yearStrToArray(yearRange) {
   const startYear = parseInt(
-    yearRange.substring(0, yearRange.indexOf(',')),
+    yearRange.substring(0, yearRange.indexOf(",")),
     10
   );
-  const endYear = parseInt(yearRange.substring(yearRange.indexOf(',') + 1), 10);
+  const endYear = parseInt(yearRange.substring(yearRange.indexOf(",") + 1), 10);
   return [startYear, endYear];
 }
 
@@ -43,16 +44,17 @@ export function paginate(
 ) {
   const sortedList = reverse
     ? sortBy(initialListData, [
-        item => (sort.includes('date') ? item[sort] : item[sort].toLowerCase())
+        (item) =>
+          sort.includes("date") ? item[sort] : item[sort].toLowerCase(),
       ]).reverse()
     : sortBy(initialListData, [
-        item => {
-          return item[sort] !== ''
-            ? sort.includes('date')
+        (item) => {
+          return item[sort] !== ""
+            ? sort.includes("date")
               ? item[sort]
               : item[sort].toLowerCase()
-            : 'zzz';
-        }
+            : "zzz";
+        },
       ]);
 
   const sliceTo =
@@ -71,14 +73,14 @@ export function paginate(
 export function convertStringArrToArr(stringArr) {
   // so first we just remove the brackets arround the array
   let cleanString = stringArr.substring(
-    stringArr.indexOf('[') + 1,
-    stringArr.lastIndexOf(']')
+    stringArr.indexOf("[") + 1,
+    stringArr.lastIndexOf("]")
   );
 
   // now we remove the "'" character
-  cleanString = cleanString.replace(/'/g, '');
+  cleanString = cleanString.replace(/'/g, "");
 
-  return cleanString.split(',');
+  return cleanString.split(",");
 }
 
 // so this basically will shorten the text and
@@ -91,7 +93,7 @@ export function truncateText(text) {
   let newText = text;
 
   if (newText.length > 440) {
-    newText = newText.substring(0, 440).concat('...');
+    newText = newText.substring(0, 440).concat("...");
   }
 
   return newText;
@@ -100,7 +102,7 @@ export function truncateText(text) {
 export function getColorByPct(pct) {
   const percentColors = [
     { pct: 0.0, color: { r: 0xff, g: 0xff, b: 0xff } },
-    { pct: 1.0, color: { r: 0x09, g: 0x00, b: 0xff } }
+    { pct: 1.0, color: { r: 0x09, g: 0x00, b: 0xff } },
   ];
 
   let i = 1;
@@ -119,7 +121,7 @@ export function getColorByPct(pct) {
   const color = {
     r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
     g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
-    b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
+    b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper),
   };
   return [color.r, color.g, color.b];
 }

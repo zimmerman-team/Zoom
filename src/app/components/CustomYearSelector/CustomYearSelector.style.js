@@ -1,10 +1,10 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import theme from 'app/theme/Theme';
+import theme from "app/theme/Theme";
 
 export const YearContainer = styled.div`
   position: relative;
-  background-color: ${props => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor};
   width: calc(100% - 48px);
   max-width: 1000px;
   margin: 0 auto 32px auto;
@@ -78,7 +78,7 @@ export const StartControl = styled(YearLabel)`
     border-left: 12px solid ${theme.color.aidsFondsRed};
     border-top: 20px solid ${theme.color.aidsFondsBlue};
     border-bottom: 20px solid ${theme.color.aidsFondsBlue};
-    content: '';
+    content: "";
     height: 0;
     left: 100%;
     position: absolute;
@@ -118,7 +118,7 @@ export const EndControl = styled(YearLabel)`
     border-right: 12px solid ${theme.color.aidsFondsRed};
     border-top: 20px solid ${theme.color.aidsFondsBlue};
     border-bottom: 20px solid ${theme.color.aidsFondsBlue};
-    content: '';
+    content: "";
     height: 0;
     right: 100%;
     position: absolute;

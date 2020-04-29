@@ -274,8 +274,8 @@ class VisualizerModuleMediator extends Component {
       this.props.chartData.currTileFile &&
       this.props.paneData.chartType !== prevProps.paneData.chartType &&
       this.props.paneData.chartType !== chartTypes.geoMap &&
-        this.props.paneData.chartType !== chartTypes.focusKE &&
-        this.props.paneData.chartType !== chartTypes.focusNL &&
+      this.props.paneData.chartType !== chartTypes.focusKE &&
+      this.props.paneData.chartType !== chartTypes.focusNL &&
       (prevProps.paneData.chartType === chartTypes.geoMap ||
         prevProps.paneData.chartType === chartTypes.focusKE ||
         prevProps.paneData.chartType === chartTypes.focusNL)

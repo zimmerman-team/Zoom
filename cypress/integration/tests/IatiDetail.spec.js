@@ -2,6 +2,7 @@ describe('IATI activity page', () => {
   let data;
   beforeEach(() => {
     cy.setCookie('cookieNotice', 'false');
+    cy.setCookie('homeDialogShown', 'true');
     cy.fixture('IatiDetailFixture.json').then(responseData => {
       data = responseData;
     });

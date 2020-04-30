@@ -41,11 +41,16 @@ const defaultProps = {
 };
 
 class CustomYearSelector extends React.Component {
-  state = {
-    numArray: [],
-    mouseDown: false,
-    selectedYear: this.props.selectedYear.replace(".0", ""),
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      numArray: [],
+      min: props.min,
+      max: props.max,
+      mouseDown: false,
+      selectedYear: props.selectedYear.replace(".0", ""),
+    };
+  }
 
   componentDidMount() {
     // we will use this to detect if the 'mouse dragg' has exited the component
@@ -54,7 +59,7 @@ class CustomYearSelector extends React.Component {
     // we generate the year array here
     const numArray = [];
     /* todo: convert to map */
-    for (let i = this.props.min; i < this.props.max + 1; i++) {
+    for (let i = this.state.min; i < this.state.max + 1; i++) {
       numArray.push(i.toString());
     }
     this.setState({ numArray });
@@ -110,6 +115,24 @@ class CustomYearSelector extends React.Component {
     this.props.selectYear(number);
   };
 
+  onArrowClick = (type) => {
+    const numArray = [];
+    let min = this.state.min;
+    let max = this.state.max;
+    if (type === "next") {
+      min += 5;
+      max += 5;
+    }
+    if (type === "prev") {
+      min -= 5;
+      max -= 5;
+    }
+    for (let i = min; i < max + 1; i++) {
+      numArray.push(i.toString());
+    }
+    this.setState({ numArray, min, max });
+  };
+
   renderYearLabels = (number, index) => {
     let yearLabels = "";
 
@@ -156,7 +179,7 @@ class CustomYearSelector extends React.Component {
           `}
         >
           <div css={ArrowButtonStyle}>
-            <ArrowBackIosIcon />
+            <ArrowBackIosIcon onClick={() => this.onArrowClick("prev")} />
           </div>
           <div
             css={`
@@ -188,7 +211,7 @@ class CustomYearSelector extends React.Component {
           </div>
 
           <div css={ArrowButtonStyle}>
-            <ArrowForwardIosIcon />
+            <ArrowForwardIosIcon onClick={() => this.onArrowClick("next")} />
           </div>
         </div>
 

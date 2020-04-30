@@ -48,6 +48,8 @@ class YearRangeSelector extends React.Component {
 
     this.state = {
       numArray: [],
+      min: props.min,
+      max: props.max,
       mouseDown: "none",
       selectedYears: props.selectedYears,
       initSelectedYears: props.selectedYears,
@@ -58,6 +60,7 @@ class YearRangeSelector extends React.Component {
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.renderYearLabels = this.renderYearLabels.bind(this);
     this.setWrapperRef = this.setWrapperRef.bind(this);
+    this.onArrowClick = this.onArrowClick.bind(this);
     this.handleMoveOutside = this.handleMoveOutside.bind(this);
     this.handleResetBtnClick = this.handleResetBtnClick.bind(this);
   }
@@ -70,7 +73,7 @@ class YearRangeSelector extends React.Component {
     const numArray = [];
 
     /* todo: convert to map */
-    for (let i = this.props.min; i < this.props.max + 1; i++) {
+    for (let i = this.state.min; i < this.state.max + 1; i++) {
       numArray.push(i.toString());
     }
     this.setState({ numArray });
@@ -157,12 +160,37 @@ class YearRangeSelector extends React.Component {
 
   handleResetBtnClick() {
     this.props.selectYearRange(this.state.initSelectedYears);
+    this.setState({ min: this.props.min, max: this.props.max }, () => {
+      const numArray = [];
+      for (let i = this.props.min; i < this.props.max + 1; i++) {
+        numArray.push(i.toString());
+      }
+      this.setState({ numArray });
+    });
   }
+
+  onArrowClick = (type) => {
+    const numArray = [];
+    let min = this.state.min;
+    let max = this.state.max;
+    if (type === "next") {
+      min += 5;
+      max += 5;
+    }
+    if (type === "prev") {
+      min -= 5;
+      max -= 5;
+    }
+    for (let i = min; i < max + 1; i++) {
+      numArray.push(i.toString());
+    }
+    this.setState({ numArray, min, max });
+  };
 
   renderYearLabels(number, index) {
     let yearLabels = "";
 
-    const { min, max } = this.props;
+    // const { min, max } = this.state;
 
     if (number === this.state.selectedYears[0]) {
       yearLabels = (
@@ -229,7 +257,7 @@ class YearRangeSelector extends React.Component {
           `}
         >
           <div css={ArrowButtonStyle}>
-            <ArrowBackIosIcon />
+            <ArrowBackIosIcon onClick={() => this.onArrowClick("prev")} />
           </div>
           <div
             css={`
@@ -261,7 +289,7 @@ class YearRangeSelector extends React.Component {
           </div>
 
           <div css={ArrowButtonStyle}>
-            <ArrowForwardIosIcon />
+            <ArrowForwardIosIcon onClick={() => this.onArrowClick("next")} />
           </div>
         </div>
 

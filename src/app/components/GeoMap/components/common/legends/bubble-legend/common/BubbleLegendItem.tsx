@@ -1,12 +1,13 @@
-import * as React from 'react';
-import 'styled-components/macro';
+import * as React from "react";
+import { css } from "styled-components/macro";
 
 interface BubbleLegendItemParams {
-  amount: number;
+  amount: string;
   scale?: number;
   size?: number;
-  first?: boolean;
+  inner?: boolean;
   last?: boolean;
+  first?: boolean;
 }
 export const BubbleLegendItem = (props: BubbleLegendItemParams) => {
   return (
@@ -24,7 +25,7 @@ export const BubbleLegendItem = (props: BubbleLegendItemParams) => {
           border-radius: 50%;
           width: ${props.size}px;
           height: ${props.size}px;
-          background: ${props.last ? '#dff5f2' : 'initial'};
+          background: ${props.last ? "#dff5f2" : "initial"};
           border: 1px solid #25baa4;
         `}
       >
@@ -42,13 +43,19 @@ export const BubbleLegendItem = (props: BubbleLegendItemParams) => {
 
       <div
         css={`
+          padding-left: 4px;
           color: rgb(42, 42, 42);
           font-size: 10px;
           font-weight: 500;
-          line-height: 26px;
+          letter-spacing: 1px;
+          ${props.inner &&
+            css`
+              margin-left: -5px;
+              transform: rotate(-90deg);
+            `}
         `}
       >
-        {`${props.amount}k`}
+        {props.amount}
       </div>
     </div>
   );

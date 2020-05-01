@@ -1,8 +1,8 @@
-import * as React from 'react';
-import 'styled-components/macro';
+import * as React from "react";
+import "styled-components/macro";
 
 interface MarkerLegendItemParams {
-  amount: number;
+  amount: string;
   opacity?: number;
 }
 export const MarkerLegendItem = (props: MarkerLegendItemParams) => {
@@ -19,7 +19,7 @@ export const MarkerLegendItem = (props: MarkerLegendItemParams) => {
           width: 10px;
           height: 10px;
           opacity: ${props.opacity};
-          background: rgb(232, 67, 87);
+          background: #f58a79;
           margin-right: 8px;
         `}
       />
@@ -32,7 +32,7 @@ export const MarkerLegendItem = (props: MarkerLegendItemParams) => {
           line-height: 26px;
         `}
       >
-        {`${props.amount}k`}
+        {props.amount}
       </div>
     </div>
   );

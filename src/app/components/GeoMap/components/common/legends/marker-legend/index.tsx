@@ -24,18 +24,18 @@ export const MarkerLegend = (props: LegendParams) => {
         title={props.title}
         enabled={props.enabled}
         changeEnabled={props.changeEnabled}
-      />{" "}
+      />
       <div
         css={`
           display: flex;
           flex-direction: column;
         `}
       >
-        <MarkerLegendItem amount={600} opacity={1} />
-        <MarkerLegendItem amount={300} opacity={0.6} />
+        <MarkerLegendItem amount="all" opacity={1} />
+        {/* <MarkerLegendItem amount={300} opacity={0.6} />
         <MarkerLegendItem amount={150} opacity={0.4} />
         <MarkerLegendItem amount={50} opacity={0.2} />
-        <MarkerLegendItem amount={25} opacity={0.1} />
+        <MarkerLegendItem amount={25} opacity={0.1} /> */}
       </div>
     </LegendBase>
   );

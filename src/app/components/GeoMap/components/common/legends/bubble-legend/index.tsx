@@ -37,10 +37,10 @@ export const BubbleLegend = (props: LegendParams) => {
           height: 96px;
         `}
       >
-        <BubbleLegendItem amount={formatNumber(props.min)} size={96} last />
-        <BubbleLegendItem amount={formatNumber(firstThird)} size={70} />
-        <BubbleLegendItem amount={formatNumber(secondThird)} size={48} />
-        <BubbleLegendItem amount={formatNumber(props.max)} size={16} first />
+        <BubbleLegendItem amount={formatNumber(props.max)} size={96} last />
+        <BubbleLegendItem amount={formatNumber(secondThird)} size={70} inner />
+        <BubbleLegendItem amount={formatNumber(firstThird)} size={48} inner />
+        <BubbleLegendItem amount={formatNumber(props.min)} size={16} first />
       </div>
     </LegendBase>
   );

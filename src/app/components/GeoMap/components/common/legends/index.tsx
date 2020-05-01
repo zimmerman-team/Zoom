@@ -24,7 +24,7 @@ export const LegendContainer = (props: LegendContainerParams) => {
         z-index: 1000;
         position: absolute;
         left: 0;
-        top: 0;
+        top: 40px;
         width: fit-content;
       `}
     >

@@ -1,11 +1,11 @@
 import React from "react";
 import { Marker } from "react-map-gl";
 import styled from "styled-components";
-import SvgIconLocation from "app/assets/icons/geomap/SvgIconLocation";
+// import SvgIconLocation from "app/assets/icons/geomap/SvgIconLocation";
 
 const IconDiv = styled.div`
-  width: 5px;
-  height: 5px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background-color: ${(props) => props.color};
 `;

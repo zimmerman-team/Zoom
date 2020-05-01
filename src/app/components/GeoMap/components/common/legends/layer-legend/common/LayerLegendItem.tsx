@@ -2,7 +2,7 @@ import * as React from "react";
 import "styled-components/macro";
 
 interface LayerLegendItemParams {
-  amount: number;
+  amount: string;
   color?: string;
 }
 export const LayerLegendItem = (props: LayerLegendItemParams) => {
@@ -33,7 +33,7 @@ export const LayerLegendItem = (props: LayerLegendItemParams) => {
           line-height: 26px;
         `}
       >
-        {`${props.amount}k`}
+        {props.amount}
       </div>
     </div>
   );

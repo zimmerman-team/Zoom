@@ -64,7 +64,7 @@ import React from "react";
 
 // import React from "react";
 
-const SvgCircleMarker = props => (
+const SvgCircleMarker = (props) => (
   <svg
     width={82}
     height={82}
@@ -79,7 +79,7 @@ const SvgCircleMarker = props => (
       <circle
         strokeOpacity={0.4}
         stroke="#25BAA4"
-        fillOpacity={0.15}
+        fillOpacity={0.25}
         fill="#25BAA4"
         cx={41}
         cy={41}

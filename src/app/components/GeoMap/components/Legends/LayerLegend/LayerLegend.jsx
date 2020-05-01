@@ -5,7 +5,7 @@ import {
   LegendItem,
   LegendLabel,
   LegendNumber,
-  LegendNumberContainer
+  LegendNumberContainer,
 } from "app/components/GeoMap/components/Legends/Legend.styles";
 import { ColorGradient } from "app/components/GeoMap/components/Legends/LayerLegend/LayerLegend.styles";
 /* utils */

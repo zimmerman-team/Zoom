@@ -157,6 +157,7 @@ export class GeoMap extends Component {
           // cause sometimes saved data from the backend
           // passes this in as NOT a function
           transitionInterpolator: new LinearInterpolator(),
+          transitionDuration: 1000,
         },
       });
     }
@@ -179,6 +180,7 @@ export class GeoMap extends Component {
 
     const layers = find(indicatorData, ["type", "layer"]);
     if (layers) {
+      mapStyle.layers[0].paint["background-color"] = "#d8d8d8";
       mapStyle.sources["vector-layers"] = {
         type: "vector",
         tiles: [
@@ -271,14 +273,15 @@ export class GeoMap extends Component {
 
   _setLayerInfo = (event) => {
     let hoverLayerInfo = null;
-    const { features } = event;
-
-    const feature = features && features.find((f) => f.layer.id === "layer");
-    if (feature) {
-      hoverLayerInfo = {
-        lngLat: event.lngLat,
-        properties: feature.properties,
-      };
+    const { features, target } = event;
+    if (target.nodeName === "DIV") {
+      const feature = features && features.find((f) => f.layer.id === "layer");
+      if (feature) {
+        hoverLayerInfo = {
+          lngLat: event.lngLat,
+          properties: feature.properties,
+        };
+      }
     }
     this.setState({
       hoverLayerInfo,
@@ -335,7 +338,9 @@ export class GeoMap extends Component {
   handleZoomIn() {
     this._updateViewport({
       ...this.state.viewport,
-      zoom: this.state.viewport.zoom + 0.1,
+      zoom: this.state.viewport.zoom + 0.5,
+      transitionInterpolator: new LinearInterpolator(),
+      transitionDuration: 500,
     });
   }
 
@@ -345,6 +350,8 @@ export class GeoMap extends Component {
       zoom,
       longitude,
       latitude,
+      transitionInterpolator: new LinearInterpolator(),
+      transitionDuration: 500,
     });
   }
 
@@ -353,9 +360,11 @@ export class GeoMap extends Component {
       this._updateViewport({
         ...this.state.viewport,
         zoom:
-          this.state.viewport.zoom - 0.1 > this.state.settings.minZoom
-            ? this.state.viewport.zoom - 0.1
+          this.state.viewport.zoom - 0.5 > this.state.settings.minZoom
+            ? this.state.viewport.zoom - 0.5
             : this.state.settings.minZoom,
+        transitionInterpolator: new LinearInterpolator(),
+        transitionDuration: 500,
       });
     }
   }
@@ -417,6 +426,27 @@ export class GeoMap extends Component {
       /*todo: use mapbox api for fullscreen functionality instead of thirdparty*/
       <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
         <MapContainer data-cy="geo-map-container">
+          <LegendContainer
+            enableLayers={enableLayers}
+            enableBubble={enableBubble}
+            enablePoints={enablePoints}
+            data={this.props.indicatorData}
+            changeEnableLayers={(value) =>
+              this.setState({
+                enableLayers: value,
+              })
+            }
+            changeEnableBubble={(value) =>
+              this.setState({
+                enableBubble: value,
+              })
+            }
+            changeEnablePoints={(value) =>
+              this.setState({
+                enablePoints: value,
+              })
+            }
+          />
           <GeoYearContainer
             ref={this.setYearSelectorRef}
             bottom="0"
@@ -495,27 +525,6 @@ export class GeoMap extends Component {
             {/*{console.log("sjsjsj", this.props.indicatorData)}*/}
 
             {/*<LegendContainer>{legends}</LegendContainer>*/}
-            <LegendContainer
-              enableLayers={enableLayers}
-              enableBubble={enableBubble}
-              enablePoints={enablePoints}
-              data={this.props.indicatorData}
-              changeEnableLayers={(value) =>
-                this.setState({
-                  enableLayers: value,
-                })
-              }
-              changeEnableBubble={(value) =>
-                this.setState({
-                  enableBubble: value,
-                })
-              }
-              changeEnablePoints={(value) =>
-                this.setState({
-                  enablePoints: value,
-                })
-              }
-            />
 
             {/*<Source*/}
             {/*  type="geojson"*/}

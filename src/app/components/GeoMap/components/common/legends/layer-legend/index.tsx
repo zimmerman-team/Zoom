@@ -41,8 +41,9 @@ export const LayerLegend = (props: LegendParams) => {
           display: flex;
         `}
       >
-        <LayerLegendItem amount={formatNumber(props.min)} color="#d8d8d8" />
-        <LayerLegendItem amount={formatNumber(firstThird)} color="#b7d0dd" />
+        <LayerLegendItem amount="0" color="#d8d8d8" />
+        <LayerLegendItem amount={formatNumber(props.min)} color="#b7d0dd" />
+        <LayerLegendItem amount={formatNumber(firstThird)} color="#a1c0ce" />
         <LayerLegendItem amount={formatNumber(secondThird)} color="#0f80aa" />
         <LayerLegendItem amount={formatNumber(props.max)} color="#034b65" />
       </div>

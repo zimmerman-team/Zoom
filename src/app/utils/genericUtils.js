@@ -1,10 +1,13 @@
 import sortBy from "lodash/sortBy";
 
 export function formatNumber(number) {
-  // console.log(number);
-  return number
-    ? number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
-    : "0";
+  if (number) {
+    return Math.abs(number) > 999
+      ? (Math.sign(number) * (Math.abs(number) / 1000).toFixed(1)).toString() +
+          "k"
+      : (Math.sign(number) * Math.abs(number)).toString();
+  }
+  return "0";
 }
 
 // Basically takes in a start year and an

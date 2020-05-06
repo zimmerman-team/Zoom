@@ -15,9 +15,9 @@ export const LegendHeader = (props: LegendHeaderParams) => {
     <div
       css={`
         display: flex;
-        justify-content: space-between;
+        margin-bottom: 15px;
         align-items: center;
-        //margin-bottom: 16px;
+        justify-content: space-between;
       `}
     >
       <LegendTitle title={props.title} />

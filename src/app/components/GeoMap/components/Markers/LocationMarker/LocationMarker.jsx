@@ -26,7 +26,7 @@ const locationMarker = (indicator, index, setMarkerInfo, color) =>
         onMouseLeave={() => setMarkerInfo(null)}
       >
         {/* <SvgIconLocation height={32} width={32} color={color} /> */}
-        <IconDiv color={color} />
+        <IconDiv id="marker" color={color} />
       </div>
     </Marker>
   );

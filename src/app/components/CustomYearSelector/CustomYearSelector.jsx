@@ -147,7 +147,9 @@ class CustomYearSelector extends React.Component {
           key={`year-${index}`}
         >
           {/* {formatYearLabels(number, this.props.min, this.props.max)} */}
-          {number}
+          {this.state.numArray[0] !== number &&
+            this.state.numArray[this.state.numArray.length - 1] !== number &&
+            number}
         </TimelineYearItem>
       );
     } else {
@@ -159,7 +161,9 @@ class CustomYearSelector extends React.Component {
           onMouseUp={() => this.handleMouseUp()}
           key={`year-${index}`}
         >
-          {number}
+          {this.state.numArray[0] !== number &&
+            this.state.numArray[this.state.numArray.length - 1] !== number &&
+            number}
           {/* {formatYearLabels(number, this.props.min, this.props.max)} */}
         </TimelineYearItem>
       );
@@ -194,7 +198,7 @@ class CustomYearSelector extends React.Component {
                 justify-content: space-between;
                 position: absolute;
                 width: 100%;
-                top: -12px;
+                top: -15px;
               `}
             >
               <TimelineYearIndicator>

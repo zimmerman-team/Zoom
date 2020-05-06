@@ -24,8 +24,10 @@ export const LegendContainer = (props: LegendContainerParams) => {
         z-index: 1000;
         position: absolute;
         left: 0;
-        top: 40px;
         width: fit-content;
+        max-width: 25vw;
+        overflow-y: overlay;
+        max-height: calc(100% - 40px);
       `}
     >
       {props.data &&

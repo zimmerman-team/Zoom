@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import theme from 'app/theme/Theme';
+import styled from "styled-components";
+import theme from "app/theme/Theme";
 
 export const ComponentBase = styled.div`
   padding: 3px 5px;
@@ -8,15 +8,15 @@ export const ComponentBase = styled.div`
 `;
 
 export const ButtonContainer = styled.div`
-  display: flex;
+  width: 30px;
+  height: 30px;
   margin: 4px 0;
-  width: 26px;
-  height: 26px;
-  border-radius: 20px;
-
+  display: flex;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.13);
   background-color: ${theme.color.aidsFondsWhite};
+
   &:hover {
-    background-color: ${theme.color.zoomGreyThree};
     cursor: pointer;
   }
 `;

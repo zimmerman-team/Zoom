@@ -274,7 +274,7 @@ export class GeoMap extends Component {
   _setLayerInfo = (event) => {
     let hoverLayerInfo = null;
     const { features, target } = event;
-    if (target.nodeName === "DIV") {
+    if (target.nodeName === "DIV" && target.id !== "marker") {
       const feature = features && features.find((f) => f.layer.id === "layer");
       if (feature) {
         hoverLayerInfo = {

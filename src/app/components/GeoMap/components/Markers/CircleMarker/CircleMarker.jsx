@@ -15,7 +15,7 @@ export function getMeasure(value, maxVal, minVal) {
 // so we need to adjust the position of the circle marker
 // cause it seems way of depending on the size of the circle
 function positionAdjustment(value, maxVal, minVal) {
-  return getMeasure(value, maxVal, minVal) / 2;
+  return getMeasure(value, maxVal, minVal);
 }
 
 const circleMarker = (indicator, index, setMarkerInfo) =>

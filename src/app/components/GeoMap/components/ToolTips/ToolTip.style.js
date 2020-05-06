@@ -1,18 +1,14 @@
-import styled from 'styled-components';
-import { Popup } from 'react-map-gl';
-import theme from 'app/theme/Theme';
+import styled from "styled-components";
+import { Popup } from "react-map-gl";
+import theme from "app/theme/Theme";
 
 export const ToolTipContainer = styled(Popup)`
   z-index: 1;
-  min-width: 320px;
-  max-height: 30vh;
+  min-width: 338px;
+  // max-height: 30vh;
   & .mapboxgl-popup-content {
-    background-color: rgba(239, 239, 239, 0.67);
-    padding: 16px 16px 30px 16px;
-  }
-
-  & .mapboxgl-popup-tip {
-    display: none;
+    background-color: ${theme.color.white};
+    padding: 15px 12px;
   }
 `;
 

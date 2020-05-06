@@ -208,6 +208,14 @@ class VizContainer extends React.Component {
             </YearContainer>
           )}
         </React.Fragment>
+        {this.state.preview && (
+          <div
+            css={`
+              width: 100%;
+              min-height: 80px;
+            `}
+          />
+        )}
         <PreviewTextContainer mode={this.state.preview ? "flex" : "none"}>
           <ContextPreview
             createdDate={this.props.chartData.createdDate}

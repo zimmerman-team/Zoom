@@ -28,8 +28,7 @@ const layerInfo = (hoverLayerInfo) => {
         latitude={hoverLayerInfo.lngLat[1]}
         closeButton={false}
         className="info-marker-tooltip"
-        tipSize={0}
-        offsetTop={-15}
+        tipSize={10}
       >
         <ToolTipTitle>{countryName}</ToolTipTitle>
         <ValueContainer>
@@ -42,7 +41,10 @@ const layerInfo = (hoverLayerInfo) => {
             }
 
             return (
-              <ToolTipLabel key={ttItem.label}>
+              <ToolTipLabel
+                key={ttItem.label}
+                style={ttItem.label.length > 100 ? { width: "30vw" } : {}}
+              >
                 {truncateText(ttItem.label)}:
                 <ToolTipText>
                   {formatNumber(ttItem.value)}

@@ -6,7 +6,7 @@ import styled from "styled-components";
 import "styled-components/macro";
 import theme from "app/theme/Theme";
 import ContextHeader, {
-  DetailsSecondary
+  DetailsSecondary,
 } from "app/components/chartcontext/common/ContextHeader";
 import "react-quill/dist/quill.snow.css"; // ES
 
@@ -36,7 +36,7 @@ const ContextIntro = styled.div`
 `;
 
 const ContextBody = styled.div`
-  max-width: 550px;
+  max-width: 870px;
   margin: 0;
 `;
 
@@ -85,13 +85,13 @@ const ChartOverviewButton = () => {
 };
 const propTypes = {
   desc: PropTypes.string,
-  show: PropTypes.string
+  show: PropTypes.string,
 };
 const defaultProps = {
-  desc: ""
+  desc: "",
 };
 
-const ContextPreview = props => {
+const ContextPreview = (props) => {
   return (
     <div>
       {/* ------------------------------------ */}

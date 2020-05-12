@@ -1,18 +1,18 @@
 /* base */
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { connect } from 'react-redux';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { connect } from "react-redux";
 /* consts */
-import graphKeys from 'app/__consts__/GraphStructKeyConst';
+import graphKeys from "app/__consts__/GraphStructKeyConst";
 /* components */
-import ChartLegends from 'app/modules/visualizer/sort/container/fragments/common/ChartLegends';
-import LineChart from 'app/components/charts/recharts_linechart/LineChart';
+import ChartLegends from "app/modules/visualizer/sort/container/fragments/common/ChartLegends";
+import LineChart from "app/components/charts/recharts_linechart/LineChart";
 /* styles */
 import {
   FragmentBase,
-  ChartContainer
-} from 'app/modules/visualizer/sort/container/VizContainer.style';
+  ChartContainer,
+} from "app/modules/visualizer/sort/container/VizContainer.style";
 
 /* mock */
 // import { LinechartMockData } from './LinechartMockData';
@@ -27,7 +27,7 @@ const propTypes = {
   chartKeys: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
-      color: PropTypes.string
+      color: PropTypes.string,
     })
   ),
   specOptions: PropTypes.shape({}),
@@ -35,24 +35,24 @@ const propTypes = {
     PropTypes.shape({
       id: PropTypes.string,
       color: PropTypes.string,
-      data: PropTypes.any
+      data: PropTypes.any,
     })
-  )
+  ),
 };
 const defaultProps = {
   chartKeys: [],
   specOptions: {},
-  indicatorData: []
+  indicatorData: [],
 };
 
-const LinechartFragment = props => {
+const LinechartFragment = (props) => {
   return (
     <FragmentBase>
       <ChartContainer>
         <Box>
           <LineChart
             chartKeys={props.chartKeys}
-            data={props.indicatorData}
+            data={props.chartType === "linechart" ? props.indicatorData : []}
             xAxisKey={props.specOptions[graphKeys.aggregate]}
             specOptions={props.specOptions}
           />
@@ -66,9 +66,9 @@ const LinechartFragment = props => {
 LinechartFragment.propTypes = propTypes;
 LinechartFragment.defaultProps = defaultProps;
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    specOptions: state.chartData.chartData.specOptions
+    specOptions: state.chartData.chartData.specOptions,
   };
 };
 

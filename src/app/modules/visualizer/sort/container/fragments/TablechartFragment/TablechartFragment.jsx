@@ -1,20 +1,20 @@
 /* base */
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
 /* utils */
-import isEqual from 'lodash/isEqual';
+import isEqual from "lodash/isEqual";
 
 /* actions */
-import * as actions from 'app/services/actions/general';
+import * as actions from "app/services/actions/general";
 
 /* consts */
-import { noData } from './TableChartFragment.const';
-import initialState from 'app/__consts__/InitialChartDataConst';
+import { noData } from "./TableChartFragment.const";
+import initialState from "app/__consts__/InitialChartDataConst";
 
 /* components */
-import TableChart from 'app/components/charts/tablechart/TableChart';
-import { FragmentBase } from 'app/modules/visualizer/sort/container/VizContainer.style';
+import TableChart from "app/components/charts/tablechart/TableChart";
+import { FragmentBase } from "app/modules/visualizer/sort/container/VizContainer.style";
 
 class TablechartFragment extends React.Component {
   constructor(props) {
@@ -26,14 +26,16 @@ class TablechartFragment extends React.Component {
       // we'll have to remount the table everytime
       // data changes, so that column headers would actually update
       // and we'll use this variable for this purpose
-      tableVisible: true
+      tableVisible: true,
     };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return (
       !isEqual(this.props.indicatorData, nextProps.indicatorData) ||
-      this.state.tableVisible !== nextState.tableVisible
+      this.state.tableVisible !== nextState.tableVisible ||
+      (this.props.chartType !== nextProps.chartType &&
+        nextProps.chartType === "tablechart")
     );
   }
 
@@ -42,14 +44,17 @@ class TablechartFragment extends React.Component {
     // does not support column header rerendering
     // we'll have to remount the table everytime
     // data changes, so that column headers would actually update
-    if (!isEqual(this.props.indicatorData, prevProps.indicatorData)) {
+    if (
+      !isEqual(this.props.indicatorData, prevProps.indicatorData) &&
+      this.props.chartType === "tablechart"
+    ) {
       this.setState(
         {
-          tableVisible: false
+          tableVisible: false,
         },
         () =>
           this.setState({
-            tableVisible: true
+            tableVisible: true,
           })
       );
     }
@@ -58,9 +63,9 @@ class TablechartFragment extends React.Component {
   render() {
     return (
       <FragmentBase position="flex-start" paddingTop="40px">
-        {this.state.tableVisible && (
+        {this.state.tableVisible && this.props.chartType === "tablechart" && (
           <TableChart
-            onDownload={e => console.log(e)}
+            onDownload={(e) => console.log(e)}
             title={this.props.indicatorData.title}
             data={
               this.props.indicatorData.rows &&

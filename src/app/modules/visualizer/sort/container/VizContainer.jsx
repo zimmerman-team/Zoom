@@ -24,6 +24,8 @@ import { aggrOptions } from "app/__consts__/GraphStructOptionConsts";
 /* style */
 import theme from "app/theme/Theme";
 import initialState from "app/__consts__/InitialChartDataConst";
+import { OtherPublicCharts } from "app/components/OtherPublicCharts";
+import { RangeTimelineContainerStyle } from "app/components/GeoMap/components/common/timeline/style";
 
 /**
  * todo: Please write a short component description of what this component does
@@ -122,6 +124,7 @@ class VizContainer extends React.Component {
             desc={this.props.chartData.desc}
             descIntro={this.props.chartData.descIntro}
             show="descIntro"
+            outerHistory={this.props.outerHistory}
           />
         </PreviewTextContainer>
 
@@ -189,6 +192,8 @@ class VizContainer extends React.Component {
               backgroundColor={theme.color.aidsFondsGreyOpacity}
               css={`
                 display: flex;
+                margin-top: 32px;
+                background: transparent;
                 justify-content: center;
               `}
             >
@@ -198,21 +203,26 @@ class VizContainer extends React.Component {
                 <YearRangeSelector
                   selectYearRange={this.props.selectYearRange}
                   selectedYears={this.props.chartData.selectedYears}
+                  css={`
+                    position: initial;
+                  `}
                 />
               ) : (
                 <CustomYearSelector
                   selectedYear={this.props.selectedYear}
                   selectYear={this.props.selectYear}
+                  containerCSS={RangeTimelineContainerStyle}
                 />
               )}
             </YearContainer>
           )}
         </React.Fragment>
+
         {this.state.preview && (
           <div
             css={`
               width: 100%;
-              min-height: 80px;
+              min-height: 60px;
             `}
           />
         )}
@@ -226,6 +236,32 @@ class VizContainer extends React.Component {
             show="descBody"
           />
         </PreviewTextContainer>
+        {this.props.publicPage && (
+          <div
+            css={`
+              display: flex;
+              width: 1280px;
+              padding-bottom: 55px;
+              flex-direction: column;
+            `}
+          >
+            <div
+              css={`
+                font-size: 24px;
+                font-weight: 600;
+                margin: 120px 0 52px 0;
+              `}
+            >
+              Other Public Charts
+            </div>
+            <OtherPublicCharts
+              data={this.props.publicCharts}
+              innerHistory={this.props.history}
+              outerHistory={this.props.outerHistory}
+              clearPrevChartData={this.props.clearPrevChartData}
+            />
+          </div>
+        )}
       </ComponentBase>
     );
   }

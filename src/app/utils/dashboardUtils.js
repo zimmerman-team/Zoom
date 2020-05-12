@@ -1,7 +1,7 @@
-import get from 'lodash/get';
-import filter from 'lodash/filter';
-import isEmpty from 'lodash/isEmpty';
-import { paginate } from './genericUtils';
+import get from "lodash/get";
+import filter from "lodash/filter";
+import isEmpty from "lodash/isEmpty";
+import { paginate } from "./genericUtils";
 
 export function formatUsersTabData(
   data,
@@ -16,35 +16,35 @@ export function formatUsersTabData(
   let allUsers = data;
 
   if (initialLoad) {
-    allUsers = data.map(d => {
+    allUsers = data.map((d) => {
       const title = !isEmpty(d.user_metadata)
-        ? `${get(d.user_metadata, 'firstName', '')} ${get(
+        ? `${get(d.user_metadata, "firstName", "")} ${get(
             d.user_metadata,
-            'lastName',
-            ''
+            "lastName",
+            ""
           )}`
         : d.email;
       return {
         title,
         id: d.user_id,
         info: {
-          Role: get(d, 'app_metadata.authorization.roles[0]', ''),
-          'Mapped data sets': 0,
+          Role: get(d, "app_metadata.authorization.roles[0]", ""),
+          "Mapped data sets": 0,
           Charts: 0,
-          Twitter: ''
+          Twitter: "",
         },
         last_updated: new Date(d.updated_at),
         onEdit: () => onEdit(d.user_id),
         onView: () => onView(d.user_id),
-        onDelete: () => onDelete(d.user_id)
+        onDelete: () => onDelete(d.user_id),
       };
     });
   }
 
   let paginatedUsers = [];
 
-  if (search !== '') {
-    paginatedUsers = filter(allUsers, item => {
+  if (search !== "") {
+    paginatedUsers = filter(allUsers, (item) => {
       return item.title.toLowerCase().indexOf(search.toLowerCase()) > -1;
     });
   } else {
@@ -55,8 +55,8 @@ export function formatUsersTabData(
     paginatedUsers,
     12,
     page,
-    sort[0] === '-' ? sort.slice(1) : sort,
-    sort[0] === '-'
+    sort[0] === "-" ? sort.slice(1) : sort,
+    sort[0] === "-"
   );
 
   return { allUsers, users: paginatedUsers };
@@ -75,27 +75,27 @@ export function formatTeamsTabData(
   let allTeams = data;
 
   if (initialLoad) {
-    allTeams = data.map(d => {
+    allTeams = data.map((d) => {
       return {
         id: d._id,
-        title: get(d, 'name', ''),
+        title: get(d, "name", ""),
         info: {
-          'Created by': get(d, 'createdBy', ''),
-          'Publication date': get(d, 'date', ''),
-          Organisations: ''
+          "Created by": get(d, "createdBy", ""),
+          "Publication date": get(d, "date", ""),
+          Organisations: "",
         },
-        last_updated: new Date(get(d, 'last_updated', '')),
+        last_updated: new Date(get(d, "last_updated", "")),
         onEdit: () => onEdit(d._id),
         onView: () => onView(d._id),
-        onDelete: () => onDelete(d._id, get(d, 'name', ''))
+        onDelete: () => onDelete(d._id, get(d, "name", "")),
       };
     });
   }
 
   let paginatedTeams = [];
 
-  if (search !== '') {
-    paginatedTeams = filter(allTeams, item => {
+  if (search !== "") {
+    paginatedTeams = filter(allTeams, (item) => {
       return item.title.toLowerCase().indexOf(search.toLowerCase()) > -1;
     });
   } else {
@@ -106,8 +106,8 @@ export function formatTeamsTabData(
     paginatedTeams,
     12,
     page,
-    sort[0] === '-' ? sort.slice(1) : sort,
-    sort[0] === '-'
+    sort[0] === "-" ? sort.slice(1) : sort,
+    sort[0] === "-"
   );
 
   return { allTeams, teams: paginatedTeams };
@@ -121,20 +121,20 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
   // otherwise the charts will just be an array
   const chartz = charts.charts ? charts.charts : charts;
 
-  return chartz.map(chart => {
+  return chartz.map((chart) => {
     let shared = chart.teams;
-    if (chart._public) shared.push('Public');
-    shared = shared.join(', ');
+    if (chart._public) shared.push("Public");
+    shared = shared.join(", ");
     let dataSources = [];
 
-    chart.indicatorItems.forEach(indItem => {
+    chart.indicatorItems.forEach((indItem) => {
       if (indItem.dataSource) {
         if (dataSources.indexOf(indItem.dataSource) === -1) {
           dataSources.push(indItem.dataSource);
         }
       }
     });
-    dataSources = dataSources.join(', ');
+    dataSources = dataSources.join(", ");
 
     let onEdit;
     let onView;
@@ -157,7 +157,7 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
       }
     }
 
-    let author = '';
+    let author = "";
 
     if (chart.author) {
       author = `${chart.author.firstName} ${chart.author.lastName}`;
@@ -169,46 +169,48 @@ export function formatChartData(charts, userId, history, remove, duplicate) {
       owner,
       info: {
         Author: author,
-        'Publication date': chart.created.substring(
+        "Publication date": chart.created.substring(
           0,
-          chart.created.indexOf('T')
+          chart.created.indexOf("T")
         ),
         Updated: chart.last_updated.substring(
           0,
-          chart.last_updated.indexOf('T')
+          chart.last_updated.indexOf("T")
         ),
         Shared: shared,
-        'Type of chart': chart.type,
-        'Data sources': dataSources
+        "Type of chart": chart.type,
+        "Data sources": dataSources,
       },
+      descIntro: chart.descIntro,
+      description: chart.description,
       chartType: chart.type,
       onEdit,
       onView,
       onDuplicate,
-      onDelete
+      onDelete,
     };
   });
 }
 
 // formats datasets for the dashboard
 export function formatDatasets(datasets, history, remove) {
-  return datasets.datasets.map(dataset => {
-    let shared = '';
+  return datasets.datasets.map((dataset) => {
+    let shared = "";
 
-    if (dataset.public === 'o') {
-      if (dataset.teams.length > 0 && dataset.teams !== 'none') {
-        shared = shared.concat(dataset.teams.join(', '));
+    if (dataset.public === "o") {
+      if (dataset.teams.length > 0 && dataset.teams !== "none") {
+        shared = shared.concat(dataset.teams.join(", "));
       }
-    } else if (dataset.public === 'a') {
+    } else if (dataset.public === "a") {
       shared =
         shared.length > 0
-          ? shared.concat(', ').concat('Public')
-          : shared.concat('Public');
-    } else if (dataset.public === 'p') {
+          ? shared.concat(", ").concat("Public")
+          : shared.concat("Public");
+    } else if (dataset.public === "p") {
       shared =
         shared.length > 0
-          ? shared.concat(', ').concat('Private')
-          : shared.concat('Private');
+          ? shared.concat(", ").concat("Private")
+          : shared.concat("Private");
     }
 
     return {
@@ -220,17 +222,17 @@ export function formatDatasets(datasets, history, remove) {
       // authors datasets === owners
       owner: true,
       info: {
-        'Publication date': dataset.created
-          ? dataset.created.substring(0, dataset.created.indexOf('T'))
-          : '',
+        "Publication date": dataset.created
+          ? dataset.created.substring(0, dataset.created.indexOf("T"))
+          : "",
         Updated: dataset.last_updated
-          ? dataset.last_updated.substring(0, dataset.last_updated.indexOf('T'))
-          : '',
+          ? dataset.last_updated.substring(0, dataset.last_updated.indexOf("T"))
+          : "",
         Shared: shared,
-        'Data sources': dataset.dataSource
+        "Data sources": dataset.dataSource,
       },
       onEdit: () => history.push(`/dataset/${dataset.datasetId}`),
-      onDelete: () => remove(dataset.datasetId)
+      onDelete: () => remove(dataset.datasetId),
     };
   });
 }

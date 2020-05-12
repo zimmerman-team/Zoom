@@ -31,12 +31,14 @@ import {
 const propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
+  containerCSS: PropTypes.object,
   selectedYear: PropTypes.string,
 };
 
 const defaultProps = {
   min: minYear,
   max: maxYear,
+  containerCSS: TimelineContainerStyle,
   selectedYear: parseInt(initialState.yearPeriod[0], 10),
 };
 
@@ -174,7 +176,7 @@ class CustomYearSelector extends React.Component {
 
   render() {
     return (
-      <div css={TimelineContainerStyle}>
+      <div css={this.props.containerCSS}>
         <div
           css={`
             display: flex;

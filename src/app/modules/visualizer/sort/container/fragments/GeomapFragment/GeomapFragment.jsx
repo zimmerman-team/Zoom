@@ -72,6 +72,11 @@ class GeomapFragment extends React.Component {
 
   render() {
     const { mode, ...otherProps } = this.props;
+    const show = mode
+      ? otherProps.chartType === "geomap" ||
+        otherProps.chartType === "focusKE" ||
+        otherProps.chartType === "focusNL"
+      : true;
     return (
       <ComponentBase height={mode ? "700px" : "100%"} id="geo-map">
         <GeoMap
@@ -80,6 +85,7 @@ class GeomapFragment extends React.Component {
           saveViewport={this.props.saveViewport}
           focus={this.state.focus && this.state.focus}
           {...otherProps}
+          indicatorData={show ? this.props.indicatorData : []}
           mapOptions={{ maxBounds: this.state.bounds }}
         />
       </ComponentBase>

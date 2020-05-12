@@ -1,33 +1,33 @@
-const Chart = require('../models/Chart');
-const fs = require('fs');
-const path = require('path');
-const https = require('https');
+const Chart = require("../models/Chart");
+const fs = require("fs");
+const path = require("path");
+const https = require("https");
 
 /* utils */
-const findIndex = require('lodash/findIndex');
-const general = require('../controllers/generalResponse');
-const utils = require('../utils/general');
+const findIndex = require("lodash/findIndex");
+const general = require("../controllers/generalResponse");
+const utils = require("../utils/general");
 
 /* consts */
-const serverPath = __dirname.substring(0, __dirname.indexOf('utils') - 1);
-const consts = require('../config/consts');
+const serverPath = __dirname.substring(0, __dirname.indexOf("utils") - 1);
+const consts = require("../config/consts");
 const chartTypes = consts.chartTypes;
-const dataPath = serverPath.concat('/data/');
+const dataPath = serverPath.concat("/data/");
 
 // just an outer function from the module exports
 // cause we want to use this same one in two different module exports
 function saveDataFileReuse(chartz, fileUrl, res) {
   chartz.dataFileUrl = fileUrl;
 
-  chartz.save(urlSavErr => {
+  chartz.save((urlSavErr) => {
     if (urlSavErr) {
       general.handleError(res, urlSavErr);
     } else {
       res.json({
-        message: 'chart created',
+        message: "chart created",
         id: chartz._id,
         name: chartz.name,
-        chartType: chartz.type
+        chartType: chartz.type,
       });
     }
   });
@@ -35,13 +35,13 @@ function saveDataFileReuse(chartz, fileUrl, res) {
 
 module.exports = {
   writeTiles: (chartz, type, data, update = false) => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (
         type === chartTypes.geoMap ||
         type === chartTypes.focusKE ||
         type === chartTypes.focusNL
       ) {
-        const layerIndex = findIndex(data, ['type', 'layer']);
+        const layerIndex = findIndex(data, ["type", "layer"]);
 
         // so basically here when a geochart is being saveda
         // AND if it has layer data, which means that there's
@@ -53,15 +53,15 @@ module.exports = {
           //set a reference to the new file name
           const newFileName = `${chartz.id}geo_json.json`;
 
-          const pathToOldFile = data[layerIndex].url.replace('api/', '');
+          const pathToOldFile = data[layerIndex].url.replace("api/", "");
 
-          const pathToNewFile = 'static/savedTiles/'.concat(newFileName);
+          const pathToNewFile = "static/savedTiles/".concat(newFileName);
 
           const fullOldPath = path.join(serverPath, pathToOldFile);
 
           const fullNewPath = path.join(serverPath, pathToNewFile);
 
-          if (fullOldPath.indexOf('savedTiles') !== -1) {
+          if (fullOldPath.indexOf("savedTiles") !== -1) {
             if (!update) {
               // so if the old path contains 'savedTiles'
               // in its path name, most likely a creation of a duplicate
@@ -74,7 +74,7 @@ module.exports = {
               fs.createReadStream(fullOldPath).pipe(
                 fs.createWriteStream(fullNewPath)
               );
-              const newUrl = '/api/'.concat(pathToNewFile);
+              const newUrl = "/api/".concat(pathToNewFile);
 
               resolve({ layerIndex, newUrl });
             } else {
@@ -84,12 +84,12 @@ module.exports = {
             // otherwise DUCT has been run locally and geojson file
             // has already been saved in zoomBackend, so we just need
             // to move it(rename it)
-            fs.rename(fullOldPath, fullNewPath, renameError => {
+            fs.rename(fullOldPath, fullNewPath, (renameError) => {
               if (renameError) {
-                console.log('ERROR MOVING/RENAMING FILE', renameError);
+                console.log("ERROR MOVING/RENAMING FILE", renameError);
               } else {
                 // console.log('Successfully renamed - AKA moved!');
-                const newUrl = '/api/'.concat(pathToNewFile);
+                const newUrl = "/api/".concat(pathToNewFile);
 
                 resolve({ layerIndex, newUrl });
               }
@@ -114,26 +114,26 @@ module.exports = {
   // it also sends out a response
   getOneChart: (query, res) => {
     Chart.findOne(query)
-      .populate('author')
+      .populate("author")
       .exec((chartError, chart) => {
         if (chartError) {
           general.handleError(res, chartError);
         } else if (!chart) {
-          general.handleError(res, 'chart not found', 404);
+          general.handleError(res, "chart not found", 404);
         } else if (chart.dataFileUrl) {
-          fs.readFile(chart.dataFileUrl, 'utf8', (dataErr, data) => {
+          fs.readFile(chart.dataFileUrl, "utf8", (dataErr, data) => {
             if (dataErr) {
               general.handleError(res, dataErr);
             } else {
               res.send({
                 chart,
-                data: JSON.parse(data)
+                data: JSON.parse(data),
               });
             }
           });
         } else {
           res.send({
-            chart
+            chart,
           });
         }
       });
@@ -154,20 +154,20 @@ module.exports = {
         const p = parseInt(page, 10);
         Chart.find(
           query,
-          'created last_updated teams type indicatorItems _id name _public'
+          "created last_updated teams type indicatorItems _id name _public descIntro"
         )
           .limit(pSize)
           .skip(p * pSize)
-          .collation({ locale: 'en' })
+          .collation({ locale: "en" })
           .sort(sort)
-          .populate('author', 'username authId firstName lastName')
+          .populate("author", "username authId firstName lastName")
           .exec((chartError, charts) => {
             if (chartError) {
               general.handleError(res, chartError);
             } else {
               res.json({
                 count,
-                charts
+                charts,
               });
             }
           });
@@ -183,13 +183,13 @@ module.exports = {
   // data file url and send a response
   writeDataFileUrl: (chartz, data, res) => {
     const fileUrl = `${dataPath}chartData${chartz.id}.txt`;
-    fs.writeFile(fileUrl, JSON.stringify(data), fileError => {
+    fs.writeFile(fileUrl, JSON.stringify(data), (fileError) => {
       if (fileError) {
-        console.log('fileError', fileError);
+        console.log("fileError", fileError);
         general.handleError(res, fileError);
       } else {
         saveDataFileReuse(chartz, fileUrl, res);
       }
     });
-  }
+  },
 };

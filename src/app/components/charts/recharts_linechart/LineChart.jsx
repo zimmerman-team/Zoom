@@ -1,6 +1,6 @@
 /* base */
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 /* components */
 import {
   CartesianGrid,
@@ -9,13 +9,13 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis
-} from 'recharts';
-import TooltipContent from './components/TooltipContent/TooltipContent';
+  YAxis,
+} from "recharts";
+import TooltipContent from "./components/TooltipContent/TooltipContent";
 
 /* utils */
-import find from 'lodash/find';
-import isEqual from 'lodash/isEqual';
+import find from "lodash/find";
+import isEqual from "lodash/isEqual";
 
 const propTypes = {
   specOptions: PropTypes.shape({}),
@@ -23,14 +23,14 @@ const propTypes = {
     top: PropTypes.number,
     right: PropTypes.number,
     left: PropTypes.number,
-    bottom: PropTypes.number
+    bottom: PropTypes.number,
   }),
-  xAxisKey: PropTypes.string
+  xAxisKey: PropTypes.string,
 };
 const defaultProps = {
   specOptions: {},
   margin: { top: 30, right: 10, left: 10, bottom: 0 },
-  xAxisKey: 'year'
+  xAxisKey: "year",
 };
 
 class LineChart extends React.Component {
@@ -38,7 +38,7 @@ class LineChart extends React.Component {
     super(props);
 
     this.state = {
-      realKeys: []
+      realKeys: [],
     };
   }
 
@@ -52,9 +52,9 @@ class LineChart extends React.Component {
       // #JustRechartLogic
       const realKeys = [];
 
-      this.props.chartKeys.forEach(chartKey => {
+      this.props.chartKeys.forEach((chartKey) => {
         if (
-          find(this.props.data, item => {
+          find(this.props.data, (item) => {
             return item[chartKey.name] !== undefined;
           })
         ) {
@@ -78,10 +78,10 @@ class LineChart extends React.Component {
             yAxisId="left"
             tickCount={10}
             tick={{ fontSize: 10 }}
-            tickFormatter={tick =>
+            tickFormatter={(tick) =>
               tick.toLocaleString(undefined, {
                 minimumFractionDigits: 0,
-                maximumFractionDigits: 2
+                maximumFractionDigits: 2,
               })
             }
           />
@@ -90,19 +90,19 @@ class LineChart extends React.Component {
             yAxisId="right"
             orientation="right"
             tick={{ fontSize: 10 }}
-            tickFormatter={tick =>
+            tickFormatter={(tick) =>
               tick.toLocaleString(undefined, {
                 minimumFractionDigits: 0,
-                maximumFractionDigits: 2
+                maximumFractionDigits: 2,
               })
             }
           />
           <Tooltip
             data-cy="linechart-tooltip"
             content={<TooltipContent />}
-            cursor={{ stroke: 'grey', strokeWidth: 1 }}
+            cursor={{ stroke: "grey", strokeWidth: 1 }}
           />
-          {this.state.realKeys.map(chartKey => (
+          {this.state.realKeys.map((chartKey) => (
             <Line
               type="monotone"
               strokeWidth={2}
@@ -110,14 +110,14 @@ class LineChart extends React.Component {
               dot={{
                 r: 4,
                 strokeWidth: 1,
-                stroke: '#fff',
-                fill: chartKey.color
+                stroke: "#fff",
+                fill: chartKey.color,
               }}
               activeDot={{
                 r: 4,
                 strokeWidth: 2,
-                stroke: '#fff',
-                fill: chartKey.color
+                stroke: "#fff",
+                fill: chartKey.color,
               }}
               name={chartKey.label}
               dataKey={chartKey.name}

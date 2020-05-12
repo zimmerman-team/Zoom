@@ -12,7 +12,6 @@ import "react-quill/dist/quill.snow.css"; // ES
 
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { Details } from "../chartcontext/common/ContextHeader";
-import { NavLink } from "react-router-dom";
 
 /**
  * todo: Please write a short component description of what this component does
@@ -40,49 +39,45 @@ const ContextBody = styled.div`
   margin: 0;
 `;
 
-const ChartOverviewButton = () => {
+const ChartOverviewButton = (props) => {
   return (
-    <NavLink
+    <div
       css={`
-        text-decoration: none;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 50px;
+        cursor: pointer;
       `}
-      to="/public/chart-library"
+      onClick={() => props.history.push("/public/chart-library")}
     >
       <div
         css={`
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-top: 50px;
+          color: #2e5bff;
+          font-size: 16px;
+          font-weight: bold;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.25;
+          letter-spacing: normal;
+          text-align: center;
+          margin-right: 5px;
         `}
       >
-        <div
-          css={`
-            color: #2e5bff;
-            font-size: 16px;
-            font-weight: bold;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: 1.25;
-            letter-spacing: normal;
-            text-align: center;
-            margin-right: 5px;
-          `}
-        >
-          More public charts
-        </div>
-        <ArrowForwardIcon
-          css={`
-            color: #2e5bff;
-            fill: #2e5bff;
-          `}
-          fontSize="small"
-        />
+        More public charts
       </div>
-    </NavLink>
+      <ArrowForwardIcon
+        css={`
+          color: #2e5bff;
+          fill: #2e5bff;
+        `}
+        fontSize="small"
+      />
+    </div>
   );
 };
+
 const propTypes = {
   desc: PropTypes.string,
   show: PropTypes.string,
@@ -96,7 +91,9 @@ const ContextPreview = (props) => {
     <div>
       {/* ------------------------------------ */}
       {/* link to chart overview */}
-      {props.show === "descIntro" && <ChartOverviewButton />}
+      {props.show === "descIntro" && (
+        <ChartOverviewButton history={props.outerHistory} />
+      )}
 
       {/* ------------------------------------ */}
       {/* contains title */}

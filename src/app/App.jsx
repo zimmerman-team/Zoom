@@ -36,6 +36,7 @@ import AppBar from "app/components/AppBar/AppBar";
 
 import MainMenuDrawer from "app/components/MainMenuDrawer/MainMenuDrawer";
 import CookieNotice from "app/components/CookieNotice/CookieNotice";
+import PageLoader from "./modules/common/pageloader/PageLoader";
 
 const theme = createMuiTheme({
   /*transitions: {
@@ -195,7 +196,11 @@ class App extends React.Component {
                     <div>{get(error, "source.errors[0].message", "")}</div>
                   );
                 }
-                return <div data-cy="loader2">Loading</div>;
+                return (
+                  <div data-cy="loader2">
+                    <PageLoader />
+                  </div>
+                );
               }}
               operation
             />

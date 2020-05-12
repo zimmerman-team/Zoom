@@ -24,7 +24,7 @@ import theme from "app/theme/MaterialTheme";
 import {
   ThemeProvider,
   StylesProvider,
-  createGenerateClassName
+  createGenerateClassName,
 } from "@material-ui/core/styles";
 
 const sagaMiddleware = createSagaMiddleware();
@@ -32,22 +32,22 @@ const history = createHistory();
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
   ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-      stateSanitizer: process.env.NODE_ENV !== "development"
+      stateSanitizer: process.env.NODE_ENV !== "development",
     })
   : compose;
 
 const encryptor = createEncryptor({
   secretKey: "my-super-secret-key",
-  onError: error => {
+  onError: (error) => {
     // Handle the error
-  }
+  },
 });
 
 const persistConfig = {
   key: "root",
   storage: storageSession,
-  whitelist: ["open", "user", "currentUser"],
-  transforms: [encryptor]
+  whitelist: ["open", "user", "currentUser", "publicCharts"],
+  transforms: [encryptor],
 };
 
 const store = createStore(
@@ -58,7 +58,7 @@ const store = createStore(
       ...mutationReducers,
       ...syncReducers,
       ...generalReducers,
-      ...authNodeReducers
+      ...authNodeReducers,
     })
   ),
   composeEnhancers(applyMiddleware(sagaMiddleware, routerMiddleware(history)))

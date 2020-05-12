@@ -1,20 +1,20 @@
 /* base */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import styled from 'styled-components';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import { BrowserRouter as Router } from "react-router-dom";
+import { Helmet } from "react-helmet";
 /* consts */
-import paneTypes from 'app/__consts__/PaneTypesConst';
-import initialState from 'app/__consts__/InitialChartDataConst';
+import paneTypes from "app/__consts__/PaneTypesConst";
+import initialState from "app/__consts__/InitialChartDataConst";
 /* components */
-import VizSidebar from 'app/modules/visualizer/sort/sidebar/VizSidebar';
-import VizContainer from 'app/modules/visualizer/sort/container/VizContainer';
-import ProgressIcon from 'app/components/ProgressIcon/ProgressIcon';
+import VizSidebar from "app/modules/visualizer/sort/sidebar/VizSidebar";
+import VizContainer from "app/modules/visualizer/sort/container/VizContainer";
+import ProgressIcon from "app/components/ProgressIcon/ProgressIcon";
 
 /* utils */
-import { formatWindowTitle } from './VisualizerModule.utils';
+import { formatWindowTitle } from "./VisualizerModule.utils";
 // import BaseDialog from 'app/components/Dialog/BaseDialog/BaseDialog';
 
 const ModuleBase = styled.div`
@@ -39,23 +39,23 @@ const propTypes = {
   saveViewport: PropTypes.func,
   chartData: PropTypes.shape({}),
   home: PropTypes.bool,
-  moduleMode: PropTypes.string
+  moduleMode: PropTypes.string,
 };
 
 const defaultProps = {
   data: [],
   publicPage: false,
   chartData: initialState,
-  dataPaneOpen: 'visualizer',
+  dataPaneOpen: "visualizer",
   chartKeys: [],
   auth0Client: {},
   selectYearRange: null,
   dropDownData: {},
-  chartType: 'geomap',
-  chartTitle: '',
+  chartType: "geomap",
+  chartTitle: "",
   saveViewport: null,
   home: false,
-  loggedIn: true
+  loggedIn: true,
 };
 
 class BuilderModule extends Component {
@@ -64,7 +64,7 @@ class BuilderModule extends Component {
     this.state = {
       dialogOpen: true,
       sideBarOpen: false,
-      data: []
+      data: [],
     };
 
     this.onClose = this.onClose.bind(this);
@@ -82,7 +82,7 @@ class BuilderModule extends Component {
   renderWindowTitle = (chartType, pathname) => {
     return (
       <Helmet>
-        {pathname.includes('vizID') || this.props.home ? (
+        {pathname.includes("vizID") || this.props.home ? (
           <title>{formatWindowTitle(chartType, this.props.home)}</title>
         ) : (
           <title>{this.props.chartTitle}</title>
@@ -97,7 +97,7 @@ class BuilderModule extends Component {
         <ModuleBase
           id="home-geomap"
           style={
-            this.props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}
+            this.props.loading ? { pointerEvents: "none", opacity: "0.4" } : {}
           }
         >
           {this.props.loading && <ProgressIcon />}
@@ -119,6 +119,8 @@ class BuilderModule extends Component {
             selectYearRange={this.props.selectYearRange}
             selectYear={this.props.selectYear}
             selectedYear={this.props.selectedYear}
+            publicCharts={this.props.publicCharts}
+            clearPrevChartData={this.props.clearPrevChartData}
             display={
               this.props.dataPaneOpen === paneTypes.visualizer ||
               (this.props.home && this.props.dataPaneOpen !== paneTypes.none)
@@ -145,9 +147,9 @@ class BuilderModule extends Component {
 BuilderModule.propTypes = propTypes;
 BuilderModule.defaultProps = defaultProps;
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    dataPaneOpen: state.dataPaneOpen.open
+    dataPaneOpen: state.dataPaneOpen.open,
   };
 };
 

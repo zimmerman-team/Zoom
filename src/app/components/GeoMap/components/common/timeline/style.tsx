@@ -11,6 +11,7 @@ export const ArrowButtonStyle = css`
     opacity: 0.5;
   }
 `;
+
 export const TimelineContainerStyle = css`
   position: absolute;
   bottom: 0;
@@ -23,9 +24,21 @@ export const TimelineContainerStyle = css`
     user-select: none;
   }
 `;
+
+export const RangeTimelineContainerStyle = css`
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+
+  * {
+    user-select: none;
+  }
+`;
+
 export const ItemContainerStyle = css`
   display: flex;
 `;
+
 export const TimeLineBottomLabelStyle = css`
   color: #008ed5;
   width: 100%;

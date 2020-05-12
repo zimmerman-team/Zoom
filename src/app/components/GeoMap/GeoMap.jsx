@@ -145,9 +145,11 @@ export class GeoMap extends Component {
     }
 
     if (
-      this.props.chartMounted !== prevProps.chartMounted &&
-      this.props.chartMounted &&
-      this.props.viewport.zoom !== undefined
+      (this.props.chartMounted !== prevProps.chartMounted &&
+        this.props.chartMounted &&
+        this.props.viewport.zoom !== undefined) ||
+      (!isEqual(this.props.viewport, prevProps.viewport) &&
+        !isEqual(this.props.viewport, this.state.viewport))
     ) {
       this.setState({
         viewport: {

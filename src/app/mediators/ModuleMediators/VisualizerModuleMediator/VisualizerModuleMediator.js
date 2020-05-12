@@ -8,8 +8,10 @@ import { withRouter } from "react-router";
 import VisualizerModule from "app/modules/visualizer/VisualizerModule";
 
 /* utils */
-import isEqual from "lodash/isEqual";
+import get from "lodash/get";
+import filter from "lodash/filter";
 import sortBy from "lodash/sortBy";
+import isEqual from "lodash/isEqual";
 import {
   getFields,
   aggrKeys,
@@ -43,6 +45,7 @@ import * as nodeActions from "app/services/actions/nodeBackend";
 import * as actions from "app/services/actions/general";
 import cryptoJs from "crypto-js";
 import axios from "axios";
+import { formatChartData } from "app/utils/dashboardUtils";
 
 const propTypes = {
   publicChart: PropTypes.shape({}),
@@ -163,6 +166,7 @@ class VisualizerModuleMediator extends Component {
       selectedYear: this.props.chartData.selectedYear
         ? this.props.chartData.selectedYear
         : initialState.yearPeriod[0],
+      formattedPublicCharts: [],
     };
 
     this.refetch = this.refetch.bind(this);
@@ -179,6 +183,9 @@ class VisualizerModuleMediator extends Component {
   }
 
   componentDidMount() {
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 5);
     this._isMounted = true;
     // so yeah with this we update the top bar pane with correct data
     if (!this.props.home) {
@@ -219,6 +226,20 @@ class VisualizerModuleMediator extends Component {
       if (chartTypes.tableChart !== this.props.match.params.chart) {
         this.storeInitialChartOptions();
       }
+    }
+
+    if (get(this.props.publicCharts, "data.charts", []).length === 0) {
+      this.loadPublicCharts();
+    } else {
+      this.setState({
+        formattedPublicCharts: formatChartData({
+          ...this.props.publicCharts.data,
+          charts: filter(
+            get(this.props.publicCharts, "data.charts", []),
+            (c) => c._id !== this.props.match.params.code
+          ),
+        }),
+      });
     }
   }
 
@@ -284,6 +305,24 @@ class VisualizerModuleMediator extends Component {
       // and if the previous geochart had tile file loaded
       // we delete the tile files from backends
       this.deleteGeoFiles();
+    }
+
+    if (
+      this.props.publicCharts.data !== prevProps.publicCharts.data ||
+      this.props.match.params.code !== prevProps.match.params.code
+    ) {
+      this.setState({
+        formattedPublicCharts: formatChartData({
+          ...this.props.publicCharts.data,
+          charts: filter(
+            get(this.props.publicCharts, "data.charts", []),
+            (c) => c._id !== this.props.match.params.code
+          ),
+        }),
+      });
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 5);
     }
   }
 
@@ -369,29 +408,33 @@ class VisualizerModuleMediator extends Component {
   }
 
   updateRankBy(specOptions) {
-    let barChartData = [];
+    if (specOptions.rankBy) {
+      let barChartData = [];
 
-    if (
-      (specOptions[graphKeys.rankBy] === "high" &&
-        specOptions[graphKeys.horizont]) ||
-      (specOptions[graphKeys.rankBy] === "low" &&
-        !specOptions[graphKeys.horizont])
-    ) {
-      barChartData = sortBy(this.props.chartData.data, ["allValSum"]);
-    } else if (
-      (specOptions[graphKeys.rankBy] === "high" &&
-        !specOptions[graphKeys.horizont]) ||
-      (specOptions[graphKeys.rankBy] === "low" &&
-        specOptions[graphKeys.horizont])
-    ) {
-      barChartData = sortBy(this.props.chartData.data, ["allValSum"]).reverse();
+      if (
+        (specOptions[graphKeys.rankBy] === "high" &&
+          specOptions[graphKeys.horizont]) ||
+        (specOptions[graphKeys.rankBy] === "low" &&
+          !specOptions[graphKeys.horizont])
+      ) {
+        barChartData = sortBy(this.props.chartData.data, ["allValSum"]);
+      } else if (
+        (specOptions[graphKeys.rankBy] === "high" &&
+          !specOptions[graphKeys.horizont]) ||
+        (specOptions[graphKeys.rankBy] === "low" &&
+          specOptions[graphKeys.horizont])
+      ) {
+        barChartData = sortBy(this.props.chartData.data, [
+          "allValSum",
+        ]).reverse();
+      }
+
+      this.props.dispatch(
+        actions.storeChartDataRequest({
+          data: barChartData,
+        })
+      );
     }
-
-    this.props.dispatch(
-      actions.storeChartDataRequest({
-        data: barChartData,
-      })
-    );
   }
 
   updateChartColor() {
@@ -923,7 +966,7 @@ class VisualizerModuleMediator extends Component {
       yearRange,
     } = this.props.chartResults.chart;
 
-    console.log("this.props.chartResults", this.props.chartResults);
+    // console.log("this.props.chartResults", this.props.chartResults);
 
     const selectedInds = [];
 
@@ -1032,6 +1075,17 @@ class VisualizerModuleMediator extends Component {
       });
   }
 
+  loadPublicCharts = () => {
+    this.props.dispatch(
+      nodeActions.getPublicChartsRequest({
+        searchTitle: "",
+        sortBy: "title",
+        page: 0,
+        pageSize: 10,
+      })
+    );
+  };
+
   render() {
     return (
       <div style={{ height: "100%" }}>
@@ -1056,6 +1110,11 @@ class VisualizerModuleMediator extends Component {
           data={this.props.chartData.data}
           dropDownData={this.props.dropDownData}
           chartTitle={this.props.chartData.name}
+          publicCharts={this.state.formattedPublicCharts}
+          clearPrevChartData={() => {
+            this.props.dispatch(nodeActions.getChartInitial());
+            this.props.dispatch(nodeActions.getPublicChartInitial());
+          }}
         />
       </div>
     );
@@ -1074,6 +1133,7 @@ const mapStateToProps = (state) => {
     chartCreated: state.chartCreated,
     paneData: state.paneData.paneData,
     dataPaneOpen: state.dataPaneOpen.open,
+    publicCharts: state.publicCharts,
   };
 };
 

@@ -1,21 +1,21 @@
 /* base */
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Helmet } from 'react-helmet';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { Helmet } from "react-helmet";
 /* components */
 import {
   ModuleContainer,
   ModuleTitle,
-  ViewContainer
-} from 'app/modules/dashboard/DashboardModule.styles';
+  ViewContainer,
+} from "app/modules/dashboard/DashboardModule.styles";
 
-import Searchbox from 'app/modules/dashboard/fragments/Searchbox/Searchbox';
-import GridListOptionsPane from '../dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane';
-import Pagination from '../../components/Pagination/Pagination';
-import GridList from '../dashboard/fragments/GridList/GridList';
-import ProgressIcon from 'app/components/ProgressIcon/ProgressIcon';
-import theme from 'app/theme/Theme';
+import Searchbox from "app/modules/dashboard/fragments/Searchbox/Searchbox";
+import GridListOptionsPane from "../dashboard/fragments/GridList/components/GridListOptionsPane/GridListOptionsPane";
+import Pagination from "../../components/Pagination/Pagination";
+import GridList from "../dashboard/fragments/GridList/GridList";
+import ProgressIcon from "app/components/ProgressIcon/ProgressIcon";
+import theme from "app/theme/Theme";
 // import data from './PublicChartLibraryModule.const';
 
 const Box = styled.div`
@@ -38,7 +38,7 @@ const propTypes = {
   setIsSortByOpen: PropTypes.func,
   loading: PropTypes.bool,
   pageCount: PropTypes.number,
-  page: PropTypes.number
+  page: PropTypes.number,
 };
 
 const defaultProps = {
@@ -49,10 +49,10 @@ const defaultProps = {
   setIsSortByOpen: null,
   loading: false,
   isSortByOpen: false,
-  changeSearchKeyword: null
+  changeSearchKeyword: null,
 };
 
-const PublicChartLibraryModule = props => {
+const PublicChartLibraryModule = (props) => {
   return (
     <ModuleContainer>
       <Helmet>
@@ -64,7 +64,7 @@ const PublicChartLibraryModule = props => {
         onEnterPressed={props.onEnterPressed}
       />
       <Box
-        style={props.loading ? { pointerEvents: 'none', opacity: '0.4' } : {}}
+        style={props.loading ? { pointerEvents: "none", opacity: "0.4" } : {}}
       >
         {props.loading && <ProgressIcon />}
         <GridListOptionsPane

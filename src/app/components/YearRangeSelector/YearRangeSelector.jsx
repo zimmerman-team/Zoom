@@ -26,6 +26,7 @@ import {
   ArrowButtonStyle,
   ItemContainerStyle,
   TimeLineBottomLabelStyle,
+  RangeTimelineContainerStyle,
 } from "app/components/GeoMap/components/common/timeline/style";
 
 const propTypes = {
@@ -248,7 +249,7 @@ class YearRangeSelector extends React.Component {
 
   render() {
     return (
-      <div css={TimelineContainerStyle}>
+      <div css={RangeTimelineContainerStyle}>
         <div
           css={`
             display: flex;
